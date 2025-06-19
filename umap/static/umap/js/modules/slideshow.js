@@ -39,7 +39,7 @@ export default class Slideshow extends WithTemplate {
   get current() {
     if (!this._current) {
       const datalayer = this.defaultDatalayer()
-      if (datalayer) this._current = datalayer.getFeatureByIndex(0)
+      if (datalayer) this._current = datalayer.features.first()
     }
     return this._current
   }

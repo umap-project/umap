@@ -22,6 +22,7 @@ import * as Utils from '../utils.js'
 import { LineString, Point, Polygon } from './features.js'
 import Rules from '../rules.js'
 import Orderable from '../orderable.js'
+import { FeatureManager } from '../managers.js'
 
 export const LAYER_TYPES = [
   DefaultLayer,
@@ -41,8 +42,7 @@ export class DataLayer {
   constructor(umap, leafletMap, data = {}) {
     this._umap = umap
     this.sync = umap.syncEngine.proxy(this)
-    this._index = Array()
-    this._features = {}
+    this.features = new FeatureManager()
     this._geojson = null
     this._propertiesIndex = []
 
@@ -160,6 +160,10 @@ export class DataLayer {
     return this.fields.map((field) => field.key)
   }
 
+  get sortKey() {
+    return this.getProperty('sortKey') || U.DEFAULT_LABEL_KEY
+  }
+
   getSyncMetadata() {
     return {
       subject: 'datalayer',
@@ -269,17 +273,10 @@ export class DataLayer {
     const Class = LAYER_MAP[this.properties.type] || DefaultLayer
     this.layer = new Class(this)
     // Rendering layer changed, so let's force reset the feature rendering too.
-    this.eachFeature((feature) => feature.makeUI())
-    this.eachFeature(this.showFeature)
+    this.features.each((feature) => feature.makeUI())
+    this.features.each((feature) => this.showFeature(feature))
     if (visible) this.show()
     this.propagateRemote()
-  }
-
-  eachFeature(method, context) {
-    for (const idx of this._index) {
-      method.call(context || this, this._features[idx])
-    }
-    return this
   }
 
   async fetchData() {
@@ -332,12 +329,6 @@ export class DataLayer {
     if (this._geojson) {
       this._geojson_bk = Utils.CopyJSON(this._geojson)
     }
-  }
-
-  reindex() {
-    const features = Object.values(this._features)
-    this.sortFeatures(features)
-    this._index = features.map((feature) => stamp(feature))
   }
 
   showAtZoom() {
@@ -443,11 +434,8 @@ export class DataLayer {
   }
 
   addFeature(feature) {
-    const id = stamp(feature)
     feature.connectToDataLayer(this)
-    this._index.push(id)
-    // TODO FeaturesManager
-    this._features[id] = feature
+    this.features.add(feature)
     this._umap.featuresIndex[feature.getSlug()] = feature
     // TODO: quid for remote data ?
     this.addFields(feature)
@@ -456,11 +444,10 @@ export class DataLayer {
   }
 
   removeFeature(feature, sync) {
-    const id = stamp(feature)
     // This feature was not yet added, may be after
     // hitting Escape while drawing a new line or
     // polygon, not yet valid (not enough points)
-    if (!this._index.includes(id)) return
+    if (!this.features.has(feature)) return
     if (sync !== false) {
       const oldValue = feature.toGeoJSON()
       feature.sync.delete(oldValue)
@@ -468,8 +455,7 @@ export class DataLayer {
     this.hideFeature(feature)
     delete this._umap.featuresIndex[feature.getSlug()]
     feature.disconnectFromDataLayer(this)
-    this._index.splice(this._index.indexOf(id), 1)
-    delete this._features[id]
+    this.features.del(feature)
     if (this.isVisible()) this.dataChanged()
   }
 
@@ -514,7 +500,7 @@ export class DataLayer {
       }
     }
     this.sync.update('properties.fields', this.fields, oldFields)
-    this.eachFeature((feature) => {
+    this.features.each((feature) => {
       feature.renameProperty(oldName, newName)
     })
     this.sync.commitBatch()
@@ -525,7 +511,7 @@ export class DataLayer {
     const oldFields = Utils.CopyJSON(this.fields)
     this.fields = this.fields.filter((field) => field.key !== property)
     this.sync.update('properties.fields', this.fields, oldFields)
-    this.eachFeature((feature) => {
+    this.features.each((feature) => {
       feature.deleteProperty(property)
     })
     this.sync.commitBatch()
@@ -559,7 +545,8 @@ export class DataLayer {
   }
 
   sortedValues(property) {
-    return Object.values(this._features)
+    return this.features
+      .all()
       .map((feature) => feature.properties[property])
       .filter((val, idx, arr) => arr.indexOf(val) === idx)
       .sort(Utils.naturalSort)
@@ -577,11 +564,6 @@ export class DataLayer {
     }
   }
 
-  sortFeatures(collection) {
-    const sortKeys = this.getProperty('sortKey') || U.DEFAULT_LABEL_KEY
-    return Utils.sortFeatures(collection, sortKeys, U.lang)
-  }
-
   makeFeatures(geojson = {}, sync = true) {
     if (geojson.type === 'Feature' || geojson.coordinates) {
       geojson = [geojson]
@@ -591,7 +573,7 @@ export class DataLayer {
       : geojson.features || geojson.geometries
     if (!collection) return
     const features = []
-    this.sortFeatures(collection)
+    Utils.sortFeatures(collection, this.sortKey, U.lang)
     for (const featureJson of collection) {
       if (featureJson.geometry?.type === 'GeometryCollection') {
         for (const geometry of featureJson.geometry.geometries) {
@@ -741,9 +723,7 @@ export class DataLayer {
   }
 
   clear(sync = true) {
-    for (const feature of Object.values(this._features)) {
-      feature.del(sync)
-    }
+    this.features.each((feature) => feature.del(sync))
     this.dataChanged()
   }
 
@@ -759,7 +739,11 @@ export class DataLayer {
 
   redraw() {
     if (!this.isVisible()) return
-    this.eachFeature((feature) => feature.redraw())
+    this.features.each((feature) => feature.redraw())
+  }
+
+  reindex() {
+    this.features.sort(this.sortKey)
   }
 
   _editMetadata(container) {
@@ -1170,7 +1154,7 @@ export class DataLayer {
 
   featuresToGeoJSON() {
     const features = []
-    this.eachFeature((feature) => features.push(feature.toGeoJSON()))
+    this.features.each((feature) => features.push(feature.toGeoJSON()))
     return features
   }
 
@@ -1231,46 +1215,23 @@ export class DataLayer {
   }
 
   count() {
-    return this._index.length
+    return this.features.count()
   }
 
   hasData() {
-    return !!this._index.length
+    return !!this.count()
   }
 
   isVisible() {
     return Boolean(this.layer && this._leafletMap.hasLayer(this.layer))
   }
 
-  getFeatureByIndex(index) {
-    if (index === -1) index = this._index.length - 1
-    const id = this._index[index]
-    return this._features[id]
-  }
-
-  // TODO Add an index
-  // For now, iterate on all the features.
-  getFeatureById(id) {
-    return Object.values(this._features).find((feature) => feature.id === id)
-  }
-
   getNextFeature(feature) {
-    const id = this._index.indexOf(stamp(feature))
-    const nextId = this._index[id + 1]
-    return nextId
-      ? this._features[nextId]
-      : this.getNextBrowsable().getFeatureByIndex(0)
+    return this.features.next(feature) || this.getNextBrowsable().features.first()
   }
 
   getPreviousFeature(feature) {
-    if (this._index <= 1) {
-      return null
-    }
-    const id = this._index.indexOf(stamp(feature))
-    const previousId = this._index[id - 1]
-    return previousId
-      ? this._features[previousId]
-      : this.getPreviousBrowsable().getFeatureByIndex(-1)
+    return this.features.prev(feature) || this.getPreviousBrowsable().features.last()
   }
 
   getPreviousBrowsable() {

@@ -91,7 +91,7 @@ export default class TableEditor extends WithTemplate {
     const bounds = this._leafletMap.getBounds()
     const inBbox = this._umap.browser.options.inBbox
     let html = ''
-    this.datalayer.eachFeature((feature) => {
+    this.datalayer.features.each((feature) => {
       if (feature.isFiltered()) return
       if (inBbox && !feature.isOnScreen(bounds)) return
       const tds = this.datalayer.fields.map(
@@ -157,10 +157,10 @@ export default class TableEditor extends WithTemplate {
     const property = cell.dataset.property
     const field = `properties.${property}`
     const tr = event.target.closest('tr')
-    const feature = this.datalayer.getFeatureById(tr.dataset.feature)
+    const feature = this.datalayer.features.get(tr.dataset.feature)
     const handler = property === 'description' ? 'Textarea' : 'Input'
     const builder = new MutatingForm(feature, [[field, { handler }]], {
-      id: `umap-feature-properties_${L.stamp(feature)}`,
+      id: `umap-feature-properties_${feature.id}`,
     })
     cell.innerHTML = ''
     cell.appendChild(builder.build())
@@ -269,7 +269,7 @@ export default class TableEditor extends WithTemplate {
         this.datalayer.hide()
         for (const row of selectedRows) {
           const id = row.dataset.feature
-          const feature = this.datalayer.getFeatureById(id)
+          const feature = this.datalayer.features.get(id)
           feature.del()
         }
         this.datalayer.show()

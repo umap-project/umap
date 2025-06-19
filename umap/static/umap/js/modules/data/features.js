@@ -3,7 +3,6 @@ import {
   DomUtil,
   GeoJSON,
   LineUtil,
-  stamp,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import { MutatingForm } from '../form/builder.js'
@@ -601,7 +600,7 @@ class Feature {
   }
 
   getRank() {
-    return this.datalayer._index.indexOf(L.stamp(this))
+    return this.datalayer.features.getIndex(this)
   }
 
   redraw() {
