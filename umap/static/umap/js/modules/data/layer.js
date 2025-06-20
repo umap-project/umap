@@ -450,7 +450,7 @@ export class DataLayer {
     this._features[id] = feature
     this._umap.featuresIndex[feature.getSlug()] = feature
     // TODO: quid for remote data ?
-    this.addFields(feature)
+    this.inferFields(feature)
     this.showFeature(feature)
     this.dataChanged()
   }
@@ -473,9 +473,9 @@ export class DataLayer {
     if (this.isVisible()) this.dataChanged()
   }
 
-  addFields(feature) {
+  inferFields(feature) {
     if (!this.properties.fields) this.properties.fields = []
-    const keys = this.properties.fields.map((field) => field.key)
+    const keys = this.fieldKeys
     for (const key in feature.properties) {
       if (typeof feature.properties[key] !== 'object') {
         if (key.indexOf('_') === 0) continue
