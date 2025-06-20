@@ -109,11 +109,6 @@ export class FeatureUpdater extends BaseUpdater {
       feature.geometry = value
     } else {
       Utils.setObjectValue(feature, key, value)
-      if (key.startsWith('properties')) {
-        feature.datalayer.indexProperties(feature)
-        const name = key.replace('properties.', '')
-        feature.datalayer.checkIndexForProperty(name)
-      }
     }
 
     feature.render([key])
