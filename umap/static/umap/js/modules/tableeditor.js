@@ -91,7 +91,7 @@ export default class TableEditor extends WithTemplate {
     const bounds = this._leafletMap.getBounds()
     const inBbox = this._umap.browser.options.inBbox
     let html = ''
-    this.datalayer.features.each((feature) => {
+    this.datalayer.features.forEach((feature) => {
       if (feature.isFiltered()) return
       if (inBbox && !feature.isOnScreen(bounds)) return
       const tds = this.datalayer.fields.map(

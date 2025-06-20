@@ -1469,7 +1469,7 @@ export default class Umap {
 
   eachFeature(callback) {
     this.datalayers.browsable().map((datalayer) => {
-      if (datalayer.isVisible()) datalayer.features.each(callback)
+      if (datalayer.isVisible()) datalayer.features.forEach(callback)
     })
   }
 

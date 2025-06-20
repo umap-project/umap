@@ -45,79 +45,61 @@ export class DataLayerManager extends Object {
     if (!next.canBrowse()) return this.next(next)
     return next
   }
-}
-export class FeatureManager {
-  constructor() {
-    this._registry = {}
-    this._index = Array()
+  first() {
+    return this.active()[0]
   }
+  last() {
+    const layers = this.active()
+    return layers[layers.length - 1]
+  }
+}
 
+export class FeatureManager extends Map {
   add(feature) {
-    this._registry[feature.id] = feature
-    this._index.push(feature.id)
+    if (this.has(feature.id)) {
+      console.error('Duplicate id', feature, this.get(feature.id))
+      feature.id = Utils.generateId()
+    }
+    this.set(feature.id, feature)
   }
 
   del(feature) {
-    this._index.splice(this._index.indexOf(feature.id), 1)
-    delete this._registry[feature.id]
-  }
-
-  has(feature) {
-    return this._index.includes(feature.id)
-  }
-
-  get(id) {
-    return this._registry[id]
+    this.delete(feature.id)
   }
 
   count() {
-    return this._index.length
-  }
-
-  all() {
-    return Object.values(this._registry)
-  }
-
-  each(method) {
-    for (const id of [...this._index]) {
-      method.call(this, this._registry[id])
-    }
+    return this.size
   }
 
   sort(by) {
-    const features = Object.values(this._registry)
+    const features = Array.from(this.values())
     Utils.sortFeatures(features, by, U.lang)
-    this._index = features.map((feature) => feature.id)
-  }
-
-  getByIndex(index) {
-    if (index === -1) index = this._index.length - 1
-    const id = this._index[index]
-    return this._registry[id]
+    this.clear()
+    for (const feature of features) {
+      this.set(feature.id, feature)
+    }
   }
 
   getIndex(feature) {
-    return this._index.indexOf(feature.id)
+    const entries = Array.from(this)
+    return entries.findIndex(([id]) => id === feature.id)
   }
 
   first() {
-    return this.getByIndex(0)
+    return this.values().next().value
   }
 
   last() {
-    return this.getByIndex(-1)
+    return Array.from(this.values())[this.size - 1]
   }
 
   next(feature) {
-    const idx = this._index.indexOf(feature.id)
-    const nextId = this._index[idx + 1]
-    return this._registry[nextId]
+    const index = this.getIndex(feature)
+    return Array.from(this.values())[index + 1]
   }
 
   prev(feature) {
-    if (this.count() <= 1) return null
-    const idx = this._index.indexOf(feature.id)
-    const previousId = this._index[idx - 1]
-    return this._registry[previousId]
+    const index = this.getIndex(feature)
+    return Array.from(this.values())[index - 1]
   }
 }

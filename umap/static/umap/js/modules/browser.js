@@ -90,7 +90,7 @@ export default class Browser {
     const label = parent.querySelector('.datalayer-name')
     const container = parent.querySelector('ul')
     container.innerHTML = ''
-    datalayer.features.each((feature) => this.addFeature(feature, container))
+    datalayer.features.forEach((feature) => this.addFeature(feature, container))
     datalayer.propagate(['properties.name'])
     const total = datalayer.count()
     if (!total) return

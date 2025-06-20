@@ -273,8 +273,8 @@ export class DataLayer {
     const Class = LAYER_MAP[this.properties.type] || DefaultLayer
     this.layer = new Class(this)
     // Rendering layer changed, so let's force reset the feature rendering too.
-    this.features.each((feature) => feature.makeUI())
-    this.features.each((feature) => this.showFeature(feature))
+    this.features.forEach((feature) => feature.makeUI())
+    this.features.forEach((feature) => this.showFeature(feature))
     if (visible) this.show()
     this.propagateRemote()
   }
@@ -447,7 +447,7 @@ export class DataLayer {
     // This feature was not yet added, may be after
     // hitting Escape while drawing a new line or
     // polygon, not yet valid (not enough points)
-    if (!this.features.has(feature)) return
+    if (!this.features.has(feature.id)) return
     if (sync !== false) {
       const oldValue = feature.toGeoJSON()
       feature.sync.delete(oldValue)
@@ -500,7 +500,7 @@ export class DataLayer {
       }
     }
     this.sync.update('properties.fields', this.fields, oldFields)
-    this.features.each((feature) => {
+    this.features.forEach((feature) => {
       feature.renameProperty(oldName, newName)
     })
     this.sync.commitBatch()
@@ -511,7 +511,7 @@ export class DataLayer {
     const oldFields = Utils.CopyJSON(this.fields)
     this.fields = this.fields.filter((field) => field.key !== property)
     this.sync.update('properties.fields', this.fields, oldFields)
-    this.features.each((feature) => {
+    this.features.forEach((feature) => {
       feature.deleteProperty(property)
     })
     this.sync.commitBatch()
@@ -545,8 +545,7 @@ export class DataLayer {
   }
 
   sortedValues(property) {
-    return this.features
-      .all()
+    return Array.from(this.features.values())
       .map((feature) => feature.properties[property])
       .filter((val, idx, arr) => arr.indexOf(val) === idx)
       .sort(Utils.naturalSort)
@@ -723,7 +722,7 @@ export class DataLayer {
   }
 
   clear(sync = true) {
-    this.features.each((feature) => feature.del(sync))
+    this.features.forEach((feature) => feature.del(sync))
     this.dataChanged()
   }
 
@@ -739,7 +738,7 @@ export class DataLayer {
 
   redraw() {
     if (!this.isVisible()) return
-    this.features.each((feature) => feature.redraw())
+    this.features.forEach((feature) => feature.redraw())
   }
 
   reindex() {
@@ -1154,7 +1153,7 @@ export class DataLayer {
 
   featuresToGeoJSON() {
     const features = []
-    this.features.each((feature) => features.push(feature.toGeoJSON()))
+    this.features.forEach((feature) => features.push(feature.toGeoJSON()))
     return features
   }
 
