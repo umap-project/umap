@@ -209,7 +209,7 @@ class Feature {
 
   edit(event) {
     if (!this._umap.editEnabled || this.isReadOnly()) return
-    if (this._umap.editedFeature === this && !event.force) return
+    if (this._umap.editedFeature === this && !event?.force) return
     const container = DomUtil.create('div', 'umap-feature-container')
     DomUtil.createTitle(
       container,
