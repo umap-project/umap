@@ -90,6 +90,12 @@ export class DataLayer {
     if (!this.createdOnServer) {
       if (this.showAtLoad()) this.show()
     }
+    if (!this._needsFetch && !this._umap.fields.length) {
+      this.properties.fields = [
+        { key: U.DEFAULT_LABEL_KEY, type: 'String' },
+        { key: 'description', type: 'Text' },
+      ]
+    }
 
     // Only layers that are displayed on load must be hidden/shown
     // Automatically, others will be shown manually, and thus will
@@ -143,12 +149,6 @@ export class DataLayer {
 
   get fields() {
     if (!this.properties.fields) this.properties.fields = []
-    if (!this.properties.fields.length && !this._umap.fields.length) {
-      this.properties.fields = [
-        { key: U.DEFAULT_LABEL_KEY, type: 'String' },
-        { key: 'description', type: 'Text' },
-      ]
-    }
     return this.properties.fields
   }
 
