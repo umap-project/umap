@@ -1,5 +1,14 @@
 # Articles
 
+## [Greeting uMap 3](https://www.openstreetmap.org/user/David%20Larlet/diary/406936) (2025-06-17)
+
+> After one more year of French administration funding (thank you!), we are so proud to have released versions 3.X of uMap since last April. Since then, we made a couple of adjustments to ease the deployment of that new version.
+>
+> The main feature of that version is the long awaited real-time collaboration! Thanks to Alexis for the development and NLnet for the funding 👏
+
+[Full article →](https://www.openstreetmap.org/user/David%20Larlet/diary/406936){ .md-button }
+
+
 ## [Towards uMap 3 😱](https://www.openstreetmap.org/user/David%20Larlet/diary/404654) (2024-07-16)
 
 > The latest 2.4.X release sets the path for two major requested features: real-time collaboration and one-click remote data importers.
