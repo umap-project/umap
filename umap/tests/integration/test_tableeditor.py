@@ -71,7 +71,7 @@ def test_table_editor(live_server, openmap, datalayer, page):
     page.locator(".panel").get_by_title("Edit properties in a table").click()
     page.locator("td[data-property=description]").dblclick()
     page.locator('textarea[name="description"]').fill("nice new description")
-    page.get_by_text("Add a new property").click()
+    page.get_by_text("Add a new field").click()
     page.locator("dialog").locator("input").fill("newprop")
     page.locator("dialog").get_by_role("button", name="OK").click()
     page.locator("td").nth(2).dblclick()
@@ -94,7 +94,7 @@ def test_cannot_add_existing_property_name(live_server, openmap, datalayer, page
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit properties in a table").click()
-    page.get_by_text("Add a new property").click()
+    page.get_by_text("Add a new field").click()
     page.locator("dialog").locator("input").fill("name")
     page.get_by_role("button", name="OK").click()
     expect(page.get_by_role("dialog")).to_contain_text(
@@ -107,7 +107,7 @@ def test_cannot_add_property_with_a_dot(live_server, openmap, datalayer, page):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit properties in a table").click()
-    page.get_by_text("Add a new property").click()
+    page.get_by_text("Add a new field").click()
     page.locator("dialog").locator("input").fill("foo.bar")
     page.get_by_role("button", name="OK").click()
     expect(page.get_by_role("dialog")).to_contain_text(

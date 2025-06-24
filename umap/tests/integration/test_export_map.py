@@ -104,6 +104,16 @@ def test_umap_export(map, live_server, bootstrap, page):
                     "browsable": True,
                     "displayOnLoad": True,
                     "name": "test datalayer",
+                    "fields": [
+                        {
+                            "key": "name",
+                            "type": "String",
+                        },
+                        {
+                            "key": "description",
+                            "type": "Text",
+                        },
+                    ],
                 },
                 "features": [
                     {

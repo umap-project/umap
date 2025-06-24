@@ -7,229 +7,303 @@
     border: none;
     background-color: initial;
 }
+
 .icon-16 {
     height: 24px;
     line-height: 24px;
     width: 24px;
     --tile: -24px;
 }
+
 .icon-24 {
     background-image: url('../img/24.svg');
     --tile: -36px;
     height: 36px;
     width: 36px;
 }
-.icon + span {
+
+.icon+span {
     margin-inline-start: 5px;
     margin-inline-end: 5px;
 }
+
 html[dir="rtl"] .icon {
-  transform: scaleX(-1);
+    transform: scaleX(-1);
 }
+
 .icon-block {
     display: block;
     float: inline-start;
     margin-inline-end: 10px;
 }
-.icon-block + span {
+
+.icon-block+span {
     margin-inline-start: 0;
 }
+
 .icon-16.icon-white,
 .dark .icon-16 {
     background-image: url('../img/16-white.svg');
 }
+
 .icon-24.icon-white,
 .dark .icon-24 {
     background-image: url('../img/24-white.svg');
 }
+
 .icon-16.icon-black,
 .icon-16 {
     background-image: url('../img/16.svg');
 }
+
 .icon-24.icon-black,
 .icon-24 {
     background-image: url('../img/24.svg');
 }
+
 .icon-add {
     background-position: var(--tile) var(--tile);
 }
+
 .icon-back {
     background-position: calc(var(--tile) * 5) calc(var(--tile) * 6);
 }
+
 .icon-backup {
     background-position: var(--tile) calc(var(--tile) * 6);
 }
+
 .icon-caption {
     background-position: calc(var(--tile) * 4) var(--tile);
 }
+
 .icon-center {
     background-position: calc(var(--tile) * 4) calc(var(--tile) * 2);
 }
+
 .icon-clone {
     background-position: calc(var(--tile) * 7) calc(var(--tile) * 2);
 }
+
 .icon-close {
     background-position: var(--tile) 0px;
 }
+
 .icon-continue-line {
     background-position: calc(var(--tile) * 4) 0;
 }
+
 .icon-copy {
     background-position: calc(var(--tile) * 4) calc(var(--tile) * 7);
 }
+
 .icon-delete {
     background-position: calc(var(--tile) * 5) calc(var(--tile) * 2);
 }
+
 .icon-delete-shape {
     background-position: calc(var(--tile) * 4) calc(var(--tile) * 3);
 }
+
 .icon-delete-vertex {
     background-position: calc(var(--tile) * 5) calc(var(--tile) * 4);
 }
+
 .readonly .icon-delete,
 .off .icon-delete {
     background-position: calc(var(--tile) * 5) calc(var(--tile) * 5);
 }
+
 .icon-download {
     background-position: 0 calc(var(--tile) * 6);
 }
+
 .icon-drag {
     background-position: calc(var(--tile) * 3) calc(var(--tile) * 3);
     cursor: move;
     float: inline-end;
+    visibility: hidden;
 }
+
+.orderable:hover .icon-drag {
+    visibility: visible;
+}
+
 .icon-empty {
     background-position: calc(var(--tile) * 7) calc(var(--tile) * 3);
 }
+
 .icon-eye {
     background-position: calc(var(--tile) * 2) var(--tile);
 }
+
 .off .icon-eye {
     background-position: calc(var(--tile) * 3) var(--tile);
 }
+
 .icon-edit {
     background-position: calc(var(--tile) * 2) calc(var(--tile) * 2);
 }
+
 .off .icon-edit {
     background-position: calc(var(--tile) * 2) calc(var(--tile) * 3);
 }
+
 .icon-external-link {
     background-position: calc(var(--tile) * 6) calc(var(--tile) * 7);
 }
+
 .icon-extract-shape {
     background-position: calc(var(--tile) * 5) 0;
 }
+
 .icon-filters {
     background-position: 0px var(--tile);
 }
+
 .icon-forward {
     background-position: calc(var(--tile) * 6) calc(var(--tile) * 6);
 }
+
 .icon-help {
     background-position: 0 0;
 }
+
 .icon-hole {
     background-position: calc(var(--tile) * 3) calc(var(--tile) * 4);
 }
+
 .icon-key {
     background-position: calc(var(--tile) * 6) calc(var(--tile) * 5);
 }
+
 .icon-layers {
     background-position: calc(var(--tile) * 4) calc(var(--tile) * 5);
 }
+
 .icon-list {
     background-position: var(--tile) calc(var(--tile) * 4);
 }
+
 .icon-magic {
     background-position: calc(var(--tile) * 7) 0;
 }
+
 .icon-marker {
     background-position: calc(var(--tile) * 7) var(--tile);
 }
+
 .icon-marker-plus {
     background-position: calc(var(--tile) * 8) var(--tile);
 }
+
 .icon-multipolygon {
     background-position: calc(var(--tile) * 7) calc(var(--tile) * 5);
 }
+
 .icon-multiline {
     background-position: calc(var(--tile) * 7) calc(var(--tile) * 7);
 }
+
 .icon-peers {
     background-position: calc(var(--tile) * 3) calc(var(--tile) * 2);
 }
+
 .icon-polygon {
     background-position: calc(var(--tile) * 7) calc(var(--tile) * 4);
 }
+
 .icon-polygon-plus {
     background-position: calc(var(--tile) * 8) calc(var(--tile) * 4);
 }
+
 .icon-polyline {
     background-position: calc(var(--tile) * 7) calc(var(--tile) * 6);
 }
+
 .icon-profile {
     background-position: 0 calc(var(--tile) * 4);
 }
+
 .icon-redo {
     background-position: calc(var(--tile) * 3) calc(var(--tile) * 7);
 }
+
 .icon-resize {
     background-position: calc(var(--tile) * 3) calc(var(--tile) * 6);
 }
+
 .icon-undo,
 .icon-restore {
     background-position: calc(var(--tile) * 2) calc(var(--tile) * 7);
 }
+
 .expanded .icon-resize {
     background-position: calc(var(--tile) * 2) calc(var(--tile) * 6);
 }
+
 .icon-save {
     background-position: calc(var(--tile) * 6) var(--tile);
 }
+
 /* FIXME move to a 16-disabled.svg sprite ? */
 .icon-save-disabled {
     background-position: calc(var(--tile) * 6) 0;
 }
+
 .icon-search {
     background-position: var(--tile) calc(var(--tile) * 5);
 }
+
 .icon-settings {
     background-position: var(--tile) calc(var(--tile) * 4);
 }
+
 .icon-share {
     background-position: 0px calc(var(--tile) * 5);
 }
+
 .icon-split-line {
     background-position: calc(var(--tile) * 5) var(--tile);
 }
+
 .icon-star {
     background-position: var(--tile) calc(var(--tile) * 7);
 }
+
 .icon-starred {
     background-position: 0 calc(var(--tile) * 7);
 }
+
 .icon-table {
     background-position: calc(var(--tile) * 2) 0px;
 }
+
 .readonly .icon-table,
 .off .icon-table {
     background-position: calc(var(--tile) * 3) 0px;
 }
+
 .remotelayer .icon-table {
     display: none !important;
 }
+
 .icon-template {
     background-position: calc(var(--tile) * 5) calc(var(--tile) * 7);
 }
+
 .icon-tilelayer {
     background-position: calc(var(--tile) * 4) calc(var(--tile) * 6);
 }
+
 .icon-upload {
     background-position: calc(var(--tile) * 6) calc(var(--tile) * 4);
 }
+
 .icon-zoom {
     background-position: 0px calc(var(--tile) * 2);
 }
+
 .off .icon-zoom {
     background-position: var(--tile) calc(var(--tile) * 2);
 }
