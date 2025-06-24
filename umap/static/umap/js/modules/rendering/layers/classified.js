@@ -67,7 +67,7 @@ const ClassifiedMixin = {
 
   getValues: function () {
     const values = []
-    this.datalayer.eachFeature((feature) => {
+    this.datalayer.features.forEach((feature) => {
       const value = this._getValue(feature)
       if (value !== undefined) values.push(value)
     })

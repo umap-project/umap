@@ -1,3 +1,5 @@
+import * as Utils from './utils.js'
+
 export class DataLayerManager extends Object {
   add(datalayer) {
     this[datalayer.id] = datalayer
@@ -42,5 +44,62 @@ export class DataLayerManager extends Object {
     const next = browsable[current + 1] || browsable[0]
     if (!next.canBrowse()) return this.next(next)
     return next
+  }
+  first() {
+    return this.active()[0]
+  }
+  last() {
+    const layers = this.active()
+    return layers[layers.length - 1]
+  }
+}
+
+export class FeatureManager extends Map {
+  add(feature) {
+    if (this.has(feature.id)) {
+      console.error('Duplicate id', feature, this.get(feature.id))
+      feature.id = Utils.generateId()
+    }
+    this.set(feature.id, feature)
+  }
+
+  del(feature) {
+    this.delete(feature.id)
+  }
+
+  count() {
+    return this.size
+  }
+
+  sort(by) {
+    const features = Array.from(this.values())
+    Utils.sortFeatures(features, by, U.lang)
+    this.clear()
+    for (const feature of features) {
+      this.set(feature.id, feature)
+    }
+  }
+
+  getIndex(feature) {
+    const entries = Array.from(this)
+    return entries.findIndex(([id]) => id === feature.id)
+  }
+
+  first() {
+    return this.values().next().value
+  }
+
+  last() {
+    return Array.from(this.values())[this.size - 1]
+  }
+
+  next(feature) {
+    const index = this.getIndex(feature)
+    return Array.from(this.values())[index + 1]
+  }
+
+  prev(feature) {
+    const index = this.getIndex(feature)
+    return Array.from(this.values())[index - 1]
   }
 }
