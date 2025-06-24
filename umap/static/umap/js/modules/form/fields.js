@@ -422,7 +422,7 @@ Fields.IntSelect = class extends Fields.Select {
 
 Fields.EditableText = class extends BaseElement {
   getTemplate() {
-    return `<span contentEditable class="${this.properties.className || ''}" data-ref=input></span>`
+    return `<span class="${this.properties.className || ''}" data-ref=input></span>`
   }
 
   buildTemplate() {
@@ -436,6 +436,24 @@ Fields.EditableText = class extends BaseElement {
     this.fetch()
     this.input.addEventListener('input', () => this.sync())
     this.input.addEventListener('keypress', (event) => this.onKeyPress(event))
+    this.input.addEventListener('dblclick', () => {
+      if (this.input.contentEditable !== true) {
+        this.input.contentEditable = true
+        this.input.focus()
+      }
+    })
+    this.input.addEventListener('blur', () => {
+      this.input.contentEditable = false
+    })
+    this.input.addEventListener('mouseover', () => {
+      this.builder._umap.tooltip.open({
+        content: translate('Double click to edit the name'),
+        anchor: this.input,
+        position: 'bottom',
+        delay: 500,
+        duration: 5000,
+      })
+    })
   }
 
   value() {
