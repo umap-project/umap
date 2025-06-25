@@ -1,14 +1,14 @@
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
 /* Uses globals for: csv2geojson, osmtogeojson (not available as ESM) */
 import { translate } from './i18n.js'
-import { wktToGeoJSON } from '../../vendors/betterknown/betterknown.mjs'
 
-const parseTextGeom = (geom) => {
+const parseTextGeom = async (geom) => {
   try {
     return JSON.parse(geom)
   } catch (e) {
     try {
-      return wktToGeoJSON(geom)
+      const betterknown = await import('../../vendors/betterknown/betterknown.mjs')
+      return betterknown.wktToGeoJSON(geom)
     } catch {
       return null
     }
@@ -94,7 +94,7 @@ export class Formatter {
         sexagesimal: false,
         parseLatLon: (raw) => Number.parseFloat(raw.toString().replace(',', '.')),
       },
-      (err, result) => {
+      async (err, result) => {
         if (result?.features.length) {
           const first = result.features[0]
           if (first.geometry === null) {
@@ -102,7 +102,7 @@ export class Formatter {
             for (const field of geomFields) {
               if (first.properties[field]) {
                 for (const feature of result.features) {
-                  feature.geometry = parseTextGeom(feature.properties[field])
+                  feature.geometry = await parseTextGeom(feature.properties[field])
                   delete feature.properties[field]
                 }
                 break
