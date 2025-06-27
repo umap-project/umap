@@ -1,3 +1,5 @@
+# Usage:
+# python /path/to/osmic/tools/export.py osmic.yaml --input /path/to/osmic/
 input:
 - name: accommodation
 - name: administration
@@ -16,16 +18,8 @@ input:
 - name: tourism
 - name: transport
 
-output_basedir: "tmp/grey"
+output_basedir: "tmp/pictograms"
 empty_output: true
-format: "png"
-subdirs: false
-
-global_style:
-  padding: 4
-  fill: "#444444"
-
-  halo:
-    fill: "#ededed"
-    width: 1
-    opacity: 0.3
+format: "svg"
+subdirs: true
+size_filter: 14

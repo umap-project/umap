@@ -1,6 +1,7 @@
 import gzip
 import json
 import os
+from pathlib import Path
 
 from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
@@ -185,3 +186,30 @@ def merge_features(reference: list, latest: list, incoming: list):
 def json_dumps(obj, **kwargs):
     """Utility using the Django JSON Encoder when dumping objects"""
     return json.dumps(obj, cls=DjangoJSONEncoder, **kwargs)
+
+
+def collect_pictograms():
+    pictograms = {}
+
+    for name, definition in settings.UMAP_PICTOGRAMS_COLLECTIONS.items():
+        root = Path(definition["path"])
+        categories = {}
+        for path in (root / "pictograms").iterdir():
+            if path.is_dir():
+                categories[path.name] = []
+                for subpath in path.iterdir():
+                    if subpath.is_dir() or subpath.name.startswith("."):
+                        continue
+                    src = subpath.relative_to(root)
+                    categories[path.name].append(
+                        {
+                            "name": subpath.stem,
+                            "src": f"{settings.STATIC_URL}{src}",
+                        }
+                    )
+        pictograms[name] = {
+            "attribution": definition.get("attribution"),
+            "categories": categories,
+        }
+
+    return pictograms
