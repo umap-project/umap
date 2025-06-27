@@ -341,6 +341,7 @@ LOCALE_PATHS = [os.path.join(PROJECT_DIR, "locale")]
 LEAFLET_LONGITUDE = env.int("LEAFLET_LONGITUDE", default=2)
 LEAFLET_LATITUDE = env.int("LEAFLET_LATITUDE", default=51)
 LEAFLET_ZOOM = env.int("LEAFLET_ZOOM", default=6)
+UMAP_PICTOGRAMS = []
 
 
 # =============================================================================

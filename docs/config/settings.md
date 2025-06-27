@@ -352,6 +352,19 @@ How many total maps to return in the search.
 
 How many maps to show in the user "my maps" page.
 
+#### UMAP_PICTOGRAMS
+
+List of icon sets to use in the frontend. When defined, this will replace the pictograms
+set through the uMap admin (`/admin/`).
+
+```python title="settings.py"
+UMAP_PICTOGRAMS = [
+    {"path": "path/to/osmic", "attribution": "Osmic"},
+    {"path": "path/to/collection", "attribution": "FooBar"},
+]
+```
+
+
 #### UMAP_SEARCH_CONFIGURATION
 
 Use it if you take control over the search configuration.
