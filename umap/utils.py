@@ -189,25 +189,27 @@ def json_dumps(obj, **kwargs):
 
 
 def collect_pictograms():
-    pictograms = []
+    pictograms = {}
 
-    def collect(root, path, attribution=None):
-        path = Path(path)
-        for subpath in path.iterdir():
-            if subpath.is_dir():
-                collect(root, subpath, attribution)
-            else:
-                src = subpath.relative_to(root)
-                dirname = path.name
-                pictograms.append(
-                    {
-                        "name": subpath.stem,
-                        "category": dirname if dirname != "pictogams" else None,
-                        "src": f"{settings.STATIC_URL}{src}",
-                        "attribution": attribution,
-                    }
-                )
+    for name, definition in settings.UMAP_PICTOGRAMS_COLLECTIONS.items():
+        root = Path(definition["path"])
+        categories = {}
+        for path in (root / "pictograms").iterdir():
+            if path.is_dir():
+                categories[path.name] = []
+                for subpath in path.iterdir():
+                    if subpath.is_dir() or subpath.name.startswith("."):
+                        continue
+                    src = subpath.relative_to(root)
+                    categories[path.name].append(
+                        {
+                            "name": subpath.stem,
+                            "src": f"{settings.STATIC_URL}{src}",
+                        }
+                    )
+        pictograms[name] = {
+            "attribution": definition.get("attribution"),
+            "categories": categories,
+        }
 
-    for icon_set in settings.UMAP_PICTOGRAMS:
-        collect(root=icon_set["path"], **icon_set)
     return pictograms

@@ -46,18 +46,18 @@ if path:
                 elif key == "UMAP_FEEDBACK_LINK":
                     globals()["UMAP_HELP_URL"] = value
                 else:
-                    if key == "UMAP_PICTOGRAMS" and value:
-                        for icon_set in value:
-                            path = Path(icon_set["path"])
+                    if key == "UMAP_PICTOGRAMS_COLLECTIONS" and value:
+                        for name, options in value.items():
+                            path = Path(options["path"])
                             if not path.exists():
                                 msg = (
-                                    f"UMAP_PICTOGRAMS defines path {path} but it does "
+                                    f"UMAP_PICTOGRAMS_COLLECTIONS defines path {path} but it does "
                                     "not exist"
                                 )
                                 raise ImproperlyConfigured(msg)
                             if not (path / "pictograms").exists():
                                 msg = (
-                                    f"UMAP_PICTOGRAMS defines path {path} but it does "
+                                    f"UMAP_PICTOGRAMS_COLLECTIONS defines path {path} but it does "
                                     "not have a 'pictograms' root folder"
                                 )
                                 raise ImproperlyConfigured(msg)
