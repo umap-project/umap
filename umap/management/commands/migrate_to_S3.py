@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.core.management.base import BaseCommand
@@ -25,7 +27,9 @@ class Command(BaseCommand):
             fs_storage = FileSystemStorage()
             for picto in Pictogram.objects.all():
                 fs_path = str(picto.pictogram)
-                picto.pictogram.save(picto.pictogram.name, fs_storage.open(fs_path))
+                picto.pictogram.save(
+                    Path(picto.pictogram.name).name, fs_storage.open(fs_path)
+                )
                 if options["verbosity"] > 1:
                     print("Migrated:", fs_path)
         else:
