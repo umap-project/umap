@@ -670,6 +670,114 @@ def test_import_csv_with_commas_in_latlon(tilelayer, live_server, page, settings
     }
 
 
+def test_import_csv_with_wkt_geom(tilelayer, live_server, page, settings):
+    settings.UMAP_ALLOW_ANONYMOUS = True
+    page.goto(f"{live_server.url}/map/new/")
+    page.get_by_title("Open browser").click()
+    layers = page.locator(".umap-browser .datalayer")
+    markers = page.locator(".leaflet-marker-icon")
+    paths = page.locator("path")
+    page.get_by_title("Import data").click()
+    textarea = page.locator(".umap-import textarea")
+    textarea.fill(
+        "geom;foobar\nPOLYGON ((-64.8 32.3, -65.5 18.3, -80.3 25.2, -64.8 32.3));mypoly\nPOINT(48.35 12.23);mypoint"
+    )
+    page.locator('select[name="format"]').select_option("csv")
+    page.get_by_role("button", name="Import data", exact=True).click()
+    expect(layers).to_have_count(1)
+    expect(markers).to_have_count(1)
+    expect(paths).to_have_count(1)
+    with page.expect_response(re.compile(r".*/datalayer/create/.*")):
+        page.get_by_role("button", name="Save").click()
+    datalayer = DataLayer.objects.last()
+    saved_data = json.loads(Path(datalayer.geojson.path).read_text())
+    assert saved_data["features"][0]["geometry"] == {
+        "coordinates": [
+            48.35,
+            12.23,
+        ],
+        "type": "Point",
+    }
+    assert saved_data["features"][1]["geometry"] == {
+        "coordinates": [
+            [
+                [
+                    -64.8,
+                    32.3,
+                ],
+                [
+                    -65.5,
+                    18.3,
+                ],
+                [
+                    -80.3,
+                    25.2,
+                ],
+                [
+                    -64.8,
+                    32.3,
+                ],
+            ],
+        ],
+        "type": "Polygon",
+    }
+
+
+def test_import_csv_with_geojson_geom(tilelayer, live_server, page, settings):
+    settings.UMAP_ALLOW_ANONYMOUS = True
+    page.goto(f"{live_server.url}/map/new/")
+    page.get_by_title("Open browser").click()
+    layers = page.locator(".umap-browser .datalayer")
+    markers = page.locator(".leaflet-marker-icon")
+    paths = page.locator("path")
+    page.get_by_title("Import data").click()
+    textarea = page.locator(".umap-import textarea")
+    textarea.fill(
+        "geojson;foobar\n"
+        '{"coordinates": [[[-64.8,32.3],[-65.5,18.3],[-80.3,25.2],[-64.8,32.3]]],"type": "Polygon"};mypoly\n'
+        '{"coordinates": [48.35,12.23],"type": "Point"};mypoint'
+    )
+    page.locator('select[name="format"]').select_option("csv")
+    page.get_by_role("button", name="Import data", exact=True).click()
+    expect(layers).to_have_count(1)
+    expect(markers).to_have_count(1)
+    expect(paths).to_have_count(1)
+    with page.expect_response(re.compile(r".*/datalayer/create/.*")):
+        page.get_by_role("button", name="Save").click()
+    datalayer = DataLayer.objects.last()
+    saved_data = json.loads(Path(datalayer.geojson.path).read_text())
+    assert saved_data["features"][0]["geometry"] == {
+        "coordinates": [
+            48.35,
+            12.23,
+        ],
+        "type": "Point",
+    }
+    assert saved_data["features"][1]["geometry"] == {
+        "coordinates": [
+            [
+                [
+                    -64.8,
+                    32.3,
+                ],
+                [
+                    -65.5,
+                    18.3,
+                ],
+                [
+                    -80.3,
+                    25.2,
+                ],
+                [
+                    -64.8,
+                    32.3,
+                ],
+            ],
+        ],
+        "type": "Polygon",
+    }
+
+
 def test_create_remote_data(page, live_server, tilelayer):
     def handle(route):
         route.fulfill(

@@ -33,5 +33,6 @@ mkdir -p umap/static/umap/vendors/simple-statistics/ && cp node_modules/simple-s
 mkdir -p umap/static/umap/vendors/iconlayers/ && cp node_modules/leaflet-iconlayers/dist/* umap/static/umap/vendors/iconlayers/
 mkdir -p umap/static/umap/vendors/geojson-to-gpx/ && cp node_modules/@dwayneparton/geojson-to-gpx/dist/index.js umap/static/umap/vendors/geojson-to-gpx/
 mkdir -p umap/static/umap/vendors/textpath/ && cp node_modules/leaflet-textpath/leaflet.textpath.js umap/static/umap/vendors/textpath/
+mkdir -p umap/static/umap/vendors/betterknown/ && cp node_modules/betterknown/dist/betterknown.mjs umap/static/umap/vendors/betterknown/
 
 echo 'Done!'
