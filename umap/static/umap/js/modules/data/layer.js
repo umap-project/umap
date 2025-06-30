@@ -796,7 +796,7 @@ export class DataLayer {
     builder.on('set', ({ detail }) => {
       this._umap.onDataLayersChanged()
       if (detail.helper.field === 'properties.type') {
-        this.edit()
+        this.edit().then((panel) => panel.scrollTo('details#layer-properties'))
       }
     })
     container.appendChild(builder.build())
@@ -806,14 +806,16 @@ export class DataLayer {
     const layerFields = this.layer.getEditableProperties()
 
     if (layerFields.length) {
-      const builder = new MutatingForm(this, layerFields, {
-        id: 'datalayer-layer-properties',
-      })
-      const layerProperties = DomUtil.createFieldset(
-        container,
-        `${this.layer.getName()}: ${translate('settings')}`
-      )
-      layerProperties.appendChild(builder.build())
+      const builder = new MutatingForm(this, layerFields)
+      const template = `
+        <details id="layer-properties">
+          <summary>${this.layer.getName()}: ${translate('settings')}</summary>
+          <fieldset data-ref=fieldset></fieldset>
+        </details>
+      `
+      const [details, { fieldset }] = Utils.loadTemplateWithRefs(template)
+      container.appendChild(details)
+      fieldset.appendChild(builder.build())
     }
   }
 

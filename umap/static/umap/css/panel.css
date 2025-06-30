@@ -15,14 +15,17 @@
     box-sizing: border-box;
     counter-reset: step;
 }
+
 .panel.dark {
     border: 1px solid #222;
 }
+
 .panel.full {
     width: initial;
     right: -100%;
     z-index: calc(var(--zindex-panels) + 1);
 }
+
 .panel.full.on {
     visibility: visible;
     right: calc(var(--panel-gutter) * 2 + var(--control-size));
@@ -30,29 +33,45 @@
     height: initial;
     max-height: initial;
 }
+
 .panel .umap-popup-content img {
     /* See https://github.com/Leaflet/Leaflet/commit/61d746818b99d362108545c151a27f09d60960ee#commitcomment-6061847 */
     max-width: 99% !important;
 }
+
 .panel .umap-popup-content {
     max-height: inherit;
 }
+
 .panel .body {
-    height: calc(100% - var(--panel-header-height)); /* Minus size of toolbox */
+    /* Minus size of toolbox */
+    height: calc(100% - var(--panel-header-height));
     padding: var(--panel-gutter);
 }
+
 .panel h3 {
     display: flex;
     align-items: center;
 }
+
 .panel .counter::before {
     counter-increment: step;
     content: counter(step) ". ";
 }
+
 .panel .counter {
     display: block;
     margin-top: var(--panel-gutter);
 }
+
+.panel.dark details[open] {
+    border-left: 2px solid var(--color-accent);
+}
+
+.panel.dark details[open] summary {
+    background-color: var(--color-veryDarkGray);
+}
+
 @media all and (orientation:landscape) {
     .panel {
         top: var(--current-header-height);
@@ -60,28 +79,35 @@
         width: var(--panel-width);
         max-width: calc(100% - var(--panel-gutter) * 2 - var(--control-size))
     }
+
     .panel.condensed {
         max-height: calc(min(500px, 100% - var(--current-header-height) - var(--current-footer-height) - var(--panel-gutter) * 2));
         bottom: initial;
     }
+
     .panel.right {
         right: calc(0px - var(--panel-width));
     }
+
     .panel.left {
         left: calc(0px - var(--panel-width));
     }
+
     .panel.left.on {
         left: calc(var(--panel-gutter) * 2 + var(--control-size));
         visibility: visible;
     }
+
     .panel.right.on {
         right: calc(var(--panel-gutter) * 2 + var(--control-size));
         visibility: visible;
     }
+
     .panel-left-on .panel.full {
         left: calc(var(--panel-gutter) * 3 + var(--control-size) + var(--panel-width));
     }
 }
+
 @media all and (orientation:portrait) {
     .panel {
         height: 50%;
@@ -90,18 +116,22 @@
         bottom: var(--current-footer-height);
         right: -100%;
     }
+
     .panel.left {
         left: -100%;
     }
+
     .panel.on {
         right: 0;
         left: 0;
         visibility: visible;
     }
+
     .panel.expanded {
         height: calc(100% - var(--current-footer-height));
         max-height: calc(100% - var(--current-footer-height));
     }
+
     .umap-caption-bar-enabled .panel {
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;

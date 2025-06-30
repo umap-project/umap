@@ -90,6 +90,7 @@ export class Panel {
   }
   scrollTo(selector) {
     const fieldset = this.container.querySelector(selector)
+    if (!fieldset) return
     fieldset.open = true
     const { top, left } = fieldset.getBoundingClientRect()
     this.container.scrollTo(left, top)
