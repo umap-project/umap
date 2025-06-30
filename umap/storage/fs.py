@@ -79,7 +79,7 @@ class FSDataStorage(FileSystemStorage):
             "size": self.size(self._base_path(instance) / name),
         }
 
-    def purge_old_versions(self, instance, keep=None):
+    def purge_old_versions(self, instance, keep=None, dry_run=False):
         root = self._base_path(instance)
         versions = self.list_versions(instance)
         if keep is not None:
@@ -92,7 +92,8 @@ class FSDataStorage(FileSystemStorage):
             if keep is not None and instance.geojson.name.endswith(name):
                 continue
             try:
-                self.delete(root / name)
+                if not dry_run:
+                    self.delete(root / name)
             except FileNotFoundError:
                 pass
             else:
