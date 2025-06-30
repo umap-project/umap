@@ -90,6 +90,12 @@ export class DataLayer {
     if (!this.createdOnServer) {
       if (this.showAtLoad()) this.show()
     }
+    if (!this._needsFetch && !this._umap.fields.length) {
+      this.properties.fields = [
+        { key: U.DEFAULT_LABEL_KEY, type: 'String' },
+        { key: 'description', type: 'Text' },
+      ]
+    }
 
     // Only layers that are displayed on load must be hidden/shown
     // Automatically, others will be shown manually, and thus will
@@ -143,12 +149,6 @@ export class DataLayer {
 
   get fields() {
     if (!this.properties.fields) this.properties.fields = []
-    if (!this.properties.fields.length && !this._umap.fields.length) {
-      this.properties.fields = [
-        { key: U.DEFAULT_LABEL_KEY, type: 'String' },
-        { key: 'description', type: 'Text' },
-      ]
-    }
     return this.properties.fields
   }
 
@@ -438,7 +438,7 @@ export class DataLayer {
     this.features.add(feature)
     this._umap.featuresIndex[feature.getSlug()] = feature
     // TODO: quid for remote data ?
-    this.addFields(feature)
+    this.inferFields(feature)
     this.showFeature(feature)
     this.dataChanged()
   }
@@ -459,9 +459,9 @@ export class DataLayer {
     if (this.isVisible()) this.dataChanged()
   }
 
-  addFields(feature) {
+  inferFields(feature) {
     if (!this.properties.fields) this.properties.fields = []
-    const keys = this.properties.fields.map((field) => field.key)
+    const keys = this.fieldKeys
     for (const key in feature.properties) {
       if (typeof feature.properties[key] !== 'object') {
         if (key.indexOf('_') === 0) continue

@@ -60,20 +60,21 @@ export default class TemplateImporter {
               break
           }
           body.textContent = message
+          return
         }
+        const ul = Utils.loadTemplate('<ul></ul>')
+        body.appendChild(ul)
         for (const template of data.templates) {
           const item = Utils.loadTemplate(
-            `<dl>
-              <dt>
+            `<li>
                 <label>
                   <input type="radio" value="${template.id}" name="template" />${template.name}
                   <a href="${template.url}" target="_blank"><nobr>${translate('Explore')}<i class="icon icon-16 icon-external-link"></i></nobr></a>
                 </label>
-              </dt>
-              <dd class="text">${Utils.toHTML(template.description)}</dd>
-            </dl>`
+              </li>
+            `
           )
-          body.appendChild(item)
+          ul.appendChild(item)
         }
         tabs.querySelectorAll('button').forEach((el) => el.classList.remove('on'))
         tabs.querySelector(`[data-value="${source}"]`).classList.add('on')

@@ -1,5 +1,9 @@
 # Vidéos uMap
 
+## uMap, quoi de neuf ? 14 juin 2025
+
+<iframe title="uMap, quoi de neuf ?" width="560" height="315" src="https://peertube.openstreetmap.fr/videos/embed/7avEP5WPUvur4za46zXGLj" frameborder="0" allowfullscreen="" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+
 ## uMap Visio-Ouverte de jeudi 22 mai 2025
 
 <iframe title="uMap-Visio-ouverte de jeudi 22 mai 2025" width="560" height="315" src="https://tube.numerique.gouv.fr/videos/embed/4ZC2ZMSaE5XWtQTzxyXgiZ" frameborder="0" allowfullscreen="" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>

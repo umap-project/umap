@@ -1,5 +1,11 @@
 # Articles
 
+## [Créer une carte umap dynamique des professionnels de santé à La Roche-sur-Yon avec un jeu d’open data](https://capnum.io/creer-une-carte-umap-dynamique-avec-un-jeu-dopen-data/) (2025-05-01)
+
+> C’est la fin de ce tutoriel pour créer une carte avec URL APIs open data dans uMap, bonne cartographie à tous et toutes !
+
+[Article complet →](https://capnum.io/creer-une-carte-umap-dynamique-avec-un-jeu-dopen-data/){ .md-button }
+
 ## [Créer des cartes interactives personnalisées : uMap ou Leaflet ?](https://www.d-booker.fr/content/242-creer-des-cartes-interactives-personnalisees-umap-ou-leaflet) (2025-02-01)
 
 > Dans ce guide, nous comparerons deux solutions libres populaires : uMap, une plateforme en ligne intuitive, et Leaflet, une bibliothèque JavaScript puissante.

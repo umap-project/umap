@@ -113,8 +113,9 @@ h2.section {
     text-align: center;
 }
 h2.tabs {
-    display: flex;
-    justify-content: space-around;
+    display: inline-flex;
+    justify-content: left;
+    gap: 22px;
     text-transform: uppercase;
     color: var(--color-darkBlue);
     text-align: start;
@@ -136,7 +137,11 @@ h2.tabs a:not(.selected) {
 }
 h2.tabs a:hover {
     text-decoration: underline;
+    text-decoration-thickness: 3px;
+    text-decoration-skip-ink: none;
+    text-underline-offset: 7px;
 }
+
 .showcase-map .map_fragment {
     height: 400px;
 }

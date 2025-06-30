@@ -131,12 +131,13 @@ class BaseElement {
 
 Fields.Textarea = class extends BaseElement {
   getTemplate() {
-    return `<textarea placeholder="${this.properties.placeholder || ''}" data-ref=textarea></textarea>`
+    return `<textarea placeholder="${this.properties.placeholder || ''}" name="${this.name}" data-ref=textarea></textarea>`
   }
 
   build() {
     super.build()
     this.textarea = this.elements.textarea
+    this.input = this.textarea
     this.fetch()
     this.textarea.addEventListener(
       'input',
@@ -363,6 +364,9 @@ Fields.Select = class extends BaseElement {
   }
 
   getOptions() {
+    if (this.properties.getOptions) {
+      return this.properties.getOptions()
+    }
     return this.properties.selectOptions
   }
 
