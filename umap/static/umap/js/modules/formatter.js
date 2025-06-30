@@ -114,7 +114,9 @@ export class Formatter {
               // point of view.
               err = {
                 type: 'Error',
-                message: translate('Cannot determine latitude and longitude columns.'),
+                message: translate(
+                  'No geo column found: must be either `lat(itude)` and `lon(gitude)` or `geom(etry)`.'
+                ),
               }
             }
           }
