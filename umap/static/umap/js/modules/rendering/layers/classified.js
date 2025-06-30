@@ -447,7 +447,7 @@ export const Categorized = FeatureGroup.extend({
         {
           handler: 'Select',
           label: translate('Color palette'),
-          selectOptions: this.getColorSchemes(this._classes),
+          getOptions: () => this.getColorSchemes(this._classes),
         },
       ],
       [
@@ -481,6 +481,8 @@ export const Categorized = FeatureGroup.extend({
       if (builder) builder.helpers['properties.categorized.mode'].fetch()
     }
     this.compute()
+    // Rebuild list of color palettes when aggregation property changes.
+    builder?.helpers['properties.categorized.brewer']?.fetch()
     // If user changes the mode
     // then update the categories input value
     if (field === 'properties.categorized.mode') {

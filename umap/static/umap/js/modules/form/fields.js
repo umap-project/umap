@@ -364,6 +364,9 @@ Fields.Select = class extends BaseElement {
   }
 
   getOptions() {
+    if (this.properties.getOptions) {
+      return this.properties.getOptions()
+    }
     return this.properties.selectOptions
   }
 
