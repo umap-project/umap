@@ -252,7 +252,7 @@ class Feature {
     this.getAdvancedEditActions(advancedActions)
     const onLoad = this._umap.editPanel.open({ content: container })
     onLoad.then(() => {
-      builder.form.querySelector('input').focus()
+      builder.form.querySelector('input')?.focus()
     })
     this._umap.editedFeature = this
     if (!this.ui.isOnScreen(this._umap._leafletMap.getBounds())) this.zoomTo(event)
