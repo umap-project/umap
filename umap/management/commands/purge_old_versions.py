@@ -49,14 +49,16 @@ class Command(BaseCommand):
             layer_id = layer.uuid
             layer_name = layer.name
             last_modified = layer.modified_at.date()
-            deleted = 0
-            if not options["dry_run"]:
-                deleted = layer.geojson.storage.purge_old_versions(layer, keep=1)
-                layer.geojson.storage.purge_gzip(layer)
-                total_deleted += deleted
-            print(
-                f"Deleted {deleted} old versions of `{layer_name}` ({layer_id}), unmodified since {last_modified}"
+            deleted = layer.geojson.storage.purge_old_versions(
+                layer, keep=1, dry_run=options["dry_run"]
             )
+            total_deleted += deleted
+            if not options["dry_run"]:
+                layer.geojson.storage.purge_gzip(layer)
+            if (deleted and options["verbosity"] > 0) or options["verbosity"] > 1:
+                print(
+                    f"Deleted {deleted} old versions of `{layer_name}` ({layer_id}), unmodified since {last_modified}"
+                )
         if not options["dry_run"]:
             print(f"Successfully deleted {total_deleted} geojson files.")
         else:
