@@ -2,6 +2,19 @@ import { uMapAlert as Alert } from '../components/alerts/alert.js'
 /* Uses globals for: csv2geojson, osmtogeojson (not available as ESM) */
 import { translate } from './i18n.js'
 
+const parseTextGeom = async (geom) => {
+  try {
+    return JSON.parse(geom)
+  } catch (e) {
+    try {
+      const betterknown = await import('../../vendors/betterknown/betterknown.mjs')
+      return betterknown.wktToGeoJSON(geom)
+    } catch {
+      return null
+    }
+  }
+}
+
 export const EXPORT_FORMATS = {
   geojson: {
     formatter: async (umap) => JSON.stringify(umap.toGeoJSON(), null, 2),
@@ -81,15 +94,30 @@ export class Formatter {
         sexagesimal: false,
         parseLatLon: (raw) => Number.parseFloat(raw.toString().replace(',', '.')),
       },
-      (err, result) => {
-        // csv2geojson fallback to null geometries when it cannot determine
-        // lat or lon columns. This is valid geojson, but unwanted from a user
-        // point of view.
+      async (err, result) => {
         if (result?.features.length) {
-          if (result.features[0].geometry === null) {
-            err = {
-              type: 'Error',
-              message: translate('Cannot determine latitude and longitude columns.'),
+          const first = result.features[0]
+          if (first.geometry === null) {
+            const geomFields = ['geom', 'geometry', 'wkt', 'geojson']
+            for (const field of geomFields) {
+              if (first.properties[field]) {
+                for (const feature of result.features) {
+                  feature.geometry = await parseTextGeom(feature.properties[field])
+                  delete feature.properties[field]
+                }
+                break
+              }
+            }
+            if (first.geometry === null) {
+              // csv2geojson fallback to null geometries when it cannot determine
+              // lat or lon columns. This is valid geojson, but unwanted from a user
+              // point of view.
+              err = {
+                type: 'Error',
+                message: translate(
+                  'No geo column found: must be either `lat(itude)` and `lon(gitude)` or `geom(etry)`.'
+                ),
+              }
             }
           }
         }
