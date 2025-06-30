@@ -88,6 +88,12 @@ export class Panel {
       this._leafletMap.invalidateSize({ pan: false })
     }
   }
+  scrollTo(selector) {
+    const fieldset = this.container.querySelector(selector)
+    fieldset.open = true
+    const { top, left } = fieldset.getBoundingClientRect()
+    this.container.scrollTo(left, top)
+  }
 }
 
 export class EditPanel extends Panel {

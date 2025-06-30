@@ -84,6 +84,11 @@ class Feature {
     this.pushGeometry()
   }
 
+  get fields() {
+    // Fields are user defined properties
+    return [...this.datalayer.fields, ...this._umap.fields]
+  }
+
   isOnScreen(bounds) {
     return this.ui?.isOnScreen(bounds)
   }
@@ -198,7 +203,6 @@ class Feature {
       if (this._umap.currentFeature === this) {
         this.view()
       }
-      this.datalayer.indexProperties(this)
     }
     this.redraw()
   }
@@ -221,30 +225,20 @@ class Feature {
     container.appendChild(builder.build())
 
     const properties = []
-    let labelKeyFound = undefined
-    for (const property of this.datalayer.allProperties()) {
-      if (!labelKeyFound && U.LABEL_KEYS.includes(property)) {
-        labelKeyFound = property
-        continue
+    for (const field of this.fields) {
+      let handler = 'Input'
+      if (field.key === 'description' || field.type === 'Text') {
+        handler = 'Textarea'
       }
-      if (property === 'description') {
-        continue
-      }
-      properties.push([`properties.${property}`, { label: property }])
+      properties.push([`properties.${field.key}`, { label: field.key, handler }])
     }
-    // We always want name and description for now (properties management to come)
-    properties.unshift('properties.description')
-    if (!labelKeyFound) {
-      labelKeyFound = U.DEFAULT_LABEL_KEY
-    }
-    properties.unshift([`properties.${labelKeyFound}`, { label: labelKeyFound }])
     builder = new MutatingForm(this, properties, {
       id: 'umap-feature-properties',
     })
     const form = builder.build()
     container.appendChild(form)
     const button = Utils.loadTemplate(
-      `<button type="button"><i class="icon icon-16 icon-add"></i>${translate('Add a new property')}</button>`
+      `<button type="button"><i class="icon icon-16 icon-add"></i>${translate('Add a new field')}</button>`
     )
     button.addEventListener('click', () => {
       this.datalayer.addProperty().then(() => this.edit({ force: true }))
@@ -258,7 +252,7 @@ class Feature {
     this.getAdvancedEditActions(advancedActions)
     const onLoad = this._umap.editPanel.open({ content: container })
     onLoad.then(() => {
-      builder.helpers[`properties.${labelKeyFound}`].input.focus()
+      builder.form.querySelector('input')?.focus()
     })
     this._umap.editedFeature = this
     if (!this.ui.isOnScreen(this._umap._leafletMap.getBounds())) this.zoomTo(event)

@@ -147,6 +147,9 @@ export const SCHEMA = {
     placeholder: translate('Example: key1,key2|Label 2,key3|Label 3|checkbox'),
     label: translate('Filters keys'),
   },
+  fields: {
+    type: Object,
+  },
   fill: {
     type: Boolean,
     impacts: ['data'],

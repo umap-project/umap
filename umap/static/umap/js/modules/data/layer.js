@@ -21,6 +21,7 @@ import TableEditor from '../tableeditor.js'
 import * as Utils from '../utils.js'
 import { LineString, Point, Polygon } from './features.js'
 import Rules from '../rules.js'
+import Orderable from '../orderable.js'
 
 export const LAYER_TYPES = [
   DefaultLayer,
@@ -89,6 +90,12 @@ export class DataLayer {
     if (!this.createdOnServer) {
       if (this.showAtLoad()) this.show()
     }
+    if (!this._needsFetch && !this._umap.fields.length) {
+      this.properties.fields = [
+        { key: U.DEFAULT_LABEL_KEY, type: 'String' },
+        { key: 'description', type: 'Text' },
+      ]
+    }
 
     // Only layers that are displayed on load must be hidden/shown
     // Automatically, others will be shown manually, and thus will
@@ -138,6 +145,19 @@ export class DataLayer {
 
   set rank(value) {
     this.properties.rank = value
+  }
+
+  get fields() {
+    if (!this.properties.fields) this.properties.fields = []
+    return this.properties.fields
+  }
+
+  set fields(fields) {
+    this.properties.fields = fields
+  }
+
+  get fieldKeys() {
+    return this.fields.map((field) => field.key)
   }
 
   getSyncMetadata() {
@@ -426,9 +446,11 @@ export class DataLayer {
     const id = stamp(feature)
     feature.connectToDataLayer(this)
     this._index.push(id)
+    // TODO FeaturesManager
     this._features[id] = feature
-    this.indexProperties(feature)
     this._umap.featuresIndex[feature.getSlug()] = feature
+    // TODO: quid for remote data ?
+    this.inferFields(feature)
     this.showFeature(feature)
     this.dataChanged()
   }
@@ -451,52 +473,62 @@ export class DataLayer {
     if (this.isVisible()) this.dataChanged()
   }
 
-  indexProperties(feature) {
-    for (const i in feature.properties)
-      if (typeof feature.properties[i] !== 'object') this.indexProperty(i)
-  }
-
-  indexProperty(name) {
-    if (!name) return
-    if (name.indexOf('_') === 0) return
-    if (!this._propertiesIndex.includes(name)) {
-      this._propertiesIndex.push(name)
-      this._propertiesIndex.sort()
-    }
-  }
-
-  checkIndexForProperty(name) {
-    for (const feature of Object.values(this._features)) {
-      if (name in feature.properties) {
-        this.indexProperty(name)
-        return
+  inferFields(feature) {
+    if (!this.properties.fields) this.properties.fields = []
+    const keys = this.fieldKeys
+    for (const key in feature.properties) {
+      if (typeof feature.properties[key] !== 'object') {
+        if (key.indexOf('_') === 0) continue
+        if (keys.includes(key)) continue
+        this.properties.fields.push({ key, type: 'String' })
       }
     }
-    this.deindexProperty(name)
   }
 
-  deindexProperty(name) {
-    const idx = this._propertiesIndex.indexOf(name)
-    if (idx !== -1) this._propertiesIndex.splice(idx, 1)
+  async confirmDeleteProperty(property) {
+    return this._umap.dialog
+      .confirm(
+        translate('Are you sure you want to delete this field on all the features?')
+      )
+      .then(() => {
+        this.deleteProperty(property)
+      })
+  }
+
+  async askForRenameProperty(property) {
+    return this._umap.dialog
+      .prompt(translate('Please enter the new name of this field'))
+      .then(({ prompt }) => {
+        if (!prompt || !this.validateName(prompt)) return
+        this.renameProperty(property, prompt)
+      })
   }
 
   renameProperty(oldName, newName) {
     this.sync.startBatch()
+    const oldFields = Utils.CopyJSON(this.fields)
+    for (const field of this.fields) {
+      if (field.key === oldName) {
+        field.key = newName
+        break
+      }
+    }
+    this.sync.update('properties.fields', this.fields, oldFields)
     this.eachFeature((feature) => {
       feature.renameProperty(oldName, newName)
     })
     this.sync.commitBatch()
-    this.deindexProperty(oldName)
-    this.indexProperty(newName)
   }
 
   deleteProperty(property) {
     this.sync.startBatch()
+    const oldFields = Utils.CopyJSON(this.fields)
+    this.fields = this.fields.filter((field) => field.key !== property)
+    this.sync.update('properties.fields', this.fields, oldFields)
     this.eachFeature((feature) => {
       feature.deleteProperty(property)
     })
     this.sync.commitBatch()
-    this.deindexProperty(property)
   }
 
   addProperty() {
@@ -508,7 +540,7 @@ export class DataLayer {
       .prompt(translate('Please enter the name of the property'))
       .then(({ prompt }) => {
         if (!prompt || !this.validateName(prompt)) return
-        this.indexProperty(prompt)
+        this.properties.fields.push({ key: prompt, type: 'String' })
         resolve()
       })
     return promise
@@ -519,15 +551,11 @@ export class DataLayer {
       Alert.error(translate('Name “{name}” should not contain a dot.', { name }))
       return false
     }
-    if (this.allProperties().includes(name)) {
+    if (this.fieldKeys.includes(name)) {
       Alert.error(translate('This name already exists: “{name}”', { name }))
       return false
     }
     return true
-  }
-
-  allProperties() {
-    return this._propertiesIndex
   }
 
   sortedValues(property) {
@@ -734,11 +762,7 @@ export class DataLayer {
     this.eachFeature((feature) => feature.redraw())
   }
 
-  edit() {
-    if (!this._umap.editEnabled) {
-      return
-    }
-    const container = DomUtil.create('div', 'umap-layer-properties-container')
+  _editMetadata(container) {
     const metadataFields = [
       'properties.name',
       'properties.description',
@@ -768,7 +792,7 @@ export class DataLayer {
       ],
     ]
     DomUtil.createTitle(container, translate('Layer properties'), 'icon-layers')
-    let builder = new MutatingForm(this, metadataFields)
+    const builder = new MutatingForm(this, metadataFields)
     builder.on('set', ({ detail }) => {
       this._umap.onDataLayersChanged()
       if (detail.helper.field === 'properties.type') {
@@ -776,11 +800,13 @@ export class DataLayer {
       }
     })
     container.appendChild(builder.build())
+  }
 
+  _editLayerProperties(container) {
     const layerFields = this.layer.getEditableProperties()
 
     if (layerFields.length) {
-      builder = new MutatingForm(this, layerFields, {
+      const builder = new MutatingForm(this, layerFields, {
         id: 'datalayer-layer-properties',
       })
       const layerProperties = DomUtil.createFieldset(
@@ -789,8 +815,10 @@ export class DataLayer {
       )
       layerProperties.appendChild(builder.build())
     }
+  }
 
-    const shapeFields = [
+  _editShapeProperties(container) {
+    const fields = [
       'properties.color',
       'properties.iconClass',
       'properties.iconUrl',
@@ -803,7 +831,7 @@ export class DataLayer {
       'properties.fillOpacity',
     ]
 
-    builder = new MutatingForm(this, shapeFields, {
+    const builder = new MutatingForm(this, fields, {
       id: 'datalayer-advanced-properties',
     })
     const shapeFieldset = DomUtil.createFieldset(
@@ -811,8 +839,10 @@ export class DataLayer {
       translate('Shape properties')
     )
     shapeFieldset.appendChild(builder.build())
+  }
 
-    const advancedFields = [
+  _editAdvancedProperties(container) {
+    const fields = [
       'properties.smoothFactor',
       'properties.dashArray',
       'properties.zoomTo',
@@ -821,7 +851,7 @@ export class DataLayer {
       'properties.sortKey',
     ]
 
-    builder = new MutatingForm(this, advancedFields, {
+    const builder = new MutatingForm(this, fields, {
       id: 'datalayer-advanced-properties',
     })
     builder.on('set', ({ detail }) => {
@@ -834,8 +864,10 @@ export class DataLayer {
       translate('Advanced properties')
     )
     advancedFieldset.appendChild(builder.build())
+  }
 
-    const popupFields = [
+  _editInteractionProperties(container) {
+    const fields = [
       'properties.popupShape',
       'properties.popupTemplate',
       'properties.popupContentTemplate',
@@ -845,14 +877,16 @@ export class DataLayer {
       'properties.outlinkTarget',
       'properties.interactive',
     ]
-    builder = new MutatingForm(this, popupFields)
+    const builder = new MutatingForm(this, fields)
     const popupFieldset = DomUtil.createFieldset(
       container,
       translate('Interaction options')
     )
     popupFieldset.appendChild(builder.build())
+  }
 
-    const textPathFields = [
+  _editTextPathProperties(container) {
+    const fields = [
       'properties.textPath',
       'properties.textPathColor',
       'properties.textPathRepeat',
@@ -861,17 +895,69 @@ export class DataLayer {
       'properties.textPathOffset',
       'properties.textPathPosition',
     ]
-    builder = new MutatingForm(this, textPathFields)
+    const builder = new MutatingForm(this, fields)
     const fieldset = DomUtil.createFieldset(container, translate('Line decoration'))
     fieldset.appendChild(builder.build())
+  }
 
+  _editFields(container) {
+    const template = `
+      <details id="fields">
+        <summary>${translate('Manage Fields')}</summary>
+        <fieldset>
+          <ul data-ref=ul></ul>
+        </fieldset>
+      </details>
+    `
+    const [fieldset, { ul }] = Utils.loadTemplateWithRefs(template)
+    container.appendChild(fieldset)
+    for (const field of this.fields) {
+      const [row, { rename, del }] = Utils.loadTemplateWithRefs(
+        `<li class="orderable" data-key="${field.key}">
+          <button class="icon icon-16 icon-edit" title="${translate('Rename this field')}" data-ref=rename></button>
+          <button class="icon icon-16 icon-delete" title="${translate('Delete this field')}" data-ref=del></button>
+          <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
+          ${field.key}
+        </li>`
+      )
+      ul.appendChild(row)
+      rename.addEventListener('click', () => {
+        this.askForRenameProperty(field.key).then(() => {
+          this.edit().then((panel) => {
+            panel.scrollTo('details#fields')
+          })
+        })
+      })
+      del.addEventListener('click', () => {
+        this.confirmDeleteProperty(field.key).then(() => {
+          this.edit().then((panel) => {
+            panel.scrollTo('details#fields')
+          })
+        })
+      })
+    }
+    const onReorder = (src, dst, initialIndex, finalIndex) => {
+      const orderedKeys = Array.from(ul.querySelectorAll('li')).map(
+        (el) => el.dataset.key
+      )
+      const oldFields = Utils.CopyJSON(this.properties.fields)
+      this.properties.fields.sort(
+        (fieldA, fieldB) =>
+          orderedKeys.indexOf(fieldA.key) > orderedKeys.indexOf(fieldB.key)
+      )
+      this.sync.update('properties.fields', this.properties.fields, oldFields)
+    }
+    const orderable = new Orderable(ul, onReorder)
+  }
+
+  _editRemoteDataProperties(container) {
     // XXX I'm not sure **why** this is needed (as it's set during `this.initialize`)
     // but apparently it's needed.
     if (!Utils.isObject(this.properties.remoteData)) {
       this.properties.remoteData = {}
     }
 
-    const remoteDataFields = [
+    const fields = [
       [
         'properties.remoteData.url',
         { handler: 'Url', label: translate('Url'), helpEntries: ['formatURL'] },
@@ -899,7 +985,7 @@ export class DataLayer {
       ],
     ]
     if (this._umap.properties.urls.ajax_proxy) {
-      remoteDataFields.push([
+      fields.push([
         'properties.remoteData.proxy',
         {
           handler: 'Switch',
@@ -907,14 +993,14 @@ export class DataLayer {
           helpEntries: ['proxyRemoteData'],
         },
       ])
-      remoteDataFields.push('properties.remoteData.ttl')
+      fields.push('properties.remoteData.ttl')
     }
 
     const remoteDataContainer = DomUtil.createFieldset(
       container,
       translate('Remote data')
     )
-    builder = new MutatingForm(this, remoteDataFields)
+    const builder = new MutatingForm(this, fields)
     remoteDataContainer.appendChild(builder.build())
     DomUtil.createButton(
       'button umap-verify',
@@ -923,12 +1009,9 @@ export class DataLayer {
       () => this.fetchRemoteData(true),
       this
     )
-    this.rules.edit(container)
+  }
 
-    if (this._umap.properties.urls.datalayer_versions) {
-      this.buildVersionsFieldset(container)
-    }
-
+  _buildAdvancedActions(container) {
     const advancedActions = DomUtil.createFieldset(
       container,
       translate('Advanced actions')
@@ -963,6 +1046,31 @@ export class DataLayer {
     }
     clone.addEventListener('click', () => this.clone().edit())
     if (this.createdOnServer) download.hidden = false
+  }
+
+  edit() {
+    if (!this._umap.editEnabled) {
+      return
+    }
+    const container = DomUtil.create('div', 'umap-layer-properties-container')
+    this._editMetadata(container)
+    this._editLayerProperties(container)
+    this._editShapeProperties(container)
+    this._editAdvancedProperties(container)
+    this._editInteractionProperties(container)
+    this._editTextPathProperties(container)
+    this._editRemoteDataProperties(container)
+    if (!this.isRemoteLayer()) {
+      this._editFields(container)
+    }
+    this.rules.edit(container)
+
+    if (this._umap.properties.urls.datalayer_versions) {
+      this.buildVersionsFieldset(container)
+    }
+
+    this._buildAdvancedActions(container)
+
     const backButton = DomUtil.createButtonIcon(
       undefined,
       'icon-back',
@@ -973,7 +1081,7 @@ export class DataLayer {
     DomEvent.disableClickPropagation(backButton)
     DomEvent.on(backButton, 'click', this._umap.editDatalayers, this._umap)
 
-    this._umap.editPanel.open({
+    return this._umap.editPanel.open({
       content: container,
       highlight: 'layers',
       actions: [backButton],
