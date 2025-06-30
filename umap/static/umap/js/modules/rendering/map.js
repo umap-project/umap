@@ -335,7 +335,7 @@ export const LeafletMap = BaseMap.extend({
         const datalayer = this._umap.datalayers.visible()[0]
         let feature
         if (datalayer) {
-          const feature = datalayer.getFeatureByIndex(-1)
+          const feature = datalayer.features.last()
           if (feature) {
             feature.zoomTo({ callback: this.options.noControl ? null : feature.view })
             return

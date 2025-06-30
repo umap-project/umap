@@ -81,7 +81,7 @@ export class DataLayerUpdater extends BaseUpdater {
 export class FeatureUpdater extends BaseUpdater {
   getFeatureFromMetadata({ id, layerId }) {
     const datalayer = this.getDataLayerFromID(layerId)
-    return datalayer.getFeatureById(id)
+    return datalayer.features.get(id)
   }
 
   // Create or update an object at a specific position

@@ -1,4 +1,4 @@
-import { DomEvent, DomUtil, stamp } from '../../vendors/leaflet/leaflet-src.esm.js'
+import { DomEvent, DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
 import * as Utils from './utils.js'
 
@@ -25,7 +25,7 @@ export default class Facets {
     }
 
     this._umap.datalayers.browsable().map((datalayer) => {
-      datalayer.eachFeature((feature) => {
+      datalayer.features.forEach((feature) => {
         for (const name of names) {
           let value = feature.properties[name]
           const type = defined.get(name).type

@@ -2,7 +2,6 @@ import {
   DomUtil,
   Util as LeafletUtil,
   latLngBounds,
-  stamp,
 } from '../../vendors/leaflet/leaflet-src.esm.js'
 import {
   uMapAlert as Alert,
@@ -1470,7 +1469,7 @@ export default class Umap {
 
   eachFeature(callback) {
     this.datalayers.browsable().map((datalayer) => {
-      if (datalayer.isVisible()) datalayer.eachFeature(callback)
+      if (datalayer.isVisible()) datalayer.features.forEach(callback)
     })
   }
 
