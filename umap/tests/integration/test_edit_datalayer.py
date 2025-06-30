@@ -221,7 +221,7 @@ def test_deleting_datalayer_should_remove_from_caption(
 def test_can_edit_datalayer_name_in_list(live_server, openmap, datalayer, page):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.get_by_role("button", name="Manage layers").click()
-    page.get_by_text("test datalayer").click()
+    page.get_by_text("test datalayer").dblclick()
     page.get_by_text("test datalayer").fill("test datalayer foobar")
     page.get_by_role("button", name="Open browser").click()
     expect(
