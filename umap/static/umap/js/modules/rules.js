@@ -171,7 +171,7 @@ class Rule {
     remove.addEventListener('click', () => {
       if (!confirm(translate('Are you sure you want to delete this rule?'))) return
       this._delete()
-      this._umap.editPanel.close()
+      this.parent.edit().then((panel) => panel.scrollTo('details#rules'))
     })
     toggle.addEventListener('click', () => {
       this.active = !this.active
