@@ -32,7 +32,7 @@ dependencies = [
   "django-agnocomplete==2.2.0",
   "django-environ==0.12.0",
   "django-probes==1.7.0",
-  "Pillow==11.2.1",
+  "Pillow==11.3.0",
   "psycopg==3.2.9",
   "requests==2.32.4",
   "rcssmin==1.2.1",
