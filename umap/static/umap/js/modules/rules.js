@@ -181,8 +181,11 @@ class Rule {
   }
 
   _delete() {
+    // TODO refactor this call to update
+    const oldRules = Utils.CopyJSON(this.parent.properties.rules || {})
     this.parent.rules.rules = this.parent.rules.rules.filter((rule) => rule !== this)
     this.parent.rules.commit()
+    this.parent.sync.update('properties.rules', this.parent.properties.rules, oldRules)
   }
 
   setter(key, value) {
