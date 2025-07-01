@@ -17,18 +17,30 @@ Example of icons libraries you may want to use:
 - [Remix](https://remixicon.com/)
 
 
-## Static folder
+## Static folders
 
-The easiest way to add icons is to put them in a folder and use the [UMAP_PICTOGRAMS_COLLECTIONS](./settings.md#umap_pictograms_collections) setting.
+The easiest way to add icons is to put them in a folder and use the
+[UMAP_PICTOGRAMS_COLLECTIONS](./settings.md#umap_pictograms_collections) setting.
 This setting is a dict of dicts, each of which represents a collection:
+
 ```python title="settings.py"
 UMAP_PICTOGRAMS_COLLECTIONS = {
-    "MyCollection": {"path": "/path/to/collection", "attribution": "Someone"},
-    "OtherCollection": {"path": "/path/to/other", "attribution": "Else"},
+    "MyCollection": {"path": "/absolute/path/to/collection", "attribution": "Someone"},
+    "OtherCollection": {"path": "relative/path/to/other", "attribution": "Else"},
 }
 ```
-Each path expects a `pictograms` root folder (so not to conflict with other paths when running `collectstatic`), and inside of it one subfolder
-for each category containing a list of pictograms file. Eg.:
+
+`path` can be either relative or absolute.
+
+### if `path` is absolute
+
+Important: the destination folder must contain a `pictograms` subfolder (not to
+conflict with other paths when running `collectstatic`).
+
+Inside of it, each subfolder will be used as a category.
+
+Example:
+
 ```
 └── pictograms
     ├── accommodation
@@ -49,6 +61,54 @@ for each category containing a list of pictograms file. Eg.:
     │   ├── exit.svg
     │   ├── library.svg
     …
+```
+
+### if `path` is relative
+
+The `path` will be searched in the staticfiles directories.
+
+Each subfolder will be used as a category.
+
+Example:
+
+```
+.
+└── umap
+    ├── dsfr-lite
+    │   ├── icons
+    │   │   ├── buildings
+    │   │   │   ├── ancient-gate-fill.svg
+    │   │   │   ├── ancient-gate-line.svg
+    │   │   │   ├── ancient-pavilion-fill.svg
+    │   │   │   ├── ancient-pavilion-line.svg
+    │   │   │   ├── bank-fill.svg
+    │   │   │   ├── bank-line.svg
+    │   │   │   ├── building-fill.svg
+    │   │   │   ├── building-line.svg
+    │   │   │   ├── community-fill.svg
+    │   │   │   ├── community-line.svg
+    │   │   │   ├── government-fill.svg
+    │   │   │   ├── government-line.svg
+    │   │   ├── business
+    │   │   │   ├── archive-fill.svg
+    │   │   │   ├── archive-line.svg
+    │   │   │   ├── attachment-fill.svg
+    │   │   │   ├── attachment-line.svg
+    │   │   │   ├── award-fill.svg
+    │   │   │   ├── award-line.svg
+    │   │   │   ├── bar-chart-box-fill.svg
+    │   │   │   ├── bar-chart-box-line.svg
+…
+```
+
+In this case, the setting will look like:
+```python title="settings.py"
+UMAP_PICTOGRAMS_COLLECTIONS = {
+    "DSFR": {
+        "path": "umap/dsfr-lite/icons",
+        "attribution": "Système de design de l’État",
+    },
+}
 ```
 
 ## Import icons manually (deprecated)

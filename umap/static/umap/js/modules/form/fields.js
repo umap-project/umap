@@ -817,7 +817,8 @@ Fields.IconUrl = class extends Fields.BlurInput {
       </div>
     `)
     let hasIcons = false
-    for (const item of items) {
+    const sorted = items.sort((a, b) => Utils.naturalSort(a.name, b.name, U.lang))
+    for (const item of sorted) {
       item.attribution ??= attribution
       hasIcons = this.addIconPreview(item, grid) || hasIcons
     }

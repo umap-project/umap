@@ -354,10 +354,10 @@ How many maps to show in the user "my maps" page.
 
 #### UMAP_PICTOGRAMS_COLLECTIONS
 
-List of icon sets to use in the frontend. When defined, this will replace the pictograms
-set through the uMap admin (`/admin/`).
+List of icon sets available. When defined, this will replace the pictograms
+set through the uMap admin.
 
-See the [icons](icons.md) page.
+See [icons](icons.md) page.
 
 ```python title="settings.py"
 UMAP_PICTOGRAMS_COLLECTIONS = {

@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 
 from django.conf import settings
+from django.contrib.staticfiles import finders
 from django.core.serializers.json import DjangoJSONEncoder
 from django.urls import URLPattern, URLResolver, get_resolver
 
@@ -193,8 +194,12 @@ def collect_pictograms():
 
     for name, definition in settings.UMAP_PICTOGRAMS_COLLECTIONS.items():
         root = Path(definition["path"])
+        subfolder = "pictograms"
+        if not root.is_absolute():
+            root = Path(finders.find(root).removesuffix(definition["path"]))
+            subfolder = definition["path"]
         categories = {}
-        for path in (root / "pictograms").iterdir():
+        for path in (root / subfolder).iterdir():
             if path.is_dir():
                 categories[path.name] = []
                 for subpath in path.iterdir():

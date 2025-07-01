@@ -48,7 +48,10 @@ if path:
                 else:
                     if key == "UMAP_PICTOGRAMS_COLLECTIONS" and value:
                         for name, options in value.items():
+                            # relative path will be looked relatively to the STATIC_ROOT
                             path = Path(options["path"])
+                            if not path.is_absolute():
+                                continue
                             if not path.exists():
                                 msg = (
                                     f"UMAP_PICTOGRAMS_COLLECTIONS defines path {path} but it does "
