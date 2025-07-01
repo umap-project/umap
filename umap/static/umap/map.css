@@ -841,6 +841,13 @@ a.umap-control-caption,
     text-align: center;
 }
 
+.rules-caption .color-box {
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    margin-right: var(--text-margin);
+    vertical-align: middle;
+}
 
 /* ************* */
 /* Marker's Icon */

@@ -4,6 +4,8 @@ import { MutatingForm } from './form/builder.js'
 import { translate } from './i18n.js'
 import Orderable from './orderable.js'
 import * as Utils from './utils.js'
+import * as Icon from './rendering/icon.js'
+import { SCHEMA } from './schema.js'
 
 const EMPTY_VALUES = ['', undefined, null]
 
@@ -12,12 +14,16 @@ class Rule {
     return this._condition
   }
 
+  get name() {
+    return this._name || this.condition
+  }
+
   set condition(value) {
     this._condition = value
     this.parse()
   }
 
-  constructor(umap, parent, condition = '', properties = {}) {
+  constructor(umap, parent, condition = '', name = '', properties = {}) {
     // TODO make this public properties when browser coverage is ok
     // cf https://caniuse.com/?search=public%20class%20field
     this._condition = null
@@ -34,6 +40,7 @@ class Rule {
     this.active = true
     this.properties = properties
     this.condition = condition
+    this._name = name
   }
 
   render(fields) {
@@ -108,6 +115,7 @@ class Rule {
           placeholder: translate('key=value or key!=value'),
         },
       ],
+      'name',
       'properties.color',
       'properties.iconClass',
       'properties.iconUrl',
@@ -160,7 +168,7 @@ class Rule {
         <button class="icon icon-16 icon-eye" title="${translate('Toggle rule')}" data-ref=toggle></button>
         <button class="icon icon-16 icon-edit show-on-edit" title="${translate('Edit')}" data-ref=edit></button>
         <button class="icon icon-16 icon-delete show-on-edit" title="${translate('Delete rule')}" data-ref=remove></button>
-        <span>${this.condition || translate('empty rule')}</span>
+        <span>${this.name || translate('empty rule')}</span>
         <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
       </li>
     `
@@ -194,6 +202,19 @@ class Rule {
     this.parent.rules.commit()
     this.parent.sync.update('properties.rules', this.parent.properties.rules, oldRules)
   }
+  renderLegend(ul) {
+    const [li, { colorBox }] = Utils.loadTemplateWithRefs(
+      `<li><span class="color-box" data-ref=colorBox></span>${this.name}</li>`
+    )
+    const bgcolor = this.properties.color || this.parent.getColor()
+    const symbol = this.properties.iconUrl
+    colorBox.style.backgroundColor = bgcolor
+    if (symbol && symbol !== SCHEMA.iconUrl.default) {
+      const icon = Icon.makeElement(symbol, colorBox)
+      Icon.setContrast(icon, colorBox, symbol, bgcolor)
+    }
+    ul.appendChild(li)
+  }
 }
 
 export default class Rules {
@@ -206,11 +227,11 @@ export default class Rules {
   load() {
     this.rules = []
     if (!this.parent.properties.rules?.length) return
-    for (const { condition, properties, options } of this.parent.properties
+    for (const { condition, name, properties, options } of this.parent.properties
       .rules) {
       if (!condition) continue
       this.rules.push(
-        new Rule(this._umap, this.parent, condition, properties || options)
+        new Rule(this._umap, this.parent, condition, name, properties || options)
       )
     }
   }
@@ -256,6 +277,18 @@ export default class Rules {
     container.appendChild(body)
   }
 
+  count() {
+    return this.rules.length
+  }
+
+  renderLegend(container) {
+    const ul = Utils.loadTemplate('<ul class="rules-caption"></ul>')
+    container.appendChild(ul)
+    for (const rule of this.rules) {
+      rule.renderLegend(ul)
+    }
+  }
+
   addRule() {
     const rule = new Rule(this._umap, this.parent)
     this.rules.push(rule)
@@ -265,6 +298,7 @@ export default class Rules {
   commit() {
     this.parent.properties.rules = this.rules.map((rule) => {
       return {
+        name: rule.name,
         condition: rule.condition,
         properties: rule.properties,
       }

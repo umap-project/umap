@@ -1430,8 +1430,10 @@ export class DataLayer {
     )) {
       container.innerHTML = ''
       if (this.layer.renderLegend) return this.layer.renderLegend(container)
-      const color = DomUtil.create('span', 'datalayer-color', container)
+      if (this.rules.count()) return this.rules.renderLegend(container)
+      const color = Utils.loadTemplate('<span class="datalayer-color"></span>')
       color.style.backgroundColor = this.getColor()
+      container.appendChild(color)
     }
   }
 
