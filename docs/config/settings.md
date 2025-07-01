@@ -352,6 +352,21 @@ How many total maps to return in the search.
 
 How many maps to show in the user "my maps" page.
 
+#### UMAP_PICTOGRAMS_COLLECTIONS
+
+List of icon sets available. When defined, this will replace the pictograms
+set through the uMap admin.
+
+See [icons](icons.md) page.
+
+```python title="settings.py"
+UMAP_PICTOGRAMS_COLLECTIONS = {
+    "MyCollection": {"path": "/path/to/collection", "attribution": "Someone"},
+    "OtherCollection": {"path": "/path/to/other", "attribution": "Else"},
+}
+```
+
+
 #### UMAP_SEARCH_CONFIGURATION
 
 Use it if you take control over the search configuration.

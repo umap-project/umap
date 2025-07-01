@@ -713,10 +713,10 @@ Fields.IconUrl = class extends Fields.BlurInput {
 
   async onDefine() {
     this.footer.innerHTML = ''
-    const [{ pictogram_list }, response, error] = await this.builder._umap.server.get(
+    const [{ data }, response, error] = await this.builder._umap.server.get(
       this.builder._umap.properties.urls.pictogram_list_json
     )
-    if (!error) this.pictogram_list = pictogram_list
+    if (!error) this.pictogramCollections = data
     this.buildTabs()
     const value = this.value()
     if (Icon.RECENT.length) this.showRecentTab()
@@ -829,36 +829,51 @@ Fields.IconUrl = class extends Fields.BlurInput {
     this.updatePreview()
   }
 
-  addCategory(items, name) {
+  addCategory(items, name, parent, attribution = null) {
     const hidden = name ? '' : ' hidden'
-    const [parent, { grid }] = Utils.loadTemplateWithRefs(`
+    const [container, { grid }] = Utils.loadTemplateWithRefs(`
       <div class="umap-pictogram-category">
         <h6${hidden}>${name}</h6>
         <div class="umap-pictogram-grid" data-ref=grid></div>
       </div>
     `)
     let hasIcons = false
-    for (const item of items) {
+    const sorted = items.sort((a, b) => Utils.naturalSort(a.name, b.name, U.lang))
+    for (const item of sorted) {
+      item.attribution ??= attribution
       hasIcons = this.addIconPreview(item, grid) || hasIcons
     }
-    if (hasIcons) this.grid.appendChild(parent)
+    if (hasIcons) parent.appendChild(container)
   }
 
   buildSymbolsList() {
     this.grid.innerHTML = ''
     const categories = {}
     let category
-    for (const props of this.pictogram_list) {
-      category = props.category || translate('Generic')
-      categories[category] = categories[category] || []
-      categories[category].push(props)
-    }
-    const sorted = Object.entries(categories).sort(([a], [b]) =>
-      Utils.naturalSort(a, b, U.lang)
+    const collectionsNames = Object.keys(this.pictogramCollections)
+    const [container, { select, icons }] = Utils.loadTemplateWithRefs(
+      '<div><select data-ref="select"></select><div data-ref="icons"></div></div>'
     )
-    for (const [name, items] of sorted) {
-      this.addCategory(items, name)
+    for (const name of collectionsNames) {
+      const option = Utils.loadTemplate(`<option value="${name}">${name}</option>`)
+      select.appendChild(option)
     }
+    this.grid.appendChild(container)
+    select.hidden = collectionsNames.length === 1
+    const loadCollection = (name) => {
+      icons.innerHTML = ''
+      const collection = this.pictogramCollections[name || collectionsNames[0]]
+      const sorted = Object.entries(collection.categories).sort(([a], [b]) =>
+        Utils.naturalSort(a, b, U.lang)
+      )
+      for (const [name, items] of sorted) {
+        this.addCategory(items, name, icons, collection.attribution)
+      }
+    }
+    loadCollection()
+    select.addEventListener('change', (event) => {
+      loadCollection(event.target.value)
+    })
   }
 
   buildRecentList() {
@@ -866,7 +881,7 @@ Fields.IconUrl = class extends Fields.BlurInput {
     const items = U.Icon.RECENT.map((src) => ({
       src,
     }))
-    this.addCategory(items)
+    this.addCategory(items, null, this.grid)
   }
 
   isDefault() {
