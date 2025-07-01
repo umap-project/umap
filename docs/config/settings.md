@@ -355,39 +355,15 @@ How many maps to show in the user "my maps" page.
 #### UMAP_PICTOGRAMS_COLLECTIONS
 
 List of icon sets to use in the frontend. When defined, this will replace the pictograms
-set through the uMap admin (`/admin/`). Each path expects a `pictograms` root folder (so
-not to conflict with others when running `collectstatic`), and inside category folders
-containing the pictograms file. Eg.:
-```
-└── pictograms
-    ├── accommodation
-    │   ├── hostel.svg
-    │   ├── hotel.svg
-    │   └── motel.svg
-    ├── administration
-    │   ├── courthouse.svg
-    │   ├── embassy.svg
-    │   ├── government.svg
-    │   ├── prison.svg
-    │   └── town-hall.svg
-    ├── amenity
-    │   ├── cemetery.svg
-    │   ├── cinema.svg
-    │   ├── clock.svg
-    │   ├── entrance.svg
-    │   ├── exit.svg
-    │   ├── library.svg
-    …
-```
-We recommend using SVG files, and in this case keep them black, as uMap front will
-deal with turning them white when needed to help with constrast.
+set through the uMap admin (`/admin/`).
+
+See the [icons](icons.md) page.
 
 ```python title="settings.py"
 UMAP_PICTOGRAMS_COLLECTIONS = {
     "MyCollection": {"path": "/path/to/collection", "attribution": "Someone"},
     "OtherCollection": {"path": "/path/to/other", "attribution": "Else"},
 }
-
 ```
 
 
