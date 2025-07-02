@@ -47,10 +47,6 @@ export class DataLayer {
     this._propertiesIndex = []
 
     this._leafletMap = leafletMap
-    this.parentPane = this._leafletMap.getPane('overlayPane')
-    this.pane = this._leafletMap.createPane(`datalayer${stamp(this)}`, this.parentPane)
-    // FIXME: should be on layer
-    this.renderer = L.svg({ pane: this.pane })
     this.defaultProperties = {
       displayOnLoad: true,
       inCaption: true,
@@ -63,9 +59,18 @@ export class DataLayer {
     // Do not save it later.
     delete data._referenceVersion
     data.id = data.id || crypto.randomUUID()
-
     this.setProperties(data)
+
+    this.parentPane = this._leafletMap.getPane('overlayPane')
+    this.pane = this._leafletMap.createPane(`datalayer-${this.id}`, this.parentPane)
     this.pane.dataset.id = this.id
+    this.pathsPane = Utils.loadTemplate('<div class="umap-paths-pane"></div>')
+    this.markersPane = Utils.loadTemplate('<div class="umap-markers-pane"></div>')
+    this.pane.appendChild(this.pathsPane)
+    this.pane.appendChild(this.markersPane)
+    // FIXME: should be on layer
+    this.renderer = L.svg({ pane: this.pathsPane })
+
     if (this.properties.rank === undefined) {
       this.properties.rank = this._umap.datalayers.count()
     }

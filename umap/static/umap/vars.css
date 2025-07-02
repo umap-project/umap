@@ -61,9 +61,12 @@
     --zindex-panels: 440;
     --zindex-controls: 430;
     --zindex-dragover: 410;
+    --zindex-markers: 405;
+    --zindex-paths: 401;
 
     --block-shadow: 0 1px 7px var(--color-mediumGray);
 }
+
 .dark {
     --background-color: var(--color-darkGray);
     --text-color: #efefef;
