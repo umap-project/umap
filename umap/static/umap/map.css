@@ -58,6 +58,13 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     bottom: var(--current-footer-height);
 }
 
+.umap-paths-pane {
+    z-index: var(--zindex-paths);
+}
+
+.umap-markers-pane {
+    z-index: var(--zindex-markers);
+}
 
 /* *********** */
 /* Controls    */
