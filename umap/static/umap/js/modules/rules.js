@@ -4,6 +4,8 @@ import { MutatingForm } from './form/builder.js'
 import { translate } from './i18n.js'
 import Orderable from './orderable.js'
 import * as Utils from './utils.js'
+import * as Icon from './rendering/icon.js'
+import { SCHEMA } from './schema.js'
 
 const EMPTY_VALUES = ['', undefined, null]
 
@@ -12,12 +14,16 @@ class Rule {
     return this._condition
   }
 
+  get label() {
+    return this.name || this.condition
+  }
+
   set condition(value) {
     this._condition = value
     this.parse()
   }
 
-  constructor(umap, parent, condition = '', options = {}) {
+  constructor(umap, parent, condition = '', name = '', properties = {}) {
     // TODO make this public properties when browser coverage is ok
     // cf https://caniuse.com/?search=public%20class%20field
     this._condition = null
@@ -32,8 +38,9 @@ class Rule {
     this.parent = parent
     this._umap = umap
     this.active = true
-    this.options = options
+    this.properties = properties
     this.condition = condition
+    this.name = name
   }
 
   render(fields) {
@@ -95,7 +102,7 @@ class Rule {
   }
 
   getOption(option) {
-    return this.options[option]
+    return this.properties[option]
   }
 
   edit() {
@@ -108,17 +115,18 @@ class Rule {
           placeholder: translate('key=value or key!=value'),
         },
       ],
-      'options.color',
-      'options.iconClass',
-      'options.iconUrl',
-      'options.iconOpacity',
-      'options.opacity',
-      'options.weight',
-      'options.fill',
-      'options.fillColor',
-      'options.fillOpacity',
-      'options.smoothFactor',
-      'options.dashArray',
+      'name',
+      'properties.color',
+      'properties.iconClass',
+      'properties.iconUrl',
+      'properties.iconOpacity',
+      'properties.opacity',
+      'properties.weight',
+      'properties.fill',
+      'properties.fillColor',
+      'properties.fillOpacity',
+      'properties.smoothFactor',
+      'properties.dashArray',
     ]
     const builder = new MutatingForm(this, options)
     const container = document.createElement('div')
@@ -160,7 +168,7 @@ class Rule {
         <button class="icon icon-16 icon-eye" title="${translate('Toggle rule')}" data-ref=toggle></button>
         <button class="icon icon-16 icon-edit show-on-edit" title="${translate('Edit')}" data-ref=edit></button>
         <button class="icon icon-16 icon-delete show-on-edit" title="${translate('Delete rule')}" data-ref=remove></button>
-        <span>${this.condition || translate('empty rule')}</span>
+        <span>${this.label || translate('empty rule')}</span>
         <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
       </li>
     `
@@ -171,7 +179,7 @@ class Rule {
     remove.addEventListener('click', () => {
       if (!confirm(translate('Are you sure you want to delete this rule?'))) return
       this._delete()
-      this._umap.editPanel.close()
+      this.parent.edit().then((panel) => panel.scrollTo('details#rules'))
     })
     toggle.addEventListener('click', () => {
       this.active = !this.active
@@ -181,8 +189,11 @@ class Rule {
   }
 
   _delete() {
+    // TODO refactor this call to update
+    const oldRules = Utils.CopyJSON(this.parent.properties.rules || {})
     this.parent.rules.rules = this.parent.rules.rules.filter((rule) => rule !== this)
     this.parent.rules.commit()
+    this.parent.sync.update('properties.rules', this.parent.properties.rules, oldRules)
   }
 
   setter(key, value) {
@@ -190,6 +201,20 @@ class Rule {
     Utils.setObjectValue(this, key, value)
     this.parent.rules.commit()
     this.parent.sync.update('properties.rules', this.parent.properties.rules, oldRules)
+  }
+
+  renderLegend(ul) {
+    const [li, { colorBox }] = Utils.loadTemplateWithRefs(
+      `<li><span class="color-box" data-ref=colorBox></span>${this.label}</li>`
+    )
+    const bgcolor = this.properties.color || this.parent.getColor()
+    const symbol = this.properties.iconUrl
+    colorBox.style.backgroundColor = bgcolor
+    if (symbol && symbol !== SCHEMA.iconUrl.default) {
+      const icon = Icon.makeElement(symbol, colorBox)
+      Icon.setContrast(icon, colorBox, symbol, bgcolor)
+    }
+    ul.appendChild(li)
   }
 }
 
@@ -203,9 +228,17 @@ export default class Rules {
   load() {
     this.rules = []
     if (!this.parent.properties.rules?.length) return
-    for (const { condition, options } of this.parent.properties.rules) {
+    for (const { condition, name, properties, options } of this.parent.properties
+      .rules) {
       if (!condition) continue
-      this.rules.push(new Rule(this._umap, this.parent, condition, options))
+      const rule = new Rule(
+        this._umap,
+        this.parent,
+        condition,
+        name,
+        properties || options
+      )
+      this.rules.push(rule)
     }
   }
 
@@ -250,6 +283,19 @@ export default class Rules {
     container.appendChild(body)
   }
 
+  count() {
+    return this.rules.length
+  }
+
+  renderLegend(container, keys = new Set()) {
+    const ul = Utils.loadTemplate('<ul class="rules-caption"></ul>')
+    container.appendChild(ul)
+    for (const rule of this.rules) {
+      if (keys.size && !keys.has(rule.key)) continue
+      rule.renderLegend(ul)
+    }
+  }
+
   addRule() {
     const rule = new Rule(this._umap, this.parent)
     this.rules.push(rule)
@@ -259,17 +305,24 @@ export default class Rules {
   commit() {
     this.parent.properties.rules = this.rules.map((rule) => {
       return {
+        name: rule.name,
         condition: rule.condition,
-        options: rule.options,
+        properties: rule.properties,
       }
     })
   }
 
-  getOption(option, feature) {
+  getOption(name, feature) {
     for (const rule of this.rules) {
       if (rule.match(feature.properties)) {
-        if (Utils.usableOption(rule.options, option)) return rule.options[option]
+        if (Utils.usableOption(rule.properties, name)) return rule.properties[name]
       }
+    }
+  }
+
+  *[Symbol.iterator]() {
+    for (const rule of this.rules) {
+      yield rule
     }
   }
 }
