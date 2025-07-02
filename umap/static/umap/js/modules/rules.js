@@ -14,8 +14,8 @@ class Rule {
     return this._condition
   }
 
-  get name() {
-    return this._name || this.condition
+  get label() {
+    return this.name || this.condition
   }
 
   set condition(value) {
@@ -40,7 +40,7 @@ class Rule {
     this.active = true
     this.properties = properties
     this.condition = condition
-    this._name = name
+    this.name = name
   }
 
   render(fields) {
@@ -168,7 +168,7 @@ class Rule {
         <button class="icon icon-16 icon-eye" title="${translate('Toggle rule')}" data-ref=toggle></button>
         <button class="icon icon-16 icon-edit show-on-edit" title="${translate('Edit')}" data-ref=edit></button>
         <button class="icon icon-16 icon-delete show-on-edit" title="${translate('Delete rule')}" data-ref=remove></button>
-        <span>${this.name || translate('empty rule')}</span>
+        <span>${this.label || translate('empty rule')}</span>
         <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
       </li>
     `
@@ -202,9 +202,10 @@ class Rule {
     this.parent.rules.commit()
     this.parent.sync.update('properties.rules', this.parent.properties.rules, oldRules)
   }
+
   renderLegend(ul) {
     const [li, { colorBox }] = Utils.loadTemplateWithRefs(
-      `<li><span class="color-box" data-ref=colorBox></span>${this.name}</li>`
+      `<li><span class="color-box" data-ref=colorBox></span>${this.label}</li>`
     )
     const bgcolor = this.properties.color || this.parent.getColor()
     const symbol = this.properties.iconUrl
@@ -230,9 +231,14 @@ export default class Rules {
     for (const { condition, name, properties, options } of this.parent.properties
       .rules) {
       if (!condition) continue
-      this.rules.push(
-        new Rule(this._umap, this.parent, condition, name, properties || options)
+      const rule = new Rule(
+        this._umap,
+        this.parent,
+        condition,
+        name,
+        properties || options
       )
+      this.rules.push(rule)
     }
   }
 
@@ -281,10 +287,11 @@ export default class Rules {
     return this.rules.length
   }
 
-  renderLegend(container) {
+  renderLegend(container, keys = new Set()) {
     const ul = Utils.loadTemplate('<ul class="rules-caption"></ul>')
     container.appendChild(ul)
     for (const rule of this.rules) {
+      if (keys.size && !keys.has(rule.key)) continue
       rule.renderLegend(ul)
     }
   }
@@ -310,6 +317,12 @@ export default class Rules {
       if (rule.match(feature.properties)) {
         if (Utils.usableOption(rule.properties, name)) return rule.properties[name]
       }
+    }
+  }
+
+  *[Symbol.iterator]() {
+    for (const rule of this.rules) {
+      yield rule
     }
   }
 }

@@ -27,6 +27,7 @@ DATALAYER_DATA1 = {
                 "myboolean": True,
                 "mydate": "2024/04/14 12:19:17",
                 "maybeempty": "not empty",
+                "onlyinone": "blah",
             },
             "geometry": {"type": "Point", "coordinates": [0.065918, 48.385442]},
         },
@@ -39,6 +40,7 @@ DATALAYER_DATA1 = {
                 "myboolean": False,
                 "mydate": "2024/03/13 12:20:20",
                 "maybeempty": "",
+                "onlyinone": "ffff",
             },
             "geometry": {"type": "Point", "coordinates": [3.55957, 49.767074]},
         },
@@ -95,7 +97,7 @@ DATALAYER_DATA2 = {
 
 def test_simple_equal_rule_at_load(live_server, page, map):
     map.settings["properties"]["rules"] = [
-        {"condition": "mytype=odd", "options": {"color": "aliceblue"}}
+        {"condition": "mytype=odd", "properties": {"color": "aliceblue"}}
     ]
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
@@ -109,7 +111,7 @@ def test_simple_equal_rule_at_load(live_server, page, map):
 
 def test_simple_not_equal_rule_at_load(live_server, page, map):
     map.settings["properties"]["rules"] = [
-        {"condition": "mytype!=even", "options": {"color": "aliceblue"}}
+        {"condition": "mytype!=even", "properties": {"color": "aliceblue"}}
     ]
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
@@ -123,7 +125,7 @@ def test_simple_not_equal_rule_at_load(live_server, page, map):
 
 def test_gt_rule_with_number_at_load(live_server, page, map):
     map.settings["properties"]["rules"] = [
-        {"condition": "mynumber>10", "options": {"color": "aliceblue"}}
+        {"condition": "mynumber>10", "properties": {"color": "aliceblue"}}
     ]
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
@@ -137,7 +139,7 @@ def test_gt_rule_with_number_at_load(live_server, page, map):
 
 def test_lt_rule_with_number_at_load(live_server, page, map):
     map.settings["properties"]["rules"] = [
-        {"condition": "mynumber<14", "options": {"color": "aliceblue"}}
+        {"condition": "mynumber<14", "properties": {"color": "aliceblue"}}
     ]
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
@@ -151,7 +153,7 @@ def test_lt_rule_with_number_at_load(live_server, page, map):
 
 def test_lt_rule_with_float_at_load(live_server, page, map):
     map.settings["properties"]["rules"] = [
-        {"condition": "mynumber<12.3", "options": {"color": "aliceblue"}}
+        {"condition": "mynumber<12.3", "properties": {"color": "aliceblue"}}
     ]
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
@@ -165,7 +167,7 @@ def test_lt_rule_with_float_at_load(live_server, page, map):
 
 def test_equal_rule_with_boolean_at_load(live_server, page, map):
     map.settings["properties"]["rules"] = [
-        {"condition": "myboolean=true", "options": {"color": "aliceblue"}}
+        {"condition": "myboolean=true", "properties": {"color": "aliceblue"}}
     ]
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
@@ -179,7 +181,7 @@ def test_equal_rule_with_boolean_at_load(live_server, page, map):
 
 def test_equal_rule_with_boolean_not_true_at_load(live_server, page, map):
     map.settings["properties"]["rules"] = [
-        {"condition": "myboolean!=true", "options": {"color": "aliceblue"}}
+        {"condition": "myboolean!=true", "properties": {"color": "aliceblue"}}
     ]
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
@@ -193,7 +195,7 @@ def test_equal_rule_with_boolean_not_true_at_load(live_server, page, map):
 
 def test_equal_rule_with_boolean_false_at_load(live_server, page, map):
     map.settings["properties"]["rules"] = [
-        {"condition": "myboolean=false", "options": {"color": "aliceblue"}}
+        {"condition": "myboolean=false", "properties": {"color": "aliceblue"}}
     ]
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
@@ -207,7 +209,7 @@ def test_equal_rule_with_boolean_false_at_load(live_server, page, map):
 
 def test_equal_rule_with_boolean_not_false_at_load(live_server, page, map):
     map.settings["properties"]["rules"] = [
-        {"condition": "myboolean!=false", "options": {"color": "aliceblue"}}
+        {"condition": "myboolean!=false", "properties": {"color": "aliceblue"}}
     ]
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
@@ -221,7 +223,7 @@ def test_equal_rule_with_boolean_not_false_at_load(live_server, page, map):
 
 def test_empty_rule_at_load(live_server, page, map):
     map.settings["properties"]["rules"] = [
-        {"condition": "maybeempty=", "options": {"color": "aliceblue"}}
+        {"condition": "maybeempty=", "properties": {"color": "aliceblue"}}
     ]
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
@@ -235,7 +237,7 @@ def test_empty_rule_at_load(live_server, page, map):
 
 def test_not_empty_rule_at_load(live_server, page, map):
     map.settings["properties"]["rules"] = [
-        {"condition": "maybeempty!=", "options": {"color": "aliceblue"}}
+        {"condition": "maybeempty!=", "properties": {"color": "aliceblue"}}
     ]
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
@@ -270,7 +272,7 @@ def test_can_create_new_rule(live_server, page, openmap):
 
 def test_can_deactive_rule_from_list(live_server, page, openmap):
     openmap.settings["properties"]["rules"] = [
-        {"condition": "mytype=odd", "options": {"color": "aliceblue"}}
+        {"condition": "mytype=odd", "properties": {"color": "aliceblue"}}
     ]
     openmap.save()
     DataLayerFactory(map=openmap, data=DATALAYER_DATA1)
@@ -299,9 +301,17 @@ def test_autocomplete_datalist(live_server, page, openmap):
     page.get_by_role("button", name="Add rule").click()
     panel = page.locator(".panel.right.on")
     datalist = panel.locator(".umap-field-condition datalist option")
-    expect(datalist).to_have_count(6)
+    expect(datalist).to_have_count(7)
     values = {option.inner_text() for option in datalist.all()}
-    assert values == {"myboolean", "mytype", "mynumber", "mydate", "name", "maybeempty"}
+    assert values == {
+        "myboolean",
+        "mytype",
+        "mynumber",
+        "mydate",
+        "name",
+        "maybeempty",
+        "onlyinone",
+    }
     page.get_by_placeholder("key=value or key!=value").fill("mytype")
     expect(datalist).to_have_count(4)
     values = {option.inner_text() for option in datalist.all()}
@@ -314,8 +324,8 @@ def test_autocomplete_datalist(live_server, page, openmap):
 
 def test_can_combine_rules(live_server, page, map):
     map.settings["properties"]["rules"] = [
-        {"condition": "mytype=odd", "options": {"color": "aliceblue"}},
-        {"condition": "mynumber>10", "options": {"iconClass": "Drop"}},
+        {"condition": "mytype=odd", "properties": {"color": "aliceblue"}},
+        {"condition": "mynumber>10", "properties": {"iconClass": "Drop"}},
     ]
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
@@ -333,8 +343,8 @@ def test_can_combine_rules(live_server, page, map):
 
 def test_first_matching_rule_wins_on_given_property(live_server, page, map):
     map.settings["properties"]["rules"] = [
-        {"condition": "mytype=odd", "options": {"color": "aliceblue"}},
-        {"condition": "mytype!=even", "options": {"color": "darkred"}},
+        {"condition": "mytype=odd", "properties": {"color": "aliceblue"}},
+        {"condition": "mytype!=even", "properties": {"color": "darkred"}},
     ]
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
@@ -348,12 +358,12 @@ def test_first_matching_rule_wins_on_given_property(live_server, page, map):
 
 def test_rules_from_datalayer(live_server, page, map):
     map.settings["properties"]["rules"] = [
-        {"condition": "mytype=odd", "options": {"color": "darkred"}}
+        {"condition": "mytype=odd", "properties": {"color": "darkred"}}
     ]
     map.save()
     data = deepcopy(DATALAYER_DATA1)
     data["_umap_options"]["rules"] = [
-        {"condition": "mytype=odd", "options": {"color": "aliceblue"}}
+        {"condition": "mytype=odd", "properties": {"color": "aliceblue"}}
     ]
     DataLayerFactory(map=map, data=data)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
@@ -365,3 +375,35 @@ def test_rules_from_datalayer(live_server, page, map):
     assert colors.count("rgb(240, 248, 255)") == 1
     # Dark Red as for map global rules
     assert colors.count("rgb(139, 0, 0)") == 2
+
+
+def test_rules_in_caption(live_server, page, map):
+    map.settings["properties"]["rules"] = [
+        {
+            "condition": "mytype=odd",
+            "name": "Rule shown twice",
+            "properties": {"color": "darkred"},
+        },
+        {
+            "condition": "onlyinone=fff",
+            "name": "Rule shown once",
+            "properties": {"color": "darkred"},
+        },
+    ]
+    map.settings["properties"]["onLoadPanel"] = "caption"
+    map.save()
+    data = deepcopy(DATALAYER_DATA1)
+    data["_umap_options"]["rules"] = [
+        {
+            "condition": "myboolean=true",
+            "name": "Rule shown also once",
+            "properties": {"color": "aliceblue"},
+        }
+    ]
+    DataLayerFactory(map=map, data=data)
+    DataLayerFactory(map=map, data=DATALAYER_DATA2)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
+    panel = page.locator(".panel.left.on")
+    expect(panel.get_by_text("Rule shown twice")).to_have_count(2)
+    expect(panel.get_by_text("Rule shown once")).to_have_count(1)
+    expect(panel.get_by_text("Rule shown also once")).to_have_count(1)

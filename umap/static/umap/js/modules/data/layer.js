@@ -1430,10 +1430,27 @@ export class DataLayer {
     )) {
       container.innerHTML = ''
       if (this.layer.renderLegend) return this.layer.renderLegend(container)
-      if (this.rules.count()) return this.rules.renderLegend(container)
-      const color = Utils.loadTemplate('<span class="datalayer-color"></span>')
-      color.style.backgroundColor = this.getColor()
-      container.appendChild(color)
+      const keys = new Set(this.fieldKeys)
+      const rules = new Map()
+      for (const rule of this.rules) {
+        rules.set(rule.condition, rule)
+      }
+      for (const rule of this._umap.rules) {
+        if (!rules.has(rule.condition) && keys.has(rule.key)) {
+          rules.set(rule.condition, rule)
+        }
+      }
+      if (rules.size) {
+        const ul = Utils.loadTemplate('<ul class="rules-caption"></ul>')
+        container.appendChild(ul)
+        for (const [_, rule] of rules) {
+          rule.renderLegend(ul)
+        }
+      } else {
+        const color = Utils.loadTemplate('<span class="datalayer-color"></span>')
+        color.style.backgroundColor = this.getColor()
+        container.appendChild(color)
+      }
     }
   }
 
