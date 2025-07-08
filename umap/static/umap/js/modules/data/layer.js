@@ -611,11 +611,13 @@ export class DataLayer {
         break
       default:
         console.debug(geojson)
-        Alert.error(
-          translate('Skipping unknown geometry.type: {type}', {
-            type: geometry.type || 'undefined',
-          })
-        )
+        if (this._umap.editEnabled) {
+          Alert.error(
+            translate('Skipping unknown geometry.type: {type}', {
+              type: geometry.type || 'undefined',
+            })
+          )
+        }
     }
     if (feature && !feature.isEmpty()) {
       this.addFeature(feature)
