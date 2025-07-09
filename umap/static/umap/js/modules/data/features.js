@@ -371,8 +371,6 @@ class Feature {
 
   connectToDataLayer(datalayer) {
     this.datalayer = datalayer
-    // FIXME should be in layer/ui
-    this.ui.options.renderer = this.datalayer.renderer
   }
 
   disconnectFromDataLayer(datalayer) {
@@ -776,12 +774,6 @@ class Path extends Feature {
 
   _setLatLngs(latlngs) {
     this.ui.setLatLngs(latlngs)
-  }
-
-  connectToDataLayer(datalayer) {
-    super.connectToDataLayer(datalayer)
-    // We keep markers on their own layer on top of the paths.
-    this.ui.options.pane = this.datalayer.pane
   }
 
   edit(event) {

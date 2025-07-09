@@ -238,6 +238,14 @@ export const LeafletMarker = Marker.extend({
     this._redraw()
     this._resetZIndex()
   },
+
+  _resetZIndex() {
+    // Override Leaflet default behaviour, which set the zIndex
+    // according to feature's y coordinate, and group features
+    // zIndex by their datalayer order
+    this._zIndex = this.feature.datalayer.getDOMOrder()
+    this._updateZIndex(0)
+  },
 })
 
 const PathMixin = {
@@ -294,6 +302,11 @@ const PathMixin = {
 
   _onDrag: function () {
     if (this._tooltip) this._tooltip.setLatLng(this.getCenter())
+  },
+
+  beforeAdd: function (map) {
+    this.options.renderer = this.feature.datalayer.renderer
+    this.parentClass.prototype.beforeAdd.call(this, map)
   },
 
   onAdd: function (map) {
