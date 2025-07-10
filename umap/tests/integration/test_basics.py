@@ -43,7 +43,7 @@ def test_create_map_with_cursor(page, live_server, tilelayer):
             "margin-left: -16px; "
             "margin-top: -40px; "
             "transform: translate3d(200px, 200px, 0px); "
-            "z-index: 200;"
+            "z-index: 0;"
         ),
     )
 

@@ -273,8 +273,10 @@ export class DataLayer {
     const Class = LAYER_MAP[this.properties.type] || DefaultLayer
     this.layer = new Class(this)
     // Rendering layer changed, so let's force reset the feature rendering too.
-    this.features.forEach((feature) => feature.makeUI())
-    this.features.forEach((feature) => this.showFeature(feature))
+    this.features.forEach((feature) => {
+      feature.makeUI()
+      this.showFeature(feature)
+    })
     if (visible) this.show()
     this.propagateRemote()
   }
@@ -753,6 +755,9 @@ export class DataLayer {
 
   reindex() {
     this.features.sort(this.sortKey)
+    if (this.isBrowsable()) {
+      this.resetLayer(true)
+    }
   }
 
   _editMetadata(container) {

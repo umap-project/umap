@@ -1529,6 +1529,7 @@ export default class Umap {
           const oldRank = datalayer.rank
           datalayer.rank = rank
           datalayer.sync.update('options.rank', rank, oldRank)
+          datalayer.redraw()
         }
       })
       this.sync.commitBatch()
