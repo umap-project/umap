@@ -3,15 +3,16 @@ import { default as DOMPurifyInitializer } from '../../vendors/dompurify/purify.
 /**
  * Generate a pseudo-unique identifier (5 chars long, mixed-case alphanumeric)
  *
- * Here's the collision risk:
- * - for 6 chars, 1 in 100 000
- * - for 5 chars, 5 in 100 000
- * - for 4 chars, 500 in 100 000
- *
  * @returns string
  */
-export function generateId() {
-  return btoa(Math.random().toString()).substring(10, 15)
+const CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+export function generateId(length = 5) {
+  let result = ''
+  const charactersLength = CHARACTERS.length
+  for (let i = 0; i < length; i++) {
+    result += CHARACTERS.charAt(Math.floor(Math.random() * charactersLength))
+  }
+  return result
 }
 
 /**
