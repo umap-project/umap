@@ -16,7 +16,6 @@ const locale = {
     "Activate slideshow mode": "Activar modo de presentación",
     "Add a layer": "Añadir una capa",
     "Add a line to the current multi": "Añadir una línea al multielemento actual",
-    "Add a new property": "Añadir una nueva propiedad",
     "Add a polygon to the current multi": "Añadir un polígono al multielemento actual",
     "Add image URL": "Añadir URL de imagen",
     "Advanced actions": "Acciones avanzadas",
@@ -29,7 +28,6 @@ const locale = {
     "Animated transitions": "Transiciones animadas",
     "Are you sure you want to clone this map and all its datalayers?": "¿Estás seguro de que quieres clonar este mapa y todas sus capas de datos?",
     "Are you sure you want to delete this map?": "¿Estás seguro de que quieres eliminar este mapa?",
-    "Are you sure you want to delete this property on all the features?": "¿Estás seguro de que quieres eliminar esta propiedad en todos los elementos?",
     "Are you sure you want to restore this version?": "¿Estás seguro de que quieres restaurar esta versión?",
     "Attach the map to my account": "Adjuntar el mapa a mi cuenta",
     "attribution": "atribución",
@@ -157,7 +155,6 @@ const locale = {
     "Format": "Formato",
     "From zoom": "Desde zoom",
     "full backup": "copia de seguridad completa",
-    "Generic": "Genérico",
     "GeoRSS (only link)": "GeoRSS (solo enlace)",
     "GeoRSS (title + image)": "GeoRSS (título + imagen)",
     "Go to \"{coords}\"": "Ir a \"{coords}\"",
@@ -273,7 +270,6 @@ const locale = {
     "Please be sure the licence is compliant with your use.": "Asegúrate de que la licencia sea compatible con tu uso.",
     "Please choose a format": "Elige un formato",
     "Please enter the name of the property": "Introduce el nombre de la propiedad",
-    "Please enter the new name of this property": "Introduce el nuevo nombre de esta propiedad",
     "Please save the map first": "Guarda el mapa primero",
     "Popup (large)": "Ventana emergente (grande)",
     "Popup content style": "Estilo del contenido emergente",
@@ -406,7 +402,6 @@ const locale = {
     "Until": "Hasta",
     "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Ejemplo: clave1,clave2|Etiqueta 2,clave3|Etiqueta 3|casilla de verificación",
     "Edit in OpenStreetMap": "Editar en OpenStreetMap",
-    "Cannot determine latitude and longitude columns.": "No se pueden determinar las columnas de latitud y longitud.",
     "Back to layers": "Volver a las capas",
     "Filters": "Filtros",
     "Comma separated list of properties to use when filtering features by text input": "Lista de propiedades separadas por comas para usar al filtrar elementos por entrada de texto",
@@ -576,7 +571,16 @@ const locale = {
     "Import data from public open data portals": "Importar datos desde portales públicos de datos abiertos",
     "Choose a portal": "Elegir un portal",
     "Limit results to current map view": "Limitar los resultados a la vista actual del mapa",
-    "Please choose an instance first.": "Por favor elige una instancia primero."
+    "Please choose an instance first.": "Por favor elige una instancia primero.",
+    "No geo column found: must be either `lat(itude)` and `lon(gitude)` or `geom(etry)`.": "No geo column found: must be either `lat(itude)` and `lon(gitude)` or `geom(etry)`.",
+    "Add a new field": "Add a new field",
+    "Are you sure you want to delete this field on all the features?": "Are you sure you want to delete this field on all the features?",
+    "Please enter the new name of this field": "Please enter the new name of this field",
+    "Cannot process MultiPoint": "Cannot process MultiPoint",
+    "Manage Fields": "Manage Fields",
+    "Rename this field": "Rename this field",
+    "Delete this field": "Delete this field",
+    "Double click to edit the name": "Double click to edit the name"
 }
 L.registerLocale("es", locale)
 L.setLocale("es")

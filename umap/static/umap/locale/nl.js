@@ -16,7 +16,6 @@ const locale = {
     "Activate slideshow mode": "Activeer slidshow modus",
     "Add a layer": "Laag toevoegen",
     "Add a line to the current multi": "Voeg een lijn toe aan de huidige multilijn",
-    "Add a new property": "Voeg een nieuwe eigenschap toe",
     "Add a polygon to the current multi": "Voeg een nieuwe polygoon toe aan de huidige multipolygoon",
     "Add image URL": "Voeg URL van afbeelding toe",
     "Advanced actions": "Geavanceerde acties",
@@ -29,7 +28,6 @@ const locale = {
     "Animated transitions": "Geavanceerde overgangen",
     "Are you sure you want to clone this map and all its datalayers?": "Weet je zeker dat je deze kaart en alle gegevenslagen wil klonen?",
     "Are you sure you want to delete this map?": "Weet je zeker dat je deze kaart wilt verwijderen?",
-    "Are you sure you want to delete this property on all the features?": "Ben je zeker dat je deze eigenschap bij alle objecten wil verwijderen?",
     "Are you sure you want to restore this version?": "Weet je zeker dat je deze versie wilt terugzetten?",
     "Attach the map to my account": "Voeg de kaart toe aan mijn account",
     "attribution": "bronvermelding",
@@ -157,7 +155,6 @@ const locale = {
     "Format": "Formaat",
     "From zoom": "Van zoom",
     "full backup": "Volledige back-up ",
-    "Generic": "Algemeen",
     "GeoRSS (only link)": "GeoRSS (enkel link)",
     "GeoRSS (title + image)": "GeoRSS (titel + afbeelding)",
     "Go to \"{coords}\"": "Ga naar \"{coords}\"",
@@ -273,7 +270,6 @@ const locale = {
     "Please be sure the licence is compliant with your use.": "Zorg er aub voor dat je je aan de licentievoorwaarden houdt",
     "Please choose a format": "Kies een formaat",
     "Please enter the name of the property": "Vul de naam in van de eigenschap",
-    "Please enter the new name of this property": "Vul de nieuwe naam in van de eigenschap",
     "Please save the map first": "Graag eerst de kaart opslaan",
     "Popup (large)": "Popup (groot)",
     "Popup content style": "Stijl van de inhoud van de Popup",
@@ -406,7 +402,6 @@ const locale = {
     "Until": "Tot",
     "Example: key1,key2|Label 2,key3|Label 3|checkbox": "Voorbeeld: sleutel1,sleutel2|Label 2,sleutel3|Label 3|selectievakje",
     "Edit in OpenStreetMap": "Bewerken in OpenStreetMap",
-    "Cannot determine latitude and longitude columns.": "Kan lengte- en breedtegraadkolommen niet bepalen.",
     "Back to layers": "Terug naar lagen",
     "Filters": "Filters",
     "Comma separated list of properties to use when filtering features by text input": "Door komma's gescheiden lijst met eigenschappen die moeten worden gebruikt bij het filteren van elementen op tekstinvoer",
@@ -576,7 +571,16 @@ const locale = {
     "Import data from public open data portals": "Import data from public open data portals",
     "Choose a portal": "Choose a portal",
     "Limit results to current map view": "Limit results to current map view",
-    "Please choose an instance first.": "Please choose an instance first."
+    "Please choose an instance first.": "Please choose an instance first.",
+    "No geo column found: must be either `lat(itude)` and `lon(gitude)` or `geom(etry)`.": "No geo column found: must be either `lat(itude)` and `lon(gitude)` or `geom(etry)`.",
+    "Add a new field": "Add a new field",
+    "Are you sure you want to delete this field on all the features?": "Are you sure you want to delete this field on all the features?",
+    "Please enter the new name of this field": "Please enter the new name of this field",
+    "Cannot process MultiPoint": "Cannot process MultiPoint",
+    "Manage Fields": "Manage Fields",
+    "Rename this field": "Rename this field",
+    "Delete this field": "Delete this field",
+    "Double click to edit the name": "Double click to edit the name"
 }
 L.registerLocale("nl", locale)
 L.setLocale("nl")

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-10 09:19+0000\n"
+"POT-Creation-Date: 2025-07-10 14:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -530,7 +530,7 @@ msgstr ""
 msgid "template"
 msgstr ""
 
-#: templates/umap/map_list.html:18 views.py:458
+#: templates/umap/map_list.html:18 views.py:459
 msgid "by"
 msgstr ""
 
@@ -809,70 +809,74 @@ msgstr ""
 msgid "No template found."
 msgstr ""
 
-#: views.py:233
+#: views.py:235
 msgid "Cannot delete a team with more than one member"
 msgstr ""
 
-#: views.py:237
+#: views.py:239
 #, python-format
 msgid "Team “%(name)s” has been deleted"
 msgstr ""
 
-#: views.py:463
+#: views.py:464
 msgid "View the map"
 msgstr ""
 
-#: views.py:864
+#: views.py:865
 msgid "See full screen"
 msgstr ""
 
-#: views.py:1007
+#: views.py:1008
 msgid "Map editors updated with success!"
 msgstr ""
 
-#: views.py:1043
+#: views.py:1044
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr ""
 
-#: views.py:1046
+#: views.py:1047
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr ""
 
-#: views.py:1053
+#: views.py:1054
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr ""
 
-#: views.py:1056
+#: views.py:1057
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr ""
 
-#: views.py:1067
+#: views.py:1068
 msgid "Only its owner can delete the map."
 msgstr ""
 
-#: views.py:1073
+#: views.py:1074
 msgid "Map successfully deleted."
 msgstr ""
 
-#: views.py:1099
+#: views.py:1100
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr ""
 
-#: views.py:1104
+#: views.py:1105
 msgid "Congratulations, your map has been cloned!"
 msgstr ""
 
-#: views.py:1358
+#: views.py:1359
 msgid "Layer successfully deleted."
 msgstr ""
 
-#: views.py:1380
+#: views.py:1381
 msgid "Permissions updated with success!"
+msgstr ""
+
+#: views.py:1398
+msgid "Generic"
 msgstr ""
