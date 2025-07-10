@@ -1,5 +1,41 @@
 # Changelog
 
+## 3.2.0 - 2025-07-10
+
+This release changes the way pictograms are managed. Instead of managing them through
+a Django models in the admin, there is now a setting to point to one or more local folders.
+It makes it easier to deal with a lot of pictograms, and also allows to expose more than one
+collection to users. See https://docs.umap-project.org/en/stable/config/icons/ for more
+informations.
+
+Note: the old way is still supported for now, but deprecated.
+
+### New features
+* fields management by @yohanboniface in #2771
+* display layer rules in caption by @yohanboniface in #2801
+* try to parse a "geometry" column in CSV import by @yohanboniface in #2788
+* allow to use static pictograms by @yohanboniface in #2792
+* import "false" MultiPoint by @yohanboniface in #2815
+* use DataLayer order to set marker z-index by @yohanboniface in #2812
+
+### Bug fixes
+* do not fail when reopening a feature already opened by @yohanboniface in #2770
+* do not duplicate pictogram/ in path while migrating to S3 by @yohanboniface in #2790
+* update brewer color palettes when layer properties change by @yohanboniface in #2794
+* only make layer name editable on double click by @yohanboniface in #2787
+* paginate open data results by @yohanboniface in #2819
+
+### Internal Changes
+* update h2.tabs in content.css by @Aurelie-Jallut in #2773
+* only show import error when in edit mode by @yohanboniface in #2811
+* update contact links in README by @danieldegroot2 in #2805
+* invert all SVG pictograms, not only local ones by @yohanboniface in #2818
+* use a better algo for generating unique feature id by @yohanboniface in #2813
+
+
+## New Contributors
+* @danieldegroot2 made their first contribution in #2805
+
 ## 3.1.2 - 2025-06-11
 
 * do not try to evaluate queryset until it's fully constructed by @yohanboniface in #2764
