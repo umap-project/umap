@@ -273,7 +273,7 @@ export function setContrast(icon, parent, src, bgcolor) {
   if (DomUtil.contrastedColor(parent, bgcolor)) {
     // Decide whether to switch svg to white or not, but do it
     // only for internal SVG, as invert could do weird things
-    if (Utils.isPath(src) && src.endsWith('.svg') && src !== SCHEMA.iconUrl.default) {
+    if (src.endsWith('.svg') && src !== SCHEMA.iconUrl.default) {
       // Must be called after icon container is added to the DOM
       // An image
       icon.style.filter = 'invert(1)'
