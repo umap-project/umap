@@ -70,15 +70,33 @@ export class Importer {
     this.portals = options.choices || PORTALS
   }
 
+  async fetchDatasets(baseUrl) {
+    let results = []
+    let total = null
+    const hardLimit = 500
+    while (total === null || results.length < total) {
+      const offset = results.length
+      const response = await this.umap.request.get(
+        `${baseUrl}/api/explore/v2.1/catalog/datasets?where=features%20in%20%28%22geo%22%29&limit=100&offset=${offset}&order_by=title asc`
+      )
+      if (!response.ok) break
+      const data = await response.json()
+      if (total === null) {
+        total = data.total_count
+      }
+      results = results.concat(data.results)
+      if (total === null || results.length > hardLimit) break
+    }
+    return results
+  }
+
   async open(importer) {
     let fields_map = {}
     const [container, { portals, datasets, geofield }] =
       Utils.loadTemplateWithRefs(TEMPLATE)
     portals.addEventListener('change', async (event) => {
-      const response = await this.umap.request.get(
-        `${event.target.value}/api/explore/v2.1/catalog/datasets?where=features%20in%20%28%22geo%22%29&limit=-1&offset=0&timezone=UTC`
-      )
-      if (response.ok) {
+      const results = await this.fetchDatasets(event.target.value)
+      if (results) {
         fields_map = {}
         Array.from(datasets.children).forEach((option) => {
           if (!option.disabled) {
@@ -87,8 +105,7 @@ export class Importer {
             option.selected = true
           }
         })
-        const data = await response.json()
-        for (const result of data.results) {
+        for (const result of results) {
           const fields = result.fields.filter((field) => field.type === 'geo_point_2d')
           if (!fields.length) {
             console.debug('No geofield found for', result)
