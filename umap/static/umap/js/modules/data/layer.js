@@ -601,6 +601,14 @@ export class DataLayer {
         // FIXME: deal with MultiPoint
         feature = new Point(this._umap, this, geojson, id)
         break
+      case 'MultiPoint':
+        if (geometry.coordinates?.length === 1) {
+          geojson.geometry.coordinates = geojson.geometry.coordinates[0]
+          feature = new Point(this._umap, this, geojson, id)
+        } else if (this._umap.editEnabled) {
+          Alert.error(translate('Cannot process MultiPoint'))
+        }
+        break
       case 'MultiLineString':
       case 'LineString':
         feature = new LineString(this._umap, this, geojson, id)
