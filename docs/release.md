@@ -22,10 +22,11 @@
     - commit new translations `git commit -am "i18n"`
 2. Test collectstatic: `umap collectstatic --no-input`
 2. Bump version: `make patch|minor`
+2. Ask automatic release notes to Github: `make changelog` and paste it in `docs/changelog.md`
 3. `git commit -am "2.X.Y"`
 4. `git tag 2.X.Y`
 5. `git push && git push --tag`
-6. Go to [Github release page](https://github.com/umap-project/umap/releases/new) and Generate release notes + paste it in `docs/changelog.md` + finish Github process for a new release
+6. Go to [Github release page](https://github.com/umap-project/umap/releases/new) and paste release notes
 7. Commit the changelog `git commit -am "changelog"`
 8. `make build`
 9. `make publish`

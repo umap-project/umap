@@ -1,1 +1,143 @@
 /* Override this file for theming uMap easily */
+ /* UB Logo + padding */
+:root {
+/* Added CI colors */
+    --color-uniBlue: #0063a6;
+    --color-uniGrey: #666666;
+    --color-white: #ffffff;
+    --color-uniRed: #A71C49;
+/* Added UB logo + variables for it's positioning to differentiate dark and light panels */
+    --panel-bgimg: url("./img/Universitätsbibliothek_A4_de_4c.jpg");
+    --panel-bgpos: 10px 10px;
+    --panel-bgsize: 130px;
+    --panel-bgrepeat: no-repeat;
+    --panel-padding-top: 5px;
+    --panel-padding-right: 10px;
+    --panel-padding-bottom: 35px;
+    --panel-padding-left: 10px;
+    --panel-header-height: 66px;
+    --panel-height: unset;
+
+}
+/* Alternative variable values for dark (edit mode) panels */
+.dark {
+    --panel-bgimg: none;
+    --panel-bgsize: unset;
+    --panel-padding-bottom: 5px;
+    --panel-header-height: 36px;
+    --panel-height: var(--panel-header-height);
+}
+
+/* Font Family changed to Roboto*/
+body, div, ul, ol, li, a, section, nav,
+h1, h2, h3, h4, h5, h6, label,
+hr, input, textarea {
+    font-family: "Roboto", sans-serif, Arial, Helvetica, sans-serif;
+}
+
+/* Linkcolor changed */
+a {
+    text-decoration: none;
+    color: var(--color-uniBlue);
+}
+
+/* Header styling */
+.umap-nav a {
+    display: flex;
+    flex-direction: row;
+    color: var(--color-uniBlue);
+    padding: .4rem;
+}
+
+/* Add underline on hover for links */
+.umap-nav a:hover {
+    text-decoration: underline;
+}
+
+/* Change font appearance in top menu bar*/
+.umap-nav ul {
+    font-weight: normal;
+}
+
+/* Display logo and adjust appearance of 'LocFinder' in top menu bar */
+.umap-nav h1 a {
+    background-image: var(--panel-bgimg);
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: 190px auto;
+    line-height: 70px;
+    padding-inline-start: 200px;
+    display: block;
+    font-size: 1.5rem;
+}
+
+/* Change font size of menu items in top menu bar */
+h2 {
+    font-size: 1rem;
+}
+
+/* Adjust appearance of different kinds of buttons */
+.button-primary {
+    background-color: var(--color-uniGrey);
+    color: var(--color-white) !important;
+    flex-direction: column !important;
+}
+
+input[type="submit"],
+.button {
+    background-color: var(--color-uniGrey);
+    color: var(--color-white);
+}
+
+.wrapper .neutral,
+.wrapper input[type="submit"].neutral {
+    background-color: var(--color-uniGrey);
+    color: var(--color-white) !important;
+}
+
+/* Change color of 'filter active' dot */
+[data-badge]::after {
+    background-color: var(--color-uniRed);
+}
+
+/* Display UB logo on top of light (view mode) panels */
+/* For dark (edit mode) panels, the .dark variables will be used */
+.window .buttons
+{
+    padding-top: var(--panel-padding-top);
+    padding-right: var(--panel-padding-right);
+    padding-bottom: var(--panel-padding-bottom);
+    padding-left: var(--panel-padding-left);
+    height: var(--panel-height);
+}
+
+ul.buttons
+{
+    background-image: var(--panel-bgimg) !important;
+    background-position: var(--panel-bgpos) !important;
+    background-size: var(--panel-bgsize) !important;
+    background-repeat: var(--panel-bgrepeat) !important;
+}
+
+/* Filter title icon changed to magnifying glass */
+.icon-filters {
+    background-position: var(--tile) calc(var(--tile) * 5) !important;
+}
+
+/* Layers title icon changed to List */
+.icon-layers {
+    background-image: url('./img/icon_list_24.svg') !important;
+    background-position: center;
+}
+
+.icon-eye,
+.icon-zoom,
+.umap-field-inBbox {
+    display: none;
+}
+
+/* Layers button icon changed to List */
+div.umap-control-browse [type="button"] {
+    background-image: url('./img/icon_list_24.svg') !important;
+    background-position: center;
+}

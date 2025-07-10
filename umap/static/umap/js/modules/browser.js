@@ -32,7 +32,11 @@ export default class Browser {
       'show-on-edit icon-delete',
       translate('Delete this feature')
     )
-    const colorBox = DomUtil.create('i', 'icon icon-16 feature-color', row)
+    const colorBox = DomUtil.create(
+      'i',
+      `icon icon-16 icon-${feature.getClassName()} feature-color`,
+      row
+    )
     const title = DomUtil.create('span', 'feature-title', row)
     const symbol = feature._getIconUrl
       ? Icon.formatUrl(feature._getIconUrl(), feature)
@@ -43,6 +47,8 @@ export default class Browser {
     if (symbol && symbol !== U.SCHEMA.iconUrl.default) {
       const icon = Icon.makeElement(symbol, colorBox)
       Icon.setContrast(icon, colorBox, symbol, bgcolor)
+    } else if (DomUtil.contrastedColor(colorBox, bgcolor)) {
+      colorBox.classList.add('icon-white')
     }
     const viewFeature = (e) => {
       feature.zoomTo({ ...e, callback: () => feature.view() })

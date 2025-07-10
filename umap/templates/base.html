@@ -1,7 +1,9 @@
 {% load umap_tags i18n static %}
+{% get_current_language as LANGUAGE_CODE %}
 
 <!DOCTYPE html>
-<html {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<html {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}
+      lang="{{ LANGUAGE_CODE }}">
   <head>
     <title>
       {% block head_title %}
@@ -16,13 +18,13 @@
       {% include "umap/header.html" %}
     {% endblock extra_head %}
     <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          content="width=device-width, initial-scale=1.0" />
     {# See https://evilmartians.com/chronicles/how-to-favicon-in-2021-six-files-that-fit-most-needs #}
     <link rel="icon"
           href="{% static 'umap/favicons/favicon.ico' %}"
           sizes="32x32">
     <link rel="icon"
-          href="{% static 'umap/favicons/icon.svg' %}"
+          href="{% static 'umap/favicons/favicon.ico' %}"
           type="image/svg+xml">
     <link rel="apple-touch-icon"
           href="{% static 'umap/favicons/apple-touch-icon.png' %}">

@@ -1,5 +1,45 @@
 # Changelog
 
+## 2.6.3u5 - 2025-03-20
+
+* Added autofocus on enter functionality to Data Browser search field - adjustSearchFieldEvents() - in univieadj.js
+* Added autofocus on load when a feature id is passed via URL - showFeature() - in univieadj.js
+* Clean up Mutation Observer structure in univieadj.js to improve performance by reducing the total number of callbacks
+* Adjust livenessProbe and readinessProbe target paths for easier debugging
+
+## 2.6.3u4 - 2025-02-28
+
+* Apply UniVie CI via theme.css
+* * Also switch favicon 
+* Set login as startpage and all subpages, except for maps, as login_required in urls.py
+* * This required adjustment of the path of probes in Helm Chart
+* Some accessibility adjustments moved to base.html (<html lang> and <viewport>)
+* * Undo: Enable ALLOWED_HOSTS which requires additional python libs (Dockerfile, base.py, deployment.yaml)
+
+## 2.6.3u3 - 2025-02-04
+
+* Change verison number to reflect actually used uMap version
+* local en.* and de.*: Change designation of Data Browser and it's features
+* icons.css & map.css: Change icons used for Data Browser  
+* Change font in base.css to Roboto to comply with UniVie Corporate Design
+* Change color of a from SeaGreen to Green to comply with accessibility requirements
+* Add univieadj.js in /umap-docker/umap/static/umap/js/components which is then included in js.html to
+* * incorporate accessibility improvements
+* * adjust look and feel of Data Browser panel
+* Disable custom contextmenu (umap.js)
+* Enable ALLOWED_HOSTS which requires additional python libs (Dockerfile, base.py, deployment.yaml)
+
+## 2.3.1u2 - 2024-11-28
+
+* Make SITE_NAME dynamic (in base.py)
+* Remove previously added check in umap.js - this setting is managed in edit view instead
+
+## 2.3.1u1 - 2024-10-31
+
+* local en.* and de.*: Change name of Data browser to filters
+* umap.js: Invert check of if displayDataBrowserOnLoad, to always display it on startup (parameter will not be used in prod)
+* icons.css: Change used part of 16.svg for Data browser from "layers" to "filters"
+
 ## 2.6.3 - 2024-09-11
 
 * delete shape from edit toolbar by @yohanboniface in #2126

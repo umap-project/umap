@@ -18,6 +18,7 @@ env = environ.Env()
 
 INTERNAL_IPS = env.list("INTERNAL_IPS", default=["127.0.0.1"])
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
+
 ADMINS = tuple(parseaddr(email) for email in env.list("ADMINS", default=[]))
 
 
@@ -250,7 +251,7 @@ UMAP_EXTRA_URLS = {
 UMAP_KEEP_VERSIONS = env.int("UMAP_KEEP_VERSIONS", default=10)
 SITE_URL = env("SITE_URL", default="http://umap.org")
 SHORT_SITE_URL = env("SHORT_SITE_URL", default=None)
-SITE_NAME = "uMap"
+SITE_NAME = env("SITE_NAME", default="uMap")
 UMAP_DEMO_SITE = env("UMAP_DEMO_SITE", default=False)
 UMAP_EXCLUDE_DEFAULT_MAPS = False
 UMAP_MAPS_PER_PAGE = 5
@@ -259,7 +260,7 @@ UMAP_MAPS_PER_PAGE_OWNER = 10
 UMAP_SEARCH_CONFIGURATION = "simple"
 UMAP_HELP_URL = "https://wiki.openstreetmap.org/wiki/UMap#Feedback_and_help"
 USER_MAPS_URL = "user_maps"
-DATABASES = {"default": env.db(default="postgis://localhost:5432/umap")}
+DATABASES = {"default": env.db(default="postgis://0.0.0.0:5432/umap")}
 UMAP_DEFAULT_SHARE_STATUS = None
 UMAP_DEFAULT_EDIT_STATUS = None
 UMAP_DEFAULT_FEATURES_HAVE_OWNERS = False

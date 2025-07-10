@@ -1681,7 +1681,7 @@ U.Map = L.Map.extend({
 
   initContextMenu: function () {
     this.contextmenu = new U.ContextMenu(this)
-    this.contextmenu.enable()
+    //this.contextmenu.enable()
   },
 
   setContextMenuItems: function (e) {

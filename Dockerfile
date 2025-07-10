@@ -31,7 +31,9 @@ RUN apt-get update && \
         zlib1g-dev \
         libfreetype6-dev \
         liblcms2-dev \
-        libwebp-dev
+        libwebp-dev \
+        iputils-ping \
+        netcat-traditional
 
 RUN python -m venv /venv
 
@@ -50,9 +52,13 @@ WORKDIR /srv/umap
 
 RUN mkdir -p /srv/umap/uploads
 
+RUN mkdir -p /srv/umap/static
+RUN chmod -R 0070 /srv/umap/
+
 ENV PYTHONUNBUFFERED=1 \
     PORT=8000 \
-    PATH="/venv/bin:$PATH"
+    PATH="/venv/bin:$PATH" \
+    PGUSER="postgres" 
 
 EXPOSE 8000
 

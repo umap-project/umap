@@ -36,7 +36,7 @@ const FeatureMixin = {
   },
 
   addInteractions: function () {
-    this.on('contextmenu editable:vertex:contextmenu', this._showContextMenu)
+    //this.on('contextmenu editable:vertex:contextmenu', this._showContextMenu)
     this.on('click', this.onClick)
   },
 

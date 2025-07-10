@@ -189,7 +189,10 @@ datalayer_urls = [
 ]
 i18n_urls += decorated_patterns([can_edit_map, never_cache], *map_urls)
 i18n_urls += decorated_patterns([never_cache], *datalayer_urls)
-urlpatterns += i18n_patterns(
+
+#univieadjustments - make everything login_required
+i18n_urls += decorated_patterns(
+    [login_required],
     path("", views.home, name="home"),
     path("showcase/", cache_page(24 * 60 * 60)(views.showcase), name="maps_showcase"),
     path("search/", views.search, name="search"),
@@ -197,8 +200,12 @@ urlpatterns += i18n_patterns(
     re_path(r"^user/(?P<identifier>.+)/stars/$", views.user_stars, name="user_stars"),
     re_path(r"^user/(?P<identifier>.+)/$", views.user_maps, name="user_maps"),
     path("team/<int:pk>/", views.TeamMaps.as_view(), name="team_maps"),
+)
+
+urlpatterns += i18n_patterns(
     re_path(r"", include(i18n_urls)),
 )
+
 urlpatterns += (
     path("stats/", cache_page(60 * 60)(views.stats), name="stats"),
     path(

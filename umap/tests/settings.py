@@ -15,7 +15,7 @@ if os.environ.get("GITHUB_ACTIONS", False) == "true":
             "ENGINE": "django.contrib.gis.db.backends.postgis",
             "NAME": "postgres",
             "USER": "postgres",
-            "HOST": "localhost",
+            "HOST": "postgis",
             "PORT": 5432,
             "PASSWORD": "postgres",
         }
