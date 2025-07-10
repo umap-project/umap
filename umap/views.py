@@ -71,6 +71,7 @@ from .models import DataLayer, Licence, Map, Pictogram, Star, Team, TileLayer
 from .utils import (
     ConflictError,
     _urls_for_js,
+    collect_pictograms,
     gzip_file,
     is_ajax,
     json_dumps,
@@ -1389,8 +1390,21 @@ class PictogramJSONList(ListView):
     model = Pictogram
 
     def render_to_response(self, context, **response_kwargs):
-        content = [p.json for p in Pictogram.objects.all()]
-        return simple_json_response(pictogram_list=content)
+        if settings.UMAP_PICTOGRAMS_COLLECTIONS:
+            content = collect_pictograms()
+        else:
+            categories = {}
+            for picto in Pictogram.objects.all():
+                category = picto.category or _("Generic")
+                categories.setdefault(category, [])
+                categories[category].append(picto.json)
+            content = {
+                settings.SITE_NAME: {
+                    "attribution": settings.SITE_NAME,
+                    "categories": categories,
+                }
+            }
+        return simple_json_response(data=content)
 
 
 # ############## #
