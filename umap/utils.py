@@ -196,7 +196,11 @@ def collect_pictograms():
         root = Path(definition["path"])
         subfolder = "pictograms"
         if not root.is_absolute():
-            root = Path(finders.find(root).removesuffix(definition["path"]))
+            found_path = finders.find(root)
+            if not found_path:
+                print(f"Cannot find {root} in STATIFILES_DIRS")
+                continue
+            root = Path(found_path.removesuffix(definition["path"]))
             subfolder = definition["path"]
         categories = {}
         for path in (root / subfolder).iterdir():

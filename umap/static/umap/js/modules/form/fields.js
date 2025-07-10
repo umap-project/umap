@@ -863,6 +863,7 @@ Fields.IconUrl = class extends Fields.BlurInput {
     const loadCollection = (name) => {
       icons.innerHTML = ''
       const collection = this.pictogramCollections[name || collectionsNames[0]]
+      if (!collection) return
       const sorted = Object.entries(collection.categories).sort(([a], [b]) =>
         Utils.naturalSort(a, b, U.lang)
       )
