@@ -893,10 +893,18 @@ export class DataLayer {
         <summary>${translate('Manage Fields')}</summary>
         <fieldset>
           <ul data-ref=ul></ul>
+          <button type="button" data-ref=add><i class="icon icon-16 icon-add"></i>${translate('Add a new field')}</button>
         </fieldset>
       </details>
     `
-    const [fieldset, { ul }] = Utils.loadTemplateWithRefs(template)
+    const [fieldset, { ul, add }] = Utils.loadTemplateWithRefs(template)
+    add.addEventListener('click', () => {
+      this.addProperty().then(() => {
+        this.edit().then((panel) => {
+          panel.scrollTo('details#fields')
+        })
+      })
+    })
     container.appendChild(fieldset)
     for (const field of this.fields) {
       const [row, { rename, del }] = Utils.loadTemplateWithRefs(
