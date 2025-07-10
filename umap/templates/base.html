@@ -1,7 +1,10 @@
 {% load umap_tags i18n static %}
 
+{% get_current_language as LANGUAGE_CODE %}
+
 <!DOCTYPE html>
-<html {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<html {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}
+      lang="{{ LANGUAGE_CODE }}">
   <head>
     <title>
       {% block head_title %}
