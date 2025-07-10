@@ -557,6 +557,38 @@ def test_import_multipolyline(live_server, page, tilelayer):
     expect(paths).to_have_count(1)
 
 
+def test_import_false_multipoint(live_server, page, tilelayer):
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "geometry": {
+                    "coordinates": [[1.43661447777346, 43.59853484073553]],
+                    "type": "MultiPoint",
+                },
+                "properties": {"name": "foo bar"},
+            }
+        ],
+    }
+    page.goto(f"{live_server.url}/map/new/")
+    page.get_by_title("Open browser").click()
+    layers = page.locator(".umap-browser .datalayer")
+    markers = page.locator(".leaflet-marker-icon")
+    expect(markers).to_have_count(0)
+    expect(layers).to_have_count(0)
+    button = page.get_by_title("Import data")
+    expect(button).to_be_visible()
+    button.click()
+    textarea = page.locator(".umap-import textarea")
+    textarea.fill(json.dumps(data))
+    page.locator('select[name="format"]').select_option("geojson")
+    page.get_by_role("button", name="Import data", exact=True).click()
+    # A layer has been created
+    expect(layers).to_have_count(1)
+    expect(markers).to_have_count(1)
+
+
 def test_should_not_import_empty_coordinates(live_server, page, tilelayer):
     data = {
         "type": "FeatureCollection",
