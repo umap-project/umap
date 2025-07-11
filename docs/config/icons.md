@@ -117,3 +117,10 @@ You can import icons manually by going to your uMap admin page: `https://your.se
 
 Note: if you used pictograms added through the admin (or from the deprecated command `umap import_pictograms`),
 you can dump them in a static folder using the command `umap export_pictograms`.
+
+
+## Protips
+
+To resize and clean massively SVG files:
+
+    for i in **.svg; mkdir -p export/(dirname $i); rsvg-convert -w 24 -h 24  $i -a -f svg -o export/(dirname $i)/(basename $i); end
