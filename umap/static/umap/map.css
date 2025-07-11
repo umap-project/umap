@@ -844,8 +844,14 @@ a.umap-control-caption,
 .rules-caption .color-box {
     width: 24px;
     height: 24px;
+    line-height: 24px;
     display: inline-block;
     margin-right: var(--text-margin);
+    vertical-align: middle;
+    text-align: center;
+}
+
+.rules-caption .color-box img {
     vertical-align: middle;
 }
 
