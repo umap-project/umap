@@ -169,8 +169,13 @@ export default class Importer extends Utils.WithTemplate {
     this.onChange()
   }
 
+  set layer(layer) {
+    this._layer = layer
+  }
+
   get layer() {
     return (
+      this._layer ||
       this._umap.datalayers[this.layerId] ||
       this._umap.createDirtyDataLayer({ name: this.layerName })
     )

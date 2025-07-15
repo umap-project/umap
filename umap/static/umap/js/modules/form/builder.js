@@ -70,7 +70,11 @@ export class Form extends Utils.WithEvents {
   }
 
   setter(field, value) {
-    Utils.setObjectValue(this.obj, field, value)
+    if ('setter' in this.obj) {
+      this.obj.setter(field, value)
+    } else {
+      Utils.setObjectValue(this.obj, field, value)
+    }
   }
 
   restoreField(field) {
@@ -104,9 +108,13 @@ export class Form extends Utils.WithEvents {
   finish() {}
 
   getTemplate(helper) {
+    let tpl = helper.getTemplate()
+    if (helper.properties.label && !tpl.includes(helper.properties.label)) {
+      tpl = `<label>${helper.properties.label}${tpl}</label>`
+    }
     return `
       <div class="formbox" data-ref=container>
-        ${helper.getTemplate()}
+        ${tpl}
         <small class="help-text" data-ref=helpText></small>
       </div>`
   }
@@ -171,11 +179,7 @@ export class MutatingForm extends Form {
 
   setter(field, value) {
     const oldValue = this.getter(field)
-    if ('setter' in this.obj) {
-      this.obj.setter(field, value)
-    } else {
-      super.setter(field, value)
-    }
+    super.setter(field, value)
     if ('render' in this.obj) {
       this.obj.render([field], this)
     }

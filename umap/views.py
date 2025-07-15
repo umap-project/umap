@@ -636,6 +636,8 @@ class MapDetailMixin(SessionMixin):
             "defaultLabelKeys": settings.UMAP_LABEL_KEYS,
             "help_links": settings.UMAP_HELP_LINKS,
         }
+        if settings.OPENROUTESERVICE_APIKEY:
+            properties["ORSAPIKey"] = settings.OPENROUTESERVICE_APIKEY
         created = bool(getattr(self, "object", None))
         if created:
             properties.update(
