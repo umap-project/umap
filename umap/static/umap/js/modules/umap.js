@@ -33,6 +33,7 @@ import Tooltip from './ui/tooltip.js'
 import URLs from './urls.js'
 import * as Utils from './utils.js'
 import { DataLayerManager } from './managers.js'
+import { Importer as OpenRouteService } from './importers/openrouteservice.js'
 
 export default class Umap {
   constructor(element, geojson) {
@@ -475,6 +476,12 @@ export default class Umap {
       items.push('-', {
         label: translate('Edit in OpenStreetMap'),
         action: () => this.editInOSM(event),
+      })
+    }
+    if (this.properties.ORSAPIKey) {
+      items.push('-', {
+        label: translate('Compute isochrone from here'),
+        action: () => this.askForIsochrone(event),
       })
     }
     return items
@@ -1744,6 +1751,12 @@ export default class Umap {
       zoom: Math.max(this._leafletMap.getZoom(), 16),
     })
     if (url) window.open(url)
+  }
+
+  async askForIsochrone(event) {
+    if (!this.properties.ORSAPIKey) return
+    const importer = new OpenRouteService(this)
+    importer.isochrone(event.latlng)
   }
 
   setCenterAndZoom() {
