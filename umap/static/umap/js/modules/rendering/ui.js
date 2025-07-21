@@ -50,21 +50,14 @@ const FeatureMixin = {
   onClick: function (event) {
     if (this._map.measureTools?.enabled()) return
     this._popupHandlersAdded = true // Prevent leaflet from managing event
-    if (!this._map._umap.editEnabled) {
-      this.feature.view(event)
-    } else if (!this.feature.isReadOnly()) {
-      if (event.originalEvent.shiftKey) {
-        if (event.originalEvent.ctrlKey || event.originalEvent.metaKey) {
-          this.feature.datalayer.edit(event)
-        } else {
-          this.feature.toggleEditing(event)
-        }
-      } else if (!this._map.editTools?.drawing()) {
-        this._map._umap.editContextmenu.open(
-          event.originalEvent,
-          this.feature.getInplaceEditMenu(event)
-        )
+    if (event.originalEvent.shiftKey) {
+      if (event.originalEvent.ctrlKey || event.originalEvent.metaKey) {
+        this.feature.datalayer.edit(event)
+      } else if (!this.feature.isReadOnly()) {
+        this.feature.toggleEditing(event)
       }
+    } else if (!this._map.editTools?.drawing()) {
+      this.feature.view(event)
     }
     DomEvent.stop(event)
   },
@@ -338,13 +331,6 @@ const PathMixin = {
   _redraw: function () {
     this.setStyle()
     this.resetTooltip()
-  },
-
-  onVertexRawClick: function (event) {
-    this._map._umap.editContextmenu.open(
-      event.originalEvent,
-      this.feature.getInplaceEditVertexMenu(event)
-    )
   },
 
   isolateShape: function (atLatLng) {
