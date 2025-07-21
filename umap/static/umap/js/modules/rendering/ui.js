@@ -286,6 +286,7 @@ const PathMixin = {
   },
 
   highlightPath: function () {
+    this.feature.activate()
     this.parentClass.prototype.setStyle.call(this, {
       fillOpacity: Math.sqrt(this.feature.getDynamicOption('fillOpacity', 1.0)),
       opacity: 1.0,
@@ -329,6 +330,7 @@ const PathMixin = {
   },
 
   _redraw: function () {
+    this.feature.deactivate()
     this.setStyle()
     this.resetTooltip()
   },
