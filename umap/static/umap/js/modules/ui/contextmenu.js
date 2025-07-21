@@ -1,4 +1,4 @@
-import { loadTemplate } from '../utils.js'
+import { loadTemplate, loadTemplateWithRefs } from '../utils.js'
 import { Positioned } from './base.js'
 
 export default class ContextMenu extends Positioned {
@@ -29,16 +29,21 @@ export default class ContextMenu extends Positioned {
     this.openAt([coords.left, coords.bottom], items)
   }
 
-  openAt([left, top], items) {
-    this.container.innerHTML = ''
+  addItems(items, container) {
     for (const item of items) {
       if (item === '-') {
-        this.container.appendChild(document.createElement('hr'))
+        container.appendChild(document.createElement('hr'))
+      } else if (item.items) {
+        const [li, { bar }] = loadTemplateWithRefs(
+          `<li class="dark"><ul data-ref=bar class="icon-bar"></ul></li>`
+        )
+        this.addItems(item.items, bar)
+        container.appendChild(li)
       } else if (typeof item.action === 'string') {
         const li = loadTemplate(
           `<li class="${item.className || ''}"><a tabindex="0" href="${item.action}">${item.label}</a></li>`
         )
-        this.container.appendChild(li)
+        container.appendChild(li)
       } else {
         let content = item.label || ''
         if (item.icon) {
@@ -51,9 +56,14 @@ export default class ContextMenu extends Positioned {
           this.close()
           item.action()
         })
-        this.container.appendChild(li)
+        container.appendChild(li)
       }
     }
+  }
+
+  openAt([left, top], items) {
+    this.container.innerHTML = ''
+    this.addItems(items, this.container)
     // When adding contextmenu below the map container, clicking on any link will send the
     // "focusout" element on link click, preventing to trigger the click action
     const parent = document
@@ -65,7 +75,7 @@ export default class ContextMenu extends Positioned {
     } else {
       this.computePosition([left, top])
     }
-    this.container.querySelector('li > *').focus()
+    this.container.querySelector('li button').focus()
     this.container.addEventListener(
       'keydown',
       (event) => {

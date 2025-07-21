@@ -58,7 +58,7 @@ def test_websocket_connection_can_sync_markers(new_page, asgi_live_server, tilel
     peerA.locator("body").press("Escape")
     peerA.wait_for_timeout(300)
 
-    peerB.locator(".leaflet-marker-icon").first.click()
+    peerB.locator(".leaflet-marker-icon").first.click(button="right")
     peerB.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
     expect(peerB.locator('input[name="name"]')).to_have_value("Synced name")
 
@@ -137,7 +137,7 @@ def test_websocket_connection_can_sync_polygons(context, asgi_live_server, tilel
     a_polygon_bbox_t1 = a_polygon.bounding_box()
     assert b_polygon_bbox_t1 == a_polygon_bbox_t1
 
-    b_polygon.click()
+    b_polygon.click(button="right")
     peerB.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
 
     edited_vertex = peerB.locator("div:nth-child(6)").first

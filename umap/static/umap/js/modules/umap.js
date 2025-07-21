@@ -129,7 +129,6 @@ export default class Umap {
     )
     this.tooltip = new Tooltip(this._leafletMap._controlContainer)
     this.contextmenu = new ContextMenu()
-    this.editContextmenu = new ContextMenu({ className: 'dark', orientation: 'rows' })
     this.server = new ServerRequest()
     this.request = new Request()
     this.facets = new Facets(this)
