@@ -223,6 +223,8 @@ class Feature {
   edit(event) {
     if (!this._umap.editEnabled || this.isReadOnly()) return
     if (this._umap.editedFeature === this && !event?.force) return
+    // If this feature is active (popup open), let's close it.
+    this.deactivate()
     const container = DomUtil.create('div', 'umap-feature-container')
     DomUtil.createTitle(
       container,
@@ -682,7 +684,10 @@ class Feature {
   }
 
   deactivate() {
-    if (this._umap.activeFeature === this) this._umap.activeFeature = undefined
+    if (this._umap.activeFeature === this) {
+      this._umap.activeFeature = undefined
+      this.ui.closePopup()
+    }
   }
 }
 
