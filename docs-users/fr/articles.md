@@ -1,5 +1,11 @@
 # Articles
 
+## [QGIS ou UMAP ? Les SIG dans nos Lycées des nouvelles pistes innovantes](https://papotcast.rootsbinsons.fr/@fabienpaquereau/episodes/episode-8-qgis-ou-umap-les-sig-dans-nos-lycees-des-nouvelles-pistes-innovantes) (2025-07-07)
+
+> Episode 8 de PapotCast, le dernier de la saison. De la carte des stages, au MapAthon ou de la carte des ressenties, François et Hocine vont vous expliquer comment démarrer et créer des cartes utiles et faciles à mettre en œuvre pour votre établissement. Que vous soyez débutant ou expert vous pourrez trouver dans ce podcast de quoi enrichir vos pratiques ou vous donner des nouvelles idées.
+
+[Podcast complet →](https://papotcast.rootsbinsons.fr/@fabienpaquereau/episodes/episode-8-qgis-ou-umap-les-sig-dans-nos-lycees-des-nouvelles-pistes-innovantes){ .md-button }
+
 ## [Créer une carte umap dynamique des professionnels de santé à La Roche-sur-Yon avec un jeu d’open data](https://capnum.io/creer-une-carte-umap-dynamique-avec-un-jeu-dopen-data/) (2025-05-01)
 
 > C’est la fin de ce tutoriel pour créer une carte avec URL APIs open data dans uMap, bonne cartographie à tous et toutes !
