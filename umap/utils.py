@@ -200,7 +200,7 @@ def collect_pictograms():
             if not found_path:
                 print(f"Cannot find {root} in STATIFILES_DIRS")
                 continue
-            root = Path(found_path.removesuffix(definition["path"]))
+            root = Path(found_path.removesuffix(definition["path"].rstrip("/")))
             subfolder = definition["path"]
         categories = {}
         for path in (root / subfolder).iterdir():
