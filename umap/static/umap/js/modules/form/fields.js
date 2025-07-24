@@ -582,6 +582,9 @@ Fields.SlideshowDelay = class extends Fields.IntSelect {
 Fields.DataLayerSwitcher = class extends Fields.Select {
   getOptions() {
     const options = []
+    if (this.properties.allowEmpty) {
+      options.push([null, translate('Import in a new layer')])
+    }
     this.builder._umap.datalayers.reverse().map((datalayer) => {
       if (
         datalayer.isLoaded() &&
@@ -595,7 +598,7 @@ Fields.DataLayerSwitcher = class extends Fields.Select {
   }
 
   toHTML() {
-    return this.obj.datalayer.id
+    return this.obj.datalayer?.id
   }
 
   toJS() {
@@ -604,7 +607,7 @@ Fields.DataLayerSwitcher = class extends Fields.Select {
 
   set() {
     this.builder._umap.lastUsedDataLayer = this.toJS()
-    this.obj.changeDataLayer(this.toJS())
+    this.builder.setter(this.field, this.toJS())
   }
 }
 
@@ -1304,11 +1307,10 @@ Fields.Range = class extends Fields.FloatInput {
     const step = this.properties.step || 1
     const digits = step < 1 ? 1 : 0
     const id = `range-${this.properties.label || this.name}`
-    for (
-      let i = this.properties.min;
-      i <= this.properties.max;
-      i += (this.properties.max - this.properties.min) / 10
-    ) {
+    const range = this.properties.max - this.properties.min
+    const ticks = this.properties.ticks || Math.min(10, range)
+    const tickStep = range / ticks
+    for (let i = this.properties.min; i <= this.properties.max; i += tickStep) {
       const ii = i.toFixed(digits)
       options += `<option value="${ii}" label="${ii}"></option>`
     }
