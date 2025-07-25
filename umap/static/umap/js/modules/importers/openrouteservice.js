@@ -9,9 +9,13 @@ export class Importer {
     this.id = 'openrouteservice'
   }
 
-  async isochrone(latlng) {
-    const ORS = await import('../../../vendors/openrouteservice/ors-js-client.js')
+  async loadORS() {
+    const mod = await import('../../../vendors/openrouteservice/ors-js-client.js')
+    return mod.default
+  }
 
+  async isochrone(latlng) {
+    const ORS = await this.loadORS()
     const properties = {
       range: 10,
       lines: 1,
@@ -56,7 +60,7 @@ export class Importer {
     // Needed for DataLayerSwitcher (which expects to be used with MutatingForm)
     form._umap = this.umap
 
-    const Isochrones = new Openrouteservice.Isochrones({
+    const Isochrones = new ORS.Isochrones({
       api_key: this.umap.properties.ORSAPIKey,
     })
     this.umap.dialog.open({ template: form.build() }).then(async () => {
@@ -79,5 +83,25 @@ export class Importer {
         console.error(err)
       }
     })
+  }
+
+  async elevation(geometry) {
+    const ORS = await this.loadORS()
+
+    const Elevation = new ORS.Elevation({
+      api_key: this.umap.properties.ORSAPIKey,
+    })
+
+    try {
+      const data = await Elevation.lineElevation({
+        format_in: 'geojson',
+        format_out: 'geojson',
+        geometry: geometry,
+      })
+      return data?.geometry
+    } catch (err) {
+      console.log(`An error occurred: ${err.status}`)
+      console.error(err)
+    }
   }
 }
