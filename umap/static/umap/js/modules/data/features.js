@@ -16,6 +16,7 @@ import {
 } from '../rendering/ui.js'
 import { SCHEMA } from '../schema.js'
 import * as Utils from '../utils.js'
+import { Importer as OpenRouteService } from '../importers/openrouteservice.js'
 
 class Feature {
   constructor(umap, datalayer, geojson = {}, id = null) {
@@ -1061,6 +1062,12 @@ export class LineString extends Path {
         label: translate('Transform to polygon'),
         action: () => this.toPolygon(),
       })
+      if (this._umap.properties.ORSAPIKey) {
+        items.push({
+          label: translate('Compute elevation'),
+          action: () => this.computeElevation(),
+        })
+      }
     }
     if (vertexClicked) {
       const index = event.vertex.getIndex()
@@ -1127,6 +1134,18 @@ export class LineString extends Path {
     })
     const fieldset = DomUtil.createFieldset(container, translate('Line decoration'))
     fieldset.appendChild(builder.build())
+  }
+
+  async computeElevation() {
+    if (!this._umap.properties.ORSAPIKey) return
+    const importer = new OpenRouteService(this._umap)
+    const geometry = await importer.elevation(this.geometry)
+    if (geometry?.type) {
+      const oldGeometry = Utils.CopyJSON(this._geometry)
+      this.geometry = geometry
+      this.ui.resetTooltip()
+      this.sync.update('geometry', this.geometry, oldGeometry)
+    }
   }
 }
 
