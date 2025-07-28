@@ -3,6 +3,7 @@ import {
   CircleMarker as BaseCircleMarker,
   DomEvent,
   DomUtil,
+  GeoJSON,
   LatLng,
   LatLngBounds,
   LineUtil,
@@ -454,6 +455,60 @@ export const LeafletPolyline = Polyline.extend({
       totalLoss += loss
     }
     return [Math.round(totalGain), Math.round(totalLoss)]
+  },
+})
+
+export const RouteEditor = L.Editable.PolylineEditor.extend({
+  options: {
+    skipMiddleMarkers: true,
+    draggable: false,
+  },
+
+  getLatLngs: function () {
+    return this.feature._route
+  },
+})
+
+export const LeafletRoute = LeafletPolyline.extend({
+  initialize: function (feature, latlngs) {
+    this._route = GeoJSON.coordsToLatLngs(
+      feature.properties._umap_options.route?.coordinates
+    )
+    FeatureMixin.initialize.call(this, feature, latlngs)
+    delete this.dragging
+  },
+
+  addInteractions: function () {
+    PathMixin.addInteractions.call(this)
+    this.on('editable:drawing:clicked', this.onDrawingClick)
+    this.on('editable:vertex:dragend editable:vertex:deleted', this.onDrawingMoved)
+  },
+
+  getEditorClass: (tools) => {
+    return RouteEditor
+  },
+
+  getClass: () => LeafletRoute,
+
+  syncRoute() {
+    this.feature.properties._umap_options.route.coordinates = GeoJSON.latLngsToCoords(
+      this._route
+    )
+  },
+
+  onDrawingMoved: function (event) {
+    this.syncRoute()
+    if (this._route.length >= 2) {
+      this.feature.computeRoute()
+    }
+  },
+
+  onDrawingClick: function (event) {
+    this._route.push(event.latlng)
+    this.syncRoute()
+    if (this._route.length >= 2) {
+      this.feature.computeRoute()
+    }
   },
 })
 

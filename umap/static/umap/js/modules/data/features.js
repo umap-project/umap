@@ -12,6 +12,7 @@ import {
   LeafletMarker,
   LeafletPolygon,
   LeafletPolyline,
+  LeafletRoute,
   MaskPolygon,
 } from '../rendering/ui.js'
 import { SCHEMA } from '../schema.js'
@@ -979,11 +980,61 @@ export class LineString extends Path {
   }
 
   getUIClass() {
-    return super.getUIClass() || LeafletPolyline
+    const klass = super.getUIClass()
+    if (klass) return klass
+    if (this.isRoute()) {
+      return LeafletRoute
+    }
+    return LeafletPolyline
   }
 
   isSameClass(other) {
     return other instanceof LineString
+  }
+
+  cancelRoute() {
+    const oldRoute = Utils.CopyJSON(this.properties._umap_options.route)
+    this.properties._umap_options.route.active = false
+    this.redraw()
+    this.edit()
+    this.sync.update('properties._umap_options.route', null, oldRoute)
+  }
+
+  restoreRoute() {
+    const oldRoute = Utils.CopyJSON(this.properties._umap_options.route)
+    this._ensureRoute()
+    delete this.properties._umap_options.route.active
+    this.redraw()
+    this.sync.update(
+      'properties._umap_options.route',
+      this.properties._umap_options.route,
+      oldRoute
+    )
+    this.edit().then((panel) => {
+      panel.scrollTo('details#edit-route')
+    })
+  }
+
+  toRoute() {
+    this._ensureRoute()
+    this.properties._umap_options.route.coordinates = Utils.CopyJSON(this.coordinates)
+    this.redraw()
+    this.sync.update(
+      'properties._umap_options.route',
+      this.properties._umap_options.route,
+      null
+    )
+    this.edit().then((panel) => {
+      panel.scrollTo('details#edit-route')
+    })
+  }
+
+  askForRouteSettings() {
+    const container = Utils.loadTemplate(
+      `<div><h3>${translate('Route settings')}</h3></div>`
+    )
+    container.appendChild(this.routeForm())
+    return this._umap.dialog.open({ template: container })
   }
 
   toPolygon() {
@@ -1000,15 +1051,44 @@ export class LineString extends Path {
     this.del()
   }
 
+  isRoute() {
+    return (
+      !!this.properties._umap_options.route &&
+      this.properties._umap_options.route.active !== false
+    )
+  }
+
   getAdvancedEditActions(container) {
     super.getAdvancedEditActions(container)
-    DomUtil.createButton(
-      'button umap-to-polygon',
-      container,
-      translate('Transform to polygon'),
-      this.toPolygon,
-      this
-    )
+    const button = Utils.loadTemplate(`
+      <button class="button" type="button"><i class="icon icon-24 icon-polygon"></i>${translate('Transform to polygon')}</button>
+    `)
+    container.appendChild(button)
+    button.addEventListener('click', () => this.toPolygon())
+    if (this.isRoute()) {
+      const button = Utils.loadTemplate(`
+        <button class="button" type="button"><i class="icon icon-24 icon-polyline"></i>${translate('Transform to regular line')}</button>
+      `)
+      container.appendChild(button)
+      button.addEventListener('click', () => this.cancelRoute())
+    } else if (!this.isMulti() && this.coordinates.length < 10) {
+      const button = Utils.loadTemplate(`
+        <button class="button" type="button"><i class="icon icon-24 icon-route"></i>${translate('Transform to route')}</button>
+      `)
+      container.appendChild(button)
+      button.addEventListener('click', () =>
+        this.askForRouteSettings().then(() => {
+          this.toRoute()
+          this.computeRoute()
+        })
+      )
+    } else if (this.properties._umap_options.route?.coordinates) {
+      const button = Utils.loadTemplate(`
+        <button class="button" type="button"><i class="icon icon-24 icon-route"></i>${translate('Restore route')}</button>
+      `)
+      container.appendChild(button)
+      button.addEventListener('click', () => this.restoreRoute())
+    }
   }
 
   _mergeShapes(from, to) {
@@ -1069,20 +1149,10 @@ export class LineString extends Path {
         action: () => this.toPolygon(),
       })
       if (this._umap.properties.ORSAPIKey) {
-        items.push(
-          {
-            label: translate('Compute elevation'),
-            action: () => this.computeElevation(),
-          },
-          {
-            label: translate('Snap line'),
-            action: () => this.snapLine(),
-          },
-          {
-            label: translate('Snap to routes'),
-            action: () => this.routeDirection(),
-          }
-        )
+        items.push({
+          label: translate('Compute elevation'),
+          action: () => this.computeElevation(),
+        })
       }
     }
     if (vertexClicked) {
@@ -1135,12 +1205,18 @@ export class LineString extends Path {
     return items
   }
 
-  _editRoute(container) {
-    const properties = {
-      profile: ORS_PROFILES[0][0],
-      preference: ORS_PREFERENCES[0][0],
-      elevation: false,
+  _ensureRoute() {
+    if (!this.properties._umap_options.route) {
+      this.properties._umap_options.route = {}
     }
+    this.properties._umap_options.route.profile ??= ORS_PROFILES[0][0]
+    this.properties._umap_options.route.preference ??= ORS_PREFERENCES[0][0]
+    this.properties._umap_options.route.elevation ??= false
+    this.properties._umap_options.route.coordinates ??= []
+  }
+
+  routeForm() {
+    this._ensureRoute()
     const metadatas = [
       [
         'profile',
@@ -1162,35 +1238,31 @@ export class LineString extends Path {
         {
           handler: 'Select',
           selectOptions: ORS_PREFERENCES,
-          label: translate('Preference'),
+          label: translate('Route preference'),
         },
       ],
     ]
-    const builder = new MutatingForm(properties, metadatas, { umap: this._umap })
+    const form = new MutatingForm(this.properties._umap_options.route, metadatas, {
+      umap: this._umap,
+    })
+    return form.build()
+  }
+
+  _editRoute(container) {
     const template = `
         <details id="edit-route">
-          <summary>${translate('Convert to route')}</summary>
+          <summary>${translate('Route settings')}</summary>
           <fieldset data-ref=fieldset></fieldset>
         </details>
       `
     const [details, { fieldset }] = Utils.loadTemplateWithRefs(template)
     container.appendChild(details)
-    fieldset.appendChild(builder.build())
+    fieldset.appendChild(this.routeForm())
     const button = Utils.loadTemplate(
       `<button data-ref=button type="button">${translate('Compute route')}</button>`
     )
     fieldset.appendChild(button)
-    button.addEventListener('click', async () => {
-      const importer = new OpenRouteService(this._umap)
-      const geometry = await importer.directions(this.geometry.coordinates, properties)
-      console.log(geometry)
-      if (geometry?.type) {
-        const oldGeometry = Utils.CopyJSON(this._geometry)
-        this.geometry = geometry
-        this.ui.resetTooltip()
-        this.sync.update('geometry', this.geometry, oldGeometry)
-      }
-    })
+    button.addEventListener('click', async () => this.computeRoute())
   }
 
   addExtraEditFieldset(container) {
@@ -1208,7 +1280,7 @@ export class LineString extends Path {
     })
     const fieldset = DomUtil.createFieldset(container, translate('Line decoration'))
     fieldset.appendChild(builder.build())
-    if (this._umap.properties.ORSAPIKey) {
+    if (this._umap.properties.ORSAPIKey && this.isRoute()) {
       this._editRoute(container)
     }
   }
@@ -1225,23 +1297,10 @@ export class LineString extends Path {
     }
   }
 
-  async snapLine() {
+  async computeRoute() {
     if (!this._umap.properties.ORSAPIKey) return
     const importer = new OpenRouteService(this._umap)
-    const geometry = await importer.snap(this.geometry.coordinates)
-    if (geometry?.type) {
-      const oldGeometry = Utils.CopyJSON(this._geometry)
-      this.geometry = geometry
-      this.ui.resetTooltip()
-      this.sync.update('geometry', this.geometry, oldGeometry)
-    }
-  }
-
-  async routeDirection() {
-    if (!this._umap.properties.ORSAPIKey) return
-    const importer = new OpenRouteService(this._umap)
-    await importer.directions(this.geometry.coordinates).then((geometry) => {
-      console.log(geometry)
+    await importer.directions(this.properties._umap_options.route).then((geometry) => {
       if (geometry?.type) {
         const oldGeometry = Utils.CopyJSON(this._geometry)
         this.geometry = geometry

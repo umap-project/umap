@@ -263,7 +263,7 @@ const EDIT_BAR_TEMPLATE = `
     <li data-ref="multipolygon" hidden>
       <button type="button" title="${translate('Add a polygon to the current multi')}"><i class="icon icon-24 icon-multipolygon"></i></button>
     </li>
-    <li data-ref="route" hidden><button type="button" data-getstarted><i class="icon icon-24 icon-route"></i></button></li>
+    <li data-ref="route" hidden><button type="button" data-getstarted title="${translate('Draw along routes')}"><i class="icon icon-24 icon-route"></i></button></li>
     <hr>
     <li data-ref="caption" hidden><button data-getstarted type="button" title="${translate('Edit map name and caption')}"><i class="icon icon-24 icon-caption"></i></button></li>
     <li data-ref="import" hidden><button type="button"><i class="icon icon-24 icon-upload"></i></button></li>

@@ -306,10 +306,9 @@ U.Editable = L.Editable.extend({
       if (event.layer instanceof U.LeafletMarker) event.layer.feature.del()
     })
     this.on('editable:drawing:commit', function (event) {
-      console.log('in initialize', event)
       if (this._umap.editedFeature !== event.layer) {
         const promise = event.layer.feature.edit(event)
-        if (event.layer.feature._is_route) {
+        if (event.layer.feature.isRoute?.()) {
           promise.then((panel) => {
             panel.scrollTo('details#edit-route')
           })
@@ -330,20 +329,24 @@ U.Editable = L.Editable.extend({
     this.on('editable:vertex:rawclick', this.onVertexRawClick)
   },
 
-  startRoute: function (latlng, options) {
-    const line = this.createPolyline([], options)
-    line.enableEdit(this.map).newShape(latlng)
-    line.feature._is_route = true
-    return line
+  startRoute: function (latlng) {
+    const feature = this.createLineString()
+    feature.askForRouteSettings().then(async () => {
+      feature.ui.enableEdit(this.map).newShape(latlng)
+    })
   },
 
-  createPolyline: function (latlngs, options) {
+  createLineString: function () {
     const datalayer = this._umap.defaultEditDataLayer()
     const line = new U.LineString(this._umap, datalayer, {
       geometry: { type: 'LineString', coordinates: [] },
     })
     line._needs_upsert = true
-    return line.ui
+    return line
+  },
+
+  createPolyline: function (latlngs, properties = {}) {
+    return this.createLineString().ui
   },
 
   createPolygon: function (latlngs) {
@@ -387,7 +390,6 @@ U.Editable = L.Editable.extend({
       // only continue with Polylines and Polygons
       return
     }
-
     let content = L._('Drawing')
     let measure
     if (e.layer.editor._drawnLatLngs) {

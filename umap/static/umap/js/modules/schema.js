@@ -453,6 +453,10 @@ export const SCHEMA = {
     type: Object,
     impacts: ['data'],
   },
+  route: {
+    type: Object,
+    impacts: ['data'],
+  },
   scaleControl: {
     type: Boolean,
     impacts: ['ui'],

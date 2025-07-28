@@ -107,74 +107,32 @@ export class Importer {
       })
       return data?.geometry
     } catch (err) {
-      console.log(`An error occurred: ${err.status}`)
+      console.debug(`An error occurred: ${err.status}`)
       console.error(err)
     }
   }
 
-  async snap(locations) {
-    const ORS = await this.loadORS()
-    const Snap = new ORS.Snap({ api_key: this.umap.properties.ORSAPIKey })
-    const properties = {
-      range: 10,
-      lines: 1,
-      profile: 'foot-walking',
+  async directions(properties) {
+    if (!properties?.coordinates || properties.coordinates.length < 2) {
+      console.error('Not enough coordinates to compute route', properties)
+      return
     }
-
-    const metadatas = [
-      [
-        'profile',
-        { handler: 'Select', selectOptions: PROFILES, label: translate('Profile') },
-      ],
-      [
-        'radius',
-        {
-          handler: 'Range',
-          min: 0,
-          max: 500,
-          step: 50,
-          ticks: 11,
-          label: translate('Radius'),
-        },
-      ],
-    ]
-    const form = new Form(properties, metadatas, { umap: this.umap })
-    this.umap.dialog.open({ template: form.build() }).then(async () => {
-      try {
-        const data = await Snap.calculate({
-          locations: locations,
-          radius: properties.radius,
-          profile: properties.profile,
-          format: 'geojson',
-        })
-        // Add your own result handling here
-        console.log('response: ', data)
-        return data
-      } catch (err) {
-        console.log(`An error occurred: ${err.status}`)
-        console.error(err)
-      }
-    })
-  }
-
-  async directions(coordinates, properties) {
     const ORS = await this.loadORS()
     const Directions = new ORS.Directions({ api_key: this.umap.properties.ORSAPIKey })
     try {
       const featuresCollection = await Directions.calculate({
-        coordinates: coordinates,
+        coordinates: properties.coordinates,
         profile: properties.profile,
         preference: properties.preference,
         elevation: properties.elevation,
         geometry_simplify: true,
+        instructions: false,
         format: 'geojson',
       })
-      // Add your own result handling here
       const feature = featuresCollection.features[0]
-      console.log('response: ', feature)
       return feature.geometry
     } catch (err) {
-      console.log(`An error occurred: ${err.status}`)
+      console.debug(`An error occurred: ${err.status}`)
       console.error(err)
     }
   }

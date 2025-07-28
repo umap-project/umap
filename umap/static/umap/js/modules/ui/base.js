@@ -39,7 +39,6 @@ export class Positioned {
   anchorRight(el) {
     this.toggleClassPosition('right')
     const coords = this.getPosition(el)
-    console.log(coords)
     this.setPosition({
       left: coords.right + 11,
       top: coords.top,
