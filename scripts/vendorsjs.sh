@@ -34,5 +34,6 @@ mkdir -p umap/static/umap/vendors/iconlayers/ && cp node_modules/leaflet-iconlay
 mkdir -p umap/static/umap/vendors/geojson-to-gpx/ && cp node_modules/@dwayneparton/geojson-to-gpx/dist/index.js umap/static/umap/vendors/geojson-to-gpx/
 mkdir -p umap/static/umap/vendors/textpath/ && cp node_modules/leaflet-textpath/leaflet.textpath.js umap/static/umap/vendors/textpath/
 mkdir -p umap/static/umap/vendors/betterknown/ && cp node_modules/betterknown/dist/betterknown.mjs umap/static/umap/vendors/betterknown/
+mkdir -p umap/static/umap/vendors/openrouteservice/ && cp node_modules/openrouteservice-js/dist/ors-js-client.js* umap/static/umap/vendors/openrouteservice/
 
 echo 'Done!'

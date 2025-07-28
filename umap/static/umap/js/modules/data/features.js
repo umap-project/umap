@@ -88,6 +88,14 @@ class Feature {
     return [...this.datalayer.fields, ...this._umap.fields]
   }
 
+  setter(key, value) {
+    if (key === 'datalayer') {
+      this.changeDataLayer(value)
+    } else {
+      Utils.setObjectValue(this, key, value)
+    }
+  }
+
   isOnScreen(bounds) {
     return this.ui?.isOnScreen(bounds)
   }
@@ -407,7 +415,6 @@ class Feature {
     if (this.datalayer) {
       this.datalayer.removeFeature(this)
     }
-
     datalayer.addFeature(this)
     this.sync.upsert(this.toGeoJSON())
     this.redraw()
