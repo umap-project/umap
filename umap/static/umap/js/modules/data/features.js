@@ -16,7 +16,11 @@ import {
 } from '../rendering/ui.js'
 import { SCHEMA } from '../schema.js'
 import * as Utils from '../utils.js'
-import { Importer as OpenRouteService } from '../importers/openrouteservice.js'
+import {
+  Importer as OpenRouteService,
+  PROFILES as ORS_PROFILES,
+  PREFERENCES as ORS_PREFERENCES,
+} from '../importers/openrouteservice.js'
 
 class Feature {
   constructor(umap, datalayer, geojson = {}, id = null) {
@@ -258,12 +262,13 @@ class Feature {
       translate('Advanced actions')
     )
     this.getAdvancedEditActions(advancedActions)
-    const onLoad = this._umap.editPanel.open({ content: container })
-    onLoad.then(() => {
+    const onPanelLoaded = this._umap.editPanel.open({ content: container })
+    onPanelLoaded.then(() => {
       builder.form.querySelector('input')?.focus()
     })
     this._umap.editedFeature = this
     if (!this.ui.isOnScreen(this._umap._leafletMap.getBounds())) this.zoomTo(event)
+    return onPanelLoaded
   }
 
   toggleEditing() {
@@ -786,8 +791,9 @@ class Path extends Feature {
 
   edit(event) {
     if (this._umap.editEnabled) {
-      super.edit(event)
+      const promise = super.edit(event)
       if (!this.ui.editEnabled()) this.ui.makeGeometryEditable()
+      return promise
     }
   }
 
@@ -1063,10 +1069,20 @@ export class LineString extends Path {
         action: () => this.toPolygon(),
       })
       if (this._umap.properties.ORSAPIKey) {
-        items.push({
-          label: translate('Compute elevation'),
-          action: () => this.computeElevation(),
-        })
+        items.push(
+          {
+            label: translate('Compute elevation'),
+            action: () => this.computeElevation(),
+          },
+          {
+            label: translate('Snap line'),
+            action: () => this.snapLine(),
+          },
+          {
+            label: translate('Snap to routes'),
+            action: () => this.routeDirection(),
+          }
+        )
       }
     }
     if (vertexClicked) {
@@ -1119,6 +1135,64 @@ export class LineString extends Path {
     return items
   }
 
+  _editRoute(container) {
+    const properties = {
+      profile: ORS_PROFILES[0][0],
+      preference: ORS_PREFERENCES[0][0],
+      elevation: false,
+    }
+    const metadatas = [
+      [
+        'profile',
+        {
+          handler: 'Select',
+          selectOptions: ORS_PROFILES,
+          label: translate('Profile'),
+        },
+      ],
+      [
+        'elevation',
+        {
+          handler: 'Switch',
+          label: translate('Compute elevations'),
+        },
+      ],
+      [
+        'preference',
+        {
+          handler: 'Select',
+          selectOptions: ORS_PREFERENCES,
+          label: translate('Preference'),
+        },
+      ],
+    ]
+    const builder = new MutatingForm(properties, metadatas, { umap: this._umap })
+    const template = `
+        <details id="edit-route">
+          <summary>${translate('Convert to route')}</summary>
+          <fieldset data-ref=fieldset></fieldset>
+        </details>
+      `
+    const [details, { fieldset }] = Utils.loadTemplateWithRefs(template)
+    container.appendChild(details)
+    fieldset.appendChild(builder.build())
+    const button = Utils.loadTemplate(
+      `<button data-ref=button type="button">${translate('Compute route')}</button>`
+    )
+    fieldset.appendChild(button)
+    button.addEventListener('click', async () => {
+      const importer = new OpenRouteService(this._umap)
+      const geometry = await importer.directions(this.geometry.coordinates, properties)
+      console.log(geometry)
+      if (geometry?.type) {
+        const oldGeometry = Utils.CopyJSON(this._geometry)
+        this.geometry = geometry
+        this.ui.resetTooltip()
+        this.sync.update('geometry', this.geometry, oldGeometry)
+      }
+    })
+  }
+
   addExtraEditFieldset(container) {
     const options = [
       'properties._umap_options.textPath',
@@ -1134,6 +1208,9 @@ export class LineString extends Path {
     })
     const fieldset = DomUtil.createFieldset(container, translate('Line decoration'))
     fieldset.appendChild(builder.build())
+    if (this._umap.properties.ORSAPIKey) {
+      this._editRoute(container)
+    }
   }
 
   async computeElevation() {
@@ -1146,6 +1223,32 @@ export class LineString extends Path {
       this.ui.resetTooltip()
       this.sync.update('geometry', this.geometry, oldGeometry)
     }
+  }
+
+  async snapLine() {
+    if (!this._umap.properties.ORSAPIKey) return
+    const importer = new OpenRouteService(this._umap)
+    const geometry = await importer.snap(this.geometry.coordinates)
+    if (geometry?.type) {
+      const oldGeometry = Utils.CopyJSON(this._geometry)
+      this.geometry = geometry
+      this.ui.resetTooltip()
+      this.sync.update('geometry', this.geometry, oldGeometry)
+    }
+  }
+
+  async routeDirection() {
+    if (!this._umap.properties.ORSAPIKey) return
+    const importer = new OpenRouteService(this._umap)
+    await importer.directions(this.geometry.coordinates).then((geometry) => {
+      console.log(geometry)
+      if (geometry?.type) {
+        const oldGeometry = Utils.CopyJSON(this._geometry)
+        this.geometry = geometry
+        this.ui.resetTooltip()
+        this.sync.update('geometry', this.geometry, oldGeometry)
+      }
+    })
   }
 }
 

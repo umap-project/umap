@@ -306,7 +306,15 @@ U.Editable = L.Editable.extend({
       if (event.layer instanceof U.LeafletMarker) event.layer.feature.del()
     })
     this.on('editable:drawing:commit', function (event) {
-      if (this._umap.editedFeature !== event.layer) event.layer.feature.edit(event)
+      console.log('in initialize', event)
+      if (this._umap.editedFeature !== event.layer) {
+        const promise = event.layer.feature.edit(event)
+        if (event.layer.feature._is_route) {
+          promise.then((panel) => {
+            panel.scrollTo('details#edit-route')
+          })
+        }
+      }
     })
     this.on('editable:vertex:ctrlclick', (event) => {
       const index = event.vertex.getIndex()
@@ -322,7 +330,14 @@ U.Editable = L.Editable.extend({
     this.on('editable:vertex:rawclick', this.onVertexRawClick)
   },
 
-  createPolyline: function (latlngs) {
+  startRoute: function (latlng, options) {
+    const line = this.createPolyline([], options)
+    line.enableEdit(this.map).newShape(latlng)
+    line.feature._is_route = true
+    return line
+  },
+
+  createPolyline: function (latlngs, options) {
     const datalayer = this._umap.defaultEditDataLayer()
     const line = new U.LineString(this._umap, datalayer, {
       geometry: { type: 'LineString', coordinates: [] },
