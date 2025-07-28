@@ -5,6 +5,7 @@ import { Form } from '../form/builder.js'
 
 export const PROFILES = [
   ['foot-walking', translate('Walking')],
+  ['foot-hiking', translate('Hiking')],
   ['driving-car', translate('By car')],
   ['cycling-regular', translate('Cycling')],
   ['wheelchair', translate('Wheelchair')],
