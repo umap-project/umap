@@ -242,6 +242,10 @@ html[dir="rtl"] .icon {
     background-position: calc(var(--tile) * 2) calc(var(--tile) * 6);
 }
 
+.icon-route {
+    background-position: calc(var(--tile) * 8) calc(var(--tile) * 6);
+}
+
 .icon-save {
     background-position: calc(var(--tile) * 6) var(--tile);
 }

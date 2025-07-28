@@ -3,6 +3,19 @@ import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
 import { Form } from '../form/builder.js'
 
+export const PROFILES = [
+  ['foot-walking', translate('Walking')],
+  ['driving-car', translate('By car')],
+  ['cycling-regular', translate('Cycling')],
+  ['wheelchair', translate('Wheelchair')],
+]
+
+export const PREFERENCES = [
+  ['recommended', translate('Recommended')],
+  ['fastest', translate('Fastest')],
+  ['shortest', translate('Shortest')],
+]
+
 export class Importer {
   constructor(umap) {
     this.umap = umap
@@ -21,18 +34,12 @@ export class Importer {
       lines: 1,
       profile: 'foot-walking',
     }
-    const profiles = [
-      ['foot-walking', translate('Walking')],
-      ['driving-car', translate('By car')],
-      ['cycling-regular', translate('Cycling')],
-      ['wheelchair', translate('Wheelchair')],
-    ]
 
     const metadatas = [
       ['datalayer', { handler: 'DataLayerSwitcher', allowEmpty: true }],
       [
         'profile',
-        { handler: 'Select', selectOptions: profiles, label: translate('Profile') },
+        { handler: 'Select', selectOptions: PROFILES, label: translate('Profile') },
       ],
       [
         'range',
@@ -100,7 +107,32 @@ export class Importer {
       })
       return data?.geometry
     } catch (err) {
-      console.log(`An error occurred: ${err.status}`)
+      console.debug(`An error occurred: ${err.status}`)
+      console.error(err)
+    }
+  }
+
+  async directions(properties) {
+    if (!properties?.coordinates || properties.coordinates.length < 2) {
+      console.error('Not enough coordinates to compute route', properties)
+      return
+    }
+    const ORS = await this.loadORS()
+    const Directions = new ORS.Directions({ api_key: this.umap.properties.ORSAPIKey })
+    try {
+      const featuresCollection = await Directions.calculate({
+        coordinates: properties.coordinates,
+        profile: properties.profile,
+        preference: properties.preference,
+        elevation: properties.elevation,
+        geometry_simplify: true,
+        instructions: false,
+        format: 'geojson',
+      })
+      const feature = featuresCollection.features[0]
+      return feature.geometry
+    } catch (err) {
+      console.debug(`An error occurred: ${err.status}`)
       console.error(err)
     }
   }

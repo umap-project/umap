@@ -263,6 +263,7 @@ const EDIT_BAR_TEMPLATE = `
     <li data-ref="multipolygon" hidden>
       <button type="button" title="${translate('Add a polygon to the current multi')}"><i class="icon icon-24 icon-multipolygon"></i></button>
     </li>
+    <li data-ref="route" hidden><button type="button" data-getstarted title="${translate('Draw along routes')}"><i class="icon icon-24 icon-route"></i></button></li>
     <hr>
     <li data-ref="caption" hidden><button data-getstarted type="button" title="${translate('Edit map name and caption')}"><i class="icon icon-24 icon-caption"></i></button></li>
     <li data-ref="import" hidden><button type="button"><i class="icon icon-24 icon-upload"></i></button></li>
@@ -293,6 +294,7 @@ export class EditBar extends WithTemplate {
     this._onClick('multiline', () => this._umap.editedFeature.ui.editor.newShape())
     this._onClick('polygon', () => this._leafletMap.editTools.startPolygon())
     this._onClick('multipolygon', () => this._umap.editedFeature.ui.editor.newShape())
+    this._onClick('route', () => this._leafletMap.editTools.startRoute())
     this._onClick('caption', () => this._umap.editCaption())
     this._onClick('import', () => this._umap.importer.open())
     this._onClick('templates', () => this.templateIimporter.open())
@@ -321,6 +323,7 @@ export class EditBar extends WithTemplate {
     this.elements.center.hidden = this._umap.properties.editMode !== 'advanced'
     this.elements.permissions.hidden = this._umap.properties.editMode !== 'advanced'
     this.elements.settings.hidden = this._umap.properties.editMode !== 'advanced'
+    this.elements.route.hidden = !this._umap.properties.ORSAPIKey
   }
 
   _addTitle(ref, label) {
