@@ -390,4 +390,4 @@ REALTIME_ENABLED = env.bool("REALTIME_ENABLED", default=False)
 
 REDIS_URL = env("REDIS_URL", default="redis://localhost:6379")
 
-OPENROUTESERVICE_APIKEY = None
+OPENROUTESERVICE_APIKEY = env("OPENROUTESERVICE_APIKEY", default=None)

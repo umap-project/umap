@@ -90,8 +90,8 @@ See [Django documentation for MEDIA_ROOT](https://docs.djangoproject.com/en/4.2/
 
 #### OPENROUTESERVICE_APIKEY
 
-API key for [OpenRouteService](https://openrouteservice.org/). When defined, it will activate the
-isochrone feature on the map.
+API key for [OpenRouteService](https://openrouteservice.org/). When defined, it will activate
+elevation, routing and isochrone features on the map.
 
 #### REALTIME_ENABLED
 
