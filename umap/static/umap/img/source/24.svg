@@ -2,7 +2,7 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg width="324" height="288" viewBox="0 0 85.724999 76.199999" version="1.1" id="svg6237" inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)" sodipodi:docname="24.svg" inkscape:export-filename="../24.svg" inkscape:export-xdpi="7.52" inkscape:export-ydpi="7.52" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview id="namedview6239" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" inkscape:showpageshadow="2" inkscape:pageopacity="0.0" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1" inkscape:document-units="px" showgrid="true" showguides="true" inkscape:zoom="2.3103906" inkscape:cx="145.86278" inkscape:cy="143.26582" inkscape:window-width="1920" inkscape:window-height="1011" inkscape:window-x="0" inkscape:window-y="0" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+  <sodipodi:namedview id="namedview6239" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" inkscape:showpageshadow="2" inkscape:pageopacity="0.0" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1" inkscape:document-units="px" showgrid="true" showguides="true" inkscape:zoom="4.728914" inkscape:cx="314.23706" inkscape:cy="44.407659" inkscape:window-width="1920" inkscape:window-height="1011" inkscape:window-x="0" inkscape:window-y="0" inkscape:window-maximized="1" inkscape:current-layer="layer1">
     <inkscape:grid type="xygrid" id="grid6358" empspacing="6" originx="0" originy="0" spacingy="0.26458333" spacingx="0.26458333" units="px" visible="true" />
     <inkscape:grid id="grid1" units="px" originx="0" originy="0" spacingx="9.5249999" spacingy="9.5249999" empcolor="#3f3fff" empopacity="0.25098039" color="#ff0000" opacity="0.83529412" empspacing="0" dotted="false" gridanglex="30" gridanglez="30" visible="true" />
   </sodipodi:namedview>
@@ -117,5 +117,6 @@
       <path inkscape:connector-curvature="0" d="m 78.188471,64.029167 v 0.132291 0.79375 0.132292 h 0.132293 0.79375 0.132292 v -0.132292 -0.09095 -0.289389 -0.413411 -0.132292 h -0.132292 -0.79375 z m 0.264584,0.264583 h 0.529166 v 0.529167 h -0.529166 z" id="polyline-7-3" class="sprite" style="fill:#4d4d4d;fill-opacity:1;stroke-width:0.264583" sodipodi:nodetypes="cccccccccccccccccccc" />
       <path style="fill:none;fill-rule:evenodd;stroke:#4d4d4d;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" d="m 79.160176,64.639676 c 0,0 2.793391,0.10937 2.828939,-1.152504 0.03453,-1.225872 -3.089291,-0.487653 -3.261813,-1.701816 -0.211661,-1.489616 3.090237,-2.519479 3.090237,-2.519479" id="path2" sodipodi:nodetypes="cssc" />
     </g>
+    <path style="fill:#4d4d4d;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" d="m 78.287826,7.4240516 h 5.31658 l -1.726594,-4.768061 -1.171181,2.5168969 -0.984189,-1.3411192 z" id="path3" sodipodi:nodetypes="cccccc" />
   </g>
 </svg>

@@ -260,11 +260,14 @@ class Feature {
     })
     form.appendChild(button)
     this.appendEditFieldsets(container)
-    const advancedActions = DomUtil.createFieldset(
-      container,
-      translate('Advanced actions')
-    )
-    this.getAdvancedEditActions(advancedActions)
+    const [details, { fieldset }] = Utils.loadTemplateWithRefs(`
+      <details>
+        <summary>${translate('Advanced actions')}</summary>
+        <fieldset class="button-bar by2" data-ref=fieldset></fieldset>
+      </details>
+    `)
+    container.appendChild(details)
+    this.getAdvancedEditActions(fieldset)
     const onPanelLoaded = this._umap.editPanel.open({ content: container })
     onPanelLoaded.then(() => {
       builder.form.querySelector('input')?.focus()
@@ -618,12 +621,12 @@ class Feature {
     }
   }
 
-  getContextMenuItems(event) {
+  getContextMenu(event) {
     const permalink = this.getPermalink()
     const items = []
     if (this._umap.editEnabled && !this.isReadOnly()) {
       items.push({
-        items: this.getContextMenuEditItems(event),
+        items: this.getEditContextMenu(event),
       })
     }
     if (permalink) {
@@ -650,11 +653,15 @@ class Feature {
     return items
   }
 
-  getContextMenuEditItems() {
-    return [
+  getShapeEditMenu() {
+    return []
+  }
+
+  getEditContextMenu(event) {
+    const items = [
       {
-        action: () => this.toggleEditing(),
         title: translate('Toggle edit mode (⇧+Click)'),
+        action: () => this.toggleEditing(),
         icon: 'icon-edit',
       },
       {
@@ -663,16 +670,37 @@ class Feature {
         action: () => this.datalayer.edit(),
       },
       {
-        title: translate('Delete this feature'),
-        icon: 'icon-delete',
-        action: () => this.del(),
-      },
-      {
         title: translate('Clone this feature'),
         icon: 'icon-copy',
         action: () => this.clone(),
       },
+      {
+        title: translate('Delete this feature'),
+        icon: 'icon-delete',
+        action: () => this.del(),
+      },
     ]
+    const subitems = this.getShapeEditMenu(event)
+    if (subitems.length) {
+      subitems.unshift('-')
+      items.push(...subitems)
+    }
+    const vertexClicked = event.vertex
+    if (this.isMulti()) {
+      const subitems = this.getMultiEditMenu(event)
+      if (subitems.length) {
+        subitems.unshift('-')
+        items.push(...subitems)
+      }
+    }
+    if (vertexClicked) {
+      const subitems = this.getVertexEditMenu(event)
+      if (subitems.length) {
+        subitems.unshift('-')
+        items.push(...subitems)
+      }
+    }
+    return items
   }
 
   isActive() {
@@ -862,43 +890,44 @@ class Path extends Feature {
     if (callback) callback.call(this)
   }
 
-  getContextMenuItems(event) {
-    const items = super.getContextMenuItems(event)
+  getContextMenu(event) {
+    const items = super.getContextMenu(event)
     items.push({
       label: translate('Display measure'),
       action: () => Alert.info(this.ui.getMeasure()),
     })
-    if (this._umap.editEnabled && !this.isReadOnly() && this.isMulti()) {
-      items.push(...this.getContextMenuMultiItems(event))
-    }
     return items
   }
 
-  getContextMenuMultiItems(event) {
-    const items = []
-    const shape = this.ui.shapeAt(event.latlng)
-    if (this.ui._latlngs.indexOf(shape) > 0) {
-      items.push('-', {
-        label: translate('Make main shape'),
-        action: () => {
-          this.ui.enableEdit().deleteShape(shape)
-          this.ui.editor.prependShape(shape)
-        },
-      })
-    }
-    return items
-  }
-
-  getContextMenuEditItems(event) {
-    const items = super.getContextMenuEditItems(event)
-    const vertexClicked = event.vertex
-    if (vertexClicked) {
-      items.push({
+  getVertexEditMenu(event) {
+    return [
+      {
         action: () => event.vertex.delete(),
         title: translate('Delete this vertex (Alt+Click)'),
         icon: 'icon-delete-vertex',
-      })
-    }
+      },
+    ]
+  }
+
+  getMultiEditMenu(event) {
+    return [
+      {
+        title: translate('Extract shape to separate feature'),
+        icon: 'icon-extract-shape',
+        action: () => {
+          this.ui.isolateShape(event.latlng)
+        },
+      },
+      {
+        title: translate('Delete this shape'),
+        icon: 'icon-delete-shape',
+        action: () => this.ui.enableEdit().deleteShapeAt(event.latlng),
+      },
+    ]
+  }
+
+  getShapeEditMenu(event) {
+    const items = []
     if (
       this._umap?.editedFeature !== this &&
       this.isSameClass(this._umap.editedFeature)
@@ -910,22 +939,6 @@ class Path extends Feature {
           this.transferShape(event.latlng, this._umap.editedFeature)
         },
       })
-    }
-    if (this.isMulti()) {
-      items.push(
-        {
-          title: translate('Extract shape to separate feature'),
-          icon: 'icon-extract-shape',
-          action: () => {
-            this.ui.isolateShape(event.latlng)
-          },
-        },
-        {
-          title: translate('Delete this shape'),
-          icon: 'icon-delete-shape',
-          action: () => this.ui.enableEdit().deleteShapeAt(event.latlng),
-        }
-      )
     }
     return items
   }
@@ -1067,6 +1080,13 @@ export class LineString extends Path {
       container.appendChild(button)
       button.addEventListener('click', () => this.restoreRoute())
     }
+    if (this._umap.properties.ORSAPIKey) {
+      const button = Utils.loadTemplate(`
+        <button class="button" type="button"><i class="icon icon-24 icon-mountain"></i>${translate('Compute elevation')}</button>
+      `)
+      container.appendChild(button)
+      button.addEventListener('click', () => this.computeElevation())
+    }
   }
 
   _mergeShapes(from, to) {
@@ -1118,44 +1138,43 @@ export class LineString extends Path {
     return !LineUtil.isFlat(this.coordinates) && this.coordinates.length > 1
   }
 
-  getContextMenuEditItems(event) {
-    const items = super.getContextMenuEditItems(event)
-    const vertexClicked = event.vertex
+  getVertexEditMenu(event) {
+    const items = super.getVertexEditMenu(event)
+    const index = event.vertex.getIndex()
+    if (index !== 0 && index !== event.vertex.getLastIndex()) {
+      items.push({
+        title: translate('Split line'),
+        icon: 'icon-split-line',
+        action: () => event.vertex.split(),
+      })
+    } else if (index === 0 || index === event.vertex.getLastIndex()) {
+      items.push({
+        title: this._umap.help.displayLabel('CONTINUE_LINE', false),
+        icon: 'icon-continue-line',
+        action: () => event.vertex.continue(),
+      })
+    }
+    return items
+  }
+
+  getMultiEditMenu(event) {
+    const items = super.getMultiEditMenu(event)
+    items.push({
+      title: translate('Merge lines'),
+      icon: 'icon-merge',
+      action: () => this.mergeShapes(),
+    })
+    return items
+  }
+
+  getShapeEditMenu(event) {
+    const items = super.getShapeEditMenu(event)
     if (!this.isMulti()) {
       items.push({
         title: translate('Transform to polygon'),
         icon: 'icon-polygon',
         action: () => this.toPolygon(),
       })
-      if (this._umap.properties.ORSAPIKey) {
-        items.push({
-          title: translate('Compute elevation'),
-          icon: 'icon-mountain',
-          action: () => this.computeElevation(),
-        })
-      }
-    } else {
-      items.push({
-        title: translate('Merge lines'),
-        icon: 'icon-merge',
-        action: () => this.mergeShapes(),
-      })
-    }
-    if (vertexClicked) {
-      const index = event.vertex.getIndex()
-      if (index !== 0 && index !== event.vertex.getLastIndex()) {
-        items.push({
-          title: translate('Split line'),
-          icon: 'icon-split-line',
-          action: () => event.vertex.split(),
-        })
-      } else if (index === 0 || index === event.vertex.getLastIndex()) {
-        items.push({
-          title: this._umap.help.displayLabel('CONTINUE_LINE', false),
-          icon: 'icon-continue-line',
-          action: () => event.vertex.continue(),
-        })
-      }
     }
     return items
   }
@@ -1374,8 +1393,8 @@ export class Polygon extends Path {
     )
   }
 
-  getContextMenuEditItems(event) {
-    const items = super.getContextMenuEditItems(event)
+  getShapeEditMenu(event) {
+    const items = super.getShapeEditMenu(event)
     const shape = this.ui.shapeAt(event.latlng)
     // No multi and no holes.
     if (shape && !this.isMulti() && (LineUtil.isFlat(shape) || shape.length === 1)) {

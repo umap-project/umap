@@ -151,7 +151,7 @@ def test_websocket_connection_can_sync_polygons(context, asgi_live_server, tilel
     assert b_polygon_bbox_t2 == a_polygon_bbox_t2
 
     # Move the polygon on peer B and check it moved also on peer A
-    b_polygon.click()
+    b_polygon.click(button="right")
     peerB.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
 
     b_polygon.drag_to(b_map_el, target_position={"x": 400, "y": 400})
@@ -340,7 +340,7 @@ def test_websocket_connection_can_sync_late_joining_peer(
     expect(b_polygons).to_have_count(1)
 
     # Verify marker properties
-    peerB.locator(".leaflet-marker-icon").first.click()
+    peerB.locator(".leaflet-marker-icon").first.click(button="right")
     peerB.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
     expect(peerB.locator('input[name="name"]')).to_have_value("First marker")
 

@@ -52,6 +52,16 @@
     flex-direction: row;
 }
 
+.umap-contextmenu .icon-bar button {
+    padding: 2px;
+}
+
+.umap-contextmenu .icon-bar hr {
+    transform: rotate(90deg);
+    width: 28px;
+    margin: auto -10px;
+}
+
 .umap-contextmenu.tooltip-bottom-left,
 .umap-contextmenu.tooltip-bottom-left>li:last-of-type {
     border-bottom-left-radius: unset;

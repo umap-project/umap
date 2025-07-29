@@ -210,7 +210,7 @@ export default class Umap {
 
     if (!this.properties.noControl) {
       this.initShortcuts()
-      this._leafletMap.on('contextmenu', (e) => this.onContextMenu(e))
+      this._leafletMap.on('contextmenu', (event) => this.onContextMenu(event))
       this.onceDataLoaded(this.setViewFromQueryString)
       this.bottomBar.setup()
       this.propagate()
@@ -391,50 +391,8 @@ export default class Umap {
     }
   }
 
-  getOwnContextMenuItems(event) {
-    const items = []
-    if (this.hasEditMode()) {
-      if (this.editEnabled) {
-        if (!this.isDirty) {
-          items.push({
-            label: this.help.displayLabel('STOP_EDIT'),
-            action: () => this.disableEdit(),
-          })
-        }
-        if (this.properties.enableMarkerDraw) {
-          items.push({
-            label: this.help.displayLabel('DRAW_MARKER'),
-            action: () => this._leafletMap.editTools.startMarker(),
-          })
-        }
-        if (this.properties.enablePolylineDraw) {
-          items.push({
-            label: this.help.displayLabel('DRAW_POLYGON'),
-            action: () => this._leafletMap.editTools.startPolygon(),
-          })
-        }
-        if (this.properties.enablePolygonDraw) {
-          items.push({
-            label: this.help.displayLabel('DRAW_LINE'),
-            action: () => this._leafletMap.editTools.startPolyline(),
-          })
-        }
-        items.push('-')
-        items.push({
-          label: translate('Help'),
-          action: () => this.help.show('edit'),
-        })
-      } else {
-        items.push({
-          label: this.help.displayLabel('TOGGLE_EDIT'),
-          action: () => this.enableEdit(),
-        })
-      }
-    }
-    if (items.length) {
-      items.push('-')
-    }
-    items.push(
+  getOwnContextMenu(event) {
+    const items = [
       {
         label: translate('Open browser'),
         action: () => this.openBrowser('layers'),
@@ -442,8 +400,8 @@ export default class Umap {
       {
         label: translate('Browse data'),
         action: () => this.openBrowser('data'),
-      }
-    )
+      },
+    ]
     if (this.properties.facetKey) {
       items.push({
         label: translate('Filter data'),
@@ -463,33 +421,32 @@ export default class Umap {
     return items
   }
 
-  getSharedContextMenuItems(event) {
+  getSharedContextMenu(event) {
     const items = []
     if (this.properties.urls.routing) {
-      items.push('-', {
+      items.push({
         label: translate('Directions from here'),
         action: () => this.openExternalRouting(event),
       })
     }
-    if (this.properties.urls.edit_in_osm) {
-      items.push('-', {
-        label: translate('Edit in OpenStreetMap'),
-        action: () => this.editInOSM(event),
-      })
-    }
     if (this.properties.ORSAPIKey) {
-      items.push('-', {
+      items.push({
         label: translate('Compute isochrone from here'),
         action: () => this.askForIsochrone(event),
       })
     }
+    if (this.properties.urls.edit_in_osm) {
+      items.push({
+        label: translate('Edit in OpenStreetMap'),
+        action: () => this.editInOSM(event),
+      })
+    }
+    if (items.length) items.unshift('-')
     return items
   }
 
   onContextMenu(event) {
-    const items = this.getOwnContextMenuItems(event).concat(
-      this.getSharedContextMenuItems(event)
-    )
+    const items = this.getOwnContextMenu(event).concat(this.getSharedContextMenu(event))
     this.contextmenu.open(event.originalEvent, items)
   }
 

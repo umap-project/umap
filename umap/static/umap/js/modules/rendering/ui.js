@@ -85,8 +85,8 @@ const FeatureMixin = {
   onContextMenu: function (event) {
     DomEvent.stop(event)
     const items = this.feature
-      .getContextMenuItems(event)
-      .concat(this._map._umap.getSharedContextMenuItems(event))
+      .getContextMenu(event)
+      .concat(this._map._umap.getSharedContextMenu(event))
     this._map._umap.contextmenu.open(event.originalEvent, items)
   },
 
