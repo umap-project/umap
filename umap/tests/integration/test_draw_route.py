@@ -171,7 +171,6 @@ def test_draw_route(page, live_server, tilelayer, settings):
     page.get_by_text("Advanced actions").click()
     page.get_by_role("button", name="Restore route").click()
     expect(page.locator(".leaflet-vertex-icon")).to_have_count(2)
-    page.locator("#edit-route").get_by_text("Profile WalkingBy").click()
     page.locator('#edit-route select[name="profile"]').select_option("driving-car")
     page.get_by_role("button", name="Compute route").click()
     page.get_by_text("Advanced actions").click()
