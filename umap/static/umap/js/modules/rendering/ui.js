@@ -250,6 +250,7 @@ export const LeafletMarker = Marker.extend({
 })
 
 const PathMixin = {
+  maxVertex: 100,
   _onMouseOver: function () {
     if (this._map.measureTools?.enabled()) {
       this._map._umap.tooltip.open({ content: this.getMeasure(), anchor: this })
@@ -263,7 +264,9 @@ const PathMixin = {
 
   shouldAllowGeometryEdit: function () {
     const pointsCount = this._parts.reduce((acc, part) => acc + part.length, 0)
-    return pointsCount < 100 || this._map.getZoom() === this._map.getMaxZoom()
+    return (
+      pointsCount < this.maxVertex || this._map.getZoom() === this._map.getMaxZoom()
+    )
   },
 
   makeGeometryEditable: function () {
@@ -516,7 +519,10 @@ export const LeafletRoute = LeafletPolyline.extend({
   },
 
   shouldAllowGeometryEdit: function () {
-    return this._route.length < 100 || this._map.getZoom() === this._map.getMaxZoom()
+    return (
+      this._route.length < this.maxVertex ||
+      this._map.getZoom() === this._map.getMaxZoom()
+    )
   },
 })
 
