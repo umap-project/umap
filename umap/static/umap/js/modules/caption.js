@@ -26,6 +26,7 @@ const TEMPLATE = `
         <h5>${translate('Map background credits')}</h5>
         <p><strong data-ref="bgName"></strong> <span data-ref="bgAttribution"></span></p>
         <p data-ref="poweredBy"></p>
+        <p data-ref="routing" hidden></p>
       </fieldset>
     </details>
   </div>
@@ -148,5 +149,12 @@ export default class Caption extends Utils.WithTemplate {
       `,
       urls
     )
+    if (this._umap.properties.ORSAPIKey) {
+      this.elements.routing.innerHTML = translate(
+        `Routing, isochrone and elevation, thanks to <a href="{url}">OpenRouteService</a>.`,
+        { url: 'https://openrouteservice.org/' }
+      )
+      this.elements.routing.hidden = false
+    }
   }
 }
