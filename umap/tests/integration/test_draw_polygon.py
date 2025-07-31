@@ -154,9 +154,7 @@ def test_can_draw_multi(live_server, page, tilelayer):
     expect(multi_button).to_be_hidden()
     polygons.first.click(button="right", position={"x": 10, "y": 10})
     expect(page.get_by_role("button", name="Transform to lines")).to_be_hidden()
-    expect(
-        page.get_by_role("button", name="Remove shape from the multi")
-    ).to_be_visible()
+    expect(page.get_by_role("button", name="Delete this shape")).to_be_visible()
 
 
 def test_can_draw_hole(page, live_server, tilelayer):
@@ -179,7 +177,7 @@ def test_can_draw_hole(page, live_server, tilelayer):
     expect(vertices).to_have_count(4)
 
     # First vertex of the hole will be created here
-    map.click(position={"x": 180, "y": 120})
+    map.click(position={"x": 180, "y": 120}, button="right")
     page.get_by_role("button", name="Start a hole here").click()
     map.click(position={"x": 180, "y": 180})
     map.click(position={"x": 120, "y": 180})
@@ -474,7 +472,7 @@ def test_vertexmarker_not_shown_if_too_many(live_server, map, page, settings):
     page.locator(".umap-import textarea").fill(geojson)
     page.locator('select[name="format"]').select_option("geojson")
     page.get_by_role("button", name="Import data", exact=True).click()
-    page.locator("path").click()
+    page.locator("path").click(button="right")
     page.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
     expect(page.locator(".umap-tooltip-container")).to_contain_text(
         "Please zoom in to edit the geometry"

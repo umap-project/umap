@@ -12,9 +12,19 @@ export class Positioned {
   }
 
   toggleClassPosition(position) {
-    this.container.classList.toggle('tooltip-bottom', position === 'bottom')
-    this.container.classList.toggle('tooltip-top', position === 'top')
-    this.container.classList.toggle('tooltip-right', position === 'right')
+    const positions = [
+      'bottom',
+      'top',
+      'left',
+      'right',
+      'bottom-right',
+      'bottom-left',
+      'top-right',
+      'top-left',
+    ]
+    for (const known of positions) {
+      this.container.classList.toggle(`tooltip-${known}`, position === known)
+    }
   }
 
   anchorTop(el) {
@@ -70,18 +80,24 @@ export class Positioned {
   }
 
   computePosition([x, y]) {
+    let tooltip = ''
     let left
     let top
-    if (x < window.innerWidth / 2) {
-      left = x
-    } else {
-      left = x - this.container.offsetWidth
-    }
     if (y < window.innerHeight / 2) {
       top = Math.min(y, window.innerHeight - this.container.offsetHeight)
+      tooltip += 'top'
     } else {
       top = Math.max(0, y - this.container.offsetHeight)
+      tooltip += 'bottom'
     }
+    if (x < window.innerWidth / 2) {
+      left = x
+      tooltip += '-left'
+    } else {
+      left = x - this.container.offsetWidth
+      tooltip += '-right'
+    }
+    this.toggleClassPosition(tooltip)
     this.setPosition({ left, top })
   }
 

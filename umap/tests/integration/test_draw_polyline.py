@@ -150,9 +150,7 @@ def test_can_draw_multi(live_server, page, tilelayer):
     expect(add_shape).to_be_hidden()
     lines.first.click(button="right", position={"x": 10, "y": 1})
     expect(page.get_by_role("button", name="Transform to polygon")).to_be_hidden()
-    expect(
-        page.get_by_role("button", name="Remove shape from the multi")
-    ).to_be_visible()
+    expect(page.get_by_role("button", name="Delete this shape")).to_be_visible()
 
 
 def test_can_transfer_shape_from_simple_polyline(live_server, page, tilelayer):
@@ -328,11 +326,11 @@ def test_can_delete_shape_using_toolbar(live_server, page, tilelayer, settings):
     map.click(position={"x": 100, "y": 200})
 
     # Now split the line
-    map.click(position={"x": 100, "y": 100})
+    map.click(position={"x": 100, "y": 100}, button="right")
     page.get_by_role("button", name="Split line").click()
 
     # Delete part of it
-    map.click(position={"x": 125, "y": 100})
+    map.click(position={"x": 125, "y": 100}, button="right")
     page.get_by_role("button", name="Delete this shape").click()
     data = save_and_get_json(page)
     assert len(data["features"]) == 1

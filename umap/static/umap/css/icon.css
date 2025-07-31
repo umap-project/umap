@@ -197,6 +197,14 @@ html[dir="rtl"] .icon {
     background-position: calc(var(--tile) * 8) var(--tile);
 }
 
+.icon-merge {
+    background-position: calc(var(--tile) * 4) calc(var(--tile) * 4);
+}
+
+.icon-mountain {
+    background-position: calc(var(--tile) * 8) 0;
+}
+
 .icon-multipolygon {
     background-position: calc(var(--tile) * 7) calc(var(--tile) * 5);
 }

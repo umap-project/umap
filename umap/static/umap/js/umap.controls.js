@@ -439,8 +439,7 @@ U.Editable = L.Editable.extend({
   },
 
   onVertexRawClick: (e) => {
-    e.layer.onVertexRawClick(e)
-    L.DomEvent.stop(e)
+    // Do not delete the vertex on click (but on alt-click only)
     e.cancel()
   },
 
