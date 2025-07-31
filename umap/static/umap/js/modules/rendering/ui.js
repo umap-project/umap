@@ -248,7 +248,7 @@ const PathMixin = {
       this._map._umap.tooltip.open({ content: this.getMeasure(), anchor: this })
     } else if (this._map._umap.editEnabled && !this._map._umap.editedFeature) {
       this._map._umap.tooltip.open({
-        content: translate('Click to edit'),
+        content: translate('Right-click to edit'),
         anchor: this,
       })
     }
