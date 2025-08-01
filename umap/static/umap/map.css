@@ -858,7 +858,7 @@ a.umap-control-caption,
 /* ************* */
 /* Marker's Icon */
 /* ************* */
-.umap-div-icon .icon_container {
+.umap-div-icon .icon-container {
     background-color: white;
     border-radius: 4px 4px 4px 4px;
     height: 32px;
@@ -870,7 +870,7 @@ a.umap-control-caption,
     line-height: 32px;
 }
 
-.umap-div-icon.umap-icon-active .icon_container {
+.umap-div-icon.umap-icon-active .icon-container {
     border-radius: 5px;
     box-shadow: 7px 10px 10px -1px black;
     height: 36px;
@@ -881,14 +881,14 @@ a.umap-control-caption,
     width: 36px;
 }
 
-.umap-div-icon .icon_container img {
+.umap-div-icon .icon-container img {
     vertical-align: middle;
     max-width: 24px !important;
     /* leaflet.css has !important, so... */
     max-height: 24px !important;
 }
 
-.umap-div-icon .icon_arrow {
+.umap-div-icon .icon-arrow {
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
     border-top: 8px solid #2270b5;
@@ -899,11 +899,11 @@ a.umap-control-caption,
     opacity: 0.9;
 }
 
-.umap-div-icon.umap-icon-active .icon_arrow {
+.umap-div-icon.umap-icon-active .icon-arrow {
     opacity: 1.0 !important;
 }
 
-.umap-drop-icon .icon_arrow {
+.umap-drop-icon .icon-arrow {
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
     border-top: 16px solid #2270B5;
@@ -914,7 +914,7 @@ a.umap-control-caption,
     width: 0;
 }
 
-.umap-drop-icon.umap-icon-active .icon_arrow {
+.umap-drop-icon.umap-icon-active .icon-arrow {
     border-left-width: 12px;
     border-right-width: 12px;
     border-top-width: 18px;
@@ -922,7 +922,7 @@ a.umap-control-caption,
     opacity: 1.0 !important;
 }
 
-.umap-drop-icon .icon_container {
+.umap-drop-icon .icon-container {
     background-color: #2470B5;
     border-radius: 16px 16px 16px 16px;
     box-shadow: 6px 13px 8px -4px black;
@@ -933,7 +933,7 @@ a.umap-control-caption,
     width: 32px;
 }
 
-.umap-drop-icon.umap-icon-active .icon_container {
+.umap-drop-icon.umap-icon-active .icon-container {
     box-shadow: 4px 11px 10px -2px black;
     border-radius: 18px 18px 18px 18px;
     height: 36px;
@@ -944,36 +944,48 @@ a.umap-control-caption,
     width: 36px;
 }
 
-.umap-drop-icon .icon_container img {
+.umap-drop-icon .icon-container img {
     vertical-align: middle;
     max-width: 24px !important;
     max-height: 24px !important;
 }
 
-.umap-div-icon .icon_container span,
-.umap-drop-icon .icon_container span {
+.umap-div-icon .icon-container span,
+.umap-drop-icon .icon-container span {
     vertical-align: middle;
     font-weight: bold;
 }
 
 .umap-circle-icon {
-    border: 1px solid white;
-    border-radius: 10px 10px 10px 10px;
-    margin-inline-start: -6px;
-    margin-top: -6px;
+    border: 2px solid white;
+    border-radius: 50%;
     height: 12px;
     width: 12px;
 }
 
 .umap-circle-icon.umap-icon-active {
-    height: 16px;
-    margin-inline-start: -8px;
-    margin-top: -8px;
     opacity: 1.0 !important;
+    height: 16px;
     width: 16px;
 }
 
-.umap-ball-icon .icon_container {
+.umap-large-circle-icon {
+    border: 2px solid white;
+    background-color: white;
+    border-radius: 50%;
+    height: 36px;
+    width: 36px;
+    box-shadow: black 0px 0px 1px;
+    display: flex;
+    align-content: center;
+}
+
+.umap-large-circle-icon.umap-icon-active {
+    opacity: 1.0 !important;
+    box-shadow: black 0px 0px 4px;
+}
+
+.umap-ball-icon .icon-container {
     background-color: darkblue;
     background: radial-gradient(circle at 6px 38%, white -4px, darkblue 8px) repeat scroll 0 0 transparent;
     border-radius: 8px 8px 8px 8px;
@@ -984,7 +996,7 @@ a.umap-control-caption,
     width: 16px;
 }
 
-.umap-ball-icon.umap-icon-active .icon_container {
+.umap-ball-icon.umap-icon-active .icon-container {
     border-radius: 10px 10px 10px 10px;
     box-shadow: 1px 23px 7px -1px black;
     margin-inline-start: -2px;
@@ -994,7 +1006,7 @@ a.umap-control-caption,
     width: 20px;
 }
 
-.umap-ball-icon .icon_arrow {
+.umap-ball-icon .icon-arrow {
     background-color: black;
     height: 16px;
     inset-inline-start: 7px;
@@ -1012,22 +1024,20 @@ a.umap-control-caption,
     cursor: not-allowed;
 }
 
-.leaflet-container .umap-raw-icon img {
-    max-height: 48px !important;
-    max-width: 48px !important;
-}
-
 .umap-raw-icon {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
     align-content: center;
     overflow: hidden;
 }
 
+.umap-raw-icon img {
+    object-fit: contain;
+}
+
 .umap-raw-icon.umap-icon-active {
-    box-shadow: var(--block-shadow);
+    box-shadow: black 0 0 1px;
 }
 
 /* ********************************* */

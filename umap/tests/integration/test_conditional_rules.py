@@ -103,7 +103,7 @@ def test_simple_equal_rule_at_load(live_server, page, map):
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
-    markers = page.locator(".leaflet-marker-icon .icon_container")
+    markers = page.locator(".leaflet-marker-icon .icon-container")
     expect(markers).to_have_count(5)
     colors = getColors(markers)
     assert colors.count("rgb(240, 248, 255)") == 3
@@ -117,7 +117,7 @@ def test_simple_not_equal_rule_at_load(live_server, page, map):
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
-    markers = page.locator(".leaflet-marker-icon .icon_container")
+    markers = page.locator(".leaflet-marker-icon .icon-container")
     expect(markers).to_have_count(5)
     colors = getColors(markers)
     assert colors.count("rgb(240, 248, 255)") == 3
@@ -131,7 +131,7 @@ def test_gt_rule_with_number_at_load(live_server, page, map):
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
-    markers = page.locator(".leaflet-marker-icon .icon_container")
+    markers = page.locator(".leaflet-marker-icon .icon-container")
     expect(markers).to_have_count(5)
     colors = getColors(markers)
     assert colors.count("rgb(240, 248, 255)") == 2
@@ -145,7 +145,7 @@ def test_lt_rule_with_number_at_load(live_server, page, map):
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
-    markers = page.locator(".leaflet-marker-icon .icon_container")
+    markers = page.locator(".leaflet-marker-icon .icon-container")
     expect(markers).to_have_count(5)
     colors = getColors(markers)
     assert colors.count("rgb(240, 248, 255)") == 4
@@ -159,7 +159,7 @@ def test_lt_rule_with_float_at_load(live_server, page, map):
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
-    markers = page.locator(".leaflet-marker-icon .icon_container")
+    markers = page.locator(".leaflet-marker-icon .icon-container")
     expect(markers).to_have_count(5)
     colors = getColors(markers)
     assert colors.count("rgb(240, 248, 255)") == 4
@@ -173,7 +173,7 @@ def test_equal_rule_with_boolean_at_load(live_server, page, map):
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
-    markers = page.locator(".leaflet-marker-icon .icon_container")
+    markers = page.locator(".leaflet-marker-icon .icon-container")
     expect(markers).to_have_count(5)
     colors = getColors(markers)
     assert colors.count("rgb(240, 248, 255)") == 2
@@ -187,7 +187,7 @@ def test_equal_rule_with_boolean_not_true_at_load(live_server, page, map):
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
-    markers = page.locator(".leaflet-marker-icon .icon_container")
+    markers = page.locator(".leaflet-marker-icon .icon-container")
     expect(markers).to_have_count(5)
     colors = getColors(markers)
     assert colors.count("rgb(240, 248, 255)") == 3
@@ -201,7 +201,7 @@ def test_equal_rule_with_boolean_false_at_load(live_server, page, map):
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
-    markers = page.locator(".leaflet-marker-icon .icon_container")
+    markers = page.locator(".leaflet-marker-icon .icon-container")
     expect(markers).to_have_count(5)
     colors = getColors(markers)
     assert colors.count("rgb(240, 248, 255)") == 1
@@ -215,7 +215,7 @@ def test_equal_rule_with_boolean_not_false_at_load(live_server, page, map):
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
-    markers = page.locator(".leaflet-marker-icon .icon_container")
+    markers = page.locator(".leaflet-marker-icon .icon-container")
     expect(markers).to_have_count(5)
     colors = getColors(markers)
     assert colors.count("rgb(240, 248, 255)") == 4
@@ -229,7 +229,7 @@ def test_empty_rule_at_load(live_server, page, map):
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
-    markers = page.locator(".leaflet-marker-icon .icon_container")
+    markers = page.locator(".leaflet-marker-icon .icon-container")
     expect(markers).to_have_count(5)
     colors = getColors(markers)
     assert colors.count("rgb(240, 248, 255)") == 3
@@ -243,7 +243,7 @@ def test_not_empty_rule_at_load(live_server, page, map):
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
-    markers = page.locator(".leaflet-marker-icon .icon_container")
+    markers = page.locator(".leaflet-marker-icon .icon-container")
     expect(markers).to_have_count(5)
     colors = getColors(markers)
     assert colors.count("rgb(240, 248, 255)") == 2
@@ -253,7 +253,7 @@ def test_can_create_new_rule(live_server, page, openmap):
     DataLayerFactory(map=openmap, data=DATALAYER_DATA1)
     DataLayerFactory(map=openmap, data=DATALAYER_DATA2)
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}#6/48.948/1.670")
-    markers = page.locator(".leaflet-marker-icon .icon_container")
+    markers = page.locator(".leaflet-marker-icon .icon-container")
     expect(markers).to_have_count(5)
     page.get_by_role("button", name="Edit").click()
     page.get_by_role("button", name="Map advanced properties").click()
@@ -278,7 +278,7 @@ def test_can_deactive_rule_from_list(live_server, page, openmap):
     DataLayerFactory(map=openmap, data=DATALAYER_DATA1)
     DataLayerFactory(map=openmap, data=DATALAYER_DATA2)
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}#6/48.948/1.670")
-    markers = page.locator(".leaflet-marker-icon .icon_container")
+    markers = page.locator(".leaflet-marker-icon .icon-container")
     expect(markers).to_have_count(5)
     colors = getColors(markers)
     assert colors.count("rgb(240, 248, 255)") == 3
@@ -331,8 +331,8 @@ def test_can_combine_rules(live_server, page, map):
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
-    markers = page.locator(".leaflet-marker-icon .icon_container")
-    drops = page.locator(".umap-drop-icon .icon_container")
+    markers = page.locator(".leaflet-marker-icon .icon-container")
+    drops = page.locator(".umap-drop-icon .icon-container")
     expect(markers).to_have_count(5)
     expect(drops).to_have_count(2)
     colors = getColors(markers)
@@ -350,7 +350,7 @@ def test_first_matching_rule_wins_on_given_property(live_server, page, map):
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
-    markers = page.locator(".leaflet-marker-icon .icon_container")
+    markers = page.locator(".leaflet-marker-icon .icon-container")
     expect(markers).to_have_count(5)
     colors = getColors(markers)
     assert colors.count("rgb(240, 248, 255)") == 3
@@ -368,7 +368,7 @@ def test_rules_from_datalayer(live_server, page, map):
     DataLayerFactory(map=map, data=data)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.948/1.670")
-    markers = page.locator(".leaflet-marker-icon .icon_container")
+    markers = page.locator(".leaflet-marker-icon .icon-container")
     expect(markers).to_have_count(5)
     colors = getColors(markers)
     # Alice Blue should only affect layer 1
