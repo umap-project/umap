@@ -870,6 +870,7 @@ export default class Umap {
     const shapeOptions = [
       'properties.color',
       'properties.iconClass',
+      'properties.iconSize',
       'properties.iconUrl',
       'properties.iconOpacity',
       'properties.opacity',

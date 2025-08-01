@@ -218,6 +218,7 @@ export const SCHEMA = {
     choices: [
       ['Default', translate('Default')],
       ['Circle', translate('Circle')],
+      ['LargeCircle', translate('Large Circle')],
       ['Drop', translate('Drop')],
       ['Ball', translate('Ball')],
       ['Raw', translate('None')],
@@ -233,6 +234,17 @@ export const SCHEMA = {
     label: translate('icon opacity'),
     inheritable: true,
     default: 1,
+  },
+  iconSize: {
+    type: Number,
+    impacts: ['data'],
+    min: 12,
+    max: 64,
+    step: 4,
+    label: translate('Icon size'),
+    helpText: translate('Will only affect raw and large circle icons.'),
+    inheritable: true,
+    default: 24,
   },
   iconUrl: {
     type: String,

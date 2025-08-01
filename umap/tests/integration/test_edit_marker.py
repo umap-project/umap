@@ -47,11 +47,11 @@ def test_marker_style_should_have_precedence(live_server, openmap, page, bootstr
     page.locator(".panel").get_by_title("Edit", exact=True).click()
     page.get_by_text("Shape properties").click()
     page.locator(".umap-field-color .define").click()
-    expect(page.locator(".leaflet-marker-icon .icon_container")).to_have_css(
+    expect(page.locator(".leaflet-marker-icon .icon-container")).to_have_css(
         "background-color", "rgb(0, 0, 139)"
     )
     page.get_by_title("DarkRed").first.click()
-    expect(page.locator(".leaflet-marker-icon .icon_container")).to_have_css(
+    expect(page.locator(".leaflet-marker-icon .icon-container")).to_have_css(
         "background-color", "rgb(139, 0, 0)"
     )
 
@@ -60,7 +60,7 @@ def test_marker_style_should_have_precedence(live_server, openmap, page, bootstr
     page.get_by_text("Shape properties").click()
     page.locator("#umap-feature-shape-properties").get_by_text("define").first.click()
     page.get_by_title("GoldenRod", exact=True).click()
-    expect(page.locator(".leaflet-marker-icon .icon_container")).to_have_css(
+    expect(page.locator(".leaflet-marker-icon .icon-container")).to_have_css(
         "background-color", "rgb(218, 165, 32)"
     )
 
@@ -70,7 +70,7 @@ def test_marker_style_should_have_precedence(live_server, openmap, page, bootstr
     page.get_by_text("Shape properties").click()
     page.locator(".umap-field-color input").click()
     page.get_by_title("DarkViolet").first.click()
-    expect(page.locator(".leaflet-marker-icon .icon_container")).to_have_css(
+    expect(page.locator(".leaflet-marker-icon .icon-container")).to_have_css(
         "background-color", "rgb(218, 165, 32)"
     )
 
@@ -111,7 +111,7 @@ def test_should_follow_datalayer_style_when_changing_datalayer(
         },
     )
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
-    marker = page.locator(".leaflet-marker-icon .icon_container")
+    marker = page.locator(".leaflet-marker-icon .icon-container")
     expect(marker).to_have_css("background-color", "rgb(0, 139, 139)")
     # Change datalayer
     marker.click()

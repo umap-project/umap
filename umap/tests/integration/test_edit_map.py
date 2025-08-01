@@ -99,7 +99,7 @@ def test_map_color_impacts_data(live_server, page, tilelayer):
     page.get_by_title("Lime", exact=True).click()
 
     # Assert the new color was used
-    marker_style = page.locator(".leaflet-marker-icon .icon_container").get_attribute(
+    marker_style = page.locator(".leaflet-marker-icon .icon-container").get_attribute(
         "style"
     )
     assert "lime" in marker_style
