@@ -257,31 +257,19 @@ const Ball = DefaultIcon.extend({
 
 export const Cluster = DivIcon.extend({
   options: {
-    iconSize: [40, 40],
-  },
-
-  initialize: function (datalayer, cluster) {
-    this.datalayer = datalayer
-    this.cluster = cluster
+    iconSize: [32, 32],
+    className: 'umap-cluster-icon',
   },
 
   createIcon: function () {
-    const container = DomUtil.create('div', 'leaflet-marker-icon marker-cluster')
-    const div = DomUtil.create('div', '', container)
-    const span = DomUtil.create('span', '', div)
-    const backgroundColor = this.datalayer.getColor()
-    span.textContent = this.cluster.getChildCount()
-    div.style.backgroundColor = backgroundColor
-    return container
-  },
-
-  computeTextColor: function (el) {
-    let color
-    const backgroundColor = this.datalayer.getColor()
-    if (this.datalayer.properties.cluster?.textColor) {
-      color = this.datalayer.properties.cluster.textColor
-    }
-    return color || DomUtil.TextColorFromBackgroundColor(el, backgroundColor)
+    const template = '<div><span data-ref=counter></span></div>'
+    const [root, { counter }] = Utils.loadTemplateWithRefs(template)
+    this.root = root
+    this.counter = counter
+    this.counter.textContent = this.options.getCounter()
+    this.root.style.backgroundColor = this.options.color
+    this._setIconStyles(this.root, 'icon')
+    return this.root
   },
 })
 

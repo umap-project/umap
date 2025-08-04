@@ -1195,10 +1195,11 @@ export class DataLayer {
   }
 
   toggle(force) {
-    // From now on, do not try to how/hidedataChanged
-    // automatically this layer.
-    let display = force
+    // From now on, do not try to how/hide
+    // automatically this layer, as user
+    // has taken control on this.
     this._forcedVisibility = true
+    let display = force
     if (force === undefined) {
       if (!this.isVisible()) display = true
       else display = false

@@ -7,8 +7,6 @@
 <script type="module"
         src="{% static 'umap/js/modules/leaflet-configure.js' %}"
         defer></script>
-<script src="{% static 'umap/vendors/markercluster/leaflet.markercluster.js' %}"
-        defer></script>
 <script src="{% static 'umap/vendors/heat/leaflet-heat.js' %}" defer></script>
 {% if locale %}
   {% with "umap/locale/"|add:locale|add:".js" as path %}
