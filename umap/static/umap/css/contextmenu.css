@@ -1,6 +1,5 @@
 .umap-contextmenu {
     background-color: var(--background-color);
-    padding: calc(var(--box-padding) / 2) calc(var(--box-padding) / 2);
     position: fixed;
     z-index: var(--zindex-contextmenu);
     border-radius: var(--border-radius);
@@ -8,13 +7,34 @@
     display: flex;
     flex-direction: column;
 }
+
+.umap-contextmenu>li {
+    background-color: var(--background-color);
+    padding-left: calc(var(--box-padding) / 2);
+    padding-right: calc(var(--box-padding) / 2);
+}
+
+.umap-contextmenu>li:last-of-type {
+    padding-bottom: calc(var(--box-padding) / 2);
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+.umap-contextmenu>li:first-of-type {
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.umap-contextmenu>li:first-of-type:not(.dark) {
+    padding-top: calc(var(--box-padding) / 2);
+}
+
 .umap-contextmenu-rows {
     flex-direction: row;
     align-items: center;
     justify-content: center;
     align-content: center;
 }
-.umap-contextmenu:not(.umap-contextmenu-rows) li + li {
+
+.umap-contextmenu:not(.umap-contextmenu-rows)>li+li {
     margin-top: var(--text-margin);
 }
 
@@ -23,6 +43,42 @@
     margin-bottom: var(--text-margin);
 }
 
+.umap-contextmenu .dark li button .icon:hover,
 .dark.umap-contextmenu li button .icon:hover {
     background-color: var(--color-mediumGray);
+}
+
+.umap-contextmenu .icon-bar {
+    display: flex;
+    flex-direction: row;
+}
+
+.umap-contextmenu .icon-bar button {
+    padding: 2px;
+}
+
+.umap-contextmenu .icon-bar hr {
+    transform: rotate(90deg);
+    width: 28px;
+    margin: auto -10px;
+}
+
+.umap-contextmenu.tooltip-bottom-left,
+.umap-contextmenu.tooltip-bottom-left>li:last-of-type {
+    border-bottom-left-radius: unset;
+}
+
+.umap-contextmenu.tooltip-bottom-right,
+.umap-contextmenu.tooltip-bottom-right>li:last-of-type {
+    border-bottom-right-radius: unset;
+}
+
+.umap-contextmenu.tooltip-top-left,
+.umap-contextmenu.tooltip-top-left>li:first-of-type {
+    border-top-left-radius: unset;
+}
+
+.umap-contextmenu.tooltip-top-right,
+.umap-contextmenu.tooltip-top-right>li:first-of-type {
+    border-top-right-radius: unset;
 }

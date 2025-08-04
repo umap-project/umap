@@ -87,7 +87,7 @@ def test_marker_style_should_have_precedence(live_server, openmap, page, bootstr
 
 def test_should_open_an_edit_toolbar_on_click(live_server, openmap, page, bootstrap):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
-    page.locator("path").click()
+    page.locator("path").click(button="right")
     expect(page.get_by_role("button", name="Toggle edit mode")).to_be_visible()
     expect(page.get_by_role("button", name="Delete this feature")).to_be_visible()
 
@@ -97,7 +97,7 @@ def test_can_remove_stroke(live_server, openmap, page, bootstrap):
     expect(page.locator(".leaflet-overlay-pane path[stroke='DarkBlue']")).to_have_count(
         1
     )
-    page.locator("path").click()
+    page.locator("path").click(button="right")
     page.get_by_role("button", name="Toggle edit mode").click()
     page.get_by_text("Shape properties").click()
     page.locator(".umap-field-stroke .define").first.click()
