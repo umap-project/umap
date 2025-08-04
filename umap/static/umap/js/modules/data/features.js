@@ -783,7 +783,9 @@ export class Point extends Feature {
 
   zoomTo(event) {
     if (this.datalayer.isClustered() && !this.ui._icon) {
-      this.ui._cluster.zoomToCoverage()
+      this.ui._cluster.zoomToCoverage().then(() => {
+        this.ui._cluster.spiderfy()
+      })
     }
     super.zoomTo(event)
   }
