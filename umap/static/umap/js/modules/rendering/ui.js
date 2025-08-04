@@ -117,6 +117,7 @@ const PointMixin = {
   },
 
   _enableDragging: function () {
+    if (this._cluster) return
     // TODO: start dragging after 1 second on mouse down
     if (this._map._umap.editEnabled) {
       if (!this.editEnabled()) this.enableEdit()

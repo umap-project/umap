@@ -1,7 +1,10 @@
 import {
   FeatureGroup,
+  LayerGroup,
+  Point,
   Marker,
   Rectangle,
+  Polyline,
   DomUtil,
   latLngBounds,
 } from '../../../../vendors/leaflet/leaflet-src.esm.js'
@@ -34,9 +37,59 @@ const MarkerCluster = Marker.extend({
     }
   },
 
-  zoomToCoverage() {
+  async zoomToCoverage() {
+    let resolve = undefined
+    const promise = new Promise((r) => {
+      resolve = r
+    })
     if (this._map && this._coverage) {
+      this._map.once('moveend', () => resolve())
       this._map.fitBounds(this._coverage.getBounds())
+    }
+    return promise
+  },
+
+  _spiderfyLatLng: function (center, index) {
+    const step = 20
+    const maxRadius = 150
+    const zoom = this._map.getZoom()
+    const angle = (index * step * Math.PI) / 180
+    const progress = index / this._layers.length
+    const radius = maxRadius * (1 - progress) ** 1
+    const x = radius * Math.cos(angle)
+    const y = radius * Math.sin(angle)
+    const point = this._map.project([center.lat, center.lng], zoom)
+    const latlng = this._map.unproject(new Point(point.x + x, point.y + y), zoom)
+    return latlng
+  },
+
+  spiderfy() {
+    if (!this._map) return
+    const crs = this._map.options.crs
+    if (this._spider && this._map.hasLayer(this._spider)) this.unspiderfy()
+    this._spider = new LayerGroup()
+    let i = 1
+    const center = this.getLatLng()
+    for (const layer of this._layers) {
+      const latlng = this._spiderfyLatLng(center, i++)
+      layer._originalLatLng = layer._latlng
+      layer.setLatLng(latlng)
+      this._spider.addLayer(layer)
+      const line = new Polyline([center, latlng], { color: 'black', weight: 1 })
+      this._spider.addLayer(line)
+    }
+    this._map.addLayer(this._spider)
+    this._icon.hidden = true
+    this._map.once('click zoomstart', this.unspiderfy, this)
+    this.once('remove', this.unspiderfy, this)
+  },
+
+  unspiderfy() {
+    if (this._icon) this._icon.hidden = false
+    if (this._spider) this._spider.remove()
+    for (const layer of this._layers) {
+      if (layer._originalLatLng) layer.setLatLng(layer._originalLatLng)
+      delete layer._originalLatLng
     }
   },
 })
@@ -162,7 +215,7 @@ export const Cluster = FeatureGroup.extend({
   },
 
   onMouseOver(event) {
-    event.layer.computeCoverage()
+    event.layer?.computeCoverage?.()
     this.showCoverage(event.layer)
   },
 
@@ -171,7 +224,11 @@ export const Cluster = FeatureGroup.extend({
   },
 
   onClick(event) {
-    event.layer.zoomToCoverage()
+    if (this._map.getZoom() === this._map.getMaxZoom()) {
+      event.layer.spiderfy?.()
+    } else {
+      event.layer.zoomToCoverage?.()
+    }
   },
 
   getEditableProperties: () => [
