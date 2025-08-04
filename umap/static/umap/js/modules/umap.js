@@ -392,7 +392,29 @@ export default class Umap {
   }
 
   getOwnContextMenu(event) {
-    const items = [
+    const items = []
+    if (this.editEnabled) {
+      items.push({
+        items: [
+          {
+            title: this.help.displayLabel('DRAW_MARKER', false),
+            icon: 'icon-marker',
+            action: () => this._leafletMap.editTools.startMarker(),
+          },
+          {
+            title: this.help.displayLabel('DRAW_LINE', false),
+            icon: 'icon-polyline',
+            action: () => this._leafletMap.editTools.startPolyline(),
+          },
+          {
+            title: this.help.displayLabel('DRAW_POLYGON', false),
+            icon: 'icon-polygon',
+            action: () => this._leafletMap.editTools.startPolygon(),
+          },
+        ],
+      })
+    }
+    items.push(
       {
         label: translate('Open browser'),
         action: () => this.openBrowser('layers'),
@@ -400,8 +422,8 @@ export default class Umap {
       {
         label: translate('Browse data'),
         action: () => this.openBrowser('data'),
-      },
-    ]
+      }
+    )
     if (this.properties.facetKey) {
       items.push({
         label: translate('Filter data'),
