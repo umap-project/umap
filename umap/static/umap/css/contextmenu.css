@@ -43,6 +43,7 @@
     margin-bottom: var(--text-margin);
 }
 
+.umap-contextmenu .dark li button .icon:hover,
 .dark.umap-contextmenu li button .icon:hover {
     background-color: var(--color-mediumGray);
 }
