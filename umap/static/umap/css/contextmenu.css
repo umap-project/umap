@@ -59,8 +59,8 @@
 
 .umap-contextmenu .icon-bar hr {
     transform: rotate(90deg);
-    width: 28px;
-    margin: auto -10px;
+    width: 16px;
+    margin: auto 0px;
 }
 
 .umap-contextmenu.tooltip-bottom-left,
