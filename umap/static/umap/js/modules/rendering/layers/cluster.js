@@ -140,9 +140,57 @@ export const Cluster = FeatureGroup.extend({
     this.addClusters()
   },
 
-  compute() {
-    const radius = this.datalayer.properties.cluster?.radius || 80
+  compute: function () {
     this._clusters = []
+    const zoom = this._map.getZoom()
+    const maxZoom = this.datalayer.properties.cluster?.maxZoom || this._map.getMaxZoom()
+    if (this.datalayer.properties.cluster?.property && zoom < maxZoom) {
+      console.log('_clusterSemantic')
+      this._clusterSemantic()
+    } else {
+      console.log('_clusterGeographic')
+      this._clusterGeographic()
+    }
+    for (const cluster of this._clusters) {
+      cluster.computeCoverage()
+    }
+  },
+
+  _makeCluster: function (center) {
+    const icon = new ClusterIcon({
+      color: this.datalayer.getColor(),
+      textColor: this.datalayer.properties.cluster?.textColor,
+      getCounter: () => cluster._layers.length,
+    })
+    const cluster = new MarkerCluster(center, { icon })
+    cluster.addEventParent(this)
+    cluster._layers = []
+    this._clusters.push(cluster)
+    return cluster
+  },
+
+  _clusterSemantic: function () {
+    const key = this.datalayer.properties.cluster.property
+    for (const layer of this._bucket) {
+      const prop = layer.feature.properties[key]
+      let cluster = null
+      for (const candidate of this._clusters) {
+        if (candidate._clusterValue === prop) {
+          cluster = candidate
+          break
+        }
+      }
+      if (!cluster) {
+        cluster = this._makeCluster(layer._latlng)
+        cluster._clusterValue = prop
+      }
+      cluster._layers.push(layer)
+      layer._cluster = cluster
+    }
+  },
+
+  _clusterGeographic() {
+    const radius = this.datalayer.properties.cluster?.radius || 80
     const map = this.datalayer._umap._leafletMap
     const CRS = map.options.crs
     for (const layer of this._bucket) {
@@ -155,22 +203,11 @@ export const Cluster = FeatureGroup.extend({
         }
       }
       if (!cluster) {
-        const icon = new ClusterIcon({
-          color: this.datalayer.getColor(),
-          textColor: this.datalayer.properties.cluster?.textColor,
-          getCounter: () => cluster._layers.length,
-        })
-        cluster = new MarkerCluster(layer._latlng, { icon })
-        cluster.addEventParent(this)
+        cluster = this._makeCluster(layer._latlng)
         cluster._xy ??= layer._xy
-        cluster._layers = []
-        this._clusters.push(cluster)
       }
       cluster._layers.push(layer)
       layer._cluster = cluster
-    }
-    for (const cluster of this._clusters) {
-      cluster.computeCoverage()
     }
   },
 
@@ -231,26 +268,44 @@ export const Cluster = FeatureGroup.extend({
     }
   },
 
-  getEditableProperties: () => [
-    [
-      'properties.cluster.radius',
-      {
-        handler: 'BlurIntInput',
-        placeholder: translate('Clustering radius'),
-        helpText: translate('Override clustering radius (default 80)'),
-      },
-    ],
-    [
-      'properties.cluster.textColor',
-      {
-        handler: 'TextColorPicker',
-        placeholder: translate('Auto'),
-        helpText: translate('Text color for the cluster label'),
-      },
-    ],
-  ],
+  getEditableProperties: function () {
+    return [
+      [
+        'properties.cluster.radius',
+        {
+          handler: 'BlurIntInput',
+          placeholder: translate('Clustering radius'),
+          helpText: translate('Override clustering radius (default 80)'),
+        },
+      ],
+      [
+        'properties.cluster.textColor',
+        {
+          handler: 'TextColorPicker',
+          placeholder: translate('Auto'),
+          helpText: translate('Text color for the cluster label'),
+        },
+      ],
+      [
+        'properties.cluster.property',
+        {
+          handler: 'Select',
+          selectOptions: ['', ...this.datalayer.fieldKeys],
+          helpText: translate('Use a property to cluster.'),
+          label: translate('Cluster by property'),
+        },
+      ],
+      [
+        'properties.cluster.maxZoom',
+        {
+          handler: 'IntInput',
+          label: translate('Max zoom to cluster by property'),
+        },
+      ],
+    ]
+  },
 
   onEdit: function (field, builder) {
-    if (field === 'properties.cluster.radius') this.redraw()
+    if (field.startsWith('properties.cluster.')) this.redraw()
   },
 })
