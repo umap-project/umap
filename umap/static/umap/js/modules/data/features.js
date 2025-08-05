@@ -7,6 +7,11 @@ import {
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import { MutatingForm } from '../form/builder.js'
 import { translate } from '../i18n.js'
+import {
+  PREFERENCES as ORS_PREFERENCES,
+  PROFILES as ORS_PROFILES,
+  Importer as OpenRouteService,
+} from '../importers/openrouteservice.js'
 import loadPopup from '../rendering/popup.js'
 import {
   LeafletMarker,
@@ -17,11 +22,6 @@ import {
 } from '../rendering/ui.js'
 import { SCHEMA } from '../schema.js'
 import * as Utils from '../utils.js'
-import {
-  Importer as OpenRouteService,
-  PROFILES as ORS_PROFILES,
-  PREFERENCES as ORS_PREFERENCES,
-} from '../importers/openrouteservice.js'
 
 class Feature {
   constructor(umap, datalayer, geojson = {}, id = null) {
@@ -653,17 +653,26 @@ class Feature {
     return items
   }
 
-  getShapeEditMenu() {
-    return []
-  }
-
-  getEditContextMenu(event) {
-    const items = [
+  getDrawingTools(event) {
+    return [
       {
         title: translate('Toggle edit mode (⇧+Click)'),
         action: () => this.toggleEditing(),
         icon: 'icon-edit',
       },
+    ]
+  }
+
+  getEditContextMenu(event) {
+    const items = []
+    const vertexClicked = event.vertex
+    if (vertexClicked) {
+      items.push(...this.getVertexTools(event))
+    } else {
+      items.push(...this.getDrawingTools(event))
+    }
+    items.push(
+      '-',
       {
         title: this._umap.help.displayLabel('EDIT_FEATURE_LAYER', false),
         icon: 'icon-layers',
@@ -678,28 +687,8 @@ class Feature {
         title: translate('Delete this feature'),
         icon: 'icon-delete',
         action: () => this.del(),
-      },
-    ]
-    const subitems = this.getShapeEditMenu(event)
-    if (subitems.length) {
-      subitems.unshift('-')
-      items.push(...subitems)
-    }
-    const vertexClicked = event.vertex
-    if (this.isMulti()) {
-      const subitems = this.getMultiEditMenu(event)
-      if (subitems.length) {
-        subitems.unshift('-')
-        items.push(...subitems)
       }
-    }
-    if (vertexClicked) {
-      const subitems = this.getVertexEditMenu(event)
-      if (subitems.length) {
-        subitems.unshift('-')
-        items.push(...subitems)
-      }
-    }
+    )
     return items
   }
 
@@ -899,7 +888,7 @@ class Path extends Feature {
     return items
   }
 
-  getVertexEditMenu(event) {
+  getVertexTools(event) {
     return [
       {
         action: () => event.vertex.delete(),
@@ -909,25 +898,24 @@ class Path extends Feature {
     ]
   }
 
-  getMultiEditMenu(event) {
-    return [
-      {
-        title: translate('Extract shape to separate feature'),
-        icon: 'icon-extract-shape',
-        action: () => {
-          this.ui.isolateShape(event.latlng)
+  getDrawingTools(event) {
+    const items = super.getDrawingTools(event)
+    if (this.isMulti()) {
+      items.push(
+        {
+          title: translate('Extract shape to separate feature'),
+          icon: 'icon-extract-shape',
+          action: () => {
+            this.ui.isolateShape(event.latlng)
+          },
         },
-      },
-      {
-        title: translate('Delete this shape'),
-        icon: 'icon-delete-shape',
-        action: () => this.ui.enableEdit().deleteShapeAt(event.latlng),
-      },
-    ]
-  }
-
-  getShapeEditMenu(event) {
-    const items = []
+        {
+          title: translate('Delete this shape'),
+          icon: 'icon-delete-shape',
+          action: () => this.ui.enableEdit().deleteShapeAt(event.latlng),
+        }
+      )
+    }
     if (
       this._umap?.editedFeature !== this &&
       this.isSameClass(this._umap.editedFeature)
@@ -1138,8 +1126,8 @@ export class LineString extends Path {
     return !LineUtil.isFlat(this.coordinates) && this.coordinates.length > 1
   }
 
-  getVertexEditMenu(event) {
-    const items = super.getVertexEditMenu(event)
+  getVertexTools(event) {
+    const items = super.getVertexTools(event)
     const index = event.vertex.getIndex()
     if (index !== 0 && index !== event.vertex.getLastIndex()) {
       items.push({
@@ -1157,19 +1145,15 @@ export class LineString extends Path {
     return items
   }
 
-  getMultiEditMenu(event) {
-    const items = super.getMultiEditMenu(event)
-    items.push({
-      title: translate('Merge lines'),
-      icon: 'icon-merge',
-      action: () => this.mergeShapes(),
-    })
-    return items
-  }
-
-  getShapeEditMenu(event) {
-    const items = super.getShapeEditMenu(event)
-    if (!this.isMulti()) {
+  getDrawingTools(event) {
+    const items = super.getDrawingTools(event)
+    if (this.isMulti()) {
+      items.push({
+        title: translate('Merge lines'),
+        icon: 'icon-merge',
+        action: () => this.mergeShapes(),
+      })
+    } else {
       items.push({
         title: translate('Transform to polygon'),
         icon: 'icon-polygon',
@@ -1393,8 +1377,8 @@ export class Polygon extends Path {
     )
   }
 
-  getShapeEditMenu(event) {
-    const items = super.getShapeEditMenu(event)
+  getDrawingTools(event) {
+    const items = super.getDrawingTools(event)
     const shape = this.ui.shapeAt(event.latlng)
     // No multi and no holes.
     if (shape && !this.isMulti() && (LineUtil.isFlat(shape) || shape.length === 1)) {
