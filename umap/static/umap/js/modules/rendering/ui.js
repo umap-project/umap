@@ -46,6 +46,16 @@ const FeatureMixin = {
     this.on('contextmenu editable:vertex:contextmenu', this.onContextMenu)
     this.on('click', this.onClick)
     this.on('editable:edited', this.onCommit)
+    this.on('mouseover', this.onMouseOver)
+  },
+
+  onMouseOver: function () {
+    if (this._map._umap.editEnabled && !this._map._umap.editedFeature) {
+      this._map._umap.tooltip.open({
+        content: translate('Right-click to edit'),
+        anchor: this,
+      })
+    }
   },
 
   onClick: function (event) {
@@ -244,14 +254,11 @@ export const LeafletMarker = Marker.extend({
 
 const PathMixin = {
   maxVertex: 100,
-  _onMouseOver: function () {
+  onMouseOver: function () {
     if (this._map.measureTools?.enabled()) {
       this._map._umap.tooltip.open({ content: this.getMeasure(), anchor: this })
-    } else if (this._map._umap.editEnabled && !this._map._umap.editedFeature) {
-      this._map._umap.tooltip.open({
-        content: translate('Right-click to edit'),
-        anchor: this,
-      })
+    } else {
+      FeatureMixin.onMouseOver.call(this)
     }
   },
 
@@ -282,7 +289,6 @@ const PathMixin = {
 
   addInteractions: function () {
     FeatureMixin.addInteractions.call(this)
-    this.on('mouseover', this._onMouseOver)
     this.on('drag editable:drag', this._onDrag)
     this.on('popupopen', this.highlightPath)
     this.on('popupclose', this._redraw)
