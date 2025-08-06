@@ -214,7 +214,7 @@ const Ball = DefaultIcon.extend({
 
 export const Cluster = DivIcon.extend({
   options: {
-    iconSize: [32, 32],
+    iconSize: [40, 40],
     className: 'umap-cluster-icon',
   },
 
