@@ -243,6 +243,7 @@ export const LeafletMarker = Marker.extend({
 })
 
 const PathMixin = {
+  maxVertex: 100,
   _onMouseOver: function () {
     if (this._map.measureTools?.enabled()) {
       this._map._umap.tooltip.open({ content: this.getMeasure(), anchor: this })
@@ -254,6 +255,13 @@ const PathMixin = {
     }
   },
 
+  shouldAllowGeometryEdit: function () {
+    const pointsCount = this._parts.reduce((acc, part) => acc + part.length, 0)
+    return (
+      pointsCount < this.maxVertex || this._map.getZoom() === this._map.getMaxZoom()
+    )
+  },
+
   makeGeometryEditable: function () {
     // Feature has been removed since then?
     if (!this._map) return
@@ -262,14 +270,13 @@ const PathMixin = {
       return
     }
     this._map.once('moveend', this.makeGeometryEditable, this)
-    const pointsCount = this._parts.reduce((acc, part) => acc + part.length, 0)
-    if (pointsCount > 100 && this._map.getZoom() < this._map.getMaxZoom()) {
+    if (this.shouldAllowGeometryEdit()) {
+      this.enableEdit()
+    } else {
       this._map._umap.tooltip.open({
         content: L._('Please zoom in to edit the geometry'),
       })
       this.disableEdit()
-    } else {
-      this.enableEdit()
     }
   },
 
@@ -497,6 +504,13 @@ export const LeafletRoute = LeafletPolyline.extend({
     if (this._route.length >= 2) {
       this.feature.computeRoute()
     }
+  },
+
+  shouldAllowGeometryEdit: function () {
+    return (
+      this._route.length < this.maxVertex ||
+      this._map.getZoom() === this._map.getMaxZoom()
+    )
   },
 })
 
