@@ -28,13 +28,13 @@ export function getClass(name) {
 export const RECENT = []
 
 const BaseIcon = DivIcon.extend({
+  default_options: {
+    iconSize: null, // Made in css
+    iconUrl: SCHEMA.iconUrl.default,
+    feature: null,
+  },
   initialize: function (options) {
-    const default_options = {
-      iconSize: null, // Made in css
-      iconUrl: SCHEMA.iconUrl.default,
-      feature: null,
-    }
-    options = { ...default_options, ...options }
+    options = { ...this.default_options, ...options }
     Icon.prototype.initialize.call(this, options)
     this.feature = this.options.feature
     if (this.feature?.isReadOnly()) {
@@ -164,10 +164,12 @@ const Circle = BaseIcon.extend({
 })
 
 const LargeCircle = BaseIcon.extend({
+  default_options: {
+    className: 'umap-large-circle-icon',
+  },
   initialize: function (options) {
     BaseIcon.prototype.initialize.call(this, options)
     const size = this._getSize()
-    this.options.className = 'umap-large-circle-icon'
     this.options.popupAnchor = new Point(0, (size / 2) * -1)
     this.options.tooltipAnchor = new Point(size / 2, 0)
     this.options.iconAnchor = new Point(size / 2, size / 2)
