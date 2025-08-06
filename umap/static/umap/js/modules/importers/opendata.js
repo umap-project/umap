@@ -115,7 +115,7 @@ class Prodige extends Connector {
         url: this.umap.proxyUrl(url, 3600),
       })
     }
-    return datasets
+    return datasets.sort((a, b) => Utils.naturalSort(a.label, b.label, U.lang))
   }
 }
 
