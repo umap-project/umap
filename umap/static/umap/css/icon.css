@@ -308,6 +308,10 @@ html[dir="rtl"] .icon {
     background-position: calc(var(--tile) * 4) calc(var(--tile) * 6);
 }
 
+.icon-transfer-shape {
+    background-position: calc(var(--tile) * 5) calc(var(--tile) * 3);
+}
+
 .icon-upload {
     background-position: calc(var(--tile) * 6) calc(var(--tile) * 4);
 }
