@@ -9,9 +9,19 @@ const PORTALS = [
     platform: 'opendatasoft',
   },
   {
+    name: 'Auverge-Rhône-Alpes',
+    url: 'https://admin.open-datara.fr',
+    platform: 'prodige',
+  },
+  {
     name: 'Bordeaux Métropole',
     url: 'https://opendata.bordeaux-metropole.fr',
     platform: 'opendatasoft',
+  },
+  {
+    name: 'Nouvelle Aquitaine',
+    url: 'https://admin.sigena.fr',
+    platform: 'prodige',
   },
   {
     name: 'Région Centre-Val de Loire',
@@ -32,6 +42,21 @@ const PORTALS = [
     name: 'Région Île-de-France',
     url: 'https://data.iledefrance.fr',
     platform: 'opendatasoft',
+  },
+  {
+    name: 'Martinique',
+    url: 'https://admin.geomartinique.fr',
+    platform: 'prodige',
+  },
+  {
+    name: 'Région Pays de la Loire',
+    url: 'https://admin.sigloire.fr',
+    platform: 'prodige',
+  },
+  {
+    name: 'Saint-Pierre et Miquelon',
+    url: 'https://admin.geospm.com',
+    platform: 'prodige',
   },
   {
     name: 'Toulouse Métropole',
@@ -57,10 +82,83 @@ const TEMPLATE = `
         <option disabled selected value="">${translate('Choose a dataset')}</option>
       </select>
       <input type="hidden" name="geofield" data-ref="geofield">
-      <label><input type="checkbox" name="in_bbox">${translate('Limit results to current map view')}</label>
+      <label data-ref="in_bbox" hidden><input type="checkbox" name="in_bbox">${translate('Limit results to current map view')}</label>
     </div>
   </div>
 `
+
+class Connector {
+  constructor(umap, baseUrl) {
+    this.umap = umap
+    this.baseUrl = baseUrl
+  }
+}
+
+class Prodige extends Connector {
+  async datasets() {
+    const datasets = []
+    const endpoint = this.umap.proxyUrl(
+      `${this.baseUrl}/api/ogc-features/collections.json`,
+      3600
+    )
+    const response = await this.umap.request.get(endpoint)
+    if (!response?.ok) return datasets
+    const data = await response.json()
+    for (const dataset of data.collections) {
+      let url
+      for (const link of dataset.links) {
+        if (link.type === 'application/geo+json') url = link.href
+      }
+      if (!url) continue
+      datasets.push({
+        label: dataset.title,
+        url: this.umap.proxyUrl(url, 3600),
+      })
+    }
+    return datasets.sort((a, b) => Utils.naturalSort(a.label, b.label, U.lang))
+  }
+}
+
+class OpenDataSoft extends Connector {
+  async datasets() {
+    let results = []
+    let total = null
+    const hardLimit = 500
+    while (total === null || results.length < total) {
+      const offset = results.length
+      const response = await this.umap.request.get(
+        `${this.baseUrl}/api/explore/v2.1/catalog/datasets?where=features%20in%20%28%22geo%22%29&limit=100&offset=${offset}&order_by=title asc`
+      )
+      if (!response?.ok) break
+      const data = await response.json()
+      if (total === null) {
+        total = data.total_count
+      }
+      results = results.concat(data.results)
+      if (total === null || results.length > hardLimit) break
+    }
+    const datasets = []
+    for (const result of results) {
+      const fields = result.fields.filter((field) => field.type === 'geo_point_2d')
+      if (!fields.length) {
+        console.debug('No geofield found for', result)
+        continue
+      }
+      if (fields.length > 1) {
+        console.debug('More than one geofield found for', result)
+      }
+      const url = `${this.baseUrl}/api/explore/v2.1/catalog/datasets/${result.dataset_id}/exports/geojson?select=%2A&limit=-1&timezone=UTC&use_labels=false&epsg=4326`
+      const bbox_url = `${url}&where=in_bbox%28${fields[0].name}%2C%20{south},{west},{north},{east}%29`
+      datasets.push({
+        id: result.dataset_id,
+        label: `${result.metas.default.title} (${result.metas.default.records_count})`,
+        url,
+        bbox_url,
+      })
+    }
+    return datasets
+  }
+}
 
 export class Importer {
   constructor(umap, options = {}) {
@@ -70,65 +168,54 @@ export class Importer {
     this.portals = options.choices || PORTALS
   }
 
-  async fetchDatasets(baseUrl) {
-    let results = []
-    let total = null
-    const hardLimit = 500
-    while (total === null || results.length < total) {
-      const offset = results.length
-      const response = await this.umap.request.get(
-        `${baseUrl}/api/explore/v2.1/catalog/datasets?where=features%20in%20%28%22geo%22%29&limit=100&offset=${offset}&order_by=title asc`
-      )
-      if (!response.ok) break
-      const data = await response.json()
-      if (total === null) {
-        total = data.total_count
+  resetSelect(select) {
+    Array.from(select.children).forEach((option) => {
+      if (!option.disabled) {
+        option.remove()
+      } else {
+        option.selected = true
       }
-      results = results.concat(data.results)
-      if (total === null || results.length > hardLimit) break
-    }
-    return results
+    })
   }
 
   async open(importer) {
-    let fields_map = {}
-    const [container, { portals, datasets, geofield }] =
+    const [container, { portals, datasets, in_bbox }] =
       Utils.loadTemplateWithRefs(TEMPLATE)
+    datasets.addEventListener('change', (event) => {
+      const select = event.target
+      const selected = select.options[select.selectedIndex]
+      const bbox_url = selected.dataset.bbox_url
+      in_bbox.checked = false
+      in_bbox.hidden = !bbox_url
+    })
     portals.addEventListener('change', async (event) => {
-      const results = await this.fetchDatasets(event.target.value)
+      const select = event.target
+      const selected = select.options[select.selectedIndex]
+      const platform = selected.dataset.platform
+      let connector
+      if (platform === 'opendatasoft') {
+        connector = new OpenDataSoft(this.umap, selected.value)
+      } else if (platform === 'prodige') {
+        connector = new Prodige(this.umap, selected.value)
+      } else {
+        console.error('Unknown platform', platform)
+        return
+      }
+      const results = await connector.datasets(event.target.value)
       if (results) {
-        fields_map = {}
-        Array.from(datasets.children).forEach((option) => {
-          if (!option.disabled) {
-            option.remove()
-          } else {
-            option.selected = true
-          }
-        })
+        this.resetSelect(datasets)
         for (const result of results) {
-          const fields = result.fields.filter((field) => field.type === 'geo_point_2d')
-          if (!fields.length) {
-            console.debug('No geofield found for', result)
-            continue
-          }
-          if (fields.length > 1) {
-            console.debug('More than one geofield found for', result)
-          }
-          fields_map[result.dataset_id] = fields[0].name
           const el = Utils.loadTemplate(
-            `<option value="${result.dataset_id}">${result.metas.default.title} (${result.metas.default.records_count})</option>`
+            `<option value="${result.url}" data-url="${result.url}" data-bbox_url="${result.bbox_url || ''}">${result.label}</option>`
           )
           datasets.appendChild(el)
         }
         datasets.hidden = false
       }
     })
-    datasets.addEventListener('change', (event) => {
-      geofield.value = fields_map[event.target.value]
-    })
     for (const instance of this.portals) {
       const el = Utils.loadTemplate(
-        `<option value="${instance.url}">${instance.name}</option>`
+        `<option value="${instance.url}" data-platform="${instance.platform}">${instance.name}</option>`
       )
       portals.appendChild(el)
     }
@@ -138,9 +225,10 @@ export class Importer {
         Alert.error(translate('Please choose an instance first.'))
         return
       }
-      let url = `${form.instance}/api/explore/v2.1/catalog/datasets/${form.dataset}/exports/geojson?select=%2A&limit=-1&timezone=UTC&use_labels=false&epsg=4326`
+      let url = form.dataset
       if (form.in_bbox) {
-        url += `&where=in_bbox%28${form.geofield}%2C%20{south},{west},{north},{east}%29`
+        const selected = datasets.options[datasets.selectedIndex]
+        url = selected.dataset.bbox_url
       }
       importer.url = url
       importer.format = 'geojson'

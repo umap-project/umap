@@ -17,7 +17,7 @@ const TEMPLATE = `
       <input type="file" multiple autofocus onchange />
       <textarea onchange placeholder="${translate('Paste your data here')}"></textarea>
       <input class="highlightable" type="url" placeholder="${translate('Provide an URL here')}" onchange />
-      <button class="flat importers" hidden data-ref="importersButton"><i class="icon icon-16 icon-magic"></i>${translate('Import helpers')}</button>
+      <button type=button class="importers" hidden data-ref="importersButton"><i class="icon icon-16 icon-magic"></i>${translate('Import helpers')}</button>
     </fieldset>
     <fieldset class="formbox">
       <legend class="counter" data-help="importFormats">${translate(
