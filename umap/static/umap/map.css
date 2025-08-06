@@ -982,7 +982,7 @@ a.umap-control-caption,
 
 .umap-large-circle-icon.umap-icon-active {
     opacity: 1.0 !important;
-    box-shadow: black 0px 0px 4px;
+    box-shadow: var(--block-shadow);
 }
 
 .umap-ball-icon .icon-container {
@@ -1037,7 +1037,7 @@ a.umap-control-caption,
 }
 
 .umap-raw-icon.umap-icon-active {
-    box-shadow: black 0 0 1px;
+    box-shadow: var(--block-shadow);
 }
 
 /* ********************************* */
