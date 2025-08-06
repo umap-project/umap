@@ -75,7 +75,7 @@ export default class ContextMenu extends Positioned {
     } else {
       this.computePosition([left, top])
     }
-    this.container.querySelector('li button').focus()
+    this.container.querySelector('button, a').focus()
     this.container.addEventListener(
       'keydown',
       (event) => {
