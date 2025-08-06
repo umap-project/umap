@@ -922,7 +922,7 @@ class Path extends Feature {
     ) {
       items.push({
         title: translate('Transfer shape to edited feature'),
-        icon: 'icon-transfer',
+        icon: 'icon-transfer-shape',
         action: () => {
           this.transferShape(event.latlng, this._umap.editedFeature)
         },
