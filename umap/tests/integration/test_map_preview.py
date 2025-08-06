@@ -104,7 +104,7 @@ def test_map_preview_can_load_csv_in_querystring(page, live_server, tilelayer):
 
 def test_map_preview_can_change_styling_from_querystring(page, live_server, tilelayer):
     page.goto(f"{live_server.url}/map/?data={quote(json.dumps(GEOJSON))}&color=DarkRed")
-    markers = page.locator(".leaflet-marker-icon .icon_container")
+    markers = page.locator(".leaflet-marker-icon .icon-container")
     expect(markers).to_have_count(1)
     expect(markers).to_have_css("background-color", "rgb(139, 0, 0)")
 

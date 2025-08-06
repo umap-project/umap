@@ -3,6 +3,7 @@ import {
   DomEvent,
   DomUtil,
   Icon,
+  Point,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { SCHEMA } from '../schema.js'
 import * as Utils from '../utils.js'
@@ -11,6 +12,8 @@ export function getClass(name) {
   switch (name) {
     case 'Circle':
       return Circle
+    case 'LargeCircle':
+      return LargeCircle
     case 'Ball':
       return Ball
     case 'Drop':
@@ -25,13 +28,13 @@ export function getClass(name) {
 export const RECENT = []
 
 const BaseIcon = DivIcon.extend({
+  default_options: {
+    iconSize: null, // Made in css
+    iconUrl: SCHEMA.iconUrl.default,
+    feature: null,
+  },
   initialize: function (options) {
-    const default_options = {
-      iconSize: null, // Made in css
-      iconUrl: SCHEMA.iconUrl.default,
-      feature: null,
-    }
-    options = L.Util.extend({}, default_options, options)
+    options = { ...this.default_options, ...options }
     Icon.prototype.initialize.call(this, options)
     this.feature = this.options.feature
     if (this.feature?.isReadOnly()) {
@@ -66,6 +69,10 @@ const BaseIcon = DivIcon.extend({
     return color
   },
 
+  _getSize: function () {
+    return this.feature?.getOption('iconSize') || SCHEMA.iconSize.default
+  },
+
   _getOpacity: function () {
     if (this.feature) return this.feature.getOption('iconOpacity')
     return SCHEMA.iconOpacity.default
@@ -77,18 +84,33 @@ const BaseIcon = DivIcon.extend({
     if (this.feature.isActive()) this.options.className += ' umap-icon-active'
     DivIcon.prototype._setIconStyles.call(this, img, name)
   },
+
+  createIcon: function () {
+    const [root, elements] = Utils.loadTemplateWithRefs(this.getTemplate())
+    this.root = root
+    this.elements = elements
+    this.root.dataset.feature = this.feature?.id
+    if (this.elements.container) {
+      const src = this._getIconUrl('icon')
+      if (src) {
+        this.elements.icon = makeElement(src, this.elements.container)
+      }
+    }
+    this._setIconStyles(this.root, 'icon')
+    return this.root
+  },
 })
 
 const DefaultIcon = BaseIcon.extend({
   default_options: {
-    iconAnchor: new L.Point(16, 40),
-    popupAnchor: new L.Point(0, -40),
-    tooltipAnchor: new L.Point(16, -24),
+    iconAnchor: new Point(16, 40),
+    popupAnchor: new Point(0, -40),
+    tooltipAnchor: new Point(16, -24),
     className: 'umap-div-icon',
   },
 
   initialize: function (options) {
-    options = L.Util.extend({}, this.default_options, options)
+    options = { ...this.default_options, ...options }
     BaseIcon.prototype.initialize.call(this, options)
   },
 
@@ -108,92 +130,113 @@ const DefaultIcon = BaseIcon.extend({
     setContrast(this.elements.icon, this.elements.container, src, bgcolor)
   },
 
-  createIcon: function () {
-    this.elements = {}
-    this.elements.main = DomUtil.create('div')
-    this.elements.container = DomUtil.create(
-      'div',
-      'icon_container',
-      this.elements.main
-    )
-    this.elements.main.dataset.feature = this.feature?.id
-    this.elements.arrow = DomUtil.create('div', 'icon_arrow', this.elements.main)
-    const src = this._getIconUrl('icon')
-    if (src) {
-      this.elements.icon = makeElement(src, this.elements.container)
-    }
-    this._setIconStyles(this.elements.main, 'icon')
-    return this.elements.main
+  getTemplate: () => {
+    return `
+      <div>
+        <div class="icon-container" data-ref=container></div>
+        <div class="icon-arrow" data-ref=arrow></div>
+      </div>
+    `
   },
 })
 
 const Circle = BaseIcon.extend({
   initialize: function (options) {
     const default_options = {
-      popupAnchor: new L.Point(0, -6),
-      tooltipAnchor: new L.Point(6, 0),
+      iconSize: new Point(12, 12),
+      popupAnchor: new Point(0, -6),
+      tooltipAnchor: new Point(6, 0),
       className: 'umap-circle-icon',
     }
-    options = L.Util.extend({}, default_options, options)
+    options = { ...default_options, ...(options || {}) }
     BaseIcon.prototype.initialize.call(this, options)
   },
 
   _setIconStyles: function (img, name) {
     BaseIcon.prototype._setIconStyles.call(this, img, name)
-    this.elements.main.style.backgroundColor = this._getColor()
-    this.elements.main.style.opacity = this._getOpacity()
+    this.root.style.backgroundColor = this._getColor()
+    this.root.style.opacity = this._getOpacity()
   },
 
-  createIcon: function () {
-    this.elements = {}
-    this.elements.main = DomUtil.create('div')
-    this.elements.main.innerHTML = '&nbsp;'
-    this._setIconStyles(this.elements.main, 'icon')
-    this.elements.main.dataset.feature = this.feature?.id
-    return this.elements.main
+  getTemplate: () => {
+    return '<div>&nbsp;</div>'
+  },
+})
+
+const LargeCircle = BaseIcon.extend({
+  default_options: {
+    className: 'umap-large-circle-icon',
+  },
+  initialize: function (options) {
+    BaseIcon.prototype.initialize.call(this, options)
+    const size = this._getSize()
+    this.options.popupAnchor = new Point(0, (size / 2) * -1)
+    this.options.tooltipAnchor = new Point(size / 2, 0)
+    this.options.iconAnchor = new Point(size / 2, size / 2)
+  },
+
+  _setIconStyles: function (img, name) {
+    BaseIcon.prototype._setIconStyles.call(this, img, name)
+    this.root.style.opacity = this._getOpacity()
+    this.root.style.borderColor = this._getColor()
+    this.root.style.width = `${this._getSize()}px`
+    this.root.style.height = `${this._getSize()}px`
+  },
+
+  getTemplate: () => {
+    return '<div data-ref=container></div>'
   },
 })
 
 const Raw = DefaultIcon.extend({
   default_options: {
-    iconSize: new L.Point(48, 48),
-    popupAnchor: new L.Point(0, 0),
-    tooltipAnchor: new L.Point(0, 0),
     className: 'umap-raw-icon',
+  },
+  initialize: function (options) {
+    DefaultIcon.prototype.initialize.call(this, options)
+    const size = this._getSize()
+    this.options.popupAnchor = new Point(0, (size / 2) * -1)
+    this.options.tooltipAnchor = new Point(size / 2, 0)
+    this.options.iconAnchor = new Point(size / 2, size / 2)
+  },
+
+  _setIconStyles: function (img, name) {
+    BaseIcon.prototype._setIconStyles.call(this, img, name)
+    this.root.style.width = `${this._getSize()}px`
+    this.root.style.height = `${this._getSize()}px`
   },
 
   _getColor: () => 'transparent',
+
+  getTemplate: () => {
+    return '<div data-ref=container></div>'
+  },
 })
 
 const Drop = DefaultIcon.extend({
   default_options: {
-    iconAnchor: new L.Point(16, 42),
-    popupAnchor: new L.Point(0, -42),
-    tooltipAnchor: new L.Point(16, -24),
+    iconAnchor: new Point(16, 42),
+    popupAnchor: new Point(0, -42),
+    tooltipAnchor: new Point(16, -24),
     className: 'umap-drop-icon',
   },
 })
 
 const Ball = DefaultIcon.extend({
   default_options: {
-    iconAnchor: new L.Point(8, 30),
-    popupAnchor: new L.Point(0, -28),
-    tooltipAnchor: new L.Point(8, -23),
+    iconAnchor: new Point(8, 30),
+    popupAnchor: new Point(0, -28),
+    tooltipAnchor: new Point(8, -23),
     className: 'umap-ball-icon',
   },
 
-  createIcon: function () {
-    this.elements = {}
-    this.elements.main = DomUtil.create('div')
-    this.elements.container = DomUtil.create(
-      'div',
-      'icon_container',
-      this.elements.main
-    )
-    this.elements.main.dataset.feature = this.feature?.id
-    this.elements.arrow = DomUtil.create('div', 'icon_arrow', this.elements.main)
-    this._setIconStyles(this.elements.main, 'icon')
-    return this.elements.main
+  getTemplate: () => {
+    return `
+      <div>
+        <div class="icon-container" data-ref=ball></div>
+        <div class="icon-arrow" data-ref=arrow></div>
+      </div>
+    `
   },
 
   _setIconStyles: function (img, name) {
@@ -207,8 +250,8 @@ const Ball = DefaultIcon.extend({
     } else {
       background = `radial-gradient(circle at 6px 38% , white -4px, ${color} 8px) repeat scroll 0 0 transparent`
     }
-    this.elements.container.style.background = background
-    this.elements.container.style.opacity = this._getOpacity()
+    this.elements.ball.style.background = background
+    this.elements.ball.style.opacity = this._getOpacity()
   },
 })
 

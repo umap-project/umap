@@ -1308,7 +1308,7 @@ Fields.Range = class extends Fields.FloatInput {
     const digits = step < 1 ? 1 : 0
     const id = `range-${this.properties.label || this.name}`
     const range = this.properties.max - this.properties.min
-    const ticks = this.properties.ticks || Math.min(10, range)
+    const ticks = this.properties.ticks || Math.min(20, range / step)
     const tickStep = range / ticks
     for (let i = this.properties.min; i <= this.properties.max; i += tickStep) {
       const ii = i.toFixed(digits)
