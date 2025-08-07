@@ -298,7 +298,7 @@ export class DataLayer {
   }
 
   dataChanged() {
-    if (!this.isLoaded()) return
+    if (!this.isLoaded() || this._batch) return
     this._umap.onDataLayersChanged()
     this.layer.dataChanged()
   }
@@ -554,15 +554,19 @@ export class DataLayer {
   }
 
   addData(geojson, sync) {
+    let data = []
+    this._batch = true
     try {
       // Do not fail if remote data is somehow invalid,
       // otherwise the layer becomes uneditable.
-      return this.makeFeatures(geojson, sync)
+      data = this.makeFeatures(geojson, sync)
     } catch (err) {
       console.debug('Error with DataLayer', this.id)
       console.error(err)
-      return []
     }
+    this._batch = false
+    this.dataChanged()
+    return data
   }
 
   makeFeatures(geojson = {}, sync = true) {
@@ -1195,10 +1199,11 @@ export class DataLayer {
   }
 
   toggle(force) {
-    // From now on, do not try to how/hidedataChanged
-    // automatically this layer.
-    let display = force
+    // From now on, do not try to how/hide
+    // automatically this layer, as user
+    // has taken control on this.
     this._forcedVisibility = true
+    let display = force
     if (force === undefined) {
       if (!this.isVisible()) display = true
       else display = false

@@ -783,11 +783,11 @@ export class Point extends Feature {
 
   zoomTo(event) {
     if (this.datalayer.isClustered() && !this.ui._icon) {
-      // callback is mandatory for zoomToShowLayer
-      this.datalayer.layer.zoomToShowLayer(this.ui, event.callback || (() => {}))
-    } else {
-      super.zoomTo(event)
+      this.ui._cluster.zoomToCoverage().then(() => {
+        this.ui._cluster.spiderfy()
+      })
     }
+    super.zoomTo(event)
   }
 }
 

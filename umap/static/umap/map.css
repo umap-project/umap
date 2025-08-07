@@ -1040,6 +1040,15 @@ a.umap-control-caption,
     box-shadow: var(--block-shadow);
 }
 
+.umap-cluster-icon {
+    border-radius: 50%;
+    border: 4px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
 /* ********************************* */
 /*         Ajax loader               */
 /* ********************************* */
