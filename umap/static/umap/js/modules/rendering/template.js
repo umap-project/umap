@@ -1,4 +1,8 @@
-import { DomEvent, DomUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
+import {
+  DomEvent,
+  DomUtil,
+  CircleMarker,
+} from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { getLocale, translate } from '../i18n.js'
 import { Request } from '../request.js'
 import * as Utils from '../utils.js'
@@ -21,6 +25,9 @@ export default async function loadTemplate(name, feature, container) {
       break
     case 'Wikipedia':
       klass = Wikipedia
+      break
+    case 'Route':
+      klass = Route
       break
   }
   const content = new klass()
@@ -280,5 +287,55 @@ class Wikipedia extends PopupTemplate {
       body.appendChild(content)
     }
     return body
+  }
+}
+
+class Route extends PopupTemplate {
+  async renderBody(feature) {
+    let prev
+    let dist = 0
+    const data = []
+    const latlngs = feature.ui.getLatLngs()
+    const map = feature._umap._leafletMap
+    for (const latlng of latlngs) {
+      if (!latlng.alt) {
+        continue
+      }
+      if (prev) {
+        dist = map.distance(latlng, prev)
+      }
+      data.push([latlng.alt, dist])
+      prev = latlng
+    }
+    const [chart, { altitude }] = Utils.loadTemplateWithRefs(`
+      <elevation-chart data-elevation="${JSON.stringify(data)}">
+        <p>
+          Altitude : <span data-ref="altitude">0</span> meters
+        </p>
+        <object width="100%" data="${feature._umap.getStaticPathFor('../vendors/simple-elevation-chart/elevation.svg')}" type="image/svg+xml">
+      </elevation-chart>
+    `)
+    let marker
+    function removeMarker() {
+      if (marker) {
+        marker.remove()
+      }
+    }
+    chart.addEventListener('mouseout', removeMarker)
+    map.on('popupclose', removeMarker)
+    chart.addEventListener('chart:eleover', (event) => {
+      const dataset = event.detail.element.dataset
+      altitude.textContent = dataset.ele
+      removeMarker()
+      const latlng = latlngs[dataset.index]
+      if (!latlng) return
+      marker = new CircleMarker(latlng, {
+        radius: 8,
+        fillColor: 'white',
+        fillOpacity: 1,
+        color: 'orange',
+      }).addTo(map)
+    })
+    return chart
   }
 }

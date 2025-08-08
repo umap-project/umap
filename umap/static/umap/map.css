@@ -1049,6 +1049,10 @@ a.umap-control-caption,
     font-weight: bold;
 }
 
+.leaflet-overlay-pane > svg {
+    z-index: var(--zindex-orphan-marker);
+}
+
 /* ********************************* */
 /*         Ajax loader               */
 /* ********************************* */
