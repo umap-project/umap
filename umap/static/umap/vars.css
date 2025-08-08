@@ -61,6 +61,7 @@
     --zindex-panels: 440;
     --zindex-controls: 430;
     --zindex-dragover: 410;
+    --zindex-orphan-marker: 401;
 
     --block-shadow: 0 1px 7px var(--color-mediumGray);
 }

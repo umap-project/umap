@@ -450,6 +450,7 @@ export const SCHEMA = {
       ['GeoRSSLink', translate('GeoRSS (only link)')],
       ['OSM', translate('OpenStreetMap')],
       ['Wikipedia', translate('Wikipedia')],
+      ['Route', translate('Route')],
     ],
     default: 'Default',
   },
