@@ -547,7 +547,8 @@ export class DataLayer {
   }
 
   sortedValues(property) {
-    return Array.from(this.features.values())
+    return this.features
+      .all()
       .map((feature) => feature.properties[property])
       .filter((val, idx, arr) => arr.indexOf(val) === idx)
       .sort(Utils.naturalSort)
@@ -1181,12 +1182,6 @@ export class DataLayer {
       })
   }
 
-  featuresToGeoJSON() {
-    const features = []
-    this.features.forEach((feature) => features.push(feature.toGeoJSON()))
-    return features
-  }
-
   async show() {
     this._leafletMap.addLayer(this.layer)
     if (!this.isLoaded()) await this.fetchData()
@@ -1273,11 +1268,9 @@ export class DataLayer {
   }
 
   umapGeoJSON() {
-    return {
-      type: 'FeatureCollection',
-      features: this.isRemoteLayer() ? [] : this.featuresToGeoJSON(),
-      _umap_options: this.properties,
-    }
+    const geojson = this._umap.formatter.toFeatureCollection(this.features.all())
+    geojson._umap_options = this.properties
+    return geojson
   }
 
   getDOMOrder() {

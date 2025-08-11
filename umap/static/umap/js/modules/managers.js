@@ -63,6 +63,14 @@ export class FeatureManager extends Map {
     this.set(feature.id, feature)
   }
 
+  all() {
+    return Array.from(this.values())
+  }
+
+  visible() {
+    return this.all().filter((feature) => !feature.isFiltered())
+  }
+
   del(feature) {
     this.delete(feature.id)
   }
@@ -72,7 +80,7 @@ export class FeatureManager extends Map {
   }
 
   sort(by) {
-    const features = Array.from(this.values())
+    const features = this.all()
     Utils.sortFeatures(features, by, U.lang)
     this.clear()
     for (const feature of features) {
@@ -90,16 +98,16 @@ export class FeatureManager extends Map {
   }
 
   last() {
-    return Array.from(this.values())[this.size - 1]
+    return this.all()[this.size - 1]
   }
 
   next(feature) {
     const index = this.getIndex(feature)
-    return Array.from(this.values())[index + 1]
+    return this.all()[index + 1]
   }
 
   prev(feature) {
     const index = this.getIndex(feature)
-    return Array.from(this.values())[index - 1]
+    return this.all()[index - 1]
   }
 }

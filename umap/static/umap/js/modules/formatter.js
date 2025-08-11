@@ -17,33 +17,18 @@ const parseTextGeom = async (geom) => {
 
 export const EXPORT_FORMATS = {
   geojson: {
-    formatter: async (umap) => JSON.stringify(umap.toGeoJSON(), null, 2),
     ext: '.geojson',
     filetype: 'application/json',
   },
   gpx: {
-    formatter: async (umap) => await umap.formatter.toGPX(umap.toGeoJSON()),
     ext: '.gpx',
     filetype: 'application/gpx+xml',
   },
   kml: {
-    formatter: async (umap) => await umap.formatter.toKML(umap.toGeoJSON()),
     ext: '.kml',
     filetype: 'application/vnd.google-earth.kml+xml',
   },
   csv: {
-    formatter: async (umap) => {
-      const table = []
-      umap.eachFeature((feature) => {
-        const row = feature.toGeoJSON().properties
-        const center = feature.center
-        delete row._umap_options
-        row.Latitude = center.lat
-        row.Longitude = center.lng
-        table.push(row)
-      })
-      return csv2geojson.dsv.csvFormat(table)
-    },
     ext: '.csv',
     filetype: 'text/csv',
   },
@@ -180,17 +165,54 @@ export class Formatter {
     }
   }
 
-  async toGPX(geojson) {
+  async stringify(features, format) {
+    switch (format) {
+      case 'csv':
+        return await this.toCSV(features)
+      case 'gpx':
+        return await this.toGPX(features)
+      case 'kml':
+        return await this.toKML(features)
+      case 'geojson':
+        return await this.toGeoJSON(features)
+    }
+  }
+
+  async toGPX(features) {
     const togpx = await import('../../vendors/geojson-to-gpx/index.js')
-    for (const feature of geojson.features) {
+    for (const feature of features) {
       feature.properties.desc = feature.properties.description
     }
-    const gpx = togpx.default(geojson)
+    const gpx = togpx.default(this.toFeatureCollection(features))
     return new XMLSerializer().serializeToString(gpx)
   }
 
-  async toKML(geojson) {
+  async toKML(features) {
     const tokml = await import('../../vendors/tokml/tokml.es.js')
-    return tokml.toKML(geojson)
+    return tokml.toKML(this.toFeatureCollection(features))
+  }
+
+  toFeatureCollection(features) {
+    return {
+      type: 'FeatureCollection',
+      features: features.map((f) => f.toGeoJSON()),
+    }
+  }
+
+  async toGeoJSON(features) {
+    return JSON.stringify(this.toFeatureCollection(features), null, 2)
+  }
+
+  async toCSV(features) {
+    const table = []
+    for (const feature of features) {
+      const row = feature.toGeoJSON().properties
+      const center = feature.center
+      delete row._umap_options
+      row.Latitude = center.lat
+      row.Longitude = center.lng
+      table.push(row)
+    }
+    return csv2geojson.dsv.csvFormat(table)
   }
 }
