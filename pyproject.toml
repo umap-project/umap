@@ -72,7 +72,7 @@ s3 = [
 ]
 sync = [
   "pydantic==2.11.7",
-  "redis==6.2.0",
+  "redis==6.4.0",
   "websockets==15.0.1",
 ]
 
