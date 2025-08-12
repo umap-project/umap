@@ -453,6 +453,13 @@ export const SCHEMA = {
     ],
     default: 'Default',
   },
+  printControl: {
+    type: Boolean,
+    impacts: ['ui'],
+    nullable: true,
+    label: translate('Display the print control'),
+    default: null,
+  },
   rank: {
     type: Number,
     impacts: ['datalayer-rank'],

@@ -43,7 +43,7 @@ export default class Share {
     const list = document.createElement('ul')
     list.classList.add('downloads')
     this.container.appendChild(list)
-    for (const format of Object.keys(EXPORT_FORMATS)) {
+    for (const format of Object.keys(EXPORT_FORMATS).concat('jpg', 'png')) {
       const button = Utils.loadTemplate(`
         <li>
           <button class="flat" type="button">
@@ -148,16 +148,20 @@ export default class Share {
   }
 
   async download(mode) {
-    const { content, filetype, filename } = await this.format(mode)
-    const blob = new Blob([content], { type: filetype })
-    window.URL = window.URL || window.webkitURL
-    const el = document.createElement('a')
-    el.download = filename
-    el.href = window.URL.createObjectURL(blob)
-    el.style.display = 'none'
-    document.body.appendChild(el)
-    el.click()
-    document.body.removeChild(el)
+    if (!(mode in EXPORT_FORMATS)) {
+      this._umap.openPrinter(mode)
+    } else {
+      const { content, filetype, filename } = await this.format(mode)
+      const blob = new Blob([content], { type: filetype })
+      window.URL = window.URL || window.webkitURL
+      const el = document.createElement('a')
+      el.download = filename
+      el.href = window.URL.createObjectURL(blob)
+      el.style.display = 'none'
+      document.body.appendChild(el)
+      el.click()
+      document.body.removeChild(el)
+    }
   }
 }
 

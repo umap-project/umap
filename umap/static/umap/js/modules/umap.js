@@ -1768,4 +1768,27 @@ export default class Umap {
   redo() {
     this.sync._undoManager.redo()
   }
+
+  async screenshot() {
+    const { snapdom, preCache } = await import('../../vendors/snapdom/snapdom.min.mjs')
+    const el = document.querySelector('#map')
+    this.fire('dataloading', { id: this.id })
+    await preCache(el)
+    const result = await snapdom(el, {
+      scale: 1,
+      type: 'jpg',
+      fast: false,
+      exclude: ['.leaflet-control', '.umap-loader', '.panel', '.umap-caption-bar'],
+    })
+    this.fire('dataload', { id: this.id })
+    return result
+  }
+
+  async openPrinter(action) {
+    if (!this._printer) {
+      const Printer = (await import('./printer.js')).default
+      this._printer = new Printer(this)
+    }
+    this._printer.open(action)
+  }
 }

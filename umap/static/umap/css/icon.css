@@ -233,6 +233,10 @@ html[dir="rtl"] .icon {
     background-position: 0 calc(var(--tile) * 4);
 }
 
+.icon-print {
+    background-position: calc(var(--tile) * 1) calc(var(--tile) * 3);
+}
+
 .icon-redo {
     background-position: calc(var(--tile) * 3) calc(var(--tile) * 7);
 }

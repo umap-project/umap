@@ -148,7 +148,6 @@ const BaseButton = Control.extend({
   },
 
   onRemove(map) {
-    Control.prototype.onRemove.call(this, map)
     this.afterRemove(map)
   },
 
@@ -196,6 +195,18 @@ export const EmbedControl = BaseButton.extend({
 
   onClick: function () {
     this._umap.share.open()
+  },
+})
+
+export const PrintControl = BaseButton.extend({
+  options: {
+    position: 'topleft',
+    title: translate('Print'),
+    icon: 'icon-print',
+  },
+
+  onClick: function () {
+    this._umap.openPrinter('print')
   },
 })
 

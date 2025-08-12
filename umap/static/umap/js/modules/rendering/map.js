@@ -22,6 +22,7 @@ import {
   PermanentCreditsControl,
   TileLayerChooser,
   LoadTemplateControl,
+  PrintControl,
   SearchControl,
 } from './controls.js'
 import * as Utils from '../utils.js'
@@ -46,6 +47,7 @@ const ControlsMixin = {
     'locate',
     'measure',
     'editinosm',
+    'print',
     'tilelayers',
   ],
 
@@ -87,6 +89,7 @@ const ControlsMixin = {
     })
     this._controls.search = new SearchControl(this._umap)
     this._controls.embed = new EmbedControl(this._umap)
+    this._controls.print = new PrintControl(this._umap)
     this._controls.tilelayersChooser = new TileLayerChooser(this._umap)
     this._controls.editinosm = new Control.EditInOSM({
       position: 'topleft',
