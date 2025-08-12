@@ -138,11 +138,22 @@ const BaseButton = Control.extend({
     button.addEventListener('dblclick', (event) => {
       event.stopPropagation()
     })
-    this.afterAdd(container)
+    if (this.options.icon) {
+      button.appendChild(
+        Utils.loadTemplate(`<i class="icon icon-24 ${this.options.icon}"></i>`)
+      )
+    }
+    this.afterAdd(container, map)
     return container
   },
 
-  afterAdd: (container) => {},
+  onRemove(map) {
+    Control.prototype.onRemove.call(this, map)
+    this.afterRemove(map)
+  },
+
+  afterAdd: (container, map) => {},
+  afterRemove: (map) => {},
 })
 
 export const DataLayersControl = BaseButton.extend({
@@ -150,6 +161,7 @@ export const DataLayersControl = BaseButton.extend({
     position: 'topleft',
     className: 'umap-control-browse',
     title: translate('Open browser'),
+    icon: 'icon-layers',
   },
 
   afterAdd: function (container) {
@@ -166,6 +178,7 @@ export const CaptionControl = BaseButton.extend({
     position: 'topleft',
     className: 'umap-control-caption',
     title: translate('About'),
+    icon: 'icon-caption',
   },
 
   onClick: function () {
@@ -178,10 +191,62 @@ export const EmbedControl = BaseButton.extend({
     position: 'topleft',
     title: translate('Share and download'),
     className: 'leaflet-control-embed',
+    icon: 'icon-share',
   },
 
   onClick: function () {
     this._umap.share.open()
+  },
+})
+
+export const SearchControl = BaseButton.extend({
+  options: {
+    position: 'topleft',
+    title: translate('Search location'),
+    className: 'leaflet-control-search',
+    icon: 'icon-search',
+  },
+
+  afterAdd(container, map) {
+    this.layer = L.layerGroup().addTo(map)
+    this.photonOptions = {
+      limit: 10,
+      noResultLabel: translate('No results'),
+    }
+    if (map.options.photonUrl) this.photonOptions.url = map.options.photonUrl
+  },
+
+  afterRemove: function (map) {
+    this.layer.remove()
+  },
+
+  onClick: function () {
+    const template = `
+      <div>
+        <h3><i class="icon icon-16 icon-search"></i>${translate('Search location')}</h3>
+        <input class="photon-input" data-ref=input />
+        <div class="photon-autocomplete" data-ref=resultsContainer></div>
+      </div>
+    `
+    const [container, { input, resultsContainer }] =
+      Utils.loadTemplateWithRefs(template)
+    const id = Math.random()
+    this._umap.panel.open({ content: container }).then(() => {
+      this.search = new U.Search(
+        this._umap._leafletMap,
+        input,
+        this.layer,
+        this.photonOptions
+      )
+      this.search.on('ajax:send', () => {
+        this._umap.fire('dataloading', { id: id })
+      })
+      this.search.on('ajax:return', () => {
+        this._umap.fire('dataload', { id: id })
+      })
+      this.search.resultsContainer = resultsContainer
+      input.focus()
+    })
   },
 })
 

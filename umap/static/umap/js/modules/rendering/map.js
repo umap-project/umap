@@ -22,6 +22,7 @@ import {
   PermanentCreditsControl,
   TileLayerChooser,
   LoadTemplateControl,
+  SearchControl,
 } from './controls.js'
 import * as Utils from '../utils.js'
 import * as Icon from './icon.js'
@@ -84,7 +85,7 @@ const ControlsMixin = {
         true: translate('Exit Fullscreen'),
       },
     })
-    this._controls.search = new U.SearchControl()
+    this._controls.search = new SearchControl(this._umap)
     this._controls.embed = new EmbedControl(this._umap)
     this._controls.tilelayersChooser = new TileLayerChooser(this._umap)
     this._controls.editinosm = new Control.EditInOSM({

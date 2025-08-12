@@ -96,17 +96,21 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
 .leaflet-control-locate a,
 .umap-control a,
 .umap-control [type="button"] {
-    background-position: 50% 50%;
-    background-repeat: no-repeat;
     display: block;
     height: var(--control-size);
     width: var(--control-size);
     line-height: var(--control-size);
-    background-image: url('./img/24.svg');
-    text-indent: -9999px;
     margin-bottom: 0;
     background-color: white;
     min-height: initial;
+    padding: 0;
+}
+
+.leaflet-measure-control a,
+.leaflet-control-locate a {
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-image: url('./img/24.svg');
 }
 
 .leaflet-control.display-on-more {
@@ -595,15 +599,6 @@ ul.photon-autocomplete {
 /* ********************************* */
 /*   Browser panel          */
 /* ********************************* */
-a.umap-control-browse,
-.umap-control-browse [type="button"] {
-    background-position: -144px -180px;
-}
-
-a.umap-control-caption,
-.umap-control-caption [type="button"] {
-    background-position: -144px -36px;
-}
 
 .leaflet-inplace-toolbar a {
     background-repeat: no-repeat;
