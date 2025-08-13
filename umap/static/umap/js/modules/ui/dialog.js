@@ -146,6 +146,10 @@ export default class Dialog extends WithTemplate {
     return this.waitForUser()
   }
 
+  on(...args) {
+    this.dialog.addEventListener(...args)
+  }
+
   close() {
     this.toggle(false)
     this.dialog.returnValue = undefined
@@ -167,15 +171,13 @@ export default class Dialog extends WithTemplate {
   }
 
   waitForUser() {
-    return new Promise((resolve, reject = () => {}) => {
+    return new Promise((resolve) => {
       this.dialog.addEventListener(
         'close',
         (event) => {
           if (this.dialog.returnValue === 'accept') {
             const value = this.hasFormData ? this.collectFormData() : true
             resolve(value)
-          } else {
-            reject()
           }
         },
         { once: true }

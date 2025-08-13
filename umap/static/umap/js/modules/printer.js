@@ -55,12 +55,10 @@ export default class Printer {
     if (!this.container) this.build()
     this.action = action
     const acceptLabel = action === 'print' ? translate('Print') : translate('Download')
+    this.dialog.on('close', () => this.resetSize(), { once: true })
     this.dialog
       .open({ template: this.container, cancel: false, accept: acceptLabel })
-      .then(
-        (form) => this.onPrint(form),
-        () => this.resetSize()
-      )
+      .then((form) => this.onPrint(form))
     this.resizeMap()
   }
 
