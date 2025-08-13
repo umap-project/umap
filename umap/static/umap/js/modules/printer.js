@@ -8,7 +8,7 @@ export default class Printer {
   }
 
   build() {
-    const [container, { format, mode }] = Utils.loadTemplateWithRefs(`
+    const [container, { format, mode, scale }] = Utils.loadTemplateWithRefs(`
       <div>
         <h3>${translate('Print map')}</h3>
         <div class="formbox">
@@ -18,6 +18,7 @@ export default class Printer {
               <option value="usletter">US Letter</option>
             </select>
           </label>
+          <input type="range" min="50" max="150" name="scale" data-ref="scale" />
           <div class="umap-multiplechoice by2" data-ref="mode">
               <input type="radio" name="mode" id="mode.0" value="portrait"><label for="mode.0">${translate('portrait')}</label>
               <input type="radio" name="mode" id="mode.1" value="landscape" checked=""><label for="mode.1">${translate('landscape')}</label>
@@ -28,6 +29,7 @@ export default class Printer {
     this.container = container
     format.addEventListener('change', () => this.resizeMap())
     mode.addEventListener('change', () => this.resizeMap())
+    scale.addEventListener('change', () => this.resizeMap())
   }
 
   resetSize() {
@@ -37,6 +39,7 @@ export default class Printer {
         map._container.classList.remove(name)
       }
     }
+    delete map._container.style.width
     map.invalidateSize()
   }
 
@@ -47,6 +50,7 @@ export default class Printer {
     if (form.format && form.mode) {
       map._container.classList.add(`print-${form.format}`)
       map._container.classList.add(`print-${form.mode}`)
+      map._container.style.width = `${form.scale}%`
       map.invalidateSize()
     }
   }

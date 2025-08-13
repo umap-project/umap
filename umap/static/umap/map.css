@@ -48,15 +48,6 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     right: initial !important;
     top: initial !important;
     bottom: initial !important;
-}
-
-.print-portrait {
-    height: 100vh;
-    width: initial !important;
-}
-
-.print-landscape {
-    width: 100vw !important;
     height: initial !important;
 }
 
