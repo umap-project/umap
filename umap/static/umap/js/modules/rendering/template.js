@@ -3,7 +3,6 @@ import {
   DomUtil,
   CircleMarker,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
-import { LineString } from '../data/features.js'
 import { getLocale, translate } from '../i18n.js'
 import { Request } from '../request.js'
 import * as Utils from '../utils.js'
@@ -293,7 +292,7 @@ class Wikipedia extends PopupTemplate {
 
 class Route extends TitleMixin(PopupTemplate) {
   async renderBody(feature) {
-    if (!(feature instanceof LineString) || feature.isMulti()) {
+    if (feature.type !== 'LineString' || feature.isMulti()) {
       return super.renderBody(feature)
     }
     let prev

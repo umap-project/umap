@@ -43,6 +43,18 @@ class UmapManifestStaticFilesStorage(ManifestStaticFilesStorage):
         ),
     )
 
+    patterns = ManifestStaticFilesStorage.patterns + (
+        (
+            "*.svg",
+            (
+                (
+                    r'(?P<matched>xlink:href="(?P<url>.*\.js)")',
+                    'xlink:href="%(url)s"',
+                ),
+            ),
+        ),
+    )
+
     def post_process(self, paths, **options):
         collected = super().post_process(paths, **options)
         for original_path, processed_path, processed in collected:
