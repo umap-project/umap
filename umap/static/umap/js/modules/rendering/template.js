@@ -3,6 +3,7 @@ import {
   DomUtil,
   CircleMarker,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
+import { LineString } from '../data/features.js'
 import { getLocale, translate } from '../i18n.js'
 import { Request } from '../request.js'
 import * as Utils from '../utils.js'
@@ -290,13 +291,17 @@ class Wikipedia extends PopupTemplate {
   }
 }
 
-class Route extends PopupTemplate {
+class Route extends TitleMixin(PopupTemplate) {
   async renderBody(feature) {
+    if (!(feature instanceof LineString) || feature.isMulti()) {
+      return super.renderBody(feature)
+    }
     let prev
     let dist = 0
     const data = []
     const latlngs = feature.ui.getLatLngs()
     const map = feature._umap._leafletMap
+    const properties = feature.extendedProperties()
     for (const latlng of latlngs) {
       if (!latlng.alt) {
         continue
@@ -307,13 +312,20 @@ class Route extends PopupTemplate {
       data.push([latlng.alt, dist])
       prev = latlng
     }
-    const [chart, { altitude }] = Utils.loadTemplateWithRefs(`
-      <elevation-chart data-elevation="${JSON.stringify(data)}">
+    const [root, { altitude, chart }] = Utils.loadTemplateWithRefs(`
+      <div>
         <p>
-          Altitude : <span data-ref="altitude">0</span> meters
+          ${translate('Distance:')} ${properties.measure} •
+          ${translate('Gain:')} ${properties.gain} m ↗ •
+          ${translate('Loss:')} ${properties.loss} m ↘ •
+          ${translate('Altitude:')} <span data-ref="altitude">—</span> m
         </p>
-        <object width="100%" data="${feature._umap.getStaticPathFor('../vendors/simple-elevation-chart/elevation.svg')}" type="image/svg+xml">
-      </elevation-chart>
+        <object width="100%"
+          data="${feature._umap.getStaticPathFor('../vendors/simple-elevation-chart/elevation.svg')}"
+          data-elevation="${JSON.stringify(data)}"
+          data-ref="chart"
+          type="image/svg+xml">
+      </div>
     `)
     let marker
     function removeMarker() {
@@ -323,9 +335,11 @@ class Route extends PopupTemplate {
     }
     chart.addEventListener('mouseout', removeMarker)
     map.on('popupclose', removeMarker)
-    chart.addEventListener('chart:eleover', (event) => {
+    chart.addEventListener('chart:over', (event) => {
       const dataset = event.detail.element.dataset
-      altitude.textContent = dataset.ele
+      if (dataset.ele) {
+        altitude.textContent = dataset.ele
+      }
       removeMarker()
       const latlng = latlngs[dataset.index]
       if (!latlng) return
@@ -336,6 +350,6 @@ class Route extends PopupTemplate {
         color: 'orange',
       }).addTo(map)
     })
-    return chart
+    return root
   }
 }

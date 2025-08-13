@@ -14,8 +14,10 @@ function elevationColor(value) {
 
 function draw() {
   const elem = document.getElementsByTagName('svg')[0]
-  let elevationData = JSON.parse(window.frameElement.parentNode.dataset.elevation)
-  elevationData = elevationData.map(([ele, dist]) => { return {ele, dist}})
+  let elevationData = JSON.parse(window.frameElement.dataset.elevation)
+  elevationData = elevationData.map(([ele, dist]) => {
+    return { ele, dist }
+  })
 
   const dataEle = elevationData.map((n) => parseFloat(n.ele, 10) || 0)
   const dataDist = elevationData.map((n) => parseFloat(n.dist, 10) || 0)
@@ -47,12 +49,14 @@ function draw() {
     rect.setAttribute('height', `${height}%`)
     rect.setAttribute('fill', color)
     rect.setAttribute('data-index', i)
-    rect.setAttribute('data-ele', dataEle[i])
+    rect.setAttribute('data-ele', Math.round(dataEle[i]))
     elem.appendChild(rect)
   }
   elem.addEventListener('mouseover', (event) => {
-    const eleOver = new CustomEvent('chart:eleover', { detail: { "element": event.target } })
-    window.frameElement.parentNode.dispatchEvent(eleOver)
+    const eleOver = new CustomEvent('chart:over', {
+      detail: { element: event.target },
+    })
+    window.frameElement.dispatchEvent(eleOver)
   })
 }
 
