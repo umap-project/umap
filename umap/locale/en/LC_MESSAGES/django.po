@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-10 14:12+0000\n"
+"POT-Creation-Date: 2025-08-14 15:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -324,7 +324,7 @@ msgstr ""
 msgid "%(current_user)s has no starred maps yet."
 msgstr ""
 
-#: templates/base.html:13
+#: templates/base.html:16
 msgid ""
 "uMap lets you create maps with OpenStreetMap layers in a minute and embed "
 "them in your site."
@@ -822,61 +822,61 @@ msgstr ""
 msgid "View the map"
 msgstr ""
 
-#: views.py:865
+#: views.py:867
 msgid "See full screen"
 msgstr ""
 
-#: views.py:1008
+#: views.py:1010
 msgid "Map editors updated with success!"
 msgstr ""
 
-#: views.py:1044
+#: views.py:1046
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr ""
 
-#: views.py:1047
+#: views.py:1049
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr ""
 
-#: views.py:1054
+#: views.py:1056
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr ""
 
-#: views.py:1057
+#: views.py:1059
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr ""
 
-#: views.py:1068
+#: views.py:1070
 msgid "Only its owner can delete the map."
 msgstr ""
 
-#: views.py:1074
+#: views.py:1076
 msgid "Map successfully deleted."
 msgstr ""
 
-#: views.py:1100
+#: views.py:1102
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr ""
 
-#: views.py:1105
+#: views.py:1107
 msgid "Congratulations, your map has been cloned!"
 msgstr ""
 
-#: views.py:1359
+#: views.py:1361
 msgid "Layer successfully deleted."
 msgstr ""
 
-#: views.py:1381
+#: views.py:1383
 msgid "Permissions updated with success!"
 msgstr ""
 
-#: views.py:1398
+#: views.py:1400
 msgid "Generic"
 msgstr ""

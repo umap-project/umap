@@ -1071,7 +1071,7 @@ export class LineString extends Path {
     }
     if (this._umap.properties.ORSAPIKey) {
       const button = Utils.loadTemplate(`
-        <button class="button" type="button"><i class="icon icon-24 icon-mountain"></i>${translate('Compute elevation')}</button>
+        <button class="button" type="button"><i class="icon icon-24 icon-mountain"></i>${translate('Compute elevations')}</button>
       `)
       container.appendChild(button)
       button.addEventListener('click', () => this.computeElevation())
