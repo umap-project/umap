@@ -3,6 +3,7 @@
 ## 3.3.0 - 2025-08-14
 
 Notable changes:
+
 - edit buttons have moved from left click to right click (contextmenu), this allows
   the left click to be unchanged in edit mode, and thus to be able to open a popup
   for example and check it without the need to switch to preview mode
