@@ -18,7 +18,9 @@ export default class Printer {
               <option value="usletter">US Letter</option>
             </select>
           </label>
-          <input type="range" min="50" max="150" name="scale" data-ref="scale" />
+          <label>${translate('Scale map')}
+            <input type="range" min="50" max="150" name="scale" data-ref="scale" />
+          </label>
           <div class="umap-multiplechoice by2" data-ref="mode">
               <input type="radio" name="mode" id="mode.0" value="portrait"><label for="mode.0">${translate('portrait')}</label>
               <input type="radio" name="mode" id="mode.1" value="landscape" checked=""><label for="mode.1">${translate('landscape')}</label>
@@ -70,20 +72,26 @@ export default class Printer {
     )
     this.dialog
       .open({ template: this.container, cancel: false, accept: acceptLabel })
-      .then((form) => this.onPrint(form))
+      .then((form) => this.onSubmit(form))
     this.resizeMap()
   }
 
-  async onPrint(form) {
+  async onSubmit(form) {
     if (this.action === 'print') {
       const win = window.open('', '_blank')
-      // screenshot be called after window.open, no idea why,
+      // Using document.body.appendChild here will end with black font
+      // on a black blackground, no idea why.
+      win.document.write(`<span>${translate('Preparing the print…')}</span>`)
+      // screenshot must be called after window.open, no idea why,
       // otherwise window.open sometimes fails and returns null.
       const screenshot = await this.umap.screenshot()
       const img = await screenshot.toPng()
-      // TODO clean me
-      img.setAttribute('onload', 'window.print();window.close()')
-      win.document.write(img.outerHTML)
+      img.addEventListener('load', () => {
+        win.print()
+        win.close()
+      })
+      win.document.querySelector('span').remove()
+      win.document.body.appendChild(img)
       win.focus()
     } else {
       const screenshot = await this.umap.screenshot()
