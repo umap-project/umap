@@ -1262,20 +1262,6 @@ export default class Umap {
     }
   }
 
-  toGeoJSON() {
-    let features = []
-    this.datalayers.active().map((datalayer) => {
-      if (datalayer.isVisible()) {
-        features = features.concat(datalayer.featuresToGeoJSON())
-      }
-    })
-    const geojson = {
-      type: 'FeatureCollection',
-      features: features,
-    }
-    return geojson
-  }
-
   enableEdit() {
     this.editBar.redraw()
     document.body.classList.add('umap-edit-enabled')

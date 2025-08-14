@@ -1069,6 +1069,10 @@ ul.photon-autocomplete {
     font-weight: bold;
 }
 
+.leaflet-overlay-pane > svg {
+    z-index: var(--zindex-orphan-marker);
+}
+
 /* ********************************* */
 /*         Ajax loader               */
 /* ********************************* */

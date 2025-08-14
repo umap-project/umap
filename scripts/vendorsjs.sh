@@ -34,5 +34,6 @@ mkdir -p umap/static/umap/vendors/textpath/ && cp node_modules/leaflet-textpath/
 mkdir -p umap/static/umap/vendors/betterknown/ && cp node_modules/betterknown/dist/betterknown.mjs umap/static/umap/vendors/betterknown/
 mkdir -p umap/static/umap/vendors/openrouteservice/ && cp node_modules/openrouteservice-js/dist/ors-js-client.js* umap/static/umap/vendors/openrouteservice/
 mkdir -p umap/static/umap/vendors/snapdom/ && cp node_modules/@zumer/snapdom/dist/snapdom.min.mjs umap/static/umap/vendors/snapdom/
+mkdir -p umap/static/umap/vendors/simple-elevation-chart/ && cp node_modules/simple-elevation-chart/src/elevation.* umap/static/umap/vendors/simple-elevation-chart/
 
 echo 'Done!'

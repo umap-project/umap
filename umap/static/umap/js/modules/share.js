@@ -142,7 +142,10 @@ export default class Share {
 
   async format(mode) {
     const type = EXPORT_FORMATS[mode]
-    const content = await type.formatter(this._umap)
+    const features = this._umap.datalayers
+      .visible()
+      .reduce((acc, dl) => acc.concat(dl.features.visible()), [])
+    const content = await this._umap.formatter.stringify(features, mode)
     const filename = Utils.slugify(this._umap.properties.name) + type.ext
     return { content, filetype: type.filetype, filename }
   }
