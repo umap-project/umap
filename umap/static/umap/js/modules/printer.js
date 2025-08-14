@@ -77,6 +77,7 @@ export default class Printer {
   }
 
   async onSubmit(form) {
+    this.umap.fire('dataloading', { id: 'screenshot' })
     if (this.action === 'print') {
       const win = window.open('', '_blank')
       // Using document.body.appendChild here will end with black font
@@ -101,5 +102,6 @@ export default class Printer {
       })
     }
     this.resetSize()
+    this.umap.fire('dataload', { id: 'screenshot' })
   }
 }

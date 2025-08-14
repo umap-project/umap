@@ -1772,15 +1772,20 @@ export default class Umap {
   async screenshot() {
     const { snapdom, preCache } = await import('../../vendors/snapdom/snapdom.min.mjs')
     const el = document.querySelector('#map')
-    this.fire('dataloading', { id: this.id })
     await preCache(el)
     const result = await snapdom(el, {
       scale: 1,
       type: 'jpg',
       fast: false,
-      exclude: ['.leaflet-control', '.umap-loader', '.panel', '.umap-caption-bar'],
+      exclude: [
+        '.leaflet-control',
+        '.umap-loader',
+        '.panel',
+        '.umap-caption-bar',
+        '.umap-main-edit-toolbox',
+        '.umap-edit-bar',
+      ],
     })
-    this.fire('dataload', { id: this.id })
     return result
   }
 
