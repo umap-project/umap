@@ -37,7 +37,8 @@ export default class Dialog extends WithTemplate {
     this.init()
   }
 
-  collectFormData(formData) {
+  collectFormData() {
+    const formData = new FormData(this.elements.form)
     const object = {}
     formData.forEach((value, key) => {
       if (!Reflect.has(object, key)) {
@@ -145,6 +146,10 @@ export default class Dialog extends WithTemplate {
     return this.waitForUser()
   }
 
+  on(...args) {
+    this.dialog.addEventListener(...args)
+  }
+
   close() {
     this.toggle(false)
     this.dialog.returnValue = undefined
@@ -171,9 +176,7 @@ export default class Dialog extends WithTemplate {
         'close',
         (event) => {
           if (this.dialog.returnValue === 'accept') {
-            const value = this.hasFormData
-              ? this.collectFormData(new FormData(this.elements.form))
-              : true
+            const value = this.hasFormData ? this.collectFormData() : true
             resolve(value)
           }
         },

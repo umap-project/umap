@@ -363,3 +363,16 @@ def test_export_should_respect_filters(map, live_server, bootstrap, page):
         ],
         "type": "FeatureCollection",
     }
+
+
+def test_png_export(map, live_server, bootstrap, page):
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?share#6/53.406/6.757")
+    page.get_by_role("button", name="png").click()
+    with page.expect_download() as download_info:
+        page.get_by_role("button", name="Download", exact=True).click()
+    download = download_info.value
+    assert download.suggested_filename == "test_map.png"
+    path = Path("/tmp/") / download.suggested_filename
+    download.save_as(path)
+    # Something has been saved…
+    assert path.read_bytes()

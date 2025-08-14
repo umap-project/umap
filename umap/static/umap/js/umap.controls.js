@@ -210,57 +210,6 @@ U.Search = L.PhotonSearch.extend({
   },
 })
 
-U.SearchControl = L.Control.extend({
-  options: {
-    position: 'topleft',
-  },
-
-  onAdd: function (map) {
-    this.map = map
-    const container = L.DomUtil.create('div', 'leaflet-control-search umap-control')
-    L.DomEvent.disableClickPropagation(container)
-    L.DomUtil.createButton(
-      '',
-      container,
-      L._('Search location'),
-      (e) => {
-        L.DomEvent.stop(e)
-        this.open()
-      },
-      this
-    )
-    this.layer = L.layerGroup().addTo(map)
-    return container
-  },
-
-  onRemove: function () {
-    this.layer.remove()
-  },
-
-  open: function () {
-    const options = {
-      limit: 10,
-      noResultLabel: L._('No results'),
-    }
-    if (this.map.options.photonUrl) options.url = this.map.options.photonUrl
-    const container = L.DomUtil.create('div', '')
-
-    L.DomUtil.createTitle(container, L._('Search location'), 'icon-search')
-    const input = L.DomUtil.create('input', 'photon-input', container)
-    const resultsContainer = L.DomUtil.create('div', 'photon-autocomplete', container)
-    this.search = new U.Search(this.map, input, this.layer, options)
-    const id = Math.random()
-    this.search.on('ajax:send', () => {
-      this.map.fire('dataloading', { id: id })
-    })
-    this.search.on('ajax:return', () => {
-      this.map.fire('dataload', { id: id })
-    })
-    this.search.resultsContainer = resultsContainer
-    this.map._umap.panel.open({ content: container }).then(input.focus())
-  },
-})
-
 L.Control.MiniMap.include({
   initialize: function (layer, options) {
     L.Util.setOptions(this, options)
