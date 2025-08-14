@@ -95,7 +95,10 @@ export default class Printer {
       win.focus()
     } else {
       const screenshot = await this.umap.screenshot()
-      await screenshot.download({ format: this.action, filename: 'umap-screenshot' })
+      await screenshot.download({
+        format: this.action,
+        filename: Utils.slugify(this.umap.properties.name),
+      })
     }
     this.resetSize()
   }
