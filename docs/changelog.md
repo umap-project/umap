@@ -34,6 +34,7 @@ Notable changes:
 ### Internal Changes
 * be more defensive with UMAP_PICTOGRAMS_COLLECTIONS setting by @yohanboniface in #2822
 
+Thanks to [OpenRouteService](https://openrouteservice.org/)!
 
 ## 3.2.0 - 2025-07-10
 
