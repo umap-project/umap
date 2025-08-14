@@ -41,7 +41,7 @@ export default class Printer {
         map._container.classList.remove(name)
       }
     }
-    delete map._container.style.width
+    map._container.removeAttribute('style')
     map.invalidateSize()
   }
 
