@@ -1,5 +1,39 @@
 # Changelog
 
+## 3.3.0 - 2025-08-14
+
+Notable changes:
+- edit buttons have moved from left click to right click (contextmenu), this allows
+  the left click to be unchanged in edit mode, and thus to be able to open a popup
+  for example and check it without the need to switch to preview mode
+- OpenRouteService is now integrated into uMap, if you have an `OPENROUTESERVICE_APIKEY`
+  setting, this will add some new features: draw along routes, compute isochrones
+  and get elevation for lines
+- there is an experimental print feature, it may be sometimes a bit slow, it can
+  sometimes miss some map elements or images, but hopefully this can be improved in
+  upcoming steps
+
+### New features
+* open edit buttons on right click instead of left click by @yohanboniface in #2831
+* add control to print the map and allow to download as image by @yohanboniface in #2866
+* adding a Route template with elevation chart by @davidbgk in #2861
+* add new tool to draw routes using OpenRouteService API by @yohanboniface in #2839
+* add optional isochrone importer, using OpenRouteService by @yohanboniface in #2828
+* allow to compute line elevation with ORS API by @yohanboniface in #2835
+* introduce LargeCircle icon class and make it resizable by @yohanboniface in #2846
+* add connector for Prodige data portals by @yohanboniface in #2858
+* use our custom cluster layer by @yohanboniface in #2851
+* do not hide layers not appearing in the bottom datalayer switcher by @yohanboniface in #2859
+
+### Bug fixes
+* fix img center rules caption by @yohanboniface in #2821
+* focus whatever first button or a tag in a contextmenu by @yohanboniface in #2860
+* exports should respect filters by @yohanboniface in #2862
+
+### Internal Changes
+* be more defensive with UMAP_PICTOGRAMS_COLLECTIONS setting by @yohanboniface in #2822
+
+
 ## 3.2.0 - 2025-07-10
 
 This release changes the way pictograms are managed. Instead of managing them through
