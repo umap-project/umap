@@ -1004,7 +1004,7 @@ Fields.FacetSearchChoices = class extends Fields.FacetSearchBase {
   }
 
   build() {
-    this.type = this.properties.criteria.type
+    this.type = this.properties.criteria.widget
 
     const choices = this.properties.criteria.choices
     choices.sort()
@@ -1054,8 +1054,8 @@ Fields.MinMaxBase = class extends Fields.FacetSearchBase {
 
   getTemplate() {
     const [minLabel, maxLabel] = this.getLabels()
-    const { min, max, type } = this.properties.criteria
-    this.type = type
+    const { min, max, widget } = this.properties.criteria
+    this.type = widget
     const inputType = this.getInputType(this.type)
     const minHTML = this.prepareForHTML(min)
     const maxHTML = this.prepareForHTML(max)
