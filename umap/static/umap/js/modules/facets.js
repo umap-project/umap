@@ -13,28 +13,34 @@ export default class Facets {
     let selected
 
     for (const name of names) {
-      const type = defined.get(name).type
-      properties[name] = { type: type }
+      const widget = defined.get(name).widget
+      properties[name] = { widget }
       selected = this.selected[name] || {}
-      selected.type = type
-      if (!['date', 'datetime', 'number'].includes(type)) {
-        properties[name].choices = []
-        selected.choices = selected.choices || []
+      selected.widget = widget
+      if (!['date', 'datetime', 'number'].includes(widget)) {
+        properties[name].choices = new Set()
+        selected.choices = selected.choices || new Set()
       }
       this.selected[name] = selected
     }
 
     this._umap.datalayers.browsable().map((datalayer) => {
+      const fields = datalayer.properties.fields.reduce((fields, field) => {
+        fields[field.key] = field
+        return fields
+      }, {})
       datalayer.features.forEach((feature) => {
         for (const name of names) {
+          let dataType = fields[name].type || 'String'
+          // TODO retrocompat, guess dataType from widget if undefined
           let value = feature.properties[name]
-          const type = defined.get(name).type
-          const parser = this.getParser(type)
+          const widget = defined.get(name).widget
+          const parser = this.getParser(dataType)
           value = parser(value)
-          switch (type) {
-            case 'date':
-            case 'datetime':
-            case 'number':
+          switch (dataType) {
+            case 'Date':
+            case 'Datetime':
+            case 'Number':
               if (!Number.isNaN(value)) {
                 // Special cases where we want to be lousy when checking isNaN without
                 // coercing to a Number first because we handle multiple types.
@@ -50,15 +56,19 @@ export default class Facets {
                 }
               }
               break
+            case 'Enum':
+              properties[name].choices = Array.from(
+                new Set([...properties[name].choices, ...value])
+              )
+              break
             default:
               value = value || translate('<empty value>')
-              if (!properties[name].choices.includes(value)) {
-                properties[name].choices.push(value)
-              }
+              properties[name].choices.add(value)
           }
         }
       })
     })
+    if (selected.choices) selected.choices = Array.from(selected.choices)
     return properties
   }
 
@@ -79,7 +89,7 @@ export default class Facets {
     const fields = names.map((name) => {
       const criteria = facetProperties[name]
       let handler = 'FacetSearchChoices'
-      switch (criteria.type) {
+      switch (criteria.widget) {
         case 'number':
           handler = 'FacetSearchNumber'
           break
@@ -105,26 +115,31 @@ export default class Facets {
   }
 
   getDefined() {
-    const defaultType = 'checkbox'
-    const allowedTypes = [defaultType, 'radio', 'number', 'date', 'datetime']
+    const defaultWidget = 'checkbox'
+    const allowedWidgets = [defaultWidget, 'radio', 'number', 'date', 'datetime']
     const defined = new Map()
     if (!this._umap.properties.facetKey) return defined
     return (this._umap.properties.facetKey || '').split(',').reduce((acc, curr) => {
-      let [name, label, type] = curr.split('|')
-      type = allowedTypes.includes(type) ? type : defaultType
-      acc.set(name, { label: label || name, type: type })
+      let [name, label, widget] = curr.split('|')
+      widget = allowedWidgets.includes(widget) ? widget : defaultWidget
+      acc.set(name, { label: label || name, widget })
       return acc
     }, defined)
   }
 
   getParser(type) {
     switch (type) {
-      case 'number':
+      case 'Number':
         return Number.parseFloat
-      case 'datetime':
+      case 'Datetime':
         return (v) => new Date(v)
-      case 'date':
+      case 'Date':
         return Utils.parseNaiveDate
+      case 'Enum':
+        return (v) =>
+          String(v || '')
+            .split(',')
+            .map((s) => s.trim())
       default:
         return (v) => String(v || '')
     }
@@ -132,8 +147,8 @@ export default class Facets {
 
   dumps(parsed) {
     const dumped = []
-    for (const [property, { label, type }] of parsed) {
-      dumped.push([property, label, type].filter(Boolean).join('|'))
+    for (const [property, { label, widget }] of parsed) {
+      dumped.push([property, label, widget].filter(Boolean).join('|'))
     }
     const oldValue = this._umap.properties.facetKey
     this._umap.properties.facetKey = dumped.join(',')
@@ -148,10 +163,10 @@ export default class Facets {
     return this.getDefined().has(property)
   }
 
-  add(property, label, type) {
+  add(property, label, widget) {
     const defined = this.getDefined()
     if (!defined.has(property)) {
-      defined.set(property, { label, type })
+      defined.set(property, { label, widget })
       this.dumps(defined)
     }
   }

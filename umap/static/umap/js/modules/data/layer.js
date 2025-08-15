@@ -9,7 +9,7 @@ import {
   uMapAlert as Alert,
   uMapAlertConflict as AlertConflict,
 } from '../../components/alerts/alert.js'
-import { MutatingForm } from '../form/builder.js'
+import { MutatingForm, Form } from '../form/builder.js'
 import { translate } from '../i18n.js'
 import { DataLayerPermissions } from '../permissions.js'
 import { Default as DefaultLayer } from '../rendering/layers/base.js'
@@ -503,6 +503,33 @@ export class DataLayer {
       })
   }
 
+  async editField(property) {
+    const FIELD_TYPES = ['String', 'Text', 'Number', 'Date', 'Datetime', 'Enum']
+    let properties
+    for (const field of this.properties.fields) {
+      if (field.key === property) {
+        properties = field
+        break
+      }
+    }
+    const metadatas = [
+      ['key', { handler: 'BlurInput' }],
+      [
+        'type',
+        { handler: 'Select', selectOptions: FIELD_TYPES, label: translate('Type') },
+      ],
+    ]
+    const form = new Form(properties, metadatas, { umap: this.umap })
+
+    return this._umap.dialog.open({ template: form.build() }).then(() => {
+      // TODO: validate name before it's saved on field property
+      // Allow cancel, or remove the cancel button
+      // this.property.fields[property] = properties
+      // if (!prompt || !this.validateName(prompt)) return
+      // this.renameProperty(property, properties.key)
+    })
+  }
+
   async askForRenameProperty(property) {
     return this._umap.dialog
       .prompt(translate('Please enter the new name of this field'))
@@ -948,17 +975,17 @@ export class DataLayer {
     })
     container.appendChild(fieldset)
     for (const field of this.fields) {
-      const [row, { rename, del }] = Utils.loadTemplateWithRefs(
+      const [row, { edit, del }] = Utils.loadTemplateWithRefs(
         `<li class="orderable" data-key="${field.key}">
-          <button class="icon icon-16 icon-edit" title="${translate('Rename this field')}" data-ref=rename></button>
+          <button class="icon icon-16 icon-edit" title="${translate('Edit this field')}" data-ref=edit></button>
           <button class="icon icon-16 icon-delete" title="${translate('Delete this field')}" data-ref=del></button>
           <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
           ${field.key}
         </li>`
       )
       ul.appendChild(row)
-      rename.addEventListener('click', () => {
-        this.askForRenameProperty(field.key).then(() => {
+      edit.addEventListener('click', () => {
+        this.editField(field.key).then(() => {
           this.edit().then((panel) => {
             panel.scrollTo('details#fields')
           })
