@@ -548,18 +548,32 @@ class Feature {
   }
 
   matchFacets() {
+    let field
     const selected = this._umap.facets.selected
-    for (const [name, { type, min, max, choices }] of Object.entries(selected)) {
-      let value = this.properties[name]
-      const parser = this._umap.facets.getParser(type)
+    for (const [key, { min, max, choices }] of Object.entries(selected)) {
+      // TODO remove this loop and refactor it
+      for (const properties of this.datalayer.properties.fields) {
+        if (properties.key === key) {
+          field = properties
+          break
+        }
+      }
+      let value = this.properties[key]
+      const parser = this._umap.facets.getParser(field.type)
       value = parser(value)
-      switch (type) {
-        case 'date':
-        case 'datetime':
-        case 'number':
+      switch (field.type) {
+        case 'Date':
+        case 'Datetime':
+        case 'Number':
           if (!Number.isNaN(min) && !Number.isNaN(value) && min > value) return false
           if (!Number.isNaN(max) && !Number.isNaN(value) && max < value) return false
           break
+        case 'Enum': {
+          // if (!choices?.length) return false
+          const intersection = value.filter((item) => choices.includes(item))
+          if (intersection.length !== choices.length) return false
+          break
+        }
         default:
           value = value || translate('<empty value>')
           if (choices?.length && !choices.includes(value)) return false
