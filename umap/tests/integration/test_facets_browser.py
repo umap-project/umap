@@ -95,7 +95,14 @@ DATALAYER_DATA3 = {
 
 def test_simple_facet_search(live_server, page, map):
     map.settings["properties"]["onLoadPanel"] = "datafilters"
-    map.settings["properties"]["facetKey"] = "mytype|My type,mynumber|My Number|number"
+    map.settings["properties"]["facets"] = {
+        "mytype": {"label": "My type"},
+        "mynumber": {"label": "My number", "widget": "minmax"},
+    }
+    map.settings["properties"]["fields"] = [
+        {"key": "mytype", "type": "String"},
+        {"key": "mynumber", "type": "Number"},
+    ]
     map.settings["properties"]["showLabel"] = True
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
@@ -120,6 +127,8 @@ def test_simple_facet_search(live_server, page, map):
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_have_count(4)
     # Tooltips
+    # Sometimes PW founds two tooltips with the same name, but cannot reproduce it.
+    page.wait_for_timeout(300)
     expect(page.get_by_role("tooltip", name="Point 1")).to_be_visible()
     expect(page.get_by_role("tooltip", name="Point 2")).to_be_visible()
     expect(page.get_by_role("tooltip", name="Point 3")).to_be_visible()
@@ -171,7 +180,10 @@ def test_simple_facet_search(live_server, page, map):
 
 def test_date_facet_search(live_server, page, map):
     map.settings["properties"]["onLoadPanel"] = "datafilters"
-    map.settings["properties"]["facetKey"] = "mydate|Date filter|date"
+    map.settings["properties"]["facets"] = {
+        "mydate": {"label": "Date filter", "widget": "minmax"}
+    }
+    map.settings["properties"]["fields"] = [{"key": "mydate", "type": "Date"}]
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
@@ -189,7 +201,7 @@ def test_date_facet_search(live_server, page, map):
 
 def test_choice_with_empty_value(live_server, page, map):
     map.settings["properties"]["onLoadPanel"] = "datafilters"
-    map.settings["properties"]["facetKey"] = "mytype|My type"
+    map.settings["properties"]["facets"] = {"mytype": {"label": "My type"}}
     map.save()
     data = copy.deepcopy(DATALAYER_DATA1)
     data["features"][0]["properties"]["mytype"] = ""
@@ -206,7 +218,10 @@ def test_choice_with_empty_value(live_server, page, map):
 
 def test_number_with_zero_value(live_server, page, map):
     map.settings["properties"]["onLoadPanel"] = "datafilters"
-    map.settings["properties"]["facetKey"] = "mynumber|Filter|number"
+    map.settings["properties"]["facets"] = {
+        "mynumber": {"label": "Filter", "widget": "minmax"}
+    }
+    map.settings["properties"]["fields"] = [{"key": "mynumber", "type": "Number"}]
     map.save()
     data = copy.deepcopy(DATALAYER_DATA1)
     data["features"][0]["properties"]["mynumber"] = 0
@@ -223,7 +238,14 @@ def test_number_with_zero_value(live_server, page, map):
 
 def test_facets_search_are_persistent_when_closing_panel(live_server, page, map):
     map.settings["properties"]["onLoadPanel"] = "datafilters"
-    map.settings["properties"]["facetKey"] = "mytype|My type,mynumber|My Number|number"
+    map.settings["properties"]["facets"] = {
+        "mytype": {"label": "My type"},
+        "mynumber": {"label": "My Number", "widget": "minmax"},
+    }
+    map.settings["properties"]["fields"] = [
+        {"key": "mytype"},
+        {"key": "mynumber", "type": "Number"},
+    ]
     map.save()
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
