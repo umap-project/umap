@@ -22,7 +22,7 @@ import * as Utils from '../utils.js'
 import { LineString, Point, Polygon } from './features.js'
 import Rules from '../rules.js'
 import Orderable from '../orderable.js'
-import { FeatureManager } from '../managers.js'
+import { FeatureManager, FieldManager } from '../managers.js'
 
 export const LAYER_TYPES = [
   DefaultLayer,
@@ -89,12 +89,13 @@ export class DataLayer {
     if (!this.createdOnServer) {
       if (this.showAtLoad()) this.show()
     }
-    if (!this._needsFetch && !this._umap.fields.length) {
+    if (!this._needsFetch && !this._umap.fields.size) {
       this.properties.fields = [
         { key: U.DEFAULT_LABEL_KEY, type: 'String' },
         { key: 'description', type: 'Text' },
       ]
     }
+    this.fields = new FieldManager(this)
 
     // Only layers that are displayed on load must be hidden/shown
     // Automatically, others will be shown manually, and thus will
@@ -146,17 +147,10 @@ export class DataLayer {
     this.properties.rank = value
   }
 
-  get fields() {
-    if (!this.properties.fields) this.properties.fields = []
-    return this.properties.fields
-  }
-
-  set fields(fields) {
-    this.properties.fields = fields
-  }
-
   get fieldKeys() {
-    return this.fields.map((field) => field.key)
+    // Needed to get a similar API from layer and uMap, but
+    // uMap whould return concat of all datalayers fields
+    return Array.from(this.fields.keys())
   }
 
   get sortKey() {
@@ -174,6 +168,7 @@ export class DataLayer {
     // Propagate will remove the fields it has already
     // processed
     fields = this.propagate(fields)
+    if (fields.includes('properties.fields')) this.fields.pull()
 
     const impacts = Utils.getImpactsFromSchema(fields)
 
@@ -482,36 +477,33 @@ export class DataLayer {
   }
 
   inferFields(feature) {
-    if (!this.properties.fields) this.properties.fields = []
-    const keys = this.fieldKeys
     for (const key in feature.properties) {
       if (typeof feature.properties[key] !== 'object') {
         if (key.indexOf('_') === 0) continue
-        if (keys.includes(key)) continue
-        this.properties.fields.push({ key, type: 'String' })
+        if (this.fields.has(key)) continue
+        if (this._umap.fields.has(key)) continue
+        // retrocompat: guess type from facets if any
+        // otherwise it will fallback to default in facets
+        const type = this._umap.facets.get(key)?.dataType
+        this.fields.add({ key, type })
       }
     }
+    this.fields.push()
   }
 
-  async confirmDeleteProperty(property) {
+  async confirmDeleteField(name) {
     return this._umap.dialog
       .confirm(
         translate('Are you sure you want to delete this field on all the features?')
       )
       .then(() => {
-        this.deleteProperty(property)
+        this.deleteField(name)
       })
   }
 
-  async editField(property) {
+  async editField(name) {
     const FIELD_TYPES = ['String', 'Text', 'Number', 'Date', 'Datetime', 'Enum']
-    let properties
-    for (const field of this.properties.fields) {
-      if (field.key === property) {
-        properties = field
-        break
-      }
-    }
+    const field = this.fields.get(name)
     const metadatas = [
       ['key', { handler: 'BlurInput' }],
       [
@@ -519,63 +511,65 @@ export class DataLayer {
         { handler: 'Select', selectOptions: FIELD_TYPES, label: translate('Type') },
       ],
     ]
-    const form = new Form(properties, metadatas, { umap: this.umap })
+    const form = new Form(field, metadatas, { umap: this.umap })
 
     return this._umap.dialog.open({ template: form.build() }).then(() => {
-      // TODO: validate name before it's saved on field property
-      // Allow cancel, or remove the cancel button
-      // this.property.fields[property] = properties
-      // if (!prompt || !this.validateName(prompt)) return
-      // this.renameProperty(property, properties.key)
+      if (!this.validateName(field.key)) {
+        this.fields.pull()
+        return
+      }
+      this.push()
+      if (name !== field.key) {
+        this.renameField(name, field.key)
+      }
     })
   }
 
-  async askForRenameProperty(property) {
+  async askForRenameField(property) {
     return this._umap.dialog
       .prompt(translate('Please enter the new name of this field'))
       .then(({ prompt }) => {
         if (!prompt || !this.validateName(prompt)) return
-        this.renameProperty(property, prompt)
+        this.renameField(property, prompt)
       })
   }
 
-  renameProperty(oldName, newName) {
-    this.sync.startBatch()
-    const oldFields = Utils.CopyJSON(this.fields)
-    for (const field of this.fields) {
-      if (field.key === oldName) {
-        field.key = newName
-        break
-      }
+  renameField(oldName, newName) {
+    const field = this.fields.get(oldName)
+    if (field) {
+      this.sync.startBatch()
+      const oldFields = Utils.CopyJSON(this.properties.fields)
+      field.key = newName
+      this.fields.push()
+      this.sync.update('properties.fields', this.properties.fields, oldFields)
+      this.features.forEach((feature) => {
+        feature.renameField(oldName, newName)
+      })
+      this.sync.commitBatch()
     }
-    this.sync.update('properties.fields', this.fields, oldFields)
-    this.features.forEach((feature) => {
-      feature.renameProperty(oldName, newName)
-    })
-    this.sync.commitBatch()
   }
 
-  deleteProperty(property) {
+  deleteField(name) {
     this.sync.startBatch()
-    const oldFields = Utils.CopyJSON(this.fields)
-    this.fields = this.fields.filter((field) => field.key !== property)
-    this.sync.update('properties.fields', this.fields, oldFields)
+    const oldFields = Utils.CopyJSON(this.properties.fields)
+    this.fields.delete(name)
+    this.sync.update('properties.fields', this.properties.fields, oldFields)
     this.features.forEach((feature) => {
-      feature.deleteProperty(property)
+      feature.deleteField(name)
     })
     this.sync.commitBatch()
   }
 
-  addProperty() {
+  addField() {
     let resolve = undefined
     const promise = new Promise((r) => {
       resolve = r
     })
     this._umap.dialog
-      .prompt(translate('Please enter the name of the property'))
+      .prompt(translate('Please enter the name of the field'))
       .then(({ prompt }) => {
         if (!prompt || !this.validateName(prompt)) return
-        this.properties.fields.push({ key: prompt, type: 'String' })
+        this.fields.add({ key: prompt })
         resolve()
       })
     return promise
@@ -586,7 +580,7 @@ export class DataLayer {
       Alert.error(translate('Name “{name}” should not contain a dot.', { name }))
       return false
     }
-    if (this.fieldKeys.includes(name)) {
+    if (this.fields.has(name)) {
       Alert.error(translate('This name already exists: “{name}”', { name }))
       return false
     }
@@ -967,14 +961,14 @@ export class DataLayer {
     `
     const [fieldset, { ul, add }] = Utils.loadTemplateWithRefs(template)
     add.addEventListener('click', () => {
-      this.addProperty().then(() => {
+      this.addField().then(() => {
         this.edit().then((panel) => {
           panel.scrollTo('details#fields')
         })
       })
     })
     container.appendChild(fieldset)
-    for (const field of this.fields) {
+    for (const field of this.fields.all()) {
       const [row, { edit, del }] = Utils.loadTemplateWithRefs(
         `<li class="orderable" data-key="${field.key}">
           <button class="icon icon-16 icon-edit" title="${translate('Edit this field')}" data-ref=edit></button>
@@ -992,7 +986,7 @@ export class DataLayer {
         })
       })
       del.addEventListener('click', () => {
-        this.confirmDeleteProperty(field.key).then(() => {
+        this.confirmDeleteField(field.key).then(() => {
           this.edit().then((panel) => {
             panel.scrollTo('details#fields')
           })
@@ -1465,13 +1459,12 @@ export class DataLayer {
     )) {
       container.innerHTML = ''
       if (this.layer.renderLegend) return this.layer.renderLegend(container)
-      const keys = new Set(this.fieldKeys)
       const rules = new Map()
       for (const rule of this.rules) {
         rules.set(rule.condition, rule)
       }
       for (const rule of this._umap.rules) {
-        if (!rules.has(rule.condition) && keys.has(rule.key)) {
+        if (!rules.has(rule.condition) && this.fields.has(rule.key)) {
           rules.set(rule.condition, rule)
         }
       }

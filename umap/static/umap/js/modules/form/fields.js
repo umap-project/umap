@@ -1004,7 +1004,7 @@ Fields.FacetSearchChoices = class extends Fields.FacetSearchBase {
   }
 
   build() {
-    this.type = this.properties.criteria.widget
+    this.type = this.properties.criteria.widget || 'checkbox'
 
     const choices = this.properties.criteria.choices
     choices.sort()
@@ -1023,7 +1023,7 @@ Fields.FacetSearchChoices = class extends Fields.FacetSearchBase {
       </li>
     `)
     label.textContent = value
-    input.checked = this.get().choices.includes(value)
+    input.checked = this.get()?.choices?.includes(value)
     input.dataset.value = value
     input.addEventListener('change', () => this.sync())
     this.elements.ul.appendChild(li)
@@ -1072,7 +1072,7 @@ Fields.MinMaxBase = class extends Fields.FacetSearchBase {
     this.minInput = this.elements.minInput
     this.maxInput = this.elements.maxInput
     const { min, max, type } = this.properties.criteria
-    const { min: modifiedMin, max: modifiedMax } = this.get()
+    const { min: modifiedMin, max: modifiedMax } = this.get() || {}
 
     const currentMin = modifiedMin !== undefined ? modifiedMin : min
     const currentMax = modifiedMax !== undefined ? modifiedMax : max
@@ -1136,12 +1136,20 @@ Fields.MinMaxBase = class extends Fields.FacetSearchBase {
 }
 
 Fields.FacetSearchNumber = class extends Fields.MinMaxBase {
+  getInputType(type) {
+    return 'number'
+  }
+
   prepareForJS(value) {
     return new Number(value)
   }
 }
 
 Fields.FacetSearchDate = class extends Fields.MinMaxBase {
+  getInputType(type) {
+    return 'date'
+  }
+
   prepareForJS(value) {
     return new Date(value)
   }
@@ -1162,7 +1170,7 @@ Fields.FacetSearchDate = class extends Fields.MinMaxBase {
 }
 
 Fields.FacetSearchDateTime = class extends Fields.FacetSearchDate {
-  getInputType(type) {
+  getInputType() {
     return 'datetime-local'
   }
 
@@ -1207,7 +1215,10 @@ Fields.MultiChoice = class extends BaseElement {
   }
 
   getChoices() {
-    return this.properties.choices || this.choices
+    let choices = this.properties.choices || this.choices
+    // Allow to pass flat arrays [c1, c2, c3] instead of [[c1, v1], [c2, v2]]
+    if (!Array.isArray(choices[0])) choices = choices.map((key) => [key, key])
+    return choices
   }
 
   getTemplate() {

@@ -112,3 +112,41 @@ export class FeatureManager extends Map {
     return this.all()[index - 1]
   }
 }
+
+export class FieldManager extends Map {
+  constructor(parent) {
+    super()
+    this.parent = parent
+    this.parent.properties.fields ??= []
+    this.pull()
+  }
+
+  pull() {
+    for (const field of this.parent.properties.fields) {
+      this.add(field)
+    }
+  }
+
+  push() {
+    this.parent.properties.fields = this.all()
+  }
+
+  add(field) {
+    if (!field?.key) {
+      console.error('Invalid field', field)
+      return
+    }
+    field.type ??= 'String'
+    this.set(field.key, field)
+    this.push()
+  }
+
+  delete(key) {
+    super.delete(key)
+    this.push()
+  }
+
+  all() {
+    return Array.from(this.values())
+  }
+}
