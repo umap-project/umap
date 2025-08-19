@@ -91,7 +91,7 @@ class Feature {
 
   get fields() {
     // Fields are user defined properties
-    return [...this.datalayer.fields, ...this._umap.fields]
+    return [...this.datalayer.fields.all(), ...this._umap.fields.all()]
   }
 
   setter(key, value) {
@@ -256,7 +256,7 @@ class Feature {
       `<button type="button"><i class="icon icon-16 icon-add"></i>${translate('Add a new field')}</button>`
     )
     button.addEventListener('click', () => {
-      this.datalayer.addProperty().then(() => this.edit({ force: true }))
+      this.datalayer.addField().then(() => this.edit({ force: true }))
     })
     form.appendChild(button)
     this.appendEditFieldsets(container)
@@ -497,16 +497,16 @@ class Feature {
     return properties
   }
 
-  deleteProperty(property) {
-    const oldValue = this.properties[property]
-    delete this.properties[property]
-    this.sync.update(`properties.${property}`, undefined, oldValue)
+  deleteField(name) {
+    const oldValue = this.properties[name]
+    delete this.properties[name]
+    this.sync.update(`properties.${name}`, undefined, oldValue)
   }
 
-  renameProperty(from, to) {
+  renameField(from, to) {
     const oldValue = this.properties[from]
     this.properties[to] = this.properties[from]
-    this.deleteProperty(from)
+    this.deleteField(from)
     this.sync.update(`properties.${to}`, oldValue, undefined)
   }
 
@@ -546,16 +546,9 @@ class Feature {
   }
 
   matchFacets() {
-    let field
     const selected = this._umap.facets.selected
     for (const [key, { min, max, choices }] of Object.entries(selected)) {
-      // TODO remove this loop and refactor it
-      for (const properties of this.datalayer.properties.fields) {
-        if (properties.key === key) {
-          field = properties
-          break
-        }
-      }
+      const field = this.datalayer.fields.get(key) || this._umap.fields.get(key)
       let value = this.properties[key]
       const parser = this._umap.facets.getParser(field.type)
       value = parser(value)
@@ -567,7 +560,6 @@ class Feature {
           if (!Number.isNaN(max) && !Number.isNaN(value) && max < value) return false
           break
         case 'Enum': {
-          // if (!choices?.length) return false
           const intersection = value.filter((item) => choices.includes(item))
           if (intersection.length !== choices.length) return false
           break

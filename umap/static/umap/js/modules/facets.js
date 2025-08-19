@@ -1,40 +1,49 @@
 import { DomEvent, DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
+import { Form } from './form/builder.js'
 import * as Utils from './utils.js'
+
+const WIDGETS = ['checkbox', 'radio', 'minmax']
 
 export default class Facets {
   constructor(umap) {
     this._umap = umap
     this.selected = {}
+    this.load()
   }
 
-  compute(names, defined) {
-    const properties = {}
-    let selected
+  get size() {
+    return this.defined.size
+  }
 
-    for (const name of names) {
-      const widget = defined.get(name).widget
-      properties[name] = { widget }
-      selected = this.selected[name] || {}
-      selected.widget = widget
-      if (!['date', 'datetime', 'number'].includes(widget)) {
-        properties[name].choices = new Set()
-        selected.choices = selected.choices || new Set()
+  getDataType(name) {
+    if (this._umap.fields.has(name)) {
+      return this._umap.fields.get(name).type
+    }
+    for (const datalayer of this._umap.datalayers.active()) {
+      if (datalayer.fields.has(name)) {
+        return datalayer.fields.get(name).type
       }
-      this.selected[name] = selected
+    }
+  }
+
+  compute() {
+    const properties = {}
+
+    for (const [name, props] of this.defined.entries()) {
+      const widget = props.widget
+      const dataType = props.dataType || this.getDataType(name)
+      properties[name] = { widget, dataType }
+      properties[name].choices = new Set()
     }
 
     this._umap.datalayers.browsable().map((datalayer) => {
-      const fields = datalayer.properties.fields.reduce((fields, field) => {
-        fields[field.key] = field
-        return fields
-      }, {})
       datalayer.features.forEach((feature) => {
-        for (const name of names) {
-          let dataType = fields[name].type || 'String'
-          // TODO retrocompat, guess dataType from widget if undefined
+        for (const [name, props] of this.defined.entries()) {
+          const dataType = properties[name].dataType
           let value = feature.properties[name]
-          const widget = defined.get(name).widget
+          const widget = this.defined.get(name).widget
+          this.defined.get(name).dataType ??= dataType
           const parser = this.getParser(dataType)
           value = parser(value)
           switch (dataType) {
@@ -68,7 +77,6 @@ export default class Facets {
         }
       })
     })
-    if (selected.choices) selected.choices = Array.from(selected.choices)
     return properties
   }
 
@@ -82,29 +90,25 @@ export default class Facets {
   }
 
   build() {
-    const defined = this.getDefined()
-    const names = [...defined.keys()]
-    const facetProperties = this.compute(names, defined)
+    const facetProperties = this.compute()
 
-    const fields = names.map((name) => {
+    const fields = Array.from(this.defined.keys()).map((name) => {
       const criteria = facetProperties[name]
       let handler = 'FacetSearchChoices'
-      switch (criteria.widget) {
-        case 'number':
+      if (criteria.widget === 'minmax' || criteria.widget === undefined) {
+        if (criteria.dataType === 'Number') {
           handler = 'FacetSearchNumber'
-          break
-        case 'date':
+        } else if (criteria.dataType === 'Date') {
           handler = 'FacetSearchDate'
-          break
-        case 'datetime':
+        } else if (criteria.dataType === 'Datetime') {
           handler = 'FacetSearchDateTime'
-          break
+        }
       }
-      const label = defined.get(name).label
+      const label = this.defined.get(name).label
       return [
         `selected.${name}`,
         {
-          criteria: criteria,
+          criteria: { ...criteria, choices: Array.from(criteria.choices) },
           handler: handler,
           label: label,
         },
@@ -114,17 +118,34 @@ export default class Facets {
     return fields
   }
 
-  getDefined() {
-    const defaultWidget = 'checkbox'
-    const allowedWidgets = [defaultWidget, 'radio', 'number', 'date', 'datetime']
-    const defined = new Map()
-    if (!this._umap.properties.facetKey) return defined
-    return (this._umap.properties.facetKey || '').split(',').reduce((acc, curr) => {
-      let [name, label, widget] = curr.split('|')
-      widget = allowedWidgets.includes(widget) ? widget : defaultWidget
-      acc.set(name, { label: label || name, widget })
-      return acc
-    }, defined)
+  load() {
+    this.defined = new Map(Object.entries(this._umap.properties.facets || {}))
+    const old =
+      this._umap.properties.advancedFilterKey || this._umap.properties.facetKey
+    if (old) {
+      for (const facet of old.split(',')) {
+        let [name, label, widget] = facet.split('|')
+        let dataType
+        if (['number', 'date', 'datetime'].includes(widget)) {
+          // Retrocompat
+          if (widget === 'number') {
+            dataType = 'Number'
+          } else if (widget === 'datetime') {
+            dataType = 'Datetime'
+          } else if (widget === 'date') {
+            dataType = 'Date'
+          }
+          widget = 'minmax'
+        }
+        if (!WIDGETS.includes(widget)) {
+          widget = 'checkbox'
+        }
+        this.defined.set(name, { label: label || name, widget, dataType })
+      }
+      delete this._umap.properties.facetKey
+      delete this._umap.properties.advancedFilterKey
+      this.dumps(false)
+    }
   }
 
   getParser(type) {
@@ -145,35 +166,109 @@ export default class Facets {
     }
   }
 
-  dumps(parsed) {
-    const dumped = []
-    for (const [property, { label, widget }] of parsed) {
-      dumped.push([property, label, widget].filter(Boolean).join('|'))
-    }
-    const oldValue = this._umap.properties.facetKey
-    this._umap.properties.facetKey = dumped.join(',')
-    this._umap.sync.update(
-      'properties.facetKey',
-      this._umap.properties.facetKey,
-      oldValue
+  dumps(sync = true) {
+    const oldValue = this._umap.properties.facets
+    this._umap.properties.facets = Object.fromEntries(
+      this.defined.entries().map(
+        // Remove dataType, which we don't want to store
+        ([key, { label, widget }]) => [key, { label, widget }]
+      )
     )
-  }
-
-  has(property) {
-    return this.getDefined().has(property)
-  }
-
-  add(property, label, widget) {
-    const defined = this.getDefined()
-    if (!defined.has(property)) {
-      defined.set(property, { label, widget })
-      this.dumps(defined)
+    if (sync) {
+      this._umap.sync.update(
+        'properties.facets',
+        this._umap.properties.facets,
+        oldValue
+      )
+      this._umap.render(['properties.facets'])
     }
   }
 
-  remove(property) {
-    const defined = this.getDefined()
-    defined.delete(property)
-    this.dumps(defined)
+  has(name) {
+    return this.defined.has(name)
+  }
+
+  get(name) {
+    return this.defined.get(name)
+  }
+
+  add(name, label, widget) {
+    if (!this.defined.has(name)) {
+      this.defined.set(name, { label, widget })
+      this.dumps()
+    }
+  }
+
+  remove(name) {
+    this.defined.delete(name)
+    this.dumps()
+  }
+
+  edit(container) {
+    const template = `
+      <details id="facets">
+        <summary>${translate('Filters')}</summary>
+        <fieldset>
+          <ul data-ref=ul></ul>
+          <button class="umap-add" type="button" data-ref=add>${translate('Add filter')}</button>
+        </fieldset>
+      </details>
+    `
+    const [body, { ul, add }] = Utils.loadTemplateWithRefs(template)
+    this.defined.forEach((props, key) => {
+      const [li, { edit, remove }] = Utils.loadTemplateWithRefs(
+        `<li>
+          <button class="icon icon-16 icon-edit" data-ref="edit" title="${translate('Edit this filter')}"></button>
+          <button class="icon icon-16 icon-delete" data-ref="remove" title="${translate('Remove this filter')}"></button>
+          ${props.label || key}
+        </li>`
+      )
+      ul.appendChild(li)
+      remove.addEventListener('click', () => {
+        this.remove(key)
+        this._umap.edit().then((panel) => panel.scrollTo('details#facets'))
+      })
+      edit.addEventListener('click', () => {
+        this.filterForm(key)
+        this._umap.edit().then((panel) => panel.scrollTo('details#facets'))
+      })
+    })
+    add.addEventListener('click', () => this.filterForm())
+    container.appendChild(body)
+  }
+
+  filterForm(name) {
+    const properties = { name, ...(this.defined.get(name) || {}) }
+    const fieldKeys = name
+      ? [name]
+      : ['', ...this._umap.fieldKeys.filter((key) => !this.defined.has(key))]
+    const metadata = [
+      [
+        'name',
+        {
+          handler: 'Select',
+          selectOptions: fieldKeys,
+          label: translate('Field to filter on'),
+        },
+      ],
+      [
+        'label',
+        { handler: 'Input', label: translate('Human readable name of the filter') },
+      ],
+      [
+        'widget',
+        {
+          handler: 'MultiChoice',
+          choices: WIDGETS,
+          label: translate('Widget for the filter'),
+        },
+      ],
+    ]
+    const form = new Form(properties, metadata)
+
+    return this._umap.dialog.open({ template: form.build() }).then(() => {
+      if (!properties.name) return
+      this.add(...properties)
+    })
   }
 }

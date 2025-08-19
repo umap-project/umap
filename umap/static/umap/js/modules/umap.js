@@ -32,7 +32,7 @@ import { EditPanel, FullPanel, Panel } from './ui/panel.js'
 import Tooltip from './ui/tooltip.js'
 import URLs from './urls.js'
 import * as Utils from './utils.js'
-import { DataLayerManager } from './managers.js'
+import { DataLayerManager, FieldManager } from './managers.js'
 import { Importer as OpenRouteService } from './importers/openrouteservice.js'
 
 export default class Umap {
@@ -160,14 +160,11 @@ export default class Umap {
     ) {
       this.properties.slideshow.active = true
     }
-    if (this.properties.advancedFilterKey) {
-      this.properties.facetKey = this.properties.advancedFilterKey
-      delete this.properties.advancedFilterKey
-    }
 
     // Global storage for retrieving datalayers and features.
     this.datalayers = new DataLayerManager()
     this.featuresIndex = {}
+    this.fields = new FieldManager(this)
 
     this.formatter = new Formatter(this)
 
@@ -261,15 +258,13 @@ export default class Umap {
     return window.self !== window.top
   }
 
-  get fields() {
-    if (!this.properties.fields) this.properties.fields = []
-    return this.properties.fields
-  }
-
   get fieldKeys() {
-    return this.fields
-      .map((field) => field.key)
-      .concat(...this.datalayers.active().map((dl) => dl.fieldKeys))
+    return Array.from(
+      new Set([
+        ...this.fields.keys(),
+        ...this.datalayers.active().reduce((acc, dl) => acc.concat(dl.fieldKeys), []),
+      ])
+    )
   }
 
   setPropertiesFromQueryString() {
@@ -424,7 +419,7 @@ export default class Umap {
         action: () => this.openBrowser('data'),
       }
     )
-    if (this.properties.facetKey) {
+    if (this.facets.size) {
       items.push({
         label: translate('Filter data'),
         action: () => this.openBrowser('filters'),
@@ -875,7 +870,6 @@ export default class Umap {
       'properties.labelKey',
       'properties.sortKey',
       'properties.filterKey',
-      'properties.facetKey',
       'properties.slugKey',
     ]
 
@@ -1160,6 +1154,7 @@ export default class Umap {
     this._editControls(container)
     this._editShapeProperties(container)
     this._editDefaultProperties(container)
+    this.facets.edit(container)
     this._editInteractionsProperties(container)
     this.rules.edit(container)
     this._editTilelayer(container)
@@ -1312,6 +1307,12 @@ export default class Umap {
     // Propagate will remove the fields it has already
     // processed
     fields = this.propagate(fields)
+    if (fields.includes('properties.facets')) {
+      this.facets.load()
+      if (this.browser.isOpen()) {
+        this.browser.buildFilters()
+      }
+    }
 
     const impacts = Utils.getImpactsFromSchema(fields)
     for (const impact of impacts) {
