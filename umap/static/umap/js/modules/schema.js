@@ -140,12 +140,9 @@ export const SCHEMA = {
     label: translate('Display the embed control'),
     default: true,
   },
-  facetKey: {
-    type: String,
+  facets: {
+    type: Object,
     impacts: ['ui'],
-    helpEntries: ['facetKey'],
-    placeholder: translate('Example: key1,key2|Label 2,key3|Label 3|checkbox'),
-    label: translate('Filters keys'),
   },
   fields: {
     type: Object,

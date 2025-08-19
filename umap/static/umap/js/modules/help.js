@@ -92,9 +92,6 @@ const ENTRIES = {
   filterKey: translate(
     'Comma separated list of properties to use when filtering features by text input'
   ),
-  facetKey: translate(
-    'Comma separated list of properties to use for filters (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control input field type, add it after another | (eg.: mykey|My Key|checkbox,otherkey|Other Key|datetime). Allowed values for the input field type are checkbox (default), radio, number, date and datetime.'
-  ),
   interactive: translate(
     'If false, the polygon or line will act as a part of the underlying map.'
   ),
