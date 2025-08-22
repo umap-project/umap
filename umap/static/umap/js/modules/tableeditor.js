@@ -58,8 +58,8 @@ export default class TableEditor extends WithTemplate {
     actions.push(filterItem)
     if (!this.datalayer.isRemoteLayer()) {
       actions.push({
-        label: translate('Rename this column'),
-        action: () => this.renameField(property),
+        label: translate('Edit this column'),
+        action: () => this.editField(property),
       })
       actions.push({
         label: translate('Delete this column'),
@@ -94,25 +94,27 @@ export default class TableEditor extends WithTemplate {
     this.datalayer.features.forEach((feature) => {
       if (feature.isFiltered()) return
       if (inBbox && !feature.isOnScreen(bounds)) return
-      const tds = this.datalayer.fields.all().map(
-        (field) =>
-          `<td tabindex="0" data-property="${field.key}">${feature.properties[field.key] ?? ''}</td>`
-      )
+      const tds = this.datalayer.fields
+        .all()
+        .map(
+          (field) =>
+            `<td tabindex="0" data-property="${field.key}">${feature.properties[field.key] ?? ''}</td>`
+        )
       html += `<tr data-feature="${feature.id}"><th><input type="checkbox" /></th>${tds.join('')}</tr>`
     })
     this.elements.body.innerHTML = html
   }
 
-  renameField(name) {
-    this.datalayer.askForRenameField(name).then(() => this.open())
+  editField(name) {
+    this.datalayer.fields.editField(name).then(() => this.open())
   }
 
   deleteField(name) {
-    this.datalayer.confirmDeleteField(name).then(() => this.open())
+    this.datalayer.fields.confirmDelete(name).then(() => this.open())
   }
 
   addField() {
-    this.datalayer.addField().then(() => this.open())
+    this.datalayer.fields.editField().then(() => this.open())
   }
 
   open() {

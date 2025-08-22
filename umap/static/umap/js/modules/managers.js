@@ -1,4 +1,8 @@
 import * as Utils from './utils.js'
+import { translate } from './i18n.js'
+import Orderable from './orderable.js'
+import { uMapAlert as Alert } from '../components/alerts/alert.js'
+import { Form } from './form/builder.js'
 
 export class DataLayerManager extends Object {
   add(datalayer) {
@@ -114,21 +118,40 @@ export class FeatureManager extends Map {
 }
 
 export class FieldManager extends Map {
-  constructor(parent) {
+  constructor(parent, dialog) {
     super()
     this.parent = parent
+    this.dialog = dialog
     this.parent.properties.fields ??= []
     this.pull()
   }
 
   pull() {
+    this.clear()
     for (const field of this.parent.properties.fields) {
       this.add(field)
     }
   }
 
   push() {
-    this.parent.properties.fields = this.all()
+    this.parent.properties.fields = this.all().map((field) => {
+      // We don't want to keep the reference, otherwise editing
+      // it will also change the old value
+      return { ...field }
+    })
+  }
+
+  async commit() {
+    return new Promise((resolve) => {
+      const oldFields = Utils.CopyJSON(this.parent.properties.fields)
+      resolve()
+      this.push()
+      this.parent.sync.update(
+        'properties.fields',
+        this.parent.properties.fields,
+        oldFields
+      )
+    })
   }
 
   add(field) {
@@ -137,7 +160,9 @@ export class FieldManager extends Map {
       return
     }
     field.type ??= 'String'
-    this.set(field.key, field)
+    // Copy object, so not to affect original
+    // when edited.
+    this.set(field.key, { ...field })
     this.push()
   }
 
@@ -148,5 +173,143 @@ export class FieldManager extends Map {
 
   all() {
     return Array.from(this.values())
+  }
+
+  edit(container) {
+    const template = `
+      <details id="fields">
+        <summary>${translate('Manage Fields')}</summary>
+        <fieldset>
+          <ul data-ref=ul></ul>
+          <button type="button" data-ref=add><i class="icon icon-16 icon-add"></i>${translate('Add a new field')}</button>
+        </fieldset>
+      </details>
+    `
+    const [fieldset, { ul, add }] = Utils.loadTemplateWithRefs(template)
+    add.addEventListener('click', () => {
+      this.editField().then(() => {
+        this.parent.edit().then((panel) => {
+          panel.scrollTo('details#fields')
+        })
+      })
+    })
+    container.appendChild(fieldset)
+    for (const field of this.all()) {
+      const [row, { edit, del }] = Utils.loadTemplateWithRefs(
+        `<li class="orderable" data-key="${field.key}">
+          <button class="icon icon-16 icon-edit" title="${translate('Edit this field')}" data-ref=edit></button>
+          <button class="icon icon-16 icon-delete" title="${translate('Delete this field')}" data-ref=del></button>
+          <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
+          ${field.key}
+        </li>`
+      )
+      ul.appendChild(row)
+      edit.addEventListener('click', () => {
+        this.editField(field.key).then(() => {
+          this.parent.edit().then((panel) => {
+            panel.scrollTo('details#fields')
+          })
+        })
+      })
+      del.addEventListener('click', () => {
+        this.confirmDelete(field.key).then(() => {
+          this.parent.edit().then((panel) => {
+            panel.scrollTo('details#fields')
+          })
+        })
+      })
+    }
+    const onReorder = (src, dst, initialIndex, finalIndex) => {
+      const orderedKeys = Array.from(ul.querySelectorAll('li')).map(
+        (el) => el.dataset.key
+      )
+      const oldFields = Utils.CopyJSON(this.parent.properties.fields)
+      const copy = Object.fromEntries(this)
+      for (const key of orderedKeys) {
+        this.add(copy[key])
+      }
+      this.parent.sync.update(
+        'properties.fields',
+        this.parent.properties.fields,
+        oldFields
+      )
+    }
+    const orderable = new Orderable(ul, onReorder)
+  }
+
+  async editField(name) {
+    const FIELD_TYPES = ['String', 'Text', 'Number', 'Date', 'Datetime', 'Enum']
+    const field = this.get(name) || {}
+    const metadatas = [
+      ['key', { handler: 'BlurInput', label: translate('Field Name') }],
+      [
+        'type',
+        {
+          handler: 'Select',
+          selectOptions: FIELD_TYPES,
+          label: translate('Field Type'),
+        },
+      ],
+    ]
+    const form = new Form(field, metadatas)
+
+    return this.dialog.open({ template: form.build() }).then(() => {
+      if (!this.validateName(field.key)) {
+        this.pull()
+        return
+      }
+      this.parent.sync.startBatch()
+      console.log(this.parent.properties.fields)
+      const oldFields = Utils.CopyJSON(this.parent.properties.fields)
+      if (!name) {
+        this.add(field)
+      }
+      if (name && name !== field.key) {
+        this.add(field)
+        this.delete(name)
+        this.parent.renameField(name, field.key)
+      }
+      console.log('update with', oldFields, this.parent.properties.fields)
+      this.parent.sync.update(
+        'properties.fields',
+        this.parent.properties.fields,
+        oldFields
+      )
+      this.parent.sync.commitBatch()
+    })
+  }
+
+  validateName(name) {
+    if (!name) {
+      Alert.error(translate('Name cannot be empty.'))
+      return false
+    }
+    if (name.includes('.')) {
+      Alert.error(translate('Name “{name}” should not contain a dot.', { name }))
+      return false
+    }
+    if (this.has(name)) {
+      Alert.error(translate('This name already exists: “{name}”', { name }))
+      return false
+    }
+    return true
+  }
+
+  async confirmDelete(name) {
+    return this.dialog
+      .confirm(translate('Are you sure you want to delete this field on all the data?'))
+      .then(() => {
+        this.parent.sync.startBatch()
+        const oldFields = Utils.CopyJSON(this.parent.properties.fields)
+        this.delete(name)
+        this.push()
+        this.parent.deleteField(name)
+        this.parent.sync.update(
+          'properties.fields',
+          this.parent.properties.fields,
+          oldFields
+        )
+        this.parent.sync.commitBatch()
+      })
   }
 }
