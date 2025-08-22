@@ -165,7 +165,7 @@ export default class Umap {
     // Global storage for retrieving datalayers and features.
     this.datalayers = new DataLayerManager()
     this.featuresIndex = {}
-    this.fields = new FieldManager(this)
+    this.fields = new FieldManager(this, this.dialog)
 
     this.formatter = new Formatter(this)
 
@@ -1164,6 +1164,7 @@ export default class Umap {
     this.facets.edit(container)
     this._editInteractionsProperties(container)
     this.rules.edit(container)
+    this.fields.edit(container)
     this._editTilelayer(container)
     this._editOverlay(container)
     this._editBounds(container)
@@ -1251,6 +1252,18 @@ export default class Umap {
       }
     }
     return properties
+  }
+
+  renameField(oldName, newName) {
+    for (const datalayer of this.datalayers.active()) {
+      datalayer.renameFeaturesField(oldName, newName)
+    }
+  }
+
+  deleteField(name) {
+    for (const datalayer of this.datalayers.active()) {
+      datalayer.deleteFeaturesField(name)
+    }
   }
 
   geometry() {
