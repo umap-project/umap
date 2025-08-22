@@ -123,7 +123,7 @@ def test_rename_property(live_server, openmap, page):
     page.locator(".panel").get_by_title("Edit properties in a table").click()
     expect(page.locator("table th button[data-property=mytype]")).to_have_count(1)
     page.locator("thead button[data-property=mytype]").click()
-    page.get_by_text("Rename this column").click()
+    page.get_by_text("Edit this column").click()
     page.locator("dialog").locator("input").fill("mynewtype")
     page.get_by_role("button", name="OK").click()
     expect(page.locator("table th button[data-property=mynewtype]")).to_have_count(1)

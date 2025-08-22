@@ -258,7 +258,7 @@ class Feature {
       `<button type="button"><i class="icon icon-16 icon-add"></i>${translate('Add a new field')}</button>`
     )
     button.addEventListener('click', () => {
-      this.datalayer.addField().then(() => this.edit({ force: true }))
+      this.datalayer.fields.editField().then(() => this.edit({ force: true }))
     })
     form.appendChild(button)
     this.appendEditFieldsets(container)
