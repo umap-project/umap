@@ -1609,8 +1609,8 @@ export default class Umap {
     for (const geojson of importedData.layers) {
       if (!geojson._umap_options && geojson._storage) {
         geojson._umap_options = geojson._storage
-        delete geojson._storage
       }
+      delete geojson._storage
       delete geojson._umap_options?.id // Never trust an id at this stage
       if (geojson._umap_options?.iconUrl?.startsWith('/')) {
         geojson._umap_options.iconUrl = remoteOrigin + geojson._umap_options.iconUrl
