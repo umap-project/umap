@@ -58,12 +58,12 @@ export default class TableEditor extends WithTemplate {
     actions.push(filterItem)
     if (!this.datalayer.isRemoteLayer()) {
       actions.push({
-        label: translate('Rename this column'),
-        action: () => this.renameProperty(property),
+        label: translate('Edit this column'),
+        action: () => this.editField(property),
       })
       actions.push({
         label: translate('Delete this column'),
-        action: () => this.deleteProperty(property),
+        action: () => this.deleteField(property),
       })
     }
     this.contextmenu.open(event, actions)
@@ -74,7 +74,7 @@ export default class TableEditor extends WithTemplate {
     const th = loadTemplate('<th><input type="checkbox" /></th>')
     const checkbox = th.firstChild
     this.elements.header.appendChild(th)
-    for (const field of this.datalayer.fields) {
+    for (const field of this.datalayer.fields.all()) {
       this.elements.header.appendChild(
         loadTemplate(
           `<th>${field.key}<button data-property="${field.key}" class="flat" aria-label="${translate('Advanced actions')}">…</button></th>`
@@ -94,25 +94,27 @@ export default class TableEditor extends WithTemplate {
     this.datalayer.features.forEach((feature) => {
       if (feature.isFiltered()) return
       if (inBbox && !feature.isOnScreen(bounds)) return
-      const tds = this.datalayer.fields.map(
-        (field) =>
-          `<td tabindex="0" data-property="${field.key}">${feature.properties[field.key] ?? ''}</td>`
-      )
+      const tds = this.datalayer.fields
+        .all()
+        .map(
+          (field) =>
+            `<td tabindex="0" data-property="${field.key}">${feature.properties[field.key] ?? ''}</td>`
+        )
       html += `<tr data-feature="${feature.id}"><th><input type="checkbox" /></th>${tds.join('')}</tr>`
     })
     this.elements.body.innerHTML = html
   }
 
-  renameProperty(property) {
-    this.datalayer.askForRenameProperty(property).then(() => this.open())
+  editField(name) {
+    this.datalayer.fields.editField(name).then(() => this.open())
   }
 
-  deleteProperty(property) {
-    this.datalayer.confirmDeleteProperty(property).then(() => this.open())
+  deleteField(name) {
+    this.datalayer.fields.confirmDelete(name).then(() => this.open())
   }
 
-  addProperty() {
-    this.datalayer.addProperty().then(() => this.open())
+  addField() {
+    this.datalayer.fields.editField().then(() => this.open())
   }
 
   open() {
@@ -127,7 +129,7 @@ export default class TableEditor extends WithTemplate {
         <button class="flat" type="button" data-ref="add">
           <i class="icon icon-16 icon-add"></i>${translate('Add a new field')}
         </button>`)
-      addButton.addEventListener('click', () => this.addProperty())
+      addButton.addEventListener('click', () => this.addField())
       actions.push(addButton)
 
       const deleteButton = loadTemplate(`

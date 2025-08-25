@@ -198,7 +198,7 @@ export const Choropleth = FeatureGroup.extend({
         'properties.choropleth.property',
         {
           handler: 'Select',
-          selectOptions: this.datalayer.fieldKeys,
+          selectOptions: this.datalayer.fields.keys(),
           label: translate('Choropleth property value'),
         },
       ],
@@ -307,7 +307,7 @@ export const Circles = FeatureGroup.extend({
         'properties.circles.property',
         {
           handler: 'Select',
-          selectOptions: this.datalayer.fieldKeys,
+          selectOptions: this.datalayer.fields.keys(),
           label: translate('Property name to compute circles'),
         },
       ],
@@ -384,7 +384,7 @@ export const Categorized = FeatureGroup.extend({
 
   _getValue: function (feature) {
     const key =
-      this.datalayer.properties.categorized.property || this.datalayer.fieldKeys[0]
+      this.datalayer.properties.categorized.property || this.datalayer.fields.keys()[0]
     return feature.properties[key]
   },
 
@@ -437,7 +437,7 @@ export const Categorized = FeatureGroup.extend({
         'properties.categorized.property',
         {
           handler: 'Select',
-          selectOptions: this.datalayer.fieldKeys,
+          selectOptions: this.datalayer.fields.keys(),
           label: translate('Category property'),
         },
       ],

@@ -132,7 +132,6 @@ export class MutatingForm extends Form {
     const customHandlers = {
       sortKey: 'PropertyInput',
       easing: 'Switch',
-      facetKey: 'PropertyInput',
       slugKey: 'PropertyInput',
       labelKey: 'PropertyInput',
       color: 'ColorPicker',
