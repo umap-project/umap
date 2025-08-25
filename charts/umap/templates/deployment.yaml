@@ -46,15 +46,15 @@ spec:
               protocol: TCP
           startupProbe:
             httpGet:
-              path: /stats
+              path: /stats/
               port: asgi
           livenessProbe:
             httpGet:
-              path: /stats
+              path: /stats/
               port: asgi
           readinessProbe:
             httpGet:
-              path: /stats
+              path: /stats/
               port: asgi
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
@@ -97,15 +97,15 @@ spec:
               protocol: TCP
           startupProbe:
             httpGet:
-              path: /
+              path: /stats/
               port: http
           livenessProbe:
             httpGet:
-              path: /
+              path: /stats/
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /stats/
               port: http
           resources:
             {{- toYaml .Values.nginx.resources | nindent 12 }}
