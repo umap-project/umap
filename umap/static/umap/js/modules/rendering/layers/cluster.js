@@ -104,6 +104,7 @@ export const Cluster = FeatureGroup.extend({
   initialize: function (datalayer) {
     this.datalayer = datalayer
     this._bucket = []
+    this._group = new LayerGroup()
     if (!Utils.isObject(this.datalayer.properties.cluster)) {
       this.datalayer.properties.cluster = {}
     }
@@ -117,11 +118,11 @@ export const Cluster = FeatureGroup.extend({
 
   removeClusters() {
     this.hideCoverage()
+    for (const layer of this._bucket) {
+      delete layer._cluster
+    }
     if (this._map) {
-      for (const cluster of this._clusters) {
-        const layer = cluster._layers.length === 1 ? cluster._layers[0] : cluster
-        this._map.removeLayer(layer)
-      }
+      this._group.clearLayers()
     }
   },
 
@@ -129,7 +130,7 @@ export const Cluster = FeatureGroup.extend({
     if (this._map) {
       for (const cluster of this._clusters) {
         const layer = cluster._layers.length === 1 ? cluster._layers[0] : cluster
-        this._map.addLayer(layer)
+        this._group.addLayer(layer)
       }
     }
   },
@@ -144,8 +145,11 @@ export const Cluster = FeatureGroup.extend({
     const radius = this.datalayer.properties.cluster?.radius || 80
     this._clusters = []
     const map = this.datalayer._umap._leafletMap
+    this._bounds = map.getBounds().pad(0.1)
     const CRS = map.options.crs
     for (const layer of this._bucket) {
+      if (layer._cluster) continue
+      if (!this._bounds.contains(layer._latlng)) continue
       layer._xy = CRS.latLngToPoint(layer._latlng, map.getZoom())
       let cluster = null
       for (const candidate of this._clusters) {
@@ -188,19 +192,32 @@ export const Cluster = FeatureGroup.extend({
     this.on('mouseout', this.onMouseOut)
     this.compute()
     LayerMixin.onAdd.call(this, leafletMap)
-    leafletMap.on('zoomend', this.redraw, this)
+    leafletMap.on('moveend', this.onMoveEnd, this)
+    leafletMap.on('zoomend', this.onZoomEnd, this)
     this.addClusters()
+    leafletMap.addLayer(this._group)
     return FeatureGroup.prototype.onAdd.call(this, leafletMap)
   },
 
   onRemove: function (leafletMap) {
-    leafletMap.off('zoomend', this.redraw, this)
+    leafletMap.off('zoomend', this.onZoomEnd, this)
+    leafletMap.off('moveend', this.onMoveEnd, this)
     this.off('click', this.onClick)
     this.off('mouseover', this.onMouseOver)
     this.off('mouseout', this.onMouseOut)
     LayerMixin.onRemove.call(this, leafletMap)
     this.removeClusters()
+    leafletMap.removeLayer(this._group)
     return FeatureGroup.prototype.onRemove.call(this, leafletMap)
+  },
+
+  onZoomEnd: function () {
+    this.removeClusters()
+  },
+
+  onMoveEnd: function () {
+    this.compute()
+    this.addClusters()
   },
 
   showCoverage(cluster) {
@@ -235,7 +252,10 @@ export const Cluster = FeatureGroup.extend({
     [
       'properties.cluster.radius',
       {
-        handler: 'BlurIntInput',
+        handler: 'Range',
+        min: 40,
+        max: 200,
+        step: 10,
         placeholder: translate('Clustering radius'),
         helpText: translate('Override clustering radius (default 80)'),
       },
