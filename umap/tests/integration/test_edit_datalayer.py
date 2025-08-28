@@ -69,6 +69,7 @@ def test_cancel_deleting_datalayer_should_restore(
 
 
 def test_can_clone_datalayer(live_server, openmap, login, datalayer, page):
+    assert DataLayer.objects.count() == 1
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
@@ -81,6 +82,9 @@ def test_can_clone_datalayer(live_server, openmap, login, datalayer, page):
     page.get_by_role("button", name="Clone").click()
     expect(layers).to_have_count(2)
     expect(markers).to_have_count(2)
+    with page.expect_response(re.compile(".*/datalayer/create/.*")):
+        page.get_by_role("button", name="Save").click()
+    assert DataLayer.objects.count() == 2
 
 
 def test_can_change_icon_class(live_server, openmap, page):

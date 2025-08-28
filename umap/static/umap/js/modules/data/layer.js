@@ -43,7 +43,6 @@ export class DataLayer {
     this._umap = umap
     this.sync = umap.syncEngine.proxy(this)
     this.features = new FeatureManager()
-    this._geojson = null
     this._propertiesIndex = []
 
     this._leafletMap = leafletMap
@@ -306,7 +305,6 @@ export class DataLayer {
   fromGeoJSON(geojson, sync = true) {
     if (!geojson) return []
     const features = this.addData(geojson, sync)
-    this._geojson = geojson
     this._needsFetch = false
     this.onDataLoaded()
     this.dataChanged()
@@ -328,12 +326,6 @@ export class DataLayer {
       await this.fetchRemoteData()
     } else {
       this.fromGeoJSON(geojson, false)
-    }
-  }
-
-  backupData() {
-    if (this._geojson) {
-      this._geojson_bk = Utils.CopyJSON(this._geojson)
     }
   }
 
@@ -751,7 +743,7 @@ export class DataLayer {
     const properties = Utils.CopyJSON(this.properties)
     properties.name = translate('Clone of {name}', { name: this.properties.name })
     delete properties.id
-    const geojson = Utils.CopyJSON(this._geojson)
+    const geojson = Utils.CopyJSON(this.umapGeoJSON())
     const datalayer = this._umap.createDirtyDataLayer(properties)
     datalayer.fromGeoJSON(geojson)
     return datalayer
@@ -1331,7 +1323,6 @@ export class DataLayer {
       ? { 'X-Datalayer-Reference': this._referenceVersion }
       : {}
     const status = await this._trySave(saveURL, headers, formData)
-    this._geojson = geojson
     return status
   }
 
@@ -1371,7 +1362,6 @@ export class DataLayer {
 
       this.setReferenceVersion({ response, sync: true })
 
-      this.backupData()
       this.connectToMap()
       this.redraw() // Needed for reordering features
       return true
