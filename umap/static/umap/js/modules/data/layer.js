@@ -318,7 +318,11 @@ export class DataLayer {
   }
 
   async fromUmapGeoJSON(geojson) {
-    if (geojson._storage) geojson._umap_options = geojson._storage // Retrocompat
+    if (geojson._storage) {
+      // Retrocompat
+      geojson._umap_options = geojson._storage
+      delete geojson._storage
+    }
     if (geojson._umap_options) this.setProperties(geojson._umap_options)
     if (this.isRemoteLayer()) {
       await this.fetchRemoteData()
@@ -1164,7 +1168,11 @@ export class DataLayer {
           this.getVersionUrl(version)
         )
         if (!error) {
-          if (geojson._storage) geojson._umap_options = geojson._storage // Retrocompat.
+          if (geojson._storage) {
+            // Retrocompat.
+            geojson._umap_options = geojson._storage
+            delete geojson._storage
+          }
           if (geojson._umap_options) {
             const oldProperties = Utils.CopyJSON(this.properties)
             this.setProperties(geojson._umap_options)
