@@ -114,6 +114,10 @@ const PointMixin = {
     FeatureMixin.addInteractions.call(this)
     this.on('dragend', (event) => {
       this.feature.edit(event)
+      if (this._cluster) {
+        delete this._originalLatLng
+        this.feature.datalayer.dataChanged()
+      }
     })
     if (!this.feature.isReadOnly()) this.on('mouseover', this._enableDragging)
     this.on('mouseout', this._onMouseOut)
@@ -127,7 +131,6 @@ const PointMixin = {
   },
 
   _enableDragging: function () {
-    if (this._cluster) return
     // TODO: start dragging after 1 second on mouse down
     if (this._map._umap.editEnabled) {
       if (!this.editEnabled()) this.enableEdit()
