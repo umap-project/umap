@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.3.1 - 2025-08-28
+
+* allow back to drag a marker while in a cluster layer by @yohanboniface in #2883
+* only compute clusters for visible features by @yohanboniface in #2878
+* use stats endpoint for nginx probe by @ohemelaar in #2874
+* never trust old id in import, even from `_storage` by @yohanboniface in #2875
+
 ## 3.3.0 - 2025-08-14
 
 Notable changes:
