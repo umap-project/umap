@@ -29,6 +29,7 @@ const FeatureMixin = {
   },
 
   onRemove: function (map) {
+    this.removeInteractions()
     this.parentClass.prototype.onRemove.call(this, map)
     if (map._umap.editedFeature === this.feature) {
       this.feature.endEdit()
@@ -47,6 +48,13 @@ const FeatureMixin = {
     this.on('click', this.onClick)
     this.on('editable:edited', this.onCommit)
     this.on('mouseover', this.onMouseOver)
+  },
+
+  removeInteractions: function () {
+    this.off('contextmenu editable:vertex:contextmenu', this.onContextMenu)
+    this.off('click', this.onClick)
+    this.off('editable:edited', this.onCommit)
+    this.off('mouseover', this.onMouseOver)
   },
 
   onMouseOver: function () {
@@ -112,15 +120,24 @@ const PointMixin = {
 
   addInteractions() {
     FeatureMixin.addInteractions.call(this)
-    this.on('dragend', (event) => {
-      this.feature.edit(event)
-      if (this._cluster) {
-        delete this._originalLatLng
-        this.feature.datalayer.dataChanged()
-      }
-    })
+    this.on('dragend', this._onDragEnd)
     if (!this.feature.isReadOnly()) this.on('mouseover', this._enableDragging)
     this.on('mouseout', this._onMouseOut)
+  },
+
+  removeInteractions() {
+    FeatureMixin.removeInteractions.call(this)
+    this.off('dragend', this._onDragEnd)
+    if (!this.feature.isReadOnly()) this.off('mouseover', this._enableDragging)
+    this.off('mouseout', this._onMouseOut)
+  },
+
+  _onDragEnd(event) {
+    if (this._cluster) {
+      delete this._originalLatLng
+      this.feature.datalayer.dataChanged()
+    }
+    this.feature.edit(event)
   },
 
   _onMouseOut: function () {
@@ -178,6 +195,12 @@ export const LeafletMarker = Marker.extend({
     this._popupHandlersAdded = true // prevent Leaflet from binding event on bindPopup
     this.on('popupopen', this.highlight)
     this.on('popupclose', this.resetHighlight)
+  },
+
+  removeInteractions() {
+    PointMixin.removeInteractions.call(this)
+    this.off('popupopen', this.highlight)
+    this.off('popupclose', this.resetHighlight)
   },
 
   onMoveEnd: function () {
@@ -296,6 +319,13 @@ const PathMixin = {
     this.on('drag editable:drag', this._onDrag)
     this.on('popupopen', this.highlightPath)
     this.on('popupclose', this._redraw)
+  },
+
+  removeInteractions: function () {
+    FeatureMixin.removeInteractions.call(this)
+    this.off('drag editable:drag', this._onDrag)
+    this.off('popupopen', this.highlightPath)
+    this.off('popupclose', this._redraw)
   },
 
   bindTooltip: function (content, options) {
@@ -487,6 +517,12 @@ export const LeafletRoute = LeafletPolyline.extend({
     PathMixin.addInteractions.call(this)
     this.on('editable:drawing:clicked', this.onDrawingClick)
     this.on('editable:vertex:dragend editable:vertex:deleted', this.onDrawingMoved)
+  },
+
+  removeInteractions: function () {
+    PathMixin.removeInteractions.call(this)
+    this.off('editable:drawing:clicked', this.onDrawingClick)
+    this.off('editable:vertex:dragend editable:vertex:deleted', this.onDrawingMoved)
   },
 
   getEditorClass: (tools) => {
