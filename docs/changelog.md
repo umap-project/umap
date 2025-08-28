@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.3.2 - 2025-08-28
+
+* properly remove UI events by @yohanboniface in #2884
+* remove unused `DataLayer._geojson` data backup by @yohanboniface in #2885
+
 ## 3.3.1 - 2025-08-28
 
 * allow back to drag a marker while in a cluster layer by @yohanboniface in #2883
