@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-10 09:19+0000\n"
+"POT-Creation-Date: 2025-08-14 15:22+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Gábor Babos <gabor.babos@gmail.com>, 2017-2019,2023-2025\n"
 "Language-Team: Hungarian (http://app.transifex.com/openstreetmap/umap/language/hu/)\n"
@@ -153,11 +153,11 @@ msgstr "beállítások"
 
 #: models.py:243
 msgid "save as template"
-msgstr ""
+msgstr "mentés sablonként"
 
 #: models.py:244
 msgid "This map is a template map."
-msgstr ""
+msgstr "Ez a térkép egy sablontérkép."
 
 #: models.py:420
 msgid "Clone of"
@@ -177,19 +177,19 @@ msgstr "Réteg megjelenítése betöltéskor"
 
 #: settings/base.py:283
 msgid "uMap user documentation"
-msgstr ""
+msgstr "uMap felhasználói dokumentáció"
 
 #: settings/base.py:288
 msgid "Video tutorials"
-msgstr ""
+msgstr "Oktatóvideók"
 
 #: settings/base.py:293
 msgid "OpenStreetMap.org forum"
-msgstr ""
+msgstr "OpenStreetMap.org fórum"
 
 #: settings/base.py:298
 msgid "OpenStreetMap France forum"
-msgstr ""
+msgstr "OpenStreetMap France fórum"
 
 #: settings/base.py:318
 msgid "Art and Culture"
@@ -326,7 +326,7 @@ msgstr "%(current_user)s megcsillagozott térképeinek böngészése"
 msgid "%(current_user)s has no starred maps yet."
 msgstr "%(current_user)s felhasználónak még nincs megcsillagozott térképe."
 
-#: templates/base.html:13
+#: templates/base.html:16
 msgid ""
 "uMap lets you create maps with OpenStreetMap layers in a minute and embed "
 "them in your site."
@@ -502,11 +502,11 @@ msgstr "Térképeim"
 #: templates/umap/dashboard_menu.html:11
 #, python-format
 msgid "My Templates (%(count)s)"
-msgstr ""
+msgstr "Sablonjaim (%(count)s)"
 
 #: templates/umap/dashboard_menu.html:13 templates/umap/user_templates.html:6
 msgid "My Templates"
-msgstr ""
+msgstr "Sablonjaim"
 
 #: templates/umap/dashboard_menu.html:17
 msgid "My profile"
@@ -530,15 +530,15 @@ msgstr "Be van jelentkezve. Továbblépés…"
 
 #: templates/umap/map_list.html:15
 msgid "template"
-msgstr ""
+msgstr "sablon"
 
-#: templates/umap/map_list.html:18 views.py:458
+#: templates/umap/map_list.html:18 views.py:459
 msgid "by"
 msgstr "– készítette:"
 
 #: templates/umap/map_list.html:22
 msgid "See the template"
-msgstr ""
+msgstr "Sablon megtekintése"
 
 #: templates/umap/map_list.html:22
 msgid "See the map"
@@ -764,7 +764,7 @@ msgstr "Saját térkép keresése"
 
 #: templates/umap/user_dashboard.html:11
 msgid "Map’s name"
-msgstr ""
+msgstr "Térkép címe"
 
 #: templates/umap/user_dashboard.html:12
 #, python-format
@@ -789,93 +789,97 @@ msgstr "Új csoport"
 
 #: templates/umap/user_templates.html:10
 msgid "Search my templates"
-msgstr ""
+msgstr "Saját sablon keresése"
 
 #: templates/umap/user_templates.html:11
 msgid "Template’s name"
-msgstr ""
+msgstr "Sablon címe"
 
 #: templates/umap/user_templates.html:12
 #, python-format
 msgid "Download %(count)s templates"
-msgstr ""
+msgstr "%(count)s sablon letöltése"
 
 #: templates/umap/user_templates.html:15
 msgid "You have no template yet."
-msgstr ""
+msgstr "Még nincs sablonja."
 
 #: templates/umap/user_templates.html:16
 msgid "Create a template"
-msgstr ""
+msgstr "Sablon létrehozása"
 
 #: templates/umap/user_templates.html:17
 msgid "No template found."
-msgstr ""
+msgstr "Nem található sablon."
 
-#: views.py:233
+#: views.py:235
 msgid "Cannot delete a team with more than one member"
 msgstr "Egynél több tagú csoport nem törölhető"
 
-#: views.py:237
+#: views.py:239
 #, python-format
 msgid "Team “%(name)s” has been deleted"
 msgstr "%(name)s csoport törölve"
 
-#: views.py:463
+#: views.py:464
 msgid "View the map"
 msgstr "Térkép megtekintése"
 
-#: views.py:864
+#: views.py:867
 msgid "See full screen"
 msgstr "Teljes képernyős nézet megtekintése"
 
-#: views.py:1007
+#: views.py:1010
 msgid "Map editors updated with success!"
 msgstr "A térképszerkesztők sikeresen frissültek."
 
-#: views.py:1043
+#: views.py:1046
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "A térképéhez tartozó uMap szerkesztési link: %(map_name)s"
 
-#: views.py:1046
+#: views.py:1049
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Az Ön titkos szerkesztési linkje: %(link)s"
 
-#: views.py:1053
+#: views.py:1056
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "Nem sikerül e-mailt küldeni ide: %(email)s"
 
-#: views.py:1056
+#: views.py:1059
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "E-mail elküldve ide: %(email)s"
 
-#: views.py:1067
+#: views.py:1070
 msgid "Only its owner can delete the map."
 msgstr "A térképet csak a tulajdonosa törölheti."
 
-#: views.py:1073
+#: views.py:1076
 msgid "Map successfully deleted."
 msgstr "Térkép sikeresen törölve."
 
-#: views.py:1099
+#: views.py:1102
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Elkészült a térképe másolata. Ha egy másik számítógépről szeretné szerkeszteni, ezt a linket használja: %(anonymous_url)s"
 
-#: views.py:1104
+#: views.py:1107
 msgid "Congratulations, your map has been cloned!"
 msgstr "Gratulálunk, elkészült a térképe másolata!"
 
-#: views.py:1358
+#: views.py:1361
 msgid "Layer successfully deleted."
 msgstr "A réteg sikeresen törlődött."
 
-#: views.py:1380
+#: views.py:1383
 msgid "Permissions updated with success!"
 msgstr "Az engedélyek sikeresen frissültek!"
+
+#: views.py:1400
+msgid "Generic"
+msgstr "Általános"
