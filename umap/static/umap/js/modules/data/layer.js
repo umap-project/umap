@@ -9,7 +9,7 @@ import {
   uMapAlert as Alert,
   uMapAlertConflict as AlertConflict,
 } from '../../components/alerts/alert.js'
-import { MutatingForm } from '../form/builder.js'
+import { MutatingForm, Form } from '../form/builder.js'
 import { translate } from '../i18n.js'
 import { DataLayerPermissions } from '../permissions.js'
 import { Default as DefaultLayer } from '../rendering/layers/base.js'
@@ -21,8 +21,7 @@ import TableEditor from '../tableeditor.js'
 import * as Utils from '../utils.js'
 import { LineString, Point, Polygon } from './features.js'
 import Rules from '../rules.js'
-import Orderable from '../orderable.js'
-import { FeatureManager } from '../managers.js'
+import { FeatureManager, FieldManager } from '../managers.js'
 
 export const LAYER_TYPES = [
   DefaultLayer,
@@ -89,12 +88,13 @@ export class DataLayer {
     if (!this.createdOnServer) {
       if (this.showAtLoad()) this.show()
     }
-    if (!this._needsFetch && !this._umap.fields.length) {
+    if (!this._needsFetch && !this._umap.fields.size) {
       this.properties.fields = [
         { key: U.DEFAULT_LABEL_KEY, type: 'String' },
         { key: 'description', type: 'Text' },
       ]
     }
+    this.fields = new FieldManager(this, this._umap.dialog)
 
     // Only layers that are displayed on load must be hidden/shown
     // Automatically, others will be shown manually, and thus will
@@ -146,17 +146,10 @@ export class DataLayer {
     this.properties.rank = value
   }
 
-  get fields() {
-    if (!this.properties.fields) this.properties.fields = []
-    return this.properties.fields
-  }
-
-  set fields(fields) {
-    this.properties.fields = fields
-  }
-
   get fieldKeys() {
-    return this.fields.map((field) => field.key)
+    // Needed to get a similar API from layer and uMap, but
+    // uMap whould return concat of all datalayers fields
+    return Array.from(this.fields.keys())
   }
 
   get sortKey() {
@@ -174,6 +167,7 @@ export class DataLayer {
     // Propagate will remove the fields it has already
     // processed
     fields = this.propagate(fields)
+    if (fields.includes('properties.fields')) this.fields.pull()
 
     const impacts = Utils.getImpactsFromSchema(fields)
 
@@ -458,88 +452,41 @@ export class DataLayer {
   }
 
   inferFields(feature) {
-    if (!this.properties.fields) this.properties.fields = []
-    const keys = this.fieldKeys
     for (const key in feature.properties) {
       if (typeof feature.properties[key] !== 'object') {
         if (key.indexOf('_') === 0) continue
-        if (keys.includes(key)) continue
-        this.properties.fields.push({ key, type: 'String' })
+        if (this.fields.has(key)) continue
+        if (this._umap.fields.has(key)) continue
+        // retrocompat: guess type from facets if any
+        // otherwise it will fallback to default in facets
+        let type = this._umap.facets.get(key)?.dataType
+        if (!type && key === 'description') type = 'Text'
+        this.fields.add({ key, type })
       }
     }
+    this.fields.push()
   }
 
-  async confirmDeleteProperty(property) {
-    return this._umap.dialog
-      .confirm(
-        translate('Are you sure you want to delete this field on all the features?')
-      )
-      .then(() => {
-        this.deleteProperty(property)
-      })
+  renameField(oldName, newName) {
+    this.renameFeaturesField(oldName, newName)
   }
 
-  async askForRenameProperty(property) {
-    return this._umap.dialog
-      .prompt(translate('Please enter the new name of this field'))
-      .then(({ prompt }) => {
-        if (!prompt || !this.validateName(prompt)) return
-        this.renameProperty(property, prompt)
-      })
-  }
-
-  renameProperty(oldName, newName) {
-    this.sync.startBatch()
-    const oldFields = Utils.CopyJSON(this.fields)
-    for (const field of this.fields) {
-      if (field.key === oldName) {
-        field.key = newName
-        break
-      }
-    }
-    this.sync.update('properties.fields', this.fields, oldFields)
+  renameFeaturesField(oldName, newName) {
     this.features.forEach((feature) => {
-      feature.renameProperty(oldName, newName)
+      feature.renameField(oldName, newName)
     })
-    this.sync.commitBatch()
   }
 
-  deleteProperty(property) {
-    this.sync.startBatch()
-    const oldFields = Utils.CopyJSON(this.fields)
-    this.fields = this.fields.filter((field) => field.key !== property)
-    this.sync.update('properties.fields', this.fields, oldFields)
-    this.features.forEach((feature) => {
-      feature.deleteProperty(property)
-    })
-    this.sync.commitBatch()
+  deleteField(name) {
+    this.deleteFeaturesField(name)
   }
 
-  addProperty() {
-    let resolve = undefined
-    const promise = new Promise((r) => {
-      resolve = r
-    })
-    this._umap.dialog
-      .prompt(translate('Please enter the name of the property'))
-      .then(({ prompt }) => {
-        if (!prompt || !this.validateName(prompt)) return
-        this.properties.fields.push({ key: prompt, type: 'String' })
-        resolve()
+  deleteFeaturesField(name) {
+    if (!this._umap.fields.has(name) && !this.fields.has(name)) {
+      this.features.forEach((feature) => {
+        feature.deleteField(name)
       })
-    return promise
-  }
-
-  validateName(name) {
-    if (name.includes('.')) {
-      Alert.error(translate('Name “{name}” should not contain a dot.', { name }))
-      return false
     }
-    if (this.fieldKeys.includes(name)) {
-      Alert.error(translate('This name already exists: “{name}”', { name }))
-      return false
-    }
-    return true
   }
 
   sortedValues(property) {
@@ -902,64 +849,6 @@ export class DataLayer {
     fieldset.appendChild(builder.build())
   }
 
-  _editFields(container) {
-    const template = `
-      <details id="fields">
-        <summary>${translate('Manage Fields')}</summary>
-        <fieldset>
-          <ul data-ref=ul></ul>
-          <button type="button" data-ref=add><i class="icon icon-16 icon-add"></i>${translate('Add a new field')}</button>
-        </fieldset>
-      </details>
-    `
-    const [fieldset, { ul, add }] = Utils.loadTemplateWithRefs(template)
-    add.addEventListener('click', () => {
-      this.addProperty().then(() => {
-        this.edit().then((panel) => {
-          panel.scrollTo('details#fields')
-        })
-      })
-    })
-    container.appendChild(fieldset)
-    for (const field of this.fields) {
-      const [row, { rename, del }] = Utils.loadTemplateWithRefs(
-        `<li class="orderable" data-key="${field.key}">
-          <button class="icon icon-16 icon-edit" title="${translate('Rename this field')}" data-ref=rename></button>
-          <button class="icon icon-16 icon-delete" title="${translate('Delete this field')}" data-ref=del></button>
-          <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
-          ${field.key}
-        </li>`
-      )
-      ul.appendChild(row)
-      rename.addEventListener('click', () => {
-        this.askForRenameProperty(field.key).then(() => {
-          this.edit().then((panel) => {
-            panel.scrollTo('details#fields')
-          })
-        })
-      })
-      del.addEventListener('click', () => {
-        this.confirmDeleteProperty(field.key).then(() => {
-          this.edit().then((panel) => {
-            panel.scrollTo('details#fields')
-          })
-        })
-      })
-    }
-    const onReorder = (src, dst, initialIndex, finalIndex) => {
-      const orderedKeys = Array.from(ul.querySelectorAll('li')).map(
-        (el) => el.dataset.key
-      )
-      const oldFields = Utils.CopyJSON(this.properties.fields)
-      this.properties.fields.sort(
-        (fieldA, fieldB) =>
-          orderedKeys.indexOf(fieldA.key) > orderedKeys.indexOf(fieldB.key)
-      )
-      this.sync.update('properties.fields', this.properties.fields, oldFields)
-    }
-    const orderable = new Orderable(ul, onReorder)
-  }
-
   _editRemoteDataProperties(container) {
     // XXX I'm not sure **why** this is needed (as it's set during `this.initialize`)
     // but apparently it's needed.
@@ -1071,7 +960,7 @@ export class DataLayer {
     this._editTextPathProperties(container)
     this._editRemoteDataProperties(container)
     if (!this.isRemoteLayer()) {
-      this._editFields(container)
+      this.fields.edit(container)
     }
     this.rules.edit(container)
 
@@ -1412,13 +1301,12 @@ export class DataLayer {
     )) {
       container.innerHTML = ''
       if (this.layer.renderLegend) return this.layer.renderLegend(container)
-      const keys = new Set(this.fieldKeys)
       const rules = new Map()
       for (const rule of this.rules) {
         rules.set(rule.condition, rule)
       }
       for (const rule of this._umap.rules) {
-        if (!rules.has(rule.condition) && keys.has(rule.key)) {
+        if (!rules.has(rule.condition) && this.fields.has(rule.key)) {
           rules.set(rule.condition, rule)
         }
       }
