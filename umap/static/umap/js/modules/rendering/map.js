@@ -154,6 +154,7 @@ const ControlsMixin = {
 
 const ManageTilelayerMixin = {
   initTileLayers: function () {
+    this.pullProperties()
     this.tilelayers = []
     for (const props of this.options.tilelayers) {
       const layer = this.createTileLayer(props)
