@@ -186,6 +186,12 @@ export const Cluster = FeatureGroup.extend({
     return this
   },
 
+  removeLayer: function (layer) {
+    if (!layer.getLatLng) return FeatureGroup.prototype.removeLayer.call(this, layer)
+    this._bucket = this._bucket.filter((el) => el !== layer)
+    return this
+  },
+
   onAdd: function (leafletMap) {
     this.on('click', this.onClick)
     this.on('mouseover', this.onMouseOver)
