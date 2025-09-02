@@ -83,3 +83,17 @@ def test_can_drag_marker_in_cluster(live_server, page, tilelayer, openmap):
     expect(page.locator(".edit-undo")).to_be_enabled()
     # There is no more cluster
     expect(marker).to_have_count(2)
+
+
+def test_can_change_datalayer_of_marker_in_cluster(
+    live_server, page, datalayer, openmap, tilelayer
+):
+    DataLayerFactory(map=openmap, data=DATALAYER_DATA)
+    datalayer.settings["iconClass"] = "Ball"
+    datalayer.save()
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#7/46.920/3.340")
+
+    expect(page.locator(".umap-ball-icon")).to_have_count(0)
+    page.locator(".umap-div-icon").click(modifiers=["Shift"])
+    page.get_by_role("combobox").select_option(str(datalayer.pk))
+    expect(page.locator(".umap-ball-icon")).to_have_count(1)
