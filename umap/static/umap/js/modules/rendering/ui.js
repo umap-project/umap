@@ -137,9 +137,9 @@ const PointMixin = {
       delete this._originalLatLng
       this.once('editable:edited', () => {
         this.feature.datalayer.dataChanged()
+        this.feature.edit(event)
       })
     }
-    this.feature.edit(event)
   },
 
   _onMouseOut: function () {
