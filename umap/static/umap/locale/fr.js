@@ -595,7 +595,6 @@ const locale = {
     "Transform to regular line": "Transformer en ligne simple",
     "Transform to route": "Transformer en route",
     "Restore route": "Rétablir la route",
-    "Compute elevation": "Récupérer les altitudes",
     "Profile": "Moyen de transport",
     "Compute elevations": "Récupérer les altitudes",
     "Route preference": "Préférence de routage",

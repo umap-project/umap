@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.3.3 - 2025-09-02
+
+* feature not properly removed from cluster layer by @yohanboniface in #2899
+* moving marker in cluster was not making the map dirty by @yohanboniface in #2897
+* update map options from umap properties before computing tilelayer by @yohanboniface in #2896
+
 ## 3.3.2 - 2025-08-28
 
 * properly remove UI events by @yohanboniface in #2884
