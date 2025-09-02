@@ -66,6 +66,9 @@ def test_can_drag_single_marker_in_cluster_layer(live_server, page, tilelayer, o
     marker.first.drag_to(map, target_position={"x": 250, "y": 250})
     assert marker.bounding_box() != old_bbox
     expect(page.locator(".edit-undo")).to_be_enabled()
+    # Make sure edit stays panel
+    page.wait_for_timeout(1000)
+    expect(page.locator(".panel.right")).to_be_visible()
 
 
 def test_can_drag_marker_in_cluster(live_server, page, tilelayer, openmap):
