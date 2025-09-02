@@ -51,3 +51,35 @@ def test_can_open_feature_on_browser_click(live_server, page, map):
     expect(page.get_by_text("can you see me ?")).to_be_visible()
     page.get_by_text("again one another point").click()
     expect(page.get_by_text("and me ?")).to_be_visible()
+
+
+def test_can_drag_single_marker_in_cluster_layer(live_server, page, tilelayer, openmap):
+    DataLayerFactory(map=openmap, data=DATALAYER_DATA)
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#7/46.920/3.340")
+
+    marker = page.locator(".umap-div-icon")
+    map = page.locator("#map")
+
+    expect(page.locator(".edit-undo")).to_be_disabled()
+    # Drag marker
+    old_bbox = marker.bounding_box()
+    marker.first.drag_to(map, target_position={"x": 250, "y": 250})
+    assert marker.bounding_box() != old_bbox
+    expect(page.locator(".edit-undo")).to_be_enabled()
+
+
+def test_can_drag_marker_in_cluster(live_server, page, tilelayer, openmap):
+    DataLayerFactory(map=openmap, data=DATALAYER_DATA)
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#18/46.92/3.34")
+
+    marker = page.locator(".umap-div-icon")
+    cluster = page.locator(".umap-cluster-icon")
+    map = page.locator("#map")
+    expect(marker).to_have_count(0)
+
+    expect(page.locator(".edit-undo")).to_be_disabled()
+    cluster.click()
+    marker.first.drag_to(map, target_position={"x": 250, "y": 250})
+    expect(page.locator(".edit-undo")).to_be_enabled()
+    # There is no more cluster
+    expect(marker).to_have_count(2)
