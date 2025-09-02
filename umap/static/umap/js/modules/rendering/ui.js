@@ -135,7 +135,9 @@ const PointMixin = {
   _onDragEnd(event) {
     if (this._cluster) {
       delete this._originalLatLng
-      this.feature.datalayer.dataChanged()
+      this.once('editable:edited', () => {
+        this.feature.datalayer.dataChanged()
+      })
     }
     this.feature.edit(event)
   },
