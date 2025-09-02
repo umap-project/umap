@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.4 - 2025-09-02
+* fix race condition closing edit panel after drag by @yohanboniface in #2901
+
 ## 3.3.3 - 2025-09-02
 
 * feature not properly removed from cluster layer by @yohanboniface in #2899
