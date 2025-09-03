@@ -259,7 +259,7 @@ export const Cluster = FeatureGroup.extend({
       'properties.cluster.radius',
       {
         handler: 'Range',
-        min: 40,
+        min: 10,
         max: 200,
         step: 10,
         placeholder: translate('Clustering radius'),
