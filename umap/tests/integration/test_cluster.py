@@ -100,3 +100,64 @@ def test_can_change_datalayer_of_marker_in_cluster(
     page.locator(".umap-div-icon").click(modifiers=["Shift"])
     page.get_by_role("combobox").select_option(str(datalayer.pk))
     expect(page.locator(".umap-ball-icon")).to_have_count(1)
+
+
+def test_can_combine_cluster_with_remote_data_and_fromZoom(
+    page, live_server, tilelayer, map
+):
+    settings = {
+        "fromZoom": "7",
+        "type": "Cluster",
+        "showLabel": True,
+        "remoteData": {
+            "url": "https://remote.org/data.json",
+            "format": "geojson",
+            "dynamic": True,
+        },
+    }
+    DataLayerFactory(map=map, settings=settings)
+    data = [
+        {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": {"name": "Point 2"},
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [4.3375, 11.2707],
+                    },
+                }
+            ],
+        },
+        {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": {"name": "Point 1"},
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [4.3375, 12.2707],
+                    },
+                }
+            ],
+        },
+    ]
+
+    def handle(route):
+        route.fulfill(json=data.pop())
+
+    page.route("https://remote.org/data.json", handle)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#7/12.271/4.338")
+    expect(page.locator(".umap-div-icon")).to_have_count(1)
+    expect(page.get_by_role("tooltip", name="Point 1")).to_be_visible()
+    page.get_by_role("button", name="Zoom out").click()
+
+    # We are above fromZoom
+    expect(page.locator(".umap-div-icon")).to_have_count(0)
+
+    page.get_by_role("button", name="Zoom in").click()
+
+    expect(page.locator(".umap-div-icon")).to_have_count(1)
+    expect(page.get_by_role("tooltip", name="Point 2")).to_be_visible()

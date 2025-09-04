@@ -6,7 +6,7 @@ export const LayerMixin = {
   browsable: true,
 
   onInit: function (leafletMap) {
-    if (this.datalayer.autoLoaded()) leafletMap.on('zoomend', this.onZoomEnd, this)
+    leafletMap.on('zoomend', this.onZoomEnd, this)
   },
 
   onDelete: function (leafletMap) {
