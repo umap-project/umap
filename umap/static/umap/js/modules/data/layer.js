@@ -304,10 +304,9 @@ export class DataLayer {
 
   fromGeoJSON(geojson, sync = true) {
     if (!geojson) return []
-    const features = this.addData(geojson, sync)
     this._needsFetch = false
+    const features = this.addData(geojson, sync)
     this.onDataLoaded()
-    this.dataChanged()
     return features
   }
 
@@ -735,7 +734,9 @@ export class DataLayer {
   }
 
   clear(sync = true) {
+    this._batch = true
     this.features.forEach((feature) => feature.del(sync))
+    this._batch = false
     this.dataChanged()
   }
 

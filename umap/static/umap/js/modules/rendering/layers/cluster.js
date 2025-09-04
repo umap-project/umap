@@ -198,16 +198,12 @@ export const Cluster = FeatureGroup.extend({
     this.on('mouseout', this.onMouseOut)
     this.compute()
     LayerMixin.onAdd.call(this, leafletMap)
-    leafletMap.on('moveend', this.onMoveEnd, this)
-    leafletMap.on('zoomend', this.onZoomEnd, this)
     this.addClusters()
     leafletMap.addLayer(this._group)
     return FeatureGroup.prototype.onAdd.call(this, leafletMap)
   },
 
   onRemove: function (leafletMap) {
-    leafletMap.off('zoomend', this.onZoomEnd, this)
-    leafletMap.off('moveend', this.onMoveEnd, this)
     this.off('click', this.onClick)
     this.off('mouseover', this.onMouseOver)
     this.off('mouseout', this.onMouseOut)
@@ -218,12 +214,18 @@ export const Cluster = FeatureGroup.extend({
   },
 
   onZoomEnd: function () {
+    LayerMixin.onZoomEnd.call(this)
     this.removeClusters()
   },
 
   onMoveEnd: function () {
-    this.compute()
-    this.addClusters()
+    LayerMixin.onMoveEnd.call(this)
+    // In case of dynamic data, the LayerMixin.onMoveEnd
+    // call with fetch the data and then call the compute
+    if (!this.datalayer.hasDynamicData()) {
+      this.compute()
+      this.addClusters()
+    }
   },
 
   showCoverage(cluster) {
@@ -234,7 +236,9 @@ export const Cluster = FeatureGroup.extend({
   },
 
   hideCoverage() {
-    if (this._shownCoverage) this._map.removeLayer(this._shownCoverage)
+    if (this._shownCoverage && this._map) {
+      this._map.removeLayer(this._shownCoverage)
+    }
   },
 
   onMouseOver(event) {
