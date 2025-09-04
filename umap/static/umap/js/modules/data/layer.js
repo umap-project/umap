@@ -607,6 +607,7 @@ export class DataLayer {
       case 'MultiPoint':
         if (geometry.coordinates?.length === 1) {
           geojson.geometry.coordinates = geojson.geometry.coordinates[0]
+          geojson.geometry.type = 'Point'
           feature = new Point(this._umap, this, geojson, id)
         } else if (this._umap.editEnabled) {
           Alert.error(translate('Cannot process MultiPoint'))
