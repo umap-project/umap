@@ -33,6 +33,17 @@ def bootstrap(map, live_server):
 
 
 def test_can_edit_on_shift_click(live_server, openmap, page, datalayer):
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    page.locator(".leaflet-marker-icon").click(modifiers=["Shift"])
+    expect(page.get_by_text("Feature properties")).to_be_visible()
+    # Help button for text
+    page.locator(".umap-field-description").get_by_role(
+        "button", name="description"
+    ).click()
+    expect(page.locator("dialog").get_by_role("heading", name="Help")).to_be_visible()
+
+
+def test_can_edit_on_ctrl_shift_click(live_server, openmap, page, datalayer):
     modifier = "Meta" if platform.system() == "Darwin" else "Control"
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.locator(".leaflet-marker-icon").click(modifiers=[modifier, "Shift"])
