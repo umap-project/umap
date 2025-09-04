@@ -241,11 +241,12 @@ class Feature {
 
     const properties = []
     for (const field of this.fields) {
-      let handler = 'Input'
+      const options = { handler: 'Input', label: field.key }
       if (field.key === 'description' || field.type === 'Text') {
-        handler = 'Textarea'
+        options.handler = 'Textarea'
+        options.helpEntries = ['textFormatting']
       }
-      properties.push([`properties.${field.key}`, { label: field.key, handler }])
+      properties.push([`properties.${field.key}`, options])
     }
     builder = new MutatingForm(this, properties, {
       id: 'umap-feature-properties',
