@@ -614,7 +614,8 @@ const locale = {
     "Loss:": "Dénivelé négatif :",
     "Altitude:": "Altitude :",
     "Right-click to edit": "Clic droit pour éditer",
-    "Draw along routes": "Dessiner en suivant les routes"
+    "Draw along routes": "Dessiner en suivant les routes",
+    "Skipping invalid geometry": "Géométrie invalide ignorée"
 }
 L.registerLocale("fr", locale)
 L.setLocale("fr")

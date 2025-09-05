@@ -15,14 +15,15 @@
 # Paul Vogel, 2025
 # pgeo, 2023
 # Klumbumbus, 2013-2014,2018-2019
+# s r, 2025
 # YOHAN BONIFACE <yb@enix.org>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-10 09:19+0000\n"
+"POT-Creation-Date: 2025-08-14 15:22+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Paul Vogel, 2025\n"
+"Last-Translator: s r, 2025\n"
 "Language-Team: German (http://app.transifex.com/openstreetmap/umap/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -212,11 +213,11 @@ msgstr "Fahrradfahren"
 
 #: settings/base.py:320
 msgid "Business"
-msgstr ""
+msgstr "Gewerblich"
 
 #: settings/base.py:321
 msgid "Environment"
-msgstr "Umgebung"
+msgstr "Umwelt"
 
 #: settings/base.py:322
 msgid "Education"
@@ -224,11 +225,11 @@ msgstr "Bildung"
 
 #: settings/base.py:323
 msgid "Food and Agriculture"
-msgstr ""
+msgstr "Nahrungsmittel und Landwirtschaft"
 
 #: settings/base.py:324
 msgid "Geopolitics"
-msgstr ""
+msgstr "Geopolitik"
 
 #: settings/base.py:325
 msgid "Health"
@@ -244,7 +245,7 @@ msgstr "Geschichte"
 
 #: settings/base.py:328
 msgid "Public sector"
-msgstr ""
+msgstr "Öffentlicher Sektor"
 
 #: settings/base.py:329
 msgid "Science"
@@ -252,7 +253,7 @@ msgstr "Wissenschaft"
 
 #: settings/base.py:330
 msgid "Shopping"
-msgstr "Shopping"
+msgstr "Einkaufsmöglichkeiten"
 
 #: settings/base.py:331
 msgid "Sport and Leisure"
@@ -264,7 +265,7 @@ msgstr "Reisen"
 
 #: settings/base.py:333
 msgid "Transports"
-msgstr ""
+msgstr "Transport"
 
 #: settings/base.py:334
 msgid "Tourism"
@@ -337,7 +338,7 @@ msgstr "Schaue dir %(current_user)s's favorisierten Karten an"
 msgid "%(current_user)s has no starred maps yet."
 msgstr "%(current_user)s hat keine favorisierten Karten."
 
-#: templates/base.html:13
+#: templates/base.html:16
 msgid ""
 "uMap lets you create maps with OpenStreetMap layers in a minute and embed "
 "them in your site."
@@ -349,11 +350,11 @@ msgstr "Anmeldung"
 
 #: templates/registration/login.html:22
 msgid "To save and easily find your maps, identify yourself."
-msgstr "Um deine Karten einfach zu speichern und wieder zu finden, merke dich an."
+msgstr "Melde dich an um deine Karten einfach zu speichern und wieder zu finden."
 
 #: templates/registration/login.html:25
 msgid "Please log in with your account:"
-msgstr "Bitte melden Sie sich mit Ihrem Konto an"
+msgstr "Bitte melde dich mit deinem Konto an"
 
 #: templates/registration/login.html:42
 msgid "Username"
@@ -513,11 +514,11 @@ msgstr "Meine Karten"
 #: templates/umap/dashboard_menu.html:11
 #, python-format
 msgid "My Templates (%(count)s)"
-msgstr ""
+msgstr "Meine Vorlagen (%(count)s)"
 
 #: templates/umap/dashboard_menu.html:13 templates/umap/user_templates.html:6
 msgid "My Templates"
-msgstr ""
+msgstr "Meine Vorlagen"
 
 #: templates/umap/dashboard_menu.html:17
 msgid "My profile"
@@ -543,7 +544,7 @@ msgstr "Du bist eingeloggt. Weiterleitung..."
 msgid "template"
 msgstr "Vorlage"
 
-#: templates/umap/map_list.html:18 views.py:458
+#: templates/umap/map_list.html:18 views.py:459
 msgid "by"
 msgstr "von"
 
@@ -720,7 +721,7 @@ msgstr "Keine Karte gefunden."
 
 #: templates/umap/search.html:36
 msgid "Latest created maps in category"
-msgstr ""
+msgstr "Zuletzt erstelle Karten in Kategorie"
 
 #: templates/umap/search.html:43
 msgid "Latest created maps"
@@ -775,7 +776,7 @@ msgstr "Meine Karten suchen"
 
 #: templates/umap/user_dashboard.html:11
 msgid "Map’s name"
-msgstr ""
+msgstr "Kartenname"
 
 #: templates/umap/user_dashboard.html:12
 #, python-format
@@ -800,93 +801,97 @@ msgstr "Neues Team"
 
 #: templates/umap/user_templates.html:10
 msgid "Search my templates"
-msgstr ""
+msgstr "Meine Vorlagen durchsuchen"
 
 #: templates/umap/user_templates.html:11
 msgid "Template’s name"
-msgstr ""
+msgstr "Vorlagenname"
 
 #: templates/umap/user_templates.html:12
 #, python-format
 msgid "Download %(count)s templates"
-msgstr ""
+msgstr "Herunterladen von %(count)s Vorlage(n)"
 
 #: templates/umap/user_templates.html:15
 msgid "You have no template yet."
-msgstr ""
+msgstr "Du hast noch keine Vorlagen"
 
 #: templates/umap/user_templates.html:16
 msgid "Create a template"
-msgstr ""
+msgstr "Erstelle Vorlage"
 
 #: templates/umap/user_templates.html:17
 msgid "No template found."
-msgstr ""
+msgstr "Keine Vorlage gefunden"
 
-#: views.py:233
+#: views.py:235
 msgid "Cannot delete a team with more than one member"
 msgstr "Teams mit mehr als einem Mitglied können nicht gelöscht werden"
 
-#: views.py:237
+#: views.py:239
 #, python-format
 msgid "Team “%(name)s” has been deleted"
 msgstr "Team “%(name)s” wurde gelöscht"
 
-#: views.py:463
+#: views.py:464
 msgid "View the map"
 msgstr "Diese Karte anzeigen"
 
-#: views.py:864
+#: views.py:867
 msgid "See full screen"
 msgstr "Vollbildanzeige"
 
-#: views.py:1007
+#: views.py:1010
 msgid "Map editors updated with success!"
 msgstr "Bearbeiter erfolgreich geändert"
 
-#: views.py:1043
+#: views.py:1046
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "Der uMap-Bearbeitungslink für Deine Karte: %(map_name)s"
 
-#: views.py:1046
+#: views.py:1049
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Dies ist der geheime Bearbeitungslink: %(link)s"
 
-#: views.py:1053
+#: views.py:1056
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "E-Mail kann nicht gesendet werden an %(email)s"
 
-#: views.py:1056
+#: views.py:1059
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Email gesendet an %(email)s"
 
-#: views.py:1067
+#: views.py:1070
 msgid "Only its owner can delete the map."
 msgstr "Nur der Ersteller kann die Karte löschen."
 
-#: views.py:1073
+#: views.py:1076
 msgid "Map successfully deleted."
 msgstr "Karte erfolgreich gelöscht."
 
-#: views.py:1099
+#: views.py:1102
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Deine Karte wurde kopiert! Wenn du diese Karte von einem anderen Computer aus bearbeiten möchtest, benutze bitte diesen Link: %(anonymous_url)s"
 
-#: views.py:1104
+#: views.py:1107
 msgid "Congratulations, your map has been cloned!"
 msgstr "Glückwunsch, deine Karte wurde kopiert!"
 
-#: views.py:1358
+#: views.py:1361
 msgid "Layer successfully deleted."
 msgstr "Ebene erfolgreich gelöscht."
 
-#: views.py:1380
+#: views.py:1383
 msgid "Permissions updated with success!"
 msgstr "Berechtigungen erfolgreich aktualisiert!"
+
+#: views.py:1400
+msgid "Generic"
+msgstr "Allgemein"

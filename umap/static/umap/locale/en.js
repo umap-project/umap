@@ -614,7 +614,8 @@ const locale = {
     "Loss:": "Loss:",
     "Altitude:": "Altitude:",
     "Right-click to edit": "Right-click to edit",
-    "Draw along routes": "Draw along routes"
+    "Draw along routes": "Draw along routes",
+    "Skipping invalid geometry": "Skipping invalid geometry"
 }
 L.registerLocale("en", locale)
 L.setLocale("en")
