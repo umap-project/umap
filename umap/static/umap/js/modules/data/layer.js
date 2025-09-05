@@ -615,17 +615,18 @@ export class DataLayer {
 
     switch (geometry.type) {
       case 'Point':
-        // FIXME: deal with MultiPoint
-        feature = new Point(this._umap, this, geojson, id)
-        break
       case 'MultiPoint':
-        if (geometry.coordinates?.length === 1) {
+        if (
+          geometry.coordinates?.length === 1 &&
+          Array.isArray(geometry.coordinates?.[0])
+        ) {
           geojson.geometry.coordinates = geojson.geometry.coordinates[0]
           geojson.geometry.type = 'Point'
-          feature = new Point(this._umap, this, geojson, id)
-        } else if (this._umap.editEnabled) {
+        } else if (geometry.type === 'MultiPoint' && this._umap.editEnabled) {
           Alert.error(translate('Cannot process MultiPoint'))
+          break
         }
+        feature = new Point(this._umap, this, geojson, id)
         break
       case 'MultiLineString':
       case 'LineString':
