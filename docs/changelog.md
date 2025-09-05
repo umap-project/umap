@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.3.5 - 2025-09-05
+
+* fix race condition between cluster moveend and dynamic remote data moveend by @yohanboniface in #2910
+* add back help button near description field by @yohanboniface in #2909
+* change minimum cluster value to 10 by @s-r-g-i-t-h-u-b in #2903
+* properly convert MultiPoint to Point by @yohanboniface in #2911
+* be more defensive with invalid coordinates by @yohanboniface in #2913
+
+### New Contributors
+* @s-r-g-i-t-h-u-b made their first contribution in #2903
+
 ## 3.3.4 - 2025-09-02
 * fix race condition closing edit panel after drag by @yohanboniface in #2901
 
@@ -90,7 +101,7 @@ Note: the old way is still supported for now, but deprecated.
 * use a better algo for generating unique feature id by @yohanboniface in #2813
 
 
-## New Contributors
+### New Contributors
 * @danieldegroot2 made their first contribution in #2805
 
 ## 3.1.2 - 2025-06-11
@@ -166,7 +177,7 @@ experimental line decoration feature.
 * naive support for GeometryCollection as Feature geometry by @yohanboniface in #2658
 * add a back button in rules form by @yohanboniface in #2673
 
-## New Contributors
+### New Contributors
 * @lippoliv made their first contribution in #2656
 
 ## 3.0.4 - 2025-04-14
