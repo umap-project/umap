@@ -430,14 +430,27 @@ export class DataLayer {
     this.layer.removeLayer(feature.ui)
   }
 
-  addFeature(feature) {
+  addFeature(feature, sync = false) {
     feature.connectToDataLayer(this)
     this.features.add(feature)
     this._umap.featuresIndex[feature.getSlug()] = feature
     // TODO: quid for remote data ?
     this.inferFields(feature)
-    this.showFeature(feature)
+    try {
+      this.showFeature(feature)
+    } catch {
+      if (this._umap.editEnabled) {
+        Alert.error(translate('Skipping invalid geometry'))
+      }
+      console.error('Invalid geometry', feature)
+      this.removeFeature(feature, false)
+      return
+    }
     this.dataChanged()
+    if (sync) {
+      feature.sync.upsert(feature.toGeoJSON(), null)
+    }
+    return feature
   }
 
   removeFeature(feature, sync) {
@@ -449,7 +462,9 @@ export class DataLayer {
       const oldValue = feature.toGeoJSON()
       feature.sync.delete(oldValue)
     }
-    this.hideFeature(feature)
+    try {
+      this.hideFeature(feature)
+    } catch {}
     delete this._umap.featuresIndex[feature.getSlug()]
     feature.disconnectFromDataLayer(this)
     this.features.del(feature)
@@ -631,9 +646,7 @@ export class DataLayer {
         }
     }
     if (feature && !feature.isEmpty()) {
-      this.addFeature(feature)
-      if (sync) feature.sync.upsert(feature.toGeoJSON(), null)
-      return feature
+      return this.addFeature(feature, sync)
     }
   }
 
