@@ -1269,6 +1269,18 @@ export default class Umap {
     this.drop.enable()
     this.fire('edit:enabled')
     this.initSyncEngine()
+    this.datalayers.active().forEach((datalayer) => {
+      if (!datalayer.isReadOnly() && datalayer._found_duplicate_id) {
+        datalayer._found_duplicate_id = false
+        // Force user to resave those datalayers
+        datalayer.sync.update(
+          'properties.name',
+          datalayer.properties.name,
+          datalayer.properties.name
+        )
+        Alert.info(translate('Layer has been migrated, please save the map.'))
+      }
+    })
   }
 
   disableEdit() {

@@ -59,6 +59,7 @@ export class FeatureManager extends Map {
     if (this.has(feature.id)) {
       console.error('Duplicate id', feature, this.get(feature.id))
       feature.id = Utils.generateId()
+      feature.datalayer._found_duplicate_id = true
     }
     this.set(feature.id, feature)
   }
