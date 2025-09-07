@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.3.6 - 2025-09-07
+
+* fix regression where a layer would be loaded while it should not by @yohanboniface in #2918
+* make datalayer dirty when duplicate id has been found by @yohanboniface in #2917
+
 ## 3.3.5 - 2025-09-05
 
 * fix race condition between cluster moveend and dynamic remote data moveend by @yohanboniface in #2910
