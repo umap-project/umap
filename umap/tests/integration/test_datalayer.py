@@ -1,8 +1,6 @@
-import json
 import re
 
 import pytest
-from django.core.files.base import ContentFile
 from playwright.sync_api import expect
 
 from ..base import DataLayerFactory
@@ -10,17 +8,9 @@ from ..base import DataLayerFactory
 pytestmark = pytest.mark.django_db
 
 
-def set_options(datalayer, **options):
-    # For now we need to change both the DB and the FS…
-    datalayer.settings.update(options)
-    data = json.load(datalayer.geojson.file)
-    data["_umap_options"].update(**options)
-    datalayer.geojson = ContentFile(json.dumps(data), "foo.json")
-    datalayer.save()
-
-
 def test_honour_displayOnLoad_false(map, live_server, datalayer, page):
-    set_options(datalayer, displayOnLoad=False)
+    datalayer.settings.update(displayOnLoad=False)
+    datalayer.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datalayers")
     expect(page.locator(".leaflet-marker-icon")).to_be_hidden()
     layers = page.locator(".umap-browser .datalayer")
@@ -30,14 +20,17 @@ def test_honour_displayOnLoad_false(map, live_server, datalayer, page):
     expect(layers_off).to_have_count(1)
     page.get_by_role("button", name="Open browser").click()
     page.get_by_label("Zoom in").click()
+    page.wait_for_timeout(300)
     expect(markers).to_be_hidden()
-    page.get_by_title("Show/hide layer").click()
+    with page.expect_response(re.compile(rf".*/datalayer/{map.pk}/{datalayer.pk}/.*")):
+        page.get_by_title("Show/hide layer").click()
     expect(layers_off).to_have_count(0)
     expect(markers).to_be_visible()
 
 
 def test_should_honour_fromZoom(live_server, map, datalayer, page):
-    set_options(datalayer, displayOnLoad=True, fromZoom=6)
+    datalayer.settings.update(displayOnLoad=True, fromZoom=6)
+    datalayer.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}#5/48.55/14.68")
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_be_hidden()
@@ -55,7 +48,8 @@ def test_should_honour_fromZoom(live_server, map, datalayer, page):
 
 
 def test_should_honour_toZoom(live_server, map, datalayer, page, new_page):
-    set_options(datalayer, displayOnLoad=True, toZoom=6)
+    datalayer.settings.update(displayOnLoad=True, toZoom=6)
+    datalayer.save()
     # Loading at zoom 7 should not show the marker
     page.goto(f"{live_server.url}{map.get_absolute_url()}#7/48.55/14.68")
     markers = page.locator(".leaflet-marker-icon")
@@ -123,7 +117,6 @@ def test_datalayers_in_query_string(live_server, datalayer, map, page):
     map.settings["properties"]["onLoadPanel"] = "datalayers"
     map.save()
     with_old_id = DataLayerFactory(old_id=134, map=map, name="with old id")
-    set_options(with_old_id, name="with old id")
     visible = page.locator(".umap-browser .datalayer:not(.off) .datalayer-name")
     hidden = page.locator(".umap-browser .datalayer.off .datalayer-name")
     page.goto(f"{live_server.url}{map.get_absolute_url()}")

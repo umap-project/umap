@@ -53,7 +53,7 @@ export const LayerMixin = {
   },
 
   onZoomEnd() {
-    if (this.datalayer._forcedVisibility) return
+    if (!this.datalayer.autoLoaded) return
     if (!this.datalayer.showAtZoom() && this.datalayer.isVisible()) {
       this.datalayer.hide()
     }
