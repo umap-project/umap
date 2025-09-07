@@ -595,7 +595,6 @@ const locale = {
     "Transform to regular line": "轉換為普通線條",
     "Transform to route": "轉換為路線",
     "Restore route": "恢復路線",
-    "Compute elevation": "計畫等高線",
     "Profile": "設定檔案",
     "Compute elevations": "計算等高線。",
     "Route preference": "路線偏好設定",
@@ -615,7 +614,8 @@ const locale = {
     "Loss:": "減少：",
     "Altitude:": "海拔：",
     "Right-click to edit": "按右鍵來編輯",
-    "Draw along routes": "沿著路線繪製"
+    "Draw along routes": "沿著路線繪製",
+    "Skipping invalid geometry": "略過無效的地理空間"
 }
 L.registerLocale("zh_TW", locale)
 L.setLocale("zh_TW")
