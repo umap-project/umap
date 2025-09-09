@@ -256,3 +256,21 @@
         display: none !important;
     }
 }
+@media all and (max-width: 480px) {
+    .umap-main-edit-toolbox {
+        flex-direction: column;
+        padding: var(--small-box-padding);
+    }
+
+    .umap-main-edit-toolbox > div {
+        justify-content: center;
+    }
+
+    .umap-main-edit-toolbox .share-status {
+        display: none;
+    }
+
+    .umap-main-edit-toolbox .map-name {
+        max-width: 100px;
+    }
+}

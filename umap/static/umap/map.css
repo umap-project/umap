@@ -1205,12 +1205,8 @@ ul.photon-autocomplete {
 
 @media all and (max-width: 480px) {
 
-    .umap-main-edit-toolbox .share-status {
-        display: none;
-    }
-
-    .umap-main-edit-toolbox .map-name {
-        max-width: 100px;
+    .umap-edit-enabled {
+        --header-height: 80px;
     }
 
     .leaflet-control-layers-expanded label {
