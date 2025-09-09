@@ -40,7 +40,7 @@ export default class TableEditor extends WithTemplate {
     let filterItem
     if (this._umap.facets.has(property)) {
       filterItem = {
-        label: translate('Remove filter for this column'),
+        label: translate('Remove filter for this field'),
         action: () => {
           this._umap.facets.remove(property)
           this._umap.browser.open('filters')
@@ -48,7 +48,7 @@ export default class TableEditor extends WithTemplate {
       }
     } else {
       filterItem = {
-        label: translate('Add filter for this column'),
+        label: translate('Add filter for this field'),
         action: () => {
           this._umap.facets.add(property)
           this._umap.browser.open('filters')

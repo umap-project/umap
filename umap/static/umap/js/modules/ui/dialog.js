@@ -78,8 +78,7 @@ export default class Dialog extends WithTemplate {
     if (!this.dialogSupported) {
       this.elements.form.addEventListener('submit', (event) => {
         event.preventDefault()
-        this.dialog.returnValue = 'accept'
-        this.close()
+        this.accept()
       })
     }
     this.dialog.addEventListener('keydown', (e) => {
@@ -107,6 +106,7 @@ export default class Dialog extends WithTemplate {
   }
 
   open(settings = {}) {
+    this.dialog.returnValue = undefined
     const dialog = Object.assign({}, this.settings, settings)
     this.dialog.className = 'umap-dialog window'
     if (dialog.className) {
@@ -152,13 +152,20 @@ export default class Dialog extends WithTemplate {
 
   close() {
     this.toggle(false)
-    this.dialog.returnValue = undefined
+  }
+
+  accept() {
+    this.dialog.returnValue = 'accept'
+    this.close()
   }
 
   toggle(open = false) {
     if (this.dialogSupported) {
-      if (open) this.dialog.show()
-      else this.dialog.close()
+      if (open) {
+        this.dialog.show()
+      } else {
+        this.dialog.close()
+      }
     } else {
       this.dialog.hidden = !open
       if (this.elements.target && !open) {
@@ -179,6 +186,7 @@ export default class Dialog extends WithTemplate {
             const value = this.hasFormData ? this.collectFormData() : true
             resolve(value)
           }
+          this.dialog.returnValue = undefined
         },
         { once: true }
       )
