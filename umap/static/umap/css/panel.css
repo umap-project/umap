@@ -128,8 +128,8 @@
     }
 
     .panel.expanded {
-        height: calc(100% - var(--current-footer-height));
-        max-height: calc(100% - var(--current-footer-height));
+        height: calc(100% - var(--current-footer-height) - var(--current-header-height));
+        max-height: calc(100% - var(--current-footer-height) - var(--current-header-height));
     }
 
     .umap-caption-bar-enabled .panel {

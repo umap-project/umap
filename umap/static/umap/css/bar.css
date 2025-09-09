@@ -219,7 +219,7 @@
     display: none;
     top: calc(var(--current-header-height) + var(--panel-gutter));
     flex-direction: column;
-    z-index: var(--zindex-panels);
+    z-index: calc(var(--zindex-panels) - 1);
     width: var(--control-size);
     background-color: var(--background-color);
     border-radius: var(--border-radius);
