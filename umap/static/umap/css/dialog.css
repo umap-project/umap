@@ -1,17 +1,17 @@
 .umap-dialog {
-    z-index: var(--zindex-dialog);
-    margin: auto;
-    margin-top: 100px;
-    width: var(--dialog-width);
-    max-width: 100vw;
-    max-height: 80vh;
-    padding: 20px;
-    border: 1px solid #222;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    border-radius: 5px;
-    overflow-y: auto;
-    height: fit-content;
+  z-index: var(--zindex-dialog);
+  margin: auto;
+  margin-top: calc(var(--header-height) + var(--panel-gutter));
+  width: var(--dialog-width);
+  max-width: 100vw;
+  max-height: 80vh;
+  padding: 20px;
+  border: 1px solid #222;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border-radius: 5px;
+  overflow-y: auto;
+  height: fit-content;
 }
 .umap-dialog ul + h4 {
   margin-top: var(--box-margin);
@@ -36,6 +36,15 @@
   margin: unset;
   padding: unset;
 }
+@media all and (max-width: 480px) {
+  :root {
+    --dialog-width: calc(100vw - var(--control-size) * 2 - var(--panel-gutter) * 4);
+  }
+  .umap-dialog {
+    padding: var(--small-box-padding);
+  }
+}
+
 /* hack for Firefox */
 @-moz-document url-prefix() {
   [data-component="no-dialog"]:not([hidden]) {
