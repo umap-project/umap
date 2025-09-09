@@ -1128,8 +1128,13 @@ ul.photon-autocomplete {
     line-height: var(--control-size);
 }
 
+.leaflet-left .leaflet-control {
+    margin-left: var(--panel-gutter);
+    margin-top: var(--panel-gutter);
+}
+
 .leaflet-container .leaflet-control-zoom {
-    margin-inline-start: 10px;
+    margin-inline-start: var(--panel-gutter);
 }
 
 .leaflet-top,
@@ -1204,11 +1209,6 @@ ul.photon-autocomplete {
 }
 
 @media all and (max-width: 480px) {
-
-    .umap-edit-enabled {
-        --header-height: 80px;
-    }
-
     .leaflet-control-layers-expanded label {
         display: inline-block;
         margin-inline-end: 10px;
