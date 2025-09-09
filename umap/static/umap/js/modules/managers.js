@@ -253,8 +253,24 @@ export class FieldManager extends Map {
     ]
     const form = new Form(field, metadatas)
 
-    return this.dialog.open({ template: form.build() }).then(() => {
-      if (!this.validateName(field.key)) {
+    const [container, { body, addFilter }] = Utils.loadTemplateWithRefs(`
+      <div>
+        <h3>${translate('Manage field')}</h3>
+        <div data-ref=body></div>
+        <button type="button" data-ref=addFilter hidden><i class="icon icon-16 icon-filters"></i>${translate('Add filter for this field')}</button>
+      </div>
+    `)
+    body.appendChild(form.build())
+    if (this.parent.facets) {
+      addFilter.addEventListener('click', () => {
+        this.dialog.accept()
+        this.parent.facets.filterForm(field.key)
+      })
+      addFilter.hidden = false
+    }
+
+    return this.dialog.open({ template: container }).then(() => {
+      if (!this.validateName(field.key, field.key !== name)) {
         this.pull()
         return
       }
@@ -279,7 +295,7 @@ export class FieldManager extends Map {
     })
   }
 
-  validateName(name) {
+  validateName(name, isNew = false) {
     if (!name) {
       Alert.error(translate('Name cannot be empty.'))
       return false
@@ -288,7 +304,7 @@ export class FieldManager extends Map {
       Alert.error(translate('Name “{name}” should not contain a dot.', { name }))
       return false
     }
-    if (this.has(name)) {
+    if (isNew && this.has(name)) {
       Alert.error(translate('This name already exists: “{name}”', { name }))
       return false
     }

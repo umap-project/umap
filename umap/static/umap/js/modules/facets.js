@@ -265,10 +265,22 @@ export default class Facets {
       ],
     ]
     const form = new Form(properties, metadata)
+    const [container, { body, editField }] = Utils.loadTemplateWithRefs(`
+      <div>
+        <h3>${translate('Manage filter')}</h3>
+        <div data-ref=body></div>
+        <button type="button" data-ref=editField><i class="icon icon-16 icon-edit"></i>${translate('Edit this field')}</button>
+      </div>
+    `)
+    body.appendChild(form.build())
+    editField.addEventListener('click', () => {
+      this._umap.dialog.accept()
+      this._umap.fields.editField(name)
+    })
 
-    return this._umap.dialog.open({ template: form.build() }).then(() => {
+    return this._umap.dialog.open({ template: container }).then(() => {
       if (!properties.name) return
-      this.add(...properties)
+      this.add({ ...properties })
     })
   }
 }
