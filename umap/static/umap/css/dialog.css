@@ -38,7 +38,7 @@
 }
 @media all and (max-width: 480px) {
   :root {
-    --dialog-width: calc(100vw - var(--control-size) * 2 - var(--panel-gutter) * 4);
+    --dialog-width: calc(100vw - var(--control-size) * 2 - var(--panel-gutter) * 8);
   }
   .umap-dialog {
     padding: var(--small-box-padding);

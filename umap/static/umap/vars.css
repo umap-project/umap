@@ -77,3 +77,13 @@
         --box-margin: 7px;
     }
 }
+
+@media all and (max-width: 480px) {
+    :root {
+        --panel-gutter: 4px;
+    }
+
+    .umap-edit-enabled {
+        --header-height: 80px;
+    }
+}
