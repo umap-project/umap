@@ -187,12 +187,23 @@ export default class Browser {
     fitBounds.addEventListener('click', () => this._umap.fitDataBounds())
     download.addEventListener('click', () => this.downloadVisible(download))
     download.hidden = this._umap.getProperty('embedControl') === false
+    reset.addEventListener('click', () => this.resetFilters())
 
     this.filtersTitle = filtersTitle
     this.dataContainer = dataContainer
     this.formContainer = formContainer
     this.toggleBadge()
+    this.buildFilters()
+    this._umap.panel.open({
+      content: container,
+      className: 'umap-browser',
+    })
 
+    this.update()
+  }
+
+  buildFilters() {
+    this.formContainer.innerHTML = ''
     let fields = [
       [
         'options.filter',
@@ -202,28 +213,19 @@ export default class Browser {
     ]
     const builder = new Form(this, fields)
     builder.on('set', () => this.onFormChange())
-    let filtersBuilder
     this.formContainer.appendChild(builder.build())
     builder.form.addEventListener('reset', () => {
       window.setTimeout(builder.syncAll.bind(builder))
     })
-    if (this._umap.properties.facetKey) {
+    if (this._umap.facets.size) {
       fields = this._umap.facets.build()
-      filtersBuilder = new Form(this._umap.facets, fields)
+      const filtersBuilder = new Form(this._umap.facets, fields)
       filtersBuilder.on('set', () => this.onFormChange())
       filtersBuilder.form.addEventListener('reset', () => {
         window.setTimeout(filtersBuilder.syncAll.bind(filtersBuilder))
       })
       this.formContainer.appendChild(filtersBuilder.build())
     }
-    reset.addEventListener('click', () => this.resetFilters())
-
-    this._umap.panel.open({
-      content: container,
-      className: 'umap-browser',
-    })
-
-    this.update()
   }
 
   resetFilters() {

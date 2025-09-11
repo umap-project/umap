@@ -113,9 +113,7 @@ class BaseElement {
   getLabelTemplate() {
     const label = this.properties.label
     const help = this.properties.helpEntries?.join() || ''
-    return label
-      ? `<label title="${label}" data-ref=label data-help="${help}">${label}</label>`
-      : ''
+    return label ? `<label data-ref=label data-help="${help}">${label}</label>` : ''
   }
 
   fetch() {}
@@ -295,6 +293,23 @@ Fields.BlurFloatInput = class extends FloatMixin(Fields.BlurInput) {
     return { step: 'any' }
   }
 }
+
+const DateMixin = (Base) =>
+  class extends Base {
+    toHTML() {
+      const raw = super.toHTML()
+      if (!raw) return null
+      const parsed = Utils.parseNaiveDate(raw)
+      if (!parsed) return null
+      return parsed.toISOString().substring(0, 10)
+    }
+
+    type() {
+      return 'date'
+    }
+  }
+
+Fields.DateInput = class extends DateMixin(Fields.Input) {}
 
 Fields.CheckBox = class extends BaseElement {
   getTemplate() {
@@ -967,7 +982,7 @@ Fields.Switch = class extends Fields.CheckBox {
   getTemplate() {
     const label = this.properties.label
     const help = this.properties.helpEntries?.join() || ''
-    return `${super.getTemplate()}<label title="${label}" for="${this.id}" data-ref=customLabel data-help="${help}">${label}</label>`
+    return `${super.getTemplate()}<label for="${this.id}" data-ref=customLabel data-help="${help}">${label}</label>`
   }
 
   build() {
@@ -1004,7 +1019,7 @@ Fields.FacetSearchChoices = class extends Fields.FacetSearchBase {
   }
 
   build() {
-    this.type = this.properties.criteria.type
+    this.type = this.properties.criteria.widget || 'checkbox'
 
     const choices = this.properties.criteria.choices
     choices.sort()
@@ -1023,7 +1038,7 @@ Fields.FacetSearchChoices = class extends Fields.FacetSearchBase {
       </li>
     `)
     label.textContent = value
-    input.checked = this.get().choices.includes(value)
+    input.checked = this.get()?.choices?.includes(value)
     input.dataset.value = value
     input.addEventListener('change', () => this.sync())
     this.elements.ul.appendChild(li)
@@ -1054,8 +1069,8 @@ Fields.MinMaxBase = class extends Fields.FacetSearchBase {
 
   getTemplate() {
     const [minLabel, maxLabel] = this.getLabels()
-    const { min, max, type } = this.properties.criteria
-    this.type = type
+    const { min, max, widget } = this.properties.criteria
+    this.type = widget
     const inputType = this.getInputType(this.type)
     const minHTML = this.prepareForHTML(min)
     const maxHTML = this.prepareForHTML(max)
@@ -1072,7 +1087,7 @@ Fields.MinMaxBase = class extends Fields.FacetSearchBase {
     this.minInput = this.elements.minInput
     this.maxInput = this.elements.maxInput
     const { min, max, type } = this.properties.criteria
-    const { min: modifiedMin, max: modifiedMax } = this.get()
+    const { min: modifiedMin, max: modifiedMax } = this.get() || {}
 
     const currentMin = modifiedMin !== undefined ? modifiedMin : min
     const currentMax = modifiedMax !== undefined ? modifiedMax : max
@@ -1136,12 +1151,20 @@ Fields.MinMaxBase = class extends Fields.FacetSearchBase {
 }
 
 Fields.FacetSearchNumber = class extends Fields.MinMaxBase {
+  getInputType(type) {
+    return 'number'
+  }
+
   prepareForJS(value) {
     return new Number(value)
   }
 }
 
 Fields.FacetSearchDate = class extends Fields.MinMaxBase {
+  getInputType(type) {
+    return 'date'
+  }
+
   prepareForJS(value) {
     return new Date(value)
   }
@@ -1152,7 +1175,7 @@ Fields.FacetSearchDate = class extends Fields.MinMaxBase {
 
   prepareForHTML(value) {
     // Value must be in local time
-    if (Number.isNaN(value)) return
+    if (!value || isNaN(value)) return
     return this.toLocaleDateTime(value).toISOString().substr(0, 10)
   }
 
@@ -1162,7 +1185,7 @@ Fields.FacetSearchDate = class extends Fields.MinMaxBase {
 }
 
 Fields.FacetSearchDateTime = class extends Fields.FacetSearchDate {
-  getInputType(type) {
+  getInputType() {
     return 'datetime-local'
   }
 
@@ -1207,7 +1230,10 @@ Fields.MultiChoice = class extends BaseElement {
   }
 
   getChoices() {
-    return this.properties.choices || this.choices
+    let choices = this.properties.choices || this.choices
+    // Allow to pass flat arrays [c1, c2, c3] instead of [[c1, v1], [c2, v2]]
+    if (!Array.isArray(choices[0])) choices = choices.map((key) => [key, key])
+    return choices
   }
 
   getTemplate() {
