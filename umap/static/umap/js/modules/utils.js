@@ -401,7 +401,10 @@ export function template(str, data) {
 }
 
 export function parseNaiveDate(value) {
+  if (!value) return undefined
   const naive = new Date(value)
+  // Number.isNaN will always return false for invalid date
+  if (isNaN(naive)) return undefined
   // Let's pretend naive date are UTC, and remove time…
   return new Date(Date.UTC(naive.getFullYear(), naive.getMonth(), naive.getDate()))
 }

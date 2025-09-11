@@ -165,6 +165,35 @@ html[dir="rtl"] .icon {
     background-position: calc(var(--tile) * 5) 0;
 }
 
+.icon-field-Boolean {
+    background-position: calc(var(--tile) * 2) calc(var(--tile) * 8);
+}
+
+.icon-field-Date {
+    background-position: calc(var(--tile) * 5) calc(var(--tile) * 8);
+}
+
+.icon-field-Datetime {
+    background-position: calc(var(--tile) * 6) calc(var(--tile) * 8);
+}
+
+.icon-field-Enum {
+    background-position: calc(var(--tile) * 7) calc(var(--tile) * 8);
+}
+
+.icon-field-Number {
+    background-position: calc(var(--tile) * 3) calc(var(--tile) * 8);
+}
+
+.icon-field-String {
+    background-position: var(--tile) calc(var(--tile) * 8);
+}
+
+.icon-field-Text {
+    background-position: 0 calc(var(--tile) * 8);
+}
+
+
 .icon-filters {
     background-position: 0px var(--tile);
 }
