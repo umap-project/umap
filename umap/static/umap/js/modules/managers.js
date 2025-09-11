@@ -226,6 +226,7 @@ export class FieldManager extends Map {
       )
       const oldFields = Utils.CopyJSON(this.parent.properties.fields)
       const copy = Object.fromEntries(this)
+      this.clear()
       for (const key of orderedKeys) {
         this.add(copy[key])
       }
