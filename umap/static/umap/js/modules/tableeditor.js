@@ -50,7 +50,7 @@ export default class TableEditor extends WithTemplate {
       filterItem = {
         label: translate('Add filter for this field'),
         action: () => {
-          this._umap.facets.add(property)
+          this._umap.facets.add({ name: property })
           this._umap.browser.open('filters')
         },
       }
