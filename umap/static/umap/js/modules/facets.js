@@ -2,6 +2,7 @@ import { DomEvent, DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
 import { Form } from './form/builder.js'
 import * as Utils from './utils.js'
+import Orderable from './orderable.js'
 
 const WIDGETS = ['checkbox', 'radio', 'minmax']
 
@@ -192,7 +193,7 @@ export default class Facets {
     return this.defined.get(name)
   }
 
-  add(name, label, widget) {
+  add({ name, label, widget }) {
     if (!this.defined.has(name)) {
       this.defined.set(name, { label, widget })
       this.dumps()
@@ -217,9 +218,10 @@ export default class Facets {
     const [body, { ul, add }] = Utils.loadTemplateWithRefs(template)
     this.defined.forEach((props, key) => {
       const [li, { edit, remove }] = Utils.loadTemplateWithRefs(
-        `<li>
+        `<li class="orderable" data-key="${key}">
           <button class="icon icon-16 icon-edit" data-ref="edit" title="${translate('Edit this filter')}"></button>
           <button class="icon icon-16 icon-delete" data-ref="remove" title="${translate('Remove this filter')}"></button>
+          <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
           ${props.label || key}
         </li>`
       )
@@ -234,6 +236,23 @@ export default class Facets {
       })
     })
     add.addEventListener('click', () => this.filterForm())
+    const onReorder = (src, dst, initialIndex, finalIndex) => {
+      const orderedKeys = Array.from(ul.querySelectorAll('li')).map(
+        (el) => el.dataset.key
+      )
+      const oldFacets = Utils.CopyJSON(this._umap.properties.facets)
+      const copy = Object.fromEntries(this.defined)
+      this.defined.clear()
+      for (const key of orderedKeys) {
+        this.add({ name: key, ...copy[key] })
+      }
+      this._umap.sync.update(
+        'properties.facets',
+        this._umap.properties.facets,
+        oldFacets
+      )
+    }
+    const orderable = new Orderable(ul, onReorder)
     container.appendChild(body)
   }
 
