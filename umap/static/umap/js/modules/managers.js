@@ -291,11 +291,17 @@ export class FieldManager extends Map {
         this.add(field)
       }
       if (name && name !== field.key) {
-        this.add(field)
-        this.delete(name)
+        this.clear()
+        // Keep order on rename
+        for (const old of oldFields) {
+          if (old.key === name) {
+            this.add(field)
+          } else {
+            this.add(old)
+          }
+        }
         this.parent.renameField(name, field.key)
       }
-      console.log('update with', oldFields, this.parent.properties.fields)
       this.parent.sync.update(
         'properties.fields',
         this.parent.properties.fields,
