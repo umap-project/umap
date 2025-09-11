@@ -200,6 +200,7 @@ export class FieldManager extends Map {
           <button class="icon icon-16 icon-edit" title="${translate('Edit this field')}" data-ref=edit></button>
           <button class="icon icon-16 icon-delete" title="${translate('Delete this field')}" data-ref=del></button>
           <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
+          <i class="icon icon-16 icon-field-${field.type}" title="${field.type}"></i>
           ${field.key}
         </li>`
       )
@@ -238,7 +239,15 @@ export class FieldManager extends Map {
   }
 
   async editField(name) {
-    const FIELD_TYPES = ['String', 'Text', 'Number', 'Date', 'Datetime', 'Enum']
+    const FIELD_TYPES = [
+      'String',
+      'Text',
+      'Number',
+      'Date',
+      'Datetime',
+      'Enum',
+      'Boolean',
+    ]
     const field = this.get(name) || {}
     const metadatas = [
       ['key', { handler: 'BlurInput', label: translate('Field Name') }],

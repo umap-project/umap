@@ -113,9 +113,7 @@ class BaseElement {
   getLabelTemplate() {
     const label = this.properties.label
     const help = this.properties.helpEntries?.join() || ''
-    return label
-      ? `<label title="${label}" data-ref=label data-help="${help}">${label}</label>`
-      : ''
+    return label ? `<label data-ref=label data-help="${help}">${label}</label>` : ''
   }
 
   fetch() {}
@@ -295,6 +293,23 @@ Fields.BlurFloatInput = class extends FloatMixin(Fields.BlurInput) {
     return { step: 'any' }
   }
 }
+
+const DateMixin = (Base) =>
+  class extends Base {
+    toHTML() {
+      const raw = super.toHTML()
+      if (!raw) return null
+      const parsed = Utils.parseNaiveDate(raw)
+      if (!parsed) return null
+      return parsed.toISOString().substring(0, 10)
+    }
+
+    type() {
+      return 'date'
+    }
+  }
+
+Fields.DateInput = class extends DateMixin(Fields.Input) {}
 
 Fields.CheckBox = class extends BaseElement {
   getTemplate() {
@@ -967,7 +982,7 @@ Fields.Switch = class extends Fields.CheckBox {
   getTemplate() {
     const label = this.properties.label
     const help = this.properties.helpEntries?.join() || ''
-    return `${super.getTemplate()}<label title="${label}" for="${this.id}" data-ref=customLabel data-help="${help}">${label}</label>`
+    return `${super.getTemplate()}<label for="${this.id}" data-ref=customLabel data-help="${help}">${label}</label>`
   }
 
   build() {
@@ -1160,7 +1175,7 @@ Fields.FacetSearchDate = class extends Fields.MinMaxBase {
 
   prepareForHTML(value) {
     // Value must be in local time
-    if (Number.isNaN(value)) return
+    if (!value || isNaN(value)) return
     return this.toLocaleDateTime(value).toISOString().substr(0, 10)
   }
 
