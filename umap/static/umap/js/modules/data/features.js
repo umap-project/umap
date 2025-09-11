@@ -242,10 +242,19 @@ class Feature {
 
     const properties = []
     for (const field of this.fields) {
-      const options = { handler: 'Input', label: field.key }
+      const options = {
+        handler: 'Input',
+        label: `<i class="icon icon-16 icon-field-${field.type}"></i>${field.key}`,
+      }
       if (field.key === 'description' || field.type === 'Text') {
         options.handler = 'Textarea'
         options.helpEntries = ['textFormatting']
+      } else if (field.type === 'Number') {
+        options.handler = 'FloatInput'
+      } else if (field.type === 'Date') {
+        options.handler = 'DateInput'
+      } else if (field.type === 'Boolean') {
+        options.handler = 'Switch'
       }
       properties.push([`properties.${field.key}`, options])
     }
