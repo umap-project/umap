@@ -44,8 +44,8 @@ Voici le marqueur obtenu avec les propriétés ci-contre :
 
 Pour modifier un marqueur de la carte, plusieurs possibilités s’offrent à vous :
 
--   un clic sur le marqueur vous permet soit d’afficher le panneau
-    d’édition (stylo), soit de supprimer le marqueur (corbeille)
+-   un **clic-droit** sur le marqueur vous permet d’afficher les options
+    d’édition possibles avec vos droits et d’autres actions relatives à ce point
 -   **shift-clic** est un raccourci qui affiche directement le panneau
     d’édition
 -   un glisser-déposer vous permet de déplacer le marqueur sur la carte

@@ -33,7 +33,7 @@ lieux (domicile, vacances, travail, etc.). Procédons par étapes.
 
 Apparaît alors sur votre navigateur une carte qui se présente ainsi :
 
-![umap_edition.jpg](../../static/tutoriels/2-je-cree-ma-premiere-carte-umap/umap_edition.jpg)
+![Une carte vierge annotée avec les principales actions d’édition](../../static/tutoriels/2-je-cree-ma-premiere-carte-umap/umap_edition.png)
 
 Nous retrouvons à gauche les boutons disponibles lors de la
 [consultation d’une carte](1-browsing-a-map.md).
@@ -42,11 +42,12 @@ Plusieurs éléments visibles au-dessus et à droite de la carte sont
 visibles uniquement lorsque l’on crée ou modifie une carte, c’est-à-dire
 dans le *mode édition* :
 
--   le **nom de la carte** en haut à gauche
--   les boutons **Annuler les modifications** et **Enregistrer** en haut à droite
--   à droite une série de 3 boutons permettant d’ajouter des éléments à
-    la carte : marqueurs, lignes et polygones
--   en-dessous une série de 7 boutons permettant de configurer la carte
+-   le **nom de la carte** en haut à gauche ainsi que les droits d’accès
+-   la possibilité d’**⃔annuler** / **reproduire⃕** des actions avec les flèches
+-   les boutons **Aperçu** et **Enregistrer** en haut à droite
+-   à droite une série de 4 boutons permettant d’ajouter des éléments à
+    la carte : marqueurs, lignes, polygones et routes
+-   en-dessous une série de boutons permettant de configurer la carte
 
 ### 2. Nommer la carte
 
