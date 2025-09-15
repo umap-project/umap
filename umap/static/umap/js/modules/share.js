@@ -3,6 +3,7 @@ import { MutatingForm } from './form/builder.js'
 import { EXPORT_FORMATS } from './formatter.js'
 import { translate } from './i18n.js'
 import * as Utils from './utils.js'
+import * as DOMUtils from './domutils.js'
 
 export default class Share {
   constructor(umap) {
@@ -17,14 +18,14 @@ export default class Share {
       'icon-share'
     )
 
-    DomUtil.createCopiableInput(
+    DOMUtils.copiableInput(
       this.container,
       translate('Link to view the map'),
       window.location.protocol + Utils.getBaseUrl()
     )
 
     if (this._umap.properties.shortUrl) {
-      DomUtil.createCopiableInput(
+      DOMUtils.copiableInput(
         this.container,
         translate('Short link'),
         this._umap.properties.shortUrl
@@ -79,7 +80,7 @@ export default class Share {
     const embedTitle = DomUtil.add('h4', '', this.container, translate('Embed the map'))
     const iframe = DomUtil.create('textarea', 'umap-share-iframe', this.container)
     const urlTitle = DomUtil.add('h4', '', this.container, translate('Direct link'))
-    const exportUrl = DomUtil.createCopiableInput(
+    const exportUrl = DOMUtils.copiableInput(
       this.container,
       translate('Share this link to open a customized map view'),
       ''

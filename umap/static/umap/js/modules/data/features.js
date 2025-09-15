@@ -22,6 +22,7 @@ import {
 } from '../rendering/ui.js'
 import { SCHEMA } from '../schema.js'
 import * as Utils from '../utils.js'
+import * as DOMUtils from '../domutils.js'
 
 class Feature {
   constructor(umap, datalayer, geojson = {}, id = null) {
@@ -647,8 +648,7 @@ class Feature {
     items.push({
       label: translate('Copy as GeoJSON'),
       action: () => {
-        L.Util.copyToClipboard(JSON.stringify(this.toGeoJSON()))
-        this._umap.tooltip.open({ content: L._('✅ Copied!') })
+        DOMUtils.copyToClipboard(JSON.stringify(this.toGeoJSON()))
       },
     })
     return items
