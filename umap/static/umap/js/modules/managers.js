@@ -285,7 +285,6 @@ export class FieldManager extends Map {
         return
       }
       this.parent.sync.startBatch()
-      console.log(this.parent.properties.fields)
       const oldFields = Utils.CopyJSON(this.parent.properties.fields)
       if (!name) {
         this.add(field)

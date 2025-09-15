@@ -253,6 +253,8 @@ class Feature {
         options.handler = 'FloatInput'
       } else if (field.type === 'Date') {
         options.handler = 'DateInput'
+      } else if (field.type === 'Datetime') {
+        options.handler = 'DateTimeInput'
       } else if (field.type === 'Boolean') {
         options.handler = 'Switch'
       }
