@@ -289,8 +289,7 @@ export class FieldManager extends Map {
       const oldFields = Utils.CopyJSON(this.parent.properties.fields)
       if (!name) {
         this.add(field)
-      }
-      if (name && name !== field.key) {
+      } else if (name !== field.key) {
         this.clear()
         // Keep order on rename
         for (const old of oldFields) {
@@ -301,6 +300,8 @@ export class FieldManager extends Map {
           }
         }
         this.parent.renameField(name, field.key)
+      } else {
+        this.push()
       }
       this.parent.sync.update(
         'properties.fields',
