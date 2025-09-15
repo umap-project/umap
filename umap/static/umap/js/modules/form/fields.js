@@ -311,6 +311,23 @@ const DateMixin = (Base) =>
 
 Fields.DateInput = class extends DateMixin(Fields.Input) {}
 
+const DateTimeMixin = (Base) =>
+  class extends Base {
+    toHTML() {
+      const raw = super.toHTML()
+      if (!raw) return null
+      const datetime = new Date(raw)
+      if (isNaN(datetime)) return null
+      return datetime.toISOString()
+    }
+
+    type() {
+      return 'datetime-local'
+    }
+  }
+
+Fields.DateTimeInput = class extends DateTimeMixin(Fields.Input) {}
+
 Fields.CheckBox = class extends BaseElement {
   getTemplate() {
     return `<input type=checkbox name="${this.name}" data-ref=input />`
