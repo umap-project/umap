@@ -176,24 +176,19 @@ export class FieldManager extends Map {
   }
 
   edit(container) {
-    const template = `
-      <details id="fields">
-        <summary>${translate('Manage Fields')}</summary>
-        <fieldset>
-          <ul data-ref=ul></ul>
-          <button type="button" data-ref=add><i class="icon icon-16 icon-add"></i>${translate('Add a new field')}</button>
-        </fieldset>
-      </details>
-    `
-    const [fieldset, { ul, add }] = Utils.loadTemplateWithRefs(template)
+    const ul = Utils.loadTemplate('<ul></ul>')
+    const add = Utils.loadTemplate(
+      `<button type="button" data-ref=add><i class="icon icon-16 icon-add"></i>${translate('Add a new field')}</button>`
+    )
     add.addEventListener('click', () => {
       this.editField().then(() => {
         this.parent.edit().then((panel) => {
-          panel.scrollTo('details#fields')
+          panel.scrollTo('details#fields-management')
         })
       })
     })
-    container.appendChild(fieldset)
+    container.appendChild(ul)
+    container.appendChild(add)
     for (const field of this.all()) {
       const [row, { edit, del }] = Utils.loadTemplateWithRefs(
         `<li class="orderable" data-key="${field.key}">
@@ -208,14 +203,14 @@ export class FieldManager extends Map {
       edit.addEventListener('click', () => {
         this.editField(field.key).then(() => {
           this.parent.edit().then((panel) => {
-            panel.scrollTo('details#fields')
+            panel.scrollTo('details#fields-management')
           })
         })
       })
       del.addEventListener('click', () => {
         this.confirmDelete(field.key).then(() => {
           this.parent.edit().then((panel) => {
-            panel.scrollTo('details#fields')
+            panel.scrollTo('details#fields-management')
           })
         })
       })

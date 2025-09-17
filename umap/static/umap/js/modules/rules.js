@@ -265,7 +265,7 @@ export default class Rules {
   edit(container) {
     const template = `
       <details id="rules">
-        <summary>${translate('Conditional style rules')}</summary>
+        <summary><h4>${translate('Conditional style rules')}</h4></summary>
         <fieldset>
           <ul data-ref=ul></ul>
           <button class="umap-add" type="button" data-ref=add>${translate('Add rule')}</button>
