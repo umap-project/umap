@@ -973,6 +973,19 @@ export class DataLayer {
     if (this.createdOnServer) download.hidden = false
   }
 
+  _editFields(container) {
+    const template = `
+      <details id="fields-management">
+        <summary><h4>${translate('Manage fields')}</h4></summary>
+        <fieldset data-ref="fieldset">
+        </fieldset>
+      </details>
+    `
+    const [root, { fieldset }] = Utils.loadTemplateWithRefs(template)
+    this.fields.edit(fieldset)
+    container.appendChild(root)
+  }
+
   edit() {
     if (!this._umap.editEnabled) {
       return
@@ -986,7 +999,7 @@ export class DataLayer {
     this._editTextPathProperties(container)
     this._editRemoteDataProperties(container)
     if (!this.isRemoteLayer()) {
-      this.fields.edit(container)
+      this._editFields(container)
     }
     this.rules.edit(container)
 

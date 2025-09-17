@@ -207,15 +207,14 @@ export default class Facets {
 
   edit(container) {
     const template = `
-      <details id="facets">
-        <summary>${translate('Filters')}</summary>
-        <fieldset>
-          <ul data-ref=ul></ul>
-          <button class="umap-add" type="button" data-ref=add>${translate('Add filter')}</button>
-        </fieldset>
-      </details>
+      <fieldset class="formbox" id="facets">
+        <legend data-help=facets>${translate('Filters')}</legend>
+        <ul data-ref=ul></ul>
+        <button class="umap-add" type="button" data-ref=add>${translate('Add filter')}</button>
+      </fieldset>
     `
     const [body, { ul, add }] = Utils.loadTemplateWithRefs(template)
+    this._umap.help.parse(body)
     this.defined.forEach((props, key) => {
       const [li, { edit, remove }] = Utils.loadTemplateWithRefs(
         `<li class="orderable" data-key="${key}">
@@ -228,11 +227,10 @@ export default class Facets {
       ul.appendChild(li)
       remove.addEventListener('click', () => {
         this.remove(key)
-        this._umap.edit().then((panel) => panel.scrollTo('details#facets'))
+        this._umap.edit().then((panel) => panel.scrollTo('details#fields-management'))
       })
       edit.addEventListener('click', () => {
         this.filterForm(key)
-        this._umap.edit().then((panel) => panel.scrollTo('details#facets'))
       })
     })
     add.addEventListener('click', () => this.filterForm())
