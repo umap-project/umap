@@ -6,6 +6,18 @@ import Orderable from './orderable.js'
 
 const WIDGETS = ['checkbox', 'radio', 'minmax']
 
+class FacetsForm extends Form {
+  buildField(field) {
+    const [root, elements] = field.buildTemplate()
+    elements.editFacet.addEventListener('click', field.properties.onClick)
+    field.build()
+  }
+
+  getHelperTemplate(helper) {
+    return helper.getTemplate()
+  }
+}
+
 export default class Facets {
   constructor(umap) {
     this._umap = umap
@@ -105,13 +117,22 @@ export default class Facets {
           handler = 'FacetSearchDateTime'
         }
       }
-      const label = this.defined.get(name).label
+      const label = `
+        <span>${Utils.escapeHTML(this.defined.get(name).label)}
+          <button class="icon icon-16 icon-edit show-on-edit" data-ref=editFacet></button>
+        </span>`
       return [
         `selected.${name}`,
         {
           criteria: { ...criteria, choices: Array.from(criteria.choices) },
           handler: handler,
           label: label,
+          onClick: () => {
+            this._umap
+              .edit()
+              .then((panel) => panel.scrollTo('details#fields-management'))
+            this._umap.facets.filterForm(name)
+          },
         },
       ]
     })
@@ -308,5 +329,11 @@ export default class Facets {
       }
       this._umap.edit().then((panel) => panel.scrollTo('details#fields-management'))
     })
+  }
+
+  buildForm(container) {
+    const form = new FacetsForm(this, this.build())
+    container.appendChild(form.build())
+    return form
   }
 }

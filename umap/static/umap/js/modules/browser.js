@@ -204,7 +204,7 @@ export default class Browser {
 
   buildFilters() {
     this.formContainer.innerHTML = ''
-    let fields = [
+    const fields = [
       [
         'options.filter',
         { handler: 'Input', placeholder: translate('Search map features…') },
@@ -218,13 +218,11 @@ export default class Browser {
       window.setTimeout(builder.syncAll.bind(builder))
     })
     if (this._umap.facets.size) {
-      fields = this._umap.facets.build()
-      const filtersBuilder = new Form(this._umap.facets, fields)
-      filtersBuilder.on('set', () => this.onFormChange())
-      filtersBuilder.form.addEventListener('reset', () => {
-        window.setTimeout(filtersBuilder.syncAll.bind(filtersBuilder))
+      const facetsForm = this._umap.facets.buildForm(this.formContainer)
+      facetsForm.on('set', () => this.onFormChange())
+      facetsForm.form.addEventListener('reset', () => {
+        window.setTimeout(facetsForm.syncAll.bind(facetsForm))
       })
-      this.formContainer.appendChild(filtersBuilder.build())
     }
   }
 
