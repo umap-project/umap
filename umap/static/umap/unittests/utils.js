@@ -838,6 +838,24 @@ describe('Utils', () => {
         '2024-03-03T00:00:00.000Z'
       )
     })
+    it('should parse a French date', () => {
+      assert.equal(
+        Utils.parseNaiveDate('14/09/2020').toISOString(),
+        '2020-09-14T00:00:00.000Z'
+      )
+    })
+    it('should parse a French date with ambiguous day number', () => {
+      assert.equal(
+        Utils.parseNaiveDate('08/09/2020').toISOString(),
+        '2020-09-08T00:00:00.000Z'
+      )
+    })
+    it('should parse a US date', () => {
+      assert.equal(
+        Utils.parseNaiveDate('1/14/2020').toISOString(),
+        '2020-01-14T00:00:00.000Z'
+      )
+    })
   })
 
   describe('#isObject', () => {
