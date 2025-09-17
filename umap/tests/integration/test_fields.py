@@ -75,7 +75,7 @@ DATALAYER_DATA2 = {
 def test_can_add_field_on_map(live_server, page, openmap):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.get_by_role("button", name="Map advanced properties").click()
-    page.get_by_text("Manage Fields").click()
+    page.get_by_text("Fields, filters and keys").click()
     page.get_by_role("button", name="Add a new field").click()
     page.get_by_role("textbox", name="Field Name ✔").fill("newfield")
     page.get_by_label("Field Type").select_option("Number")
@@ -122,6 +122,10 @@ def test_edit_and_rename_field_from_datalayer(live_server, page, openmap):
     saved = DataLayer.objects.first()
     assert saved.settings["fields"] == [
         {
+            "key": "mytypenew",
+            "type": "Text",
+        },
+        {
             "key": "name",
             "type": "String",
         },
@@ -132,10 +136,6 @@ def test_edit_and_rename_field_from_datalayer(live_server, page, openmap):
         {
             "key": "mydate",
             "type": "String",
-        },
-        {
-            "key": "mytypenew",
-            "type": "Text",
         },
     ]
     data = json.loads(Path(saved.geojson.path).read_text())
@@ -151,11 +151,46 @@ def test_edit_and_rename_field_from_datalayer(live_server, page, openmap):
         "mytypenew": "even",
         "name": "Point 2",
     }
+    page.locator(".edit-undo").click()
+    with page.expect_response(re.compile(r".*/datalayer/update/")):
+        page.get_by_role("button", name="Save").click()
+    saved = DataLayer.objects.first()
+    assert saved.settings["fields"] == [
+        {
+            "key": "mytype",
+            "type": "String",
+        },
+        {
+            "key": "name",
+            "type": "String",
+        },
+        {
+            "key": "mynumber",
+            "type": "String",
+        },
+        {
+            "key": "mydate",
+            "type": "String",
+        },
+    ]
+    data = json.loads(Path(saved.geojson.path).read_text())
+    assert data["features"][0]["properties"] == {
+        "mydate": "2024/03/13 12:20:20",
+        "mynumber": 12,
+        "mytype": "odd",
+        "name": "Point 1",
+    }
+    assert data["features"][1]["properties"] == {
+        "mydate": "2024/04/14 12:19:17",
+        "mynumber": 10,
+        "mytype": "even",
+        "name": "Point 2",
+    }
 
 
 def test_edit_and_rename_field_from_map(live_server, page, openmap):
     dl1 = DataLayerFactory(map=openmap, data=DATALAYER_DATA1)
-    dl2 = DataLayerFactory(map=openmap, data=DATALAYER_DATA2)
+    DataLayerFactory(map=openmap, data=DATALAYER_DATA2)
     openmap.settings["properties"]["fields"] = [
         {"key": "mytype", "type": "String"},
         {"key": "mynumber", "type": "Number"},
@@ -163,7 +198,7 @@ def test_edit_and_rename_field_from_map(live_server, page, openmap):
     openmap.save()
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.get_by_role("button", name="Map advanced properties").click()
-    page.get_by_text("Manage Fields").click()
+    page.get_by_text("Fields, filters and keys").click()
     page.get_by_role("button", name="Edit this field").first.click()
     page.get_by_role("textbox", name="Field Name ✔").fill("mytypenew")
     page.get_by_label("Field Type").select_option("Text")
@@ -172,8 +207,8 @@ def test_edit_and_rename_field_from_map(live_server, page, openmap):
         page.get_by_role("button", name="Save").click()
     saved = Map.objects.get(pk=openmap.pk)
     assert saved.settings["properties"]["fields"] == [
-        {"key": "mynumber", "type": "Number"},
         {"key": "mytypenew", "type": "Text"},
+        {"key": "mynumber", "type": "Number"},
     ]
     saved = DataLayer.objects.get(pk=dl1.pk)
     assert saved.settings["fields"] == [
@@ -197,6 +232,40 @@ def test_edit_and_rename_field_from_map(live_server, page, openmap):
         "mydate": "2024/04/14 12:19:17",
         "mynumber": 10,
         "mytypenew": "even",
+        "name": "Point 2",
+    }
+    page.locator(".edit-undo").click()
+
+    with page.expect_response(re.compile(rf".*/datalayer/update/{dl1.pk}")):
+        with page.expect_response(re.compile(r".*/update/settings/")):
+            page.get_by_role("button", name="Save").click()
+    saved = Map.objects.get(pk=openmap.pk)
+    assert saved.settings["properties"]["fields"] == [
+        {"key": "mytype", "type": "String"},
+        {"key": "mynumber", "type": "Number"},
+    ]
+    saved = DataLayer.objects.get(pk=dl1.pk)
+    assert saved.settings["fields"] == [
+        {
+            "key": "name",
+            "type": "String",
+        },
+        {
+            "key": "mydate",
+            "type": "String",
+        },
+    ]
+    data = json.loads(Path(saved.geojson.path).read_text())
+    assert data["features"][0]["properties"] == {
+        "mydate": "2024/03/13 12:20:20",
+        "mynumber": 12,
+        "mytype": "odd",
+        "name": "Point 1",
+    }
+    assert data["features"][1]["properties"] == {
+        "mydate": "2024/04/14 12:19:17",
+        "mynumber": 10,
+        "mytype": "even",
         "name": "Point 2",
     }
 
@@ -241,7 +310,7 @@ def test_delete_field_from_datalayer(live_server, page, openmap):
 
 def test_delete_field_from_map(live_server, page, openmap):
     dl1 = DataLayerFactory(map=openmap, data=DATALAYER_DATA1)
-    dl2 = DataLayerFactory(map=openmap, data=DATALAYER_DATA2)
+    DataLayerFactory(map=openmap, data=DATALAYER_DATA2)
     openmap.settings["properties"]["fields"] = [
         {"key": "mytype", "type": "String"},
         {"key": "mynumber", "type": "Number"},
@@ -249,7 +318,7 @@ def test_delete_field_from_map(live_server, page, openmap):
     openmap.save()
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.get_by_role("button", name="Map advanced properties").click()
-    page.get_by_text("Manage Fields").click()
+    page.get_by_text("Fields, filters and keys").click()
     page.get_by_role("button", name="Delete this field").first.click()
     page.get_by_role("button", name="OK").click()
     with page.expect_response(re.compile(r".*/datalayer/update/")):
