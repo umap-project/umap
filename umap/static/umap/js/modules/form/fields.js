@@ -49,6 +49,7 @@ class BaseElement {
     this.elements = elements
     this.container = elements.container
     this.form.appendChild(this.root)
+    return [root, elements]
   }
 
   getTemplate() {
@@ -1029,7 +1030,7 @@ Fields.FacetSearchChoices = class extends Fields.FacetSearchBase {
   getTemplate() {
     return `
       <fieldset class="umap-facet">
-        <legend data-ref=label>${Utils.escapeHTML(this.properties.label)}</legend>
+        <legend data-ref=label>${this.properties.label}</legend>
         <ul data-ref=ul></ul>
       </fieldset>
       `
@@ -1093,7 +1094,7 @@ Fields.MinMaxBase = class extends Fields.FacetSearchBase {
     const maxHTML = this.prepareForHTML(max)
     return `
       <fieldset class="umap-facet">
-        <legend>${Utils.escapeHTML(this.properties.label)}</legend>
+        <legend>${this.properties.label}</legend>
         <label>${minLabel}<input min="${minHTML}" max="${maxHTML}" step=any type="${inputType}" data-ref=minInput /></label>
         <label>${maxLabel}<input min="${minHTML}" max="${maxHTML}" step=any type="${inputType}" data-ref=maxInput /></label>
       </fieldset>
