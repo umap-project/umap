@@ -18,10 +18,10 @@ def test_iframe_code_can_contain_datalayers(map, live_server, datalayer, page):
     expect(textarea).not_to_have_text(re.compile(f"datalayers={datalayer.pk}"))
     # Open options
     page.get_by_text("Embed and link options").click()
-    page.get_by_title("Keep current visible layers").click()
+    page.get_by_text("Keep current visible layers").click()
     expect(textarea).to_have_text(re.compile(f"datalayers={datalayer.pk}"))
     # Now click again
-    page.get_by_title("Keep current visible layers").click()
+    page.get_by_text("Keep current visible layers").click()
     expect(textarea).not_to_have_text(re.compile(f"datalayers={datalayer.pk}"))
 
 
@@ -33,8 +33,8 @@ def test_iframe_code_can_contain_feature(map, live_server, datalayer, page):
     expect(textarea).not_to_have_text(re.compile("feature=Here"))
     # Open options
     page.get_by_text("Embed and link options").click()
-    page.get_by_title("Open current feature on load").click()
+    page.get_by_text("Open current feature on load").click()
     expect(textarea).to_have_text(re.compile("feature=Here"))
     # Click again to deactivate it
-    page.get_by_title("Open current feature on load").click()
+    page.get_by_text("Open current feature on load").click()
     expect(textarea).not_to_have_text(re.compile("feature=Here"))

@@ -186,7 +186,6 @@ export default class Dialog extends WithTemplate {
             const value = this.hasFormData ? this.collectFormData() : true
             resolve(value)
           }
-          this.dialog.returnValue = undefined
         },
         { once: true }
       )

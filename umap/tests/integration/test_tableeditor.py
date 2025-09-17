@@ -79,7 +79,7 @@ def test_table_editor(live_server, openmap, datalayer, page):
     page.wait_for_timeout(300)  # Time for the input debounce.
     page.keyboard.press("Enter")
     page.locator("thead button[data-property=name]").click()
-    page.get_by_role("button", name="Delete this column").click()
+    page.get_by_role("button", name="Delete this field").click()
     page.locator("dialog").get_by_role("button", name="OK").click()
     with page.expect_response(re.compile(r".*/datalayer/update/.*")):
         page.get_by_role("button", name="Save").click()
@@ -123,7 +123,7 @@ def test_rename_property(live_server, openmap, page):
     page.locator(".panel").get_by_title("Edit properties in a table").click()
     expect(page.locator("table th button[data-property=mytype]")).to_have_count(1)
     page.locator("thead button[data-property=mytype]").click()
-    page.get_by_text("Edit this column").click()
+    page.get_by_text("Edit this field").click()
     page.locator("dialog").locator("input").fill("mynewtype")
     page.get_by_role("button", name="OK").click()
     expect(page.locator("table th button[data-property=mynewtype]")).to_have_count(1)
@@ -149,7 +149,7 @@ def test_delete_property(live_server, openmap, page):
     page.locator(".panel").get_by_title("Edit properties in a table").click()
     expect(page.locator("table th button[data-property=mytype]")).to_have_count(1)
     page.locator("thead button[data-property=mytype]").click()
-    page.get_by_text("Delete this column").click()
+    page.get_by_text("Delete this field").click()
     page.get_by_role("button", name="OK").click()
     expect(page.locator("table th button[data-property=mytype]")).to_have_count(0)
 
@@ -202,7 +202,7 @@ def test_filter_and_delete_rows(live_server, openmap, page):
     expect(table.locator("tbody tr")).to_have_count(4)
     expect(page.locator(".leaflet-marker-icon")).to_have_count(4)
     table.locator("thead button[data-property=mytype]").click()
-    page.get_by_role("button", name="Add filter for this column").click()
+    page.get_by_role("button", name="Add filter for this field").click()
     expect(panel).to_be_visible()
     panel.get_by_label("even").check()
     table.locator("thead").get_by_role("checkbox").check()
