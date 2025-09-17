@@ -58,11 +58,11 @@ export default class TableEditor extends WithTemplate {
     actions.push(filterItem)
     if (!this.datalayer.isRemoteLayer()) {
       actions.push({
-        label: translate('Edit this column'),
+        label: translate('Edit this field'),
         action: () => this.editField(property),
       })
       actions.push({
-        label: translate('Delete this column'),
+        label: translate('Delete this field'),
         action: () => this.deleteField(property),
       })
     }
