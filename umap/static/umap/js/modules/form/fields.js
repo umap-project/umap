@@ -8,15 +8,15 @@ import * as Icon from '../rendering/icon.js'
 import { SCHEMA } from '../schema.js'
 import * as Utils from '../utils.js'
 
-const Fields = {}
+export const Fields = {}
 
-export default function getClass(name) {
+export function getClass(name) {
   if (typeof name === 'function') return name
   if (!Fields[name]) throw Error(`Unknown class ${name}`)
   return Fields[name]
 }
 
-class BaseElement {
+Fields.Base = class {
   constructor(builder, field, properties) {
     this.builder = builder
     this.obj = this.builder.obj
@@ -128,7 +128,7 @@ class BaseElement {
   }
 }
 
-Fields.Textarea = class extends BaseElement {
+Fields.Textarea = class extends Fields.Base {
   getTemplate() {
     return `<textarea placeholder="${this.properties.placeholder || ''}" name="${this.name}" data-ref=textarea></textarea>`
   }
@@ -168,7 +168,7 @@ Fields.Textarea = class extends BaseElement {
   }
 }
 
-Fields.Input = class extends BaseElement {
+Fields.Input = class extends Fields.Base {
   getTemplate() {
     return `<input type="${this.type()}" name="${this.name}" placeholder="${this.properties.placeholder || ''}" data-ref=input />`
   }
@@ -329,7 +329,7 @@ const DateTimeMixin = (Base) =>
 
 Fields.DateTimeInput = class extends DateTimeMixin(Fields.Input) {}
 
-Fields.CheckBox = class extends BaseElement {
+Fields.CheckBox = class extends Fields.Base {
   getTemplate() {
     return `<input type=checkbox name="${this.name}" data-ref=input />`
   }
@@ -360,7 +360,7 @@ Fields.CheckBox = class extends BaseElement {
   }
 }
 
-Fields.CheckBoxes = class extends BaseElement {
+Fields.CheckBoxes = class extends Fields.Base {
   getInputTemplate(value, label) {
     return `<label><input type=checkbox value="${value}" name="${this.name}" data-ref=input />${label}</label>`
   }
@@ -383,7 +383,7 @@ Fields.CheckBoxes = class extends BaseElement {
   }
 }
 
-Fields.Select = class extends BaseElement {
+Fields.Select = class extends Fields.Base {
   getTemplate() {
     return `<select name="${this.name}" data-ref=select></select>`
   }
@@ -456,7 +456,7 @@ Fields.IntSelect = class extends Fields.Select {
   }
 }
 
-Fields.EditableText = class extends BaseElement {
+Fields.EditableText = class extends Fields.Base {
   getTemplate() {
     return `<span class="${this.properties.className || ''}" data-ref=input></span>`
   }
@@ -1022,199 +1022,7 @@ Fields.Switch = class extends Fields.CheckBox {
   }
 }
 
-Fields.FacetSearchBase = class extends BaseElement {
-  buildLabel() {}
-}
-
-Fields.FacetSearchChoices = class extends Fields.FacetSearchBase {
-  getTemplate() {
-    return `
-      <fieldset class="umap-facet">
-        <legend data-ref=label>${this.properties.label}</legend>
-        <ul data-ref=ul></ul>
-      </fieldset>
-      `
-  }
-
-  build() {
-    this.type = this.properties.criteria.widget || 'checkbox'
-
-    const choices = this.properties.criteria.choices
-    choices.sort()
-    choices.forEach((value) => this.buildLi(value))
-    super.build()
-  }
-
-  buildLi(value) {
-    const name = `${this.type}_${this.name}`
-    const [li, { input, label }] = Utils.loadTemplateWithRefs(`
-      <li>
-        <label>
-          <input type="${this.type}" name="${name}" data-ref=input />
-          <span data-ref=label></span>
-        </label>
-      </li>
-    `)
-    label.textContent = value
-    input.checked = this.get()?.choices?.includes(value)
-    input.dataset.value = value
-    input.addEventListener('change', () => this.sync())
-    this.elements.ul.appendChild(li)
-  }
-
-  toJS() {
-    return {
-      type: this.type,
-      choices: [...this.elements.ul.querySelectorAll('input:checked')].map(
-        (i) => i.dataset.value
-      ),
-    }
-  }
-}
-
-Fields.MinMaxBase = class extends Fields.FacetSearchBase {
-  getInputType(type) {
-    return type
-  }
-
-  getLabels() {
-    return [translate('Min'), translate('Max')]
-  }
-
-  prepareForHTML(value) {
-    return value.valueOf()
-  }
-
-  getTemplate() {
-    const [minLabel, maxLabel] = this.getLabels()
-    const { min, max, widget } = this.properties.criteria
-    this.type = widget
-    const inputType = this.getInputType(this.type)
-    const minHTML = this.prepareForHTML(min)
-    const maxHTML = this.prepareForHTML(max)
-    return `
-      <fieldset class="umap-facet">
-        <legend>${this.properties.label}</legend>
-        <label>${minLabel}<input min="${minHTML}" max="${maxHTML}" step=any type="${inputType}" data-ref=minInput /></label>
-        <label>${maxLabel}<input min="${minHTML}" max="${maxHTML}" step=any type="${inputType}" data-ref=maxInput /></label>
-      </fieldset>
-    `
-  }
-
-  build() {
-    this.minInput = this.elements.minInput
-    this.maxInput = this.elements.maxInput
-    const { min, max, type } = this.properties.criteria
-    const { min: modifiedMin, max: modifiedMax } = this.get() || {}
-
-    const currentMin = modifiedMin !== undefined ? modifiedMin : min
-    const currentMax = modifiedMax !== undefined ? modifiedMax : max
-    if (min != null) {
-      // The value stored using setAttribute is not modified by
-      // user input, and will be used as initial value when calling
-      // form.reset(), and can also be retrieve later on by using
-      // getAttributing, to compare with current value and know
-      // if this value has been modified by the user
-      // https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/reset
-      this.minInput.setAttribute('value', this.prepareForHTML(min))
-      this.minInput.value = this.prepareForHTML(currentMin)
-    }
-
-    if (max != null) {
-      // Cf comment above about setAttribute vs value
-      this.maxInput.setAttribute('value', this.prepareForHTML(max))
-      this.maxInput.value = this.prepareForHTML(currentMax)
-    }
-    this.toggleStatus()
-
-    this.minInput.addEventListener('change', () => this.sync())
-    this.maxInput.addEventListener('change', () => this.sync())
-    super.build()
-  }
-
-  toggleStatus() {
-    this.minInput.dataset.modified = this.isMinModified()
-    this.maxInput.dataset.modified = this.isMaxModified()
-  }
-
-  sync() {
-    super.sync()
-    this.toggleStatus()
-  }
-
-  isMinModified() {
-    const default_ = this.minInput.getAttribute('value')
-    const current = this.minInput.value
-    return current !== default_
-  }
-
-  isMaxModified() {
-    const default_ = this.maxInput.getAttribute('value')
-    const current = this.maxInput.value
-    return current !== default_
-  }
-
-  toJS() {
-    const opts = {
-      type: this.type,
-    }
-    if (this.minInput.value !== '' && this.isMinModified()) {
-      opts.min = this.prepareForJS(this.minInput.value)
-    }
-    if (this.maxInput.value !== '' && this.isMaxModified()) {
-      opts.max = this.prepareForJS(this.maxInput.value)
-    }
-    return opts
-  }
-}
-
-Fields.FacetSearchNumber = class extends Fields.MinMaxBase {
-  getInputType(type) {
-    return 'number'
-  }
-
-  prepareForJS(value) {
-    return new Number(value)
-  }
-}
-
-Fields.FacetSearchDate = class extends Fields.MinMaxBase {
-  getInputType(type) {
-    return 'date'
-  }
-
-  prepareForJS(value) {
-    return new Date(value)
-  }
-
-  toLocaleDateTime(dt) {
-    return new Date(dt.valueOf() - dt.getTimezoneOffset() * 60000)
-  }
-
-  prepareForHTML(value) {
-    // Value must be in local time
-    if (!value || isNaN(value)) return
-    return this.toLocaleDateTime(value).toISOString().substr(0, 10)
-  }
-
-  getLabels() {
-    return [translate('From'), translate('Until')]
-  }
-}
-
-Fields.FacetSearchDateTime = class extends Fields.FacetSearchDate {
-  getInputType() {
-    return 'datetime-local'
-  }
-
-  prepareForHTML(value) {
-    // Value must be in local time
-    if (Number.isNaN(value)) return
-    return this.toLocaleDateTime(value).toISOString().slice(0, -1)
-  }
-}
-
-Fields.MultiChoice = class extends BaseElement {
+Fields.MultiChoice = class extends Fields.Base {
   getDefault() {
     return 'null'
   }
@@ -1366,7 +1174,7 @@ Fields.Range = class extends Fields.FloatInput {
   }
 }
 
-Fields.ManageOwner = class extends BaseElement {
+Fields.ManageOwner = class extends Fields.Base {
   build() {
     super.build()
     const options = {
@@ -1397,7 +1205,7 @@ Fields.ManageOwner = class extends BaseElement {
   }
 }
 
-Fields.ManageEditors = class extends BaseElement {
+Fields.ManageEditors = class extends Fields.Base {
   build() {
     super.build()
     const options = {
