@@ -92,6 +92,9 @@ const ENTRIES = {
   filterKey: translate(
     'Comma separated list of properties to use when filtering features by text input'
   ),
+  facets: translate(
+    'Filters will be displayed in the data browser to ease data selection.'
+  ),
   interactive: translate(
     'If false, the polygon or line will act as a part of the underlying map.'
   ),

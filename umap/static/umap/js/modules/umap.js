@@ -837,6 +837,8 @@ export default class Umap {
       'properties.captionBar',
       'properties.captionMenus',
       'properties.layerSwitcher',
+      'properties.zoomTo',
+      'properties.easing',
     ])
     const builder = new MutatingForm(this, UIFields, { umap: this })
     const controlsOptions = DomUtil.createFieldset(
@@ -870,22 +872,42 @@ export default class Umap {
     defaultShapeProperties.appendChild(builder.build())
   }
 
-  _editDefaultProperties(container) {
+  _editFieldsAndKeys(parent) {
+    const body = Utils.loadTemplate(`
+      <details id="fields-management">
+        <summary><h4>${translate('Fields, filters and keys')}</h4></summary>
+        <fieldset data-ref="fieldset">
+        </fieldset>
+      </details>
+    `)
+    parent.appendChild(body)
+
+    const fieldsContainer = Utils.loadTemplate(`
+      <fieldset class="formbox" id="fields">
+        <legend>${translate('Manage Fields')}</legend>
+      </fieldset>
+    `)
+
+    body.appendChild(fieldsContainer)
+    this.fields.edit(fieldsContainer)
+    const template = `
+      <fieldset class="formbox" id="fields-and-keys">
+        <legend>${translate('Keys management')}</legend>
+        <div data-ref=keyContainer></div>
+      </fieldset>
+    `
+    const [root, { keyContainer }] = Utils.loadTemplateWithRefs(template)
     const optionsFields = [
-      'properties.zoomTo',
-      'properties.easing',
       'properties.labelKey',
       'properties.sortKey',
       'properties.filterKey',
       'properties.slugKey',
     ]
+    body.appendChild(root)
 
     const builder = new MutatingForm(this, optionsFields, { umap: this })
-    const defaultProperties = DomUtil.createFieldset(
-      container,
-      translate('Default properties')
-    )
-    defaultProperties.appendChild(builder.build())
+    keyContainer.appendChild(builder.build())
+    this.facets.edit(body)
   }
 
   _editInteractionsProperties(container) {
@@ -1160,11 +1182,9 @@ export default class Umap {
     )
     this._editControls(container)
     this._editShapeProperties(container)
-    this._editDefaultProperties(container)
-    this.facets.edit(container)
+    this._editFieldsAndKeys(container)
     this._editInteractionsProperties(container)
     this.rules.edit(container)
-    this.fields.edit(container)
     this._editTilelayer(container)
     this._editOverlay(container)
     this._editBounds(container)
