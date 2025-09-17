@@ -195,9 +195,13 @@ export default class Facets {
 
   add({ name, label, widget }) {
     if (!this.defined.has(name)) {
-      this.defined.set(name, { label, widget })
-      this.dumps()
+      this.update({ name, label, widget })
     }
+  }
+
+  update({ name, label, widget }) {
+    this.defined.set(name, { label, widget })
+    this.dumps()
   }
 
   remove(name) {
@@ -297,7 +301,12 @@ export default class Facets {
 
     return this._umap.dialog.open({ template: container }).then(() => {
       if (!properties.name) return
-      this.add({ ...properties })
+      if (name) {
+        this.update({ ...properties })
+      } else {
+        this.add({ ...properties })
+      }
+      this._umap.edit().then((panel) => panel.scrollTo('details#fields-management'))
     })
   }
 }
