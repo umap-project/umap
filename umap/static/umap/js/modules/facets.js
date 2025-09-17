@@ -235,7 +235,9 @@ export default class Facets {
       <fieldset class="formbox" id="facets">
         <legend data-help=facets>${translate('Filters')}</legend>
         <ul data-ref=ul></ul>
-        <button class="umap-add" type="button" data-ref=add>${translate('Add filter')}</button>
+        <button class="umap-add" type="button" data-ref=add>
+          <i class="icon icon-16 icon-add"></i> ${translate('Add filter')}
+        </button>
       </fieldset>
     `
     const [body, { ul, add }] = Utils.loadTemplateWithRefs(template)
