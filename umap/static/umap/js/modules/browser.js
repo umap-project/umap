@@ -151,7 +151,10 @@ export default class Browser {
       <div>
         <h3><i class="icon icon-16 icon-layers"></i>${translate('Data browser')}</h3>
         <details class="filters" data-ref="details">
-          <summary data-ref=filtersTitle><i class="icon icon-16 icon-filters"></i>${translate('Filters')}</summary>
+          <summary data-ref=filtersTitle>
+            <i class="icon icon-16 icon-filters"></i>${translate('Filters')}
+            <button class="show-on-edit icon icon-16 icon-add" title="${translate('Add filter')}" data-ref=add></button>
+          </summary>
           <fieldset>
             <div data-ref=formContainer>
             </div>
@@ -177,6 +180,7 @@ export default class Browser {
         dataContainer,
         formContainer,
         reset,
+        add,
       },
     ] = Utils.loadTemplateWithRefs(template)
     // HOTFIX. Remove when this is released:
@@ -188,6 +192,10 @@ export default class Browser {
     download.addEventListener('click', () => this.downloadVisible(download))
     download.hidden = this._umap.getProperty('embedControl') === false
     reset.addEventListener('click', () => this.resetFilters())
+    add.addEventListener('click', () => {
+      this._umap.edit().then((panel) => panel.scrollTo('details#fields-management'))
+      this._umap.facets.filterForm()
+    })
 
     this.filtersTitle = filtersTitle
     this.dataContainer = dataContainer
