@@ -107,14 +107,18 @@ export class Form extends Utils.WithEvents {
 
   finish() {}
 
-  getTemplate(helper) {
+  getHelperTemplate(helper) {
     let tpl = helper.getTemplate()
     if (helper.properties.label && !tpl.includes(helper.properties.label)) {
       tpl = `<label>${helper.properties.label}${tpl}</label>`
     }
+    return tpl
+  }
+
+  getTemplate(helper) {
     return `
       <div class="formbox" data-ref=container>
-        ${tpl}
+        ${this.getHelperTemplate(helper)}
         <small class="help-text" data-ref=helpText></small>
       </div>`
   }
