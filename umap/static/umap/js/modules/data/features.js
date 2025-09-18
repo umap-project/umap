@@ -561,7 +561,11 @@ class Feature {
   matchFacets() {
     const selected = this._umap.facets.selected
     for (const [key, { min, max, choices }] of Object.entries(selected)) {
+      // This facet has no value selected by the user.
+      if (min === undefined && max === undefined && !choices?.length) continue
       const field = this.datalayer.fields.get(key) || this._umap.fields.get(key)
+      // This field may only exist on another layer.
+      if (!field) return false
       let value = this.properties[key]
       const parser = this._umap.facets.getParser(field.type)
       value = parser(value)
