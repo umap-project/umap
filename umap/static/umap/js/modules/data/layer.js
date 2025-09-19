@@ -1197,7 +1197,8 @@ export class DataLayer {
   }
 
   umapGeoJSON() {
-    const geojson = this._umap.formatter.toFeatureCollection(this.features.all())
+    const features = this.isRemoteLayer() ? [] : this.features.all()
+    const geojson = this._umap.formatter.toFeatureCollection(features)
     geojson._umap_options = this.properties
     return geojson
   }
@@ -1234,12 +1235,12 @@ export class DataLayer {
   async save() {
     if (this.isDeleted) return await this.saveDelete()
     if (!this.isRemoteLayer() && !this.isLoaded()) return
-    const geojson = this.umapGeoJSON()
     const formData = new FormData()
     formData.append('name', this.properties.name)
     formData.append('display_on_load', !!this.properties.displayOnLoad)
     formData.append('rank', this.rank)
     formData.append('settings', this.prepareProperties())
+    const geojson = this.umapGeoJSON()
     // Filename support is shaky, don't do it for now.
     const blob = new Blob([JSON.stringify(geojson)], { type: 'application/json' })
     formData.append('geojson', blob)

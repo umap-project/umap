@@ -35,7 +35,7 @@ def new_page(context):
             else None,
         )
         page.on("pageerror", lambda exc: print(f"{prefix} uncaught exception: {exc}"))
-        if not bool(os.environ.get("PWDEBUG", False)):
+        if not bool(os.environ.get("PWDEBUG", os.environ.get("FORCE_TILES", False))):
             page.route(re.compile(r".*tile\..*"), mock_tiles)
         return page
 
