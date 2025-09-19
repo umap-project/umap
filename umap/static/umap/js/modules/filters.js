@@ -7,10 +7,10 @@ import { Fields } from './form/fields.js'
 
 const WIDGETS = ['checkbox', 'radio', 'minmax']
 
-class FacetsForm extends Form {
+class FiltersForm extends Form {
   buildField(field) {
     const [root, elements] = field.buildTemplate()
-    elements.editFacet.addEventListener('click', field.properties.onClick)
+    elements.editFilter.addEventListener('click', field.properties.onClick)
     field.build()
   }
 
@@ -19,7 +19,7 @@ class FacetsForm extends Form {
   }
 }
 
-export default class Facets {
+export default class Filters {
   constructor(umap) {
     this._umap = umap
     this.selected = {}
@@ -104,23 +104,23 @@ export default class Facets {
   }
 
   build() {
-    const facetProperties = this.compute()
+    const filterProperties = this.compute()
 
     const fields = Array.from(this.defined.keys()).map((name) => {
-      const criteria = facetProperties[name]
-      let handler = 'FacetSearchChoices'
+      const criteria = filterProperties[name]
+      let handler = 'FilterByChoices'
       if (criteria.widget === 'minmax' || criteria.widget === undefined) {
         if (criteria.dataType === 'Number') {
-          handler = 'FacetSearchNumber'
+          handler = 'FilterByNumber'
         } else if (criteria.dataType === 'Date') {
-          handler = 'FacetSearchDate'
+          handler = 'FilterByDate'
         } else if (criteria.dataType === 'Datetime') {
-          handler = 'FacetSearchDateTime'
+          handler = 'FilterByDateTime'
         }
       }
       const label = `
         <span>${Utils.escapeHTML(this.defined.get(name).label)}
-          <button class="icon icon-16 icon-edit show-on-edit" data-ref=editFacet></button>
+          <button class="icon icon-16 icon-edit show-on-edit" data-ref=editFilter></button>
         </span>`
       return [
         `selected.${name}`,
@@ -132,7 +132,7 @@ export default class Facets {
             this._umap
               .edit()
               .then((panel) => panel.scrollTo('details#fields-management'))
-            this._umap.facets.filterForm(name)
+            this._umap.filters.filterForm(name)
           },
         },
       ]
@@ -142,33 +142,37 @@ export default class Facets {
   }
 
   load() {
-    this.defined = new Map(Object.entries(this._umap.properties.facets || {}))
-    const old =
+    this.defined = new Map(Object.entries(this._umap.properties.filters || {}))
+    this.loadLegacy()
+  }
+
+  loadLegacy() {
+    const legacy =
       this._umap.properties.advancedFilterKey || this._umap.properties.facetKey
-    if (old) {
-      for (const facet of old.split(',')) {
-        let [name, label, widget] = facet.split('|')
-        let dataType
-        if (['number', 'date', 'datetime'].includes(widget)) {
-          // Retrocompat
-          if (widget === 'number') {
-            dataType = 'Number'
-          } else if (widget === 'datetime') {
-            dataType = 'Datetime'
-          } else if (widget === 'date') {
-            dataType = 'Date'
-          }
-          widget = 'minmax'
+    if (!legacy) return
+    for (const filter of legacy.split(',')) {
+      let [name, label, widget] = filter.split('|')
+      let dataType
+      if (['number', 'date', 'datetime'].includes(widget)) {
+        // Retrocompat
+        if (widget === 'number') {
+          dataType = 'Number'
+        } else if (widget === 'datetime') {
+          dataType = 'Datetime'
+        } else if (widget === 'date') {
+          dataType = 'Date'
         }
-        if (!WIDGETS.includes(widget)) {
-          widget = 'checkbox'
-        }
-        this.defined.set(name, { label: label || name, widget, dataType })
+        widget = 'minmax'
       }
-      delete this._umap.properties.facetKey
-      delete this._umap.properties.advancedFilterKey
-      this.dumps(false)
+      if (!WIDGETS.includes(widget)) {
+        widget = 'checkbox'
+      }
+      this.defined.set(name, { label: label || name, widget, dataType })
     }
+    delete this._umap.properties.facetKey
+    delete this._umap.properties.advancedFilterKey
+    this.dumps(false)
+    this._umap._migrated = true
   }
 
   getParser(type) {
@@ -190,8 +194,8 @@ export default class Facets {
   }
 
   dumps(sync = true) {
-    const oldValue = this._umap.properties.facets
-    this._umap.properties.facets = Object.fromEntries(
+    const oldValue = this._umap.properties.filters
+    this._umap.properties.filters = Object.fromEntries(
       this.defined.entries().map(
         // Remove dataType, which we don't want to store
         ([key, { label, widget }]) => [key, { label, widget }]
@@ -199,11 +203,11 @@ export default class Facets {
     )
     if (sync) {
       this._umap.sync.update(
-        'properties.facets',
-        this._umap.properties.facets,
+        'properties.filters',
+        this._umap.properties.filters,
         oldValue
       )
-      this._umap.render(['properties.facets'])
+      this._umap.render(['properties.filters'])
     }
   }
 
@@ -233,8 +237,8 @@ export default class Facets {
 
   edit(container) {
     const template = `
-      <fieldset class="formbox" id="facets">
-        <legend data-help=facets>${translate('Filters')}</legend>
+      <fieldset class="formbox" id="filters">
+        <legend data-help=filters>${translate('Filters')}</legend>
         <ul data-ref=ul></ul>
         <button class="umap-add" type="button" data-ref=add>
           <i class="icon icon-16 icon-add"></i> ${translate('Add filter')}
@@ -266,16 +270,16 @@ export default class Facets {
       const orderedKeys = Array.from(ul.querySelectorAll('li')).map(
         (el) => el.dataset.key
       )
-      const oldFacets = Utils.CopyJSON(this._umap.properties.facets)
+      const oldValue = Utils.CopyJSON(this._umap.properties.filters)
       const copy = Object.fromEntries(this.defined)
       this.defined.clear()
       for (const key of orderedKeys) {
         this.add({ name: key, ...copy[key] })
       }
       this._umap.sync.update(
-        'properties.facets',
-        this._umap.properties.facets,
-        oldFacets
+        'properties.filters',
+        this._umap.properties.filters,
+        oldValue
       )
     }
     const orderable = new Orderable(ul, onReorder)
@@ -335,20 +339,20 @@ export default class Facets {
   }
 
   buildForm(container) {
-    const form = new FacetsForm(this, this.build())
+    const form = new FiltersForm(this, this.build())
     container.appendChild(form.build())
     return form
   }
 }
 
-Fields.FacetSearchBase = class extends Fields.Base {
+Fields.FilterBase = class extends Fields.Base {
   buildLabel() {}
 }
 
-Fields.FacetSearchChoices = class extends Fields.FacetSearchBase {
+Fields.FilterByChoices = class extends Fields.FilterBase {
   getTemplate() {
     return `
-      <fieldset class="umap-facet">
+      <fieldset class="umap-filter">
         <legend data-ref=label>${this.properties.label}</legend>
         <ul data-ref=ul></ul>
       </fieldset>
@@ -391,7 +395,7 @@ Fields.FacetSearchChoices = class extends Fields.FacetSearchBase {
   }
 }
 
-Fields.MinMaxBase = class extends Fields.FacetSearchBase {
+Fields.MinMaxBase = class extends Fields.FilterBase {
   getInputType(type) {
     return type
   }
@@ -412,7 +416,7 @@ Fields.MinMaxBase = class extends Fields.FacetSearchBase {
     const minHTML = this.prepareForHTML(min)
     const maxHTML = this.prepareForHTML(max)
     return `
-      <fieldset class="umap-facet">
+      <fieldset class="umap-filter">
         <legend>${this.properties.label}</legend>
         <label>${minLabel}<input min="${minHTML}" max="${maxHTML}" step=any type="${inputType}" data-ref=minInput /></label>
         <label>${maxLabel}<input min="${minHTML}" max="${maxHTML}" step=any type="${inputType}" data-ref=maxInput /></label>
@@ -487,7 +491,7 @@ Fields.MinMaxBase = class extends Fields.FacetSearchBase {
   }
 }
 
-Fields.FacetSearchNumber = class extends Fields.MinMaxBase {
+Fields.FilterByNumber = class extends Fields.MinMaxBase {
   getInputType(type) {
     return 'number'
   }
@@ -497,7 +501,7 @@ Fields.FacetSearchNumber = class extends Fields.MinMaxBase {
   }
 }
 
-Fields.FacetSearchDate = class extends Fields.MinMaxBase {
+Fields.FilterByDate = class extends Fields.MinMaxBase {
   getInputType(type) {
     return 'date'
   }
@@ -521,7 +525,7 @@ Fields.FacetSearchDate = class extends Fields.MinMaxBase {
   }
 }
 
-Fields.FacetSearchDateTime = class extends Fields.FacetSearchDate {
+Fields.FilterByDateTime = class extends Fields.FilterByDate {
   getInputType() {
     return 'datetime-local'
   }

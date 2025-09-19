@@ -63,7 +63,7 @@ export class FeatureManager extends Map {
     if (this.has(feature.id)) {
       console.error('Duplicate id', feature, this.get(feature.id))
       feature.id = Utils.generateId()
-      feature.datalayer._found_duplicate_id = true
+      feature.datalayer._migrated = true
     }
     this.set(feature.id, feature)
   }
@@ -266,10 +266,10 @@ export class FieldManager extends Map {
       </div>
     `)
     body.appendChild(form.build())
-    if (this.parent.facets) {
+    if (this.parent.filters) {
       addFilter.addEventListener('click', () => {
         this.dialog.accept()
-        this.parent.facets.filterForm(field.key)
+        this.parent.filters.filterForm(field.key)
       })
       addFilter.hidden = false
     }

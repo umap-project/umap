@@ -124,7 +124,7 @@ export default class Browser {
   }
 
   hasFilters() {
-    return !!this.options.filter || this._umap.facets.isActive()
+    return !!this.options.filter || this._umap.filters.isActive()
   }
 
   onMoveEnd() {
@@ -194,7 +194,7 @@ export default class Browser {
     reset.addEventListener('click', () => this.resetFilters())
     add.addEventListener('click', () => {
       this._umap.edit().then((panel) => panel.scrollTo('details#fields-management'))
-      this._umap.facets.filterForm()
+      this._umap.filters.filterForm()
     })
 
     this.filtersTitle = filtersTitle
@@ -225,11 +225,11 @@ export default class Browser {
     builder.form.addEventListener('reset', () => {
       window.setTimeout(builder.syncAll.bind(builder))
     })
-    if (this._umap.facets.size) {
-      const facetsForm = this._umap.facets.buildForm(this.formContainer)
-      facetsForm.on('set', () => this.onFormChange())
-      facetsForm.form.addEventListener('reset', () => {
-        window.setTimeout(facetsForm.syncAll.bind(facetsForm))
+    if (this._umap.filters.size) {
+      const filtersForm = this._umap.filters.buildForm(this.formContainer)
+      filtersForm.on('set', () => this.onFormChange())
+      filtersForm.form.addEventListener('reset', () => {
+        window.setTimeout(filtersForm.syncAll.bind(filtersForm))
       })
     }
   }

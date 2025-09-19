@@ -140,7 +140,7 @@ export const SCHEMA = {
     label: translate('Display the embed control'),
     default: true,
   },
-  facets: {
+  filters: {
     type: Object,
     impacts: ['ui'],
   },

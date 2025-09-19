@@ -481,9 +481,9 @@ export class DataLayer {
         if (key.indexOf('_') === 0) continue
         if (this.fields.has(key)) continue
         if (this._umap.fields.has(key)) continue
-        // retrocompat: guess type from facets if any
-        // otherwise it will fallback to default in facets
-        let type = this._umap.facets.get(key)?.dataType
+        // retrocompat: guess type from filters if any
+        // otherwise it will fallback to default in filters
+        let type = this._umap.filters.get(key)?.dataType
         if (!type && key === 'description') type = 'Text'
         this.fields.add({ key, type })
       }

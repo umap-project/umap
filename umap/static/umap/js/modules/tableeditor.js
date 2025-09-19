@@ -38,11 +38,11 @@ export default class TableEditor extends WithTemplate {
   openHeaderMenu(property) {
     const actions = []
     let filterItem
-    if (this._umap.facets.has(property)) {
+    if (this._umap.filters.has(property)) {
       filterItem = {
         label: translate('Remove filter for this field'),
         action: () => {
-          this._umap.facets.remove(property)
+          this._umap.filters.remove(property)
           this._umap.browser.open('filters')
         },
       }
@@ -50,7 +50,7 @@ export default class TableEditor extends WithTemplate {
       filterItem = {
         label: translate('Add filter for this field'),
         action: () => {
-          this._umap.facets.add({ name: property })
+          this._umap.filters.add({ name: property })
           this._umap.browser.open('filters')
         },
       }
