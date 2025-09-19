@@ -32,6 +32,7 @@ import { EditPanel, FullPanel, Panel } from './ui/panel.js'
 import Tooltip from './ui/tooltip.js'
 import URLs from './urls.js'
 import * as Utils from './utils.js'
+import * as DOMUtils from './domutils.js'
 import { DataLayerManager } from './managers.js'
 import { Importer as OpenRouteService } from './importers/openrouteservice.js'
 
@@ -444,7 +445,13 @@ export default class Umap {
   }
 
   getSharedContextMenu(event) {
-    const items = []
+    const latlng = `${event.latlng.lat.toFixed(6)},${event.latlng.lng.toFixed(6)}`
+    const items = [
+      {
+        label: latlng,
+        action: () => DOMUtils.copyToClipboard(latlng),
+      },
+    ]
     if (this.properties.urls.routing) {
       items.push({
         label: translate('Directions from here'),

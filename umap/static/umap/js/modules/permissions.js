@@ -3,6 +3,7 @@ import { uMapAlert as Alert } from '../components/alerts/alert.js'
 import { MutatingForm } from './form/builder.js'
 import { translate } from './i18n.js'
 import * as Utils from './utils.js'
+import * as DOMUtils from './domutils.js'
 
 // Dedicated object so we can deal with a separate dirty status, and thus
 // call the endpoint only when needed, saving one call at each save.
@@ -69,7 +70,7 @@ export class MapPermissions {
       container.appendChild(form)
 
       if (this.properties.anonymous_edit_url) {
-        DomUtil.createCopiableInput(
+        DOMUtils.copiableInput(
           container,
           translate('Secret edit link:'),
           this.properties.anonymous_edit_url
