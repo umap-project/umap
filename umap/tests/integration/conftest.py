@@ -26,7 +26,7 @@ def set_timeout(context):
 
 @pytest.fixture(autouse=True)
 def mock_osm_tiles(page):
-    if not bool(os.environ.get("PWDEBUG", False)):
+    if not bool(os.environ.get("PWDEBUG", os.environ.get("FORCE_TILES", False))):
         page.route(re.compile(r".*tile\..*"), mock_tiles)
 
 
