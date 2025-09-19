@@ -535,12 +535,12 @@ class Feature {
   isFiltered() {
     const filterKeys = this.datalayer.getFilterKeys()
     const filter = this._umap.browser.options.filter
-    if (filter && !this.matchFilter(filter, filterKeys)) return true
-    if (!this.matchFacets()) return true
+    if (filter && !this.matchFullTextFilter(filter, filterKeys)) return true
+    if (!this.matchFilters()) return true
     return false
   }
 
-  matchFilter(filter, keys) {
+  matchFullTextFilter(filter, keys) {
     filter = filter.toLowerCase()
     // When user hasn't touched settings, when a feature has no name
     // it will use the datalayer's name, so let's make the filtering
@@ -558,16 +558,16 @@ class Feature {
     return false
   }
 
-  matchFacets() {
-    const selected = this._umap.facets.selected
+  matchFilters() {
+    const selected = this._umap.filters.selected
     for (const [key, { min, max, choices }] of Object.entries(selected)) {
-      // This facet has no value selected by the user.
+      // This filter has no value selected by the user.
       if (min === undefined && max === undefined && !choices?.length) continue
       const field = this.datalayer.fields.get(key) || this._umap.fields.get(key)
       // This field may only exist on another layer.
       if (!field) return false
       let value = this.properties[key]
-      const parser = this._umap.facets.getParser(field.type)
+      const parser = this._umap.filters.getParser(field.type)
       value = parser(value)
       switch (field.type) {
         case 'Date':
