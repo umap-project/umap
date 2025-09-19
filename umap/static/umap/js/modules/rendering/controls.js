@@ -242,13 +242,13 @@ export const SearchControl = BaseButton.extend({
     const [container, { input, resultsContainer }] =
       Utils.loadTemplateWithRefs(template)
     const id = Math.random()
+    this.search = new U.Search(
+      this._umap._leafletMap,
+      input,
+      this.layer,
+      this.photonOptions
+    )
     this._umap.panel.open({ content: container }).then(() => {
-      this.search = new U.Search(
-        this._umap._leafletMap,
-        input,
-        this.layer,
-        this.photonOptions
-      )
       this.search.on('ajax:send', () => {
         this._umap.fire('dataloading', { id: id })
       })

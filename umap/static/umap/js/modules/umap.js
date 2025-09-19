@@ -481,7 +481,7 @@ export default class Umap {
   }
 
   search() {
-    if (this._leafletMap._controls.search) this._leafletMap._controls.search.open()
+    if (this._leafletMap._controls.search) this._leafletMap._controls.search.onClick()
   }
 
   hasEditMode() {
