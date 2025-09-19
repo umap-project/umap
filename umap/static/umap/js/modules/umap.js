@@ -10,7 +10,7 @@ import {
 import Browser from './browser.js'
 import Caption from './caption.js'
 import { DataLayer } from './data/layer.js'
-import Facets from './facets.js'
+import Filters from './filters.js'
 import { MutatingForm } from './form/builder.js'
 import { Formatter } from './formatter.js'
 import Help from './help.js'
@@ -132,7 +132,7 @@ export default class Umap {
     this.contextmenu = new ContextMenu()
     this.server = new ServerRequest()
     this.request = new Request()
-    this.facets = new Facets(this)
+    this.filters = new Filters(this)
     this.browser = new Browser(this, this._leafletMap)
     this.caption = new Caption(this, this._leafletMap)
     this.importer = new Importer(this)
@@ -420,7 +420,7 @@ export default class Umap {
         action: () => this.openBrowser('data'),
       }
     )
-    if (this.facets.size) {
+    if (this.filters.size) {
       items.push({
         label: translate('Filter data'),
         action: () => this.openBrowser('filters'),
@@ -907,7 +907,7 @@ export default class Umap {
 
     const builder = new MutatingForm(this, optionsFields, { umap: this })
     keyContainer.appendChild(builder.build())
-    this.facets.edit(body)
+    this.filters.edit(body)
   }
 
   _editInteractionsProperties(container) {
@@ -1304,18 +1304,34 @@ export default class Umap {
     this.drop.enable()
     this.fire('edit:enabled')
     this.initSyncEngine()
-    this.datalayers.active().forEach((datalayer) => {
-      if (!datalayer.isReadOnly() && datalayer._found_duplicate_id) {
-        datalayer._found_duplicate_id = false
+    this.checkForLegacy()
+  }
+
+  checkForLegacy() {
+    let needSaveAlert = false
+    if (this._migrated) {
+      needSaveAlert = true
+      delete this._migrated
+      // Force user to save
+      this.sync.update('properties.name', this.properties.name, this.properties.name)
+    }
+    for (const datalayer of this.datalayers.active()) {
+      if (!datalayer.isReadOnly() && datalayer._migrated) {
+        datalayer._migrated = false
         // Force user to resave those datalayers
         datalayer.sync.update(
           'properties.name',
           datalayer.properties.name,
           datalayer.properties.name
         )
-        Alert.info(translate('Layer has been migrated, please save the map.'))
+        needSaveAlert = true
       }
-    })
+    }
+    if (needSaveAlert) {
+      Alert.warning(
+        translate('The map has been upgraded to latest version, please save it.')
+      )
+    }
   }
 
   disableEdit() {
@@ -1359,8 +1375,8 @@ export default class Umap {
     // Propagate will remove the fields it has already
     // processed
     fields = this.propagate(fields)
-    if (fields.includes('properties.facets')) {
-      this.facets.load()
+    if (fields.includes('properties.filters')) {
+      this.filters.load()
       if (this.browser.isOpen()) {
         this.browser.buildFilters()
       }

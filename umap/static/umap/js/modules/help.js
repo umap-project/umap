@@ -92,7 +92,7 @@ const ENTRIES = {
   filterKey: translate(
     'Comma separated list of properties to use when filtering features by text input'
   ),
-  facets: translate(
+  filters: translate(
     'Filters will be displayed in the data browser to ease data selection.'
   ),
   interactive: translate(
