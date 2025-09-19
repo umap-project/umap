@@ -23,6 +23,11 @@ class uMapAlert extends uMapElement {
   }
 
   // biome-ignore lint/style/useNumberNamespace: Number.Infinity returns undefined by default
+  static warning(message, duration = Infinity) {
+    uMapAlert.emit('alert', { level: 'warning', message, duration })
+  }
+
+  // biome-ignore lint/style/useNumberNamespace: Number.Infinity returns undefined by default
   static error(message, duration = Infinity) {
     uMapAlert.emit('alert', { level: 'error', message, duration })
   }

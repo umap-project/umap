@@ -16,6 +16,7 @@
     --color-darkCyan: #009099;
     --color-veryDarkCyan: #046460;
     --color-red: #c60f13;
+    --color-darkOrange: #b36200;
     --color-darkRed: #5b2a2a;
 
     --background-color: var(--color-light);
@@ -65,6 +66,7 @@
 
     --block-shadow: 0 1px 7px var(--color-mediumGray);
 }
+
 .dark {
     --background-color: var(--color-darkGray);
     --text-color: #efefef;
