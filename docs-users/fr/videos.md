@@ -1,5 +1,9 @@
 # Vidéos uMap
 
+## Atelier State of the map 2025 : Grist 🤝 uMap - Tutoriel 13 juin 2025
+
+<iframe title="Atelier State of the map 2025 : Grist 🤝 uMap  - Tutoriel" width="560" height="315" src="https://tube.numerique.gouv.fr/videos/embed/khyihwBWNexSAu2YCxowAo" frameborder="0" allowfullscreen="" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+
 ## uMap, quoi de neuf ? 14 juin 2025
 
 <iframe title="uMap, quoi de neuf ?" width="560" height="315" src="https://peertube.openstreetmap.fr/videos/embed/7avEP5WPUvur4za46zXGLj" frameborder="0" allowfullscreen="" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
