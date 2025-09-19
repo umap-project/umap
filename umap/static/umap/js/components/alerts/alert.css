@@ -1,7 +1,5 @@
 .umap-alert[role="dialog"] {
     box-sizing: border-box;
-    min-height: 46px;
-    line-height: 46px;
     padding: var(--box-padding);
     position: absolute;
     box-shadow: 0 1px 7px #999999;
@@ -25,8 +23,12 @@
     margin: 0 auto;
     min-width: 60%;
     background-size: 20px;
-    background-position: 0 15px;
     padding-inline-start: 28px;
+    background-position: 0 center;
+    min-height: 10vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .umap-alert[role="dialog"][data-level="info"]>div {
@@ -34,30 +36,30 @@
     background-repeat: no-repeat;
 }
 
-html[dir="rtl"] .umap-alert[role="dialog"][data-level="info"]>div {
-    background-position: right;
-}
-
 .umap-alert[role="dialog"][data-level="success"]>div {
     background-image: url('../../../img/alert-icon-success.svg');
     background-repeat: no-repeat;
 }
 
-html[dir="rtl"] .umap-alert[role="dialog"][data-level="success"]>div {
-    background-position: right;
-}
-
+.umap-alert[role="dialog"][data-level="warning"]>div,
 .umap-alert[role="dialog"][data-level="error"]>div {
     background-image: url('../../../img/alert-icon-error.svg');
     background-repeat: no-repeat;
 }
 
+html[dir="rtl"] .umap-alert[role="dialog"][data-level="info"]>div,
+html[dir="rtl"] .umap-alert[role="dialog"][data-level="success"]>div,
+html[dir="rtl"] .umap-alert[role="dialog"][data-level="warning"]>div,
 html[dir="rtl"] .umap-alert[role="dialog"][data-level="error"]>div {
     background-position: right;
 }
 
 .umap-alert[role="dialog"][data-level="error"] {
     background-color: var(--color-darkRed);
+}
+
+.umap-alert[role="dialog"][data-level="warning"] {
+    background-color: var(--color-darkOrange);
 }
 
 .umap-alert[role="dialog"] a {
@@ -130,13 +132,11 @@ h3[role="alert"]+p {
 [role="group"] input[type="button"] {
     background: var(--color-darkGray);
     color: var(--color-light);
-    border: none;
     line-height: initial;
 }
 
 [role="group"] input[type="button"]:hover {
     text-decoration: underline;
-    border: none;
 }
 
 @media only screen and (max-width:770px) {
