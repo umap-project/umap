@@ -10,7 +10,7 @@ import {
 import Browser from './browser.js'
 import Caption from './caption.js'
 import { DataLayer } from './data/layer.js'
-import Facets from './facets.js'
+import Filters from './filters.js'
 import { MutatingForm } from './form/builder.js'
 import { Formatter } from './formatter.js'
 import Help from './help.js'
@@ -32,7 +32,7 @@ import { EditPanel, FullPanel, Panel } from './ui/panel.js'
 import Tooltip from './ui/tooltip.js'
 import URLs from './urls.js'
 import * as Utils from './utils.js'
-import { DataLayerManager } from './managers.js'
+import { DataLayerManager, FieldManager } from './managers.js'
 import { Importer as OpenRouteService } from './importers/openrouteservice.js'
 
 export default class Umap {
@@ -131,7 +131,7 @@ export default class Umap {
     this.contextmenu = new ContextMenu()
     this.server = new ServerRequest()
     this.request = new Request()
-    this.facets = new Facets(this)
+    this.filters = new Filters(this)
     this.browser = new Browser(this, this._leafletMap)
     this.caption = new Caption(this, this._leafletMap)
     this.importer = new Importer(this)
@@ -160,14 +160,11 @@ export default class Umap {
     ) {
       this.properties.slideshow.active = true
     }
-    if (this.properties.advancedFilterKey) {
-      this.properties.facetKey = this.properties.advancedFilterKey
-      delete this.properties.advancedFilterKey
-    }
 
     // Global storage for retrieving datalayers and features.
     this.datalayers = new DataLayerManager()
     this.featuresIndex = {}
+    this.fields = new FieldManager(this, this.dialog)
 
     this.formatter = new Formatter(this)
 
@@ -261,15 +258,13 @@ export default class Umap {
     return window.self !== window.top
   }
 
-  get fields() {
-    if (!this.properties.fields) this.properties.fields = []
-    return this.properties.fields
-  }
-
   get fieldKeys() {
-    return this.fields
-      .map((field) => field.key)
-      .concat(...this.datalayers.active().map((dl) => dl.fieldKeys))
+    return Array.from(
+      new Set([
+        ...this.fields.keys(),
+        ...this.datalayers.active().reduce((acc, dl) => acc.concat(dl.fieldKeys), []),
+      ])
+    )
   }
 
   setPropertiesFromQueryString() {
@@ -424,7 +419,7 @@ export default class Umap {
         action: () => this.openBrowser('data'),
       }
     )
-    if (this.properties.facetKey) {
+    if (this.filters.size) {
       items.push({
         label: translate('Filter data'),
         action: () => this.openBrowser('filters'),
@@ -835,6 +830,8 @@ export default class Umap {
       'properties.captionBar',
       'properties.captionMenus',
       'properties.layerSwitcher',
+      'properties.zoomTo',
+      'properties.easing',
     ])
     const builder = new MutatingForm(this, UIFields, { umap: this })
     const controlsOptions = DomUtil.createFieldset(
@@ -868,23 +865,42 @@ export default class Umap {
     defaultShapeProperties.appendChild(builder.build())
   }
 
-  _editDefaultProperties(container) {
+  _editFieldsAndKeys(parent) {
+    const body = Utils.loadTemplate(`
+      <details id="fields-management">
+        <summary><h4>${translate('Fields, filters and keys')}</h4></summary>
+        <fieldset data-ref="fieldset">
+        </fieldset>
+      </details>
+    `)
+    parent.appendChild(body)
+
+    const fieldsContainer = Utils.loadTemplate(`
+      <fieldset class="formbox" id="fields">
+        <legend>${translate('Manage Fields')}</legend>
+      </fieldset>
+    `)
+
+    body.appendChild(fieldsContainer)
+    this.fields.edit(fieldsContainer)
+    const template = `
+      <fieldset class="formbox" id="fields-and-keys">
+        <legend>${translate('Keys management')}</legend>
+        <div data-ref=keyContainer></div>
+      </fieldset>
+    `
+    const [root, { keyContainer }] = Utils.loadTemplateWithRefs(template)
     const optionsFields = [
-      'properties.zoomTo',
-      'properties.easing',
       'properties.labelKey',
       'properties.sortKey',
       'properties.filterKey',
-      'properties.facetKey',
       'properties.slugKey',
     ]
+    body.appendChild(root)
 
     const builder = new MutatingForm(this, optionsFields, { umap: this })
-    const defaultProperties = DomUtil.createFieldset(
-      container,
-      translate('Default properties')
-    )
-    defaultProperties.appendChild(builder.build())
+    keyContainer.appendChild(builder.build())
+    this.filters.edit(body)
   }
 
   _editInteractionsProperties(container) {
@@ -1159,7 +1175,7 @@ export default class Umap {
     )
     this._editControls(container)
     this._editShapeProperties(container)
-    this._editDefaultProperties(container)
+    this._editFieldsAndKeys(container)
     this._editInteractionsProperties(container)
     this.rules.edit(container)
     this._editTilelayer(container)
@@ -1251,6 +1267,18 @@ export default class Umap {
     return properties
   }
 
+  renameField(oldName, newName) {
+    for (const datalayer of this.datalayers.active()) {
+      datalayer.renameFeaturesField(oldName, newName)
+    }
+  }
+
+  deleteField(name) {
+    for (const datalayer of this.datalayers.active()) {
+      datalayer.deleteFeaturesField(name)
+    }
+  }
+
   geometry() {
     /* Return a GeoJSON geometry Object */
     const latlng = this._leafletMap.latLng(
@@ -1269,18 +1297,34 @@ export default class Umap {
     this.drop.enable()
     this.fire('edit:enabled')
     this.initSyncEngine()
-    this.datalayers.active().forEach((datalayer) => {
-      if (!datalayer.isReadOnly() && datalayer._found_duplicate_id) {
-        datalayer._found_duplicate_id = false
+    this.checkForLegacy()
+  }
+
+  checkForLegacy() {
+    let needSaveAlert = false
+    if (this._migrated) {
+      needSaveAlert = true
+      delete this._migrated
+      // Force user to save
+      this.sync.update('properties.name', this.properties.name, this.properties.name)
+    }
+    for (const datalayer of this.datalayers.active()) {
+      if (!datalayer.isReadOnly() && datalayer._migrated) {
+        datalayer._migrated = false
         // Force user to resave those datalayers
         datalayer.sync.update(
           'properties.name',
           datalayer.properties.name,
           datalayer.properties.name
         )
-        Alert.info(translate('Layer has been migrated, please save the map.'))
+        needSaveAlert = true
       }
-    })
+    }
+    if (needSaveAlert) {
+      Alert.warning(
+        translate('The map has been upgraded to latest version, please save it.')
+      )
+    }
   }
 
   disableEdit() {
@@ -1324,6 +1368,12 @@ export default class Umap {
     // Propagate will remove the fields it has already
     // processed
     fields = this.propagate(fields)
+    if (fields.includes('properties.filters')) {
+      this.filters.load()
+      if (this.browser.isOpen()) {
+        this.browser.buildFilters()
+      }
+    }
 
     const impacts = Utils.getImpactsFromSchema(fields)
     for (const impact of impacts) {

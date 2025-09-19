@@ -124,7 +124,7 @@ export default class Browser {
   }
 
   hasFilters() {
-    return !!this.options.filter || this._umap.facets.isActive()
+    return !!this.options.filter || this._umap.filters.isActive()
   }
 
   onMoveEnd() {
@@ -151,7 +151,10 @@ export default class Browser {
       <div>
         <h3><i class="icon icon-16 icon-layers"></i>${translate('Data browser')}</h3>
         <details class="filters" data-ref="details">
-          <summary data-ref=filtersTitle><i class="icon icon-16 icon-filters"></i>${translate('Filters')}</summary>
+          <summary data-ref=filtersTitle>
+            <i class="icon icon-16 icon-filters"></i>${translate('Filters')}
+            <button class="show-on-edit icon icon-16 icon-add" title="${translate('Add filter')}" data-ref=add></button>
+          </summary>
           <fieldset>
             <div data-ref=formContainer>
             </div>
@@ -177,6 +180,7 @@ export default class Browser {
         dataContainer,
         formContainer,
         reset,
+        add,
       },
     ] = Utils.loadTemplateWithRefs(template)
     // HOTFIX. Remove when this is released:
@@ -187,13 +191,28 @@ export default class Browser {
     fitBounds.addEventListener('click', () => this._umap.fitDataBounds())
     download.addEventListener('click', () => this.downloadVisible(download))
     download.hidden = this._umap.getProperty('embedControl') === false
+    reset.addEventListener('click', () => this.resetFilters())
+    add.addEventListener('click', () => {
+      this._umap.edit().then((panel) => panel.scrollTo('details#fields-management'))
+      this._umap.filters.filterForm()
+    })
 
     this.filtersTitle = filtersTitle
     this.dataContainer = dataContainer
     this.formContainer = formContainer
     this.toggleBadge()
+    this.buildFilters()
+    this._umap.panel.open({
+      content: container,
+      className: 'umap-browser',
+    })
 
-    let fields = [
+    this.update()
+  }
+
+  buildFilters() {
+    this.formContainer.innerHTML = ''
+    const fields = [
       [
         'options.filter',
         { handler: 'Input', placeholder: translate('Search map features…') },
@@ -202,28 +221,17 @@ export default class Browser {
     ]
     const builder = new Form(this, fields)
     builder.on('set', () => this.onFormChange())
-    let filtersBuilder
     this.formContainer.appendChild(builder.build())
     builder.form.addEventListener('reset', () => {
       window.setTimeout(builder.syncAll.bind(builder))
     })
-    if (this._umap.properties.facetKey) {
-      fields = this._umap.facets.build()
-      filtersBuilder = new Form(this._umap.facets, fields)
-      filtersBuilder.on('set', () => this.onFormChange())
-      filtersBuilder.form.addEventListener('reset', () => {
-        window.setTimeout(filtersBuilder.syncAll.bind(filtersBuilder))
+    if (this._umap.filters.size) {
+      const filtersForm = this._umap.filters.buildForm(this.formContainer)
+      filtersForm.on('set', () => this.onFormChange())
+      filtersForm.form.addEventListener('reset', () => {
+        window.setTimeout(filtersForm.syncAll.bind(filtersForm))
       })
-      this.formContainer.appendChild(filtersBuilder.build())
     }
-    reset.addEventListener('click', () => this.resetFilters())
-
-    this._umap.panel.open({
-      content: container,
-      className: 'umap-browser',
-    })
-
-    this.update()
   }
 
   resetFilters() {

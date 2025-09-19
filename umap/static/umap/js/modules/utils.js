@@ -400,8 +400,30 @@ export function template(str, data) {
   })
 }
 
+const DATE_REGEX = [
+  // Format 1: "YYYY-MM-DD"
+  /^(?<year>\d{4})[\-\/](?<month>\d{2})[\-\/](?<day>\d{2})$/,
+  // Format2 : "DD-MM-YYYY"
+  /^(?<day>0[1-9]|[12][0-9]|3[01])[\-\/](?<month>0[1-9]|1[0-2])[\-\/](?<year>\d{4})/,
+]
+
 export function parseNaiveDate(value) {
-  const naive = new Date(value)
+  let naive
+  if (!value) return undefined
+  value = String(value)
+  for (const regex of DATE_REGEX) {
+    const parsed = value.match(regex)
+    if (parsed) {
+      const { year, month, day } = parsed.groups
+      naive = new Date(year, Number.parseInt(month, 10) - 1, Number.parseInt(day, 10))
+      break
+    }
+  }
+  if (!naive) {
+    naive = new Date(value)
+  }
+  // Number.isNaN will always return false for invalid date
+  if (isNaN(naive)) return undefined
   // Let's pretend naive date are UTC, and remove time…
   return new Date(Date.UTC(naive.getFullYear(), naive.getMonth(), naive.getDate()))
 }

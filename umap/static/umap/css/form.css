@@ -306,8 +306,12 @@ details summary {
     color: var(--color-light);
 }
 
-.dark details fieldset {
+.dark details fieldset:not(.formbox) {
     border: 1px solid var(--color-darkGray);
+}
+
+summary h4 {
+    display: inline;
 }
 
 fieldset legend {
