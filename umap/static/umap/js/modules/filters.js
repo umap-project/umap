@@ -291,7 +291,12 @@ export default class Filters {
   }
 
   filterForm(name) {
-    const properties = { name, ...(this.defined.get(name) || {}) }
+    let widget = WIDGETS[0]
+    const field = this.#parent.fields.get(name)
+    if (['Number', 'Date', 'Datetime'].includes(field?.type)) {
+      widget = 'minmax'
+    }
+    const properties = { name, widget, ...(this.defined.get(name) || {}) }
     const fieldKeys = name
       ? [name]
       : ['', ...this.#parent.fieldKeys.filter((key) => !this.defined.has(key))]
