@@ -536,7 +536,8 @@ class Feature {
     const filterKeys = this.datalayer.getFilterKeys()
     const filter = this._umap.browser.options.filter
     if (filter && !this.matchFullTextFilter(filter, filterKeys)) return true
-    if (!this.matchFilters()) return true
+    if (!this.matchMapFilters()) return true
+    if (!this.matchLayerFilters()) return true
     return false
   }
 
@@ -558,36 +559,51 @@ class Feature {
     return false
   }
 
-  matchFilters() {
-    const selected = this._umap.filters.selected
-    for (const [key, { min, max, choices }] of Object.entries(selected)) {
+  _mapFilters(fields, filters) {
+    for (const [key, { min, max, choices }] of Object.entries(filters.selected)) {
       // This filter has no value selected by the user.
       if (min === undefined && max === undefined && !choices?.length) continue
-      const field = this.datalayer.fields.get(key) || this._umap.fields.get(key)
+      const field = fields.get(key)
       // This field may only exist on another layer.
-      if (!field) return false
+      if (!field) continue
       let value = this.properties[key]
-      const parser = this._umap.filters.getParser(field.type)
+      const parser = filters.getParser(field.type)
       value = parser(value)
       switch (field.type) {
         case 'Date':
         case 'Datetime':
         case 'Number':
-          if (!Number.isNaN(min) && !Number.isNaN(value) && min > value) return false
-          if (!Number.isNaN(max) && !Number.isNaN(value) && max < value) return false
+          if (!Number.isNaN(min) && !Number.isNaN(value) && min > value) {
+            return false
+          }
+          if (!Number.isNaN(max) && !Number.isNaN(value) && max < value) {
+            return false
+          }
           break
         case 'Enum': {
           const intersection = value.filter((item) => choices.includes(item))
-          if (intersection.length !== choices.length) return false
+          if (intersection.length !== choices.length) {
+            return false
+          }
           break
         }
         default:
           value = value || translate('<empty value>')
-          if (choices?.length && !choices.includes(value)) return false
+          if (choices?.length && !choices.includes(value)) {
+            return false
+          }
           break
       }
     }
     return true
+  }
+
+  matchMapFilters() {
+    return this._mapFilters(this._umap.fields, this._umap.filters)
+  }
+
+  matchLayerFilters() {
+    return this._mapFilters(this.datalayer.fields, this.datalayer.filters)
   }
 
   isMulti() {

@@ -132,7 +132,7 @@ export default class Umap {
     this.contextmenu = new ContextMenu()
     this.server = new ServerRequest()
     this.request = new Request()
-    this.filters = new Filters(this)
+    this.filters = new Filters(this, this)
     this.browser = new Browser(this, this._leafletMap)
     this.caption = new Caption(this, this._leafletMap)
     this.importer = new Importer(this)

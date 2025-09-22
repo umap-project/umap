@@ -124,7 +124,11 @@ export default class Browser {
   }
 
   hasFilters() {
-    return !!this.options.filter || this._umap.filters.isActive()
+    return (
+      !!this.options.filter ||
+      this._umap.filters.isActive() ||
+      this._umap.datalayers.active().some((d) => d.filters.isActive())
+    )
   }
 
   onMoveEnd() {
@@ -219,18 +223,24 @@ export default class Browser {
       ],
       ['options.inBbox', { handler: 'Switch', label: translate('Current map view') }],
     ]
-    const builder = new Form(this, fields)
-    builder.on('set', () => this.onFormChange())
-    this.formContainer.appendChild(builder.build())
-    builder.form.addEventListener('reset', () => {
-      window.setTimeout(builder.syncAll.bind(builder))
-    })
+    const searchForm = new Form(this, fields)
+    const listenFormChanges = (form) => {
+      form.on('set', () => this.onFormChange())
+      form.form.addEventListener('reset', () => {
+        window.setTimeout(form.syncAll.bind(form))
+      })
+    }
+    this.formContainer.appendChild(searchForm.build())
+    listenFormChanges(searchForm)
     if (this._umap.filters.size) {
       const filtersForm = this._umap.filters.buildForm(this.formContainer)
-      filtersForm.on('set', () => this.onFormChange())
-      filtersForm.form.addEventListener('reset', () => {
-        window.setTimeout(filtersForm.syncAll.bind(filtersForm))
-      })
+      listenFormChanges(filtersForm)
+    }
+    for (const datalayer of this._umap.datalayers.active()) {
+      if (datalayer.filters.size) {
+        const filtersForm = datalayer.filters.buildForm(this.formContainer)
+        listenFormChanges(filtersForm)
+      }
     }
   }
 
