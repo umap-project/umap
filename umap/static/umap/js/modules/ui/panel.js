@@ -59,13 +59,17 @@ export class Panel {
       if (isOpen) {
         resolve(this)
       } else {
-        this.container.addEventListener(
-          'transitionend',
-          () => {
-            resolve(this)
-          },
-          { once: true }
+        Promise.all(
+          this.container.getAnimations().map((animation) => animation.finished)
         )
+          .then(() => {
+            resolve(this)
+          })
+          .catch(() => {
+            // Panel has been removed, so the DOM has changed, so the animations
+            // were cancelled, we want the new panel callabck to be called anyway.
+            resolve(this)
+          })
         this.container.classList.add('on')
       }
     })

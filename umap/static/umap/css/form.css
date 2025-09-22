@@ -549,10 +549,6 @@ i.info {
     background-image: url('../img/16-white.svg');
 }
 
-.with-transition {
-    transition: all .7s;
-}
-
 .umap-empty:before,
 .umap-to-polygon:before,
 .umap-clone:before,
