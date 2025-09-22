@@ -22,6 +22,7 @@ import * as Utils from '../utils.js'
 import { LineString, Point, Polygon } from './features.js'
 import Rules from '../rules.js'
 import { FeatureManager, FieldManager } from '../managers.js'
+import Filters from '../filters.js'
 
 export const LAYER_TYPES = [
   DefaultLayer,
@@ -95,6 +96,7 @@ export class DataLayer {
       ]
     }
     this.fields = new FieldManager(this, this._umap.dialog)
+    this.filters = new Filters(this, this._umap)
 
     // Only layers that are displayed on load must be hidden/shown
     // Automatically, others will be shown manually, and thus will
@@ -168,6 +170,12 @@ export class DataLayer {
     // processed
     fields = this.propagate(fields)
     if (fields.includes('properties.fields')) this.fields.pull()
+    if (fields.includes('properties.filters')) {
+      this.filters.load()
+      if (this._umap.browser.isOpen()) {
+        this._umap.browser.buildFilters()
+      }
+    }
 
     const impacts = Utils.getImpactsFromSchema(fields)
 
@@ -973,17 +981,44 @@ export class DataLayer {
     if (this.createdOnServer) download.hidden = false
   }
 
-  _editFields(container) {
-    const template = `
+  _editFieldsAndKeys(parent) {
+    const body = Utils.loadTemplate(`
       <details id="fields-management">
-        <summary><h4>${translate('Manage fields')}</h4></summary>
+        <summary><h4>${translate('Fields, filters and keys')}</h4></summary>
         <fieldset data-ref="fieldset">
         </fieldset>
       </details>
+    `)
+    parent.appendChild(body)
+
+    if (!this.isRemoteLayer()) {
+      const fieldsContainer = Utils.loadTemplate(`
+      <fieldset class="formbox" id="fields">
+        <legend>${translate('Manage Fields')}</legend>
+      </fieldset>
+    `)
+
+      body.appendChild(fieldsContainer)
+      this.fields.edit(fieldsContainer)
+    }
+
+    const template = `
+      <fieldset class="formbox" id="fields-and-keys">
+        <legend>${translate('Keys management')}</legend>
+        <div data-ref=keyContainer></div>
+      </fieldset>
     `
-    const [root, { fieldset }] = Utils.loadTemplateWithRefs(template)
-    this.fields.edit(fieldset)
-    container.appendChild(root)
+    const [root, { keyContainer }] = Utils.loadTemplateWithRefs(template)
+    const optionsFields = [
+      'properties.labelKey',
+      'properties.sortKey',
+      // 'properties.filterKey',
+    ]
+    body.appendChild(root)
+
+    const builder = new MutatingForm(this, optionsFields, { umap: this })
+    keyContainer.appendChild(builder.build())
+    this.filters.edit(body)
   }
 
   edit() {
@@ -998,9 +1033,7 @@ export class DataLayer {
     this._editInteractionProperties(container)
     this._editTextPathProperties(container)
     this._editRemoteDataProperties(container)
-    if (!this.isRemoteLayer()) {
-      this._editFields(container)
-    }
+    this._editFieldsAndKeys(container)
     this.rules.edit(container)
 
     if (this._umap.properties.urls.datalayer_versions) {
