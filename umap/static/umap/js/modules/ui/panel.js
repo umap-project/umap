@@ -26,12 +26,12 @@ export class Panel {
   }
 
   open({ content, className, highlight, actions = [] } = {}) {
+    let isOpen = false
     if (this.isOpen()) {
+      isOpen = true
       this.onClose()
     }
-    this.container.className = `with-transition panel window ${this.className} ${
-      this.mode || ''
-    }`
+    this.container.className = `with-transition panel window ${this.className} ${this.mode || ''} ${isOpen ? 'on' : ''}`
     if (highlight) {
       this.container.dataset.highlight = highlight
     }
@@ -56,8 +56,22 @@ export class Panel {
     }
     if (className) DomUtil.addClass(body, className)
     const promise = new Promise((resolve, reject) => {
-      DomUtil.addClass(this.container, 'on')
-      resolve(this)
+      if (isOpen) {
+        resolve(this)
+      } else {
+        Promise.all(
+          this.container.getAnimations().map((animation) => animation.finished)
+        )
+          .then(() => {
+            resolve(this)
+          })
+          .catch(() => {
+            // Panel has been removed, so the DOM has changed, so the animations
+            // were cancelled, we want the new panel callabck to be called anyway.
+            resolve(this)
+          })
+        this.container.classList.add('on')
+      }
     })
     DomEvent.on(closeButton, 'click', this.close, this)
     DomEvent.on(resizeButton, 'click', this.resize, this)
@@ -83,8 +97,8 @@ export class Panel {
   }
 
   onClose() {
-    if (DomUtil.hasClass(this.container, 'on')) {
-      DomUtil.removeClass(this.container, 'on')
+    if (this.container.classList.contains('on')) {
+      this.container.classList.remove('on')
       this._leafletMap.invalidateSize({ pan: false })
     }
   }

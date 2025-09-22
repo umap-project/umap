@@ -25,6 +25,13 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
 }
 
 /* *********** */
+/*   Generic   */
+/* *********** */
+.with-transition {
+    transition: all var(--transition);
+}
+
+/* *********** */
 /* Map details */
 /* *********** */
 #map {
@@ -1069,7 +1076,7 @@ ul.photon-autocomplete {
     font-weight: bold;
 }
 
-.leaflet-overlay-pane > svg {
+.leaflet-overlay-pane>svg {
     z-index: var(--zindex-orphan-marker);
 }
 
