@@ -20,12 +20,9 @@ class FiltersForm extends Form {
 }
 
 export default class Filters {
-  #parent
-  #umap
-
   constructor(parent, umap) {
-    this.#parent = parent
-    this.#umap = umap
+    this._parent = parent
+    this._umap = umap
     this.selected = {}
     this.load()
   }
@@ -49,11 +46,11 @@ export default class Filters {
     const properties = Object.fromEntries(this.defined.keys().map((name) => [name, {}]))
 
     for (const name of this.defined.keys()) {
-      const field = this.#parent.fields.get(name)
+      const field = this._parent.fields.get(name)
       if (!field) continue
       properties[name].choices ??= new Set()
       const parser = this.getParser(field.type)
-      this.#parent.eachFeature((feature) => {
+      this._parent.eachFeature((feature) => {
         let value = feature.properties[name]
         value = parser(value)
         switch (field.type) {
@@ -95,7 +92,7 @@ export default class Filters {
     const formFields = []
     for (const name of this.defined.keys()) {
       const criteria = filterProperties[name] || {}
-      const field = this.#parent.fields.get(name)
+      const field = this._parent.fields.get(name)
       if (!field) continue
       const type = field.type
       let handler = 'FilterByChoices'
@@ -119,10 +116,10 @@ export default class Filters {
           handler: handler,
           label: label,
           onClick: () => {
-            this.#parent
+            this._parent
               .edit()
               .then((panel) => panel.scrollTo('details#fields-management'))
-            this.#parent.filters.filterForm(name)
+            this._parent.filters.filterForm(name)
           },
         },
       ])
@@ -131,13 +128,13 @@ export default class Filters {
   }
 
   load() {
-    this.defined = new Map(Object.entries(this.#parent.properties.filters || {}))
+    this.defined = new Map(Object.entries(this._parent.properties.filters || {}))
     this.loadLegacy()
   }
 
   loadLegacy() {
     const legacy =
-      this.#parent.properties.advancedFilterKey || this.#parent.properties.facetKey
+      this._parent.properties.advancedFilterKey || this._parent.properties.facetKey
     if (!legacy) return
     for (const filter of legacy.split(',')) {
       let [key, label, widget] = filter.split('|')
@@ -157,14 +154,14 @@ export default class Filters {
         widget = 'checkbox'
       }
       this.defined.set(key, { label: label || key, widget })
-      if (!this.#parent.fields.has(key)) {
-        this.#parent.fields.add({ key, type })
+      if (!this._parent.fields.has(key)) {
+        this._parent.fields.add({ key, type })
       }
     }
-    delete this.#parent.properties.facetKey
-    delete this.#parent.properties.advancedFilterKey
+    delete this._parent.properties.facetKey
+    delete this._parent.properties.advancedFilterKey
     this.dumps(false)
-    this.#parent._migrated = true
+    this._parent._migrated = true
   }
 
   getParser(type) {
@@ -186,15 +183,15 @@ export default class Filters {
   }
 
   dumps(sync = true) {
-    const oldValue = this.#parent.properties.filters
-    this.#parent.properties.filters = Object.fromEntries(this.defined.entries())
+    const oldValue = this._parent.properties.filters
+    this._parent.properties.filters = Object.fromEntries(this.defined.entries())
     if (sync) {
-      this.#parent.sync.update(
+      this._parent.sync.update(
         'properties.filters',
-        this.#parent.properties.filters,
+        this._parent.properties.filters,
         oldValue
       )
-      this.#parent.render(['properties.filters'])
+      this._parent.render(['properties.filters'])
     }
   }
 
@@ -233,7 +230,7 @@ export default class Filters {
       </fieldset>
     `
     const [body, { ul, add }] = Utils.loadTemplateWithRefs(template)
-    this.#umap.help.parse(body)
+    this._umap.help.parse(body)
     this.defined.forEach((props, key) => {
       const [li, { edit, remove }] = Utils.loadTemplateWithRefs(
         `<li class="orderable" data-key="${key}">
@@ -246,7 +243,7 @@ export default class Filters {
       ul.appendChild(li)
       remove.addEventListener('click', () => {
         this.remove(key)
-        this.#parent.edit().then((panel) => panel.scrollTo('details#fields-management'))
+        this._parent.edit().then((panel) => panel.scrollTo('details#fields-management'))
       })
       edit.addEventListener('click', () => {
         this.filterForm(key)
@@ -257,15 +254,15 @@ export default class Filters {
       const orderedKeys = Array.from(ul.querySelectorAll('li')).map(
         (el) => el.dataset.key
       )
-      const oldValue = Utils.CopyJSON(this.#parent.properties.filters)
+      const oldValue = Utils.CopyJSON(this._parent.properties.filters)
       const copy = Object.fromEntries(this.defined)
       this.defined.clear()
       for (const key of orderedKeys) {
         this.add({ name: key, ...copy[key] })
       }
-      this.#parent.sync.update(
+      this._parent.sync.update(
         'properties.filters',
-        this.#parent.properties.filters,
+        this._parent.properties.filters,
         oldValue
       )
     }
@@ -275,14 +272,14 @@ export default class Filters {
 
   filterForm(name) {
     let widget = WIDGETS[0]
-    const field = this.#parent.fields.get(name)
+    const field = this._parent.fields.get(name)
     if (['Number', 'Date', 'Datetime'].includes(field?.type)) {
       widget = 'minmax'
     }
     const properties = { name, widget, ...(this.defined.get(name) || {}) }
     const fieldKeys = name
       ? [name]
-      : ['', ...this.#parent.fieldKeys.filter((key) => !this.defined.has(key))]
+      : ['', ...this._parent.fieldKeys.filter((key) => !this.defined.has(key))]
     const metadata = [
       [
         'name',
@@ -315,18 +312,18 @@ export default class Filters {
     `)
     body.appendChild(form.build())
     editField.addEventListener('click', () => {
-      this.#umap.dialog.accept()
-      this.#parent.fields.editField(name)
+      this._umap.dialog.accept()
+      this._parent.fields.editField(name)
     })
 
-    return this.#umap.dialog.open({ template: container }).then(() => {
+    return this._umap.dialog.open({ template: container }).then(() => {
       if (!properties.name) return
       if (name) {
         this.update({ ...properties })
       } else {
         this.add({ ...properties })
       }
-      this.#parent.edit().then((panel) => panel.scrollTo('details#fields-management'))
+      this._parent.edit().then((panel) => panel.scrollTo('details#fields-management'))
     })
   }
 
