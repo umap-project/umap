@@ -1,4 +1,3 @@
-import { DomEvent, DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
 import { Form } from './form/builder.js'
 import * as Utils from './utils.js'
@@ -303,9 +302,16 @@ export default class Filters {
       ],
     ]
     const form = new Form(properties, metadata)
+    let label
+    if (name) {
+      label = translate('Edit filter')
+    } else {
+      label = translate('Add filter')
+    }
+
     const [container, { body, editField }] = Utils.loadTemplateWithRefs(`
       <div>
-        <h3>${translate('Manage filter')}</h3>
+        <h3>${label}</h3>
         <div data-ref=body></div>
         <button type="button" data-ref=editField><i class="icon icon-16 icon-edit"></i>${translate('Edit this field')}</button>
       </div>
