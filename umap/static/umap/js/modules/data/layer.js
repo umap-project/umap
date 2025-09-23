@@ -521,6 +521,10 @@ export class DataLayer {
     }
   }
 
+  eachFeature(callback) {
+    this.features.forEach((feature) => callback(feature))
+  }
+
   sortedValues(property) {
     return this.features
       .all()

@@ -4,6 +4,8 @@ import re
 import pytest
 from playwright.sync_api import expect
 
+from umap.models import Map
+
 from ..base import DataLayerFactory
 
 pytestmark = pytest.mark.django_db
@@ -95,7 +97,7 @@ DATALAYER_DATA3 = {
 
 def test_simple_facet_search(live_server, page, map):
     map.settings["properties"]["onLoadPanel"] = "datafilters"
-    map.settings["properties"]["facets"] = {
+    map.settings["properties"]["filters"] = {
         "mytype": {"label": "My type"},
         "mynumber": {"label": "My number", "widget": "minmax"},
     }
@@ -180,7 +182,7 @@ def test_simple_facet_search(live_server, page, map):
 
 def test_date_facet_search(live_server, page, map):
     map.settings["properties"]["onLoadPanel"] = "datafilters"
-    map.settings["properties"]["facets"] = {
+    map.settings["properties"]["filters"] = {
         "mydate": {"label": "Date filter", "widget": "minmax"}
     }
     map.settings["properties"]["fields"] = [{"key": "mydate", "type": "Date"}]
@@ -201,7 +203,8 @@ def test_date_facet_search(live_server, page, map):
 
 def test_choice_with_empty_value(live_server, page, map):
     map.settings["properties"]["onLoadPanel"] = "datafilters"
-    map.settings["properties"]["facets"] = {"mytype": {"label": "My type"}}
+    map.settings["properties"]["fields"] = [{"key": "mytype", "type": "String"}]
+    map.settings["properties"]["filters"] = {"mytype": {"label": "My type"}}
     map.save()
     data = copy.deepcopy(DATALAYER_DATA1)
     data["features"][0]["properties"]["mytype"] = ""
@@ -218,7 +221,7 @@ def test_choice_with_empty_value(live_server, page, map):
 
 def test_number_with_zero_value(live_server, page, map):
     map.settings["properties"]["onLoadPanel"] = "datafilters"
-    map.settings["properties"]["facets"] = {
+    map.settings["properties"]["filters"] = {
         "mynumber": {"label": "Filter", "widget": "minmax"}
     }
     map.settings["properties"]["fields"] = [{"key": "mynumber", "type": "Number"}]
@@ -238,7 +241,7 @@ def test_number_with_zero_value(live_server, page, map):
 
 def test_facets_search_are_persistent_when_closing_panel(live_server, page, map):
     map.settings["properties"]["onLoadPanel"] = "datafilters"
-    map.settings["properties"]["facets"] = {
+    map.settings["properties"]["filters"] = {
         "mytype": {"label": "My type"},
         "mynumber": {"label": "My Number", "widget": "minmax"},
     }
@@ -299,3 +302,37 @@ def test_facets_search_are_persistent_when_closing_panel(live_server, page, map)
     expect(panel.get_by_text("Point 4")).to_be_hidden()
     expect(panel.get_by_text("Point 1")).to_be_hidden()
     expect(panel.get_by_text("Point 3")).to_be_visible()
+
+
+def test_can_load_legacy_facetKey(live_server, page, openmap):
+    openmap.settings["properties"]["facetKey"] = (
+        "mytype|My Type|radio,mynumber|My Number|number,mydate|My Date|date"
+    )
+    openmap.save()
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    expect(
+        page.get_by_text("The map has been upgraded to latest version, please save it.")
+    ).to_be_visible()
+    with page.expect_response(re.compile("./update/settings/.*")):
+        page.get_by_role("button", name="Save", exact=True).click()
+    saved = Map.objects.first()
+    assert "facetKey" not in saved.settings["properties"]
+    assert saved.settings["properties"]["filters"] == {
+        "mydate": {
+            "label": "My Date",
+            "widget": "minmax",
+        },
+        "mynumber": {
+            "label": "My Number",
+            "widget": "minmax",
+        },
+        "mytype": {
+            "label": "My Type",
+            "widget": "radio",
+        },
+    }
+    assert saved.settings["properties"]["fields"] == [
+        {"key": "mytype", "type": "String"},
+        {"key": "mynumber", "type": "Number"},
+        {"key": "mydate", "type": "Date"},
+    ]
