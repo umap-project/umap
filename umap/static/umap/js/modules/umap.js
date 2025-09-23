@@ -132,6 +132,7 @@ export default class Umap {
     this.contextmenu = new ContextMenu()
     this.server = new ServerRequest()
     this.request = new Request()
+    this.fields = new FieldManager(this, this.dialog)
     this.filters = new Filters(this, this)
     this.browser = new Browser(this, this._leafletMap)
     this.caption = new Caption(this, this._leafletMap)
@@ -165,7 +166,6 @@ export default class Umap {
     // Global storage for retrieving datalayers and features.
     this.datalayers = new DataLayerManager()
     this.featuresIndex = {}
-    this.fields = new FieldManager(this, this.dialog)
 
     this.formatter = new Formatter(this)
 

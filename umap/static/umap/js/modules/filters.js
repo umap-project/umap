@@ -34,70 +34,6 @@ export default class Filters {
     return this.defined.size
   }
 
-  getDataType(name) {
-    if (this.#parent.fields.has(name)) {
-      return this.#parent.fields.get(name).type
-    }
-    for (const datalayer of this.#umap.datalayers.active()) {
-      if (datalayer.fields.has(name)) {
-        return datalayer.fields.get(name).type
-      }
-    }
-  }
-
-  compute() {
-    const properties = {}
-
-    for (const [name, props] of this.defined.entries()) {
-      const widget = props.widget
-      const dataType = props.dataType || this.getDataType(name)
-      properties[name] = { widget, dataType }
-      properties[name].choices = new Set()
-    }
-
-    this.#umap.datalayers.browsable().map((datalayer) => {
-      datalayer.features.forEach((feature) => {
-        for (const [name, props] of this.defined.entries()) {
-          const dataType = properties[name].dataType
-          let value = feature.properties[name]
-          const widget = this.defined.get(name).widget
-          this.defined.get(name).dataType ??= dataType
-          const parser = this.getParser(dataType)
-          value = parser(value)
-          switch (dataType) {
-            case 'Date':
-            case 'Datetime':
-            case 'Number':
-              if (!Number.isNaN(value)) {
-                // Special cases where we want to be lousy when checking isNaN without
-                // coercing to a Number first because we handle multiple types.
-                // See https://developer.mozilla.org/en-US/docs/Web/JavaScript/
-                // Reference/Global_Objects/Number/isNaN
-                // biome-ignore lint/suspicious/noGlobalIsNan: see above.
-                if (isNaN(properties[name].min) || properties[name].min > value) {
-                  properties[name].min = value
-                }
-                // biome-ignore lint/suspicious/noGlobalIsNan: see above.
-                if (isNaN(properties[name].max) || properties[name].max < value) {
-                  properties[name].max = value
-                }
-              }
-              break
-            case 'Enum':
-              properties[name].choices = Array.from(
-                new Set([...properties[name].choices, ...value])
-              )
-              break
-            default:
-              value = value || translate('<empty value>')
-              properties[name].choices.add(value)
-          }
-        }
-      })
-    })
-    return properties
-  }
-
   isActive() {
     for (const { type, min, max, choices } of Object.values(this.selected)) {
       if (min !== undefined || max !== undefined || choices?.length) {
@@ -107,18 +43,68 @@ export default class Filters {
     return false
   }
 
-  build() {
+  // Loop on the data to compute the list of choices, min
+  // and max values.
+  compute() {
+    const properties = Object.fromEntries(this.defined.keys().map((name) => [name, {}]))
+
+    for (const name of this.defined.keys()) {
+      const field = this.#parent.fields.get(name)
+      if (!field) continue
+      properties[name].choices ??= new Set()
+      const parser = this.getParser(field.type)
+      this.#parent.eachFeature((feature) => {
+        let value = feature.properties[name]
+        value = parser(value)
+        switch (field.type) {
+          case 'Date':
+          case 'Datetime':
+          case 'Number':
+            if (!Number.isNaN(value)) {
+              // Special cases where we want to be lousy when checking isNaN without
+              // coercing to a Number first because we handle multiple types.
+              // See https://developer.mozilla.org/en-US/docs/Web/JavaScript/
+              // Reference/Global_Objects/Number/isNaN
+              // biome-ignore lint/suspicious/noGlobalIsNan: see above.
+              if (isNaN(properties[name].min) || properties[name].min > value) {
+                properties[name].min = value
+              }
+              // biome-ignore lint/suspicious/noGlobalIsNan: see above.
+              if (isNaN(properties[name].max) || properties[name].max < value) {
+                properties[name].max = value
+              }
+            }
+            break
+          case 'Enum':
+            properties[name].choices = Array.from(
+              new Set([...properties[name].choices, ...value])
+            )
+            break
+          default:
+            value = value || translate('<empty value>')
+            properties[name].choices.add(value)
+        }
+      })
+    }
+    return properties
+  }
+
+  buildFormFields() {
     const filterProperties = this.compute()
 
-    const fields = Array.from(this.defined.keys()).map((name) => {
-      const criteria = filterProperties[name]
+    const formFields = []
+    for (const name of this.defined.keys()) {
+      const criteria = filterProperties[name] || {}
+      const field = this.#parent.fields.get(name)
+      if (!field) continue
+      const type = field.type
       let handler = 'FilterByChoices'
       if (criteria.widget === 'minmax' || criteria.widget === undefined) {
-        if (criteria.dataType === 'Number') {
+        if (type === 'Number') {
           handler = 'FilterByNumber'
-        } else if (criteria.dataType === 'Date') {
+        } else if (type === 'Date') {
           handler = 'FilterByDate'
-        } else if (criteria.dataType === 'Datetime') {
+        } else if (type === 'Datetime') {
           handler = 'FilterByDateTime'
         }
       }
@@ -126,7 +112,7 @@ export default class Filters {
         <span>${Utils.escapeHTML(this.defined.get(name).label)}
           <button class="icon icon-16 icon-edit show-on-edit" data-ref=editFilter></button>
         </span>`
-      return [
+      formFields.push([
         `selected.${name}`,
         {
           criteria: { ...criteria, choices: Array.from(criteria.choices) },
@@ -139,10 +125,9 @@ export default class Filters {
             this.#parent.filters.filterForm(name)
           },
         },
-      ]
-    })
-
-    return fields
+      ])
+    }
+    return formFields
   }
 
   load() {
@@ -155,23 +140,26 @@ export default class Filters {
       this.#parent.properties.advancedFilterKey || this.#parent.properties.facetKey
     if (!legacy) return
     for (const filter of legacy.split(',')) {
-      let [name, label, widget] = filter.split('|')
-      let dataType
+      let [key, label, widget] = filter.split('|')
+      let type = 'String'
       if (['number', 'date', 'datetime'].includes(widget)) {
         // Retrocompat
         if (widget === 'number') {
-          dataType = 'Number'
+          type = 'Number'
         } else if (widget === 'datetime') {
-          dataType = 'Datetime'
+          type = 'Datetime'
         } else if (widget === 'date') {
-          dataType = 'Date'
+          type = 'Date'
         }
         widget = 'minmax'
       }
       if (!WIDGETS.includes(widget)) {
         widget = 'checkbox'
       }
-      this.defined.set(name, { label: label || name, widget, dataType })
+      this.defined.set(key, { label: label || key, widget })
+      if (!this.#parent.fields.has(key)) {
+        this.#parent.fields.add({ key, type })
+      }
     }
     delete this.#parent.properties.facetKey
     delete this.#parent.properties.advancedFilterKey
@@ -199,12 +187,7 @@ export default class Filters {
 
   dumps(sync = true) {
     const oldValue = this.#parent.properties.filters
-    this.#parent.properties.filters = Object.fromEntries(
-      this.defined.entries().map(
-        // Remove dataType, which we don't want to store
-        ([key, { label, widget }]) => [key, { label, widget }]
-      )
-    )
+    this.#parent.properties.filters = Object.fromEntries(this.defined.entries())
     if (sync) {
       this.#parent.sync.update(
         'properties.filters',
@@ -348,7 +331,7 @@ export default class Filters {
   }
 
   buildForm(container) {
-    const form = new FiltersForm(this, this.build())
+    const form = new FiltersForm(this, this.buildFormFields())
     container.appendChild(form.build())
     return form
   }
