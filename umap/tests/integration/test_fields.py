@@ -306,6 +306,41 @@ def test_delete_field_from_datalayer(live_server, page, openmap):
         "mynumber": 10,
         "name": "Point 2",
     }
+    page.locator(".edit-undo").click()
+    with page.expect_response(re.compile(r".*/datalayer/update/")):
+        page.get_by_role("button", name="Save").click()
+    saved = DataLayer.objects.first()
+    assert saved.settings["fields"] == [
+        {
+            "key": "mytype",
+            "type": "String",
+        },
+        {
+            "key": "name",
+            "type": "String",
+        },
+        {
+            "key": "mynumber",
+            "type": "String",
+        },
+        {
+            "key": "mydate",
+            "type": "String",
+        },
+    ]
+    data = json.loads(Path(saved.geojson.path).read_text())
+    assert data["features"][0]["properties"] == {
+        "mydate": "2024/03/13 12:20:20",
+        "mynumber": 12,
+        "name": "Point 1",
+        "mytype": "odd",
+    }
+    assert data["features"][1]["properties"] == {
+        "mydate": "2024/04/14 12:19:17",
+        "mynumber": 10,
+        "name": "Point 2",
+        "mytype": "even",
+    }
 
 
 def test_delete_field_from_map(live_server, page, openmap):
@@ -349,11 +384,42 @@ def test_delete_field_from_map(live_server, page, openmap):
         "mynumber": 10,
         "name": "Point 2",
     }
+    page.locator(".edit-undo").click()
+    with page.expect_response(re.compile(r"./update/settings/.*")):
+        with page.expect_response(re.compile(r".*/datalayer/update/")):
+            page.get_by_role("button", name="Save").click()
+    saved = Map.objects.get(pk=openmap.pk)
+    assert saved.settings["properties"]["fields"] == [
+        {"key": "mytype", "type": "String"},
+        {"key": "mynumber", "type": "Number"},
+    ]
+    saved = DataLayer.objects.get(pk=dl1.pk)
+    assert saved.settings["fields"] == [
+        {
+            "key": "name",
+            "type": "String",
+        },
+        {
+            "key": "mydate",
+            "type": "String",
+        },
+    ]
+    data = json.loads(Path(saved.geojson.path).read_text())
+    assert data["features"][0]["properties"] == {
+        "mydate": "2024/03/13 12:20:20",
+        "mynumber": 12,
+        "name": "Point 1",
+    }
+    assert data["features"][1]["properties"] == {
+        "mydate": "2024/04/14 12:19:17",
+        "mynumber": 10,
+        "name": "Point 2",
+    }
 
 
 def test_delete_field_from_datalayer_also_in_map(live_server, page, openmap):
     # mytype exist both on map and datalayer 1
-    # deleting the field in the datalayer should not delete the data, at the field
+    # deleting the field in the datalayer should not delete the data, as the field
     # is also defined on the map
     data = deepcopy(DATALAYER_DATA1)
     data["_umap_options"]["fields"] = [

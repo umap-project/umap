@@ -330,6 +330,9 @@ export class FieldManager extends Map {
         const oldFields = Utils.CopyJSON(this.parent.properties.fields)
         this.delete(name)
         this.push()
+        if (this.parent.filters.has(name)) {
+          this.parent.filters.remove(name)
+        }
         this.parent.deleteField(name)
         this.parent.sync.update(
           'properties.fields',

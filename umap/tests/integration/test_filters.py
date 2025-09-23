@@ -4,7 +4,7 @@ import re
 import pytest
 from playwright.sync_api import expect
 
-from umap.models import Map
+from umap.models import DataLayer, Map
 
 from ..base import DataLayerFactory
 
@@ -336,3 +336,86 @@ def test_can_load_legacy_facetKey(live_server, page, openmap):
         {"key": "mynumber", "type": "Number"},
         {"key": "mydate", "type": "Date"},
     ]
+
+
+def test_deleting_field_should_delete_filter(live_server, page, openmap, datalayer):
+    datalayer.settings["fields"] = [
+        {"key": "name", "type": "String"},
+        {"key": "foobar", "type": "Number"},
+        {"key": "description", "type": "Text"},
+    ]
+    datalayer.settings["filters"] = {
+        "foobar": {"widget": "minmax", "label": "Foo Bar"},
+        "name": {"widget": "checkbox", "label": "Bar Foo"},
+    }
+    datalayer.save()
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    page.get_by_role("button", name="Manage layers").click()
+    page.get_by_role("button", name="Edit", exact=True).click()
+    page.get_by_text("Fields, filters and keys").click()
+    page.get_by_role("button", name="Delete this field").nth(1).click()
+    page.get_by_role("button", name="OK").click()
+    with page.expect_response(re.compile(r".*/datalayer/update/")):
+        page.get_by_role("button", name="Save").click()
+    saved = DataLayer.objects.first()
+    assert saved.settings["fields"] == [
+        {"key": "name", "type": "String"},
+        {"key": "description", "type": "Text"},
+    ]
+    saved.settings["filters"] == {
+        "name": {"widget": "checkbox", "label": "Bar Foo"},
+    }
+    page.locator(".edit-undo").click()
+    with page.expect_response(re.compile(r".*/datalayer/update/")):
+        page.get_by_role("button", name="Save").click()
+    saved = DataLayer.objects.first()
+    assert saved.settings["fields"] == [
+        {"key": "name", "type": "String"},
+        {"key": "foobar", "type": "Number"},
+        {"key": "description", "type": "Text"},
+    ]
+    saved.settings["filters"] == {
+        "foobar": {"widget": "minmax", "label": "Foo Bar"},
+        "name": {"widget": "checkbox", "label": "Bar Foo"},
+    }
+
+
+def test_deleting_field_from_map_should_delete_filter(live_server, page, openmap):
+    openmap.settings["properties"]["fields"] = [
+        {"key": "name", "type": "String"},
+        {"key": "foobar", "type": "Number"},
+        {"key": "description", "type": "Text"},
+    ]
+    openmap.settings["properties"]["filters"] = {
+        "foobar": {"widget": "minmax", "label": "Foo Bar"},
+        "name": {"widget": "checkbox", "label": "Bar Foo"},
+    }
+    openmap.save()
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    page.get_by_role("button", name="Map advanced properties").click()
+    page.get_by_text("Fields, filters and keys").click()
+    page.get_by_role("button", name="Delete this field").nth(1).click()
+    page.get_by_role("button", name="OK").click()
+    with page.expect_response(re.compile(r"./update/settings/.*")):
+        page.get_by_role("button", name="Save").click()
+    saved = Map.objects.first()
+    assert saved.settings["properties"]["fields"] == [
+        {"key": "name", "type": "String"},
+        {"key": "description", "type": "Text"},
+    ]
+    saved.settings["properties"]["filters"] == {
+        "name": {"widget": "checkbox", "label": "Bar Foo"},
+    }
+    page.locator(".edit-undo").click()
+    with page.expect_response(re.compile(r"./update/settings/.*")):
+        page.get_by_role("button", name="Save").click()
+    saved = Map.objects.first()
+    assert saved.settings["properties"]["fields"] == [
+        {"key": "name", "type": "String"},
+        {"key": "foobar", "type": "Number"},
+        {"key": "description", "type": "Text"},
+    ]
+    saved.settings["properties"]["filters"] == {
+        "foobar": {"widget": "minmax", "label": "Foo Bar"},
+        "name": {"widget": "checkbox", "label": "Bar Foo"},
+    }
