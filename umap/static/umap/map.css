@@ -525,7 +525,7 @@ ul.photon-autocomplete {
 /* ********************************* */
 /*     Help Lightbox                 */
 /* ********************************* */
-.umap-help-button {
+.umap-help-button[type="button"] {
     display: inline-block;
     width: 16px;
     height: 16px;
