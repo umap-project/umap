@@ -99,7 +99,7 @@ select[multiple="multiple"] {
 }
 
 .button,
-[type="button"],
+[type="button"]:not(.icon),
 input[type="submit"] {
     display: flex;
     align-items: center;
