@@ -229,6 +229,14 @@ export default class Filters {
       </fieldset>
     `
     const [body, { ul, add }] = Utils.loadTemplateWithRefs(template)
+    if (!this._parent.fields.size) {
+      add.disabled = true
+      ul.appendChild(
+        Utils.loadTemplate(
+          `<li>${translate('Add a field prior to create a filter.')}</li>`
+        )
+      )
+    }
     this._umap.help.parse(body)
     this.defined.forEach((props, key) => {
       const [li, { edit, remove }] = Utils.loadTemplateWithRefs(
