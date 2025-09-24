@@ -39,7 +39,7 @@ export default class Caption extends Utils.WithTemplate {
     this._leafletMap = leafletMap
     this.loadTemplate(TEMPLATE)
     this.elements.star.addEventListener('click', async () => {
-      if (this._umap.properties.user?.id) {
+      if (this._umap.permissions.userIsAuth()) {
         await this._umap.star()
         this.refresh()
       } else {

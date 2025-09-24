@@ -1305,6 +1305,23 @@ export default class Umap {
     this.fire('edit:enabled')
     this.initSyncEngine()
     this.checkForLegacy()
+    this.checkForAnonymous()
+  }
+
+  checkForAnonymous() {
+    if (
+      this.permissions.isAnonymousMap() &&
+      this.permissions.isOwner() &&
+      this.permissions.userIsAuth()
+    ) {
+      this.dialog
+        .confirm(
+          translate('This map is anonymous, do you want to attach it to your account?')
+        )
+        .then(() => {
+          this.permissions.attach()
+        })
+    }
   }
 
   checkForLegacy() {
@@ -1433,7 +1450,7 @@ export default class Umap {
       },
       user: () => {
         Utils.eachElement('.umap-user .username', (el) => {
-          if (this.properties.user?.id) {
+          if (this.permissions.userIsAuth()) {
             el.textContent = this.properties.user.name
           }
         })

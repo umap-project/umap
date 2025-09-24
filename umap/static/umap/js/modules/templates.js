@@ -32,9 +32,8 @@ export default class TemplateImporter {
     const [root, { tabs, form, body, mine, confirm, confirmData }] =
       Utils.loadTemplateWithRefs(TEMPLATE)
     const uri = this.umap.urls.get('template_list')
-    const userIsAuth = Boolean(this.umap.properties.user?.id)
-    const defaultTab = userIsAuth ? 'mine' : 'staff'
-    mine.hidden = !userIsAuth
+    const defaultTab = this.umap.permissions.userIsAuth() ? 'mine' : 'staff'
+    mine.hidden = !this.umap.permissions.userIsAuth()
 
     const loadTemplates = async (source) => {
       const [data, response, error] = await this.umap.server.get(
