@@ -34,6 +34,11 @@ const PORTALS = [
     platform: 'opendatasoft',
   },
   {
+    name: 'Ministère de la Culture',
+    url: 'https://data.culture.gouv.fr',
+    platform: 'opendatasoft',
+  },
+  {
     name: 'Métropole de Dijon',
     url: 'https://data.metropole-dijon.fr',
     platform: 'opendatasoft',
