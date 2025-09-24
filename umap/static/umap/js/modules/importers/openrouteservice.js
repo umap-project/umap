@@ -37,7 +37,7 @@ export class Importer {
     }
 
     const metadatas = [
-      ['datalayer', { handler: 'DataLayerSwitcher', allowEmpty: true }],
+      ['datalayer', { handler: 'NullableDataLayerSwitcher'}],
       [
         'profile',
         { handler: 'Select', selectOptions: PROFILES, label: translate('Profile') },

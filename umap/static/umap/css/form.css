@@ -155,16 +155,19 @@ input[type="submit"] {
 }
 
 button.flat,
-[type="button"].flat,
-.dark [type="button"].flat {
-    border: none;
-    background-color: inherit;
+[type="button"].flat {
     padding: 0;
     text-align: start;
     min-height: inherit;
     width: initial;
     display: initial;
-    line-height: inherit;
+}
+
+button.flat,
+[type="button"].flat,
+.dark [type="button"].flat {
+    border: none;
+    background-color: inherit;
     color: var(--text-color);
 }
 
@@ -758,4 +761,9 @@ input.highlightable:not(:placeholder-shown) {
 
 .umap-import [type=url] {
     margin-bottom: 0;
+}
+
+.select-with-actions {
+    display: flex;
+    align-items: center;
 }
