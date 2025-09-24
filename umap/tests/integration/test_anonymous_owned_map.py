@@ -255,7 +255,7 @@ def test_logged_in_user_should_have_a_message_to_attach_map(
     page.get_by_role("button", name="Edit").click()
     expect(
         page.get_by_text(
-            "This map is anonymous, do you want to attach it to your account ?"
+            "This map is anonymous, do you want to attach it to your account?"
         )
     ).to_be_hidden()
 
@@ -264,7 +264,7 @@ def test_logged_in_user_should_have_a_message_to_attach_map(
     page.get_by_role("button", name="Edit").click()
     expect(
         page.get_by_text(
-            "This map is anonymous, do you want to attach it to your account ?"
+            "This map is anonymous, do you want to attach it to your account?"
         )
     ).to_be_visible()
     with page.expect_response(re.compile(r".*/update/owner/.*")):
