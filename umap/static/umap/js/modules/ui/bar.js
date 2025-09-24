@@ -77,7 +77,7 @@ export class TopBar extends WithTemplate {
       this.elements.share.addEventListener('click', () => this._umap.permissions.edit())
     }
     this.elements.user.addEventListener('click', () => {
-      if (this._umap.properties.user?.id) {
+      if (this._umap.permissions.userIsAuth()) {
         const actions = [
           {
             label: translate('New map'),

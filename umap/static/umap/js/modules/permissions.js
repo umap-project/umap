@@ -46,6 +46,14 @@ export class MapPermissions {
     return !this._umap.properties.permissions.owner
   }
 
+  isDraft() {
+    return this.properties.share_status === 0
+  }
+
+  userIsAuth() {
+    return Boolean(this._umap.properties.user?.id)
+  }
+
   _editAnonymous(container) {
     const fields = []
     if (this.isOwner()) {
@@ -77,7 +85,7 @@ export class MapPermissions {
         )
       }
 
-      if (this._umap.properties.user?.id) {
+      if (this.userIsAuth()) {
         // We have a user, and this user has come through here, so they can edit the map, so let's allow to own the map.
         // Note: real check is made on the back office anyway.
         const advancedActions = DomUtil.createFieldset(
@@ -247,9 +255,6 @@ export class MapPermissions {
     }
   }
 
-  isDraft() {
-    return this.properties.share_status === 0
-  }
 }
 
 export class DataLayerPermissions {
