@@ -1316,7 +1316,7 @@ export default class Umap {
     ) {
       this.dialog
         .confirm(
-          translate('This map is anonymous, do you want to attach it to your account ?')
+          translate('This map is anonymous, do you want to attach it to your account?')
         )
         .then(() => {
           this.permissions.attach()
