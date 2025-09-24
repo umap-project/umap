@@ -23,7 +23,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         old = User.objects.get(username=options["old"])
         new = User.objects.get(username=options["new"])
-        print(f"Replacing usre {old} by user {new}")
+        print(f"Replacing user {old} by user {new}")
         owned_maps = old.owned_maps.all()
         print(f"Replacing owner of {len(owned_maps)} maps")
         if not options["dry_run"]:
@@ -40,7 +40,7 @@ class Command(BaseCommand):
                 mm.save()
 
         teams = old.teams.all()
-        print(f"Replacing editor of {len(teams)} maps")
+        print(f"Replacing team member of {len(teams)} teams")
         if not options["dry_run"]:
             for team in teams:
                 team.users.remove(old)
