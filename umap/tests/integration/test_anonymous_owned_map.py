@@ -18,25 +18,24 @@ def owner_session(anonymap, context, live_server):
     key, value = anonymap.signed_cookie_elements
     signed = get_cookie_signer(salt=key).sign(value)
     context.add_cookies([{"name": key, "value": signed, "url": live_server.url}])
-    return context.new_page()
 
 
-def test_map_load_with_owner(anonymap, live_server, owner_session):
-    owner_session.goto(f"{live_server.url}{anonymap.get_absolute_url()}")
-    map_el = owner_session.locator("#map")
+def test_map_load_with_owner(anonymap, live_server, owner_session, page):
+    page.goto(f"{live_server.url}{anonymap.get_absolute_url()}")
+    map_el = page.locator("#map")
     expect(map_el).to_be_visible()
-    enable = owner_session.get_by_role("button", name="Edit")
+    enable = page.get_by_role("button", name="Edit")
     expect(enable).to_be_visible()
     enable.click()
-    disable = owner_session.get_by_role("button", name="View")
+    disable = page.get_by_role("button", name="View")
     expect(disable).to_be_visible()
-    save = owner_session.get_by_role("button", name="Save")
+    save = page.get_by_role("button", name="Save")
     expect(save).to_be_visible()
-    add_marker = owner_session.get_by_title("Draw a marker")
+    add_marker = page.get_by_title("Draw a marker")
     expect(add_marker).to_be_visible()
-    edit_settings = owner_session.get_by_title("Map advanced properties")
+    edit_settings = page.get_by_title("Map advanced properties")
     expect(edit_settings).to_be_visible()
-    edit_permissions = owner_session.get_by_title("Update permissions and editors")
+    edit_permissions = page.get_by_title("Update permissions and editors")
     expect(edit_permissions).to_be_visible()
 
 
@@ -71,35 +70,31 @@ def test_map_load_with_anonymous_but_editable_layer(
     expect(edit_permissions).to_be_hidden()
 
 
-def test_owner_permissions_form(map, datalayer, live_server, owner_session):
-    owner_session.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
-    edit_permissions = owner_session.get_by_title("Update permissions and editors")
+def test_owner_permissions_form(map, datalayer, live_server, owner_session, page):
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    edit_permissions = page.get_by_title("Update permissions and editors")
     expect(edit_permissions).to_be_visible()
     edit_permissions.click()
-    owner_field = owner_session.locator(".umap-field-owner")
+    owner_field = page.locator(".umap-field-owner")
     expect(owner_field).to_be_hidden()
-    editors_field = owner_session.locator(".umap-field-editors input")
+    editors_field = page.locator(".umap-field-editors input")
     expect(editors_field).to_be_hidden()
-    datalayer_label = owner_session.get_by_text('Who can edit "test datalayer"')
+    datalayer_label = page.get_by_text('Who can edit "test datalayer"')
     expect(datalayer_label).to_be_visible()
-    options = owner_session.locator(
-        ".datalayer-permissions select[name='edit_status'] option"
-    )
+    options = page.locator(".datalayer-permissions select[name='edit_status'] option")
     expect(options).to_have_count(3)
-    option = owner_session.locator(
+    option = page.locator(
         ".datalayer-permissions select[name='edit_status'] option:checked"
     )
     expect(option).to_have_text("Inherit")
-    expect(owner_session.locator(".umap-field-share_status select")).to_be_visible()
+    expect(page.locator(".umap-field-share_status select")).to_be_visible()
     options = [
         int(option.get_attribute("value"))
-        for option in owner_session.locator(
-            ".umap-field-share_status select option"
-        ).all()
+        for option in page.locator(".umap-field-share_status select option").all()
     ]
     assert options == [Map.DRAFT, Map.PUBLIC]
     # This field should not be present in anonymous maps
-    expect(owner_session.locator(".umap-field-owner")).to_be_hidden()
+    expect(page.locator(".umap-field-owner")).to_be_hidden()
 
 
 def test_anonymous_can_add_marker_on_editable_layer(
@@ -230,16 +225,16 @@ def test_alert_message_after_create_show_link_even_without_mail(
     expect(alert.get_by_role("button", name="Send me the link")).to_be_hidden()
 
 
-def test_anonymous_owner_can_delete_the_map(anonymap, live_server, owner_session):
+def test_anonymous_owner_can_delete_the_map(anonymap, live_server, owner_session, page):
     assert Map.objects.count() == 1
-    owner_session.goto(f"{live_server.url}{anonymap.get_absolute_url()}")
-    owner_session.get_by_role("button", name="Edit").click()
-    owner_session.get_by_role("button", name="Map advanced properties").click()
-    owner_session.get_by_text("Advanced actions").click()
-    expect(owner_session.get_by_role("button", name="Delete")).to_be_visible()
-    owner_session.get_by_role("button", name="Delete").click()
-    with owner_session.expect_response(re.compile(r".*/update/delete/.*")):
-        owner_session.get_by_role("button", name="OK").click()
+    page.goto(f"{live_server.url}{anonymap.get_absolute_url()}")
+    page.get_by_role("button", name="Edit").click()
+    page.get_by_role("button", name="Map advanced properties").click()
+    page.get_by_text("Advanced actions").click()
+    expect(page.get_by_role("button", name="Delete")).to_be_visible()
+    page.get_by_role("button", name="Delete").click()
+    with page.expect_response(re.compile(r".*/update/delete/.*")):
+        page.get_by_role("button", name="OK").click()
     assert Map.objects.get(pk=anonymap.pk).share_status == Map.DELETED
 
 
@@ -251,3 +246,28 @@ def test_non_owner_cannot_see_delete_button(anonymap, live_server, page):
     page.get_by_role("button", name="Map advanced properties").click()
     page.get_by_text("Advanced actions").click()
     expect(page.get_by_role("button", name="Delete")).to_be_hidden()
+
+
+def test_logged_in_user_should_have_a_message_to_attach_map(
+    anonymap, live_server, login, user, page, owner_session
+):
+    page.goto(f"{live_server.url}{anonymap.get_absolute_url()}")
+    page.get_by_role("button", name="Edit").click()
+    expect(
+        page.get_by_text(
+            "This map is anonymous, do you want to attach it to your account?"
+        )
+    ).to_be_hidden()
+
+    page = login(user)
+    page.goto(f"{live_server.url}{anonymap.get_absolute_url()}")
+    page.get_by_role("button", name="Edit").click()
+    expect(
+        page.get_by_text(
+            "This map is anonymous, do you want to attach it to your account?"
+        )
+    ).to_be_visible()
+    with page.expect_response(re.compile(r".*/update/owner/.*")):
+        page.get_by_role("button", name="OK").click()
+    saved = Map.objects.get(pk=anonymap.pk)
+    assert saved.owner
