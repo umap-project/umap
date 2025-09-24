@@ -8,12 +8,16 @@
     background-color: initial;
 }
 
+[type=button].icon-16,
+button.icon-16,
 .icon-16 {
     height: 24px;
     width: 24px;
     --tile: -24px;
 }
 
+[type=button].icon-24,
+button.icon-24,
 .icon-24 {
     background-image: url('../img/24.svg');
     --tile: -36px;
