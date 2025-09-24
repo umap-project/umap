@@ -234,7 +234,7 @@ class Feature {
     )
 
     let builder = new MutatingForm(this, [
-      ['datalayer', { handler: 'DataLayerSwitcher' }],
+      ['datalayer', { handler: 'EditableDataLayerSwitcher' }],
     ])
     // removeLayer step will close the edit panel, let's reopen it
     builder.on('set', () => this.edit(event))

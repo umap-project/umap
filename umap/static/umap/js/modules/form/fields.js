@@ -612,12 +612,9 @@ Fields.SlideshowDelay = class extends Fields.IntSelect {
   }
 }
 
-Fields.DataLayerSwitcher = class extends Fields.Select {
+const BaseDataLayerSwitcher = class extends Fields.Select {
   getOptions() {
     const options = []
-    if (this.properties.allowEmpty) {
-      options.push([null, translate('Import in a new layer')])
-    }
     this.builder._umap.datalayers.reverse().map((datalayer) => {
       if (
         datalayer.isLoaded() &&
@@ -641,6 +638,36 @@ Fields.DataLayerSwitcher = class extends Fields.Select {
   set() {
     this.builder._umap.lastUsedDataLayer = this.toJS()
     this.builder.setter(this.field, this.toJS())
+  }
+}
+
+Fields.NullableDataLayerSwitcher = class extends BaseDataLayerSwitcher {
+  getOptions() {
+    const options = super.getOptions()
+    options.unshift([null, translate('Import in a new layer')])
+    return options
+  }
+}
+
+Fields.EditableDataLayerSwitcher = class extends BaseDataLayerSwitcher {
+  getTemplate() {
+    return `
+      <div class="select-with-actions">
+        ${super.getTemplate()}
+        <button type="button" class="icon icon-16 icon-edit flat" data-ref=openEditPanel></button>
+        <button type="button" class="icon icon-16 icon-table flat" data-ref=openTableEditor></button>
+      </div>
+    `
+  }
+
+  build() {
+    super.build()
+    this.elements.openEditPanel.addEventListener('click', () => {
+      this.obj.datalayer.edit()
+    })
+    this.elements.openTableEditor.addEventListener('click', () => {
+      this.obj.datalayer.tableEdit()
+    })
   }
 }
 
