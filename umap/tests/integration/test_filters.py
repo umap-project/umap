@@ -468,3 +468,85 @@ def test_can_create_filter_from_new_field(live_server, page, openmap):
             "widget": "checkbox",
         },
     }
+
+
+def test_can_create_new_filter_on_map_from_panel(live_server, page, openmap):
+    openmap.settings["properties"]["onLoadPanel"] = "datafilters"
+    openmap.settings["properties"]["fields"] = [
+        {"key": "name", "type": "String"},
+        {"key": "foobar", "type": "Number"},
+        {"key": "description", "type": "Text"},
+    ]
+    openmap.save()
+    DataLayerFactory(map=openmap, data=DATALAYER_DATA1)
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    page.get_by_role("button", name="Add filter").click()
+    page.get_by_label("Filter on").select_option("foobar")
+    page.get_by_role("textbox", name="Human readable name of the").fill("Foo Bar")
+    page.wait_for_timeout(300)
+    page.get_by_text("radio").click()
+    page.get_by_role("button", name="OK").click()
+    expect(
+        page.locator(".panel.left").get_by_role("group", name="Foo Bar")
+    ).to_be_visible()
+    with page.expect_response(re.compile("./update/settings/.*")):
+        page.get_by_role("button", name="Save", exact=True).click()
+    saved = Map.objects.first()
+    assert saved.settings["properties"]["filters"] == {
+        "foobar": {"label": "Foo Bar", "widget": "radio"}
+    }
+
+
+def test_can_create_new_filter_on_datalayer_from_panel(live_server, page, openmap):
+    openmap.settings["properties"]["fields"] = [
+        {"key": "name", "type": "String"},
+        {"key": "foobar", "type": "Number"},
+        {"key": "description", "type": "Text"},
+    ]
+    openmap.save()
+    datalayer = DataLayerFactory(map=openmap, data=DATALAYER_DATA1)
+    page.goto(
+        f"{live_server.url}{openmap.get_absolute_url()}?edit&onLoadPanel=datafilters"
+    )
+    page.get_by_role("button", name="Add filter").click()
+    expect(page.get_by_label("Apply filter to")).to_have_value(f"map:{openmap.pk}")
+    page.get_by_label("Apply filter to").select_option(f"layer:{datalayer.pk}")
+    page.get_by_label("Filter on").select_option("mynumber")
+    page.get_by_role("textbox", name="Human readable name of the").fill("Foo Bar")
+    page.wait_for_timeout(300)
+    page.get_by_text("radio").click()
+    page.get_by_role("button", name="OK").click()
+    expect(
+        page.locator(".panel.left").get_by_role("group", name="Foo Bar")
+    ).to_be_visible()
+    with page.expect_response(re.compile("./datalayer/update/.*")):
+        page.get_by_role("button", name="Save", exact=True).click()
+    saved = DataLayer.objects.first()
+    assert saved.settings["filters"] == {
+        "mynumber": {"label": "Foo Bar", "widget": "radio"}
+    }
+
+
+def test_can_edit_filter_from_panel(live_server, page, openmap):
+    openmap.settings["properties"]["fields"] = [
+        {"key": "name", "type": "String"},
+        {"key": "foobar", "type": "Number"},
+        {"key": "description", "type": "Text"},
+    ]
+    openmap.settings["properties"]["filters"] = {
+        "foobar": {"widget": "minmax", "label": "Foo Bar"},
+        "name": {"widget": "checkbox", "label": "Bar Foo"},
+    }
+    openmap.save()
+    page.goto(
+        f"{live_server.url}{openmap.get_absolute_url()}?edit&onLoadPanel=datafilters"
+    )
+    page.get_by_role("group", name="Foo Bar").get_by_role("button").click()
+    expect(page.get_by_label("Apply filter to")).to_have_value(f"map:{openmap.pk}")
+    expect(page.get_by_label("Apply filter to")).to_be_disabled()
+    page.get_by_role("textbox", name="Human readable name of the").fill("Foo Bar Baz")
+    page.wait_for_timeout(300)  # Input throttling.
+    page.get_by_role("button", name="OK").click()
+    expect(
+        page.get_by_role("group", name="Foo Bar Baz").locator("legend")
+    ).to_be_visible()

@@ -354,6 +354,7 @@ def test_delete_field_from_map(live_server, page, openmap):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.get_by_role("button", name="Map advanced properties").click()
     page.get_by_text("Fields, filters and keys").click()
+    # Delete field mytype
     page.get_by_role("button", name="Delete this field").first.click()
     page.get_by_role("button", name="OK").click()
     with page.expect_response(re.compile(r".*/datalayer/update/")):
@@ -386,7 +387,7 @@ def test_delete_field_from_map(live_server, page, openmap):
     }
     page.locator(".edit-undo").click()
     with page.expect_response(re.compile(r"./update/settings/.*")):
-        with page.expect_response(re.compile(r".*/datalayer/update/")):
+        with page.expect_response(re.compile(rf".*/datalayer/update/{dl1.pk}/")):
             page.get_by_role("button", name="Save").click()
     saved = Map.objects.get(pk=openmap.pk)
     assert saved.settings["properties"]["fields"] == [
@@ -409,11 +410,13 @@ def test_delete_field_from_map(live_server, page, openmap):
         "mydate": "2024/03/13 12:20:20",
         "mynumber": 12,
         "name": "Point 1",
+        "mytype": "odd",
     }
     assert data["features"][1]["properties"] == {
         "mydate": "2024/04/14 12:19:17",
         "mynumber": 10,
         "name": "Point 2",
+        "mytype": "even",
     }
 
 
