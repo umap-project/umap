@@ -419,3 +419,52 @@ def test_deleting_field_from_map_should_delete_filter(live_server, page, openmap
         "foobar": {"widget": "minmax", "label": "Foo Bar"},
         "name": {"widget": "checkbox", "label": "Bar Foo"},
     }
+
+
+def test_can_create_filter_from_new_field(live_server, page, openmap):
+    openmap.settings["properties"]["onLoadPanel"] = "datafilters"
+    openmap.save()
+    DataLayerFactory(map=openmap, data=DATALAYER_DATA1)
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    page.get_by_role("button", name="Manage layers").click()
+    page.get_by_role("button", name="Edit", exact=True).nth(1).click()
+    page.get_by_role("heading", name="Fields, filters and keys").click()
+    page.get_by_role("button", name="Add a new field").click()
+    page.get_by_role("textbox", name="Field Name ✔").fill("foobar")
+    page.get_by_role("button", name="Add filter for this field").click()
+    page.get_by_role("textbox", name="Human readable name of the").fill("Foo Bar")
+    page.wait_for_timeout(300)  # Input throttling.
+    page.get_by_text("Edit this field").click()
+    expect(page.locator(".umap-filter span").filter(has_text="Foo Bar")).to_be_visible()
+    with page.expect_response(re.compile(r".*/datalayer/update/")):
+        page.get_by_role("button", name="Save").click()
+    saved = DataLayer.objects.first()
+    assert saved.settings["fields"] == [
+        {
+            "key": "mytype",
+            "type": "String",
+        },
+        {
+            "key": "name",
+            "type": "String",
+        },
+        {
+            "key": "mynumber",
+            "type": "String",
+        },
+        {
+            "key": "mydate",
+            "type": "String",
+        },
+        {
+            "key": "foobar",
+            "type": "String",
+        },
+    ]
+
+    assert saved.settings["filters"] == {
+        "foobar": {
+            "label": "Foo Bar",
+            "widget": "checkbox",
+        },
+    }
