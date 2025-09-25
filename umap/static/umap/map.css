@@ -31,6 +31,22 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     transition: all var(--transition);
 }
 
+.draft {
+    background: repeating-linear-gradient(-45deg,
+            var(--color-darkGray),
+            var(--color-darkGray) 10px,
+            var(--color-darkerGray) 10px,
+            var(--color-darkerGray) 20px);
+}
+
+.show-on-draft {
+    display: none;
+}
+
+.draft .show-on-draft {
+    display: inline-block;
+}
+
 /* *********** */
 /* Map details */
 /* *********** */

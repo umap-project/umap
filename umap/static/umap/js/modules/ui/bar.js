@@ -11,7 +11,9 @@ const TOP_BAR_TEMPLATE = `
     <div class="umap-left-edit-toolbox" data-ref="left">
         <div class="logo"><a class="" href="/" title="${translate('Go to the homepage')}">uMap</a></div>
         <button class="map-name flat truncate" type="button" data-ref="name"></button>
-        <button class="share-status flat truncate" type="button" data-ref="share"></button>
+        <button class="flat truncate" type="button" data-ref="share">
+          <i class="icon icon-16 icon-draft show-on-draft"></i><span class="share-status"></span>
+        </button>
         <button class="edit-undo round flat" type="button" data-ref="undo" disabled>
             <i class="icon icon-16 icon-undo"></i>
         </button>
@@ -162,10 +164,10 @@ export class TopBar extends WithTemplate {
         duration: 5000,
       })
     })
-    this.redraw()
   }
 
   redraw() {
+    this.element.classList.toggle('draft', this._umap.permissions.isDraft())
     const syncEnabled = this._umap.getProperty('syncEnabled')
     this.elements.peers.hidden = !syncEnabled
     this.elements.view.disabled = this._umap.sync._undoManager.isDirty()
@@ -218,7 +220,6 @@ export class BottomBar extends WithTemplate {
         }
       })
     })
-    this.redraw()
   }
 
   redraw() {
