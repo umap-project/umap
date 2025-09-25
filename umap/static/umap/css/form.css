@@ -94,12 +94,19 @@ select {
     border-width: 1px;
 }
 
+.dark select[disabled],
+select[disabled] {
+    background-color: var(--color-mediumGray);
+    color: var(--color-lightGray);
+    cursor: not-allowed;
+}
+
 select[multiple="multiple"] {
     height: auto;
 }
 
 .button,
-[type="button"],
+[type="button"]:not(.icon),
 input[type="submit"] {
     display: flex;
     align-items: center;
@@ -155,16 +162,19 @@ input[type="submit"] {
 }
 
 button.flat,
-[type="button"].flat,
-.dark [type="button"].flat {
-    border: none;
-    background-color: inherit;
+[type="button"].flat {
     padding: 0;
     text-align: start;
     min-height: inherit;
     width: initial;
     display: initial;
-    line-height: inherit;
+}
+
+button.flat,
+[type="button"].flat,
+.dark [type="button"].flat {
+    border: none;
+    background-color: inherit;
     color: var(--text-color);
 }
 
@@ -306,8 +316,12 @@ details summary {
     color: var(--color-light);
 }
 
-.dark details fieldset {
+.dark details fieldset:not(.formbox) {
     border: 1px solid var(--color-darkGray);
+}
+
+summary h4 {
+    display: inline;
 }
 
 fieldset legend {
@@ -754,4 +768,9 @@ input.highlightable:not(:placeholder-shown) {
 
 .umap-import [type=url] {
     margin-bottom: 0;
+}
+
+.select-with-actions {
+    display: flex;
+    align-items: center;
 }

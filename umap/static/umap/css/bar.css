@@ -231,7 +231,7 @@
     width: var(--control-size);
     height: var(--control-size);
 }
-.umap-edit-bar button {
+.umap-edit-bar button[type="button"] {
     padding: 0;
     border-radius: 0;
 }

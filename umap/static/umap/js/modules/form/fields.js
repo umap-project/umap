@@ -8,15 +8,15 @@ import * as Icon from '../rendering/icon.js'
 import { SCHEMA } from '../schema.js'
 import * as Utils from '../utils.js'
 
-const Fields = {}
+export const Fields = {}
 
-export default function getClass(name) {
+export function getClass(name) {
   if (typeof name === 'function') return name
   if (!Fields[name]) throw Error(`Unknown class ${name}`)
   return Fields[name]
 }
 
-class BaseElement {
+Fields.Base = class {
   constructor(builder, field, properties) {
     this.builder = builder
     this.obj = this.builder.obj
@@ -49,6 +49,7 @@ class BaseElement {
     this.elements = elements
     this.container = elements.container
     this.form.appendChild(this.root)
+    return [root, elements]
   }
 
   getTemplate() {
@@ -113,9 +114,7 @@ class BaseElement {
   getLabelTemplate() {
     const label = this.properties.label
     const help = this.properties.helpEntries?.join() || ''
-    return label
-      ? `<label title="${label}" data-ref=label data-help="${help}">${label}</label>`
-      : ''
+    return label ? `<label data-ref=label data-help="${help}">${label}</label>` : ''
   }
 
   fetch() {}
@@ -129,7 +128,7 @@ class BaseElement {
   }
 }
 
-Fields.Textarea = class extends BaseElement {
+Fields.Textarea = class extends Fields.Base {
   getTemplate() {
     return `<textarea placeholder="${this.properties.placeholder || ''}" name="${this.name}" data-ref=textarea></textarea>`
   }
@@ -169,7 +168,7 @@ Fields.Textarea = class extends BaseElement {
   }
 }
 
-Fields.Input = class extends BaseElement {
+Fields.Input = class extends Fields.Base {
   getTemplate() {
     return `<input type="${this.type()}" name="${this.name}" placeholder="${this.properties.placeholder || ''}" data-ref=input />`
   }
@@ -296,7 +295,41 @@ Fields.BlurFloatInput = class extends FloatMixin(Fields.BlurInput) {
   }
 }
 
-Fields.CheckBox = class extends BaseElement {
+const DateMixin = (Base) =>
+  class extends Base {
+    toHTML() {
+      const raw = super.toHTML()
+      if (!raw) return null
+      const parsed = Utils.parseNaiveDate(raw)
+      if (!parsed) return null
+      return parsed.toISOString().substring(0, 10)
+    }
+
+    type() {
+      return 'date'
+    }
+  }
+
+Fields.DateInput = class extends DateMixin(Fields.Input) {}
+
+const DateTimeMixin = (Base) =>
+  class extends Base {
+    toHTML() {
+      const raw = super.toHTML()
+      if (!raw) return null
+      const datetime = new Date(raw)
+      if (isNaN(datetime)) return null
+      return datetime.toISOString()
+    }
+
+    type() {
+      return 'datetime-local'
+    }
+  }
+
+Fields.DateTimeInput = class extends DateTimeMixin(Fields.Input) {}
+
+Fields.CheckBox = class extends Fields.Base {
   getTemplate() {
     return `<input type=checkbox name="${this.name}" data-ref=input />`
   }
@@ -327,7 +360,7 @@ Fields.CheckBox = class extends BaseElement {
   }
 }
 
-Fields.CheckBoxes = class extends BaseElement {
+Fields.CheckBoxes = class extends Fields.Base {
   getInputTemplate(value, label) {
     return `<label><input type=checkbox value="${value}" name="${this.name}" data-ref=input />${label}</label>`
   }
@@ -350,13 +383,16 @@ Fields.CheckBoxes = class extends BaseElement {
   }
 }
 
-Fields.Select = class extends BaseElement {
+Fields.Select = class extends Fields.Base {
   getTemplate() {
     return `<select name="${this.name}" data-ref=select></select>`
   }
 
   build() {
     this.select = this.elements.select
+    if (this.properties.disabled) {
+      this.select.disabled = true
+    }
     this.validValues = []
     this.buildOptions()
     this.select.addEventListener('change', () => this.sync())
@@ -423,7 +459,7 @@ Fields.IntSelect = class extends Fields.Select {
   }
 }
 
-Fields.EditableText = class extends BaseElement {
+Fields.EditableText = class extends Fields.Base {
   getTemplate() {
     return `<span class="${this.properties.className || ''}" data-ref=input></span>`
   }
@@ -579,12 +615,9 @@ Fields.SlideshowDelay = class extends Fields.IntSelect {
   }
 }
 
-Fields.DataLayerSwitcher = class extends Fields.Select {
+const BaseDataLayerSwitcher = class extends Fields.Select {
   getOptions() {
     const options = []
-    if (this.properties.allowEmpty) {
-      options.push([null, translate('Import in a new layer')])
-    }
     this.builder._umap.datalayers.reverse().map((datalayer) => {
       if (
         datalayer.isLoaded() &&
@@ -608,6 +641,36 @@ Fields.DataLayerSwitcher = class extends Fields.Select {
   set() {
     this.builder._umap.lastUsedDataLayer = this.toJS()
     this.builder.setter(this.field, this.toJS())
+  }
+}
+
+Fields.NullableDataLayerSwitcher = class extends BaseDataLayerSwitcher {
+  getOptions() {
+    const options = super.getOptions()
+    options.unshift([null, translate('Import in a new layer')])
+    return options
+  }
+}
+
+Fields.EditableDataLayerSwitcher = class extends BaseDataLayerSwitcher {
+  getTemplate() {
+    return `
+      <div class="select-with-actions">
+        ${super.getTemplate()}
+        <button type="button" class="icon icon-16 icon-edit flat" data-ref=openEditPanel></button>
+        <button type="button" class="icon icon-16 icon-table flat" data-ref=openTableEditor></button>
+      </div>
+    `
+  }
+
+  build() {
+    super.build()
+    this.elements.openEditPanel.addEventListener('click', () => {
+      this.obj.datalayer.edit()
+    })
+    this.elements.openTableEditor.addEventListener('click', () => {
+      this.obj.datalayer.tableEdit()
+    })
   }
 }
 
@@ -967,7 +1030,7 @@ Fields.Switch = class extends Fields.CheckBox {
   getTemplate() {
     const label = this.properties.label
     const help = this.properties.helpEntries?.join() || ''
-    return `${super.getTemplate()}<label title="${label}" for="${this.id}" data-ref=customLabel data-help="${help}">${label}</label>`
+    return `${super.getTemplate()}<label for="${this.id}" data-ref=customLabel data-help="${help}">${label}</label>`
   }
 
   build() {
@@ -989,191 +1052,7 @@ Fields.Switch = class extends Fields.CheckBox {
   }
 }
 
-Fields.FacetSearchBase = class extends BaseElement {
-  buildLabel() {}
-}
-
-Fields.FacetSearchChoices = class extends Fields.FacetSearchBase {
-  getTemplate() {
-    return `
-      <fieldset class="umap-facet">
-        <legend data-ref=label>${Utils.escapeHTML(this.properties.label)}</legend>
-        <ul data-ref=ul></ul>
-      </fieldset>
-      `
-  }
-
-  build() {
-    this.type = this.properties.criteria.type
-
-    const choices = this.properties.criteria.choices
-    choices.sort()
-    choices.forEach((value) => this.buildLi(value))
-    super.build()
-  }
-
-  buildLi(value) {
-    const name = `${this.type}_${this.name}`
-    const [li, { input, label }] = Utils.loadTemplateWithRefs(`
-      <li>
-        <label>
-          <input type="${this.type}" name="${name}" data-ref=input />
-          <span data-ref=label></span>
-        </label>
-      </li>
-    `)
-    label.textContent = value
-    input.checked = this.get().choices.includes(value)
-    input.dataset.value = value
-    input.addEventListener('change', () => this.sync())
-    this.elements.ul.appendChild(li)
-  }
-
-  toJS() {
-    return {
-      type: this.type,
-      choices: [...this.elements.ul.querySelectorAll('input:checked')].map(
-        (i) => i.dataset.value
-      ),
-    }
-  }
-}
-
-Fields.MinMaxBase = class extends Fields.FacetSearchBase {
-  getInputType(type) {
-    return type
-  }
-
-  getLabels() {
-    return [translate('Min'), translate('Max')]
-  }
-
-  prepareForHTML(value) {
-    return value.valueOf()
-  }
-
-  getTemplate() {
-    const [minLabel, maxLabel] = this.getLabels()
-    const { min, max, type } = this.properties.criteria
-    this.type = type
-    const inputType = this.getInputType(this.type)
-    const minHTML = this.prepareForHTML(min)
-    const maxHTML = this.prepareForHTML(max)
-    return `
-      <fieldset class="umap-facet">
-        <legend>${Utils.escapeHTML(this.properties.label)}</legend>
-        <label>${minLabel}<input min="${minHTML}" max="${maxHTML}" step=any type="${inputType}" data-ref=minInput /></label>
-        <label>${maxLabel}<input min="${minHTML}" max="${maxHTML}" step=any type="${inputType}" data-ref=maxInput /></label>
-      </fieldset>
-    `
-  }
-
-  build() {
-    this.minInput = this.elements.minInput
-    this.maxInput = this.elements.maxInput
-    const { min, max, type } = this.properties.criteria
-    const { min: modifiedMin, max: modifiedMax } = this.get()
-
-    const currentMin = modifiedMin !== undefined ? modifiedMin : min
-    const currentMax = modifiedMax !== undefined ? modifiedMax : max
-    if (min != null) {
-      // The value stored using setAttribute is not modified by
-      // user input, and will be used as initial value when calling
-      // form.reset(), and can also be retrieve later on by using
-      // getAttributing, to compare with current value and know
-      // if this value has been modified by the user
-      // https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/reset
-      this.minInput.setAttribute('value', this.prepareForHTML(min))
-      this.minInput.value = this.prepareForHTML(currentMin)
-    }
-
-    if (max != null) {
-      // Cf comment above about setAttribute vs value
-      this.maxInput.setAttribute('value', this.prepareForHTML(max))
-      this.maxInput.value = this.prepareForHTML(currentMax)
-    }
-    this.toggleStatus()
-
-    this.minInput.addEventListener('change', () => this.sync())
-    this.maxInput.addEventListener('change', () => this.sync())
-    super.build()
-  }
-
-  toggleStatus() {
-    this.minInput.dataset.modified = this.isMinModified()
-    this.maxInput.dataset.modified = this.isMaxModified()
-  }
-
-  sync() {
-    super.sync()
-    this.toggleStatus()
-  }
-
-  isMinModified() {
-    const default_ = this.minInput.getAttribute('value')
-    const current = this.minInput.value
-    return current !== default_
-  }
-
-  isMaxModified() {
-    const default_ = this.maxInput.getAttribute('value')
-    const current = this.maxInput.value
-    return current !== default_
-  }
-
-  toJS() {
-    const opts = {
-      type: this.type,
-    }
-    if (this.minInput.value !== '' && this.isMinModified()) {
-      opts.min = this.prepareForJS(this.minInput.value)
-    }
-    if (this.maxInput.value !== '' && this.isMaxModified()) {
-      opts.max = this.prepareForJS(this.maxInput.value)
-    }
-    return opts
-  }
-}
-
-Fields.FacetSearchNumber = class extends Fields.MinMaxBase {
-  prepareForJS(value) {
-    return new Number(value)
-  }
-}
-
-Fields.FacetSearchDate = class extends Fields.MinMaxBase {
-  prepareForJS(value) {
-    return new Date(value)
-  }
-
-  toLocaleDateTime(dt) {
-    return new Date(dt.valueOf() - dt.getTimezoneOffset() * 60000)
-  }
-
-  prepareForHTML(value) {
-    // Value must be in local time
-    if (Number.isNaN(value)) return
-    return this.toLocaleDateTime(value).toISOString().substr(0, 10)
-  }
-
-  getLabels() {
-    return [translate('From'), translate('Until')]
-  }
-}
-
-Fields.FacetSearchDateTime = class extends Fields.FacetSearchDate {
-  getInputType(type) {
-    return 'datetime-local'
-  }
-
-  prepareForHTML(value) {
-    // Value must be in local time
-    if (Number.isNaN(value)) return
-    return this.toLocaleDateTime(value).toISOString().slice(0, -1)
-  }
-}
-
-Fields.MultiChoice = class extends BaseElement {
+Fields.MultiChoice = class extends Fields.Base {
   getDefault() {
     return 'null'
   }
@@ -1207,7 +1086,10 @@ Fields.MultiChoice = class extends BaseElement {
   }
 
   getChoices() {
-    return this.properties.choices || this.choices
+    let choices = this.properties.choices || this.choices
+    // Allow to pass flat arrays [c1, c2, c3] instead of [[c1, v1], [c2, v2]]
+    if (!Array.isArray(choices[0])) choices = choices.map((key) => [key, key])
+    return choices
   }
 
   getTemplate() {
@@ -1322,7 +1204,7 @@ Fields.Range = class extends Fields.FloatInput {
   }
 }
 
-Fields.ManageOwner = class extends BaseElement {
+Fields.ManageOwner = class extends Fields.Base {
   build() {
     super.build()
     const options = {
@@ -1353,7 +1235,7 @@ Fields.ManageOwner = class extends BaseElement {
   }
 }
 
-Fields.ManageEditors = class extends BaseElement {
+Fields.ManageEditors = class extends Fields.Base {
   build() {
     super.build()
     const options = {

@@ -92,7 +92,7 @@ class Feature {
 
   get fields() {
     // Fields are user defined properties
-    return [...this.datalayer.fields, ...this._umap.fields]
+    return [...this.datalayer.fields.all(), ...this._umap.fields.all()]
   }
 
   setter(key, value) {
@@ -234,7 +234,7 @@ class Feature {
     )
 
     let builder = new MutatingForm(this, [
-      ['datalayer', { handler: 'DataLayerSwitcher' }],
+      ['datalayer', { handler: 'EditableDataLayerSwitcher' }],
     ])
     // removeLayer step will close the edit panel, let's reopen it
     builder.on('set', () => this.edit(event))
@@ -242,10 +242,21 @@ class Feature {
 
     const properties = []
     for (const field of this.fields) {
-      const options = { handler: 'Input', label: field.key }
+      const options = {
+        handler: 'Input',
+        label: `<i class="icon icon-16 icon-field-${field.type}"></i>${field.key}`,
+      }
       if (field.key === 'description' || field.type === 'Text') {
         options.handler = 'Textarea'
         options.helpEntries = ['textFormatting']
+      } else if (field.type === 'Number') {
+        options.handler = 'FloatInput'
+      } else if (field.type === 'Date') {
+        options.handler = 'DateInput'
+      } else if (field.type === 'Datetime') {
+        options.handler = 'DateTimeInput'
+      } else if (field.type === 'Boolean') {
+        options.handler = 'Switch'
       }
       properties.push([`properties.${field.key}`, options])
     }
@@ -258,7 +269,7 @@ class Feature {
       `<button type="button"><i class="icon icon-16 icon-add"></i>${translate('Add a new field')}</button>`
     )
     button.addEventListener('click', () => {
-      this.datalayer.addProperty().then(() => this.edit({ force: true }))
+      this.datalayer.fields.editField().then(() => this.edit({ force: true }))
     })
     form.appendChild(button)
     this.appendEditFieldsets(container)
@@ -499,16 +510,16 @@ class Feature {
     return properties
   }
 
-  deleteProperty(property) {
-    const oldValue = this.properties[property]
-    delete this.properties[property]
-    this.sync.update(`properties.${property}`, undefined, oldValue)
+  deleteField(name) {
+    const oldValue = this.properties[name]
+    delete this.properties[name]
+    this.sync.update(`properties.${name}`, undefined, oldValue)
   }
 
-  renameProperty(from, to) {
+  renameField(from, to) {
     const oldValue = this.properties[from]
     this.properties[to] = this.properties[from]
-    this.deleteProperty(from)
+    this.deleteField(from)
     this.sync.update(`properties.${to}`, oldValue, undefined)
   }
 
@@ -524,12 +535,13 @@ class Feature {
   isFiltered() {
     const filterKeys = this.datalayer.getFilterKeys()
     const filter = this._umap.browser.options.filter
-    if (filter && !this.matchFilter(filter, filterKeys)) return true
-    if (!this.matchFacets()) return true
+    if (filter && !this.matchFullTextFilter(filter, filterKeys)) return true
+    if (!this.matchMapFilters()) return true
+    if (!this.matchLayerFilters()) return true
     return false
   }
 
-  matchFilter(filter, keys) {
+  matchFullTextFilter(filter, keys) {
     filter = filter.toLowerCase()
     // When user hasn't touched settings, when a feature has no name
     // it will use the datalayer's name, so let's make the filtering
@@ -547,26 +559,51 @@ class Feature {
     return false
   }
 
-  matchFacets() {
-    const selected = this._umap.facets.selected
-    for (const [name, { type, min, max, choices }] of Object.entries(selected)) {
-      let value = this.properties[name]
-      const parser = this._umap.facets.getParser(type)
+  _mapFilters(fields, filters) {
+    for (const [key, { min, max, choices }] of Object.entries(filters.selected)) {
+      // This filter has no value selected by the user.
+      if (min === undefined && max === undefined && !choices?.length) continue
+      const field = fields.get(key)
+      // This field may only exist on another layer.
+      if (!field) continue
+      let value = this.properties[key]
+      const parser = filters.getParser(field.type)
       value = parser(value)
-      switch (type) {
-        case 'date':
-        case 'datetime':
-        case 'number':
-          if (!Number.isNaN(min) && !Number.isNaN(value) && min > value) return false
-          if (!Number.isNaN(max) && !Number.isNaN(value) && max < value) return false
+      switch (field.type) {
+        case 'Date':
+        case 'Datetime':
+        case 'Number':
+          if (!Number.isNaN(min) && !Number.isNaN(value) && min > value) {
+            return false
+          }
+          if (!Number.isNaN(max) && !Number.isNaN(value) && max < value) {
+            return false
+          }
           break
+        case 'Enum': {
+          const intersection = value.filter((item) => choices.includes(item))
+          if (intersection.length !== choices.length) {
+            return false
+          }
+          break
+        }
         default:
           value = value || translate('<empty value>')
-          if (choices?.length && !choices.includes(value)) return false
+          if (choices?.length && !choices.includes(value)) {
+            return false
+          }
           break
       }
     }
     return true
+  }
+
+  matchMapFilters() {
+    return this._mapFilters(this._umap.fields, this._umap.filters)
+  }
+
+  matchLayerFilters() {
+    return this._mapFilters(this.datalayer.fields, this.datalayer.filters)
   }
 
   isMulti() {
