@@ -283,17 +283,30 @@ export default class Filters {
     if (['Number', 'Date', 'Datetime'].includes(field?.type)) {
       widget = 'minmax'
     }
-    const properties = { name, widget, ...(this.defined.get(name) || {}) }
+    const properties = {
+      target: this._parent,
+      name,
+      widget,
+      ...(this.defined.get(name) || {}),
+    }
     const fieldKeys = name
       ? [name]
       : ['', ...this._parent.fieldKeys.filter((key) => !this.defined.has(key))]
     const metadata = [
       [
+        'target',
+        {
+          handler: 'FilterTargetSelect',
+          label: translate('Apply filter to'),
+          disabled: Boolean(name),
+        },
+      ],
+      [
         'name',
         {
           handler: 'Select',
           selectOptions: fieldKeys,
-          label: translate('Field to filter on'),
+          label: translate('Filter on'),
         },
       ],
       [
@@ -309,7 +322,7 @@ export default class Filters {
         },
       ],
     ]
-    const form = new Form(properties, metadata)
+    const form = new Form(properties, metadata, { umap: this._umap })
     let label
     if (name) {
       label = translate('Edit filter')
@@ -331,13 +344,16 @@ export default class Filters {
     })
 
     return this._umap.dialog.open({ template: container }).then(() => {
+      const target = properties.target
       if (!properties.name) return
       if (name) {
-        this.update({ ...properties })
+        target.filters.update({ ...properties })
       } else {
-        this.add({ ...properties })
+        target.filters.add({ ...properties })
       }
-      this._parent.edit().then((panel) => panel.scrollTo('details#fields-management'))
+      target.filters._parent
+        .edit()
+        .then((panel) => panel.scrollTo('details#fields-management'))
     })
   }
 
@@ -408,7 +424,7 @@ Fields.MinMaxBase = class extends Fields.FilterBase {
   }
 
   prepareForHTML(value) {
-    return value.valueOf()
+    return value?.valueOf() ?? null
   }
 
   getTemplate() {
@@ -537,5 +553,44 @@ Fields.FilterByDateTime = class extends Fields.FilterByDate {
     // Value must be in local time
     if (Number.isNaN(value)) return
     return this.toLocaleDateTime(value).toISOString().slice(0, -1)
+  }
+}
+
+Fields.FilterTargetSelect = class extends Fields.Select {
+  getOptions() {
+    const options = []
+    if (this.builder.properties.umap.fields.size) {
+      options.push([
+        `map:${this.builder.properties.umap.id}`,
+        `${this.builder.properties.umap.properties.name} (${translate('all layers')})`,
+      ])
+    }
+    this.builder.properties.umap.datalayers.reverse().map((datalayer) => {
+      if (datalayer.isBrowsable() && datalayer.fields.size) {
+        options.push([
+          `layer:${datalayer.id}`,
+          `${datalayer.getName()}  (${translate('single layer')})`,
+        ])
+      }
+    })
+    return options
+  }
+
+  toHTML() {
+    if (!this.obj.target) return null
+    // TODO: better way to check for class
+    // Importing DataLayer will end in circular import
+    const type = this.obj.target._umap ? 'layer' : 'map'
+    return `${type}:${this.obj.target?.id}`
+  }
+
+  toJS() {
+    const value = this.value()
+    if (!value) return null
+    const [type, id] = value.split(':')
+    if (type === 'map') {
+      return this.builder.properties.umap
+    }
+    return this.builder.properties.umap.datalayers[id]
   }
 }

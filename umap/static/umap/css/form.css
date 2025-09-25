@@ -94,6 +94,13 @@ select {
     border-width: 1px;
 }
 
+.dark select[disabled],
+select[disabled] {
+    background-color: var(--color-mediumGray);
+    color: var(--color-lightGray);
+    cursor: not-allowed;
+}
+
 select[multiple="multiple"] {
     height: auto;
 }

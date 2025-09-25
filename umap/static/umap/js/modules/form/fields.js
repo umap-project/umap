@@ -390,6 +390,9 @@ Fields.Select = class extends Fields.Base {
 
   build() {
     this.select = this.elements.select
+    if (this.properties.disabled) {
+      this.select.disabled = true
+    }
     this.validValues = []
     this.buildOptions()
     this.select.addEventListener('change', () => this.sync())
