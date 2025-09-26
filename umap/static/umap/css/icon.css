@@ -118,6 +118,10 @@ html[dir="rtl"] .icon {
     background-position: 0 calc(var(--tile) * 6);
 }
 
+.icon-draft {
+    background-position: calc(var(--tile) * 7) calc(var(--tile) * 7);
+}
+
 .icon-drag {
     background-position: calc(var(--tile) * 3) calc(var(--tile) * 3);
     cursor: move;
