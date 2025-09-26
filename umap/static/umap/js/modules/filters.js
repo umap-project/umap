@@ -105,7 +105,8 @@ export default class Filters {
         }
       }
       const label = `
-        <span>${Utils.escapeHTML(this.defined.get(name).label || field.key)}
+        <span>${Utils.escapeHTML(this.defined.get(name).label || field.key)}</span>
+        <span class="filter-toolbox">
           <button type="button" class="icon icon-16 icon-edit show-on-edit" data-ref=editFilter></button>
         </span>`
       formFields.push([
