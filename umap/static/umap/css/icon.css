@@ -131,7 +131,7 @@ html[dir="rtl"] .icon {
 
 .icon-drag {
     background-position: calc(var(--tile) * 3) calc(var(--tile) * 3);
-    cursor: move;
+    cursor: grab;
     float: inline-end;
     visibility: hidden;
 }
