@@ -14,10 +14,13 @@ const TOP_BAR_TEMPLATE = `
         <button class="flat truncate" type="button" data-ref="share">
           <i class="icon icon-16 icon-draft show-on-draft"></i><span class="share-status"></span>
         </button>
-        <button class="edit-undo round flat" type="button" data-ref="undo" disabled>
+        <button class="primary truncate round" type="button" data-ref="shareAnonymous" hidden>
+          <i class="icon icon-16 icon-anonymous icon-black"></i><span class="share-status"></span>
+        </button>
+        <button class="edit-undo flat" type="button" data-ref="undo" disabled>
             <i class="icon icon-16 icon-undo"></i>
         </button>
-        <button class="edit-redo round flat" type="button" data-ref="redo" disabled>
+        <button class="edit-redo flat" type="button" data-ref="redo" disabled>
             <i class="icon icon-16 icon-redo"></i>
         </button>
     </div>
@@ -74,9 +77,25 @@ export class TopBar extends WithTemplate {
         duration: 5000,
       })
     })
+    this.elements.shareAnonymous.addEventListener('mouseover', () => {
+      this._umap.tooltip.open({
+        content: translate('Anonymous map: update who can see and edit it'),
+        anchor: this.elements.shareAnonymous,
+        position: 'bottom',
+        delay: 500,
+        duration: 5000,
+      })
+    })
     if (this._umap.properties.editMode === 'advanced') {
       this.elements.name.addEventListener('click', () => this._umap.editCaption())
       this.elements.share.addEventListener('click', () => this._umap.permissions.edit())
+      this.elements.shareAnonymous.addEventListener('click', () =>
+        this._umap.permissions.edit()
+      )
+    }
+    if (this._umap.permissions.isAnonymousMap()) {
+      this.elements.share.hidden = true
+      this.elements.shareAnonymous.hidden = false
     }
     this.elements.user.addEventListener('click', () => {
       if (this._umap.properties.user?.id) {

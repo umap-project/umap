@@ -65,6 +65,10 @@ html[dir="rtl"] .icon {
     background-position: var(--tile) var(--tile);
 }
 
+.icon-anonymous {
+    background-position: calc(var(--tile) * 8) calc(var(--tile) * 7);
+}
+
 .icon-back {
     background-position: calc(var(--tile) * 5) calc(var(--tile) * 6);
 }

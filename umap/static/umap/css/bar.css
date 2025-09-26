@@ -6,6 +6,7 @@
     margin-bottom: 0;
     min-height: initial;
 }
+
 .umap-main-edit-toolbox [type=button]:hover {
     text-decoration: underline;
 }
@@ -14,33 +15,34 @@
     padding: 0 var(--text-margin);
     background-color: inherit;
 }
+
 .leaflet-container .edit-undo {
     margin-left: var(--box-margin);
 }
+
 .leaflet-container .edit-undo[disabled],
 .leaflet-container .edit-redo[disabled] {
     filter: invert(.5);
 }
-.leaflet-container .edit-save,
-.leaflet-container .edit-disable,
-.leaflet-container .connected-peers
-{
+
+.umap-main-edit-toolbox .round {
     display: inline-block;
     height: 32px;
     line-height: 30px;
     padding: 0 20px;
 }
+
 .leaflet-container .connected-peers,
-.dark [type=button].connected-peers:hover
-{
+.dark [type=button].connected-peers:hover {
     background-color: var(--color-lightCyan);
     color: var(--color-dark);
 }
-.dark [type=button].connected-peers:hover
-{
+
+.dark [type=button].connected-peers:hover {
     text-decoration: none;
     border: 0.5px solid var(--color-brightCyan);
 }
+
 .dark .off.connected-peers {
     background-color: var(--color-lightGray);
     color: var(--color-darkGray);
@@ -50,6 +52,7 @@
     border: 0.5px solid rgba(153, 153, 153, 0.80);
     text-decoration: none;
 }
+
 .leaflet-container .edit-save {
     opacity: 0.5;
     cursor: not-allowed;
@@ -57,13 +60,16 @@
     border: 0.5px solid rgba(153, 153, 153, 0.40);
     background: rgba(153, 153, 153, 0.10);
 }
+
 .leaflet-container .icon-save {
     display: none;
 }
+
 .dark button.edit-save:hover {
     background: rgba(153, 153, 153, 0.10);
     text-decoration: none;
 }
+
 .umap-is-dirty .edit-save {
     opacity: 1;
     cursor: pointer;
@@ -71,27 +77,34 @@
     background: rgba(66, 236, 230, 0.10);
     color: var(--color-brightCyan);
 }
+
 .umap-is-dirty .icon-save {
     display: inline-block;
 }
+
 .umap-is-dirty .icon-save-disabled {
     display: none;
 }
+
 .umap-is-dirty .dark button.edit-save:hover {
     border-color: rgba(66, 236, 230, 0.80);
     background: rgba(66, 236, 230, 0.10);
 }
+
 .leaflet-container .edit-save,
 .umap-edit-enabled .edit-enable {
     display: none;
 }
+
 .umap-edit-enabled .edit-save,
 .umap-edit-enabled .edit-disable {
     display: inline-block;
 }
+
 .umap-caption-bar {
     display: none;
 }
+
 .umap-main-edit-toolbox {
     /* Show a transition from top to bottom when opening it */
     top: calc(var(--header-height) * -1);
@@ -111,6 +124,7 @@
     background-color: var(--background-color);
     color: var(--text-color);
 }
+
 .umap-left-edit-toolbox,
 .umap-right-edit-toolbox {
     display: flex;
@@ -122,6 +136,7 @@
     width: 39px;
     height: 100%;
 }
+
 .umap-main-edit-toolbox .logo a {
     background-image: url('../img/logo_small.svg');
     background-position: 0 center;
@@ -132,55 +147,69 @@
     vertical-align: middle;
     text-indent: -9999px;
 }
+
 .umap-main-edit-toolbox .map-name {
     font-weight: bold;
     text-align: start;
 }
+
 .truncate {
     display: inline-flex;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
 .umap-main-edit-toolbox .username {
     max-width: 100px;
 }
+
 .umap-main-edit-toolbox .share-status {
     font-style: italic;
 }
+
 .map-name:after {
-    content:  '\00a0';
+    content: '\00a0';
     padding-inline-start: 3px;
     width: 1ch;
     display: inline-block;
 }
+
 .umap-is-dirty .map-name:after {
-    content:  '*';
+    content: '*';
 }
+
 .umap-edit-enabled .umap-main-edit-toolbox {
     top: 0;
 }
+
 .umap-caption-bar h3,
 .umap-main-edit-toolbox h3 {
     display: inline;
 }
+
 .umap-caption-bar .umap-map-author {
     margin-inline-end: 10px;
 }
-.umap-caption-bar:has(select:not([hidden])) > button + button:after,
-.umap-caption-bar > button + button:before {
+
+.umap-caption-bar:has(select:not([hidden]))>button+button:after,
+.umap-caption-bar>button+button:before {
     content: '|';
     padding-inline-start: 10px;
     padding-inline-end: 10px;
 }
+
 .umap-main-edit-toolbox .umap-user:hover {
     text-decoration: underline;
 }
+
 .umap-main-edit-toolbox .umap-user:after {
     content: '|';
     padding-inline-start: 20px;
-    display: inline-block; /* Prevents underline on hover. */
+    display: inline-block;
+    /* Prevents underline on hover. */
 }
+
 .umap-caption-bar {
     display: none;
     height: var(--footer-height);
@@ -198,10 +227,12 @@
     opacity: 0.93;
     z-index: var(--zindex-panels);
 }
+
 .umap-caption-bar-enabled .umap-caption-bar {
     display: flex;
     align-items: baseline;
 }
+
 .umap-caption-bar select {
     margin-top: 0;
     line-height: initial;
@@ -210,9 +241,11 @@
     width: auto;
     padding: 0 var(--text-margin);
 }
+
 .umap-caption-bar-enabled {
     --current-footer-height: var(--footer-height);
 }
+
 .umap-edit-bar {
     position: absolute;
     right: var(--panel-gutter);
@@ -224,45 +257,55 @@
     background-color: var(--background-color);
     border-radius: var(--border-radius);
 }
+
 .umap-edit-enabled .umap-edit-bar {
     display: flex;
 }
+
 .umap-edit-bar li {
     width: var(--control-size);
     height: var(--control-size);
 }
+
 .umap-edit-bar button {
     padding: 0;
     border-radius: 0;
 }
+
 .umap-edit-bar li:first-of-type button {
     border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
+
 .umap-edit-bar li:last-of-type button {
     border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
+
 .umap-edit-bar hr {
     padding: 0;
     margin: 0;
 }
+
 @media all and (max-width: 980px) {
     .umap-main-edit-toolbox button span {
         display: none;
     }
 }
+
 @media all and (max-width: 770px) {
+
     .umap-main-edit-toolbox .umap-help-link,
     .umap-main-edit-toolbox .share-status {
         display: none !important;
     }
 }
+
 @media all and (max-width: 480px) {
     .umap-main-edit-toolbox {
         flex-direction: column;
         padding: var(--small-box-padding);
     }
 
-    .umap-main-edit-toolbox > div {
+    .umap-main-edit-toolbox>div {
         justify-content: center;
     }
 
