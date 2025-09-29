@@ -1223,8 +1223,7 @@ export default class Umap {
     // TOOD: map.save may not always be the first call during save process
     // since SAVEMANAGER refactor
     if (data.login_required) {
-      window.onLogin = () => this.saveAll()
-      window.open(data.login_required)
+      this.askForLogin().then(() => this.saveAll())
       return
     }
     this.properties.user = data.user
@@ -1262,6 +1261,24 @@ export default class Umap {
       window.location = data.url
     }
     return true
+  }
+
+  askForLogin() {
+    const promise = new Promise((resolve) => {
+      window.onLogin = () => {
+        const url = this.urls.get('whoami', { map_id: this.id })
+        this.server.get(url).then(([data]) => {
+          this.properties.user = data.user
+          if (!this.id) {
+            this.properties.permissions.owner = { ...data.user }
+          }
+          this.render(['user'])
+          resolve()
+        })
+      }
+    })
+    window.open(this.urls.get('login'))
+    return promise
   }
 
   exportProperties() {

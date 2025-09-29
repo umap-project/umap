@@ -8,6 +8,21 @@
     flex-direction: column;
 }
 
+.dark .umap-contextmenu a,
+.umap-contextmenu a {
+    color: var(--text-color) !important;
+}
+
+.dark .umap-contextmenu a:hover,
+.umap-contextmenu a:hover {
+    text-decoration: underline;
+}
+
+.dark .umap-contextmenu button,
+.umap-contextmenu button {
+    font-size: 1rem;
+}
+
 .umap-contextmenu>li {
     background-color: var(--background-color);
     padding-left: calc(var(--box-padding) / 2);

@@ -585,6 +585,11 @@ class SessionMixin:
         }
 
 
+class WhoAmI(SessionMixin, View):
+    def get(self, request, *args, **kwargs):
+        return simple_json_response(user=self.get_user_data())
+
+
 class FormLessEditMixin:
     http_method_names = [
         "post",

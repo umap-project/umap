@@ -31,7 +31,7 @@ const TOP_BAR_TEMPLATE = `
         </button>
         <button class="umap-user flat" type="button" data-ref="user">
           <i class="icon icon-16 icon-profile"></i>
-          <span class="username truncate" data-ref="username"></span>
+          <span class="username truncate" data-ref="username">${translate('Anonymous')}</span>
         </button>
         <button class="umap-help-link flat" type="button" title="${translate('Help')}" data-ref="help">${translate('Help')}</button>
         <button class="edit-disable round disabled-on-dirty" type="button" data-ref="view">
@@ -93,17 +93,15 @@ export class TopBar extends WithTemplate {
         this._umap.permissions.edit()
       )
     }
-    if (this._umap.permissions.isAnonymousMap()) {
-      this.elements.share.hidden = true
-      this.elements.shareAnonymous.hidden = false
-    }
     this.elements.user.addEventListener('click', () => {
+      const actions = [
+        {
+          label: translate('New map'),
+          action: this._umap.urls.get('map_new'),
+        },
+      ]
       if (this._umap.permissions.userIsAuth()) {
-        const actions = [
-          {
-            label: translate('New map'),
-            action: this._umap.urls.get('map_new'),
-          },
+        actions.push(
           {
             label: translate('My maps'),
             action: this._umap.urls.get('user_dashboard'),
@@ -111,18 +109,25 @@ export class TopBar extends WithTemplate {
           {
             label: translate('My teams'),
             action: this._umap.urls.get('user_teams'),
-          },
-        ]
+          }
+        )
         if (this._umap.urls.has('user_profile')) {
           actions.push({
             label: translate('My profile'),
             action: this._umap.urls.get('user_profile'),
           })
         }
-        this._menu.openBelow(this.elements.user, actions)
+      } else {
+        actions.push({
+          label: translate('Login'),
+          action: () =>
+            this._umap.askForLogin().then(() => {
+              this.redraw()
+            }),
+        })
       }
+      this._menu.openBelow(this.elements.user, actions)
     })
-
     this.elements.peers.addEventListener('mouseover', () => {
       const connectedPeers = this._umap.sync.getPeers()
       if (!Object.keys(connectedPeers).length) return
@@ -196,6 +201,8 @@ export class TopBar extends WithTemplate {
     this.elements.saveDraftLabel.hidden = !isDraft || isTemplate
     this.elements.saveTemplateLabel.hidden = !isTemplate
     this._umap.sync._undoManager.toggleState()
+    this.elements.share.hidden = this._umap.permissions.isAnonymousMap()
+    this.elements.shareAnonymous.hidden = !this._umap.permissions.isAnonymousMap()
   }
 }
 

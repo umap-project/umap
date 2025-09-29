@@ -254,7 +254,6 @@ export class MapPermissions {
       ]
     }
   }
-
 }
 
 export class DataLayerPermissions {
