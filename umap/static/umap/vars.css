@@ -18,6 +18,8 @@
     --color-red: #c60f13;
     --color-darkOrange: #b36200;
     --color-darkRed: #5b2a2a;
+    --color-lightViolet: #c043ff;
+    --color-veryDarkViolet: #472e54;
 
     --background-color: var(--color-light);
     --color-accent: var(--color-brightCyan);

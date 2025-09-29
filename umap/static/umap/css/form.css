@@ -145,6 +145,12 @@ input[type="submit"] {
     border: 1px solid var(--color-veryDarkGray);
 }
 
+.dark .button.anonymous,
+.dark [type="button"].anonymous {
+    background-color: var(--color-veryDarkViolet);
+    border: 1px solid var(--color-lightViolet);
+}
+
 .dark .button:hover,
 .dark [type="button"]:hover,
 .dark input[type="submit"]:hover {
@@ -188,6 +194,11 @@ button.flat:hover,
 button.round {
     border-radius: 20px;
     border: 0.5px solid rgba(153, 153, 153, 0.40);
+}
+
+.dark button.soft-round,
+button.soft-round {
+    border-radius: var(--border-radius);
 }
 
 button.round.small {

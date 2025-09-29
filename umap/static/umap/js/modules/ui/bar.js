@@ -14,8 +14,8 @@ const TOP_BAR_TEMPLATE = `
         <button class="flat truncate" type="button" data-ref="share">
           <i class="icon icon-16 icon-draft show-on-draft"></i><span class="share-status"></span>
         </button>
-        <button class="primary truncate round" type="button" data-ref="shareAnonymous" hidden>
-          <i class="icon icon-16 icon-anonymous icon-black"></i><span class="share-status"></span>
+        <button class="anonymous truncate soft-round" type="button" data-ref="shareAnonymous" hidden>
+          <i class="icon icon-16 icon-anonymous"></i><span class="share-status"></span>
         </button>
         <button class="edit-undo flat" type="button" data-ref="undo" disabled>
             <i class="icon icon-16 icon-undo"></i>

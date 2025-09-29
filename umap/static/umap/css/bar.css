@@ -25,6 +25,7 @@
     filter: invert(.5);
 }
 
+.umap-main-edit-toolbox .soft-round,
 .umap-main-edit-toolbox .round {
     display: inline-block;
     height: 32px;
