@@ -43,7 +43,7 @@ export class MapPermissions {
   }
 
   isAnonymousMap() {
-    return !this._umap.properties.permissions.owner
+    return !this._umap.properties.permissions?.owner
   }
 
   _editAnonymous(container) {
