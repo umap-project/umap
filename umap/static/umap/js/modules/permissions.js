@@ -55,8 +55,30 @@ export class MapPermissions {
   }
 
   _editAnonymous(container) {
-    const fields = []
     if (this.isOwner()) {
+      // We have a user, and this user has come through here, so they can edit the map, so let's allow to own the map.
+      // Note: real check is made on the back office anyway.
+      const template = `
+          <div class="anonymous soft-round aplat">
+            <h4><i class="icon icon-16 icon-anonymous"></i> ${translate('Anonymous map')}</h4>
+            <div data-ref="copiableInput"></div>
+            <p data-ref="p" hidden><button type="button" data-ref="button">${translate('Attach the map to my account')}</button></p>
+          </div>
+        `
+      const [root, { button, copiableInput, p }] = Utils.loadTemplateWithRefs(template)
+      container.appendChild(root)
+      if (this.properties.anonymous_edit_url) {
+        DOMUtils.copiableInput(
+          copiableInput,
+          translate('Secret edit link:'),
+          this.properties.anonymous_edit_url
+        )
+      }
+      if (this.userIsAuth()) {
+        button.addEventListener('click', () => this.attach())
+        p.hidden = false
+      }
+      const fields = []
       fields.push([
         'properties.edit_status',
         {
@@ -76,31 +98,6 @@ export class MapPermissions {
       const builder = new MutatingForm(this, fields)
       const form = builder.build()
       container.appendChild(form)
-
-      if (this.properties.anonymous_edit_url) {
-        DOMUtils.copiableInput(
-          container,
-          translate('Secret edit link:'),
-          this.properties.anonymous_edit_url
-        )
-      }
-
-      if (this.userIsAuth()) {
-        // We have a user, and this user has come through here, so they can edit the map, so let's allow to own the map.
-        // Note: real check is made on the back office anyway.
-        const advancedActions = DomUtil.createFieldset(
-          container,
-          translate('Advanced actions')
-        )
-        const advancedButtons = DomUtil.create('div', 'button-bar', advancedActions)
-        DomUtil.createButton(
-          'button',
-          advancedButtons,
-          translate('Attach the map to my account'),
-          this.attach,
-          this
-        )
-      }
     }
   }
 

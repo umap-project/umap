@@ -47,7 +47,8 @@
     --control-size: 36px;
     --border-radius: 4px;
     --box-padding: 20px;
-    --small-box-padding: 4px;
+    --medium-box-padding: calc(var(--box-padding) / 2);
+    --small-box-padding: calc(var(--box-padding) / 4);
     --box-margin: 14px;
     --text-margin: 7px;
     --dialog-width: 40vw;

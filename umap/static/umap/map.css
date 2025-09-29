@@ -47,6 +47,11 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     display: inline-block;
 }
 
+.aplat {
+    padding: var(--medium-box-padding);
+    margin-bottom: var(--box-margin);
+}
+
 /* *********** */
 /* Map details */
 /* *********** */
