@@ -28,36 +28,39 @@
       <h3 role="alert">
       </h3>
       {% url "login" as login_url %}
-      <p>
-        <em>{% blocktranslate %}Pro-tip: to easily find back your maps, <a href="{{ login_url }}" target="_blank">create an account</a> or <a href="{{ login_url }}" target="_blank">log in</a>.{% endblocktranslate %}</em>
+      <p class="aplat">
+        {% blocktranslate %}Oops, I didn't mean it, I want to <a href="{{ login_url }}" target="_blank">create an account</a> or <a href="{{ login_url }}" target="_blank">log in</a>.{% endblocktranslate %}
       </p>
-      <div id="link-wrapper">
-        <form>
-          <label for="url">
-            {% translate "Here is your secret link to edit the map, please keep it safe:" %}
-          </label>
-          <fieldset role="group">
-            <input type="url" name="url" id="url">
-            <input type="button" value="{% translate "Copy link" %}">
-          </fieldset>
-        </form>
-      </div>
-      <div id="form-wrapper" hidden>
-        <form>
-          <label for="email">
-            {% translate "Enter your email address to receive the secret link:" %}
-          </label>
-          <fieldset role="group">
-            <input type="email"
-                   name="email"
-                   id="email"
-                   placeholder="{% translate "Email" %}"
-                   required>
-            <input type="submit"
-                   value="{% translate "Send me the link" %}"
-                   class="umap-action">
-          </fieldset>
-        </form>
+      <div class="anonymous soft-rounded aplat">
+        <h4><i class="icon icon-16 icon-anonymous"></i> {% trans "Yes, I want to continue editing anonymously, I will save the secret edit link to be able to edit this map later or on another device" %}</h4>
+        <div id="link-wrapper">
+          <form>
+            <label for="url">
+              {% translate "Here is your secret link to edit the map, please keep it safe:" %}
+            </label>
+            <fieldset role="group">
+              <input type="url" name="url" id="url">
+              <input type="button" value="{% translate "Copy link" %}">
+            </fieldset>
+          </form>
+        </div>
+        <div id="form-wrapper" hidden>
+          <form>
+            <label for="email">
+              {% translate "Enter your email address to receive the secret link:" %}
+            </label>
+            <fieldset role="group">
+              <input type="email"
+                     name="email"
+                     id="email"
+                     placeholder="{% translate "Email" %}"
+                     required>
+              <input type="submit"
+                     value="{% translate "Send me the link" %}"
+                     class="umap-action">
+            </fieldset>
+          </form>
+        </div>
       </div>
     </div>
     <ul class="buttons">

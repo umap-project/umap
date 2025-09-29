@@ -200,3 +200,11 @@ umap-alert-choice a {
     color: var(--color-light);
     text-decoration: underline;
 }
+
+umap-alert-creation .dark .anonymous {
+    background-color: initial;
+}
+
+umap-alert-creation h3[role="alert"] {
+    margin-bottom: var(--box-margin);
+}

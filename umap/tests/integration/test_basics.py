@@ -112,7 +112,7 @@ def test_login_from_unsaved_map_page(
     settings.ENABLE_ACCOUNT_LOGIN = True
     assert Map.objects.count() == 0
     page.goto(f"{live_server.url}/en/map/new/")
-    page.locator('[data-ref="anonymousUser"]').click()
+    page.locator('[data-ref="user"]').click()
     with context.expect_page() as login_page_info:
         page.get_by_role("button", name="Login").click()
     login_page = login_page_info.value

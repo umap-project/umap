@@ -1201,6 +1201,15 @@ export default class Umap {
     })
   }
 
+  onAnonymousSave(editUrl) {
+    AlertCreation.info(
+      translate('Hey, you created a map without an account!'),
+      Number.Infinity,
+      editUrl,
+      this.properties.urls.map_send_edit_link ? this.sendEditLinkEmail.bind(this) : null
+    )
+  }
+
   async save() {
     const geojson = {
       type: 'Feature',
@@ -1231,17 +1240,9 @@ export default class Umap {
       this.properties.id = data.id
       this.permissions.setProperties(data.permissions)
       this.permissions.commit()
-      if (data.permissions?.anonymous_edit_url) {
-        this._leafletMap.once('saved', () => {
-          AlertCreation.info(
-            translate('Your map has been created with an anonymous account!'),
-            Number.Infinity,
-            data.permissions.anonymous_edit_url,
-            this.properties.urls.map_send_edit_link
-              ? this.sendEditLinkEmail.bind(this)
-              : null
-          )
-        })
+      const anonymousEditUrl = data.permissions?.anonymous_edit_url
+      if (anonymousEditUrl) {
+        this._leafletMap.once('saved', () => this.onAnonymousSave(anonymousEditUrl))
       } else {
         this._leafletMap.once('saved', () => {
           Alert.success(translate('Congratulations, your map has been created!'))

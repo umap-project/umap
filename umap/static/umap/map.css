@@ -50,6 +50,8 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
 .aplat {
     padding: var(--medium-box-padding);
     margin-bottom: var(--box-margin);
+    background-color: var(--color-mediumGray);
+    border: 1px solid var(--color-accent);
 }
 
 /* *********** */
