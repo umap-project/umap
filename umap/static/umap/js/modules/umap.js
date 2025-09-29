@@ -760,7 +760,7 @@ export default class Umap {
       'properties.is_template',
     ]
 
-    DomUtil.createTitle(container, translate('Edit map details'), 'icon-caption')
+    DomUtil.createTitle(container, translate('Edit map details'), 'icon-info')
     const builder = new MutatingForm(this, metadataFields, {
       className: 'map-metadata',
       umap: this,

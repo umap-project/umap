@@ -294,7 +294,7 @@ const EDIT_BAR_TEMPLATE = `
     </li>
     <li data-ref="route" hidden><button type="button" data-getstarted title="${translate('Draw along routes')}"><i class="icon icon-24 icon-route"></i></button></li>
     <hr>
-    <li data-ref="caption" hidden><button data-getstarted type="button" title="${translate('Edit map name and caption')}"><i class="icon icon-24 icon-caption"></i></button></li>
+    <li data-ref="caption" hidden><button data-getstarted type="button" title="${translate('Edit map name and caption')}"><i class="icon icon-24 icon-info"></i></button></li>
     <li data-ref="import" hidden><button type="button"><i class="icon icon-24 icon-upload"></i></button></li>
     <li data-ref="templates" hidden><button type="button" title="${translate('Load template')}" data-getstarted><i class="icon icon-24 icon-template"></i></button></li>
     <li data-ref="layers" hidden><button type="button" title="${translate('Manage layers')}"><i class="icon icon-24 icon-layers"></i></button></li>

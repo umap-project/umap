@@ -5,7 +5,7 @@ import * as Utils from './utils.js'
 const TEMPLATE = `
 <div class="umap-caption">
   <div class="header">
-    <i class="icon icon-16 icon-caption icon-block"></i>
+    <i class="icon icon-16 icon-info icon-block"></i>
     <hgroup>
       <h3><span class="map-name" data-ref="name"></span></h3>
       <p data-ref="author"></p>
