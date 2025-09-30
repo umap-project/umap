@@ -426,6 +426,8 @@ def test_can_draw_a_polygon_and_invert_it(live_server, page, tilelayer, settings
     page.get_by_text("Advanced properties").click()
     page.get_by_text("Display the polygon inverted").click()
     data = save_and_get_json(page)
+    # Close save message
+    page.get_by_role("dialog").get_by_role("button", name="Close").click()
     assert len(data["features"]) == 1
     assert data["features"][0]["geometry"]["type"] == "Polygon"
     assert data["features"][0]["geometry"]["coordinates"] == [

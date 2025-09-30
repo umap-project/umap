@@ -25,6 +25,7 @@
     filter: invert(.5);
 }
 
+.umap-main-edit-toolbox .soft-round,
 .umap-main-edit-toolbox .round {
     display: inline-block;
     height: 32px;
@@ -199,13 +200,13 @@
     padding-inline-end: 10px;
 }
 
-.umap-main-edit-toolbox .umap-user:hover {
-    text-decoration: underline;
+.umap-main-edit-toolbox .flat.umap-user:hover {
+    text-decoration: none;
 }
 
 .umap-main-edit-toolbox .umap-user:after {
     content: '|';
-    padding-inline-start: 20px;
+    padding-inline-start: var(--text-margin);
     display: inline-block;
     /* Prevents underline on hover. */
 }

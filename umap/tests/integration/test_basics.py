@@ -79,7 +79,9 @@ def test_cannot_put_script_tag_in_datalayer_name_or_description(
     expect(page.get_by_text("before after")).to_be_visible()
 
 
-def test_login_from_map_page(live_server, page, tilelayer, settings, user, context):
+def test_login_from_map_page_after_save(
+    live_server, page, tilelayer, settings, user, context
+):
     settings.ENABLE_ACCOUNT_LOGIN = True
     assert Map.objects.count() == 0
     page.goto(f"{live_server.url}/en/map/new/")
@@ -100,5 +102,27 @@ def test_login_from_map_page(live_server, page, tilelayer, settings, user, conte
     assert len(context.pages) == 1
     # Save should have proceed
     assert Map.objects.count() == 1
+    # Use name should now appear on the header toolbar
+    expect(page.get_by_role("button", name="Joe")).to_be_visible()
+
+
+def test_login_from_unsaved_map_page(
+    live_server, page, tilelayer, settings, user, context
+):
+    settings.ENABLE_ACCOUNT_LOGIN = True
+    assert Map.objects.count() == 0
+    page.goto(f"{live_server.url}/en/map/new/")
+    page.locator('[data-ref="user"]').click()
+    with context.expect_page() as login_page_info:
+        page.get_by_role("button", name="Login").click()
+    login_page = login_page_info.value
+    expect(login_page).to_have_title("Login - Online map creator")
+    login_page.get_by_placeholder("Username").fill(user.username)
+    login_page.get_by_placeholder("Password").fill("123123")
+    login_page.locator('#login_form input[type="submit"]').click()
+    # Login page should be closed
+    page.wait_for_timeout(500)  # Seems needed from time to time…
+    assert len(context.pages) == 1
+    # Save should have proceed
     # Use name should now appear on the header toolbar
     expect(page.get_by_role("button", name="Joe")).to_be_visible()

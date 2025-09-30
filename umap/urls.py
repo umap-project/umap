@@ -124,6 +124,7 @@ i18n_urls += decorated_patterns(
     path("me/teams", views.UserTeams.as_view(), name="user_teams"),
     path("me/templates", views.UserTemplates.as_view(), name="user_templates"),
     path("team/create/", views.TeamNew.as_view(), name="team_new"),
+    path("whoami", views.WhoAmI.as_view(), name="whoami"),
 )
 
 if settings.UMAP_ALLOW_EDIT_PROFILE:

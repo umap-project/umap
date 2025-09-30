@@ -47,6 +47,13 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     display: inline-block;
 }
 
+.aplat {
+    padding: var(--medium-box-padding);
+    margin-bottom: var(--box-margin);
+    background-color: var(--color-mediumGray);
+    border: 1px solid var(--color-accent);
+}
+
 /* *********** */
 /* Map details */
 /* *********** */
@@ -443,60 +450,6 @@ ul.photon-autocomplete {
     margin-top: 0;
 }
 
-.update-map-extent,
-.leaflet-container .umap-toolbar .update-map-extent {
-    background-position: 0 -36px;
-}
-
-.umap-toolbar .update-map-tilelayers,
-.update-map-tilelayers {
-    background-position: -72px 0;
-}
-
-.manage-datalayers {
-    background-position: -36px -72px;
-}
-
-.umap-toolbar .update-map-permissions,
-.update-map-permissions {
-    background-position: -36px -36px;
-}
-
-.umap-toolbar .upload-data,
-.upload-data {
-    background-position: -144px 0;
-}
-
-.umap-toolbar .update-map-settings,
-.update-map-settings {
-    background-position: -108px 0;
-}
-
-.umap-draw-marker,
-.umap-toolbar .umap-draw-marker {
-    background-position: -144px -36px;
-}
-
-.umap-draw-polyline,
-.umap-toolbar .umap-draw-polyline {
-    background-position: -108px -36px;
-}
-
-.umap-draw-polyline-multi,
-.umap-toolbar .umap-draw-polyline-multi {
-    background-position: -36px -106px;
-}
-
-.umap-draw-polygon,
-.umap-toolbar .umap-draw-polygon {
-    background-position: -72px -36px;
-}
-
-.umap-draw-polygon-multi,
-.umap-toolbar .umap-draw-polygon-multi {
-    background-position: 0 -108px;
-}
-
 .umap-edit-enabled .umap-toolbar a {
     display: block;
 }
@@ -642,7 +595,6 @@ ul.photon-autocomplete {
 .umap-edit-enabled .hide-on-edit {
     display: none !important;
 }
-
 
 /* ********************************* */
 /*   Browser panel          */

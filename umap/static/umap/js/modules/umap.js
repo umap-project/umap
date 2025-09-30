@@ -760,7 +760,7 @@ export default class Umap {
       'properties.is_template',
     ]
 
-    DomUtil.createTitle(container, translate('Edit map details'), 'icon-caption')
+    DomUtil.createTitle(container, translate('Edit map details'), 'icon-info')
     const builder = new MutatingForm(this, metadataFields, {
       className: 'map-metadata',
       umap: this,
@@ -1201,6 +1201,15 @@ export default class Umap {
     })
   }
 
+  onAnonymousSave(editUrl) {
+    AlertCreation.info(
+      translate('Hey, you created a map without an account!'),
+      Number.Infinity,
+      editUrl,
+      this.properties.urls.map_send_edit_link ? this.sendEditLinkEmail.bind(this) : null
+    )
+  }
+
   async save() {
     const geojson = {
       type: 'Feature',
@@ -1223,8 +1232,7 @@ export default class Umap {
     // TOOD: map.save may not always be the first call during save process
     // since SAVEMANAGER refactor
     if (data.login_required) {
-      window.onLogin = () => this.saveAll()
-      window.open(data.login_required)
+      this.askForLogin().then(() => this.saveAll())
       return
     }
     this.properties.user = data.user
@@ -1232,17 +1240,9 @@ export default class Umap {
       this.properties.id = data.id
       this.permissions.setProperties(data.permissions)
       this.permissions.commit()
-      if (data.permissions?.anonymous_edit_url) {
-        this._leafletMap.once('saved', () => {
-          AlertCreation.info(
-            translate('Your map has been created with an anonymous account!'),
-            Number.Infinity,
-            data.permissions.anonymous_edit_url,
-            this.properties.urls.map_send_edit_link
-              ? this.sendEditLinkEmail.bind(this)
-              : null
-          )
-        })
+      const anonymousEditUrl = data.permissions?.anonymous_edit_url
+      if (anonymousEditUrl) {
+        this._leafletMap.once('saved', () => this.onAnonymousSave(anonymousEditUrl))
       } else {
         this._leafletMap.once('saved', () => {
           Alert.success(translate('Congratulations, your map has been created!'))
@@ -1262,6 +1262,24 @@ export default class Umap {
       window.location = data.url
     }
     return true
+  }
+
+  askForLogin() {
+    const promise = new Promise((resolve) => {
+      window.onLogin = () => {
+        const url = this.urls.get('whoami', { map_id: this.id })
+        this.server.get(url).then(([data]) => {
+          this.properties.user = data.user
+          if (!this.id) {
+            this.properties.permissions.owner = { ...data.user }
+          }
+          this.render(['user'])
+          resolve()
+        })
+      }
+    })
+    window.open(this.urls.get('login'))
+    return promise
   }
 
   exportProperties() {

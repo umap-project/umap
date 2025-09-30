@@ -80,7 +80,7 @@ html[dir="rtl"] .icon {
     background-position: var(--tile) calc(var(--tile) * 6);
 }
 
-.icon-caption {
+.icon-info {
     background-position: calc(var(--tile) * 4) var(--tile);
 }
 

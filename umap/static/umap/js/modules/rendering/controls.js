@@ -177,7 +177,7 @@ export const CaptionControl = BaseButton.extend({
     position: 'topleft',
     className: 'umap-control-caption',
     title: translate('About'),
-    icon: 'icon-caption',
+    icon: 'icon-info',
   },
 
   onClick: function () {
