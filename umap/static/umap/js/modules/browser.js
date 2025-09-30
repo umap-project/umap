@@ -157,12 +157,12 @@ export default class Browser {
         <details class="filters" data-ref="details">
           <summary data-ref=filtersTitle>
             <i class="icon icon-16 icon-filters"></i>${translate('Filters')}
-            <button class="show-on-edit icon icon-16 icon-add" title="${translate('Add filter')}" data-ref=add></button>
           </summary>
+          <button type="button" class="show-on-edit flat" data-ref=addFilter><i class="icon icon-16 icon-add"></i> ${translate('Add filter')}</button>
           <fieldset>
             <div data-ref=formContainer>
             </div>
-            <button class="flat" type="button" data-ref=reset><i class="icon icon-16 icon-restore" title=""></i>${translate('Reset all')}</button>
+            <button class="flat" type="button" data-ref=reset><i class="icon icon-16 icon-restore" title=""></i> ${translate('Reset all')}</button>
           </fieldset>
         </details>
         <div class="main-toolbox">
@@ -184,7 +184,7 @@ export default class Browser {
         dataContainer,
         formContainer,
         reset,
-        add,
+        addFilter,
       },
     ] = Utils.loadTemplateWithRefs(template)
     // HOTFIX. Remove when this is released:
@@ -196,7 +196,7 @@ export default class Browser {
     download.addEventListener('click', () => this.downloadVisible(download))
     download.hidden = this._umap.getProperty('embedControl') === false
     reset.addEventListener('click', () => this.resetFilters())
-    add.addEventListener('click', () => {
+    addFilter.addEventListener('click', () => {
       this._umap.edit().then((panel) => panel.scrollTo('details#fields-management'))
       this._umap.filters.filterForm()
     })

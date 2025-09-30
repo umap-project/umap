@@ -72,17 +72,6 @@
     background-color: var(--color-veryDarkGray);
 }
 
-.panel .umap-filter legend {
-    display: flex;
-    justify-content: space-between;
-}
-
-.panel .filter-toolbox {
-    position: absolute;
-    right: 25px;
-    background-color: var(--background-color);
-}
-
 @media all and (orientation:landscape) {
     .panel {
         top: var(--current-header-height);

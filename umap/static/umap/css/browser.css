@@ -1,0 +1,171 @@
+.umap-browser .filters {
+    --background-color: var(--color-lighterGray);
+}
+
+.umap-browser .feature-title {
+    cursor: pointer;
+}
+
+.umap-browser .datalayer i {
+    cursor: pointer;
+}
+
+.umap-browser .off .feature {
+    display: none;
+}
+
+.umap-browser .datalayer {
+    margin-bottom: 2px;
+    border-radius: 2px;
+}
+
+.umap-browser .datalayer ul {
+    border: 1px solid #d3d3d3;
+}
+
+.umap-browser.dark .datalayer ul {
+    border: 1px solid #232729;
+}
+
+.umap-browser .datalayer summary {
+    margin-bottom: 0;
+    overflow: hidden;
+    padding-inline-start: 5px;
+    height: 30px;
+    background-color: var(--color-lightGray);
+    font-weight: bold;
+}
+
+.umap-browser .off summary {
+    color: #b3b3b3;
+}
+
+.umap-browser li {
+    padding: 2px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.umap-browser .datalayer li:nth-child(even) {
+    background-color: #efefef;
+}
+
+.umap-browser.dark .datalayer li:nth-child(even) {
+    background-color: #2c3233;
+}
+
+.umap-browser .datalayer .feature-color {
+    box-shadow: 0 0 2px 0 black inset;
+    cursor: inherit;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    padding: 0;
+    width: 24px;
+    text-align: center;
+    margin-inline-start: 5px;
+}
+
+.umap-browser .marker .feature-color {
+    background: none;
+}
+
+.umap-browser.dark .datalayer .feature-color {
+    box-shadow: 0 0 2px 0 #999 inset;
+}
+
+.umap-browser .datalayer .feature-color img {
+    width: 24px;
+}
+
+.umap-browser .datalayer .feature-color span {
+    font-style: normal;
+    font-weight: bold;
+}
+
+.umap-browser .datalayer-toggle-list {
+    float: inline-end;
+    margin-inline-end: 5px;
+    background-position: -145px -70px;
+}
+
+.umap-browser .filters summary {
+    background: none;
+    border: 1px solid var(--color-lightGray);
+    width: fit-content;
+    padding: 0 10px;
+    margin-bottom: var(--block-margin);
+}
+
+.umap-browser .filters summary {
+    list-style: none;
+    display: inline-block;
+}
+
+.umap-browser details[open].filters summary {
+    margin-bottom: -1px;
+    border-bottom: 1px solid var(--background-color);
+}
+
+.datalayer-name {
+    cursor: pointer;
+}
+
+.umap-caption .dates {
+    color: var(--color-mediumGray);
+}
+
+.umap-caption .header {
+    display: flex;
+}
+
+.umap-caption .header i.icon {
+    flex-shrink: 0;
+}
+
+.umap-caption button {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.umap-browser .main-toolbox {
+    padding-left: 1.3rem;
+    /* Align with toolbox below  */
+    border-top: 1px solid var(--color-mediumGray);
+    margin-top: var(--box-margin);
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+.umap-browser .main-toolbox i {
+    cursor: pointer;
+}
+
+.umap-browser details {
+    position: relative;
+}
+
+.umap-browser details.filters>* {
+    background-color: var(--background-color);
+}
+
+.umap-browser details.filters [data-ref="addFilter"] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: inherit;
+    padding-inline-end: var(--text-margin);
+}
+
+.umap-browser .umap-filter legend {
+    display: flex;
+    justify-content: space-between;
+}
+
+.umap-browser .filter-toolbox {
+    position: absolute;
+    right: 25px;
+    background-color: var(--background-color);
+}
