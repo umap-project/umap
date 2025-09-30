@@ -215,6 +215,25 @@ test two,53.725145179688646,2.9700064980570517,"""
     )
 
 
+def test_wkt_export(map, live_server, bootstrap, page):
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?share")
+    button = page.get_by_role("button", name="wkt")
+    expect(button).to_be_visible()
+    with page.expect_download() as download_info:
+        button.click()
+    download = download_info.value
+    assert download.suggested_filename == "test_map.csv"
+    path = Path("/tmp/") / download.suggested_filename
+    download.save_as(path)
+    assert (
+        path.read_text()
+        == """name,geometry,description
+name poly,"POLYGON ((11.25 53.585984,10.151367 52.975108,12.689209 52.167194,14.084473 53.199452,12.634277 53.618579,11.25 53.585984,11.25 53.585984))",
+test one,POINT (-0.274658 52.57635),Some description
+test two,"LINESTRING (-0.571289 54.476422,0.439453 54.610255,1.724854 53.448807,4.163818 53.988395,5.306396 53.533778,6.591797 53.709714,7.042236 53.350551)","""
+    )
+
+
 def test_gpx_export(map, live_server, bootstrap, page):
     page.goto(f"{live_server.url}{map.get_absolute_url()}?share")
     button = page.get_by_role("button", name="gpx")

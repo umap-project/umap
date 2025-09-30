@@ -32,6 +32,10 @@ export const EXPORT_FORMATS = {
     ext: '.csv',
     filetype: 'text/csv',
   },
+  wkt: {
+    ext: '.csv',
+    filetype: 'text/csv',
+  },
 }
 
 export class Formatter {
@@ -174,6 +178,8 @@ export class Formatter {
     switch (format) {
       case 'csv':
         return await this.toCSV(features)
+      case 'wkt':
+        return await this.toWKT(features)
       case 'gpx':
         return await this.toGPX(features)
       case 'kml':
@@ -216,6 +222,18 @@ export class Formatter {
       delete row._umap_options
       row.Latitude = center.lat
       row.Longitude = center.lng
+      table.push(row)
+    }
+    return csv2geojson.dsv.csvFormat(table)
+  }
+
+  async toWKT(features) {
+    const table = []
+    const betterknown = await import('../../vendors/betterknown/betterknown.mjs')
+    for (const feature of features) {
+      const row = feature.toGeoJSON().properties
+      delete row._umap_options
+      row.geometry = betterknown.geoJSONToWkt(feature.geometry)
       table.push(row)
     }
     return csv2geojson.dsv.csvFormat(table)
