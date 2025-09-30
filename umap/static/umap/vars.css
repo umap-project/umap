@@ -55,13 +55,13 @@
     --map-fragment-height: 210px;
 
     /* z-indexes (leaflet CSS sets the map at 400 by default) */
+    --zindex-tooltip: 510;
     --zindex-alert: 500;
     --zindex-loader: 490;
     --zindex-toolbar: 480;
     --zindex-autocomplete: 470;
     --zindex-dialog: 460;
-    --zindex-contextmenu: 455;
-    --zindex-tooltip: 445;
+    --zindex-contextmenu: 450;
     --zindex-panels: 440;
     --zindex-controls: 430;
     --zindex-dragover: 410;

@@ -271,3 +271,36 @@ def test_logged_in_user_should_have_a_message_to_attach_map(
         page.get_by_role("button", name="OK").click()
     saved = Map.objects.get(pk=anonymap.pk)
     assert saved.owner
+
+
+def test_can_attach_map_after_save(
+    live_server, user, page, tilelayer, context, settings
+):
+    settings.ENABLE_ACCOUNT_LOGIN = True
+    page.goto(f"{live_server.url}/en/map/new")
+    expect(page.get_by_role("button", name="Anonymous")).to_be_visible()
+    expect(page.get_by_role("button", name="Visibility: Draft")).to_have_class(
+        re.compile(r".*anonymous.*")
+    )
+    assert not Map.objects.count()
+    with page.expect_response(re.compile(r".*/map/create/")):
+        page.get_by_role("button", name="Save draft", exact=True).click()
+    assert Map.objects.count() == 1
+    saved = Map.objects.last()
+    assert not saved.owner
+    with context.expect_page() as login_page_info:
+        page.get_by_role("link", name="log in").click()
+    login_page = login_page_info.value
+    expect(login_page).to_have_title("Login - Online map creator")
+    login_page.get_by_placeholder("Username").fill(user.username)
+    login_page.get_by_placeholder("Password").fill("123123")
+    with page.expect_response(re.compile(r".*/update/owner/")):
+        login_page.locator('#login_form input[type="submit"]').click()
+    expect(page.get_by_text("Map has been attached to your account")).to_be_visible()
+    saved = Map.objects.last()
+    assert saved.owner == user
+    expect(page.get_by_role("button", name="Anonymous")).to_be_hidden()
+    expect(page.get_by_role("button", name=user.username)).to_be_visible()
+    expect(page.get_by_role("button", name="Visibility: Draft")).not_to_have_class(
+        re.compile(r".*anonymous.*")
+    )

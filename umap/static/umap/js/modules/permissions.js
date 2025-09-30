@@ -43,7 +43,7 @@ export class MapPermissions {
   }
 
   isAnonymousMap() {
-    return !this._umap.properties.permissions?.owner
+    return !this.properties.owner
   }
 
   isDraft() {
@@ -193,6 +193,8 @@ export class MapPermissions {
     const [data, response, error] = await this._umap.server.post(this.getAttachUrl())
     if (!error) {
       this.properties.owner = this._umap.properties.user
+      this._umap.properties.user.is_owner = true
+      this.render()
       Alert.success(translate('Map has been attached to your account'))
       this._umap.editPanel.close()
     }
