@@ -689,7 +689,7 @@ def test_import_csv_with_wkt_geom(tilelayer, live_server, page, settings):
     page.get_by_title("Import data").click()
     textarea = page.locator(".umap-import textarea")
     textarea.fill(
-        "geom;foobar\nPOLYGON ((-64.8 32.3, -65.5 18.3, -80.3 25.2, -64.8 32.3));mypoly\nPOINT(48.35 12.23);mypoint"
+        "Geom;foobar\nPOLYGON ((-64.8 32.3, -65.5 18.3, -80.3 25.2, -64.8 32.3));mypoly\nPOINT(48.35 12.23);mypoint"
     )
     page.locator('select[name="format"]').select_option("csv")
     page.get_by_role("button", name="Import data", exact=True).click()

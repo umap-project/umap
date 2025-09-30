@@ -84,7 +84,12 @@ export class Formatter {
           const first = result.features[0]
           if (first.geometry === null) {
             const geomFields = ['geom', 'geometry', 'wkt', 'geojson']
-            for (const field of geomFields) {
+            const availableFields = Object.keys(first.properties).reduce((acc, key) => {
+              acc[key.toLowerCase()] = key
+              return acc
+            }, {})
+            for (let field of geomFields) {
+              field = availableFields[field]
               if (first.properties[field]) {
                 for (const feature of result.features) {
                   feature.geometry = await parseTextGeom(feature.properties[field])
