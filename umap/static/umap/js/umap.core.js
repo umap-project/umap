@@ -15,7 +15,7 @@ L.DomUtil.createFieldset = (container, legend, options) => {
   const details = L.DomUtil.create('details', options.className || '', container)
   const summary = L.DomUtil.add('summary', '', details)
   if (options.icon) L.DomUtil.createIcon(summary, options.icon)
-  L.DomUtil.add('span', '', summary, legend)
+  L.DomUtil.add('h4', '', summary, legend)
   const fieldset = L.DomUtil.add('fieldset', '', details)
   details.open = options.on === true
   if (options.callback) {

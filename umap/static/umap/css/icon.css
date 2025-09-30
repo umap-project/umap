@@ -8,13 +8,16 @@
     background-color: initial;
 }
 
+[type=button].icon-16,
+button.icon-16,
 .icon-16 {
     height: 24px;
-    line-height: 24px;
     width: 24px;
     --tile: -24px;
 }
 
+[type=button].icon-24,
+button.icon-24,
 .icon-24 {
     background-image: url('../img/24.svg');
     --tile: -36px;
@@ -128,7 +131,7 @@ html[dir="rtl"] .icon {
 
 .icon-drag {
     background-position: calc(var(--tile) * 3) calc(var(--tile) * 3);
-    cursor: move;
+    cursor: grab;
     float: inline-end;
     visibility: hidden;
 }
@@ -164,6 +167,35 @@ html[dir="rtl"] .icon {
 .icon-extract-shape {
     background-position: calc(var(--tile) * 5) 0;
 }
+
+.icon-field-Boolean {
+    background-position: calc(var(--tile) * 2) calc(var(--tile) * 8);
+}
+
+.icon-field-Date {
+    background-position: calc(var(--tile) * 5) calc(var(--tile) * 8);
+}
+
+.icon-field-Datetime {
+    background-position: calc(var(--tile) * 6) calc(var(--tile) * 8);
+}
+
+.icon-field-Enum {
+    background-position: calc(var(--tile) * 7) calc(var(--tile) * 8);
+}
+
+.icon-field-Number {
+    background-position: calc(var(--tile) * 3) calc(var(--tile) * 8);
+}
+
+.icon-field-String {
+    background-position: var(--tile) calc(var(--tile) * 8);
+}
+
+.icon-field-Text {
+    background-position: 0 calc(var(--tile) * 8);
+}
+
 
 .icon-filters {
     background-position: 0px var(--tile);

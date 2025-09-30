@@ -98,7 +98,7 @@ export class TopBar extends WithTemplate {
       this.elements.shareAnonymous.hidden = false
     }
     this.elements.user.addEventListener('click', () => {
-      if (this._umap.properties.user?.id) {
+      if (this._umap.permissions.userIsAuth()) {
         const actions = [
           {
             label: translate('New map'),
@@ -249,7 +249,7 @@ export class BottomBar extends WithTemplate {
     const showMenus = this._umap.getProperty('captionMenus')
     this.elements.caption.hidden = !showMenus
     this.elements.browse.hidden = !showMenus
-    this.elements.filter.hidden = !showMenus || !this._umap.properties.facetKey
+    this.elements.filter.hidden = !showMenus || !this._umap.filters.size
     this.buildDataLayerSwitcher()
   }
 

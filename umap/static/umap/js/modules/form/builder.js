@@ -1,7 +1,7 @@
 import { translate } from '../i18n.js'
 import { SCHEMA } from '../schema.js'
 import * as Utils from '../utils.js'
-import getClass from './fields.js'
+import { getClass } from './fields.js'
 
 export class Form extends Utils.WithEvents {
   constructor(obj, fields, properties) {
@@ -107,14 +107,18 @@ export class Form extends Utils.WithEvents {
 
   finish() {}
 
-  getTemplate(helper) {
+  getHelperTemplate(helper) {
     let tpl = helper.getTemplate()
     if (helper.properties.label && !tpl.includes(helper.properties.label)) {
       tpl = `<label>${helper.properties.label}${tpl}</label>`
     }
+    return tpl
+  }
+
+  getTemplate(helper) {
     return `
       <div class="formbox" data-ref=container>
-        ${tpl}
+        ${this.getHelperTemplate(helper)}
         <small class="help-text" data-ref=helpText></small>
       </div>`
   }
@@ -132,7 +136,6 @@ export class MutatingForm extends Form {
     const customHandlers = {
       sortKey: 'PropertyInput',
       easing: 'Switch',
-      facetKey: 'PropertyInput',
       slugKey: 'PropertyInput',
       labelKey: 'PropertyInput',
       color: 'ColorPicker',
