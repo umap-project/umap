@@ -29,7 +29,7 @@
       </h3>
       {% url "login" as login_url %}
       <p class="aplat">
-        {% blocktranslate %}Oops, I didn't mean it, I want to <a href="{{ login_url }}" target="_blank">create an account</a> or <a href="{{ login_url }}" target="_blank">log in</a>.{% endblocktranslate %}
+        {% blocktranslate %}Oops, I didn't mean it, I want to <a href="{{ login_url }}" class="login">create an account</a> or <a href="{{ login_url }}" class="login">log in</a> (no worry, we'll attach the map to your account).{% endblocktranslate %}
       </p>
       <div class="anonymous soft-rounded aplat">
         <h4><i class="icon icon-16 icon-anonymous"></i> {% trans "Yes, I want to continue editing anonymously, I will save the secret edit link to be able to edit this map later or on another device" %}</h4>

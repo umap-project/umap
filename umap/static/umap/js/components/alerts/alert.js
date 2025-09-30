@@ -1,5 +1,6 @@
 import { translate } from '../../modules/i18n.js'
 import { uMapElement } from '../base.js'
+import { copyToClipboard } from '../../modules/domutils.js'
 
 class uMapAlert extends uMapElement {
   static get observedAttributes() {
@@ -80,6 +81,7 @@ class uMapAlert extends uMapElement {
 
 class uMapAlertCreation extends uMapAlert {
   static info(
+    umap,
     message,
     // biome-ignore lint/style/useNumberNamespace: Number.Infinity returns undefined by default
     duration = Infinity,
@@ -87,6 +89,7 @@ class uMapAlertCreation extends uMapAlert {
     sendCallback = undefined
   ) {
     uMapAlertCreation.emit('alertCreation', {
+      umap,
       message,
       duration,
       editLink,
@@ -98,10 +101,12 @@ class uMapAlertCreation extends uMapAlert {
     super()
     this.linkWrapper = this.container.querySelector('#link-wrapper')
     this.formWrapper = this.container.querySelector('#form-wrapper')
+    this.loginLinks = this.container.querySelectorAll('a.login')
   }
 
   onAlertCreation(event) {
     const {
+      umap,
       level = 'info',
       duration = 5000,
       message = '',
@@ -113,9 +118,17 @@ class uMapAlertCreation extends uMapAlert {
     const button = this.linkWrapper.querySelector('input[type="button"]')
     button.addEventListener('click', (event) => {
       event.preventDefault()
-      L.Util.copyToClipboard(editLink)
-      event.target.value = translate('✅ Copied!')
+      copyToClipboard(editLink)
     })
+    for (const link of this.loginLinks) {
+      link.addEventListener('click', (event) => {
+        event.preventDefault()
+        umap.askForLogin().then(() => {
+          umap.permissions.attach()
+          this._hide()
+        })
+      })
+    }
     if (sendCallback) {
       this.formWrapper.removeAttribute('hidden')
       const form = this.formWrapper.querySelector('form')

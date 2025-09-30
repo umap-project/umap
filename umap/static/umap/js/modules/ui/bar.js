@@ -120,10 +120,7 @@ export class TopBar extends WithTemplate {
       } else {
         actions.push({
           label: translate('Login'),
-          action: () =>
-            this._umap.askForLogin().then(() => {
-              this.redraw()
-            }),
+          action: () => this._umap.askForLogin(),
         })
       }
       this._menu.openBelow(this.elements.user, actions)

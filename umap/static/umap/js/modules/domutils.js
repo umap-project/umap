@@ -29,7 +29,7 @@ export const copyToClipboard = (textToCopy) => {
       textArea.remove()
     }
   }
-  tooltip.open({ content: translate('✅ Copied!') })
+  tooltip.open({ content: translate('✅ Copied!'), duration: 5000 })
 }
 
 export const copiableInput = (parent, label, value) => {

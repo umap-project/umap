@@ -1203,6 +1203,7 @@ export default class Umap {
 
   onAnonymousSave(editUrl) {
     AlertCreation.info(
+      this,
       translate('Hey, you created a map without an account!'),
       Number.Infinity,
       editUrl,
@@ -1273,7 +1274,7 @@ export default class Umap {
           if (!this.id) {
             this.properties.permissions.owner = { ...data.user }
           }
-          this.render(['user'])
+          this.render(['user', 'properties.permissions'])
           resolve()
         })
       }
