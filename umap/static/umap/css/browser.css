@@ -125,6 +125,7 @@
     flex-shrink: 0;
 }
 
+.umap-caption [type="button"],
 .umap-caption button {
     background-color: var(--background-color);
     color: var(--text-color);
