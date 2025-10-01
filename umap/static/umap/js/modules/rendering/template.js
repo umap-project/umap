@@ -181,7 +181,7 @@ class OSM extends PopupTemplate {
     const props = feature.properties
     const locale = getLocale()
     if (locale && props[`name:${locale}`]) return props[`name:${locale}`]
-    return props.name
+    return props.name || feature.getDisplayName()
   }
 
   async renderBody(feature) {
@@ -235,7 +235,15 @@ class OSM extends PopupTemplate {
     if (wikipedia) {
       body.appendChild(
         Utils.loadTemplate(
-          `<div class="wikipedia-link"><a href="https://wikipedia.org/wiki/${wikipedia}" target="_blank">${translate('Wikipedia')}</a></div>`
+          `<div><a href="https://wikipedia.org/wiki/${wikipedia}" target="_blank">${translate('Wikipedia')}<i class="icon icon-16 icon-external-link"></i></a></div>`
+        )
+      )
+    }
+    const wikidata = props[`wikidata:${locale}`] || props.wikidata
+    if (wikidata) {
+      body.appendChild(
+        Utils.loadTemplate(
+          `<div><a href="https://www.wikidata.org/wiki/${wikidata}" target="_blank">${translate('Wikidata')}<i class="icon icon-16 icon-external-link"></i></a></div>`
         )
       )
     }
@@ -243,7 +251,7 @@ class OSM extends PopupTemplate {
     if (id) {
       body.appendChild(
         Utils.loadTemplate(
-          `<div class="osm-link"><a href="https://www.openstreetmap.org/${id}">${translate('See on OpenStreetMap')}</a></div>`
+          `<div class="osm-link"><a href="https://www.openstreetmap.org/${id}">${translate('See on OpenStreetMap')}<i class="icon icon-16 icon-external-link"></i></a></div>`
         )
       )
     }
