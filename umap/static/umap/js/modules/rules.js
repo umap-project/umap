@@ -207,7 +207,8 @@ class Rule {
     const [li, { colorBox }] = Utils.loadTemplateWithRefs(
       `<li><span class="color-box" data-ref=colorBox></span>${this.label}</li>`
     )
-    const bgcolor = this.properties.color || this.parent.getColor()
+    const bgcolor =
+      this.properties.fillColor || this.properties.color || this.parent.getColor()
     const symbol = this.properties.iconUrl
     colorBox.style.backgroundColor = bgcolor
     if (symbol && symbol !== SCHEMA.iconUrl.default) {
