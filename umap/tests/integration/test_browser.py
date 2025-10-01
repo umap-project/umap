@@ -353,6 +353,43 @@ def test_should_redraw_list_on_feature_delete(live_server, openmap, page, bootst
     expect(buttons).to_have_count(3)
 
 
+def test_should_change_feature_title_and_color_on_edit(
+    live_server, openmap, page, bootstrap
+):
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#2/19/-2")
+    expect(page.locator(".umap-browser .feature.marker")).to_contain_text(
+        "one point in france"
+    )
+    page.locator(".leaflet-marker-icon").click(modifiers=["Shift"])
+    page.locator('input[name="name"]').fill("changed name")
+    expect(page.locator(".umap-browser .feature.marker")).to_contain_text(
+        "changed name"
+    )
+
+    # Change color
+    expect(
+        page.get_by_role("listitem").filter(has_text="changed name").locator("i")
+    ).to_have_css("background-color", "rgb(0, 0, 139)")
+    page.get_by_role("heading", name="Shape properties").click()
+    page.locator(".umap-field-color").get_by_role("button", name="define").first.click()
+    page.get_by_title("Crimson").click()
+    expect(
+        page.get_by_role("listitem").filter(has_text="changed name").locator("i")
+    ).to_have_css("background-color", "rgb(220, 20, 60)")
+
+    # Undo color
+    page.locator(".edit-undo").click()
+    expect(
+        page.get_by_role("listitem").filter(has_text="changed name").locator("i")
+    ).to_have_css("background-color", "rgb(0, 0, 139)")
+
+    # Undo title change
+    page.locator(".edit-undo").click()
+    expect(page.locator(".umap-browser .feature.marker")).to_contain_text(
+        "one point in france"
+    )
+
+
 def test_should_show_header_for_display_on_load_false(
     live_server, page, bootstrap, map, datalayer
 ):

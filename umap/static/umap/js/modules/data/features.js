@@ -23,6 +23,7 @@ import {
 import { SCHEMA } from '../schema.js'
 import * as Utils from '../utils.js'
 import * as DOMUtils from '../domutils.js'
+import * as Icon from '../rendering/icon.js'
 
 class Feature {
   constructor(umap, datalayer, geojson = {}, id = null) {
@@ -137,6 +138,10 @@ class Feature {
     return this.staticOptions.className
   }
 
+  getUniqueClassName() {
+    return `feature-${this.datalayer.id}-${this.id}`
+  }
+
   getPreviewColor() {
     return this.getDynamicOption(this.staticOptions.mainColor)
   }
@@ -214,9 +219,20 @@ class Feature {
       return field.startsWith('properties.')
     })
     if (impactData) {
+      Utils.eachElement(`.${this.getUniqueClassName()} .feature-title`, (el) => {
+        el.textContent = this.getDisplayName()
+      })
       if (this._umap.currentFeature === this) {
         this.view()
       }
+    }
+    const impactPreview = fields.some((field) => {
+      return field.startsWith('properties._umap_options')
+    })
+    if (impactPreview) {
+      Utils.eachElement(`.${this.getUniqueClassName()} .feature-color`, (el) => {
+        this.makePreview(el)
+      })
     }
     this.redraw()
   }
@@ -742,6 +758,19 @@ class Feature {
     if (this._umap.activeFeature === this) {
       this._umap.activeFeature = undefined
       this.ui.closePopup()
+    }
+  }
+
+  makePreview(element) {
+    element.innerHTML = ''
+    const symbol = this._getIconUrl ? Icon.formatUrl(this._getIconUrl(), this) : null
+    const bgcolor = this.getPreviewColor()
+    element.style.backgroundColor = bgcolor
+    if (symbol && symbol !== SCHEMA.iconUrl.default) {
+      const icon = Icon.makeElement(symbol, element)
+      Icon.setContrast(icon, element, symbol, bgcolor)
+    } else if (DOMUtils.contrastedColor(element, bgcolor)) {
+      element.classList.add('icon-white')
     }
   }
 }

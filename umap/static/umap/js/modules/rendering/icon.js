@@ -1,12 +1,7 @@
-import {
-  DivIcon,
-  DomEvent,
-  DomUtil,
-  Icon,
-  Point,
-} from '../../../vendors/leaflet/leaflet-src.esm.js'
+import { DivIcon, Icon, Point } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { SCHEMA } from '../schema.js'
 import * as Utils from '../utils.js'
+import * as DOMUtils from '../domutils.js'
 
 export function getClass(name) {
   switch (name) {
@@ -299,7 +294,7 @@ export function setContrast(icon, parent, src, bgcolor) {
    */
   if (!icon) return
 
-  if (DomUtil.contrastedColor(parent, bgcolor)) {
+  if (DOMUtils.contrastedColor(parent, bgcolor)) {
     // Decide whether to switch svg to white or not, but do it
     // only for internal SVG, as invert could do weird things
     if (src.endsWith('.svg') && src !== SCHEMA.iconUrl.default) {
