@@ -5,11 +5,11 @@ import {
   Marker,
   Rectangle,
   Polyline,
-  DomUtil,
   latLngBounds,
 } from '../../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from '../../i18n.js'
 import * as Utils from '../../utils.js'
+import * as DOMUtils from '../../domutils.js'
 import { Cluster as ClusterIcon } from '../icon.js'
 import { LayerMixin } from './base.js'
 
@@ -21,7 +21,7 @@ const MarkerCluster = Marker.extend({
     const bgColor = this.options.icon.options.color
     const textColor = this.options.icon.options.textColor
     counter.style.color =
-      textColor || DomUtil.TextColorFromBackgroundColor(counter, bgColor)
+      textColor || DOMUtils.textColorFromBackgroundColor(counter, bgColor)
   },
 
   computeCoverage() {

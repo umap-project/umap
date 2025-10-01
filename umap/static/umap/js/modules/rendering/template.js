@@ -6,6 +6,7 @@ import {
 import { getLocale, translate } from '../i18n.js'
 import { Request } from '../request.js'
 import * as Utils from '../utils.js'
+import * as DOMUtils from '../domutils.js'
 import * as Icon from './icon.js'
 
 export default async function loadTemplate(name, feature, container) {
@@ -171,7 +172,7 @@ class OSM extends PopupTemplate {
     const icon = Icon.makeElement(iconUrl, title)
     DomUtil.addClass(icon, 'icon')
     Icon.setContrast(icon, title, iconUrl, color)
-    if (DomUtil.contrastedColor(title, color)) title.style.color = 'white'
+    if (DOMUtils.contrastedColor(title, color)) title.style.color = 'white'
     DomUtil.add('span', '', title, this.getName(feature))
     return title
   }

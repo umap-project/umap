@@ -2,7 +2,6 @@ import { DomEvent, DomUtil, stamp } from '../../vendors/leaflet/leaflet-src.esm.
 import { Form } from './form/builder.js'
 import { EXPORT_FORMATS } from './formatter.js'
 import { translate } from './i18n.js'
-import * as Icon from './rendering/icon.js'
 import ContextMenu from './ui/contextmenu.js'
 import * as Utils from './utils.js'
 import { SCHEMA } from './schema.js'
@@ -23,7 +22,7 @@ export default class Browser {
     if (feature.isFiltered()) return
     if (this.options.inBbox && !feature.isOnScreen(this.bounds)) return
     const template = `
-      <li class="feature ${feature.getClassName()}">
+      <li class="feature ${feature.getClassName()} ${feature.getUniqueClassName()}">
         <button class="icon icon-16 icon-zoom" title="${translate('Bring feature to center')}" data-ref=zoom></button>
         <button class="icon icon-16 show-on-edit icon-edit" title="${translate('Edit this feature')}" data-ref=edit></button>
         <button class="icon icon-16 show-on-edit icon-delete" title="${translate('Delete this feature')}" data-ref=remove></button>
@@ -34,17 +33,7 @@ export default class Browser {
     const [row, { zoom, edit, remove, colorBox, label }] =
       Utils.loadTemplateWithRefs(template)
     label.textContent = label.title = feature.getDisplayName() || '—'
-    const symbol = feature._getIconUrl
-      ? Icon.formatUrl(feature._getIconUrl(), feature)
-      : null
-    const bgcolor = feature.getPreviewColor()
-    colorBox.style.backgroundColor = bgcolor
-    if (symbol && symbol !== SCHEMA.iconUrl.default) {
-      const icon = Icon.makeElement(symbol, colorBox)
-      Icon.setContrast(icon, colorBox, symbol, bgcolor)
-    } else if (DomUtil.contrastedColor(colorBox, bgcolor)) {
-      colorBox.classList.add('icon-white')
-    }
+    feature.makePreview(colorBox)
     const viewFeature = (e) => {
       feature.zoomTo({ ...e, callback: () => feature.view() })
     }
