@@ -191,12 +191,16 @@ export class FieldManager extends Map {
     container.appendChild(add)
     for (const field of this.all()) {
       const [row, { edit, del }] = Utils.loadTemplateWithRefs(
-        `<li class="orderable" data-key="${field.key}">
-          <button class="icon icon-16 icon-edit" title="${translate('Edit this field')}" data-ref=edit></button>
-          <button class="icon icon-16 icon-delete" title="${translate('Delete this field')}" data-ref=del></button>
-          <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
-          <i class="icon icon-16 icon-field-${field.type}" title="${field.type}"></i>
-          ${field.key}
+        `<li class="orderable with-toolbox" data-key="${field.key}">
+          <span>
+            <i class="icon icon-16 icon-field-${field.type}" title="${field.type}"></i>
+            ${field.key}
+          </span>
+          <span>
+            <button class="icon icon-16 icon-edit" title="${translate('Edit this field')}" data-ref=edit></button>
+            <button class="icon icon-16 icon-delete" title="${translate('Delete this field')}" data-ref=del></button>
+            <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
+          </span>
         </li>`
       )
       ul.appendChild(row)

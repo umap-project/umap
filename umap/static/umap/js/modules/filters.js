@@ -333,11 +333,15 @@ export default class Filters {
     this._umap.help.parse(body)
     this.available.forEach((filter, key) => {
       const [li, { edit, remove }] = Utils.loadTemplateWithRefs(
-        `<li class="orderable" data-key="${key}">
-          <button class="icon icon-16 icon-edit" data-ref="edit" title="${translate('Edit this filter')}"></button>
-          <button class="icon icon-16 icon-delete" data-ref="remove" title="${translate('Remove this filter')}"></button>
-          <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
-          ${filter.label || key}
+        `<li class="orderable with-toolbox" data-key="${key}">
+          <span>
+            ${filter.label || key}
+          </span>
+          <span>
+            <button class="icon icon-16 icon-edit" data-ref="edit" title="${translate('Edit this filter')}"></button>
+            <button class="icon icon-16 icon-delete" data-ref="remove" title="${translate('Remove this filter')}"></button>
+            <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
+          </span>
         </li>`
       )
       ul.appendChild(li)

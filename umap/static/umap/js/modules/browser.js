@@ -22,12 +22,16 @@ export default class Browser {
     if (feature.isFiltered()) return
     if (this.options.inBbox && !feature.isOnScreen(this.bounds)) return
     const template = `
-      <li class="feature ${feature.getClassName()} ${feature.getUniqueClassName()}">
-        <button class="icon icon-16 icon-zoom" title="${translate('Bring feature to center')}" data-ref=zoom></button>
-        <button class="icon icon-16 show-on-edit icon-edit" title="${translate('Edit this feature')}" data-ref=edit></button>
-        <button class="icon icon-16 show-on-edit icon-delete" title="${translate('Delete this feature')}" data-ref=remove></button>
-        <i class="icon icon-16 icon-${feature.getClassName()} feature-color" data-ref=colorBox></i>
-        <span class="feature-title" data-ref=label></span>
+      <li class="feature ${feature.getClassName()} ${feature.getUniqueClassName()} with-toolbox">
+        <span>
+          <i class="icon icon-16 icon-${feature.getClassName()} feature-color" data-ref=colorBox></i>
+          <span class="feature-title" data-ref=label></span>
+        </span>
+        <span>
+          <button class="icon icon-16 icon-zoom" title="${translate('Bring feature to center')}" data-ref=zoom></button>
+          <button class="icon icon-16 show-on-edit icon-edit" title="${translate('Edit this feature')}" data-ref=edit></button>
+          <button class="icon icon-16 show-on-edit icon-delete" title="${translate('Delete this feature')}" data-ref=remove></button>
+        </span>
       </li>
     `
     const [row, { zoom, edit, remove, colorBox, label }] =
@@ -55,10 +59,12 @@ export default class Browser {
     const open = this.mode !== 'layers' ? ' open' : ''
     const [container, { headline, toolbox, label }] = Utils.loadTemplateWithRefs(`
       <details class="datalayer ${datalayer.getHidableClass()}" id="${this.datalayerId(datalayer)}"${open}>
-        <summary data-ref=headline>
+        <summary data-ref=headline class="with-toolbox">
+          <span>
+            <span class="datalayer-name" data-id="${datalayer.id}" data-ref=label></span>
+            <span class="datalayer-counter"></span>
+          </span>
           <span data-ref=toolbox></span>
-          <span class="datalayer-name" data-id="${datalayer.id}" data-ref=label></span>
-          <span class="datalayer-counter"></span>
         </summary>
         <ul></ul>
       </details>

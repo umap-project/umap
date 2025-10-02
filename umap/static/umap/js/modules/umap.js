@@ -1583,17 +1583,23 @@ export default class Umap {
     `
     const [container, { ul }] = Utils.loadTemplateWithRefs(template)
     this.datalayers.reverse().map((datalayer) => {
-      const row = Utils.loadTemplate(
-        `<li class="orderable"><i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i></li>`
-      )
-      datalayer.renderToolbox(row)
+      const [row, { toolbox, formbox }] = Utils.loadTemplateWithRefs(`
+        <li class="orderable with-toolbox">
+          <span data-ref=formbox></span>
+          <span>
+            <span data-ref=toolbox></span>
+            <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
+          </span>
+        </li>
+      `)
+      datalayer.renderToolbox(toolbox)
       const builder = new MutatingForm(
         datalayer,
         [['properties.name', { handler: 'EditableText' }]],
         { className: 'umap-form-inline' }
       )
       const form = builder.build()
-      row.appendChild(form)
+      formbox.appendChild(form)
       row.classList.toggle('off', !datalayer.isVisible())
       row.dataset.id = datalayer.id
       ul.appendChild(row)
