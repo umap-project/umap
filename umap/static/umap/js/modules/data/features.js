@@ -1325,6 +1325,7 @@ export class LineString extends Path {
       this.geometry = geometry
       this.ui.resetTooltip()
       this.sync.update('geometry', this.geometry, oldGeometry)
+      Alert.success(translate('Elevation has been added!'))
     }
   }
 
