@@ -387,6 +387,12 @@ export default class Umap {
     }
   }
 
+  hasFilters() {
+    return (
+      this.filters.size || this.datalayers.active().some((d) => Boolean(d.filters.size))
+    )
+  }
+
   getOwnContextMenu(event) {
     const items = []
     if (this.editEnabled) {
@@ -420,7 +426,7 @@ export default class Umap {
         action: () => this.openBrowser('data'),
       }
     )
-    if (this.filters.size) {
+    if (this.hasFilters()) {
       items.push({
         label: translate('Filter data'),
         action: () => this.openBrowser('filters'),

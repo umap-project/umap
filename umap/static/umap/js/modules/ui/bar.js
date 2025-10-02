@@ -253,7 +253,7 @@ export class BottomBar extends WithTemplate {
     const showMenus = this._umap.getProperty('captionMenus')
     this.elements.caption.hidden = !showMenus
     this.elements.browse.hidden = !showMenus
-    this.elements.filter.hidden = !showMenus || !this._umap.filters.size
+    this.elements.filter.hidden = !showMenus || !this._umap.hasFilters()
     this.buildDataLayerSwitcher()
   }
 
