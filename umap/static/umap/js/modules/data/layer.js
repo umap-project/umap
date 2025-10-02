@@ -793,7 +793,7 @@ export class DataLayer {
       const builder = new MutatingForm(this, layerFields)
       const template = `
         <details id="layer-properties">
-          <summary>${this.layer.getName()}: ${translate('settings')}</summary>
+          <summary><h4>${this.layer.getName()}: ${translate('settings')}</h4></summary>
           <fieldset data-ref=fieldset></fieldset>
         </details>
       `
