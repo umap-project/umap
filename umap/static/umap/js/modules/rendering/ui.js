@@ -111,6 +111,10 @@ const FeatureMixin = {
   onCommit: function () {
     this.feature.onCommit()
   },
+
+  isVisible() {
+    return Boolean(this._map?.hasLayer(this))
+  },
 }
 
 const PointMixin = {
