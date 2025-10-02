@@ -231,6 +231,11 @@ class OSM extends PopupTemplate {
         )
       )
     }
+    if (props.image) {
+      body.appendChild(
+        Utils.loadTemplate(`<div><img src="${props.image}" alt="" /></div>`)
+      )
+    }
     if (props.mapillary) {
       body.appendChild(
         Utils.loadTemplate(
