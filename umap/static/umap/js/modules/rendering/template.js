@@ -231,6 +231,13 @@ class OSM extends PopupTemplate {
         )
       )
     }
+    if (props.mapillary) {
+      body.appendChild(
+        Utils.loadTemplate(
+          `<div><a href="https://www.mapillary.com/app/?focus=photo&pKey=${props.mapillary}" target="_blank">${translate('Mapillary')}<i class="icon icon-16 icon-external-link"></i></a></div>`
+        )
+      )
+    }
     const wikipedia = props[`wikipedia:${locale}`] || props.wikipedia
     if (wikipedia) {
       body.appendChild(
