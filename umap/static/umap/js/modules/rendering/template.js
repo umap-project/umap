@@ -358,6 +358,9 @@ class Route extends TitleMixin(PopupTemplate) {
         color: 'orange',
       }).addTo(map)
     })
+    if (feature.properties.description) {
+      root.appendChild(Utils.loadTemplate(`<p>${feature.properties.description}</p>`))
+    }
     return root
   }
 }
