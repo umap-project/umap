@@ -62,7 +62,7 @@ test = [
   "pytest-playwright==0.7.1",
   "pytest-rerunfailures==16.0.1",
   "pytest-xdist>=3.5.0,<4",
-  "moto[s3]==5.1.13"
+  "moto[s3]==5.1.14"
 ]
 docker = [
   "uvicorn==0.35.0",
