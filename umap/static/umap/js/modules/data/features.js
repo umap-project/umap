@@ -291,7 +291,7 @@ class Feature {
     this.appendEditFieldsets(container)
     const [details, { fieldset }] = Utils.loadTemplateWithRefs(`
       <details>
-        <summary>${translate('Advanced actions')}</summary>
+        <summary><h4>${translate('Advanced actions')}</h4></summary>
         <fieldset class="button-bar by2" data-ref=fieldset></fieldset>
       </details>
     `)
