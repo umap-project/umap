@@ -665,7 +665,7 @@ class Feature {
   }
 
   redraw() {
-    if (this.datalayer?.isVisible()) {
+    if (this.datalayer?.isVisible() && this.ui?.isVisible()) {
       if (this.getUIClass() !== this.ui.getClass()) {
         this.datalayer.hideFeature(this)
         this.makeUI()
