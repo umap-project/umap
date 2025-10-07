@@ -269,7 +269,7 @@ export class FieldManager extends Map {
     if (this.parent.filters) {
       addFilter.addEventListener('click', () => {
         this.dialog.accept()
-        this.parent.filters.filterForm(field.key)
+        this.parent.filters.createFilterForm(field.key)
       })
       addFilter.hidden = false
     }

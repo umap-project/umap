@@ -227,7 +227,7 @@ def test_add_filter_on_map_field(live_server, openmap, page):
     page.locator(".panel").get_by_title("Edit properties in a table").click()
     table.locator("thead button[data-property=mynumber]").click()
     page.get_by_role("button", name="Add filter for this field").click()
-    expect(page.locator("dialog").get_by_label("minmax", exact=True)).to_be_checked()
+    expect(page.locator("dialog").get_by_label("Min/Max", exact=True)).to_be_checked()
     page.locator("dialog").get_by_label("human readable name").fill("My Fun Filter")
     page.wait_for_timeout(300)  # Throttling…
     page.get_by_role("button", name="OK").click()
@@ -236,5 +236,5 @@ def test_add_filter_on_map_field(live_server, openmap, page):
         page.get_by_role("button", name="Save").click()
     saved = Map.objects.first()
     assert saved.settings["properties"]["filters"] == {
-        "mynumber": {"widget": "minmax", "label": "My Fun Filter"}
+        "mynumber": {"widget": "MinMax", "label": "My Fun Filter"}
     }

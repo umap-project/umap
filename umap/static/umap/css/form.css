@@ -314,7 +314,8 @@ details fieldset {
     overflow: hidden;
     border: 1px solid var(--color-lightGray);
     margin: 0;
-    padding-top: 10px;
+    padding: var(--text-margin);
+    margin-bottom: var(--text-margin);
 }
 
 details summary {
@@ -787,4 +788,49 @@ input.highlightable:not(:placeholder-shown) {
 .select-with-actions {
     display: flex;
     align-items: center;
+}
+
+.ternary-switch {
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border: 1px solid var(--color-mediumGray);
+    border-radius: var(--border-radius);
+}
+
+.ternary-switch input[type="radio"] {
+    display: none;
+}
+
+.ternary-switch label {
+    cursor: pointer;
+    text-align: center;
+}
+
+.ternary-switch::before {
+    --nb-of-items: 3;
+    --fraction-width: calc(100%/var(--nb-of-items));
+    content: '';
+    position: absolute;
+    left: 0;
+    width: var(--fraction-width);
+    height: 100%;
+    opacity: .5;
+    transition: .5s left ease;
+    background: var(--color-mediumGray);
+}
+
+.ternary-switch:has(input[type="radio"]:nth-of-type(1):checked):before {
+    left: 0%;
+    background: var(--color-accent);
+}
+
+.ternary-switch:has(input[type="radio"]:nth-of-type(2):checked):before {
+    left: var(--fraction-width);
+}
+
+.ternary-switch:has(input[type="radio"]:nth-of-type(3):checked):before {
+    left: calc(var(--fraction-width) * 2);
+    background: var(--color-accent);
 }

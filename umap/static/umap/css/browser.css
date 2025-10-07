@@ -40,13 +40,6 @@
     color: #b3b3b3;
 }
 
-.umap-browser li {
-    padding: 2px 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
 .umap-browser .datalayer li:nth-child(even) {
     background-color: #efefef;
 }
@@ -167,6 +160,6 @@
 
 .umap-browser .filter-toolbox {
     position: absolute;
-    right: 25px;
+    right: calc(var(--gutter) * 2);
     background-color: var(--background-color);
 }

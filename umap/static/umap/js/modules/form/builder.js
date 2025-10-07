@@ -84,7 +84,7 @@ export class Form extends Utils.WithEvents {
 
   getName(field) {
     const fieldEls = field.split('.')
-    return fieldEls[fieldEls.length - 1]
+    return Utils.escapeHTML(fieldEls[fieldEls.length - 1])
   }
 
   fetchAll() {

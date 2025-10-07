@@ -51,7 +51,7 @@ export default class TableEditor extends WithTemplate {
     actions.push({
       label: actionLabel,
       action: () => {
-        parent.filters.filterForm(name)
+        parent.filters.createFilterForm(name)
         this._umap.browser.open('filters')
       },
     })
