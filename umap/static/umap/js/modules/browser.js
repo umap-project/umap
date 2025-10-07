@@ -25,12 +25,12 @@ export default class Browser {
       <li class="feature ${feature.getClassName()} ${feature.getUniqueClassName()} with-toolbox">
         <span>
           <i class="icon icon-16 icon-${feature.getClassName()} feature-color" data-ref=colorBox></i>
-          <span class="feature-title" data-ref=label></span>
+          <span class="feature-title truncate" data-ref=label></span>
         </span>
         <span>
-          <button class="icon icon-16 icon-zoom" title="${translate('Bring feature to center')}" data-ref=zoom></button>
-          <button class="icon icon-16 show-on-edit icon-edit" title="${translate('Edit this feature')}" data-ref=edit></button>
-          <button class="icon icon-16 show-on-edit icon-delete" title="${translate('Delete this feature')}" data-ref=remove></button>
+          <button class="icon icon-16 icon-zoom" title="${translate('Bring feature to center')}" data-ref=zoom></button
+          ><button class="icon icon-16 show-on-edit icon-edit" title="${translate('Edit this feature')}" data-ref=edit></button
+          ><button class="icon icon-16 show-on-edit icon-delete" title="${translate('Delete this feature')}" data-ref=remove></button>
         </span>
       </li>
     `
@@ -61,7 +61,7 @@ export default class Browser {
       <details class="datalayer ${datalayer.getHidableClass()}" id="${this.datalayerId(datalayer)}"${open}>
         <summary data-ref=headline class="with-toolbox">
           <span>
-            <span class="datalayer-name" data-id="${datalayer.id}" data-ref=label></span>
+            <span class="datalayer-name truncate" data-id="${datalayer.id}" data-ref=label></span>
             <span class="datalayer-counter"></span>
           </span>
           <span data-ref=toolbox></span>

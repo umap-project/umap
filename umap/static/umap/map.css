@@ -57,8 +57,8 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
 .with-toolbox {
     display: flex;
     justify-content: space-between;
-    padding-inline-start: var(--medium-box-padding);
-    padding-inline-end: var(--medium-box-padding);
+    align-items: center;
+    padding: 0;
 }
 
 /* *********** */

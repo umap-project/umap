@@ -227,7 +227,9 @@ def test_websocket_connection_can_sync_datalayer_properties(
     peerA.locator("body").press("Escape")
 
     peerB.get_by_role("button", name="Manage layers").click()
-    peerB.locator(".panel.right").get_by_role("button", name="Edit").first.click()
+    peerB.locator(".panel.right").get_by_role(
+        "button", name="Edit", exact=True
+    ).first.click()
     expect(peerB.locator('input[name="name"]')).to_have_value("synced layer!")
     expect(peerB.get_by_role("combobox")).to_have_value("Choropleth")
 
