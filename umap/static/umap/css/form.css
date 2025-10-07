@@ -797,6 +797,8 @@ input.highlightable:not(:placeholder-shown) {
     align-items: center;
     border: 1px solid var(--color-mediumGray);
     border-radius: var(--border-radius);
+    --nb-of-items: 3;
+    --fraction-width: calc(100%/var(--nb-of-items));
 }
 
 .ternary-switch input[type="radio"] {
@@ -809,8 +811,6 @@ input.highlightable:not(:placeholder-shown) {
 }
 
 .ternary-switch::before {
-    --nb-of-items: 3;
-    --fraction-width: calc(100%/var(--nb-of-items));
     content: '';
     position: absolute;
     left: 0;

@@ -37,17 +37,28 @@ class BaseWidget {
   }
 
   dumps() {
-    return {
-      label: this.label,
-      widget: this.constructor.KEY,
+    const props = {
+      widget: this.key,
     }
+    if (this.label) {
+      props.label = this.label
+    }
+    return props
   }
+
+  getFormField(field) {
+    return 'FilterByCheckbox'
+  }
+
+  computeInitialData(data, value) {}
 }
 
 Widgets.MinMax = class extends BaseWidget {
-  static LABEL = translate('Min/Max')
-  // FIXME use this.constructor.name in a dynamic getter ?
-  static KEY = 'MinMax'
+  constructor(parent, label, field) {
+    super(parent, label, field)
+    // FIXME make it dynamic from class name
+    this.key = 'MinMax'
+  }
   match(value) {
     if (this.userData.min > value) return true
     if (this.userData.max < value) return true
@@ -56,7 +67,30 @@ Widgets.MinMax = class extends BaseWidget {
   isActive() {
     return this.userData.min !== undefined || this.userData.max !== undefined
   }
+  getFormField(field) {
+    if (field.type === 'Number') {
+      return 'FilterByNumber'
+    }
+    if (field.type === 'Date') {
+      return 'FilterByDate'
+    }
+    if (field.type === 'Datetime') {
+      return 'FilterByDateTime'
+    }
+    return super.getFormField(field)
+  }
+  computeInitialData(data, value) {
+    if (value === undefined || value === null) return
+    if (data.min === undefined || data.min > value) {
+      data.min = value
+    }
+    if (data.max === undefined || data.max < value) {
+      data.max = value
+    }
+  }
 }
+// Can't use static properties yet (baseline >= 2022)
+Widgets.MinMax.NAME = translate('Min/Max')
 
 class Choices extends BaseWidget {
   match(value) {
@@ -73,23 +107,42 @@ class Choices extends BaseWidget {
   isActive() {
     return !!this.userData.selected?.length
   }
+
+  computeInitialData(data, value) {
+    data.choices ??= new Set()
+    if (Array.isArray(value)) {
+      data.choices = new Set([...data.choices, ...value])
+    } else {
+      value = value || translate('<empty value>')
+      data.choices.add(value)
+    }
+  }
 }
 
-// biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
 Widgets.Checkbox = class extends Choices {
-  static LABEL = translate('Multiple choices')
-  static KEY = 'Checkbox'
+  constructor(parent, label, field) {
+    super(parent, label, field)
+    this.key = 'Checkbox'
+  }
 }
+Widgets.Checkbox.NAME = translate('Multiple choices')
 
-// biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
 Widgets.Radio = class extends Choices {
-  static LABEL = translate('Exclusive choice')
-  static KEY = 'Radio'
+  constructor(parent, label, field) {
+    super(parent, label, field)
+    this.key = 'Radio'
+  }
+  getFormField(field) {
+    return 'FilterByRadio'
+  }
 }
+Widgets.Radio.NAME = translate('Exclusive choice')
 
 Widgets.Switch = class extends BaseWidget {
-  static LABEL = translate('Yes/No')
-  static KEY = 'Switch'
+  constructor(parent, label, field) {
+    super(parent, label, field)
+    this.key = 'Switch'
+  }
   match(value) {
     if (this.userData.wanted === undefined) return false
     return !!value !== this.userData.wanted
@@ -97,7 +150,11 @@ Widgets.Switch = class extends BaseWidget {
   isActive() {
     return this.userData.wanted !== undefined
   }
+  getFormField(field) {
+    return 'FilterBySwitch'
+  }
 }
+Widgets.Switch.NAME = translate('Yes/No')
 
 const loadWidget = (key) => {
   return Widgets[key] || Widgets.Checkbox
@@ -122,82 +179,37 @@ export default class Filters {
 
   // Loop on the data to compute the list of choices, min
   // and max values.
-  compute() {
-    const properties = Object.fromEntries(
+  computeInitialData() {
+    const initialData = Object.fromEntries(
       this.available.keys().map((name) => [name, {}])
     )
 
-    for (const name of this.available.keys()) {
+    for (const [name, filter] of this.available.entries()) {
       const field = this._parent.fields.get(name)
       if (!field) continue
-      properties[name].choices ??= new Set()
       const parser = getParser(field.type)
       this._parent.eachFeature((feature) => {
         let value = feature.properties[name]
         value = parser(value)
-        switch (field.type) {
-          case 'Date':
-          case 'Datetime':
-          case 'Number':
-            if (!Number.isNaN(value)) {
-              // Special cases where we want to be lousy when checking isNaN without
-              // coercing to a Number first because we handle multiple types.
-              // See https://developer.mozilla.org/en-US/docs/Web/JavaScript/
-              // Reference/Global_Objects/Number/isNaN
-              // biome-ignore lint/suspicious/noGlobalIsNan: see above.
-              if (isNaN(properties[name].min) || properties[name].min > value) {
-                properties[name].min = value
-              }
-              // biome-ignore lint/suspicious/noGlobalIsNan: see above.
-              if (isNaN(properties[name].max) || properties[name].max < value) {
-                properties[name].max = value
-              }
-            }
-            break
-          case 'Enum':
-            properties[name].choices = Array.from(
-              new Set([...properties[name].choices, ...value])
-            )
-            break
-          default:
-            value = value || translate('<empty value>')
-            properties[name].choices.add(value)
-        }
+        filter.computeInitialData(initialData[name], value)
       })
     }
-    return properties
+    return initialData
   }
 
   buildFormFields() {
-    const filterProperties = this.compute()
+    const initialData = this.computeInitialData()
 
     const formFields = []
-    for (const [name, obj] of this.available.entries()) {
-      const criteria = filterProperties[name] || {}
+    for (const [name, filter] of this.available.entries()) {
       const field = this._parent.fields.get(name)
       if (!field) continue
-      const type = field.type
-      let handler = 'FilterByCheckbox'
-      if (obj instanceof Widgets.Radio) {
-        handler = 'FilterByRadio'
-      } else if (obj instanceof Widgets.Switch) {
-        handler = 'FilterBySwitch'
-      } else if (obj instanceof Widgets.MinMax) {
-        if (type === 'Number') {
-          handler = 'FilterByNumber'
-        } else if (type === 'Date') {
-          handler = 'FilterByDate'
-        } else if (type === 'Datetime') {
-          handler = 'FilterByDateTime'
-        }
-      }
-      const label = Utils.escapeHTML(this.available.get(name).label || field.key)
       formFields.push([
         `userData.${name}`,
         {
-          criteria: { ...criteria, choices: Array.from(criteria.choices) },
-          handler: handler,
-          label: label,
+          initialData: initialData[name] || {},
+          handler: filter.getFormField(field),
+          label: Utils.escapeHTML(this.available.get(name).label || field.key),
           onClick: () => {
             this._parent
               .edit()
@@ -370,7 +382,7 @@ export default class Filters {
       target: this._parent.filters.size ? this._parent : null,
       key,
       widget,
-      ...(this.available.get(key) || {}),
+      ...(this.available?.get(key)?.dumps() || {}),
     }
     const fieldKeys = key
       ? [key]
@@ -400,7 +412,7 @@ export default class Filters {
         'widget',
         {
           handler: 'MultiChoice',
-          choices: Object.entries(Widgets).map(([key, klass]) => [key, klass.LABEL]),
+          choices: Object.entries(Widgets).map(([key, klass]) => [key, klass.NAME]),
           label: translate('Widget for the filter'),
         },
       ],
@@ -498,10 +510,9 @@ const FilterByChoices = class extends FilterBase {
   }
 
   build() {
-    this.type = this.constructor.TYPE
-    console.log(this.type, this.properties.criteria)
+    this.type = this.getType()
 
-    const choices = this.properties.criteria.choices
+    const choices = Array.from(this.properties.initialData.choices || [])
     choices.sort()
     choices.forEach((value) => this.buildLi(value))
     super.build()
@@ -533,21 +544,19 @@ const FilterByChoices = class extends FilterBase {
   }
 }
 
-// biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
 Fields.FilterByCheckbox = class extends FilterByChoices {
-  static TYPE = 'checkbox'
+  getType() {
+    return 'checkbox'
+  }
 }
 
-// biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
 Fields.FilterByRadio = class extends FilterByChoices {
-  static TYPE = 'radio'
+  getType() {
+    return 'radio'
+  }
 }
 
 Fields.MinMaxBase = class extends FilterBase {
-  getInputType(type) {
-    return type
-  }
-
   getLabels() {
     return [translate('Min'), translate('Max')]
   }
@@ -558,9 +567,8 @@ Fields.MinMaxBase = class extends FilterBase {
 
   getTemplate() {
     const [minLabel, maxLabel] = this.getLabels()
-    const { min, max, widget } = this.properties.criteria
-    this.type = widget
-    const inputType = this.getInputType(this.type)
+    const { min, max } = this.properties.initialData
+    const inputType = this.getInputType()
     const minHTML = this.prepareForHTML(min)
     const maxHTML = this.prepareForHTML(max)
     return `
@@ -572,7 +580,7 @@ Fields.MinMaxBase = class extends FilterBase {
   build() {
     this.minInput = this.elements.minInput
     this.maxInput = this.elements.maxInput
-    const { min, max, type } = this.properties.criteria
+    const { min, max, type } = this.properties.initialData
     const { min: userMin, max: userMax } = this.get() || {}
 
     const currentMin = userMin !== undefined ? userMin : min
