@@ -72,7 +72,7 @@ const colorNameToHex = (str) => {
   ctx.fillStyle = str
   return ctx.fillStyle
 }
-const hexToRGB = (hex) => {
+export const hexToRGB = (hex) => {
   return hex
     .replace(
       /^#?([a-f\d])([a-f\d])([a-f\d])$/i,

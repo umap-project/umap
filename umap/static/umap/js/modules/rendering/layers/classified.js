@@ -2,6 +2,7 @@ import colorbrewer from '../../../../vendors/colorbrewer/colorbrewer.js'
 import { DomUtil, FeatureGroup } from '../../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from '../../i18n.js'
 import * as Utils from '../../utils.js'
+import * as DOMUtils from '../../domutils.js'
 import { CircleMarker } from '../ui.js'
 import { LayerMixin } from './base.js'
 
@@ -76,15 +77,21 @@ const ClassifiedMixin = {
 
   renderLegend: function (container) {
     if (!this.datalayer.isLoaded()) return
-    const parent = DomUtil.create('ul', '', container)
+    const ul = Utils.loadTemplate('<ul></ul>')
     const items = this.getLegendItems()
     for (const [color, label] of items) {
-      const li = DomUtil.create('li', '', parent)
-      const colorEl = DomUtil.create('span', 'datalayer-color', li)
-      colorEl.style.backgroundColor = color
-      const labelEl = DomUtil.create('span', '', li)
-      labelEl.textContent = label
+      const rgbColor = DOMUtils.hexToRGB(color)
+      const opacity = this.datalayer.getOption('fillOpacity')
+      const bgColor = `rgba(${rgbColor.join(',')}, ${opacity})`
+      const li = Utils.loadTemplate(`
+        <li>
+          <span class="datalayer-color" style="background-color: ${bgColor};"></span>
+          <span>${label}</span>
+        </li>
+      `)
+      ul.appendChild(li)
     }
+    container.appendChild(ul)
   },
 
   getColorSchemes: function (classes) {
