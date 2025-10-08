@@ -4,122 +4,217 @@ import * as Utils from './utils.js'
 import Orderable from './orderable.js'
 import { Fields } from './form/fields.js'
 
-const WIDGETS = ['checkbox', 'radio', 'minmax']
+const getParser = (type) => {
+  switch (type) {
+    case 'Number':
+      return Number.parseFloat
+    case 'Datetime':
+      return (v) => new Date(v)
+    case 'Date':
+      return Utils.parseNaiveDate
+    case 'Boolean':
+      return Boolean
+    case 'Enum':
+      return (v) =>
+        String(v || '')
+          .split(',')
+          .map((s) => s.trim())
+    default:
+      return (v) => String(v || '')
+  }
+}
+const Widgets = {}
 
-class FiltersForm extends Form {
-  buildField(field) {
-    const [root, elements] = field.buildTemplate()
-    elements.editFilter.addEventListener('click', field.properties.onClick)
-    field.build()
+class BaseWidget {
+  constructor(parent, label, field) {
+    this.parent = parent
+    this.label = label
+    this.field = field
   }
 
-  getHelperTemplate(helper) {
-    return helper.getTemplate()
+  get userData() {
+    return this.parent.userData[this.field] || {}
   }
+
+  dumps() {
+    const props = {
+      widget: this.key,
+    }
+    if (this.label) {
+      props.label = this.label
+    }
+    return props
+  }
+
+  getFormField(field) {
+    return 'FilterByCheckbox'
+  }
+
+  computeInitialData(data, value) {}
+}
+
+Widgets.MinMax = class extends BaseWidget {
+  constructor(parent, label, field) {
+    super(parent, label, field)
+    // FIXME make it dynamic from class name
+    this.key = 'MinMax'
+  }
+  match(value) {
+    if (this.userData.min > value) return true
+    if (this.userData.max < value) return true
+    return false
+  }
+  isActive() {
+    return this.userData.min !== undefined || this.userData.max !== undefined
+  }
+  getFormField(field) {
+    if (field.type === 'Number') {
+      return 'FilterByNumber'
+    }
+    if (field.type === 'Date') {
+      return 'FilterByDate'
+    }
+    if (field.type === 'Datetime') {
+      return 'FilterByDateTime'
+    }
+    return super.getFormField(field)
+  }
+  computeInitialData(data, value) {
+    if (value === undefined || value === null) return
+    if (data.min === undefined || data.min > value) {
+      data.min = value
+    }
+    if (data.max === undefined || data.max < value) {
+      data.max = value
+    }
+  }
+}
+// Can't use static properties yet (baseline >= 2022)
+Widgets.MinMax.NAME = translate('Min/Max')
+
+class Choices extends BaseWidget {
+  match(value) {
+    if (!this.userData.selected?.length) return false
+    if (Array.isArray(value)) {
+      const intersection = value.filter((item) => this.userData.selected.includes(item))
+      if (intersection.length !== this.userData.selected.length) return true
+    } else {
+      value = value || translate('<empty value>')
+      if (!this.userData.selected.includes(value)) return true
+    }
+    return false
+  }
+  isActive() {
+    return !!this.userData.selected?.length
+  }
+
+  computeInitialData(data, value) {
+    data.choices ??= new Set()
+    if (Array.isArray(value)) {
+      data.choices = new Set([...data.choices, ...value])
+    } else {
+      value = value || translate('<empty value>')
+      data.choices.add(value)
+    }
+  }
+}
+
+Widgets.Checkbox = class extends Choices {
+  constructor(parent, label, field) {
+    super(parent, label, field)
+    this.key = 'Checkbox'
+  }
+}
+Widgets.Checkbox.NAME = translate('Multiple choices')
+
+Widgets.Radio = class extends Choices {
+  constructor(parent, label, field) {
+    super(parent, label, field)
+    this.key = 'Radio'
+  }
+  getFormField(field) {
+    return 'FilterByRadio'
+  }
+}
+Widgets.Radio.NAME = translate('Exclusive choice')
+
+Widgets.Switch = class extends BaseWidget {
+  constructor(parent, label, field) {
+    super(parent, label, field)
+    this.key = 'Switch'
+  }
+  match(value) {
+    if (this.userData.wanted === undefined) return false
+    return !!value !== this.userData.wanted
+  }
+  isActive() {
+    return this.userData.wanted !== undefined
+  }
+  getFormField(field) {
+    return 'FilterBySwitch'
+  }
+}
+Widgets.Switch.NAME = translate('Yes/No')
+
+const loadWidget = (key) => {
+  return Widgets[key] || Widgets.Checkbox
 }
 
 export default class Filters {
   constructor(parent, umap) {
     this._parent = parent
     this._umap = umap
-    this.selected = {}
+    this.available = new Map()
+    this.userData = {}
     this.load()
   }
 
   get size() {
-    return this.defined.size
+    return this.available.size
   }
 
   isActive() {
-    for (const { type, min, max, choices } of Object.values(this.selected)) {
-      if (min !== undefined || max !== undefined || choices?.length) {
-        return true
-      }
-    }
-    return false
+    return this.available.values().some((obj) => obj.isActive())
   }
 
   // Loop on the data to compute the list of choices, min
   // and max values.
-  compute() {
-    const properties = Object.fromEntries(this.defined.keys().map((name) => [name, {}]))
+  computeInitialData() {
+    const initialData = Object.fromEntries(
+      this.available.keys().map((name) => [name, {}])
+    )
 
-    for (const name of this.defined.keys()) {
+    for (const [name, filter] of this.available.entries()) {
       const field = this._parent.fields.get(name)
       if (!field) continue
-      properties[name].choices ??= new Set()
-      const parser = this.getParser(field.type)
+      const parser = getParser(field.type)
       this._parent.eachFeature((feature) => {
         let value = feature.properties[name]
         value = parser(value)
-        switch (field.type) {
-          case 'Date':
-          case 'Datetime':
-          case 'Number':
-            if (!Number.isNaN(value)) {
-              // Special cases where we want to be lousy when checking isNaN without
-              // coercing to a Number first because we handle multiple types.
-              // See https://developer.mozilla.org/en-US/docs/Web/JavaScript/
-              // Reference/Global_Objects/Number/isNaN
-              // biome-ignore lint/suspicious/noGlobalIsNan: see above.
-              if (isNaN(properties[name].min) || properties[name].min > value) {
-                properties[name].min = value
-              }
-              // biome-ignore lint/suspicious/noGlobalIsNan: see above.
-              if (isNaN(properties[name].max) || properties[name].max < value) {
-                properties[name].max = value
-              }
-            }
-            break
-          case 'Enum':
-            properties[name].choices = Array.from(
-              new Set([...properties[name].choices, ...value])
-            )
-            break
-          default:
-            value = value || translate('<empty value>')
-            properties[name].choices.add(value)
-        }
+        filter.computeInitialData(initialData[name], value)
       })
     }
-    return properties
+    return initialData
   }
 
   buildFormFields() {
-    const filterProperties = this.compute()
+    const initialData = this.computeInitialData()
 
     const formFields = []
-    for (const name of this.defined.keys()) {
-      const criteria = filterProperties[name] || {}
+    for (const [name, filter] of this.available.entries()) {
       const field = this._parent.fields.get(name)
       if (!field) continue
-      const type = field.type
-      let handler = 'FilterByChoices'
-      if (criteria.widget === 'minmax' || criteria.widget === undefined) {
-        if (type === 'Number') {
-          handler = 'FilterByNumber'
-        } else if (type === 'Date') {
-          handler = 'FilterByDate'
-        } else if (type === 'Datetime') {
-          handler = 'FilterByDateTime'
-        }
-      }
-      const label = `
-        <span>${Utils.escapeHTML(this.defined.get(name).label || field.key)}</span>
-        <span class="filter-toolbox">
-          <button type="button" class="icon icon-16 icon-edit show-on-edit" data-ref=editFilter></button>
-        </span>`
       formFields.push([
-        `selected.${name}`,
+        `userData.${name}`,
         {
-          criteria: { ...criteria, choices: Array.from(criteria.choices) },
-          handler: handler,
-          label: label,
+          initialData: initialData[name] || {},
+          handler: filter.getFormField(field),
+          label: Utils.escapeHTML(this.available.get(name).label || field.key),
           onClick: () => {
             this._parent
               .edit()
               .then((panel) => panel.scrollTo('details#fields-management'))
-            this._parent.filters.filterForm(name)
+            this._parent.filters.createFilterForm(name)
           },
         },
       ])
@@ -128,7 +223,9 @@ export default class Filters {
   }
 
   load() {
-    this.defined = new Map(Object.entries(this._parent.properties.filters || {}))
+    for (const [key, props] of Object.entries(this._parent.properties.filters || {})) {
+      this._add({ key, ...props })
+    }
     this.loadLegacy()
   }
 
@@ -148,12 +245,16 @@ export default class Filters {
         } else if (widget === 'date') {
           type = 'Date'
         }
-        widget = 'minmax'
+        widget = 'MinMax'
       }
-      if (!WIDGETS.includes(widget)) {
-        widget = 'checkbox'
+      if (widget === 'radio') {
+        widget = 'Radio'
       }
-      this.defined.set(key, { label: label || key, widget })
+      if (!(widget in Widgets)) {
+        widget = 'Checkbox'
+      }
+      this._add({ key, label, widget })
+      // this.available.set(key, { label: label || key, widget })
       if (!this._parent.fields.has(key)) {
         this._parent.fields.add({ key, type })
       }
@@ -164,27 +265,12 @@ export default class Filters {
     this._parent._migrated = true
   }
 
-  getParser(type) {
-    switch (type) {
-      case 'Number':
-        return Number.parseFloat
-      case 'Datetime':
-        return (v) => new Date(v)
-      case 'Date':
-        return Utils.parseNaiveDate
-      case 'Enum':
-        return (v) =>
-          String(v || '')
-            .split(',')
-            .map((s) => s.trim())
-      default:
-        return (v) => String(v || '')
-    }
-  }
-
   dumps(sync = true) {
     const oldValue = this._parent.properties.filters
-    this._parent.properties.filters = Object.fromEntries(this.defined.entries())
+    this._parent.properties.filters = {}
+    for (const [key, filter] of this.available.entries()) {
+      this._parent.properties.filters[key] = filter.dumps()
+    }
     if (sync) {
       this._parent.sync.update(
         'properties.filters',
@@ -195,27 +281,33 @@ export default class Filters {
     }
   }
 
-  has(name) {
-    return this.defined.has(name)
+  has(key) {
+    return this.available.has(key)
   }
 
-  get(name) {
-    return this.defined.get(name)
+  get(key) {
+    return this.available.get(key)
   }
 
-  add({ name, label, widget }) {
-    if (!this.defined.has(name)) {
-      this.update({ name, label, widget })
+  add({ key, label, widget }) {
+    if (!this.available.has(key)) {
+      this.update({ key, label, widget })
     }
   }
 
-  update({ name, label, widget }) {
-    this.defined.set(name, { label, widget })
+  _add({ key, label, widget }) {
+    const klass = loadWidget(widget)
+    const inst = new klass(this, label, key)
+    this.available.set(key, inst)
+  }
+
+  update({ key, label, widget }) {
+    this._add({ key, label, widget })
     this.dumps()
   }
 
-  remove(name) {
-    this.defined.delete(name)
+  remove(key) {
+    this.available.delete(key)
     this.dumps()
   }
 
@@ -239,13 +331,13 @@ export default class Filters {
       )
     }
     this._umap.help.parse(body)
-    this.defined.forEach((props, key) => {
+    this.available.forEach((filter, key) => {
       const [li, { edit, remove }] = Utils.loadTemplateWithRefs(
         `<li class="orderable" data-key="${key}">
           <button class="icon icon-16 icon-edit" data-ref="edit" title="${translate('Edit this filter')}"></button>
           <button class="icon icon-16 icon-delete" data-ref="remove" title="${translate('Remove this filter')}"></button>
           <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
-          ${props.label || key}
+          ${filter.label || key}
         </li>`
       )
       ul.appendChild(li)
@@ -254,19 +346,19 @@ export default class Filters {
         this._parent.edit().then((panel) => panel.scrollTo('details#fields-management'))
       })
       edit.addEventListener('click', () => {
-        this.filterForm(key)
+        this.createFilterForm(key)
       })
     })
-    add.addEventListener('click', () => this.filterForm())
+    add.addEventListener('click', () => this.createFilterForm())
     const onReorder = (src, dst, initialIndex, finalIndex) => {
       const orderedKeys = Array.from(ul.querySelectorAll('li')).map(
         (el) => el.dataset.key
       )
       const oldValue = Utils.CopyJSON(this._parent.properties.filters)
-      const copy = Object.fromEntries(this.defined)
-      this.defined.clear()
+      const copy = Object.fromEntries(this.available)
+      this.available.clear()
       for (const key of orderedKeys) {
-        this.add({ name: key, ...copy[key] })
+        this.add({ name: key, ...copy[key].dumps() })
       }
       this._parent.sync.update(
         'properties.filters',
@@ -278,32 +370,34 @@ export default class Filters {
     container.appendChild(body)
   }
 
-  filterForm(name) {
-    let widget = WIDGETS[0]
-    const field = this._parent.fields.get(name)
+  createFilterForm(key) {
+    let widget = 'Checkbox'
+    const field = this._parent.fields.get(key)
     if (['Number', 'Date', 'Datetime'].includes(field?.type)) {
-      widget = 'minmax'
+      widget = 'MinMax'
+    } else if (field?.type === 'Boolean') {
+      widget = 'Switch'
     }
     const properties = {
-      target: this._parent,
-      name,
+      target: this._parent.filters.size ? this._parent : null,
+      key,
       widget,
-      ...(this.defined.get(name) || {}),
+      ...(this.available?.get(key)?.dumps() || {}),
     }
-    const fieldKeys = name
-      ? [name]
-      : ['', ...this._parent.fieldKeys.filter((key) => !this.defined.has(key))]
+    const fieldKeys = key
+      ? [key]
+      : ['', ...this._parent.fieldKeys.filter((key) => !this.available.has(key))]
     const metadata = [
       [
         'target',
         {
           handler: 'FilterTargetSelect',
           label: translate('Apply filter to'),
-          disabled: Boolean(name),
+          disabled: Boolean(key),
         },
       ],
       [
-        'name',
+        'key',
         {
           handler: 'Select',
           selectOptions: fieldKeys,
@@ -318,14 +412,14 @@ export default class Filters {
         'widget',
         {
           handler: 'MultiChoice',
-          choices: WIDGETS,
+          choices: Object.entries(Widgets).map(([key, klass]) => [key, klass.NAME]),
           label: translate('Widget for the filter'),
         },
       ],
     ]
     const form = new Form(properties, metadata, { umap: this._umap })
     let label
-    if (name) {
+    if (key) {
       label = translate('Edit filter')
     } else {
       label = translate('Add filter')
@@ -341,13 +435,14 @@ export default class Filters {
     body.appendChild(form.build())
     editField.addEventListener('click', () => {
       this._umap.dialog.accept()
-      this._parent.fields.editField(name)
+      this._parent.fields.editField(key)
     })
 
     return this._umap.dialog.open({ template: container }).then(() => {
       const target = properties.target
-      if (!properties.name) return
-      if (name) {
+      if (!target) return
+      if (!properties.key) return
+      if (key) {
         target.filters.update({ ...properties })
       } else {
         target.filters.add({ ...properties })
@@ -363,26 +458,61 @@ export default class Filters {
     container.appendChild(form.build())
     return form
   }
+
+  matchFeature(feature) {
+    for (const [key, obj] of this.available.entries()) {
+      if (!obj.isActive()) continue
+      const field = this._parent.fields.get(key)
+      // This field may only exist on another layer.
+      if (!field) continue
+      let value = feature.properties[key]
+      const parser = getParser(field.type)
+      value = parser(value)
+      if (obj.match(value)) return true
+    }
+    return false
+  }
 }
 
-Fields.FilterBase = class extends Fields.Base {
+class FiltersForm extends Form {
+  buildField(field) {
+    const [root, elements] = field.buildTemplate()
+    elements.editFilter.addEventListener('click', field.properties.onClick)
+    field.build()
+  }
+
+  getHelperTemplate(helper) {
+    return helper.getTemplate()
+  }
+
+  getTemplate(helper) {
+    return `
+      <fieldset class="umap-filter">
+        <legend data-ref=label>
+          <span>${helper.properties.label}</span>
+          <span class="filter-toolbox">
+            <button type="button" class="icon icon-16 icon-edit show-on-edit" data-ref=editFilter></button>
+          </span>
+        </legend>
+        <div data-ref="container">${helper.getTemplate()}</div>
+      </fieldset>
+    `
+  }
+}
+
+const FilterBase = class extends Fields.Base {
   buildLabel() {}
 }
 
-Fields.FilterByChoices = class extends Fields.FilterBase {
+const FilterByChoices = class extends FilterBase {
   getTemplate() {
-    return `
-      <fieldset class="umap-filter">
-        <legend data-ref=label>${this.properties.label}</legend>
-        <ul data-ref=ul></ul>
-      </fieldset>
-      `
+    return '<ul data-ref=ul></ul>'
   }
 
   build() {
-    this.type = this.properties.criteria.widget || 'checkbox'
+    this.type = this.getType()
 
-    const choices = this.properties.criteria.choices
+    const choices = Array.from(this.properties.initialData.choices || [])
     choices.sort()
     choices.forEach((value) => this.buildLi(value))
     super.build()
@@ -399,7 +529,7 @@ Fields.FilterByChoices = class extends Fields.FilterBase {
       </li>
     `)
     label.textContent = value
-    input.checked = this.get()?.choices?.includes(value)
+    input.checked = this.get()?.selected?.includes(value)
     input.dataset.value = value
     input.addEventListener('change', () => this.sync())
     this.elements.ul.appendChild(li)
@@ -407,19 +537,26 @@ Fields.FilterByChoices = class extends Fields.FilterBase {
 
   toJS() {
     return {
-      type: this.type,
-      choices: [...this.elements.ul.querySelectorAll('input:checked')].map(
+      selected: [...this.elements.ul.querySelectorAll('input:checked')].map(
         (i) => i.dataset.value
       ),
     }
   }
 }
 
-Fields.MinMaxBase = class extends Fields.FilterBase {
-  getInputType(type) {
-    return type
+Fields.FilterByCheckbox = class extends FilterByChoices {
+  getType() {
+    return 'checkbox'
   }
+}
 
+Fields.FilterByRadio = class extends FilterByChoices {
+  getType() {
+    return 'radio'
+  }
+}
+
+Fields.MinMaxBase = class extends FilterBase {
   getLabels() {
     return [translate('Min'), translate('Max')]
   }
@@ -430,28 +567,24 @@ Fields.MinMaxBase = class extends Fields.FilterBase {
 
   getTemplate() {
     const [minLabel, maxLabel] = this.getLabels()
-    const { min, max, widget } = this.properties.criteria
-    this.type = widget
-    const inputType = this.getInputType(this.type)
+    const { min, max } = this.properties.initialData
+    const inputType = this.getInputType()
     const minHTML = this.prepareForHTML(min)
     const maxHTML = this.prepareForHTML(max)
     return `
-      <fieldset class="umap-filter">
-        <legend>${this.properties.label}</legend>
-        <label>${minLabel}<input min="${minHTML}" max="${maxHTML}" step=any type="${inputType}" data-ref=minInput /></label>
-        <label>${maxLabel}<input min="${minHTML}" max="${maxHTML}" step=any type="${inputType}" data-ref=maxInput /></label>
-      </fieldset>
+      <label>${minLabel}<input min="${minHTML}" max="${maxHTML}" step=any type="${inputType}" data-ref=minInput /></label>
+      <label>${maxLabel}<input min="${minHTML}" max="${maxHTML}" step=any type="${inputType}" data-ref=maxInput /></label>
     `
   }
 
   build() {
     this.minInput = this.elements.minInput
     this.maxInput = this.elements.maxInput
-    const { min, max, type } = this.properties.criteria
-    const { min: modifiedMin, max: modifiedMax } = this.get() || {}
+    const { min, max, type } = this.properties.initialData
+    const { min: userMin, max: userMax } = this.get() || {}
 
-    const currentMin = modifiedMin !== undefined ? modifiedMin : min
-    const currentMax = modifiedMax !== undefined ? modifiedMax : max
+    const currentMin = userMin !== undefined ? userMin : min
+    const currentMax = userMax !== undefined ? userMax : max
     if (min != null) {
       // The value stored using setAttribute is not modified by
       // user input, and will be used as initial value when calling
@@ -498,9 +631,7 @@ Fields.MinMaxBase = class extends Fields.FilterBase {
   }
 
   toJS() {
-    const opts = {
-      type: this.type,
-    }
+    const opts = {}
     if (this.minInput.value !== '' && this.isMinModified()) {
       opts.min = this.prepareForJS(this.minInput.value)
     }
@@ -561,6 +692,9 @@ Fields.FilterTargetSelect = class extends Fields.Select {
   getOptions() {
     const options = []
     if (this.builder.properties.umap.fields.size) {
+      if (!this.obj.target) {
+        this.obj.target = this.builder.properties.umap
+      }
       options.push([
         `map:${this.builder.properties.umap.id}`,
         `${this.builder.properties.umap.properties.name} (${translate('all layers')})`,
@@ -568,6 +702,9 @@ Fields.FilterTargetSelect = class extends Fields.Select {
     }
     this.builder.properties.umap.datalayers.reverse().map((datalayer) => {
       if (datalayer.isBrowsable() && datalayer.fields.size) {
+        if (!this.obj.target) {
+          this.obj.target = datalayer
+        }
         options.push([
           `layer:${datalayer.id}`,
           `${datalayer.getName()}  (${translate('single layer')})`,
@@ -593,5 +730,37 @@ Fields.FilterTargetSelect = class extends Fields.Select {
       return this.builder.properties.umap
     }
     return this.builder.properties.umap.datalayers[id]
+  }
+}
+
+Fields.FilterBySwitch = class extends FilterBase {
+  getTemplate() {
+    return `
+      <div class="ternary-switch">
+        <input type="radio" id="${this.id}.1" name="${this.name}" value="true" />
+        <label tabindex="0" for="${this.id}.1">${translate('yes')}</label>
+        <input type="radio" id="${this.id}.2" name="${this.name}" value="unset" checked />
+        <label tabindex="0" for="${this.id}.2">${translate('unset')}</label>
+        <input type="radio" id="${this.id}.3" name="${this.name}" value="false" />
+        <label tabindex="0" for="${this.id}.3">${translate('no')}</label>
+      </div>
+    `
+  }
+
+  build() {
+    super.build()
+    this.inputs = Array.from(this.form[this.name])
+    for (const input of this.inputs) {
+      input.addEventListener('change', () => this.sync())
+    }
+  }
+
+  value() {
+    return this.form[this.name].value
+  }
+
+  toJS() {
+    if (this.value() === 'unset') return {}
+    return { wanted: this.value() === 'true' }
   }
 }

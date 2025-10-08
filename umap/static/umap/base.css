@@ -1,34 +1,55 @@
 /*
 * Generic
 */
-body, div, ul, ol, li, a, section, nav,
-h1, h2, h3, h4, h5, h6, label,
-hr, input, textarea, select, button {
+body,
+div,
+ul,
+ol,
+li,
+a,
+section,
+nav,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+label,
+fieldset,
+hr,
+input,
+textarea,
+summary,
+details,
+select,
+button {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
     font-family: "fira_sans", -apple-system, BlinkMacSystemFont,
-    "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
-    "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+        "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+        "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 }
-body, div, ul, ol, li, a, section, nav,
-h1, h2, h3, h4, h5, h6, label, hr {
-    padding: 0;
-}
+
 a {
     text-decoration: none;
     color: var(--link-color);
 }
+
 a.main {
     font-weight: bold;
     text-decoration: underline;
 }
+
 a[href^="http"]:not(nav.umap-nav a) {
     text-decoration: underline;
 }
+
 button {
     cursor: pointer;
 }
+
 hr {
     clear: both;
     width: 100%;
@@ -44,45 +65,59 @@ hr {
     border-style: solid;
     border-width: 1px 0 0;
 }
-h1, h2 {
+
+h1,
+h2 {
     margin-bottom: 28px;
 }
-h3, h4, h5 {
+
+h3,
+h4,
+h5 {
     margin-bottom: 14px;
 }
+
 p {
     line-height: 1.4;
     margin-top: 14px;
     margin-bottom: 14px;
 }
+
 kbd {
-  border: 1px solid #b4b4b4;
-  box-shadow:
-    0 1px 1px rgba(0, 0, 0, 0.2),
-    0 2px 0 0 rgba(255, 255, 255, 0.7) inset;
-  border-radius: 3px;
-  padding: 1px 4px;
-  display: inline-block;
-  white-space: nowrap;
+    border: 1px solid #b4b4b4;
+    box-shadow:
+        0 1px 1px rgba(0, 0, 0, 0.2),
+        0 2px 0 0 rgba(255, 255, 255, 0.7) inset;
+    border-radius: 3px;
+    padding: 1px 4px;
+    display: inline-block;
+    white-space: nowrap;
 }
+
 h3 {
     font-size: 1rem;
 }
+
 h4 {
     font-size: 0.9rem;
 }
+
 h5 {
     font-size: 0.8rem;
 }
+
 h6 {
     font-size: 0.7rem;
 }
-hgroup > * {
+
+hgroup>* {
     margin-bottom: 0;
 }
+
 hgroup {
     margin-bottom: var(--box-margin);
 }
+
 hgroup p,
 hgroup button {
     margin: 0;
@@ -92,13 +127,15 @@ hgroup button {
 * List
 */
 ul {
-    list-style-image:none;
-    list-style-position:inside;
-    list-style-type:none;
+    list-style-image: none;
+    list-style-position: inside;
+    list-style-type: none;
 }
+
 dt {
     font-weight: bold;
 }
+
 dd {
     margin: 0;
 }
@@ -110,6 +147,7 @@ dd {
     width: 100%;
     clear: both;
 }
+
 .wrapper:after {
     visibility: hidden;
     display: block;
@@ -118,6 +156,7 @@ dd {
     clear: both;
     height: 0;
 }
+
 .row {
     width: 100%;
     max-width: 1200px;
@@ -127,41 +166,54 @@ dd {
     margin-top: 0;
     margin-bottom: 2rem;
 }
+
 .col {
     float: inline-start;
 }
+
 .right {
     float: right;
 }
-.col + .col {
+
+.col+.col {
     padding-inline-start: 20px;
 }
+
 .half {
     width: 50%;
 }
+
 .third {
     width: 33.33%;
 }
+
 .two-third {
     width: 66.66%
 }
+
 .quarter {
     width: 25%;
 }
+
 .wide {
     width: 100%;
 }
-.col + .wide {
+
+.col+.wide {
     padding-inline-start: inherit;
 }
-.mshow, .tshow {
+
+.mshow,
+.tshow {
     display: none;
 }
+
 .center {
     margin-left: auto;
     margin-right: auto;
     float: none;
 }
+
 .grid-container {
     display: grid;
     --grid-layout-gap: calc(var(--gutter) * 2);
@@ -178,11 +230,13 @@ dd {
     grid-template-columns: repeat(auto-fill, minmax(max(var(--grid-item--min-width), var(--grid-item--max-width)), 1fr));
     grid-gap: var(--grid-layout-gap);
 }
+
 .grid-container.by4 {
     --grid-column-count: 4;
     --grid-item--min-width: 60px;
 }
-.grid-container > * {
+
+.grid-container>* {
     text-align: center;
 }
 
@@ -193,6 +247,7 @@ dd {
 .leaflet-ui-container {
     overflow-x: hidden;
 }
+
 .leaflet-top,
 .leaflet-right {
     transition: all .7s;
@@ -213,7 +268,7 @@ dd {
 }
 
 .umap-dragover:before {
-    content:  ' ';
+    content: ' ';
     background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="arcs">%3Cpath d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5"/>%3C/svg>');
     background-repeat: no-repeat;
     background-position: center;
@@ -225,11 +280,12 @@ dd {
     height: 100vh;
     opacity: 0.5;
 }
+
 .table-scrollable {
     background-image: linear-gradient(to right, var(--background-color), var(--background-color)),
-                      linear-gradient(to right, var(--background-color), var(--background-color)),
-                      linear-gradient(to right, rgba(0, 0, 20, .50), rgba(255, 255, 255, 0)),
-                      linear-gradient(to left, rgba(0, 0, 20, .50), rgba(255, 255, 255, 0));
+        linear-gradient(to right, var(--background-color), var(--background-color)),
+        linear-gradient(to right, rgba(0, 0, 20, .50), rgba(255, 255, 255, 0)),
+        linear-gradient(to left, rgba(0, 0, 20, .50), rgba(255, 255, 255, 0));
     background-position: left center, right center, left center, right center;
     background-repeat: no-repeat;
     background-size: 20px 100%, 20px 100%, 10px 100%, 10px 100%;
@@ -237,6 +293,7 @@ dd {
     display: block;
     overflow-x: auto;
 }
+
 mark {
     background-color: var(--color-lightCyan);
     padding: 0 var(--small-box-padding);

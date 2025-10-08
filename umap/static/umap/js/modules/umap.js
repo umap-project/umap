@@ -389,7 +389,8 @@ export default class Umap {
 
   hasFilters() {
     return (
-      this.filters.size || this.datalayers.active().some((d) => Boolean(d.filters.size))
+      this.filters.isActive() ||
+      this.datalayers.active().some((d) => d.filters.isActive())
     )
   }
 
@@ -1748,7 +1749,7 @@ export default class Umap {
         this.importRaw(rawData)
       } catch (e) {
         console.error('Error importing data', e)
-        U.Alert.error(
+        Alert.error(
           translate('Invalid umap data in {filename}', { filename: file.name })
         )
       }

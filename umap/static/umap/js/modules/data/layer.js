@@ -450,7 +450,8 @@ export class DataLayer {
     this.inferFields(feature)
     try {
       this.showFeature(feature)
-    } catch {
+    } catch (error) {
+      console.error(error)
       if (this._umap.editEnabled) {
         Alert.error(translate('Skipping invalid geometry'))
       }
@@ -489,10 +490,8 @@ export class DataLayer {
         if (key.indexOf('_') === 0) continue
         if (this.fields.has(key)) continue
         if (this._umap.fields.has(key)) continue
-        // retrocompat: guess type from filters if any
-        // otherwise it will fallback to default in filters
-        let type = this._umap.filters.get(key)?.dataType
-        if (!type && key === 'description') type = 'Text'
+        let type = 'String'
+        if (key === 'description') type = 'Text'
         this.fields.add({ key, type })
       }
     }

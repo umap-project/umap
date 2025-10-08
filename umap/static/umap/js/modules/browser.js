@@ -65,10 +65,10 @@ export default class Browser {
     `)
     datalayer.renderToolbox(toolbox)
     parent.appendChild(container)
-    this.updateDatalayer(datalayer)
+    this.updateFeaturesList(datalayer)
   }
 
-  updateDatalayer(datalayer) {
+  updateFeaturesList(datalayer) {
     // Compute once, but use it for each feature later.
     this.bounds = this._leafletMap.getBounds()
     const id = this.datalayerId(datalayer)
@@ -98,7 +98,7 @@ export default class Browser {
   onFormChange() {
     this._umap.datalayers.browsable().map((datalayer) => {
       datalayer.resetLayer(true)
-      this.updateDatalayer(datalayer)
+      this.updateFeaturesList(datalayer)
       if (this._umap.fullPanel?.isOpen()) datalayer.tableEdit()
     })
     this.toggleBadge()
@@ -113,19 +113,14 @@ export default class Browser {
   }
 
   hasFilters() {
-    return (
-      !!this.options.filter ||
-      this._umap.filters.isActive() ||
-      this._umap.datalayers.active().some((d) => d.filters.isActive())
-    )
+    return !!this.options.filter || this._umap.hasFilters()
   }
 
   onMoveEnd() {
     if (!this.isOpen()) return
-    const isListDynamic = this.options.inBbox
     this._umap.datalayers.browsable().map((datalayer) => {
-      if (!isListDynamic && !datalayer.hasDynamicData()) return
-      this.updateDatalayer(datalayer)
+      if (!this.options.inBbox && !datalayer.hasDynamicData()) return
+      this.updateFeaturesList(datalayer)
     })
   }
 
@@ -187,7 +182,7 @@ export default class Browser {
     reset.addEventListener('click', () => this.resetFilters())
     addFilter.addEventListener('click', () => {
       this._umap.edit().then((panel) => panel.scrollTo('details#fields-management'))
-      this._umap.filters.filterForm()
+      this._umap.filters.createFilterForm()
     })
 
     this.filtersTitle = filtersTitle

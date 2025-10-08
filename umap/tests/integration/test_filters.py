@@ -99,7 +99,7 @@ def test_simple_facet_search(live_server, page, map):
     map.settings["properties"]["onLoadPanel"] = "datafilters"
     map.settings["properties"]["filters"] = {
         "mytype": {"label": "My type"},
-        "mynumber": {"label": "My number", "widget": "minmax"},
+        "mynumber": {"label": "My number", "widget": "MinMax"},
     }
     map.settings["properties"]["fields"] = [
         {"key": "mytype", "type": "String"},
@@ -183,7 +183,7 @@ def test_simple_facet_search(live_server, page, map):
 def test_date_facet_search(live_server, page, map):
     map.settings["properties"]["onLoadPanel"] = "datafilters"
     map.settings["properties"]["filters"] = {
-        "mydate": {"label": "Date filter", "widget": "minmax"}
+        "mydate": {"label": "Date filter", "widget": "MinMax"}
     }
     map.settings["properties"]["fields"] = [{"key": "mydate", "type": "Date"}]
     map.save()
@@ -222,7 +222,7 @@ def test_choice_with_empty_value(live_server, page, map):
 def test_number_with_zero_value(live_server, page, map):
     map.settings["properties"]["onLoadPanel"] = "datafilters"
     map.settings["properties"]["filters"] = {
-        "mynumber": {"label": "Filter", "widget": "minmax"}
+        "mynumber": {"label": "Filter", "widget": "MinMax"}
     }
     map.settings["properties"]["fields"] = [{"key": "mynumber", "type": "Number"}]
     map.save()
@@ -243,7 +243,7 @@ def test_facets_search_are_persistent_when_closing_panel(live_server, page, map)
     map.settings["properties"]["onLoadPanel"] = "datafilters"
     map.settings["properties"]["filters"] = {
         "mytype": {"label": "My type"},
-        "mynumber": {"label": "My Number", "widget": "minmax"},
+        "mynumber": {"label": "My Number", "widget": "MinMax"},
     }
     map.settings["properties"]["fields"] = [
         {"key": "mytype"},
@@ -320,15 +320,15 @@ def test_can_load_legacy_facetKey(live_server, page, openmap):
     assert saved.settings["properties"]["filters"] == {
         "mydate": {
             "label": "My Date",
-            "widget": "minmax",
+            "widget": "MinMax",
         },
         "mynumber": {
             "label": "My Number",
-            "widget": "minmax",
+            "widget": "MinMax",
         },
         "mytype": {
             "label": "My Type",
-            "widget": "radio",
+            "widget": "Radio",
         },
     }
     assert saved.settings["properties"]["fields"] == [
@@ -345,8 +345,8 @@ def test_deleting_field_should_delete_filter(live_server, page, openmap, datalay
         {"key": "description", "type": "Text"},
     ]
     datalayer.settings["filters"] = {
-        "foobar": {"widget": "minmax", "label": "Foo Bar"},
-        "name": {"widget": "checkbox", "label": "Bar Foo"},
+        "foobar": {"widget": "MinMax", "label": "Foo Bar"},
+        "name": {"widget": "Checkbox", "label": "Bar Foo"},
     }
     datalayer.save()
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
@@ -363,7 +363,7 @@ def test_deleting_field_should_delete_filter(live_server, page, openmap, datalay
         {"key": "description", "type": "Text"},
     ]
     saved.settings["filters"] == {
-        "name": {"widget": "checkbox", "label": "Bar Foo"},
+        "name": {"widget": "Checkbox", "label": "Bar Foo"},
     }
     page.locator(".edit-undo").click()
     with page.expect_response(re.compile(r".*/datalayer/update/")):
@@ -375,8 +375,8 @@ def test_deleting_field_should_delete_filter(live_server, page, openmap, datalay
         {"key": "description", "type": "Text"},
     ]
     saved.settings["filters"] == {
-        "foobar": {"widget": "minmax", "label": "Foo Bar"},
-        "name": {"widget": "checkbox", "label": "Bar Foo"},
+        "foobar": {"widget": "MinMax", "label": "Foo Bar"},
+        "name": {"widget": "Checkbox", "label": "Bar Foo"},
     }
 
 
@@ -387,8 +387,8 @@ def test_deleting_field_from_map_should_delete_filter(live_server, page, openmap
         {"key": "description", "type": "Text"},
     ]
     openmap.settings["properties"]["filters"] = {
-        "foobar": {"widget": "minmax", "label": "Foo Bar"},
-        "name": {"widget": "checkbox", "label": "Bar Foo"},
+        "foobar": {"widget": "MinMax", "label": "Foo Bar"},
+        "name": {"widget": "Checkbox", "label": "Bar Foo"},
     }
     openmap.save()
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
@@ -404,7 +404,7 @@ def test_deleting_field_from_map_should_delete_filter(live_server, page, openmap
         {"key": "description", "type": "Text"},
     ]
     saved.settings["properties"]["filters"] == {
-        "name": {"widget": "checkbox", "label": "Bar Foo"},
+        "name": {"widget": "Checkbox", "label": "Bar Foo"},
     }
     page.locator(".edit-undo").click()
     with page.expect_response(re.compile(r"./update/settings/.*")):
@@ -416,8 +416,8 @@ def test_deleting_field_from_map_should_delete_filter(live_server, page, openmap
         {"key": "description", "type": "Text"},
     ]
     saved.settings["properties"]["filters"] == {
-        "foobar": {"widget": "minmax", "label": "Foo Bar"},
-        "name": {"widget": "checkbox", "label": "Bar Foo"},
+        "foobar": {"widget": "MinMax", "label": "Foo Bar"},
+        "name": {"widget": "Checkbox", "label": "Bar Foo"},
     }
 
 
@@ -465,7 +465,7 @@ def test_can_create_filter_from_new_field(live_server, page, openmap):
     assert saved.settings["filters"] == {
         "foobar": {
             "label": "Foo Bar",
-            "widget": "checkbox",
+            "widget": "Checkbox",
         },
     }
 
@@ -484,7 +484,7 @@ def test_can_create_new_filter_on_map_from_panel(live_server, page, openmap):
     page.get_by_label("Filter on").select_option("foobar")
     page.get_by_role("textbox", name="Human readable name of the").fill("Foo Bar")
     page.wait_for_timeout(300)
-    page.get_by_text("radio").click()
+    page.get_by_text("Exclusive choice").click()
     page.get_by_role("button", name="OK").click()
     expect(
         page.locator(".panel.left").get_by_role("group", name="Foo Bar")
@@ -493,7 +493,7 @@ def test_can_create_new_filter_on_map_from_panel(live_server, page, openmap):
         page.get_by_role("button", name="Save", exact=True).click()
     saved = Map.objects.first()
     assert saved.settings["properties"]["filters"] == {
-        "foobar": {"label": "Foo Bar", "widget": "radio"}
+        "foobar": {"label": "Foo Bar", "widget": "Radio"}
     }
 
 
@@ -514,7 +514,7 @@ def test_can_create_new_filter_on_datalayer_from_panel(live_server, page, openma
     page.get_by_label("Filter on").select_option("mynumber")
     page.get_by_role("textbox", name="Human readable name of the").fill("Foo Bar")
     page.wait_for_timeout(300)
-    page.get_by_text("radio").click()
+    page.get_by_text("Exclusive choice").click()
     page.get_by_role("button", name="OK").click()
     expect(
         page.locator(".panel.left").get_by_role("group", name="Foo Bar")
@@ -523,7 +523,7 @@ def test_can_create_new_filter_on_datalayer_from_panel(live_server, page, openma
         page.get_by_role("button", name="Save", exact=True).click()
     saved = DataLayer.objects.first()
     assert saved.settings["filters"] == {
-        "mynumber": {"label": "Foo Bar", "widget": "radio"}
+        "mynumber": {"label": "Foo Bar", "widget": "Radio"}
     }
 
 
@@ -534,8 +534,8 @@ def test_can_edit_filter_from_panel(live_server, page, openmap):
         {"key": "description", "type": "Text"},
     ]
     openmap.settings["properties"]["filters"] = {
-        "foobar": {"widget": "minmax", "label": "Foo Bar"},
-        "name": {"widget": "checkbox", "label": "Bar Foo"},
+        "foobar": {"widget": "MinMax", "label": "Foo Bar"},
+        "name": {"widget": "Checkbox", "label": "Bar Foo"},
     }
     openmap.save()
     page.goto(
@@ -550,3 +550,59 @@ def test_can_edit_filter_from_panel(live_server, page, openmap):
     expect(
         page.get_by_role("group", name="Foo Bar Baz").locator("legend")
     ).to_be_visible()
+
+
+def test_filter_with_enum(live_server, openmap, page):
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Point 2",
+                    "products": "flour,vegetable,bread",
+                },
+                "geometry": {"type": "Point", "coordinates": [0.065918, 48.385442]},
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Point 1",
+                    "products": "vegetable,bread",
+                },
+                "geometry": {"type": "Point", "coordinates": [3.55957, 49.767074]},
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Point 3",
+                    "products": "flour,vegetable,milk,eggs",
+                },
+                "geometry": {"type": "Point", "coordinates": [0.856934, 45.290347]},
+            },
+        ],
+        "_umap_options": {
+            "name": "Calque 1",
+            "fields": [{"key": "products", "type": "Enum"}],
+        },
+    }
+    DataLayerFactory(map=openmap, data=data)
+    page.goto(
+        f"{live_server.url}{openmap.get_absolute_url()}?edit&onLoadPanel=datafilters#6/48.948/1.670"
+    )
+    page.get_by_role("button", name="Add filter").click()
+    page.get_by_label("Filter on").select_option("products")
+    page.get_by_role("button", name="OK").click()
+    expect(
+        page.locator(".umap-browser .filters span").filter(has_text="products")
+    ).to_be_visible()
+    markers = page.locator(".leaflet-marker-icon")
+    expect(markers).to_have_count(3)
+    page.get_by_role("checkbox", name="bread").check()
+    expect(markers).to_have_count(2)
+    page.get_by_role("checkbox", name="bread").uncheck()
+    expect(markers).to_have_count(3)
+    page.get_by_role("checkbox", name="vegetable").check()
+    expect(markers).to_have_count(3)
+    page.get_by_role("checkbox", name="milk").check()
+    expect(markers).to_have_count(1)

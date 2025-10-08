@@ -552,8 +552,8 @@ class Feature {
     const filterKeys = this.datalayer.getFilterKeys()
     const filter = this._umap.browser.options.filter
     if (filter && !this.matchFullTextFilter(filter, filterKeys)) return true
-    if (!this.matchMapFilters()) return true
-    if (!this.matchLayerFilters()) return true
+    if (this._umap.filters.matchFeature(this)) return true
+    if (this.datalayer.filters.matchFeature(this)) return true
     return false
   }
 
@@ -573,53 +573,6 @@ class Feature {
       if (value.toLowerCase().indexOf(filter) !== -1) return true
     }
     return false
-  }
-
-  _mapFilters(fields, filters) {
-    for (const [key, { min, max, choices }] of Object.entries(filters.selected)) {
-      // This filter has no value selected by the user.
-      if (min === undefined && max === undefined && !choices?.length) continue
-      const field = fields.get(key)
-      // This field may only exist on another layer.
-      if (!field) continue
-      let value = this.properties[key]
-      const parser = filters.getParser(field.type)
-      value = parser(value)
-      switch (field.type) {
-        case 'Date':
-        case 'Datetime':
-        case 'Number':
-          if (!Number.isNaN(min) && !Number.isNaN(value) && min > value) {
-            return false
-          }
-          if (!Number.isNaN(max) && !Number.isNaN(value) && max < value) {
-            return false
-          }
-          break
-        case 'Enum': {
-          const intersection = value.filter((item) => choices.includes(item))
-          if (intersection.length !== choices.length) {
-            return false
-          }
-          break
-        }
-        default:
-          value = value || translate('<empty value>')
-          if (choices?.length && !choices.includes(value)) {
-            return false
-          }
-          break
-      }
-    }
-    return true
-  }
-
-  matchMapFilters() {
-    return this._mapFilters(this._umap.fields, this._umap.filters)
-  }
-
-  matchLayerFilters() {
-    return this._mapFilters(this.datalayer.fields, this.datalayer.filters)
   }
 
   isMulti() {

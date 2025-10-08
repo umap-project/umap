@@ -25,7 +25,7 @@ Fields.Base = class {
     this.setProperties(properties)
     this.fieldEls = this.field.split('.')
     this.name = this.builder.getName(field)
-    this.id = `${this.builder.properties.id || Date.now()}.${this.name}`
+    this.id = `id.${this.builder.properties.id || Date.now()}.${this.name}`
   }
 
   getDefaultProperties() {
@@ -57,6 +57,7 @@ Fields.Base = class {
   }
 
   build() {
+    if (!this.elements.helpText) return
     if (this.properties.helpText) {
       this.elements.helpText.textContent = this.properties.helpText
     } else {
@@ -1027,6 +1028,9 @@ Fields.Url = class extends Fields.Input {
 }
 
 Fields.Switch = class extends Fields.CheckBox {
+  getLabelTemplate() {
+    return ''
+  }
   getTemplate() {
     const label = this.properties.label
     const help = this.properties.helpEntries?.join() || ''
@@ -1035,17 +1039,6 @@ Fields.Switch = class extends Fields.CheckBox {
 
   build() {
     super.build()
-    // We have it in our template
-    if (!this.properties.inheritable) {
-      // We already have the label near the switch,
-      // only show the default label in inheritable mode
-      // as the switch itself may be hidden (until "defined")
-      if (this.elements.label) {
-        this.elements.label.hidden = true
-        this.elements.label.innerHTML = ''
-        this.elements.label.title = ''
-      }
-    }
     this.container.classList.add('with-switch')
     this.input.classList.add('switch')
     this.input.id = this.id
@@ -1106,7 +1099,7 @@ Fields.MultiChoice = class extends Fields.Base {
   }
 
   addChoice(value, label, counter) {
-    const id = `${Date.now()}.${this.name}.${counter}`
+    const id = `id.${Date.now()}.${this.name}.${counter}`
     const input = Utils.loadTemplate(
       `<input type="radio" name="${this.name}" id="${id}" value="${value}" />`
     )
