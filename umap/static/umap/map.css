@@ -825,6 +825,13 @@ ul.photon-autocomplete {
     box-shadow: black 0px 0px 1px;
     display: flex;
     align-content: center;
+    justify-content: center;
+}
+
+.umap-large-circle-icon span {
+    display: flex;
+    align-items: center;
+    text-align: center;
 }
 
 .umap-large-circle-icon.umap-icon-active {
