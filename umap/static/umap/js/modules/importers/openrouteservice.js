@@ -37,7 +37,7 @@ export class Importer {
     }
 
     const metadatas = [
-      ['datalayer', { handler: 'NullableDataLayerSwitcher'}],
+      ['datalayer', { handler: 'NullableDataLayerSwitcher' }],
       [
         'profile',
         { handler: 'Select', selectOptions: PROFILES, label: translate('Profile') },
@@ -82,6 +82,11 @@ export class Importer {
           params.interval = (properties.range / properties.lines) * 60
         }
         const data = await Isochrones.calculate(params)
+        data.features.reverse()
+        for (const feature of data.features) {
+          feature.properties.duration = Number(feature.properties.value) / 60
+          feature.properties.profile = properties.profile
+        }
         this.umap.importer.build()
         this.umap.importer.raw = JSON.stringify(data)
         this.umap.importer.format = 'geojson'
