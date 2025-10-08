@@ -273,7 +273,7 @@ class Wikipedia extends PopupTemplate {
     if (wikipedia && _WIKIPEDIA_CACHE[wikipedia]) return _WIKIPEDIA_CACHE[wikipedia]
     // Wikipedia value should be in form of "{locale}:{title}", according to https://wiki.openstreetmap.org/wiki/Key:wikipedia
     const [locale, page] = wikipedia.split(':')
-    const url = `https://${locale}.wikipedia.org/w/api.php?action=query&format=json&origin=*&pithumbsize=500&prop=extracts|pageimages&titles=${page}`
+    const url = `https://${locale}.wikipedia.org/w/api.php?action=query&format=json&origin=*&pithumbsize=500&exintro=1&prop=extracts|pageimages&titles=${page}`
     const request = new Request()
     const response = await request.get(url)
     if (response?.ok) {
@@ -293,9 +293,21 @@ class Wikipedia extends PopupTemplate {
       const title = page.title || feature.getDisplayName()
       const extract = page.extract || ''
       const thumbnail = page.thumbnail?.source
-      const [content, { image }] = Utils.loadTemplateWithRefs(
-        `<div><h3>${Utils.escapeHTML(title)}</h3><img data-ref="image" hidden src="" />${Utils.escapeHTML(extract)}</div>`
-      )
+      const [content, { image }] = Utils.loadTemplateWithRefs(`
+      <div>
+        <h3>${Utils.escapeHTML(title)}</h3>
+        <img data-ref="image" hidden src="" />
+        <p>
+          ${Utils.escapeHTML(extract)}
+        </p>
+        <p>
+          © ${translate('Wikipedia contributors')} •
+          <a href="https://wikipedia.org/wiki/${wikipedia}" target="_blank">
+            ${translate('See on Wikipedia')}
+            <i class="icon icon-16 icon-external-link"></i>
+          </a>
+        </p>
+      </div>`)
       if (thumbnail) {
         image.src = thumbnail
         image.hidden = false
