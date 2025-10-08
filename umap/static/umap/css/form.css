@@ -321,9 +321,8 @@ details fieldset {
 details summary {
     cursor: pointer;
     background-color: var(--color-lightGray);
-    line-height: 30px;
-    font-size: 1.2em;
-    padding: 0 5px;
+    font-size: 0.9rem;
+    padding: var(--small-box-padding);
 }
 
 .dark details summary {
@@ -635,7 +634,7 @@ i.info {
 .flat-tabs {
     display: flex;
     justify-content: space-around;
-    font-size: 1.2em;
+    font-size: 1.2rem;
     margin-bottom: 20px;
     border-bottom: 1px solid var(--color-lighterGray);
 }

@@ -1405,6 +1405,11 @@ export class DataLayer {
       'icon-eye',
       translate('Show/hide layer')
     )
+    const table = DomUtil.createButtonIcon(
+      container,
+      'icon-table show-on-edit',
+      translate('Edit properties in a table')
+    )
     const zoomTo = DomUtil.createButtonIcon(
       container,
       'icon-zoom',
@@ -1414,11 +1419,6 @@ export class DataLayer {
       container,
       'icon-edit show-on-edit',
       translate('Edit')
-    )
-    const table = DomUtil.createButtonIcon(
-      container,
-      'icon-table show-on-edit',
-      translate('Edit properties in a table')
     )
     const remove = DomUtil.createButtonIcon(
       container,

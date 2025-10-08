@@ -54,6 +54,13 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     border: 1px solid var(--color-accent);
 }
 
+.with-toolbox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+}
+
 /* *********** */
 /* Map details */
 /* *********** */

@@ -221,6 +221,7 @@ class Feature {
     if (impactData) {
       Utils.eachElement(`.${this.getUniqueClassName()} .feature-title`, (el) => {
         el.textContent = this.getDisplayName()
+        el.title = this.getDisplayName()
       })
       if (this._umap.currentFeature === this) {
         this.view()

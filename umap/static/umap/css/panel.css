@@ -72,6 +72,10 @@
     background-color: var(--color-veryDarkGray);
 }
 
+.panel.dark .datalayer-editable-title {
+    max-width: 35ch;
+}
+
 @media all and (orientation:landscape) {
     .panel {
         top: var(--current-header-height);

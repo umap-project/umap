@@ -2,8 +2,14 @@
     --background-color: var(--color-lighterGray);
 }
 
+.umap-browser .datalayer-name,
 .umap-browser .feature-title {
     cursor: pointer;
+    max-width: 25ch;
+}
+
+.umap-browser .feature-title {
+    max-width: 35ch;
 }
 
 .umap-browser .datalayer i {
@@ -100,10 +106,6 @@
 .umap-browser details[open].filters summary {
     margin-bottom: -1px;
     border-bottom: 1px solid var(--background-color);
-}
-
-.datalayer-name {
-    cursor: pointer;
 }
 
 .umap-caption .dates {
