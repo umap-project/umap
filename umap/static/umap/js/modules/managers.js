@@ -178,7 +178,7 @@ export class FieldManager extends Map {
   edit(container) {
     const ul = Utils.loadTemplate('<ul></ul>')
     const add = Utils.loadTemplate(
-      `<button type="button" data-ref=add><i class="icon icon-16 icon-add"></i>${translate('Add a new field')}</button>`
+      `<button type="button" data-ref=add>${translate('Add a new field')}</button>`
     )
     add.addEventListener('click', () => {
       this.editField().then(() => {
