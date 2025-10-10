@@ -148,7 +148,7 @@ input[type="submit"] {
 .dark .anonymous,
 .dark .button.anonymous,
 .dark [type="button"].anonymous {
-    background-color: var(--color-veryDarkViolet);
+    background-color: var(--color-veryDarkerViolet);
     border: 1px solid var(--color-lightViolet);
 }
 
@@ -156,6 +156,12 @@ input[type="submit"] {
 .dark [type="button"]:hover,
 .dark input[type="submit"]:hover {
     background-color: var(--color-mediumGray);
+}
+
+.dark .anonymous:hover,
+.dark .button.anonymous:hover,
+.dark [type="button"].anonymous:hover {
+    background-color: var(--color-veryDarkViolet);
 }
 
 .dark a {
