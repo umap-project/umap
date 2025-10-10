@@ -316,9 +316,7 @@ export default class Filters {
       <fieldset class="formbox" id="filters">
         <legend data-help=filters>${translate('Filters')}</legend>
         <ul data-ref=ul></ul>
-        <button class="umap-add" type="button" data-ref=add>
-          <i class="icon icon-16 icon-add"></i> ${translate('Add filter')}
-        </button>
+        <button class="umap-add" type="button" data-ref=add>${translate('Add filter')}</button>
       </fieldset>
     `
     const [body, { ul, add }] = Utils.loadTemplateWithRefs(template)

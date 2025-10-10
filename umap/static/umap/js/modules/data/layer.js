@@ -1004,23 +1004,6 @@ export class DataLayer {
       body.appendChild(fieldsContainer)
       this.fields.edit(fieldsContainer)
     }
-
-    const template = `
-      <fieldset class="formbox" id="fields-and-keys">
-        <legend>${translate('Keys management')}</legend>
-        <div data-ref=keyContainer></div>
-      </fieldset>
-    `
-    const [root, { keyContainer }] = Utils.loadTemplateWithRefs(template)
-    const optionsFields = [
-      'properties.labelKey',
-      'properties.sortKey',
-      // 'properties.filterKey',
-    ]
-    body.appendChild(root)
-
-    const builder = new MutatingForm(this, optionsFields, { umap: this })
-    keyContainer.appendChild(builder.build())
     this.filters.edit(body)
   }
 
