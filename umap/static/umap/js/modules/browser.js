@@ -58,7 +58,7 @@ export default class Browser {
   addDataLayer(datalayer, parent) {
     const open = this.mode !== 'layers' ? ' open' : ''
     const [container, { headline, toolbox, label }] = Utils.loadTemplateWithRefs(`
-      <details class="datalayer ${datalayer.getHidableClass()}" id="${this.datalayerId(datalayer)}"${open}>
+      <details class="datalayer ${datalayer.cssId}" id="${this.datalayerId(datalayer)}"${open}>
         <summary data-ref=headline class="with-toolbox">
           <span>
             <span class="datalayer-name truncate" data-id="${datalayer.id}" data-ref=label></span>
