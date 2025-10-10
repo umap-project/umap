@@ -1274,16 +1274,20 @@ export default class Umap {
 
   askForLogin() {
     const promise = new Promise((resolve) => {
-      window.onLogin = () => {
-        const url = this.urls.get('whoami', { map_id: this.id })
-        this.server.get(url).then(([data]) => {
-          this.properties.user = data.user
-          if (!this.id) {
-            this.properties.permissions.owner = { ...data.user }
-          }
-          this.render(['user', 'properties.permissions'])
-          resolve()
-        })
+      const bc = new BroadcastChannel('auth')
+      bc.onmessage = (event) => {
+        if (event.data === 'auth:ok') {
+          bc.postMessage('auth:close')
+          const url = this.urls.get('whoami', { map_id: this.id })
+          this.server.get(url).then(([data]) => {
+            this.properties.user = data.user
+            if (!this.id) {
+              this.properties.permissions.owner = { ...data.user }
+            }
+            this.render(['user', 'properties.permissions'])
+            resolve()
+          })
+        }
       }
     })
     window.open(this.urls.get('login'))

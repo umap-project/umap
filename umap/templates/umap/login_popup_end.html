@@ -5,19 +5,28 @@
 </h3>
 <script type="text/javascript">
   function proceed() {
-    if (window.opener?.onLogin) {
-      // We are in the normal process login
-      window.opener.onLogin()
-      window.close()
-    } else {
-      // we may be in login process that includes a magic link, so user
-      // has opened a new window from this link, and we cannot close it then.
-      window.location.href = '{% url "user_dashboard" %}'
+    if (window.BroadcastChannel) {
+      const bc = new BroadcastChannel('auth')
+      bc.onmessage = (event) => {
+        if (event.data === 'auth:close') {
+          window.close()
+        }
+      }
+      bc.postMessage('auth:ok')
     }
+    // In case the login was started in Javascript, the broadcasting whould close this
+    // window, so we wait for the broacasting to have a chance to finish the communication
+    // before trying to load the dashboard.
+    window.setTimeout(() => {
+      // We should arrive here in three situations:
+      // - the browser is older than 2022 and does not have BroadcastChannel API
+      // - the login process has opened another page/tab (like using a magic link)
+      // - the login was started from a content page (so not from the map page, and not in JS)
+      window.location.href = '{% url "user_dashboard" %}'
+    }, 1000)
   }
 
   proceed()
 // To handle errors, this template should be integrated into your authentication error message page
-// Note that you can call any window.opener function like window.opener.func
 
 </script>
