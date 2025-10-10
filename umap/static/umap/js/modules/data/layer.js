@@ -131,7 +131,7 @@ export class DataLayer {
   }
 
   get cssId() {
-    return `datalayer-${stamp(this)}`
+    return `datalayer-${this.id}`
   }
 
   get rank() {
@@ -1437,16 +1437,12 @@ export class DataLayer {
     }
     DomEvent.on(toggle, 'click', () => this.toggle())
     DomEvent.on(zoomTo, 'click', this.zoomTo, this)
-    container.classList.add(this.getHidableClass())
+    container.classList.add(this.cssId)
     container.classList.toggle('off', !this.isVisible())
   }
 
   getHidableElements() {
-    return document.querySelectorAll(`.${this.getHidableClass()}`)
-  }
-
-  getHidableClass() {
-    return `show_with_datalayer_${stamp(this)}`
+    return document.querySelectorAll(`.${this.cssId}`)
   }
 
   propagateDelete() {

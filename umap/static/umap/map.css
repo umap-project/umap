@@ -667,10 +667,10 @@ ul.photon-autocomplete {
 }
 
 .caption-item {
-    color: #555;
-    padding: 6px 8px;
+    padding: var(--text-margin);
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
-    border-radius: 1px;
+    border-radius: var(--border-radius);
+    margin-bottom: var(--box-margin);
 }
 
 .caption-item ul {

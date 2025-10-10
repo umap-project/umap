@@ -1584,7 +1584,7 @@ export default class Umap {
     const [container, { ul }] = Utils.loadTemplateWithRefs(template)
     this.datalayers.reverse().map((datalayer) => {
       const [row, { toolbox, formbox }] = Utils.loadTemplateWithRefs(`
-        <li class="orderable with-toolbox ${datalayer.getHidableClass()}">
+        <li class="orderable with-toolbox ${datalayer.cssId}">
           <span data-ref=formbox class="datalayer-editable-title truncate"></span>
           <span data-ref=toolbox>
             <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
