@@ -327,7 +327,7 @@ class Feature {
     container.appendChild(button)
   }
 
-  addExtraEditFieldset() {}
+  addExtraEditFieldset(container) {}
 
   appendEditFieldsets(container) {
     const optionsFields = this.getShapeOptions()
@@ -952,6 +952,23 @@ class Path extends Feature {
     }
     return items
   }
+
+  addExtraEditFieldset(container) {
+    const options = [
+      'properties._umap_options.textPath',
+      'properties._umap_options.textPathColor',
+      'properties._umap_options.textPathRepeat',
+      'properties._umap_options.textPathRotate',
+      'properties._umap_options.textPathSize',
+      'properties._umap_options.textPathOffset',
+      'properties._umap_options.textPathPosition',
+    ]
+    const builder = new MutatingForm(this, options, {
+      id: 'umap-feature-line-decoration',
+    })
+    const fieldset = DomUtil.createFieldset(container, translate('Line decoration'))
+    fieldset.appendChild(builder.build())
+  }
 }
 
 export class LineString extends Path {
@@ -1250,26 +1267,6 @@ export class LineString extends Path {
     button.addEventListener('click', async () => this.computeRoute())
   }
 
-  addExtraEditFieldset(container) {
-    const options = [
-      'properties._umap_options.textPath',
-      'properties._umap_options.textPathColor',
-      'properties._umap_options.textPathRepeat',
-      'properties._umap_options.textPathRotate',
-      'properties._umap_options.textPathSize',
-      'properties._umap_options.textPathOffset',
-      'properties._umap_options.textPathPosition',
-    ]
-    const builder = new MutatingForm(this, options, {
-      id: 'umap-feature-line-decoration',
-    })
-    const fieldset = DomUtil.createFieldset(container, translate('Line decoration'))
-    fieldset.appendChild(builder.build())
-    if (this._umap.properties.ORSAPIKey && this.isRoute()) {
-      this._editRoute(container)
-    }
-  }
-
   async computeElevation() {
     if (!this._umap.properties.ORSAPIKey) return
     const importer = new OpenRouteService(this._umap)
@@ -1294,6 +1291,13 @@ export class LineString extends Path {
         this.sync.update('geometry', this.geometry, oldGeometry)
       }
     })
+  }
+
+  addExtraEditFieldset(container) {
+    super.addExtraEditFieldset(container)
+    if (this._umap.properties.ORSAPIKey && this.isRoute()) {
+      this._editRoute(container)
+    }
   }
 }
 
