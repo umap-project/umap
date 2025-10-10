@@ -844,8 +844,6 @@ export default class Umap {
       'properties.captionBar',
       'properties.captionMenus',
       'properties.layerSwitcher',
-      'properties.zoomTo',
-      'properties.easing',
     ])
     const builder = new MutatingForm(this, UIFields, { umap: this })
     const controlsOptions = DomUtil.createFieldset(
@@ -879,6 +877,24 @@ export default class Umap {
     defaultShapeProperties.appendChild(builder.build())
   }
 
+  _editDefaultKeys(container) {
+    const shapeOptions = [
+      'properties.zoomTo',
+      'properties.easing',
+      'properties.labelKey',
+      'properties.sortKey',
+      'properties.filterKey',
+      'properties.slugKey',
+    ]
+
+    const builder = new MutatingForm(this, shapeOptions, { umap: this })
+    const defaultShapeProperties = DomUtil.createFieldset(
+      container,
+      translate('Default properties')
+    )
+    defaultShapeProperties.appendChild(builder.build())
+  }
+
   _editFieldsAndKeys(parent) {
     const body = Utils.loadTemplate(`
       <details id="fields-management">
@@ -897,23 +913,6 @@ export default class Umap {
 
     body.appendChild(fieldsContainer)
     this.fields.edit(fieldsContainer)
-    const template = `
-      <fieldset class="formbox" id="fields-and-keys">
-        <legend>${translate('Keys management')}</legend>
-        <div data-ref=keyContainer></div>
-      </fieldset>
-    `
-    const [root, { keyContainer }] = Utils.loadTemplateWithRefs(template)
-    const optionsFields = [
-      'properties.labelKey',
-      'properties.sortKey',
-      'properties.filterKey',
-      'properties.slugKey',
-    ]
-    body.appendChild(root)
-
-    const builder = new MutatingForm(this, optionsFields, { umap: this })
-    keyContainer.appendChild(builder.build())
     this.filters.edit(body)
   }
 
@@ -1189,6 +1188,7 @@ export default class Umap {
     )
     this._editControls(container)
     this._editShapeProperties(container)
+    this._editDefaultKeys(container)
     this._editFieldsAndKeys(container)
     this._editInteractionsProperties(container)
     this.rules.edit(container)
