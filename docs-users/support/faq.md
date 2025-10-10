@@ -93,6 +93,7 @@ Any property of the feature will be available, plus:
 - `{rank}` → the rank of the feature in the layer
 - `{layer}` → the name of the feature's layer
 - `{zoom}` → the current map zoom
+- `{id}` → the unique feature id
 
 ### Available variables in URL for remote data:
 

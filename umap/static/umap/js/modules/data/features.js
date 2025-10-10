@@ -601,6 +601,7 @@ class Feature {
     if (U.lang) properties.lang = U.lang
     properties.rank = this.getRank() + 1
     properties.layer = this.datalayer.getName()
+    properties.id = this.id
     if (this.ui._map && this.hasGeom()) {
       const center = this.center
       properties.lat = center.lat
