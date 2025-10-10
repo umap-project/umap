@@ -93,6 +93,7 @@ Toute propriété de l'élément sera disponible, ainsi que:
 - `{rank}` → la rang d'un élément dans son calque
 - `{layer}` → le nom du calque de l'élément
 - `{zoom}` → le zoom actuel de la carte
+- `{id}` → identifiant unique d'un élément
 
 ### Variables disponibles dans les URL de données distantes:
 
