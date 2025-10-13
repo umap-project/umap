@@ -232,6 +232,7 @@
     <path id="path17" d="m199.57 986.02c-1.1569 0.014-2.2777 0.76142-2.2871 2.2852v2.2715h-2.2852v1h16v-1h-2.2852v-2.2715c0-1.1551-1.1506-2.3038-2.2871-2.2852z" stop-color="#000000"/>
    </g>
   </g>
-  <path id="path8" d="m5 841.36h14v2h-1.1167l-3.8833 6v6l-4-1v-5l-4-6h-1z" fill="#f2f2f2" fill-rule="evenodd" stroke="#999" stroke-width=".25"/>
+  <path id="path8" d="m6 841.36h12v2h-1.0003l-4 6v6l-2-1v-5l-4-6h-1z" fill="#f2f2f2" fill-rule="evenodd" stroke="#999" stroke-width=".25"/>
+  <path id="path8-6" d="m198 1009.4h12v2h-1.0003l-4 6v6l-2-1v-5l-4-6h-1z" fill="none" stroke="#999"/>
  </g>
 </svg>

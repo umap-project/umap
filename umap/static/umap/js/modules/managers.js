@@ -198,7 +198,7 @@ export class FieldManager extends Map {
     })
     manageFilters.addEventListener('click', () => this.parent.filters.edit())
     for (const field of this.all()) {
-      const [row, { edit, del }] = Utils.loadTemplateWithRefs(
+      const [row, { edit, del, addFilter, editFilter }] = Utils.loadTemplateWithRefs(
         `<li class="orderable with-toolbox" data-key="${field.key}">
           <span>
             <i class="icon icon-16 icon-field-${field.type}" title="${field.type}"></i>
@@ -206,10 +206,20 @@ export class FieldManager extends Map {
           </span>
           <span>
             <button class="icon icon-16 icon-edit" title="${translate('Edit this field')}" data-ref=edit></button>
+            <button class="icon icon-16 icon-filters" title="${translate('Edit filter')}" data-ref=editFilter></button>
+            <button class="icon icon-16 icon-filters-empty" title="${translate('Add a filter for this field')}" data-ref=addFilter></button>
             <button class="icon icon-16 icon-delete" title="${translate('Delete this field')}" data-ref=del></button>
             <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
           </span>
         </li>`
+      )
+      editFilter.hidden = !this.parent.filters.has(field.key)
+      addFilter.hidden = this.parent.filters.has(field.key)
+      editFilter.addEventListener('click', () =>
+        this.parent.filters.createFilterForm(field.key)
+      )
+      addFilter.addEventListener('click', () =>
+        this.parent.filters.createFilterForm(field.key)
       )
       ul.appendChild(row)
       edit.addEventListener('click', () => {

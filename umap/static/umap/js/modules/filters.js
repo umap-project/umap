@@ -318,9 +318,9 @@ export default class Filters {
       </div>
     `
     const body = Utils.loadTemplate(template)
-    this._editOne(this._umap.filters, body, translate('Map (all layers)'))
+    this._listFilters(this._umap.filters, body, translate('Map (all layers)'))
     this._umap.datalayers.active().forEach((datalayer) => {
-      this._editOne(
+      this._listFilters(
         datalayer.filters,
         body,
         `${datalayer.getName()} (${translate('single layer')})`
@@ -329,7 +329,7 @@ export default class Filters {
     this._umap.dialog.open({ template: body })
   }
 
-  _editOne(filters, container, title) {
+  _listFilters(filters, container, title) {
     const template = `
       <details open>
         <summary>${title}</summary>
