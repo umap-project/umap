@@ -176,10 +176,19 @@ export class FieldManager extends Map {
   }
 
   edit(container) {
-    const ul = Utils.loadTemplate('<ul></ul>')
-    const add = Utils.loadTemplate(
-      `<button type="button" data-ref=add>${translate('Add a new field')}</button>`
-    )
+    const [root, { ul, add, manageFilters }] = Utils.loadTemplateWithRefs(`
+      <details id="fields-management">
+        <summary><h4>${translate('Manage Fields')}</h4></summary>
+        <fieldset>
+          <ul data-ref=ul></ul>
+          <div class="button-bar half">
+            <button type="button" data-ref=add>${translate('Add a new field')}</button>
+            <button type="button" data-ref="manageFilters">${translate('Manage filters')}</button>
+          </div>
+        </fieldset>
+      </details>
+    `)
+    container.appendChild(root)
     add.addEventListener('click', () => {
       this.editField().then(() => {
         this.parent.edit().then((panel) => {
@@ -187,8 +196,7 @@ export class FieldManager extends Map {
         })
       })
     })
-    container.appendChild(ul)
-    container.appendChild(add)
+    manageFilters.addEventListener('click', () => this.parent.filters.edit())
     for (const field of this.all()) {
       const [row, { edit, del }] = Utils.loadTemplateWithRefs(
         `<li class="orderable with-toolbox" data-key="${field.key}">

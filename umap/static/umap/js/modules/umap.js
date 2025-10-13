@@ -895,27 +895,6 @@ export default class Umap {
     defaultShapeProperties.appendChild(builder.build())
   }
 
-  _editFieldsAndKeys(parent) {
-    const body = Utils.loadTemplate(`
-      <details id="fields-management">
-        <summary><h4>${translate('Fields, filters and keys')}</h4></summary>
-        <fieldset data-ref="fieldset">
-        </fieldset>
-      </details>
-    `)
-    parent.appendChild(body)
-
-    const fieldsContainer = Utils.loadTemplate(`
-      <fieldset class="formbox" id="fields">
-        <legend>${translate('Manage Fields')}</legend>
-      </fieldset>
-    `)
-
-    body.appendChild(fieldsContainer)
-    this.fields.edit(fieldsContainer)
-    this.filters.edit(body)
-  }
-
   _editInteractionsProperties(container) {
     const popupFields = [
       'properties.popupShape',
@@ -1189,7 +1168,7 @@ export default class Umap {
     this._editControls(container)
     this._editShapeProperties(container)
     this._editDefaultKeys(container)
-    this._editFieldsAndKeys(container)
+    this.fields.edit(container)
     this._editInteractionsProperties(container)
     this.rules.edit(container)
     this._editTilelayer(container)

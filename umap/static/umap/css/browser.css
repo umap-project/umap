@@ -147,7 +147,7 @@
     background-color: var(--background-color);
 }
 
-.umap-browser details.filters [data-ref="addFilter"] {
+.umap-browser details.filters [data-ref="manageFilters"] {
     position: absolute;
     top: 0;
     right: 0;

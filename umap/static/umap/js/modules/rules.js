@@ -269,7 +269,7 @@ export default class Rules {
         <summary><h4>${translate('Conditional style rules')}</h4></summary>
         <fieldset>
           <ul data-ref=ul></ul>
-          <button class="umap-add" type="button" data-ref=add>${translate('Add rule')}</button>
+          <button type="button" data-ref=add>${translate('Add rule')}</button>
         </fieldset>
       </details>
     `

@@ -126,6 +126,10 @@ input[type="submit"] {
 .dark [type="button"] {
     background-color: var(--color-darkerGray);
     color: var(--text-color);
+}
+
+.dark menu .button,
+.dark menu [type="button"] {
     border: 1px solid var(--color-lightGray);
 }
 
@@ -316,12 +320,14 @@ details {
     border: 1px solid var(--color-veryDarkGray);
 }
 
+details>* {
+    padding: var(--text-margin);
+}
+
 details fieldset {
     overflow: hidden;
     border: 1px solid var(--color-lightGray);
     margin: 0;
-    padding: var(--text-margin);
-    margin-bottom: var(--text-margin);
 }
 
 details summary {
