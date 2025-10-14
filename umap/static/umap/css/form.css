@@ -295,6 +295,7 @@ input[type="file"]+.error {
 input[value]:invalid {
     border-color: var(--color-red);
     background-color: var(--color-darkRed);
+    color: var(--color-light);
 }
 
 .dark input,
