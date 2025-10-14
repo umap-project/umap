@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-10 09:19+0000\n"
+"POT-Creation-Date: 2025-08-14 15:22+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Moon Ika, 2020,2025\n"
 "Language-Team: Estonian (http://app.transifex.com/openstreetmap/umap/language/et/)\n"
@@ -93,7 +93,7 @@ msgstr "Kõik (avalik)"
 
 #: models.py:189
 msgid "Anyone with link"
-msgstr ""
+msgstr "Kõik, kellel on link"
 
 #: models.py:191
 msgid "Blocked"
@@ -153,7 +153,7 @@ msgstr "seaded"
 
 #: models.py:243
 msgid "save as template"
-msgstr ""
+msgstr "salvesta mallina"
 
 #: models.py:244
 msgid "This map is a template map."
@@ -181,7 +181,7 @@ msgstr ""
 
 #: settings/base.py:288
 msgid "Video tutorials"
-msgstr ""
+msgstr "Videojuhendid"
 
 #: settings/base.py:293
 msgid "OpenStreetMap.org forum"
@@ -193,71 +193,71 @@ msgstr ""
 
 #: settings/base.py:318
 msgid "Art and Culture"
-msgstr ""
+msgstr "Kunst ja kultuur"
 
 #: settings/base.py:319
 msgid "Cycling"
-msgstr ""
+msgstr "Rattasõit"
 
 #: settings/base.py:320
 msgid "Business"
-msgstr ""
+msgstr "Äri"
 
 #: settings/base.py:321
 msgid "Environment"
-msgstr ""
+msgstr "Keskkond"
 
 #: settings/base.py:322
 msgid "Education"
-msgstr ""
+msgstr "Haridus"
 
 #: settings/base.py:323
 msgid "Food and Agriculture"
-msgstr ""
+msgstr "Toit ja põllumajandus"
 
 #: settings/base.py:324
 msgid "Geopolitics"
-msgstr ""
+msgstr "Geopliitika"
 
 #: settings/base.py:325
 msgid "Health"
-msgstr ""
+msgstr "Tervis"
 
 #: settings/base.py:326
 msgid "Hiking"
-msgstr ""
+msgstr "Matkamine"
 
 #: settings/base.py:327
 msgid "History"
-msgstr ""
+msgstr "Ajalugu"
 
 #: settings/base.py:328
 msgid "Public sector"
-msgstr ""
+msgstr "Avalik sektor"
 
 #: settings/base.py:329
 msgid "Science"
-msgstr ""
+msgstr "Teadus"
 
 #: settings/base.py:330
 msgid "Shopping"
-msgstr ""
+msgstr "Kaubandus"
 
 #: settings/base.py:331
 msgid "Sport and Leisure"
-msgstr ""
+msgstr "Sport ja vaba aeg"
 
 #: settings/base.py:332
 msgid "Travel"
-msgstr ""
+msgstr "Reisimine"
 
 #: settings/base.py:333
 msgid "Transports"
-msgstr ""
+msgstr "Transport"
 
 #: settings/base.py:334
 msgid "Tourism"
-msgstr ""
+msgstr "Turism"
 
 #: templates/403.html:8
 msgid ""
@@ -277,7 +277,7 @@ msgstr "404 Lehte ei leitud"
 #: templates/auth/user_detail.html:6
 #, python-format
 msgid "%(current_user)s’s maps"
-msgstr ""
+msgstr "Kasutaja %(current_user)s kaardid"
 
 #: templates/auth/user_detail.html:12
 #, python-format
@@ -326,7 +326,7 @@ msgstr ""
 msgid "%(current_user)s has no starred maps yet."
 msgstr ""
 
-#: templates/base.html:13
+#: templates/base.html:16
 msgid ""
 "uMap lets you create maps with OpenStreetMap layers in a minute and embed "
 "them in your site."
@@ -413,7 +413,7 @@ msgstr "Mängi demoga"
 #: templates/umap/components/alerts/alert.html:66
 #: templates/umap/components/alerts/alert.html:94
 msgid "Close"
-msgstr ""
+msgstr "Sulge"
 
 #: templates/umap/components/alerts/alert.html:32
 #, python-format
@@ -506,7 +506,7 @@ msgstr ""
 
 #: templates/umap/dashboard_menu.html:13 templates/umap/user_templates.html:6
 msgid "My Templates"
-msgstr ""
+msgstr "Minu mallid"
 
 #: templates/umap/dashboard_menu.html:17
 msgid "My profile"
@@ -530,19 +530,19 @@ msgstr "Oled sisse logitud. Jätkamine..."
 
 #: templates/umap/map_list.html:15
 msgid "template"
-msgstr ""
+msgstr "mall"
 
-#: templates/umap/map_list.html:18 views.py:458
+#: templates/umap/map_list.html:18 views.py:459
 msgid "by"
 msgstr "kasutajalt"
 
 #: templates/umap/map_list.html:22
 msgid "See the template"
-msgstr ""
+msgstr "Vaata malli"
 
 #: templates/umap/map_list.html:22
 msgid "See the map"
-msgstr ""
+msgstr "Vaata kaarti"
 
 #: templates/umap/map_list.html:28
 msgid "More"
@@ -578,7 +578,7 @@ msgstr ""
 
 #: templates/umap/map_table.html:40 templates/umap/map_table.html:42
 msgid "Open preview"
-msgstr ""
+msgstr "Ava eelvaade"
 
 #: templates/umap/map_table.html:72 templates/umap/map_table.html:74
 msgid "Share"
@@ -709,7 +709,7 @@ msgstr "Kaarti ei leitud."
 
 #: templates/umap/search.html:36
 msgid "Latest created maps in category"
-msgstr ""
+msgstr "Viimati selles kategoorias loodud kaardid "
 
 #: templates/umap/search.html:43
 msgid "Latest created maps"
@@ -764,7 +764,7 @@ msgstr "Otsi minu kaarte"
 
 #: templates/umap/user_dashboard.html:11
 msgid "Map’s name"
-msgstr ""
+msgstr "Kaardi nimi"
 
 #: templates/umap/user_dashboard.html:12
 #, python-format
@@ -773,7 +773,7 @@ msgstr ""
 
 #: templates/umap/user_dashboard.html:15
 msgid "You have no map yet."
-msgstr ""
+msgstr "Sul ei ole veel kaarte."
 
 #: templates/umap/user_teams.html:6
 msgid "My Teams"
@@ -789,93 +789,97 @@ msgstr "Uus meeskond"
 
 #: templates/umap/user_templates.html:10
 msgid "Search my templates"
-msgstr ""
+msgstr "Otsi minu malle"
 
 #: templates/umap/user_templates.html:11
 msgid "Template’s name"
-msgstr ""
+msgstr "Malli nimi"
 
 #: templates/umap/user_templates.html:12
 #, python-format
 msgid "Download %(count)s templates"
-msgstr ""
+msgstr "Laadi alla %(count)s mall(i)"
 
 #: templates/umap/user_templates.html:15
 msgid "You have no template yet."
-msgstr ""
+msgstr "Sul ei ole veel malle."
 
 #: templates/umap/user_templates.html:16
 msgid "Create a template"
-msgstr ""
+msgstr "Loo mall"
 
 #: templates/umap/user_templates.html:17
 msgid "No template found."
-msgstr ""
+msgstr "Malle ei leitud."
 
-#: views.py:233
+#: views.py:235
 msgid "Cannot delete a team with more than one member"
 msgstr ""
 
-#: views.py:237
+#: views.py:239
 #, python-format
 msgid "Team “%(name)s” has been deleted"
 msgstr "Meeskond “%(name)s” on kustutatud"
 
-#: views.py:463
+#: views.py:464
 msgid "View the map"
 msgstr "Vaata kaarti"
 
-#: views.py:864
+#: views.py:867
 msgid "See full screen"
 msgstr "Vaata täisekraanil"
 
-#: views.py:1007
+#: views.py:1010
 msgid "Map editors updated with success!"
 msgstr "Kaardi toimetajaid uuendati edukalt!"
 
-#: views.py:1043
+#: views.py:1046
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "Redigeerimislink sinu uMapi kaardile: %(map_name)s"
 
-#: views.py:1046
+#: views.py:1049
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Siin on sinu salajane redigeerimislink: %(link)s"
 
-#: views.py:1053
+#: views.py:1056
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "Ei saa saata e-kirja aadressile %(email)s"
 
-#: views.py:1056
+#: views.py:1059
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "E-kiri saadetud aadressile %(email)s"
 
-#: views.py:1067
+#: views.py:1070
 msgid "Only its owner can delete the map."
 msgstr "Kaardi saab kustutada vaid selle omanik."
 
-#: views.py:1073
+#: views.py:1076
 msgid "Map successfully deleted."
 msgstr "Kaart on kustutatud."
 
-#: views.py:1099
+#: views.py:1102
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Sinu kaart on kopeeritud! Kui sa soovid oma kaarti muuta teisest arvutist, kasuta palun seda linki: %(anonymous_url)s"
 
-#: views.py:1104
+#: views.py:1107
 msgid "Congratulations, your map has been cloned!"
 msgstr "Sinu kaart on kopeeritud!"
 
-#: views.py:1358
+#: views.py:1361
 msgid "Layer successfully deleted."
 msgstr "Kiht on kustutatud."
 
-#: views.py:1380
+#: views.py:1383
 msgid "Permissions updated with success!"
+msgstr ""
+
+#: views.py:1400
+msgid "Generic"
 msgstr ""

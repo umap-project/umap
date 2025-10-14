@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-10 09:19+0000\n"
+"POT-Creation-Date: 2025-10-14 15:28+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Ignacio L'Episcopo, 2024-2025\n"
 "Language-Team: Spanish (http://app.transifex.com/openstreetmap/umap/language/es/)\n"
@@ -334,7 +334,7 @@ msgstr "Explorar los mapas destacados de %(current_user)s"
 msgid "%(current_user)s has no starred maps yet."
 msgstr "%(current_user)s no tiene mapas destacados todavía."
 
-#: templates/base.html:13
+#: templates/base.html:16
 msgid ""
 "uMap lets you create maps with OpenStreetMap layers in a minute and embed "
 "them in your site."
@@ -418,48 +418,54 @@ msgid "Play with the demo"
 msgstr "Juega con la demo"
 
 #: templates/umap/components/alerts/alert.html:17
-#: templates/umap/components/alerts/alert.html:66
-#: templates/umap/components/alerts/alert.html:94
+#: templates/umap/components/alerts/alert.html:69
+#: templates/umap/components/alerts/alert.html:97
 msgid "Close"
 msgstr "Cerrar"
 
 #: templates/umap/components/alerts/alert.html:32
 #, python-format
 msgid ""
-"Pro-tip: to easily find back your maps, <a href=\"%(login_url)s\" "
-"target=\"_blank\">create an account</a> or <a href=\"%(login_url)s\" "
-"target=\"_blank\">log in</a>."
-msgstr "Consejo pro: para encontrar fácilmente tus mapas, <a href=\"%(login_url)s\" target=\"_blank\">crea una cuenta</a> o <a href=\"%(login_url)s\" target=\"_blank\">inicia sesión</a>."
+"Oops, I didn't mean it, I want to <a href=\"%(login_url)s\" "
+"class=\"login\">create an account</a> or <a href=\"%(login_url)s\" "
+"class=\"login\">log in</a> (no worry, we'll attach the map to your account)."
+msgstr ""
 
-#: templates/umap/components/alerts/alert.html:37
+#: templates/umap/components/alerts/alert.html:35
+msgid ""
+"Yes, I want to continue editing anonymously, I will save the secret edit "
+"link to be able to edit this map later or on another device"
+msgstr ""
+
+#: templates/umap/components/alerts/alert.html:39
 msgid "Here is your secret link to edit the map, please keep it safe:"
 msgstr "Aquí está tu enlace secreto para editar el mapa, guárdalo bien:"
 
-#: templates/umap/components/alerts/alert.html:41
+#: templates/umap/components/alerts/alert.html:43
 msgid "Copy link"
 msgstr "Copiar enlace"
 
-#: templates/umap/components/alerts/alert.html:48
+#: templates/umap/components/alerts/alert.html:50
 msgid "Enter your email address to receive the secret link:"
 msgstr "Introduce tu dirección de correo electrónico para recibir el enlace secreto:"
 
-#: templates/umap/components/alerts/alert.html:54
+#: templates/umap/components/alerts/alert.html:56
 msgid "Email"
 msgstr "Correo electrónico"
 
-#: templates/umap/components/alerts/alert.html:57
+#: templates/umap/components/alerts/alert.html:59
 msgid "Send me the link"
 msgstr "Enviarme el enlace"
 
-#: templates/umap/components/alerts/alert.html:81
+#: templates/umap/components/alerts/alert.html:84
 msgid "See their edits in another tab"
 msgstr "Ver sus ediciones en otra pestaña"
 
-#: templates/umap/components/alerts/alert.html:84
+#: templates/umap/components/alerts/alert.html:87
 msgid "Keep your changes and loose theirs"
 msgstr "Mantén tus cambios y descarta los suyos"
 
-#: templates/umap/components/alerts/alert.html:87
+#: templates/umap/components/alerts/alert.html:90
 msgid "Keep their changes and loose yours"
 msgstr "Mantén sus cambios y descarta los tuyos"
 
@@ -540,7 +546,7 @@ msgstr "Has iniciado sesión. Continuando..."
 msgid "template"
 msgstr "plantilla"
 
-#: templates/umap/map_list.html:18 views.py:458
+#: templates/umap/map_list.html:18 views.py:459
 msgid "by"
 msgstr "por"
 
@@ -728,7 +734,7 @@ msgstr "Últimos mapas creados"
 msgid "Search maps"
 msgstr "Buscar mapas"
 
-#: templates/umap/search_bar.html:14
+#: templates/umap/search_bar.html:14 templates/umap/user_map_table.html:15
 msgid "Any category"
 msgstr "Cualquier categoría"
 
@@ -821,70 +827,74 @@ msgstr "Crear una plantilla"
 msgid "No template found."
 msgstr "No se encontró ninguna plantilla."
 
-#: views.py:233
+#: views.py:235
 msgid "Cannot delete a team with more than one member"
 msgstr "No se puede eliminar un equipo con más de un miembro"
 
-#: views.py:237
+#: views.py:239
 #, python-format
 msgid "Team “%(name)s” has been deleted"
 msgstr "El equipo “%(name)s” ha sido eliminado"
 
-#: views.py:463
+#: views.py:464
 msgid "View the map"
 msgstr "Ver el mapa"
 
-#: views.py:864
+#: views.py:872
 msgid "See full screen"
 msgstr "Ver en pantalla completa"
 
-#: views.py:1007
+#: views.py:1015
 msgid "Map editors updated with success!"
 msgstr "¡Los editores del mapas han sido actualizados con éxito!"
 
-#: views.py:1043
+#: views.py:1051
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "El enlace de edición de uMap para tu mapa: %(map_name)s"
 
-#: views.py:1046
+#: views.py:1054
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Aquí está tu enlace secreto de edición: %(link)s"
 
-#: views.py:1053
+#: views.py:1061
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "No se puede enviar correo electrónico a %(email)s"
 
-#: views.py:1056
+#: views.py:1064
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Correo electrónico enviado a %(email)s"
 
-#: views.py:1067
+#: views.py:1075
 msgid "Only its owner can delete the map."
 msgstr "Sólo el propietario puede borrar el mapa."
 
-#: views.py:1073
+#: views.py:1081
 msgid "Map successfully deleted."
 msgstr "Mapa eliminado correctamente."
 
-#: views.py:1099
+#: views.py:1107
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "¡Tu mapa ha sido clonado! Si quieres editar este mapa desde otro ordenador, usa este enlace: %(anonymous_url)s"
 
-#: views.py:1104
+#: views.py:1112
 msgid "Congratulations, your map has been cloned!"
 msgstr "¡Enhorabuena! ¡Tu mapa ha sido clonado!"
 
-#: views.py:1358
+#: views.py:1366
 msgid "Layer successfully deleted."
 msgstr "Se eliminó la capa con éxito."
 
-#: views.py:1380
+#: views.py:1388
 msgid "Permissions updated with success!"
 msgstr "¡Permisos actualizados con éxito!"
+
+#: views.py:1405
+msgid "Generic"
+msgstr "Genérico"

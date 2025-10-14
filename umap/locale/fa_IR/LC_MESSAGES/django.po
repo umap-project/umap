@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-10 09:19+0000\n"
+"POT-Creation-Date: 2025-10-14 15:28+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: imni <iriman@chmail.ir>, 2024\n"
 "Language-Team: Persian (Iran) (http://app.transifex.com/openstreetmap/umap/language/fa_IR/)\n"
@@ -329,7 +329,7 @@ msgstr "نقشه‌های ستاره‌دار %(current_user)s را مرور ک�
 msgid "%(current_user)s has no starred maps yet."
 msgstr "%(current_user)s هنوز نقشهٔ ستاره‌داری ندارد."
 
-#: templates/base.html:13
+#: templates/base.html:16
 msgid ""
 "uMap lets you create maps with OpenStreetMap layers in a minute and embed "
 "them in your site."
@@ -413,48 +413,54 @@ msgid "Play with the demo"
 msgstr "با نسخهٔ نمایشی کار کنید"
 
 #: templates/umap/components/alerts/alert.html:17
-#: templates/umap/components/alerts/alert.html:66
-#: templates/umap/components/alerts/alert.html:94
+#: templates/umap/components/alerts/alert.html:69
+#: templates/umap/components/alerts/alert.html:97
 msgid "Close"
 msgstr "بستن"
 
 #: templates/umap/components/alerts/alert.html:32
 #, python-format
 msgid ""
-"Pro-tip: to easily find back your maps, <a href=\"%(login_url)s\" "
-"target=\"_blank\">create an account</a> or <a href=\"%(login_url)s\" "
-"target=\"_blank\">log in</a>."
-msgstr "نکتهٔ طلایی: برای اینکه نقشه‌های خود را به آسانی پیدا کنید، <a href=\"%(login_url)s\" target=\"_blank\">حساب کاربری بسازید</a> یا <a href=\"%(login_url)s\" target=\"_blank\">وارد شوید</a>."
+"Oops, I didn't mean it, I want to <a href=\"%(login_url)s\" "
+"class=\"login\">create an account</a> or <a href=\"%(login_url)s\" "
+"class=\"login\">log in</a> (no worry, we'll attach the map to your account)."
+msgstr ""
 
-#: templates/umap/components/alerts/alert.html:37
+#: templates/umap/components/alerts/alert.html:35
+msgid ""
+"Yes, I want to continue editing anonymously, I will save the secret edit "
+"link to be able to edit this map later or on another device"
+msgstr ""
+
+#: templates/umap/components/alerts/alert.html:39
 msgid "Here is your secret link to edit the map, please keep it safe:"
 msgstr "این پیوند محرمانهٔ شما برای ویرایش نقشه است. لطفاً در جای امنی نگهش دارید:"
 
-#: templates/umap/components/alerts/alert.html:41
+#: templates/umap/components/alerts/alert.html:43
 msgid "Copy link"
 msgstr "کپی پیوند"
 
-#: templates/umap/components/alerts/alert.html:48
+#: templates/umap/components/alerts/alert.html:50
 msgid "Enter your email address to receive the secret link:"
 msgstr "رایانامهٔ خود را وارد کنید تا پیوند محرمانه را دریافت کنید:"
 
-#: templates/umap/components/alerts/alert.html:54
+#: templates/umap/components/alerts/alert.html:56
 msgid "Email"
 msgstr "رایانامه"
 
-#: templates/umap/components/alerts/alert.html:57
+#: templates/umap/components/alerts/alert.html:59
 msgid "Send me the link"
 msgstr "پیوند را برایم بفرست"
 
-#: templates/umap/components/alerts/alert.html:81
+#: templates/umap/components/alerts/alert.html:84
 msgid "See their edits in another tab"
 msgstr "ویرایش‌هایشان را در زبانهٔ دیگری ببینید"
 
-#: templates/umap/components/alerts/alert.html:84
+#: templates/umap/components/alerts/alert.html:87
 msgid "Keep your changes and loose theirs"
 msgstr "تغییرات خود را نگه دارید و از آن‌ها را رها کنید"
 
-#: templates/umap/components/alerts/alert.html:87
+#: templates/umap/components/alerts/alert.html:90
 msgid "Keep their changes and loose yours"
 msgstr "تغییرات آن‌ها را نگه دارید و از خودتان را رها کنید"
 
@@ -535,7 +541,7 @@ msgstr "شما وارد شده‌اید. ادامه..."
 msgid "template"
 msgstr ""
 
-#: templates/umap/map_list.html:18 views.py:458
+#: templates/umap/map_list.html:18 views.py:459
 msgid "by"
 msgstr "ساختهٔ"
 
@@ -722,7 +728,7 @@ msgstr "آخرین نقشه‌های ساخته‌شده"
 msgid "Search maps"
 msgstr "جستجوی نقشه‌ها"
 
-#: templates/umap/search_bar.html:14
+#: templates/umap/search_bar.html:14 templates/umap/user_map_table.html:15
 msgid "Any category"
 msgstr ""
 
@@ -815,70 +821,74 @@ msgstr ""
 msgid "No template found."
 msgstr ""
 
-#: views.py:233
+#: views.py:235
 msgid "Cannot delete a team with more than one member"
 msgstr ""
 
-#: views.py:237
+#: views.py:239
 #, python-format
 msgid "Team “%(name)s” has been deleted"
 msgstr ""
 
-#: views.py:463
+#: views.py:464
 msgid "View the map"
 msgstr "مشاهدهٔ نقشه"
 
-#: views.py:864
+#: views.py:872
 msgid "See full screen"
 msgstr "تمام‌صفحه ببینید"
 
-#: views.py:1007
+#: views.py:1015
 msgid "Map editors updated with success!"
 msgstr "ویرایشگران نقشه با موفقیت روزآمد شد!"
 
-#: views.py:1043
+#: views.py:1051
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "پیوند ویرایش uMap برای نقشهٔ شما: %(map_name)s"
 
-#: views.py:1046
+#: views.py:1054
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "این پیوند محرمانهٔ ویرایش برای شماست: %(link)s"
 
-#: views.py:1053
+#: views.py:1061
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "رایانامه به %(email)s فرستاده نشد"
 
-#: views.py:1056
+#: views.py:1064
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "رایانامه به %(email)s فرستاده شد"
 
-#: views.py:1067
+#: views.py:1075
 msgid "Only its owner can delete the map."
 msgstr "فقط مالک آن می‌تواند نقشه را حذف کند."
 
-#: views.py:1073
+#: views.py:1081
 msgid "Map successfully deleted."
 msgstr "نقشه با موفقیت حذف شد."
 
-#: views.py:1099
+#: views.py:1107
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "از نقشهٔ شما همانندسازی شد! اگر می‌خواهید این نقشه را از رایانهٔ دیگری ویرایش کنید، لطفاً از این پیوند استفاده کنید: %(anonymous_url)s"
 
-#: views.py:1104
+#: views.py:1112
 msgid "Congratulations, your map has been cloned!"
 msgstr "تبریک، نقشهٔ شما همانندسازی شد!"
 
-#: views.py:1358
+#: views.py:1366
 msgid "Layer successfully deleted."
 msgstr "لایه با موفقیت حذف شد."
 
-#: views.py:1380
+#: views.py:1388
 msgid "Permissions updated with success!"
 msgstr "مجوزها با موفقیت روزآمد شد!"
+
+#: views.py:1405
+msgid "Generic"
+msgstr ""

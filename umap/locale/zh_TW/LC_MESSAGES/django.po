@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-10 09:19+0000\n"
+"POT-Creation-Date: 2025-10-14 15:28+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Supaplex <bejokeup@gmail.com>, 2019,2023-2025\n"
 "Language-Team: Chinese (Taiwan) (http://app.transifex.com/openstreetmap/umap/language/zh_TW/)\n"
@@ -159,11 +159,11 @@ msgstr "設定"
 
 #: models.py:243
 msgid "save as template"
-msgstr ""
+msgstr "儲存為模版"
 
 #: models.py:244
 msgid "This map is a template map."
-msgstr ""
+msgstr "這份地圖是模版地圖"
 
 #: models.py:420
 msgid "Clone of"
@@ -183,87 +183,87 @@ msgstr "載入此圖層時顯示"
 
 #: settings/base.py:283
 msgid "uMap user documentation"
-msgstr ""
+msgstr "uMap使用者說明文件"
 
 #: settings/base.py:288
 msgid "Video tutorials"
-msgstr ""
+msgstr "影片教學"
 
 #: settings/base.py:293
 msgid "OpenStreetMap.org forum"
-msgstr ""
+msgstr "OpenStreetMap.org 論壇"
 
 #: settings/base.py:298
 msgid "OpenStreetMap France forum"
-msgstr ""
+msgstr "OpenStreetMap 法國論壇"
 
 #: settings/base.py:318
 msgid "Art and Culture"
-msgstr ""
+msgstr "藝術與文化"
 
 #: settings/base.py:319
 msgid "Cycling"
-msgstr ""
+msgstr "單車"
 
 #: settings/base.py:320
 msgid "Business"
-msgstr ""
+msgstr "商家"
 
 #: settings/base.py:321
 msgid "Environment"
-msgstr ""
+msgstr "環境"
 
 #: settings/base.py:322
 msgid "Education"
-msgstr ""
+msgstr "教育"
 
 #: settings/base.py:323
 msgid "Food and Agriculture"
-msgstr ""
+msgstr "食物與農業"
 
 #: settings/base.py:324
 msgid "Geopolitics"
-msgstr ""
+msgstr "地緣政治"
 
 #: settings/base.py:325
 msgid "Health"
-msgstr ""
+msgstr "健康"
 
 #: settings/base.py:326
 msgid "Hiking"
-msgstr ""
+msgstr "登山"
 
 #: settings/base.py:327
 msgid "History"
-msgstr ""
+msgstr "歷史"
 
 #: settings/base.py:328
 msgid "Public sector"
-msgstr ""
+msgstr "公共部門"
 
 #: settings/base.py:329
 msgid "Science"
-msgstr ""
+msgstr "科學"
 
 #: settings/base.py:330
 msgid "Shopping"
-msgstr ""
+msgstr "購物"
 
 #: settings/base.py:331
 msgid "Sport and Leisure"
-msgstr ""
+msgstr "運動與休閒"
 
 #: settings/base.py:332
 msgid "Travel"
-msgstr ""
+msgstr "旅遊"
 
 #: settings/base.py:333
 msgid "Transports"
-msgstr ""
+msgstr "交通運輸"
 
 #: settings/base.py:334
 msgid "Tourism"
-msgstr ""
+msgstr "遊客"
 
 #: templates/403.html:8
 msgid ""
@@ -332,7 +332,7 @@ msgstr "瀏覽 %(current_user)s 已打心號的地圖"
 msgid "%(current_user)s has no starred maps yet."
 msgstr "%(current_user)s 沒有任何打心號的地圖。"
 
-#: templates/base.html:13
+#: templates/base.html:16
 msgid ""
 "uMap lets you create maps with OpenStreetMap layers in a minute and embed "
 "them in your site."
@@ -416,48 +416,54 @@ msgid "Play with the demo"
 msgstr "播放展示"
 
 #: templates/umap/components/alerts/alert.html:17
-#: templates/umap/components/alerts/alert.html:66
-#: templates/umap/components/alerts/alert.html:94
+#: templates/umap/components/alerts/alert.html:69
+#: templates/umap/components/alerts/alert.html:97
 msgid "Close"
 msgstr "關閉"
 
 #: templates/umap/components/alerts/alert.html:32
 #, python-format
 msgid ""
-"Pro-tip: to easily find back your maps, <a href=\"%(login_url)s\" "
-"target=\"_blank\">create an account</a> or <a href=\"%(login_url)s\" "
-"target=\"_blank\">log in</a>."
-msgstr "進階技巧：要輕易找到你先前的地圖，<a href=\"%(login_url)s\" target=\"_blank\">創建帳號</a>或是<a href=\"%(login_url)s\" target=\"_blank\">登入</a>。"
+"Oops, I didn't mean it, I want to <a href=\"%(login_url)s\" "
+"class=\"login\">create an account</a> or <a href=\"%(login_url)s\" "
+"class=\"login\">log in</a> (no worry, we'll attach the map to your account)."
+msgstr ""
 
-#: templates/umap/components/alerts/alert.html:37
+#: templates/umap/components/alerts/alert.html:35
+msgid ""
+"Yes, I want to continue editing anonymously, I will save the secret edit "
+"link to be able to edit this map later or on another device"
+msgstr ""
+
+#: templates/umap/components/alerts/alert.html:39
 msgid "Here is your secret link to edit the map, please keep it safe:"
 msgstr "這裡是編輯地圖的祕密連結，請好好保管："
 
-#: templates/umap/components/alerts/alert.html:41
+#: templates/umap/components/alerts/alert.html:43
 msgid "Copy link"
 msgstr "複製連結"
 
-#: templates/umap/components/alerts/alert.html:48
+#: templates/umap/components/alerts/alert.html:50
 msgid "Enter your email address to receive the secret link:"
 msgstr "輸入你的電子郵件來取得祕密連結："
 
-#: templates/umap/components/alerts/alert.html:54
+#: templates/umap/components/alerts/alert.html:56
 msgid "Email"
 msgstr "電子郵件"
 
-#: templates/umap/components/alerts/alert.html:57
+#: templates/umap/components/alerts/alert.html:59
 msgid "Send me the link"
 msgstr "寄送連結"
 
-#: templates/umap/components/alerts/alert.html:81
+#: templates/umap/components/alerts/alert.html:84
 msgid "See their edits in another tab"
 msgstr "在其他頁籤察看他們的編輯"
 
-#: templates/umap/components/alerts/alert.html:84
+#: templates/umap/components/alerts/alert.html:87
 msgid "Keep your changes and loose theirs"
 msgstr "保留你的變動並且丟棄他們的"
 
-#: templates/umap/components/alerts/alert.html:87
+#: templates/umap/components/alerts/alert.html:90
 msgid "Keep their changes and loose yours"
 msgstr "保留他們的變動並且丟棄自己的"
 
@@ -508,11 +514,11 @@ msgstr "我的地圖"
 #: templates/umap/dashboard_menu.html:11
 #, python-format
 msgid "My Templates (%(count)s)"
-msgstr ""
+msgstr "我的模版 (%(count)s)"
 
 #: templates/umap/dashboard_menu.html:13 templates/umap/user_templates.html:6
 msgid "My Templates"
-msgstr ""
+msgstr "我的模版"
 
 #: templates/umap/dashboard_menu.html:17
 msgid "My profile"
@@ -536,19 +542,19 @@ msgstr "您已登入，繼續中..."
 
 #: templates/umap/map_list.html:15
 msgid "template"
-msgstr ""
+msgstr "模版"
 
-#: templates/umap/map_list.html:18 views.py:458
+#: templates/umap/map_list.html:18 views.py:459
 msgid "by"
 msgstr "由"
 
 #: templates/umap/map_list.html:22
 msgid "See the template"
-msgstr ""
+msgstr "檢視模版"
 
 #: templates/umap/map_list.html:22
 msgid "See the map"
-msgstr ""
+msgstr "檢視地圖"
 
 #: templates/umap/map_list.html:28
 msgid "More"
@@ -714,7 +720,7 @@ msgstr "找不到地圖。"
 
 #: templates/umap/search.html:36
 msgid "Latest created maps in category"
-msgstr ""
+msgstr "這個類別最新的地圖"
 
 #: templates/umap/search.html:43
 msgid "Latest created maps"
@@ -724,9 +730,9 @@ msgstr "最新創建地圖"
 msgid "Search maps"
 msgstr "搜尋地圖"
 
-#: templates/umap/search_bar.html:14
+#: templates/umap/search_bar.html:14 templates/umap/user_map_table.html:15
 msgid "Any category"
-msgstr ""
+msgstr "任何類別"
 
 #: templates/umap/search_bar.html:19
 msgid "Search"
@@ -769,7 +775,7 @@ msgstr "搜尋我的地圖"
 
 #: templates/umap/user_dashboard.html:11
 msgid "Map’s name"
-msgstr ""
+msgstr "地圖的名稱"
 
 #: templates/umap/user_dashboard.html:12
 #, python-format
@@ -794,93 +800,97 @@ msgstr "新的團隊"
 
 #: templates/umap/user_templates.html:10
 msgid "Search my templates"
-msgstr ""
+msgstr "搜尋我的模版"
 
 #: templates/umap/user_templates.html:11
 msgid "Template’s name"
-msgstr ""
+msgstr "模版名稱"
 
 #: templates/umap/user_templates.html:12
 #, python-format
 msgid "Download %(count)s templates"
-msgstr ""
+msgstr "下載%(count)s模版"
 
 #: templates/umap/user_templates.html:15
 msgid "You have no template yet."
-msgstr ""
+msgstr "你仍沒有模版。"
 
 #: templates/umap/user_templates.html:16
 msgid "Create a template"
-msgstr ""
+msgstr "新建模版"
 
 #: templates/umap/user_templates.html:17
 msgid "No template found."
-msgstr ""
+msgstr "沒有找到模版"
 
-#: views.py:233
+#: views.py:235
 msgid "Cannot delete a team with more than one member"
 msgstr "無法刪除超過一位成員的團隊"
 
-#: views.py:237
+#: views.py:239
 #, python-format
 msgid "Team “%(name)s” has been deleted"
 msgstr "已經刪除團隊 \"%(name)s\" "
 
-#: views.py:463
+#: views.py:464
 msgid "View the map"
 msgstr "檢視地圖"
 
-#: views.py:864
+#: views.py:872
 msgid "See full screen"
 msgstr "檢視全螢幕"
 
-#: views.py:1007
+#: views.py:1015
 msgid "Map editors updated with success!"
 msgstr "地圖編輯者更新完成"
 
-#: views.py:1043
+#: views.py:1051
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "你的地圖 uMap 編輯連結：%(map_name)s"
 
-#: views.py:1046
+#: views.py:1054
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "這是你的祕密編輯連結：%(link)s"
 
-#: views.py:1053
+#: views.py:1061
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "無法傳送電子郵件到%(email)s"
 
-#: views.py:1056
+#: views.py:1064
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "電子郵件寄至 %(email)s"
 
-#: views.py:1067
+#: views.py:1075
 msgid "Only its owner can delete the map."
 msgstr "只有擁有者可以刪除此地圖"
 
-#: views.py:1073
+#: views.py:1081
 msgid "Map successfully deleted."
 msgstr "成功刪除地圖"
 
-#: views.py:1099
+#: views.py:1107
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "您的地圖已複製完成！如果您想在不同的機器編輯這個地圖，請使用這個連結：%(anonymous_url)s"
 
-#: views.py:1104
+#: views.py:1112
 msgid "Congratulations, your map has been cloned!"
 msgstr "恭喜，您的地圖已被複製！"
 
-#: views.py:1358
+#: views.py:1366
 msgid "Layer successfully deleted."
 msgstr "圖層已刪除"
 
-#: views.py:1380
+#: views.py:1388
 msgid "Permissions updated with success!"
 msgstr "權限更新完成"
+
+#: views.py:1405
+msgid "Generic"
+msgstr "一般"
