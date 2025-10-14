@@ -38,7 +38,7 @@ dependencies = [
   "rcssmin==1.2.1",
   "rjsmin==1.2.4",
   "social-auth-core==4.5.6",
-  "social-auth-app-django==5.4.3",
+  "social-auth-app-django==5.6.0",
 ]
 
 [project.optional-dependencies]
