@@ -99,3 +99,13 @@ def test_user_dashboard_search_empty(client, map):
     body = response.content.decode()
     assert map.name not in body
     assert "No map found." in body
+
+
+def test_user_dashboard_filter_by_tag(client, map):
+    new_map = MapFactory(name="A map about bicycle", owner=map.owner, tags=["cycling"])
+    client.login(username=map.owner.username, password="123123")
+    response = client.get(f"{reverse('user_dashboard')}?tags=cycling")
+    assert response.status_code == 200
+    body = response.content.decode()
+    assert map.name not in body
+    assert new_map.name in body
