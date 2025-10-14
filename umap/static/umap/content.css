@@ -9,25 +9,31 @@ body.content {
 
 
 /* Search form */
-input::-webkit-input-placeholder, ::-webkit-input-placeholder {
-   color: #a5a5a5;
+input::-webkit-input-placeholder,
+::-webkit-input-placeholder {
+    color: #a5a5a5;
 }
 
-input:-moz-placeholder, :-moz-placeholder {
-   color: #a5a5a5;
+input:-moz-placeholder,
+:-moz-placeholder {
+    color: #a5a5a5;
 }
+
 .search-form {
     display: flex;
     align-items: baseline;
     max-width: 800px;
     margin: 0 auto;
 }
+
 .search-form select {
     max-width: 200px;
 }
+
 .search-form input[type=submit] {
     min-width: 200px;
 }
+
 .flex-break {
     justify-content: center;
 }
@@ -37,20 +43,23 @@ input:-moz-placeholder, :-moz-placeholder {
 /*    Login icons   */
 /* **************** */
 body.login {
-    width:  320px;
+    width: 320px;
     margin: auto;
     background-color: var(--color-lighterGray);
     color: var(--color-darkerGray);
 }
+
 body.login header {
     display: flex;
 }
+
 .login-grid {
     display: grid;
     justify-content: space-between;
     grid-gap: 5px;
-    grid-template-columns: repeat(auto-fill,92px);
+    grid-template-columns: repeat(auto-fill, 92px);
 }
+
 .login-grid li,
 .login-grid a {
     display: inline-block;
@@ -71,47 +80,59 @@ body.login header {
 .map_fragment {
     width: 100%;
 }
+
 .map_fragment,
 .demo_map .map_fragment {
     height: var(--map-fragment-height);
 }
+
 .grid-container hgroup {
     text-align: left;
 }
+
 .umap-features-list ul {
     margin-top: 14px;
 }
+
 .umap-features-list li {
     line-height: 21px;
 }
+
 .umap-features-list li:before {
     content: "✔";
     color: #323E56;
     padding-inline-end: 5px;
 }
+
 .summary {
     background-color: #eee;
 }
+
 .summary .row {
     margin-top: 0;
     padding-top: 20px;
 }
+
 .search_wrapper .row {
     margin-top: 0;
     padding-top: 20px;
 }
+
 .showcase-map {
     background-color: #fff;
     padding-bottom: 28px;
 }
+
 .showcase-map .row {
     margin-top: 28px;
 }
+
 h2.section {
     text-transform: uppercase;
     color: #666;
     text-align: center;
 }
+
 h2.tabs {
     display: inline-flex;
     justify-content: left;
@@ -121,6 +142,7 @@ h2.tabs {
     text-align: start;
     padding-top: 28px;
 }
+
 h2.tabs a {
     color: var(--color-darkBlue);
     text-decoration: underline;
@@ -129,12 +151,14 @@ h2.tabs a {
     text-underline-offset: 7px;
     display: inline-block;
 }
+
 h2.tabs a:not(.selected) {
     font-weight: normal;
     color: var(--color-darkBlue);
     text-decoration: none;
     margin-inline-end: 0;
 }
+
 h2.tabs a:hover {
     text-decoration: underline;
     text-decoration-thickness: 3px;
@@ -145,42 +169,51 @@ h2.tabs a:hover {
 .showcase-map .map_fragment {
     height: 400px;
 }
+
 .highlights {
     text-align: center;
     margin-bottom: calc(var(--box-margin) * 2);
 }
+
 .highlights img.colophon {
     display: inline-block;
     height: 128px;
 }
+
 .demo-instance-warning {
     background-color: #c0392b;
     color: #efefef;
     margin-top: 0;
     padding: var(--gutter);
 }
+
 .demo-instance-warning .row {
     margin-top: 0;
 }
+
 .demo-instance-warning a {
     color: #efefef;
     text-decoration: underline;
 }
+
 .more_button {
     min-height: var(--map-fragment-height);
 }
+
 .tag-list {
     margin-bottom: var(--text-margin);
     display: flex;
     flex-wrap: wrap;
-    gap: calc(var(--gutter) / 2 );
+    gap: calc(var(--gutter) / 2);
 }
+
 .tag-list li {
     border: 1px solid var(--color-darkBlue);
     border-radius: 3vmin;
     display: inline-block;
     padding: var(--button-padding-small);
 }
+
 .tag-list li a {
     color: var(--color-darkBlue);
     max-width: 125px;
@@ -192,16 +225,19 @@ h2.tabs a:hover {
     font-size: small;
     padding: 0 3px;
 }
+
 .card {
-    border: 1px solid var(--color-lightGray);
+    border: 1px solid var(--color-veryLightGray);
     border-radius: var(--border-radius);
     padding: var(--box-padding);
     display: flex;
     flex-direction: column;
 }
+
 .card .button {
     margin-bottom: 0;
 }
+
 .card hgroup {
     display: flex;
     flex-direction: column;
@@ -211,6 +247,7 @@ h2.tabs a:hover {
     gap: var(--gutter);
     margin-top: var(--text-margin);
 }
+
 .card h3 {
     margin-bottom: 0;
 }
@@ -223,13 +260,17 @@ h2.tabs a:hover {
     background-color: var(--button-primary-background);
     color: var(--button-primary-color);
 }
+
 .button-primary {
     font-weight: bold;
 }
-.wrapper .neutral, .wrapper input[type="submit"].neutral {
+
+.wrapper .neutral,
+.wrapper input[type="submit"].neutral {
     background-color: var(--button-neutral-background);
     color: var(--button-neutral-color);
 }
+
 .wrapper .button,
 .wrapper input {
     font-weight: bold;
@@ -244,17 +285,21 @@ h2.tabs a:hover {
     margin-right: auto;
     margin-top: 100px;
 }
+
 .content-40x a {
     color: #3A4259;
 }
+
 .content-40x h1 {
     font-size: 2em;
     margin-bottom: 0;
     margin-top: 40px;
 }
+
 .content-404 img {
     width: 32%;
 }
+
 .page-40x {
     background-image: url('./img/logo_lightcyan.svg');
     background-repeat: no-repeat;
@@ -263,6 +308,7 @@ h2.tabs a:hover {
     height: 75vh;
     margin: 1rem;
 }
+
 .page-40x a {
     text-decoration: underline;
 }
@@ -277,19 +323,23 @@ ul.umap-autocomplete {
     z-index: var(--zindex-autocomplete);
     box-shadow: 0 4px 9px #999999;
 }
+
 .umap-autocomplete li {
     height: 56px;
     line-height: 28px;
     padding: 14px;
 }
+
 .umap-autocomplete li.on {
     background-color: SeaGreen;
     cursor: pointer;
 }
+
 .umap-singleresult {
     margin-bottom: 10px;
     clear: both;
 }
+
 .umap-singleresult div,
 .umap-multiresult li {
     width: 100%;
@@ -300,6 +350,7 @@ ul.umap-autocomplete {
     color: #eeeeec;
     margin-bottom: 7px;
 }
+
 .umap-singleresult div .close,
 .umap-multiresult li .close {
     float: inline-end;
@@ -334,29 +385,31 @@ ul.umap-autocomplete {
 /* **************************** */
 /* https://kittygiraudel.com/2020/12/03/a11y-advent-hiding-content/ */
 .sr-only {
-  border: 0 !important;
-  clip: rect(1px, 1px, 1px, 1px) !important;
-  -webkit-clip-path: inset(50%) !important;
-  clip-path: inset(50%) !important;
-  height: 1px !important;
-  overflow: hidden !important;
-  margin: -1px !important;
-  padding: 0 !important;
-  position: absolute !important;
-  width: 1px !important;
-  white-space: nowrap !important;
+    border: 0 !important;
+    clip: rect(1px, 1px, 1px, 1px) !important;
+    -webkit-clip-path: inset(50%) !important;
+    clip-path: inset(50%) !important;
+    height: 1px !important;
+    overflow: hidden !important;
+    margin: -1px !important;
+    padding: 0 !important;
+    position: absolute !important;
+    width: 1px !important;
+    white-space: nowrap !important;
 }
+
 /* https://kittygiraudel.com/2020/12/06/a11y-advent-skip-to-content/ */
 .sr-only.sr-only--focusable:focus,
 .sr-only.sr-only--focusable:active {
-  clip: auto !important;
-  -webkit-clip-path: auto !important;
-  clip-path: auto !important;
-  height: auto !important;
-  overflow: visible !important;
-  width: auto !important;
-  white-space: normal !important;
+    clip: auto !important;
+    -webkit-clip-path: auto !important;
+    clip-path: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+    width: auto !important;
+    white-space: normal !important;
 }
+
 .icon-dashboard {
     display: inline-block;
     height: 36px;
@@ -364,35 +417,45 @@ ul.umap-autocomplete {
     margin: 3px;
     background-position: initial;
 }
+
 .content .icon-view {
     background-image: url('./img/icon-view.svg');
 }
+
 .content .icon-share {
     background-image: url('./img/icon-share.svg');
 }
+
 .content .icon-edit {
     background-image: url('./img/icon-edit.svg');
 }
+
 .content .icon-download {
     background-image: url('./img/icon-download.svg');
 }
+
 .content .icon-duplicate {
     background-image: url('./img/icon-duplicate.svg');
 }
+
 .content .icon-delete {
     background-image: url('./img/icon-delete.svg');
 }
+
 html[dir="rtl"] .content .icon-edit,
 html[dir="rtl"] .content .icon-share,
 html[dir="rtl"] .content .icon-delete {
-  background-position: initial; /* this takes precedence over similar selector in icon.css and fixes position */
+    background-position: initial;
+    /* this takes precedence over similar selector in icon.css and fixes position */
 }
+
 .table-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
     margin-bottom: 1rem;
 }
+
 @media all and (max-width: 640px) {
     .table-header {
         flex-direction: column;
@@ -400,16 +463,19 @@ html[dir="rtl"] .content .icon-delete {
         gap: 1rem;
     }
 }
+
 .table-header form {
     display: flex;
     align-items: flex-end;
 }
+
 @media all and (max-width: 640px) {
     .table-header form {
         flex-direction: column;
         align-items: center;
     }
 }
+
 .table-header form input[type="search"] {
     width: 30ch;
 }
@@ -426,19 +492,23 @@ html[dir="rtl"] .content .icon-delete {
     line-height: 24px;
     height: 40px;
 }
+
 .table-wrapper {
     overflow-x: scroll;
 }
+
 .table-wrapper table {
     width: 100%;
     min-width: 600px;
     border-collapse: collapse;
 }
+
 .table-wrapper table .map_fragment {
     display: block;
     height: 80vh;
     width: 100%;
 }
+
 .table-wrapper table a,
 .table-wrapper table thead tr th,
 .table-wrapper table th[scope="row"] {
@@ -446,10 +516,12 @@ html[dir="rtl"] .content .icon-delete {
     text-align: start;
     padding-inline-start: 2px;
 }
+
 .table-wrapper table thead tr th {
     line-height: 1.2;
     padding: 10px 5px;
 }
+
 .table-wrapper table thead th:last-of-type {
     min-width: 240px;
 }
@@ -457,14 +529,17 @@ html[dir="rtl"] .content .icon-delete {
 .table-wrapper table a:not(.icon-link) {
     text-decoration: underline;
 }
+
 .table-wrapper table button.map-icon {
     padding: 0;
     border: none;
     background: transparent;
 }
+
 .table-wrapper table form {
     display: inline;
 }
+
 .table-wrapper table input[type="submit"] {
     display: inline;
     background-color: transparent;
@@ -475,24 +550,30 @@ html[dir="rtl"] .content .icon-delete {
     margin: 0;
     line-height: inherit;
 }
+
 .table-wrapper table tbody tr {
     border-bottom: 1px solid #BDC7D4;
 }
+
 .table-wrapper table tbody tr td {
     padding: 5px 4px;
 }
+
 .table-wrapper table tbody tr:nth-child(odd) {
     background-color: #f4f4f4;
 }
+
 .table-wrapper table thead tr {
     line-height: 2em;
 }
+
 .table-wrapper table .button {
     margin-bottom: 2px;
-    padding:4px 6px;
+    padding: 4px 6px;
     height: 36px;
     line-height: 26px;
 }
+
 .table-wrapper table button {
     cursor: pointer;
 }
@@ -504,10 +585,12 @@ dialog {
     width: 90vw;
     height: 90vh;
 }
+
 dialog::backdrop {
     background: #fff5;
     backdrop-filter: blur(4px);
 }
+
 .close-dialog {
     text-align: center;
     margin-bottom: 0;
@@ -522,9 +605,11 @@ dialog::backdrop {
     justify-content: space-around;
     margin-bottom: 3rem;
 }
-.pagination > * {
+
+.pagination>* {
     padding: 1rem;
 }
+
 .pagination a {
     color: var(--color-darkBlue);
     text-decoration: underline;
@@ -539,40 +624,51 @@ dialog::backdrop {
         padding-left: 5px;
         padding-right: 5px;
     }
+
     .twide {
         width: 100%;
-        padding-inline-start: 0!important;
+        padding-inline-start: 0 !important;
     }
+
     .tthird {
         width: 33.3333%;
     }
+
     .ttwo-third {
         width: 66.6666%;
     }
+
     .tshow {
         display: inherit;
     }
+
     .thide {
         display: none;
     }
 }
+
 @media only screen and (max-width: 639px) {
     .mwide {
-        padding-inline-start: 0!important;
+        padding-inline-start: 0 !important;
         width: 100%;
     }
-    .mwide + .mwide {
+
+    .mwide+.mwide {
         margin-top: 20px;
     }
+
     .mthird {
         width: 33.3333%;
     }
+
     .mshow {
         display: inherit;
     }
+
     .mhide {
         display: none;
     }
+
     .flex-break {
         flex-direction: column;
         align-items: center;

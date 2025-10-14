@@ -480,7 +480,7 @@ export default class Filters {
   }
 
   buildForm(container) {
-    const form = new FiltersForm(this, this.buildFormFields())
+    const form = new FiltersForm(this, this.buildFormFields(), { className: 'formbox' })
     container.appendChild(form.build())
     return form
   }

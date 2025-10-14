@@ -60,7 +60,7 @@ hr {
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
     -moz-border-top-colors: none;
-    border-color: var(--color-lightGray);
+    border-color: var(--color-veryLightGray);
     border-image: none;
     border-style: solid;
     border-width: 1px 0 0;

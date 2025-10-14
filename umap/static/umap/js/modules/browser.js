@@ -150,7 +150,7 @@ export default class Browser {
           </summary>
           <button type="button" class="show-on-edit flat" data-ref=manageFilters>${translate('Manage filters')}</button>
           <fieldset>
-            <div data-ref=formContainer>
+            <div data-ref="formContainer" class="formbox">
             </div>
             <button class="flat" type="button" data-ref=reset><i class="icon icon-16 icon-restore" title=""></i> ${translate('Reset all')}</button>
           </fieldset>
@@ -213,7 +213,7 @@ export default class Browser {
       ],
       ['options.inBbox', { handler: 'Switch', label: translate('Current map view') }],
     ]
-    const searchForm = new Form(this, fields)
+    const searchForm = new Form(this, fields, { className: 'formbox' })
     const listenFormChanges = (form) => {
       form.on('set', () => this.onFormChange())
       form.form.addEventListener('reset', () => {
