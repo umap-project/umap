@@ -24,12 +24,6 @@ def set_timeout(context):
     expect.set_options(timeout=timeout)
 
 
-@pytest.fixture(autouse=True)
-def mock_osm_tiles(page):
-    if not bool(os.environ.get("PWDEBUG", False)):
-        page.route(re.compile(r".*tile\..*"), mock_tiles)
-
-
 @pytest.fixture
 def new_page(context):
     def make_page(prefix="console"):
@@ -41,6 +35,8 @@ def new_page(context):
             else None,
         )
         page.on("pageerror", lambda exc: print(f"{prefix} uncaught exception: {exc}"))
+        if not bool(os.environ.get("PWDEBUG", False)):
+            page.route(re.compile(r".*tile\..*"), mock_tiles)
         return page
 
     yield make_page
