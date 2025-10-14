@@ -352,7 +352,7 @@ def test_deleting_field_should_delete_filter(live_server, page, openmap, datalay
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.get_by_role("button", name="Manage layers").click()
     page.get_by_role("button", name="Edit", exact=True).click()
-    page.get_by_text("Fields, filters and keys").click()
+    page.get_by_text("Manage Fields").click()
     page.get_by_role("button", name="Delete this field").nth(1).click()
     page.get_by_role("button", name="OK").click()
     with page.expect_response(re.compile(r".*/datalayer/update/")):
@@ -393,7 +393,7 @@ def test_deleting_field_from_map_should_delete_filter(live_server, page, openmap
     openmap.save()
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.get_by_role("button", name="Map advanced properties").click()
-    page.get_by_text("Fields, filters and keys").click()
+    page.get_by_text("Manage Fields").click()
     page.get_by_role("button", name="Delete this field").nth(1).click()
     page.get_by_role("button", name="OK").click()
     with page.expect_response(re.compile(r"./update/settings/.*")):
@@ -428,7 +428,7 @@ def test_can_create_filter_from_new_field(live_server, page, openmap):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.get_by_role("button", name="Manage layers").click()
     page.get_by_role("button", name="Edit", exact=True).nth(1).click()
-    page.get_by_role("heading", name="Fields, filters and keys").click()
+    page.get_by_role("heading", name="Manage Fields").click()
     page.get_by_role("button", name="Add a new field").click()
     page.get_by_role("textbox", name="Field Name ✔").fill("foobar")
     page.get_by_role("button", name="Add filter for this field").click()
@@ -480,9 +480,11 @@ def test_can_create_new_filter_on_map_from_panel(live_server, page, openmap):
     openmap.save()
     DataLayerFactory(map=openmap, data=DATALAYER_DATA1)
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    page.get_by_role("button", name="Manage filters").click()
+    page.get_by_text("Map (all layers)").click()
     page.get_by_role("button", name="Add filter").click()
     page.get_by_label("Filter on").select_option("foobar")
-    page.get_by_role("textbox", name="Human readable name of the").fill("Foo Bar")
+    page.get_by_role("textbox", name="Human readable name").fill("Foo Bar")
     page.wait_for_timeout(300)
     page.get_by_text("Exclusive choice").click()
     page.get_by_role("button", name="OK").click()
@@ -508,6 +510,8 @@ def test_can_create_new_filter_on_datalayer_from_panel(live_server, page, openma
     page.goto(
         f"{live_server.url}{openmap.get_absolute_url()}?edit&onLoadPanel=datafilters"
     )
+    page.get_by_role("button", name="Manage filters").click()
+    page.get_by_text("Calque 1 (single layer)").click()
     page.get_by_role("button", name="Add filter").click()
     expect(page.get_by_label("Apply filter to")).to_have_value(f"map:{openmap.pk}")
     page.get_by_label("Apply filter to").select_option(f"layer:{datalayer.pk}")
@@ -590,6 +594,8 @@ def test_filter_with_enum(live_server, openmap, page):
     page.goto(
         f"{live_server.url}{openmap.get_absolute_url()}?edit&onLoadPanel=datafilters#6/48.948/1.670"
     )
+    page.get_by_role("button", name="Manage filters").click()
+    page.get_by_text("Calque 1 (single layer)").click()
     page.get_by_role("button", name="Add filter").click()
     page.get_by_label("Filter on").select_option("products")
     page.get_by_role("button", name="OK").click()

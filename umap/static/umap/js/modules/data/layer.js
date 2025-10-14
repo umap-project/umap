@@ -984,29 +984,6 @@ export class DataLayer {
     if (this.createdOnServer) download.hidden = false
   }
 
-  _editFieldsAndKeys(parent) {
-    const body = Utils.loadTemplate(`
-      <details id="fields-management">
-        <summary><h4>${translate('Fields, filters and keys')}</h4></summary>
-        <fieldset data-ref="fieldset">
-        </fieldset>
-      </details>
-    `)
-    parent.appendChild(body)
-
-    if (!this.isRemoteLayer()) {
-      const fieldsContainer = Utils.loadTemplate(`
-      <fieldset class="formbox" id="fields">
-        <legend>${translate('Manage Fields')}</legend>
-      </fieldset>
-    `)
-
-      body.appendChild(fieldsContainer)
-      this.fields.edit(fieldsContainer)
-    }
-    this.filters.edit(body)
-  }
-
   edit() {
     if (!this._umap.editEnabled) {
       return
@@ -1019,7 +996,9 @@ export class DataLayer {
     this._editInteractionProperties(container)
     this._editTextPathProperties(container)
     this._editRemoteDataProperties(container)
-    this._editFieldsAndKeys(container)
+    if (!this.isRemoteLayer()) {
+      this.fields.edit(container)
+    }
     this.rules.edit(container)
 
     if (this._umap.properties.urls.datalayer_versions) {

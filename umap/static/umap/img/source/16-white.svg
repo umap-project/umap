@@ -25,7 +25,7 @@
       <rect width="18.049999" height="19.01" fill="#ffffff" id="rect586-6" x="0" y="0" />
     </clipPath>
   </defs>
-  <sodipodi:namedview id="base" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:zoom="3.2209826" inkscape:cx="153.05888" inkscape:cy="173.85999" inkscape:document-units="px" inkscape:current-layer="layer1" showgrid="true" inkscape:window-width="1920" inkscape:window-height="1011" inkscape:window-x="0" inkscape:window-y="0" inkscape:window-maximized="1" showguides="true" inkscape:guide-bbox="true" inkscape:snap-grids="true" inkscape:snap-to-guides="true" inkscape:showpageshadow="2" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1">
+  <sodipodi:namedview id="base" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:zoom="2.9359891" inkscape:cx="111.37643" inkscape:cy="115.80424" inkscape:document-units="px" inkscape:current-layer="layer1" showgrid="true" inkscape:window-width="1920" inkscape:window-height="1011" inkscape:window-x="0" inkscape:window-y="0" inkscape:window-maximized="1" showguides="true" inkscape:guide-bbox="true" inkscape:snap-grids="true" inkscape:snap-to-guides="true" inkscape:showpageshadow="2" inkscape:pagecheckerboard="0" inkscape:deskcolor="#d1d1d1">
     <inkscape:grid type="xygrid" id="grid3004" empspacing="4" visible="true" enabled="true" snapvisiblegridlinesonly="true" originx="0" originy="0" spacingy="1" spacingx="1" units="px" />
     <inkscape:grid id="grid1" units="px" originx="0" originy="0" spacingx="24" spacingy="24" empcolor="#203fff" empopacity="0.85490196" color="#3f3fff" opacity="0.1254902" empspacing="1" enabled="true" visible="true" />
   </sodipodi:namedview>
@@ -244,6 +244,7 @@
         <path id="path17" style="baseline-shift:baseline;display:inline;overflow:visible;fill:#f2f2f2;fill-opacity:1;fill-rule:evenodd;stroke:#999999;stroke-width:0.25;stroke-dasharray:none;stroke-opacity:1;enable-background:accumulate;stop-color:#000000;stop-opacity:1" d="m 199.57227,986.02038 c -1.15689,0.014 -2.2777,0.76142 -2.28711,2.28516 v 2.27148 h -2.28516 v 1 h 16 v -1 h -2.28516 v -2.27148 c 0,-1.1551 -1.15064,-2.30379 -2.28711,-2.28516 z" />
       </g>
     </g>
-    <path style="fill:#f2f2f2;fill-opacity:1;fill-rule:evenodd;stroke:#999999;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-dasharray:none" d="m 5,841.36218 h 14 v 2 h -1.11669 l -3.88331,6 v 6 l -4,-1 v -5 l -4,-6 h -1 z" id="path8" sodipodi:nodetypes="ccccccccccc" />
+    <path style="fill:#f2f2f2;fill-opacity:1;fill-rule:evenodd;stroke:#999999;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1" d="m 6,841.36218 h 12.000345 v 2 h -1.000345 l -4,6 v 6 l -2,-1 v -5 l -4,-6 h -1 z" id="path8" sodipodi:nodetypes="ccccccccccc" />
+    <path style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#999999;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1" d="m 198,1009.3622 h 12.00034 v 2 h -1.00034 l -4,6 v 6 l -2,-1 v -5 l -4,-6 h -1 z" id="path8-6" sodipodi:nodetypes="ccccccccccc" />
   </g>
 </svg>
