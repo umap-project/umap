@@ -1029,11 +1029,14 @@ Fields.Url = class extends Fields.Input {
 
 Fields.Switch = class extends Fields.CheckBox {
   getLabelTemplate() {
-    return ''
+    if (!this.properties.inheritable) return ''
+    return super.getLabelTemplate()
   }
   getTemplate() {
-    const label = this.properties.label
-    const help = this.properties.helpEntries?.join() || ''
+    const label = this.properties.inheritable ? '' : this.properties.label
+    const help = this.properties.inheritable
+      ? ''
+      : this.properties.helpEntries?.join() || ''
     return `${super.getTemplate()}<label for="${this.id}" data-ref=customLabel data-help="${help}">${label}</label>`
   }
 
