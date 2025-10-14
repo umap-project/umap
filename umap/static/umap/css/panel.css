@@ -10,7 +10,7 @@
     color: var(--text-color);
     cursor: initial;
     border-radius: var(--border-radius);
-    border: 1px solid var(--color-lightGray);
+    border: 1px solid var(--color-veryLightGray);
     bottom: calc(var(--current-footer-height) + var(--panel-bottom));
     box-sizing: border-box;
     counter-reset: step;

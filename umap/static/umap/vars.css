@@ -2,7 +2,8 @@
     /* Colors. */
     --color-darkBlue: #263B58;
     --color-lighterGray: #f6f6f6;
-    --color-lightGray: #ddd;
+    --color-veryLightGray: #ddd;
+    --color-lightGray: #d3d3d3;
     --color-mediumGray: #3e4444;
     --color-darkGray: #323737;
     --color-darkerGray: #2a2e30;
@@ -30,7 +31,7 @@
     /* Buttons. */
     --button-primary-background: var(--color-limeGreen);
     --button-primary-color: var(--color-darkBlue);
-    --button-neutral-background: var(--color-lightGray);
+    --button-neutral-background: var(--color-veryLightGray);
     --button-neutral-color: var(--color-darkGray);
     --button-padding: 8px 16px;
     --button-padding-small: 2px 8px;

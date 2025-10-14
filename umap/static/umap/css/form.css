@@ -47,7 +47,7 @@ input[type="checkbox"]:after {
     content: ' ';
     width: 12px;
     height: 12px;
-    border: 1px solid var(--color-lightGray);
+    border: 1px solid var(--color-veryLightGray);
     cursor: pointer;
     text-align: center;
     font-size: 1rem;
@@ -97,7 +97,7 @@ select {
 .dark select[disabled],
 select[disabled] {
     background-color: var(--color-mediumGray);
-    color: var(--color-lightGray);
+    color: var(--color-veryLightGray);
     cursor: not-allowed;
 }
 
@@ -130,7 +130,7 @@ input[type="submit"] {
 
 .dark menu .button,
 .dark menu [type="button"] {
-    border: 1px solid var(--color-lightGray);
+    border: 1px solid var(--color-veryLightGray);
 }
 
 .dark.umap-edit-bar .button,
@@ -224,13 +224,13 @@ button.round.small {
     padding: 7px 7px;
     margin-bottom: 14px;
     background: var(--color-mediumGray);
-    color: var(--color-lightGray);
+    color: var(--color-veryLightGray);
     font-size: 10px;
     border-radius: 0 2px;
 }
 
 .content .helptext {
-    background-color: var(--color-lightGray);
+    background-color: var(--color-veryLightGray);
     color: var(--color-dark);
 }
 
@@ -243,7 +243,11 @@ input+.help-text {
     margin-bottom: 14px;
     display: flex;
     flex-direction: column;
-    gap: var(--text-margin);
+    gap: var(--gutter);
+}
+
+.formbox .formbox {
+    margin-bottom: 0;
 }
 
 .formbox.with-switch {
@@ -256,7 +260,7 @@ input+.help-text {
 
 fieldset.formbox {
     border: none;
-    border-top: 1px solid var(--color-lightGray);
+    border-top: 1px solid var(--color-veryLightGray);
 }
 
 label {
@@ -285,7 +289,7 @@ input+.error {
     padding: 7px 7px;
     margin-top: -14px;
     margin-bottom: 14px;
-    background: var(--color-lightGray);
+    background: var(--color-veryLightGray);
     color: var(--color-light);
     background-color: var(--color-red);
     font-size: 11px;
@@ -306,7 +310,7 @@ input[value]:invalid {
     background-color: var(--color-darkerGray);
     border-color: var(--color-veryDarkGray);
     border-width: 1px;
-    color: var(--color-lightGray);
+    color: var(--color-veryLightGray);
 }
 
 details {
@@ -326,13 +330,13 @@ details>* {
 
 details fieldset {
     overflow: hidden;
-    border: 1px solid var(--color-lightGray);
+    border: 1px solid var(--color-veryLightGray);
     margin: 0;
 }
 
 details summary {
     cursor: pointer;
-    background-color: var(--color-lightGray);
+    background-color: var(--color-veryLightGray);
     font-size: 0.9rem;
     padding: var(--small-box-padding);
 }
@@ -357,7 +361,7 @@ fieldset legend {
 
 fieldset.separator {
     border: none;
-    border-top: 1px solid var(--color-lightGray);
+    border-top: 1px solid var(--color-veryLightGray);
 }
 
 [data-badge] {
@@ -417,7 +421,7 @@ input.switch:empty~label:after {
     transition: all 100ms ease-in;
     color: var(--color-mediumGray);
     font-weight: bold;
-    background-color: var(--color-lighterGray);
+    background-color: var(--color-veryLightGray);
 }
 
 .dark input.switch:empty~label:before,
@@ -438,7 +442,7 @@ input.switch:empty~label:after {
 .dark input.switch:empty~label:after {
     border: 1px solid var(--color-veryDarkGray);
     background-color: var(--color-darkerGray);
-    color: var(--color-lightGray);
+    color: var(--color-veryLightGray);
 }
 
 input.switch:checked:empty~label:after {
@@ -448,7 +452,7 @@ input.switch:checked:empty~label:after {
 .dark input.switch:checked~label:before,
 input.switch:checked~label:before {
     background-color: var(--color-verySoftCyan);
-    border: 1px solid var(--color-lightGray);
+    border: 1px solid var(--color-veryLightGray);
     color: var(--color-darkGray);
     content: "ON";
     text-indent: 0.7em;
@@ -514,7 +518,7 @@ input.switch:checked~label:after {
 .umap-multiplechoice label {
     border: 1px solid var(--color-veryDarkGray);
     cursor: pointer;
-    background-color: var(--color-lightGray);
+    background-color: var(--color-veryLightGray);
     min-height: 30px;
     line-height: 30px;
     text-align: center;
@@ -696,7 +700,7 @@ i.info {
     height: 30px;
     line-height: 30px;
     cursor: pointer;
-    background-color: var(--color-lightGray);
+    background-color: var(--color-veryLightGray);
     text-align: center;
     margin-bottom: 5px;
     display: inline-block;
@@ -802,14 +806,16 @@ input.highlightable:not(:placeholder-shown) {
 }
 
 .ternary-switch {
+    --nb-of-items: 3;
+    --fraction-width: calc(100%/var(--nb-of-items));
     position: relative;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    border: 1px solid var(--color-mediumGray);
-    border-radius: var(--border-radius);
-    --nb-of-items: 3;
-    --fraction-width: calc(100%/var(--nb-of-items));
+    background-color: var(--color-veryLightGray);
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: var(--text-margin);
 }
 
 .ternary-switch input[type="radio"] {
@@ -827,14 +833,14 @@ input.highlightable:not(:placeholder-shown) {
     left: 0;
     width: var(--fraction-width);
     height: 100%;
-    opacity: .5;
     transition: .5s left ease;
-    background: var(--color-mediumGray);
+    background: transparent;
+    border: 2px solid var(--color-mediumGray);
 }
 
 .ternary-switch:has(input[type="radio"]:nth-of-type(1):checked):before {
     left: 0%;
-    background: var(--color-accent);
+    border-color: var(--color-accent);
 }
 
 .ternary-switch:has(input[type="radio"]:nth-of-type(2):checked):before {
@@ -843,5 +849,5 @@ input.highlightable:not(:placeholder-shown) {
 
 .ternary-switch:has(input[type="radio"]:nth-of-type(3):checked):before {
     left: calc(var(--fraction-width) * 2);
-    background: var(--color-accent);
+    border-color: var(--color-accent);
 }

@@ -45,7 +45,7 @@
 }
 
 .dark .off.connected-peers {
-    background-color: var(--color-lightGray);
+    background-color: var(--color-veryLightGray);
     color: var(--color-darkGray);
 }
 
@@ -224,7 +224,7 @@
     text-align: start;
     line-height: 100%;
     cursor: auto;
-    border-top: 1px solid var(--color-lightGray);
+    border-top: 1px solid var(--color-veryLightGray);
     opacity: 0.93;
     z-index: var(--zindex-panels);
 }

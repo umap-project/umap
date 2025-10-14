@@ -38,7 +38,7 @@
     overflow: hidden;
     padding-inline-start: 5px;
     height: 30px;
-    background-color: var(--color-lightGray);
+    background-color: var(--color-veryLightGray);
     font-weight: bold;
 }
 
@@ -92,7 +92,7 @@
 
 .umap-browser .filters summary {
     background: none;
-    border: 1px solid var(--color-lightGray);
+    border: 1px solid var(--color-veryLightGray);
     width: fit-content;
     padding: 0 10px;
     margin-bottom: var(--block-margin);
@@ -106,6 +106,7 @@
 .umap-browser details[open].filters summary {
     margin-bottom: -1px;
     border-bottom: 1px solid var(--background-color);
+    padding: calc(var(--text-margin) / 2) var(--text-margin);
 }
 
 .umap-caption .dates {
