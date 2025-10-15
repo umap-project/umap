@@ -753,6 +753,15 @@ Fields.IconUrl = class extends Fields.BlurInput {
     return 'hidden'
   }
 
+  get() {
+    // We never want to have parent value here
+    // TODO: check if/when we need the getOption call
+    // in the super method, maybe it's useless for all fields.
+    const path = this.field.split('.')
+    const key = path[path.length - 1]
+    return this.builder.getter(this.field)
+  }
+
   getTemplate() {
     return `
       <div>
