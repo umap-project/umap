@@ -96,7 +96,7 @@ export default class TableEditor extends WithTemplate {
     for (const field of this.fields) {
       this.elements.header.appendChild(
         loadTemplate(
-          `<th><i class="icon icon-16 icon-field-${field.type}"></i>${field.key}<button data-property="${field.key}" data-field-parent="${field.parent}" class="flat" aria-label="${translate('Advanced actions')}">…</button></th>`
+          `<th>${field.key}<button data-property="${field.key}" data-field-parent="${field.parent}" class="flat" aria-label="${translate('Advanced actions')}">…</button></th>`
         )
       )
     }
