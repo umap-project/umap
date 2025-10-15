@@ -388,7 +388,7 @@ export default class Filters {
       const copy = Object.fromEntries(filters.available)
       filters.available.clear()
       for (const key of orderedKeys) {
-        filters.add({ name: key, ...copy[key].dumps() })
+        filters.add({ key, ...copy[key].dumps() })
       }
       filters._parent.sync.update(
         'properties.filters',
