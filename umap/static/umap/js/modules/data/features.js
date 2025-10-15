@@ -259,10 +259,7 @@ class Feature {
 
     const properties = []
     for (const field of this.fields) {
-      const options = {
-        handler: 'Input',
-        label: `<i class="icon icon-16 icon-field-${field.type}"></i>${field.key}`,
-      }
+      const options = { handler: 'Input', label: field.key }
       if (field.key === 'description' || field.type === 'Text') {
         options.handler = 'Textarea'
         options.helpEntries = ['textFormatting']
