@@ -190,6 +190,9 @@ Fields.Input = class extends Fields.Base {
     if (this.properties.step) {
       this.input.step = this.properties.step
     }
+    if (this.properties.disabled) {
+      this.input.disabled = true
+    }
     this.fetch()
     this.listenForSync()
     this.input.addEventListener('keydown', (event) => this.onKeyDown(event))

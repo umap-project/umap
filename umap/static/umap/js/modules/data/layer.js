@@ -996,9 +996,7 @@ export class DataLayer {
     this._editInteractionProperties(container)
     this._editTextPathProperties(container)
     this._editRemoteDataProperties(container)
-    if (!this.isRemoteLayer()) {
-      this.fields.edit(container)
-    }
+    this.fields.edit(container)
     this.rules.edit(container)
 
     if (this._umap.properties.urls.datalayer_versions) {
