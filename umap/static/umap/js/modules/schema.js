@@ -141,11 +141,11 @@ export const SCHEMA = {
     default: true,
   },
   filters: {
-    type: Object,
+    type: Array,
     impacts: ['ui'],
   },
   fields: {
-    type: Object,
+    type: Array,
   },
   fill: {
     type: Boolean,

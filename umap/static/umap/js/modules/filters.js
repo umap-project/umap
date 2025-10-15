@@ -42,7 +42,8 @@ class BaseWidget {
 
   dumps() {
     const props = {
-      widget: this.key,
+      widget: this.KEY,
+      fieldKey: this.field,
     }
     if (this.label) {
       props.label = this.label
@@ -61,7 +62,7 @@ Widgets.MinMax = class extends BaseWidget {
   constructor(parent, label, field) {
     super(parent, label, field)
     // FIXME make it dynamic from class name
-    this.key = 'MinMax'
+    this.KEY = 'MinMax'
   }
   match(value) {
     if (this.userData.min > value) return true
@@ -126,7 +127,7 @@ class Choices extends BaseWidget {
 Widgets.Checkbox = class extends Choices {
   constructor(parent, label, field) {
     super(parent, label, field)
-    this.key = 'Checkbox'
+    this.KEY = 'Checkbox'
   }
 }
 Widgets.Checkbox.NAME = translate('Multiple choices')
@@ -134,7 +135,7 @@ Widgets.Checkbox.NAME = translate('Multiple choices')
 Widgets.Radio = class extends Choices {
   constructor(parent, label, field) {
     super(parent, label, field)
-    this.key = 'Radio'
+    this.KEY = 'Radio'
   }
   getFormField(field) {
     return 'FilterByRadio'
@@ -145,7 +146,7 @@ Widgets.Radio.NAME = translate('Exclusive choice')
 Widgets.Switch = class extends BaseWidget {
   constructor(parent, label, field) {
     super(parent, label, field)
-    this.key = 'Switch'
+    this.KEY = 'Switch'
   }
   match(value) {
     if (this.userData.wanted === undefined) return false
@@ -164,7 +165,7 @@ const loadWidget = (key) => {
   return Widgets[key] || Widgets.Checkbox
 }
 
-export default class Filters {
+export class Filters {
   constructor(parent, umap) {
     this._parent = parent
     this._umap = umap
@@ -227,54 +228,16 @@ export default class Filters {
   }
 
   load() {
-    for (const [key, props] of Object.entries(this._parent.properties.filters || {})) {
-      this._add({ key, ...props })
+    for (const filter of this._parent.properties.filters || []) {
+      this._add({ ...filter })
     }
-    this.loadLegacy()
-  }
-
-  loadLegacy() {
-    const legacy =
-      this._parent.properties.advancedFilterKey || this._parent.properties.facetKey
-    if (!legacy) return
-    for (const filter of legacy.split(',')) {
-      let [key, label, widget] = filter.split('|')
-      let type = 'String'
-      if (['number', 'date', 'datetime'].includes(widget)) {
-        // Retrocompat
-        if (widget === 'number') {
-          type = 'Number'
-        } else if (widget === 'datetime') {
-          type = 'Datetime'
-        } else if (widget === 'date') {
-          type = 'Date'
-        }
-        widget = 'MinMax'
-      }
-      if (widget === 'radio') {
-        widget = 'Radio'
-      }
-      if (!(widget in Widgets)) {
-        widget = 'Checkbox'
-      }
-      this._add({ key, label, widget })
-      // this.available.set(key, { label: label || key, widget })
-      if (!this._parent.fields.has(key)) {
-        this._parent.fields.add({ key, type })
-      }
-    }
-    delete this._parent.properties.facetKey
-    delete this._parent.properties.advancedFilterKey
-    this.dumps(false)
-    this._parent._migrated = true
   }
 
   dumps(sync = true) {
     const oldValue = this._parent.properties.filters
-    this._parent.properties.filters = {}
-    for (const [key, filter] of this.available.entries()) {
-      this._parent.properties.filters[key] = filter.dumps()
-    }
+    this._parent.properties.filters = Array.from(
+      this.available.entries().map(([key, filter]) => filter.dumps())
+    )
     if (sync) {
       this._parent.sync.update(
         'properties.filters',
@@ -285,33 +248,33 @@ export default class Filters {
     }
   }
 
-  has(key) {
-    return this.available.has(key)
+  has(fieldKey) {
+    return this.available.has(fieldKey)
   }
 
-  get(key) {
-    return this.available.get(key)
+  get(fieldKey) {
+    return this.available.get(fieldKey)
   }
 
-  add({ key, label, widget }) {
-    if (!this.available.has(key)) {
-      this.update({ key, label, widget })
+  add({ fieldKey, label, widget }) {
+    if (!this.available.has(fieldKey)) {
+      this.update({ fieldKey, label, widget })
     }
   }
 
-  _add({ key, label, widget }) {
+  _add({ fieldKey, label, widget }) {
     const klass = loadWidget(widget)
-    const inst = new klass(this, label, key)
-    this.available.set(key, inst)
+    const inst = new klass(this, label, fieldKey)
+    this.available.set(fieldKey, inst)
   }
 
-  update({ key, label, widget }) {
-    this._add({ key, label, widget })
+  update({ fieldKey, label, widget }) {
+    this._add({ fieldKey, label, widget })
     this.dumps()
   }
 
-  remove(key) {
-    this.available.delete(key)
+  remove(fieldKey) {
+    this.available.delete(fieldKey)
     this.dumps()
   }
 
@@ -355,11 +318,11 @@ export default class Filters {
     if (!filters.size) {
       body.open = false
     }
-    filters.available.forEach((filter, key) => {
+    filters.available.forEach((filter, fieldKey) => {
       const [li, { edit, remove }] = Utils.loadTemplateWithRefs(
-        `<li class="orderable with-toolbox" data-key="${key}">
+        `<li class="orderable with-toolbox" data-fieldkey="${fieldKey}">
           <span>
-            ${filter.label || key}
+            ${filter.label || fieldKey}
           </span>
           <span>
             <button class="icon icon-16 icon-edit" data-ref="edit" title="${translate('Edit this filter')}"></button>
@@ -370,25 +333,29 @@ export default class Filters {
       )
       ul.appendChild(li)
       remove.addEventListener('click', () => {
-        filters.remove(key)
+        filters.remove(fieldKey)
         filters._parent
           .edit()
           .then((panel) => panel.scrollTo('details#fields-management'))
       })
       edit.addEventListener('click', () => {
-        filters.createFilterForm(key)
+        filters.createFilterForm(fieldKey)
       })
     })
     add.addEventListener('click', () => filters.createFilterForm())
     const onReorder = (src, dst, initialIndex, finalIndex) => {
       const orderedKeys = Array.from(ul.querySelectorAll('li')).map(
-        (el) => el.dataset.key
+        (el) => el.dataset.fieldkey
       )
       const oldValue = Utils.CopyJSON(filters._parent.properties.filters)
-      const copy = Object.fromEntries(filters.available)
+      const copy = filters.available.entries().reduce((acc, [key, filter]) => {
+        acc[key] = filter.dumps()
+        return acc
+      }, {})
+
       filters.available.clear()
-      for (const key of orderedKeys) {
-        filters.add({ key, ...copy[key].dumps() })
+      for (const fieldKey of orderedKeys) {
+        filters.add({ ...copy[fieldKey] })
       }
       filters._parent.sync.update(
         'properties.filters',
@@ -400,34 +367,37 @@ export default class Filters {
     container.appendChild(body)
   }
 
-  createFilterForm(key) {
+  createFilterForm(fieldKey) {
     let widget = 'Checkbox'
-    const field = this._parent.fields.get(key)
+    const field = this._parent.fields.get(fieldKey)
     if (['Number', 'Date', 'Datetime'].includes(field?.type)) {
       widget = 'MinMax'
     } else if (field?.type === 'Boolean') {
       widget = 'Switch'
     }
     const properties = {
-      target: this._parent.filters.size ? this._parent : null,
-      key,
+      target: this._parent.fields.size ? this._parent : null,
+      fieldKey,
       widget,
-      ...(this.available?.get(key)?.dumps() || {}),
+      ...(this.available?.get(fieldKey)?.dumps() || {}),
     }
-    const fieldKeys = key
-      ? [key]
-      : ['', ...this._parent.fieldKeys.filter((key) => !this.available.has(key))]
+    const fieldKeys = fieldKey
+      ? [fieldKey]
+      : [
+          '',
+          ...this._parent.fieldKeys.filter((fieldKey) => !this.available.has(fieldKey)),
+        ]
     const metadata = [
       [
         'target',
         {
           handler: 'FilterTargetSelect',
           label: translate('Apply filter to'),
-          disabled: Boolean(key),
+          disabled: Boolean(fieldKey),
         },
       ],
       [
-        'key',
+        'fieldKey',
         {
           handler: 'Select',
           selectOptions: fieldKeys,
@@ -449,7 +419,7 @@ export default class Filters {
     ]
     const form = new Form(properties, metadata, { umap: this._umap })
     let label
-    if (key) {
+    if (fieldKey) {
       label = translate('Edit filter')
     } else {
       label = translate('Add filter')
@@ -465,14 +435,14 @@ export default class Filters {
     body.appendChild(form.build())
     editField.addEventListener('click', () => {
       this._umap.dialog.accept()
-      this._parent.fields.editField(key)
+      this._parent.fields.editField(fieldKey)
     })
 
     return this._umap.dialog.open({ template: container }).then(() => {
       const target = properties.target
       if (!target) return
-      if (!properties.key) return
-      if (key) {
+      if (!properties.fieldKey) return
+      if (fieldKey) {
         target.filters.update({ ...properties })
       } else {
         target.filters.add({ ...properties })
@@ -490,12 +460,12 @@ export default class Filters {
   }
 
   matchFeature(feature) {
-    for (const [key, obj] of this.available.entries()) {
+    for (const [fieldKey, obj] of this.available.entries()) {
       if (!obj.isActive()) continue
-      const field = this._parent.fields.get(key)
+      const field = this._parent.fields.get(fieldKey)
       // This field may only exist on another layer.
       if (!field) continue
-      let value = feature.properties[key]
+      let value = feature.properties[fieldKey]
       const parser = getParser(field.type)
       value = parser(value)
       if (obj.match(value)) return true
@@ -793,4 +763,37 @@ Fields.FilterBySwitch = class extends FilterBase {
     if (this.value() === 'unset') return {}
     return { wanted: this.value() === 'true' }
   }
+}
+
+export const migrateLegacyFilters = (properties) => {
+  const legacy = properties.advancedFilterKey || properties.facetKey
+  if (!legacy) return false
+  properties.filters ??= []
+  properties.fields ??= []
+  for (const filter of legacy.split(',')) {
+    let [fieldKey, label, widget] = filter.split('|')
+    let type = 'String'
+    if (['number', 'date', 'datetime'].includes(widget)) {
+      // Retrocompat
+      if (widget === 'number') {
+        type = 'Number'
+      } else if (widget === 'datetime') {
+        type = 'Datetime'
+      } else if (widget === 'date') {
+        type = 'Date'
+      }
+      widget = 'MinMax'
+    }
+    if (widget === 'radio') {
+      widget = 'Radio'
+    }
+    if (!(widget in Widgets)) {
+      widget = 'Checkbox'
+    }
+    properties.filters.push({ fieldKey, label, widget })
+    properties.fields.push({ key: fieldKey, type })
+  }
+  delete properties.facetKey
+  delete properties.advancedFilterKey
+  return true
 }
