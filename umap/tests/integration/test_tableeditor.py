@@ -235,6 +235,6 @@ def test_add_filter_on_map_field(live_server, openmap, page):
     with page.expect_response(re.compile("./update/settings/.*")):
         page.get_by_role("button", name="Save").click()
     saved = Map.objects.first()
-    assert saved.settings["properties"]["filters"] == {
-        "mynumber": {"widget": "MinMax", "label": "My Fun Filter"}
-    }
+    assert saved.settings["properties"]["filters"] == [
+        {"fieldKey": "mynumber", "widget": "MinMax", "label": "My Fun Filter"}
+    ]

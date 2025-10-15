@@ -22,7 +22,7 @@ import * as Utils from '../utils.js'
 import { LineString, Point, Polygon } from './features.js'
 import Rules from '../rules.js'
 import { FeatureManager, FieldManager } from '../managers.js'
-import Filters from '../filters.js'
+import { Filters } from '../filters.js'
 
 export const LAYER_TYPES = [
   DefaultLayer,

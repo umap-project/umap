@@ -10,7 +10,7 @@ import {
 import Browser from './browser.js'
 import Caption from './caption.js'
 import { DataLayer } from './data/layer.js'
-import Filters from './filters.js'
+import { Filters, migrateLegacyFilters } from './filters.js'
 import { MutatingForm } from './form/builder.js'
 import { Formatter } from './formatter.js'
 import Help from './help.js'
@@ -49,6 +49,7 @@ export default class Umap {
   }
 
   async init(element, geojson) {
+    this.migrateLegacyProperties(geojson.properties)
     this.properties = Object.assign(
       {
         enableMarkerDraw: true,
@@ -729,7 +730,14 @@ export default class Umap {
     return this.properties.name || translate('Untitled map')
   }
 
+  migrateLegacyProperties(properties) {
+    if (migrateLegacyFilters(properties)) {
+      this._migrated = true
+    }
+  }
+
   setProperties(newProperties) {
+    this.migrateLegacyProperties(newProperties)
     for (const key of Object.keys(SCHEMA)) {
       if (newProperties[key] !== undefined) {
         this.properties[key] = newProperties[key]
@@ -1724,6 +1732,7 @@ export default class Umap {
     const fields = Object.keys(importedData.properties).map(
       (field) => `properties.${field}`
     )
+    this.filters.load()
     this.render(fields)
     this._leafletMap._setDefaultCenter()
   }
