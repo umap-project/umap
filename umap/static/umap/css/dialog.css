@@ -13,17 +13,25 @@
   overflow-y: auto;
   height: fit-content;
 }
-.umap-dialog ul + h4 {
+
+.umap-dialog ul+h4 {
   margin-top: var(--box-margin);
 }
+
 .umap-dialog .body {
   max-height: 50vh;
   overflow-y: auto;
 }
+
+.umap-dialog details>* {
+  padding: var(--text-margin);
+}
+
 :where([data-component="no-dialog"]:not([hidden])) {
   display: block;
   position: relative;
 }
+
 :where([data-component*="dialog"] menu) {
   display: flex;
   gap: calc(var(--gutter) / 2);
@@ -31,15 +39,18 @@
   margin: 0;
   padding: 0;
 }
+
 :where([data-component*="dialog"] [data-ref="fieldset"]) {
   border: 0;
   margin: unset;
   padding: unset;
 }
+
 @media all and (max-width: 480px) {
   :root {
     --dialog-width: calc(100vw - var(--control-size) * 2 - var(--panel-gutter) * 8);
   }
+
   .umap-dialog {
     padding: var(--small-box-padding);
   }
@@ -49,6 +60,6 @@
 @-moz-document url-prefix() {
   [data-component="no-dialog"]:not([hidden]) {
     inset-inline-start: 0;
-     transform: none;
+    transform: none;
   }
 }
