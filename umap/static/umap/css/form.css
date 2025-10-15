@@ -325,14 +325,11 @@ details {
     border: 1px solid var(--color-veryDarkGray);
 }
 
-details>* {
-    padding: var(--text-margin);
-}
-
 details fieldset {
     overflow: hidden;
     border: 1px solid var(--color-veryLightGray);
     margin: 0;
+    padding: var(--text-margin);
 }
 
 details summary {
