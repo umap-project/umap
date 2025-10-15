@@ -94,19 +94,15 @@
     background: none;
     border: 1px solid var(--color-veryLightGray);
     width: fit-content;
-    padding: 0 10px;
     margin-bottom: var(--block-margin);
-}
-
-.umap-browser .filters summary {
     list-style: none;
     display: inline-block;
+    padding: calc(var(--text-margin) / 2) var(--text-margin);
 }
 
 .umap-browser details[open].filters summary {
     margin-bottom: -1px;
     border-bottom: 1px solid var(--background-color);
-    padding: calc(var(--text-margin) / 2) var(--text-margin);
 }
 
 .umap-caption .dates {
