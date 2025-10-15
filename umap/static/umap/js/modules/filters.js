@@ -521,7 +521,7 @@ class FiltersForm extends Form {
         <legend data-ref=label>
           <span>${helper.properties.label}</span>
           <span class="filter-toolbox">
-            <button type="button" class="icon icon-16 icon-edit show-on-edit" data-ref=editFilter></button>
+            <button type="button" class="icon icon-16 icon-edit show-on-edit" data-ref=editFilter title="${translate('Edit filter')}"></button>
           </span>
         </legend>
         <div data-ref="container">${helper.getTemplate()}</div>
