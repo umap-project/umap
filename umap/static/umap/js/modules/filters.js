@@ -4,6 +4,8 @@ import * as Utils from './utils.js'
 import Orderable from './orderable.js'
 import { Fields } from './form/fields.js'
 
+const EMPTY_VALUE = translate('<empty value>')
+
 const getParser = (type) => {
   switch (type) {
     case 'Number':
@@ -15,10 +17,12 @@ const getParser = (type) => {
     case 'Boolean':
       return Boolean
     case 'Enum':
-      return (v) =>
-        String(v || '')
+      return (v) => {
+        if (!v) return [EMPTY_VALUE]
+        return String(v || '')
           .split(',')
           .map((s) => s.trim())
+      }
     default:
       return (v) => String(v || '')
   }
@@ -99,7 +103,7 @@ class Choices extends BaseWidget {
       const intersection = value.filter((item) => this.userData.selected.includes(item))
       if (intersection.length !== this.userData.selected.length) return true
     } else {
-      value = value || translate('<empty value>')
+      value = value || EMPTY_VALUE
       if (!this.userData.selected.includes(value)) return true
     }
     return false
@@ -113,7 +117,7 @@ class Choices extends BaseWidget {
     if (Array.isArray(value)) {
       data.choices = new Set([...data.choices, ...value])
     } else {
-      value = value || translate('<empty value>')
+      value = value || EMPTY_VALUE
       data.choices.add(value)
     }
   }
@@ -517,7 +521,7 @@ class FiltersForm extends Form {
         <legend data-ref=label>
           <span>${helper.properties.label}</span>
           <span class="filter-toolbox">
-            <button type="button" class="icon icon-16 icon-edit show-on-edit" data-ref=editFilter></button>
+            <button type="button" class="icon icon-16 icon-edit show-on-edit" data-ref=editFilter title="${translate('Edit filter')}"></button>
           </span>
         </legend>
         <div data-ref="container">${helper.getTemplate()}</div>

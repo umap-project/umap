@@ -169,7 +169,12 @@ export class DataLayer {
     // Propagate will remove the fields it has already
     // processed
     fields = this.propagate(fields)
-    if (fields.includes('properties.fields')) this.fields.pull()
+    if (fields.includes('properties.fields')) {
+      this.fields?.pull()
+      if (this._umap.browser.isOpen()) {
+        this._umap.browser.buildFilters()
+      }
+    }
     if (fields.includes('properties.filters')) {
       this.filters.load()
       if (this._umap.browser.isOpen()) {

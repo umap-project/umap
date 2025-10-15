@@ -335,6 +335,7 @@ export class FieldManager extends Map {
         oldFields
       )
       this.parent.sync.commitBatch()
+      this.parent.render(['properties.fields'])
     })
   }
 
