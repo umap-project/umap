@@ -4,6 +4,7 @@ from copy import deepcopy
 from pathlib import Path
 
 import pytest
+from playwright.sync_api import expect
 
 from umap.models import DataLayer, Map
 
@@ -463,3 +464,59 @@ def test_delete_field_from_datalayer_also_in_map(live_server, page, openmap):
         "name": "Point 2",
         "mytype": "even",
     }
+
+
+def test_can_change_field_type_with_remote_data(live_server, page, openmap, tilelayer):
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {"name": "Point 2", "myenum": "foofoo,bababar"},
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [4.3375, 11.2707],
+                },
+            },
+            {
+                "type": "Feature",
+                "properties": {"name": "Point 1", "myenum": "feefee,bababar"},
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [4.3375, 12.2707],
+                },
+            },
+        ],
+    }
+
+    def handle(route):
+        route.fulfill(json=data)
+
+    DataLayerFactory(
+        map=openmap,
+        settings={
+            "remoteData": {
+                "url": "https://remote.org/data.json",
+                "format": "geojson",
+            },
+        },
+    )
+    # Intercept the route to the proxy
+    page.route("https://remote.org/data.json", handle)
+
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#9/12.0017/4.4824")
+    page.get_by_role("button", name="Manage layers").click()
+    page.get_by_role("button", name="Edit", exact=True).click()
+    page.locator("summary").filter(has_text="Manage Fields").click()
+    # Click on "myenum" edit button
+    page.get_by_role("button", name="Edit this field").nth(1).click()
+    page.get_by_label("Field Type").select_option("Enum")
+    page.get_by_role("button", name="OK").click()
+    # Click on "myenum" add filter button
+    page.get_by_role("button", name="Add a filter for this field").nth(1).click()
+    page.get_by_role("button", name="OK").click()
+    page.get_by_role("button", name="Open browser").click()
+    page.get_by_text("Filters", exact=True).click()
+    expect(page.locator(".panel .umap-filter label")).to_contain_text(
+        ["bababar", "feefee", "foofoo"]
+    )

@@ -189,6 +189,7 @@ export class FieldManager extends Map {
       </details>
     `)
     container.appendChild(root)
+    add.hidden = this.parent.isRemoteLayer?.()
     add.addEventListener('click', () => {
       this.editField().then(() => {
         this.parent.edit().then((panel) => {
@@ -215,6 +216,7 @@ export class FieldManager extends Map {
       )
       editFilter.hidden = !this.parent.filters.has(field.key)
       addFilter.hidden = this.parent.filters.has(field.key)
+      del.hidden = this.parent.isRemoteLayer?.()
       editFilter.addEventListener('click', () =>
         this.parent.filters.createFilterForm(field.key)
       )
@@ -257,6 +259,7 @@ export class FieldManager extends Map {
   }
 
   async editField(name) {
+    if (!name && this.parent.isRemoteLayer?.()) return
     const FIELD_TYPES = [
       'String',
       'Text',
@@ -268,7 +271,14 @@ export class FieldManager extends Map {
     ]
     const field = this.get(name) || {}
     const metadatas = [
-      ['key', { handler: 'BlurInput', label: translate('Field Name') }],
+      [
+        'key',
+        {
+          handler: 'BlurInput',
+          label: translate('Field Name'),
+          disabled: this.parent.isRemoteLayer?.(),
+        },
+      ],
       [
         'type',
         {

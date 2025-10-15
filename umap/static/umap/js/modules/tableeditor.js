@@ -41,28 +41,29 @@ export default class TableEditor extends WithTemplate {
   }
 
   openHeaderMenu(name, parent) {
-    const actions = []
     let actionLabel
     if (parent.filters.has(name)) {
       actionLabel = translate('Edit filter for this field')
     } else {
       actionLabel = translate('Add filter for this field')
     }
-    actions.push({
-      label: actionLabel,
-      action: () => {
-        parent.filters.createFilterForm(name)
-        this._umap.browser.open('filters')
+    const actions = [
+      {
+        label: actionLabel,
+        action: () => {
+          parent.filters.createFilterForm(name)
+          this._umap.browser.open('filters')
+        },
       },
-    })
-    // Only allow editing fields for map and local datalayer.
-    if (!parent.isRemoteLayer?.()) {
-      actions.push({
+      {
         label: translate('Edit this field'),
         action: () => {
           parent.fields.editField(name).then(() => this.open())
         },
-      })
+      },
+    ]
+    // Only allow deleting fields for map and local datalayer.
+    if (!parent.isRemoteLayer?.()) {
       actions.push({
         label: translate('Delete this field'),
         action: () => {
