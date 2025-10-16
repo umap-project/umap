@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.4.0-beta2 - 2025-10-16
+* be more defensive and try not add a field with an empty key by @yohanboniface in #3016
+* fix search result button color by @yohanboniface in #3017
+* order tags for frontend too
+
 ## 3.4.0-beta1 - 2025-10-16
 * update permissions properties after login by @yohanboniface in #3013
 * sort tags in search select by @yohanboniface in #3014
