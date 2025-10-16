@@ -1271,6 +1271,7 @@ export default class Umap {
             if (!this.id) {
               this.properties.permissions.owner = { ...data.user }
             }
+            this.permissions.pull()
             this.render(['user', 'properties.permissions'])
             resolve()
           })

@@ -246,6 +246,10 @@ export class MapPermissions {
     )
   }
 
+  pull() {
+    this.setProperties(this._umap.properties.permissions)
+  }
+
   getShareStatusDisplay() {
     if (this._umap.properties.share_statuses) {
       return Object.fromEntries(this._umap.properties.share_statuses)[
