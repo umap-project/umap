@@ -369,7 +369,7 @@ ul.photon-autocomplete {
     margin: 0;
 }
 
-.photon-autocomplete button:hover {
+.photon-autocomplete button[type="button"]:hover {
     background-color: var(--color-darkCyan);
 }
 
@@ -405,8 +405,8 @@ ul.photon-autocomplete {
     display: none;
 }
 
-.search-result-tools button {
-    padding: 8px;
+.search-result-tools button[type="button"] {
+    padding: var(--text-margin);
     background-color: var(--background-color);
 }
 
