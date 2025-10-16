@@ -226,5 +226,5 @@ def collect_pictograms():
 
 
 def normalize_string(s):
-    n = unicodedata.normalize("NFKD", s)
+    n = unicodedata.normalize("NFKD", str(s))
     return "".join([c for c in n if not unicodedata.combining(c)]).lower()

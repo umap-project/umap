@@ -16,7 +16,7 @@ def settings(request):
         "UMAP_HOST_INFOS": djsettings.UMAP_HOST_INFOS,
         "UMAP_ALLOW_EDIT_PROFILE": djsettings.UMAP_ALLOW_EDIT_PROFILE,
         "UMAP_TAGS": sorted(
-            djsettings.UMAP_TAGS, key=lambda item: normalize_string(str(item[1]))
+            djsettings.UMAP_TAGS, key=lambda item: normalize_string(item[1])
         ),
     }
 

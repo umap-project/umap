@@ -13,7 +13,7 @@ from django.utils.functional import classproperty
 from django.utils.translation import gettext_lazy as _
 
 from .managers import PrivateManager, PublicManager
-from .utils import _urls_for_js
+from .utils import _urls_for_js, normalize_string
 
 
 # Did not find a clean way to do this in Django
@@ -438,7 +438,11 @@ class Map(NamedModel):
             "iconUrl": {
                 "default": "%sumap/img/marker.svg" % settings.STATIC_URL,
             },
-            "tags": {"choices": sorted(settings.UMAP_TAGS, key=lambda i: i[0])},
+            "tags": {
+                "choices": sorted(
+                    settings.UMAP_TAGS, key=lambda i: normalize_string(i[1])
+                )
+            },
         }
 
 
