@@ -1,6 +1,8 @@
 from pathlib import Path
 
-from umap.utils import gzip_file
+import pytest
+
+from umap.utils import gzip_file, normalize_string
 
 
 def test_gzip_file():
@@ -12,3 +14,15 @@ def test_gzip_file():
     dest_stat = dest.stat()
     dest.unlink()
     assert src_stat.st_mtime == dest_stat.st_mtime
+
+
+@pytest.mark.parametrize(
+    "input,output",
+    (
+        ("Vélo", "velo"),
+        ("Éducation", "education"),
+        ("stävänger", "stavanger"),
+    ),
+)
+def test_normalize_string(input, output):
+    assert normalize_string(input) == output

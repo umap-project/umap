@@ -1,6 +1,7 @@
 import gzip
 import json
 import os
+import unicodedata
 from pathlib import Path
 
 from django.conf import settings
@@ -222,3 +223,8 @@ def collect_pictograms():
         }
 
     return pictograms
+
+
+def normalize_string(s):
+    n = unicodedata.normalize("NFKD", s)
+    return "".join([c for c in n if not unicodedata.combining(c)]).lower()
