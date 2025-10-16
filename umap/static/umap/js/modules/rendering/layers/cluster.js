@@ -281,6 +281,8 @@ export const Cluster = FeatureGroup.extend({
   ],
 
   onEdit: function (field, builder) {
-    if (field === 'properties.cluster.radius') this.redraw()
+    if (field === 'properties.cluster.radius' || field === 'properties.color') {
+      this.redraw()
+    }
   },
 })
