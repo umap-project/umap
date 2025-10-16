@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.4.0-beta1 - 2025-10-16
+* update permissions properties after login by @yohanboniface in #3013
+* sort tags in search select by @yohanboniface in #3014
+* redraw cluster when changing color by @yohanboniface in #3015
+
 ## 3.4.0-beta0 - 2025-10-16
 
 This release is mainly about a refactor of fields and filters management.
@@ -25,6 +30,7 @@ Also:
 * add duration and profile in isochrone data by @yohanboniface in #2986
 * allow path decoration on polygons too by @yohanboniface in #2987
 * expose feature id in template variables by @yohanboniface in #2989
+* only show Wikipedia intro, and add credit and full link in footer by @yohanboniface in #2983
 
 ### Bug fixes
 * make the edition header responsive by @davidbgk in #2921
@@ -36,7 +42,6 @@ Also:
 * use fillColor if defined in rules legend by @yohanboniface in #2967
 * add success message when elevation has been added by @yohanboniface in #2972
 * do no try to redraw a feature not on the map by @yohanboniface in #2975
-* only show Wikipedia intro, and add credit and full link in footer by @yohanboniface in #2983
 * align text in large circle icon by @yohanboniface in #2984
 * add opacity to classified layer legend color by @yohanboniface in #2985
 * do not save data to the server for remote layers by @yohanboniface in #3010
