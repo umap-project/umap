@@ -491,7 +491,7 @@ export class DataLayer {
 
   inferFields(feature) {
     for (const key in feature.properties) {
-      if (typeof feature.properties[key] !== 'object') {
+      if (key && typeof feature.properties[key] !== 'object') {
         if (key.indexOf('_') === 0) continue
         if (this.fields.has(key)) continue
         if (this._umap.fields.has(key)) continue
