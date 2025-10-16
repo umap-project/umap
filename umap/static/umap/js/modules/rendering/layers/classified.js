@@ -7,7 +7,7 @@ import { CircleMarker } from '../ui.js'
 import { LayerMixin } from './base.js'
 
 // Layer where each feature color is relative to the others,
-// so we need all features before behing able to set one
+// so we need all features before being able to set one
 // feature layer
 const ClassifiedMixin = {
   initialize: function (datalayer) {

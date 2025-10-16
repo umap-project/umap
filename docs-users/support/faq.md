@@ -46,7 +46,7 @@ With macOS, replace `Ctrl` by `Cmd`.
 * `mycolumn<12.34` → will match features whose column `mycolumn` is lower than `12.34` (as number)
 * `mycolumn=` → will match features whose column `mycolumn` has no or null value
 * `mycolumn!=` → will match features whose column `mycolumn` has any defined
-* `mycolumn=true/false` → will match features whose column `mycolumn` is explicitely `true` (or `false`)
+* `mycolumn=true/false` → will match features whose column `mycolumn` is explicitly `true` (or `false`)
 * `mycolumn!=true/false` → will match features whose column `mycolumn` is different from `true` (or `false`)
 
 When the condition matches, the associated style will be applied to the corresponding feature. When multiple rules

@@ -1,7 +1,7 @@
 'use strict';
 
 /* A Draggable that does not update the element position
-and takes care of only bubbling to targetted path in Canvas mode. */
+and takes care of only bubbling to targeted path in Canvas mode. */
 L.PathDraggable = L.Draggable.extend({
 
   initialize: function (path) {

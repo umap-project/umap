@@ -289,7 +289,7 @@ class Map(NamedModel):
         self.save()
 
     def delete(self, **kwargs):
-        # Explicitely call datalayers.delete, so we can deal with removing files
+        # Explicitly call datalayers.delete, so we can deal with removing files
         # (the cascade delete would not call the model delete method)
         # Use datalayer_set so to get also the deleted ones.
         for datalayer in self.datalayer_set.all():

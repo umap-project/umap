@@ -118,7 +118,7 @@ const ENTRIES = {
     <dt>KML</dt>
     <dd>${translate('Properties imported:')}name, description</dd>
     <dt>CSV</dt>
-    <dd>${translate('Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.')}</dd>
+    <dd>${translate('Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the beginning of the header, case insensitive. All other column are imported as properties.')}</dd>
     <dt>uMap</dt>
     <dd>${translate('Imports all umap data, including layers and settings.')}</dd>
   </div>

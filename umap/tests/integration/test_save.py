@@ -1,7 +1,7 @@
 import re
 
 
-def test_reseting_map_would_remove_from_save_queue(
+def test_resetting_map_would_remove_from_save_queue(
     live_server, openmap, page, datalayer
 ):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")

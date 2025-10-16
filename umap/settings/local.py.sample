@@ -59,7 +59,7 @@ SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 SOCIAL_AUTH_BACKEND_ERROR_URL = "/"
 
-# If you want to add a playgroud map, add its primary key
+# If you want to add a playground map, add its primary key
 # UMAP_DEMO_PK = 204
 # If you want to add a showcase map on the home page, add its primary key
 # UMAP_SHOWCASE_PK = 1156

@@ -70,7 +70,7 @@ const locale = {
     "color": "farba",
     "Comma separated list of numbers, including min and max values.": "Comma separated list of numbers, including min and max values.",
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
-    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Hodnoty oddelené čiarkou, tabulátorom, alebo bodkočiarkou. Predpokladá sa SRS WGS84 a sú importované iba polohy bodov. Import hľadá záhlavie stĺpcov začínajúcich na \"lat\" a \"lon\" a tie považuje za súradnice (na veľkosti písmien nezáleži). Ostatné stĺpce sú importované ako vlastnosti.",
+    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the beginning of the header, case insensitive. All other column are imported as properties.": "Hodnoty oddelené čiarkou, tabulátorom, alebo bodkočiarkou. Predpokladá sa SRS WGS84 a sú importované iba polohy bodov. Import hľadá záhlavie stĺpcov začínajúcich na \"lat\" a \"lon\" a tie považuje za súradnice (na veľkosti písmien nezáleži). Ostatné stĺpce sú importované ako vlastnosti.",
     "Congratulations, your map has been created!": "Congratulations, your map has been created!",
     "Continue line": "Pokračovať v čiare",
     "Coordinates": "Súradnice",

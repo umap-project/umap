@@ -50,7 +50,7 @@ STORAGES = {
         },
     },
     "data": {
-        # Whatch out, this is a dedicated uMap class!
+        # Watch out, this is a dedicated uMap class!
         "BACKEND": "umap.storage.s3.S3DataStorage",
         "OPTIONS": {
             "access_key": "xxx",

@@ -7,7 +7,7 @@ export class Panel {
     this._umap = umap
     this._leafletMap = leafletMap
     this.container = DomUtil.create('div', '', this.parent)
-    // This will be set once according to the panel configurated at load
+    // This will be set once according to the panel configured at load
     // or by using panels as popups
     this.mode = null
     this.className = 'left'
@@ -67,7 +67,7 @@ export class Panel {
           })
           .catch(() => {
             // Panel has been removed, so the DOM has changed, so the animations
-            // were cancelled, we want the new panel callabck to be called anyway.
+            // were cancelled, we want the new panel callback to be called anyway.
             resolve(this)
           })
         this.container.classList.add('on')

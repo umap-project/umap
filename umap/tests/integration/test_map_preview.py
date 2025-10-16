@@ -58,7 +58,7 @@ def test_map_preview_can_load_remote_geojson(page, live_server, tilelayer):
     expect(markers).to_have_count(1)
 
 
-def test_map_preview_can_load_mutiple_remote_geojson(page, live_server, tilelayer):
+def test_map_preview_can_load_multiple_remote_geojson(page, live_server, tilelayer):
     def handle(route):
         if "2" in route.request.url:
             route.fulfill(json=GEOJSON2)

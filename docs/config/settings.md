@@ -171,7 +171,7 @@ Eg.: `USER_AUTOCOMPLETE_FIELDS = ["^username", "email"]`
 
 #### USER_DISPLAY_NAME
 
-Advanced setting for controling which user fields will be used for displaying
+Advanced setting for controlling which user fields will be used for displaying
 their name on the application, depending on which fields you collect with your
 OAuth configuration.
 For example: `USER_DISPLAY_NAME = "{username}"`
@@ -289,7 +289,7 @@ Which feed to display on the home page. Three valid values:
 
 #### UMAP_HOST_INFOS
 
-Informations about the entity hosting this uMap instance.
+Information about the entity hosting this uMap instance.
 
 ```python title="local_settings.py"
 UMAP_HOST_INFOS = {

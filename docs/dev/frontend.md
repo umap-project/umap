@@ -53,7 +53,7 @@ Each data layer contains a "layer", to know what type of layer it is. It's one o
 - Heat (`U.Layer.Heat`)
 
 When the data layers are initialized, they can have two states:
-- `loaded`: the object is loaded in memory. At this stage we have access to all the datalayer's metada (name, type, id)
+- `loaded`: the object is loaded in memory. At this stage we have access to all the datalayer's metadata (name, type, id)
 - `dataLoaded` : the data is available to be used, so we can for instance compute the center of the map (when it's dynamic).
 
 - `backupOptions` is here to make it possible to cancel what have been done (using undo). It stores the old settings for the data-layer.

@@ -353,7 +353,7 @@ export default class Importer extends Utils.WithTemplate {
 
   async copy() {
     // Format may be guessed from file later.
-    // Usefull in case of multiple files with different formats.
+    // Useful in case of multiple files with different formats.
     if (!this.format && !this.files.length) {
       this.onError(translate('Please choose a format'))
       return false

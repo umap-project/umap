@@ -150,7 +150,7 @@ export class DataLayer {
 
   get fieldKeys() {
     // Needed to get a similar API from layer and uMap, but
-    // uMap whould return concat of all datalayers fields
+    // uMap would return concat of all datalayers fields
     return Array.from(this.fields.keys())
   }
 
@@ -209,7 +209,7 @@ export class DataLayer {
   }
 
   // This method does a targeted update of the UI,
-  // it whould be merged with `render`` method and the
+  // it would be merged with `render`` method and the
   // SCHEMA at some point
   propagate(fields = []) {
     const impacts = {

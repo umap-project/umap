@@ -49,7 +49,7 @@ User accounts can be managed via the Django admin page ({SITE_URL}/admin). The r
 umap createsuperuser
 ```
 
-## Developping with Docker
+## Developing with Docker
 
 If you want to develop with podman or docker, here are commands that might be useful, given that you have a postgreSQL server running locally and that your settings are located at `umap.conf`:
 

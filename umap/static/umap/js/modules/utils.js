@@ -40,7 +40,7 @@ function _getPropertyName(field) {
  * Return an array of unique impacts.
  *
  * @param {fields}  list[fields]
- * @param object schema object. If ommited, global U.SCHEMA will be used.
+ * @param object schema object. If omitted, global U.SCHEMA will be used.
  * @returns Array[string]
  */
 export function getImpactsFromSchema(fields, schema) {

@@ -70,7 +70,7 @@ const locale = {
     "color": "色",
     "Comma separated list of numbers, including min and max values.": "Comma separated list of numbers, including min and max values.",
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
-    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "カンマ、タブ、セミコロンなどで区切られた値。SRSはWGS84が適用されます。ポイントのジオメトリのみがインポート対象です。インポートを行なう際は、カラムの先頭行を対象に «lat» と «lon» という文字列が検索されます。検索は行の最初から順に行われ、大文字と小文字は区別されません。その他のすべてのカラムは、プロパティとしてインポートされます。",
+    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the beginning of the header, case insensitive. All other column are imported as properties.": "カンマ、タブ、セミコロンなどで区切られた値。SRSはWGS84が適用されます。ポイントのジオメトリのみがインポート対象です。インポートを行なう際は、カラムの先頭行を対象に «lat» と «lon» という文字列が検索されます。検索は行の最初から順に行われ、大文字と小文字は区別されません。その他のすべてのカラムは、プロパティとしてインポートされます。",
     "Congratulations, your map has been created!": "Congratulations, your map has been created!",
     "Continue line": "ラインを延長",
     "Coordinates": "位置情報",

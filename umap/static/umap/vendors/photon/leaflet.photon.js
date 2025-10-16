@@ -148,7 +148,7 @@ L.PhotonBaseSearch = L.PhotonBase.extend({
                 break;
             case this.KEYS.DOWN:
                 if(this.RESULTS.length > 0) {
-                    if(this.CURRENT !== null && this.CURRENT < this.RESULTS.length - 1) { // what if one resutl?
+                    if(this.CURRENT !== null && this.CURRENT < this.RESULTS.length - 1) { // what if one result?
                         this.CURRENT++;
                         this.highlight();
                     }

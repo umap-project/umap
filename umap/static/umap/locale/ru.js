@@ -70,7 +70,7 @@ const locale = {
     "color": "цвет",
     "Comma separated list of numbers, including min and max values.": "Comma separated list of numbers, including min and max values.",
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
-    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "В качестве разделителя используются запятые, табуляции и точки с запятой. Применяется датум WGS84. Импорт просматривает заголовок на наличие полей «lat» и «lon», регистр не имеет значения. Все остальные поля импортируются как свойства.",
+    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the beginning of the header, case insensitive. All other column are imported as properties.": "В качестве разделителя используются запятые, табуляции и точки с запятой. Применяется датум WGS84. Импорт просматривает заголовок на наличие полей «lat» и «lon», регистр не имеет значения. Все остальные поля импортируются как свойства.",
     "Congratulations, your map has been created!": "Congratulations, your map has been created!",
     "Continue line": "Продолжить линию",
     "Coordinates": "Координаты",

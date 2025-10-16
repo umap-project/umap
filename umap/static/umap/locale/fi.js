@@ -70,7 +70,7 @@ const locale = {
     "color": "väri",
     "Comma separated list of numbers, including min and max values.": "Comma separated list of numbers, including min and max values.",
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
-    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Pilkku-, tabulaattori- tai puolipiste-erotettuja arvoja. Koordinaattijärjestemänä WGS84. Vain pistegeometriat tuodaan uMapiin. Tietue-tuonti etsii «lat»- ja «lon»-alkavia sarakeotsikoita. Kaikki muut sarakkeet tuodaan ominaisuustietoina.",
+    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the beginning of the header, case insensitive. All other column are imported as properties.": "Pilkku-, tabulaattori- tai puolipiste-erotettuja arvoja. Koordinaattijärjestemänä WGS84. Vain pistegeometriat tuodaan uMapiin. Tietue-tuonti etsii «lat»- ja «lon»-alkavia sarakeotsikoita. Kaikki muut sarakkeet tuodaan ominaisuustietoina.",
     "Congratulations, your map has been created!": "Congratulations, your map has been created!",
     "Continue line": "Jatka viivaa",
     "Coordinates": "Koordinaatit",

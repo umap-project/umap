@@ -70,7 +70,7 @@ const locale = {
     "color": "spalva",
     "Comma separated list of numbers, including min and max values.": "Comma separated list of numbers, including min and max values.",
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
-    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Kableliu, tab'u arba kabliataškiu atskirtos reikšmės. SRS WGS84 yra palaikomas. Tik taškai yra importuoti. Importuojant bus patikrintos stulpelių antraštės ieškant pavadinimų \"lat\" ir \"lon\". Visi kiti stulpeliai bus įtraukti kaip papildomi atributai.",
+    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the beginning of the header, case insensitive. All other column are imported as properties.": "Kableliu, tab'u arba kabliataškiu atskirtos reikšmės. SRS WGS84 yra palaikomas. Tik taškai yra importuoti. Importuojant bus patikrintos stulpelių antraštės ieškant pavadinimų \"lat\" ir \"lon\". Visi kiti stulpeliai bus įtraukti kaip papildomi atributai.",
     "Congratulations, your map has been created!": "Congratulations, your map has been created!",
     "Continue line": "Continue line",
     "Coordinates": "Koordinatės",
