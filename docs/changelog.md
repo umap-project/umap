@@ -1,5 +1,52 @@
 # Changelog
 
+## 3.4.0-beta0 - 2025-10-16
+
+This release is mainly about a refactor of fields and filters management.
+There is now an UI to create filters, and fields can be loosely typed.
+Also:
+- a bunch of CSS fix to make editing on small screens a bit better
+- an effort to make clearer when the map is in draft and/or anonymous mode
+
+### New features
+* refactor field and filters management by @yohanboniface and @davidngk in #2868, #2981 and more
+* add more visible draft status in the top edit bar by @yohanboniface in #2953
+* make more explicity on the top edit bar when map is anonymous by @yohanboniface in #2954
+* show latlng in the contextmenu, and allow to copy it by @yohanboniface in #2930
+* allow to login from the map page by @yohanboniface in #2957
+* allow to filter by tags in my dashboard by @yohanboniface in #3001
+* add data portal https://data.culture.gouv.fr/ by @yohanboniface in #2949
+* add export in CSV with WKT geometry by @yohanboniface in #2962
+* allow to attach map to account after creation by @yohanboniface in #2963
+* add wikidata link in OSM popup template by @yohanboniface in #2965
+* add description to Route template by @yohanboniface in #2971
+* add a Mapillary link when tag is present, in OSM popup template by @yohanboniface in #2976
+* display image tag when present in OSM template by @yohanboniface in #2977
+* add duration and profile in isochrone data by @yohanboniface in #2986
+* allow path decoration on polygons too by @yohanboniface in #2987
+* expose feature id in template variables by @yohanboniface in #2989
+
+### Bug fixes
+* make the edition header responsive by @davidbgk in #2921
+* keep panels buttons accessible on small screens by @davidbgk in #2920
+* make dialogs more responsive by @davidbgk in #2922
+* more responsive sidebars on small screens by @davidbgk in #2923
+* fix search shortcut broken and make focus work each time by @yohanboniface in #2940
+* case insensitive match of CSV geom column by @yohanboniface in #2961
+* use fillColor if defined in rules legend by @yohanboniface in #2967
+* add success message when elevation has been added by @yohanboniface in #2972
+* do no try to redraw a feature not on the map by @yohanboniface in #2975
+* only show Wikipedia intro, and add credit and full link in footer by @yohanboniface in #2983
+* align text in large circle icon by @yohanboniface in #2984
+* add opacity to classified layer legend color by @yohanboniface in #2985
+* do not save data to the server for remote layers by @yohanboniface in #3010
+
+### Internal changes
+* move toolbox to the right by @yohanboniface in #2970
+* add example with two keys in overpass help by @yohanboniface in #2991
+* use a separate block for description in caption by @yohanboniface in #2990
+
+
 ## 3.3.6 - 2025-09-07
 
 * fix regression where a layer would be loaded while it should not by @yohanboniface in #2918
