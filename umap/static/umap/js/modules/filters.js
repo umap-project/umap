@@ -228,7 +228,15 @@ export class Filters {
   }
 
   load() {
-    for (const filter of this._parent.properties.filters || []) {
+    let filters = this._parent.properties.filters || []
+    // TMP fix for dev server to update map created before changing
+    // filters to be an array
+    if (typeof filters === 'object' && !Array.isArray(filters) && filters !== null) {
+      filters = Object.entries(filters).map(([fieldKey, props]) => {
+        return { fieldKey, ...props }
+      })
+    }
+    for (const filter of filters) {
       this._add({ ...filter })
     }
   }
