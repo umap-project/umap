@@ -306,7 +306,7 @@ export class Filters {
 
   _listFilters(filters, container, title) {
     const template = `
-      <details open>
+      <details>
         <summary>${title}</summary>
         <ul data-ref=ul></ul>
         <div>
@@ -322,9 +322,8 @@ export class Filters {
           `<li>${translate('Add a field prior to create a filter.')}</li>`
         )
       )
-    }
-    if (!filters.size) {
-      body.open = false
+    } else if (!filters._parent.fields.isDefault()) {
+      body.open = true
     }
     filters.available.forEach((filter, fieldKey) => {
       const [li, { edit, remove }] = Utils.loadTemplateWithRefs(
