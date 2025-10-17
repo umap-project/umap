@@ -18,6 +18,15 @@ export class Fields extends Map {
     this.pull()
   }
 
+  isDefault() {
+    const keys = Array.from(this.keys())
+    const defaultKeys = getDefaultFields().map((field) => field.key)
+    return (
+      keys.length === defaultKeys.length &&
+      keys.every((value, index) => value === defaultKeys[index])
+    )
+  }
+
   pull() {
     this.clear()
     for (const field of this.parent.properties.fields) {
