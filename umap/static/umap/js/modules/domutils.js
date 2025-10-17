@@ -83,11 +83,11 @@ export const hexToRGB = (hex) => {
     .map((x) => Number.parseInt(x, 16))
 }
 
-const CACHE_CONSTRAST = {}
+const CACHE_CONTRAST = {}
 export const contrastedColor = (el, bgcolor) => {
   // Return 0 for black and 1 for white
   // bgcolor is a human color, it can be a any keyword (purple…)
-  if (typeof CACHE_CONSTRAST[bgcolor] !== 'undefined') return CACHE_CONSTRAST[bgcolor]
+  if (typeof CACHE_CONTRAST[bgcolor] !== 'undefined') return CACHE_CONTRAST[bgcolor]
   let rgb = window.getComputedStyle(el).getPropertyValue('background-color')
   rgb = RGBRegex.exec(rgb)
   if (rgb && rgb.length === 4) {
@@ -104,6 +104,6 @@ export const contrastedColor = (el, bgcolor) => {
   }
   if (!rgb) return 1
   const out = contrastWCAG21(rgb)
-  if (bgcolor) CACHE_CONSTRAST[bgcolor] = out
+  if (bgcolor) CACHE_CONTRAST[bgcolor] = out
   return out
 }

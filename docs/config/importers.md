@@ -69,7 +69,7 @@ UMAP_IMPORTERS = {
 ## OpenDataSoft
 
 Importer allowing to interact with an OpenDataSoft instance API.
-By default, all instances are in France, but this can be overriden from settings.
+By default, all instances are in France, but this can be overridden from settings.
 
 ### Configuration
 - `name`: the name of the importer in the list (default: `OpenDataSoft`)

@@ -193,7 +193,7 @@ class OSM extends PopupTemplate {
       const row = DomUtil.add('address', 'address', body)
       const number = props['addr:housenumber']
       if (number) {
-        // Poor way to deal with international forms of writting addresses
+        // Poor way to deal with international forms of writing addresses
         DomUtil.add('span', '', row, `${translate('No.')}: ${number}`)
         DomUtil.add('span', '', row, `${translate('Street')}: ${street}`)
       } else {

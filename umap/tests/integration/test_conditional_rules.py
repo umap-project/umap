@@ -270,7 +270,7 @@ def test_can_create_new_rule(live_server, page, openmap):
     assert colors.count("rgb(240, 248, 255)") == 0
 
 
-def test_can_deactive_rule_from_list(live_server, page, openmap):
+def test_can_deactivate_rule_from_list(live_server, page, openmap):
     openmap.settings["properties"]["rules"] = [
         {"condition": "mytype=odd", "properties": {"color": "aliceblue"}}
     ]

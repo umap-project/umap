@@ -10,7 +10,7 @@ You simply have to drag&drop a GPX file above the map to automagically create a 
 
 ![Screenshot of a browser with a GPX file hover](../../static/tutoriels/gpx-import-drag-and-drop.png)
 
-A line should appear on the map with optionnal pre-defined points according to your source file:
+A line should appear on the map with optional pre-defined points according to your source file:
 
 ![Screenshot of the map with the trace](../../static/tutoriels/gpx-import-result.png)
 

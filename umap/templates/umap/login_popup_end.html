@@ -14,8 +14,8 @@
       }
       bc.postMessage('auth:ok')
     }
-    // In case the login was started in Javascript, the broadcasting whould close this
-    // window, so we wait for the broacasting to have a chance to finish the communication
+    // In case the login was started in Javascript, the broadcasting would close this
+    // window, so we wait for the broadcasting to have a chance to finish the communication
     // before trying to load the dashboard.
     window.setTimeout(() => {
       // We should arrive here in three situations:

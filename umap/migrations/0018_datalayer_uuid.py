@@ -57,6 +57,6 @@ class Migration(migrations.Migration):
             ),
         ),
         # When applying the migration backwards, we need to drop the pk index
-        # Before addding a new one.
+        # Before adding a new one.
         migrations.RunSQL(migrations.RunSQL.noop, reverse_sql=drop_index),
     ]

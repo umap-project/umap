@@ -23,7 +23,7 @@ location /uploads {
     gzip on;
     gzip_vary on;
     alias /path/to/umap/var/data/;
-    # Exclude direct acces to geojson, as permissions must be
+    # Exclude direct access to geojson, as permissions must be
     # checked py django.
     location /uploads/datalayer/ { return 404; }
 }

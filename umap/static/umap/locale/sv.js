@@ -70,7 +70,7 @@ const locale = {
     "color": "färg",
     "Comma separated list of numbers, including min and max values.": "Comma separated list of numbers, including min and max values.",
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
-    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Komma, tabb eller semikolon separerade värden. SRS WGS84 är underförstått. Bara punktgeometrier importeras. Importen letar kolumnrubriker som startar med «lat» eller «lon», ej skiftlägeskänslig. Övriga kolumner importeras som attribut.",
+    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the beginning of the header, case insensitive. All other column are imported as properties.": "Komma, tabb eller semikolon separerade värden. SRS WGS84 är underförstått. Bara punktgeometrier importeras. Importen letar kolumnrubriker som startar med «lat» eller «lon», ej skiftlägeskänslig. Övriga kolumner importeras som attribut.",
     "Congratulations, your map has been created!": "Grattis, din karta har skapats!",
     "Continue line": "Fortsätt linjen",
     "Coordinates": "Koordinater",

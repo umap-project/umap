@@ -1,6 +1,6 @@
 services:
 
-  # Usefull only to use the real time collaboration
+  # Useful only to use the real time collaboration
   redis:
     image: redis:latest
     healthcheck:

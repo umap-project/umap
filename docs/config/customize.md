@@ -98,7 +98,7 @@ There are three settings you can play with to control that:
     USER_AUTOCOMPLETE_FIELDS = ["^username"]
     # Which field to use in the URL, may also be for example "pk" to use the
     # primary key and not expose the username (which may be private or may change too
-    # often for URL persistance)
+    # often for URL persistence)
     USER_URL_FIELD = "username"
 
 

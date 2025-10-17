@@ -1,7 +1,7 @@
 # Deploying uMap
 
 uMap is a python package, running [Django](https://docs.djangoproject.com/en/5.2/howto/deployment/),
-so anyone experimented with this stack will find it familiar, but there are some speficic details
+so anyone experimented with this stack will find it familiar, but there are some specific details
 to know about.
 
 ## Data

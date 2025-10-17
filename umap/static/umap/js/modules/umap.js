@@ -1224,7 +1224,7 @@ export default class Umap {
     if (error) {
       return
     }
-    // TOOD: map.save may not always be the first call during save process
+    // TODO: map.save may not always be the first call during save process
     // since SAVEMANAGER refactor
     if (data.login_required) {
       this.askForLogin().then(() => this.saveAll())
@@ -1457,7 +1457,7 @@ export default class Umap {
   }
 
   // This method does a targeted update of the UI,
-  // it whould be merged with `render`` method and the
+  // it would be merged with `render`` method and the
   // SCHEMA at some point
   propagate(fields = []) {
     const impacts = {

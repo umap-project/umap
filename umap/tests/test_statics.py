@@ -32,9 +32,9 @@ def test_collectstatic_ran_successfully_with_hashes(settings, staticfiles):
     assert "hash" in json_manifest.keys()
     assert "umap/base.css" in json_manifest["paths"]
     # Hash + the dot ("umap/base.<hash>.css").
-    md5_hash_lenght = 12 + 1
+    md5_hash_length = 12 + 1
     # The value of the manifest must contain the hash (length).
     assert (
         len(json_manifest["paths"]["umap/base.css"])
-        == len("umap/base.css") + md5_hash_lenght
+        == len("umap/base.css") + md5_hash_length
     )

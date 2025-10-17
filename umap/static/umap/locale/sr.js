@@ -70,7 +70,7 @@ const locale = {
     "color": "боја",
     "Comma separated list of numbers, including min and max values.": "Comma separated list of numbers, including min and max values.",
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
-    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "Вредности одвојене зарезима, табом или новим редом. Подразумева се SRS WGS84. Увозе се само тачке геометрије. Увоз ће погледати заглавља ступаца за било које спомињање «лат» и «лон» на почетку заглавља, осетљив на велика и мала слова. Све друге колоне се увозе као својства.",
+    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the beginning of the header, case insensitive. All other column are imported as properties.": "Вредности одвојене зарезима, табом или новим редом. Подразумева се SRS WGS84. Увозе се само тачке геометрије. Увоз ће погледати заглавља ступаца за било које спомињање «лат» и «лон» на почетку заглавља, осетљив на велика и мала слова. Све друге колоне се увозе као својства.",
     "Congratulations, your map has been created!": "Congratulations, your map has been created!",
     "Continue line": "Наставите линију",
     "Coordinates": "Координате",

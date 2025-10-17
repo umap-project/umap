@@ -73,7 +73,7 @@ def test_POST_raises():
         validate_url(request)
 
 
-def test_unkown_domain_raises():
+def test_unknown_domain_raises():
     request = get("http://xlkjdkjsdlkjfd.com")
     with pytest.raises(AssertionError):
         validate_url(request)

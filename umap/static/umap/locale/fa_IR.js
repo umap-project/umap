@@ -70,7 +70,7 @@ const locale = {
     "color": "رنگ",
     "Comma separated list of numbers, including min and max values.": "فهرست اعداد جداشده با کاما، شامل مقدارهای کمینه و بیشینه.",
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "فهرست ویژگی‌ها برای استفاده در مرتب‌سازی عنصرها (جداشده با کاما). برای ترتیب معکوس، یک منها قبل آن بگذارید. مثلاًmykey, -othrekey.",
-    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.": "مقادیر جداشده با کاما، تب یا سمی‌کالن. SRS WGS84 پیشفرض است. فقط نقطه‌ها درون‌برد می‌شوند. درون‌بردکننده به سرستون‌ها نگاه می‌کند تا هرگونه ذکر عبارت «lat» و «lon» را در ابتدای سرستون بیابد. به بزرگی و کوچکی حروف حساس نیست. همهٔ ستون‌های دیگر به عنوان ویژگی درون‌برد می‌شوند.",
+    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the beginning of the header, case insensitive. All other column are imported as properties.": "مقادیر جداشده با کاما، تب یا سمی‌کالن. SRS WGS84 پیشفرض است. فقط نقطه‌ها درون‌برد می‌شوند. درون‌بردکننده به سرستون‌ها نگاه می‌کند تا هرگونه ذکر عبارت «lat» و «lon» را در ابتدای سرستون بیابد. به بزرگی و کوچکی حروف حساس نیست. همهٔ ستون‌های دیگر به عنوان ویژگی درون‌برد می‌شوند.",
     "Congratulations, your map has been created!": "تبریک، نقشهٔ شما ساخته شد!",
     "Continue line": "ادامه‌دادن به خط",
     "Coordinates": "مختصات",

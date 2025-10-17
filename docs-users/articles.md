@@ -94,7 +94,7 @@
 >
 > uMap is now ten years old, and is deployed on many instances around the world. The one I know well is hosted by OSM France, and is close to reach one million maps created and 100.000 users.
 >
-> This incubation program is ported by the French [“Accélérateur d’initiatives citoyennes”](https://citoyens.transformation.gouv.fr/), it includes coaches and a small budget for non tech needs (UI/UX…). One goal of this program is to find financial support for uMap development and maintainance. A French administration, the [Agence pour la cohésion des territoires](https://agence-cohesion-territoires.gouv.fr/), is the first uMap financial backer since a few months. This allowed us to put up a small team to work, part time, in uMap […]
+> This incubation program is ported by the French [“Accélérateur d’initiatives citoyennes”](https://citoyens.transformation.gouv.fr/), it includes coaches and a small budget for non tech needs (UI/UX…). One goal of this program is to find financial support for uMap development and maintenance. A French administration, the [Agence pour la cohésion des territoires](https://agence-cohesion-territoires.gouv.fr/), is the first uMap financial backer since a few months. This allowed us to put up a small team to work, part time, in uMap […]
 
 [Full article →](https://www.openstreetmap.org/user/ybon/diary/402248){ .md-button }
 

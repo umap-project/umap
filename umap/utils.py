@@ -80,7 +80,7 @@ def get_uri_template(urlname, args=None, prefix="", module=None):
             result, params = possibility[0]
             return _convert(result, params)
         else:
-            # If there are optionnal arguments passed, use them to try to find
+            # If there are optional arguments passed, use them to try to find
             # the correct pattern.
             # First, we need to build a list with all the arguments
             seen_params = []

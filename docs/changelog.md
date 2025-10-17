@@ -136,7 +136,7 @@ This release changes the way pictograms are managed. Instead of managing them th
 a Django models in the admin, there is now a setting to point to one or more local folders.
 It makes it easier to deal with a lot of pictograms, and also allows to expose more than one
 collection to users. See https://docs.umap-project.org/en/stable/config/icons/ for more
-informations.
+information.
 
 Note: the old way is still supported for now, but deprecated.
 
@@ -282,8 +282,8 @@ experimental line decoration feature.
 
 ## 3.0.0 - 2025-04-07
 
-This is the first release to officially support colaborative real-time map editing.
-It introduces ASGI deployement, to support websockets, and adds Redis in the stack.
+This is the first release to officially support collaborative real-time map editing.
+It introduces ASGI deployment, to support websockets, and adds Redis in the stack.
 But it's still possible to continue deploying in WSGI for now, and Redis is only
 mandatory when using the real-time feature.
 
@@ -336,7 +336,7 @@ see https://docs.umap-project.org/en/stable/config/settings/#umap_search_configu
 * remove confirm delete for features and datalayers by @yohanboniface in #2603
 
 ### Accessibility
-* a11y: turn embeded maps into inert elements by @davidbgk in #2533
+* a11y: turn embedded maps into inert elements by @davidbgk in #2533
 
 ### Changed templates
   - auth/user_detail.html
@@ -385,8 +385,8 @@ not yet activated by default).
 * add a quick link to layer's permalink by @yohanboniface in #2529
 
 ### Bug fixes
-* display a more usefull message when error in remote data by @yohanboniface in #2443
-* fix circle icon no longer hihlighted by @yohanboniface in #2440
+* display a more useful message when error in remote data by @yohanboniface in #2443
+* fix circle icon no longer highlighted by @yohanboniface in #2440
 * keep layer visibility after clicking on toggle all by @yohanboniface in #2439
 * update map.modified_at when saving a datalayer by @yohanboniface in #2423
 * do not consume ctrl-Z in textarea or input by @yohanboniface in #2441
@@ -394,7 +394,7 @@ not yet activated by default).
 * reference secret-env by fullname instead release-name by @swarnat in #2406
 * correctly parse http link including another http link in the path by @yohanboniface in #2460
 * display current configured oauth as icon instead of text by @yohanboniface in #2375
-* better buttons positionning for the homepage by @davidbgk in #2463
+* better buttons positioning for the homepage by @davidbgk in #2463
 * catch cluster error at zoom in certain situation by @yohanboniface in #2464
 * display a more descriptive alert on invalid geojson error by @yohanboniface in #2466
 * do not try to backup an undefined geojson by @yohanboniface in #2468
@@ -418,7 +418,7 @@ not yet activated by default).
 * add very minimal documentation for deploying uMap with ASGI by @yohanboniface in #2480
 * use default value from schema for non inheritable fields by @yohanboniface in #2513
 * sync save state by @yohanboniface in #2487
-* use our contexmenu class for inplace toolbar by @yohanboniface in #2510
+* use our contextmenu class for inplace toolbar by @yohanboniface in #2510
 * make sure we sync a line when hitting esc while drawing by @yohanboniface in #2526
 * make datalayer upsert idempotent by @yohanboniface in #2528
 
@@ -446,7 +446,7 @@ not yet activated by default).
 * fix duplicated content during sync by @yohanboniface in #2388
 * main help button was broken by @yohanboniface in #2393
 * split zoomTo to accept bounds by @davidbgk in #2394
-* zoom to droped file once loaded by @davidbgk in #2401
+* zoom to dropped file once loaded by @davidbgk in #2401
 * do not load all datalayers at once by @yohanboniface in #2402
 * add a 403.html template by @yohanboniface in #2396
 
@@ -463,7 +463,7 @@ we introduce two new map statuses:
   - "deleted", which make that now a delete will be a soft delete (and the command `umap empty_trash`
     could be run to do the real delete).
 
-Also pursuing the code cleaning (more modules and spliting uMap core code from Leaflet rendering one).
+Also pursuing the code cleaning (more modules and splitting uMap core code from Leaflet rendering one).
 
 Finally, this is now the javascript who create the datalayer uuid, and then push it to the back. This
 is for preparing for the synchronisation between clients.
@@ -475,7 +475,7 @@ is for preparing for the synchronisation between clients.
 
         add_header X-DataLayer-Version $upstream_http_x_datalayer_version;
 
-  See the [documentation](deploy/nginx.md) for more informations.
+  See the [documentation](deploy/nginx.md) for more information.
 
 ### New features
 * add umap helm chart for Kubernetes deployment by @NaPs in #2286
@@ -520,7 +520,7 @@ is for preparing for the synchronisation between clients.
 * make the client create the DataLayer.id by @yohanboniface in #2259
 * move editToolBar and captionBar to modules by @yohanboniface in #2272
 * update browserslist to be more explicit by @davidbgk in #2277
-* explicitely set postgis as db engine by @yohanboniface in #2285
+* explicitly set postgis as db engine by @yohanboniface in #2285
 * add logo for social_core.backends.keycloak.KeycloakOAuth2 by @tomamplius in #2258
 
 ### Changed templates
@@ -531,9 +531,9 @@ is for preparing for the synchronisation between clients.
     * added `umap/css/bar.js`
 * umap/templates/registration/login.html
 * umap/templates/umap/map_init.html
-    * changed the way we instanciate `Umap` (instead of `U.Map`)
+    * changed the way we instantiate `Umap` (instead of `U.Map`)
 * umap/templates/umap/user_dashboard.html
-    * changed the way we instanciate `Umap` (instead of `U.Map`)
+    * changed the way we instantiate `Umap` (instead of `U.Map`)
 
 ### New Contributors
 * @NaPs made their first contribution in #2286
@@ -565,17 +565,17 @@ is for preparing for the synchronisation between clients.
 
 ### Bug fixes
 * make sure maps of demo instances of uMap are no indexed by @yohanboniface in #2203
-* fix contextmenu positionning when map is not full screen by @yohanboniface in #2198
+* fix contextmenu positioning when map is not full screen by @yohanboniface in #2198
 * honour carriage returns in permanent credits by @yohanboniface in #2206
 * do not show browser counter when layer is empty or not loaded by @yohanboniface in #2217
-* fix dispeared icons from panel titles by @yohanboniface in #2222
+* fix disappeared icons from panel titles by @yohanboniface in #2222
 * use correct icon for layer download advanced action by @yohanboniface in #2224
 * do not try to create legend for non loaded classified layer by @yohanboniface in #2234
-* icon alignement in browser, and user icon-xxx class by @yohanboniface in #2132
+* icon alignment in browser, and user icon-xxx class by @yohanboniface in #2132
 * editing coordinates manually would not be saved by @yohanboniface in #2147
 * remoteData helpEntries were not on the right format by @yohanboniface in #2183
 * polygon with interactive=false was still interactive by @yohanboniface in #2151
-* allow to draw new proprotional circles and to drag them by @yohanboniface in #2172
+* allow to draw new proportional circles and to drag them by @yohanboniface in #2172
 * make sure anonymous is owner at create by @yohanboniface in #2189
 
 ### Internal changes
@@ -681,7 +681,7 @@ Thanks to @fim100 and @Dimitar5555!
 
 ### Bug fixes
 * add throttle in autocomplete by @yohanboniface in #1964
-* allow to search a French departement in Overpass importer by @yohanboniface in #1963
+* allow to search a French department in Overpass importer by @yohanboniface in #1963
 * main help button from edit toolbar was broken by @yohanboniface in #1958
 * make sure panels are above controls by @yohanboniface in #1972
 * BlurInput was not updating the object in some situations by @yohanboniface in #1979
@@ -745,7 +745,7 @@ Thanks to @fim100 and @Dimitar5555!
 * move autocomplete to modules/ by @yohanboniface in #1846
 * move importer to modules/ by @yohanboniface in #1856
 * move help to a separate module by @yohanboniface in #1881
-* remove U.Keys, and refactor global shorcuts by @yohanboniface in #1883
+* remove U.Keys, and refactor global shortcuts by @yohanboniface in #1883
 * better browser labels by @yohanboniface in #1809
 * smaller headings in descriptions by @yohanboniface in #1922
 * change heading CSS size by @yohanboniface in #1929
@@ -783,7 +783,7 @@ Thanks to @fim100 and @Dimitar5555!
 * add max-width to panel in landscape mode by @yohanboniface in #1789
 * allow `dir` and `title` attributes by @davidbgk in #1801
 * allow panel expanded mode in mobile by @yohanboniface in #1790
-* do not try to render drawinTooltip on drawing start by @yohanboniface in #1805
+* do not try to render drawingTooltip on drawing start by @yohanboniface in #1805
 * really focus on search input after showing the panel by @yohanboniface in #1807
 * open edit panel when pressing ESC while drawing, if valid by @yohanboniface in #1804
 
@@ -925,7 +925,7 @@ Thanks to @fim100 and @Dimitar5555!
 
 ## 2.0.0 - 2024-02-16
 
-This release is inauguring a new era in versionning uMap: in the future, we'll take care of better documenting breaking changes, so expect more major releases from now on. More details on [how we version](https://docs.umap-project.org/en/master/release/#when-to-make-a-release).
+This release is inaugurating a new era in versioning uMap: in the future, we'll take care of better documenting breaking changes, so expect more major releases from now on. More details on [how we version](https://docs.umap-project.org/en/master/release/#when-to-make-a-release).
 
 The main changes are:
 
@@ -938,7 +938,7 @@ More details below!
 
 ### Breaking changes
 
-* updrade to Django 5.x drops support for Python < 3.10
+* upgrade to Django 5.x drops support for Python < 3.10
 * `django-compressor` has been removed, so `umap compress` is not a valid command anymore (compress is now done in the `collectstatic` process itself) (#1544, #1539)
 * removed support for settings starting with `LEAFLET_STORAGE_` (deprecated since 1.0.0)
 * removed support for deprecated OpenStreetMap OAuth1 backend in favour of OAuth2 (see below)
@@ -996,7 +996,7 @@ More details below!
 
 ### Documentation
 
-* Define an explicit release stragegy (#1567)
+* Define an explicit release strategy (#1567)
 
 ### Changed templates
 
@@ -1066,7 +1066,7 @@ More details below!
 
 ### Bug fixes
 * Increase iconlayers titles on hover by @yohanboniface in #1476
-* Remove zoom/moeveend events when deleting datalayer by @yohanboniface in #1484
+* Remove zoom/moveend events when deleting datalayer by @yohanboniface in #1484
 * Better way of handling escape while drawing by @yohanboniface in #1483
 * Do not fail on greedyTemplate when description is an object by @yohanboniface in #1482
 
@@ -1076,7 +1076,7 @@ More details below!
 ## 1.12.0 - 2023-12-17
 
 ### New features
-* Optimistic conflicts resolution mecanism by @almet in #772
+* Optimistic conflicts resolution mechanism by @almet in #772
 * Use Leaflet.IconLayers as tilelayers switcher by @yohanboniface in #1469
 * Use map style options to style minimap bbox rectangle by @yohanboniface in #1443
 * Make it easier to open file dialog by @yohanboniface in #1445
@@ -1139,7 +1139,7 @@ More details below!
 * Add triangle icon to form fieldset to make toggle clearer by @yohanboniface in #1393
 * Speedup the tests by using a weaker hash algo. by @almet in #1405
 * Improve buttons’ contrasts on the homepage #a11y by @davidbgk in #1406
-* Fix next/previous in popup footer in panel not openning next panel by @yohanboniface in #1403
+* Fix next/previous in popup footer in panel not opening next panel by @yohanboniface in #1403
 * Set a default favicon by @davidbgk in #1401
 * Fix vertex icons by @jschleic in #1407
 * Fix heavy request for getting user maps by @yohanboniface in #1412
@@ -1273,7 +1273,7 @@ More details below!
 
 ## 1.5.1 - 2023-08-15
 
-- Fix layers behing hidden at zoom
+- Fix layers being hidden at zoom
 - Fix bad status show in edit header on map creation (cf #1260)
 
 ## 1.5.0 - 2023-08-15
@@ -1291,7 +1291,7 @@ More details below!
 * Do not close panel when switching tilelayer by @yohanboniface in #1252
 * Better control of default view by @yohanboniface in #1255
 * Use latest release of black by @yohanboniface in #1193
-* Explicitely use map default when dynamic var is unset by @yohanboniface in #1251
+* Explicitly use map default when dynamic var is unset by @yohanboniface in #1251
 * Make fromZoom and toZoom options available for all layers by @yohanboniface in #1253
 * Refactor "advanced filters" (and rename to facets) by @yohanboniface in #1243
 * Edit header revamp by @yohanboniface in #1233
@@ -1370,7 +1370,7 @@ More details below!
 ## 1.3.3 - 2023-06-07
 
 - add Dockerfile
-- fix content overlflow on popups (cf #1128)
+- fix content overflow on popups (cf #1128)
 - display uMap version in the credit box + link to changelog (cf #1129)
 
 ## 1.3.2 - 2023-06-04
@@ -1390,7 +1390,7 @@ More details below!
 - added a permanent credit (cf #1041, thanks @k-3st3ban)
 - allow to add an overlay tilelayer
 - replaced custom locate control with Leaflet.Locate (cf #1031, thanks @aleksejspopovs)
-- fixed bug where we coud not edit permissions of a new saved map unless reloading the page
+- fixed bug where we could not edit permissions of a new saved map unless reloading the page
 - CSS: Fix cut of text in iframes of popup content (cf #971, thanks @tordans)
 - enhanced property fallback in string formatting (cf #862, thanks @mstock)
 - lines and polygons measure is now displayed while drawing (cf #1068, thanks @knowname)
@@ -1422,7 +1422,7 @@ More details below!
 
 ## 1.2.4
 - upgrade to Django 4.x, and upgrade of other deps
-- switched from custom DictField to propert JsonField
+- switched from custom DictField to proper JsonField
 
 ## 1.2.3
 
@@ -1608,10 +1608,10 @@ COMMIT;
   (#550)
 - fixed ClusterMarker text color on Chrome (#547)
 - allow to clone also markers
-- only list https ready tilerlayers when page is in https (#567)
+- only list https ready tilelayers when page is in https (#567)
 - allow to use an unicode character as Marker symbol (#527)
 - add `{rank}` as dynamic feature property (to be used in popup or icon symbol)
-- add an explicit button to attach a owner to an anonyous map (#568)
+- add an explicit button to attach a owner to an anonymous map (#568)
 - Add 'TablePanel' popup template (#481)
 
 
@@ -1637,7 +1637,7 @@ COMMIT;
 - add tooltip when drawing
 - import multiple files at a time
 - added Chinese (Taiwan) locale
-- fixed right-click on path vertex not working propertly when editing
+- fixed right-click on path vertex not working properly when editing
 
 ## 0.7.1
 - upgrade Leaflet.Editable to 0.2.0
@@ -1647,7 +1647,7 @@ COMMIT;
 - introduce panel popup mode
 - upgraded leaflet.loading to 0.1.10
 - make the cluster text color dynamic
-- fix missing icons for transorm to polygon/polyline actions
+- fix missing icons for transform to polygon/polyline actions
 - add a slideshow mode
 - make possible to set cluster color by hand
 - make possible to manage showLabel from layer and map
@@ -1689,7 +1689,7 @@ COMMIT;
 - upgrade to django 1.6
 - sesql replaced by django-pgindex
 - support for gzip for datalayer geojson
-- support for X-Senfile/Accel-Redirect
+- support for X-Sendfile/Accel-Redirect
 - more translations
 - fix anonymous map owner not able to delete their map
 - fix missing vendors assets
@@ -1738,7 +1738,7 @@ COMMIT;
 - cloned map name is now prefixed by "Clone of "
 - added Transifex config
 - workaround for non asciiable map names
-- add a share_status fielf in Map model
+- add a share_status field in Map model
 
 ## 0.4.x
 - add a data browser

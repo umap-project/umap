@@ -68,7 +68,7 @@ def test_user_dashboard_display_user_team_maps(client, map, team, user, share_st
 
 def test_user_dashboard_display_user_maps_distinct(client, map):
     # cf https://github.com/umap-project/umap/issues/1325
-    anonymap = MapFactory(name="Map witout owner should not appear")
+    anonymap = MapFactory(name="Map without owner should not appear")
     user1 = UserFactory(username="user1")
     user2 = UserFactory(username="user2")
     map.editors.add(user1)

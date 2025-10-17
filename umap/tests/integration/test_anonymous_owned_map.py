@@ -193,7 +193,7 @@ def test_alert_message_after_create(
         )
 
 
-def test_email_sending_error_are_catched(tilelayer, page, live_server):
+def test_email_sending_error_are_caught(tilelayer, page, live_server):
     page.goto(f"{live_server.url}/en/map/new")
     alert_creation = page.locator('umap-alert-creation div[role="dialog"]')
     with page.expect_response(re.compile(r".*/map/create/")):
