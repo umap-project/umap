@@ -21,8 +21,9 @@ import TableEditor from '../tableeditor.js'
 import * as Utils from '../utils.js'
 import { LineString, Point, Polygon } from './features.js'
 import Rules from '../rules.js'
-import { FeatureManager, FieldManager } from '../managers.js'
+import { FeatureManager } from '../managers.js'
 import { Filters } from '../filters.js'
+import { Fields, getDefaultFields } from './fields.js'
 
 export const LAYER_TYPES = [
   DefaultLayer,
@@ -90,12 +91,9 @@ export class DataLayer {
       if (this.showAtLoad()) this.show()
     }
     if (!this._needsFetch && !this._umap.fields.size) {
-      this.properties.fields = [
-        { key: U.DEFAULT_LABEL_KEY, type: 'String' },
-        { key: 'description', type: 'Text' },
-      ]
+      this.properties.fields = getDefaultFields()
     }
-    this.fields = new FieldManager(this, this._umap.dialog)
+    this.fields = new Fields(this, this._umap.dialog)
     this.filters = new Filters(this, this._umap)
 
     // Only layers that are displayed on load must be hidden/shown

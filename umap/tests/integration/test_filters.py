@@ -485,8 +485,7 @@ def test_can_create_new_filter_on_map_from_panel(live_server, page, openmap):
     DataLayerFactory(map=openmap, data=DATALAYER_DATA1)
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.get_by_role("button", name="Manage filters").click()
-    page.get_by_text("Map (all layers)").click()
-    page.get_by_role("button", name="Add filter").click()
+    page.get_by_role("button", name="Add filter").first.click()
     page.get_by_label("Filter on").select_option("foobar")
     page.get_by_role("textbox", name="Human readable name").fill("Foo Bar")
     page.wait_for_timeout(300)
@@ -515,8 +514,7 @@ def test_can_create_new_filter_on_datalayer_from_panel(live_server, page, openma
         f"{live_server.url}{openmap.get_absolute_url()}?edit&onLoadPanel=datafilters"
     )
     page.get_by_role("button", name="Manage filters").click()
-    page.get_by_text("Calque 1 (single layer)").click()
-    page.get_by_role("button", name="Add filter").click()
+    page.get_by_role("button", name="Add filter").nth(1).click()
     expect(page.get_by_label("Apply filter to")).to_have_value(f"layer:{datalayer.pk}")
     page.get_by_label("Filter on").select_option("mynumber")
     page.get_by_role("textbox", name="Human readable name of the").fill("Foo Bar")
@@ -598,7 +596,6 @@ def test_filter_with_enum(live_server, openmap, page):
         f"{live_server.url}{openmap.get_absolute_url()}?edit&onLoadPanel=datafilters#6/48.948/1.670"
     )
     page.get_by_role("button", name="Manage filters").click()
-    page.get_by_text("Calque 1 (single layer)").click()
     page.get_by_role("button", name="Add filter").click()
     page.get_by_label("Filter on").select_option("products")
     page.get_by_role("button", name="OK").click()
