@@ -70,7 +70,7 @@ const locale = {
     "color": "kleur",
     "Comma separated list of numbers, including min and max values.": "Door komma's gescheiden lijst van getallen, inclusief minimale en maximale waarden.",
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Komma-gescheiden lijst van eigenschappen die gebruikt worden om objecten te sorteren. Om de sortering om te draaien, plaats er een minteken (-) voor . Bijvoorbeeld mykey,-otherkey.",
-    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the beginning of the header, case insensitive. All other column are imported as properties.": "Komma-, tabulator- of puntkomma-gescheiden waardes, SRS WGS84 wordt verondersteld. Enkel puntgeometrieën worden geïmporteerd. Bij het importeren wordt gekeken naar kolomkoppen die met «lat» of «lon» beginnen. Alle andere kolommen worden als eigenschappen geïmporteerd",
+    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the beginning of the header, case insensitive. All other column are imported as properties.": "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the beginning of the header, case insensitive. All other column are imported as properties.",
     "Congratulations, your map has been created!": "Proficiat, je kaart is aangemaakt!",
     "Continue line": "Ga door met deze lijn",
     "Coordinates": "Coördinaten",
@@ -631,7 +631,6 @@ const locale = {
     "Are you sure you want to delete this field on all the data?": "Are you sure you want to delete this field on all the data?",
     "Anonymous map": "Anonymous map",
     "Edit filter for this field": "Edit filter for this field",
-    "Fields, filters and keys": "Fields, filters and keys",
     "Hey, you created a map without an account!": "Hey, you created a map without an account!",
     "This map is anonymous, do you want to attach it to your account?": "This map is anonymous, do you want to attach it to your account?",
     "The map has been upgraded to latest version, please save it.": "The map has been upgraded to latest version, please save it.",
@@ -641,7 +640,17 @@ const locale = {
     "Wikipedia contributors": "Wikipedia contributors",
     "See on Wikipedia": "See on Wikipedia",
     "Anonymous map: update who can see and edit it": "Anonymous map: update who can see and edit it",
-    "Login": "Login"
+    "Login": "Login",
+    "Manage filters": "Manage filters",
+    "Map (all layers)": "Map (all layers)",
+    "Add a filter for this field": "Add a filter for this field",
+    "short text": "short text",
+    "text": "text",
+    "number": "number",
+    "date": "date",
+    "date and time": "date and time",
+    "list of values": "list of values",
+    "yes / no": "yes / no"
 }
 L.registerLocale("nl", locale)
 L.setLocale("nl")

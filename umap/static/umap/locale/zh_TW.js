@@ -70,7 +70,7 @@ const locale = {
     "color": "色彩",
     "Comma separated list of numbers, including min and max values.": "用逗號分隔數字，包括最小與最大值。",
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "用逗號分隔屬性清單來排序圖徵。要保存排序，在槊面加上減號 (-1)，例如 mykey,-otherkey。",
-    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the beginning of the header, case insensitive. All other column are imported as properties.": "使用逗號、定位鍵或是分號分隔的地理數據。預設座標系為 SRS WGS84。只會匯入地理座標點。匯入時抓取 «lat» 與 «lon» 開頭的欄位資料，不分大小寫。其他欄位則歸入屬性資料。",
+    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the beginning of the header, case insensitive. All other column are imported as properties.": "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the beginning of the header, case insensitive. All other column are imported as properties.",
     "Congratulations, your map has been created!": "恭喜您的地圖已經新增完成",
     "Continue line": "連續線段",
     "Coordinates": "座標",
@@ -643,7 +643,14 @@ const locale = {
     "Login": "登入",
     "Manage filters": "Manage filters",
     "Map (all layers)": "Map (all layers)",
-    "Add a filter for this field": "Add a filter for this field"
+    "Add a filter for this field": "Add a filter for this field",
+    "short text": "short text",
+    "text": "text",
+    "number": "number",
+    "date": "date",
+    "date and time": "date and time",
+    "list of values": "list of values",
+    "yes / no": "yes / no"
 }
 L.registerLocale("zh_TW", locale)
 L.setLocale("zh_TW")

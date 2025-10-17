@@ -643,7 +643,14 @@ const locale = {
     "Login": "Connexion",
     "Manage filters": "Gérer les filtres",
     "Map (all layers)": "Carte (tous les calques)",
-    "Add a filter for this field": "Ajouter un filtre pour ce champ"
+    "Add a filter for this field": "Ajouter un filtre pour ce champ",
+    "Short text": "Texte court",
+    "Text": "Texte long",
+    "Number": "Nombre",
+    "Date": "Date",
+    "Date and time": "Date et heure",
+    "List of values": "Liste de valeurs",
+    "Yes / No": "Oui / Non"
 }
 L.registerLocale("fr", locale)
 L.setLocale("fr")

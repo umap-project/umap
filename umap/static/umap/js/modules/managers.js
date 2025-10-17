@@ -261,13 +261,13 @@ export class FieldManager extends Map {
   async editField(name) {
     if (!name && this.parent.isRemoteLayer?.()) return
     const FIELD_TYPES = [
-      'String',
-      'Text',
-      'Number',
-      'Date',
-      'Datetime',
-      'Enum',
-      'Boolean',
+      ['String', translate('Short text')],
+      ['Text', translate('Text')],
+      ['Number', translate('Number')],
+      ['Date', translate('Date')],
+      ['Datetime', translate('Date and time')],
+      ['Enum', translate('List of values')],
+      ['Boolean', translate('Yes / No')],
     ]
     const field = this.get(name) || {}
     const metadatas = [

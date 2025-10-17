@@ -70,7 +70,7 @@ const locale = {
     "color": "color",
     "Comma separated list of numbers, including min and max values.": "Lista de números separados por comas, incluyendo valores mínimos y máximos.",
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Lista de propiedades separadas por comas para ordenar elementos. Para invertir el orden, coloca un signo menos (-) antes. Ej. miclave,-otraclave.",
-    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the beginning of the header, case insensitive. All other column are imported as properties.": "Valores separados por coma, tabulación o punto y coma. Se asume SRS WGS84. Solo se importan geometrías de punto. La importación buscará en los encabezados de columna cualquier mención de «lat» y «lon» al principio del encabezado, sin distinción entre mayúsculas y minúsculas. Todas las demás columnas se importan como propiedades.",
+    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the beginning of the header, case insensitive. All other column are imported as properties.": "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the beginning of the header, case insensitive. All other column are imported as properties.",
     "Congratulations, your map has been created!": "¡Felicidades, tu mapa ha sido creado!",
     "Continue line": "Línea continua",
     "Coordinates": "Coordenadas",
@@ -643,7 +643,14 @@ const locale = {
     "Login": "Iniciar sesión",
     "Manage filters": "Manage filters",
     "Map (all layers)": "Map (all layers)",
-    "Add a filter for this field": "Add a filter for this field"
+    "Add a filter for this field": "Add a filter for this field",
+    "short text": "short text",
+    "text": "text",
+    "number": "number",
+    "date": "date",
+    "date and time": "date and time",
+    "list of values": "list of values",
+    "yes / no": "yes / no"
 }
 L.registerLocale("es", locale)
 L.setLocale("es")

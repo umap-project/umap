@@ -70,7 +70,7 @@ const locale = {
     "color": "色",
     "Comma separated list of numbers, including min and max values.": "Comma separated list of numbers, including min and max values.",
     "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.": "Comma separated list of properties to use for sorting features. To reverse the sort, put a minus sign (-) before. Eg. mykey,-otherkey.",
-    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the beginning of the header, case insensitive. All other column are imported as properties.": "カンマ、タブ、セミコロンなどで区切られた値。SRSはWGS84が適用されます。ポイントのジオメトリのみがインポート対象です。インポートを行なう際は、カラムの先頭行を対象に «lat» と «lon» という文字列が検索されます。検索は行の最初から順に行われ、大文字と小文字は区別されません。その他のすべてのカラムは、プロパティとしてインポートされます。",
+    "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the beginning of the header, case insensitive. All other column are imported as properties.": "Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the beginning of the header, case insensitive. All other column are imported as properties.",
     "Congratulations, your map has been created!": "Congratulations, your map has been created!",
     "Continue line": "ラインを延長",
     "Coordinates": "位置情報",
@@ -631,7 +631,6 @@ const locale = {
     "Are you sure you want to delete this field on all the data?": "Are you sure you want to delete this field on all the data?",
     "Anonymous map": "Anonymous map",
     "Edit filter for this field": "Edit filter for this field",
-    "Fields, filters and keys": "Fields, filters and keys",
     "Hey, you created a map without an account!": "Hey, you created a map without an account!",
     "This map is anonymous, do you want to attach it to your account?": "This map is anonymous, do you want to attach it to your account?",
     "The map has been upgraded to latest version, please save it.": "The map has been upgraded to latest version, please save it.",
@@ -641,7 +640,17 @@ const locale = {
     "Wikipedia contributors": "Wikipedia contributors",
     "See on Wikipedia": "See on Wikipedia",
     "Anonymous map: update who can see and edit it": "Anonymous map: update who can see and edit it",
-    "Login": "Login"
+    "Login": "Login",
+    "Manage filters": "Manage filters",
+    "Map (all layers)": "Map (all layers)",
+    "Add a filter for this field": "Add a filter for this field",
+    "short text": "short text",
+    "text": "text",
+    "number": "number",
+    "date": "date",
+    "date and time": "date and time",
+    "list of values": "list of values",
+    "yes / no": "yes / no"
 }
 L.registerLocale("ja", locale)
 L.setLocale("ja")

@@ -643,5 +643,12 @@
     "Login": "Login",
     "Manage filters": "Manage filters",
     "Map (all layers)": "Map (all layers)",
-    "Add a filter for this field": "Add a filter for this field"
+    "Add a filter for this field": "Add a filter for this field",
+    "Short text": "Short text",
+    "Text": "Text",
+    "Number": "Number",
+    "Date": "Date",
+    "Date and time": "Date and time",
+    "List of values": "List of values",
+    "Yes / No": "Yes / No"
 }
