@@ -631,7 +631,6 @@ const locale = {
     "Are you sure you want to delete this field on all the data?": "Êtes-vous sûr de vouloir supprimer ce champ et toutes les données associées ?",
     "Anonymous map": "Carte anonyme",
     "Edit filter for this field": "Modifier le filtre lié à ce champ",
-    "Fields, filters and keys": "Champs, filtres et clés",
     "Hey, you created a map without an account!": "Hé, vous avez créé une carte sans être connecté !",
     "This map is anonymous, do you want to attach it to your account?": "Cette carte est anonyme, voulez-vous la relier à votre compte ?",
     "The map has been upgraded to latest version, please save it.": "La carte a été mise à jour, merci de l'enregistrer.",
@@ -641,7 +640,10 @@ const locale = {
     "Wikipedia contributors": "Contributeurs Wikipédia",
     "See on Wikipedia": "Voir sur Wikipédia",
     "Anonymous map: update who can see and edit it": "Carte anonyme: gérer qui peut la voir et la modifier",
-    "Login": "Connexion"
+    "Login": "Connexion",
+    "Manage filters": "Gérer les filtres",
+    "Map (all layers)": "Carte (tous les calques)",
+    "Add a filter for this field": "Ajouter un filtre pour ce champ"
 }
 L.registerLocale("fr", locale)
 L.setLocale("fr")

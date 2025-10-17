@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-14 15:28+0000\n"
+"POT-Creation-Date: 2025-10-17 06:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,7 +41,7 @@ msgstr ""
 msgid "name"
 msgstr ""
 
-#: models.py:63 models.py:503
+#: models.py:63 models.py:507
 msgid "description"
 msgstr ""
 
@@ -61,23 +61,23 @@ msgstr ""
 msgid "Order of the tilelayers in the edit box"
 msgstr ""
 
-#: models.py:176 models.py:497
+#: models.py:176 models.py:501
 msgid "Only editable with secret edit link"
 msgstr ""
 
-#: models.py:177 models.py:498
+#: models.py:177 models.py:502
 msgid "Everyone can edit"
 msgstr ""
 
-#: models.py:180 models.py:491
+#: models.py:180 models.py:495
 msgid "Everyone"
 msgstr ""
 
-#: models.py:181 models.py:190 models.py:492
+#: models.py:181 models.py:190 models.py:496
 msgid "Editors and team only"
 msgstr ""
 
-#: models.py:182 models.py:493
+#: models.py:182 models.py:497
 msgid "Owner only"
 msgstr ""
 
@@ -97,7 +97,7 @@ msgstr ""
 msgid "Blocked"
 msgstr ""
 
-#: models.py:192 models.py:487
+#: models.py:192 models.py:491
 msgid "Deleted"
 msgstr ""
 
@@ -137,15 +137,15 @@ msgstr ""
 msgid "team"
 msgstr ""
 
-#: models.py:230 models.py:519
+#: models.py:230 models.py:523
 msgid "edit status"
 msgstr ""
 
-#: models.py:235 models.py:524
+#: models.py:235 models.py:528
 msgid "share status"
 msgstr ""
 
-#: models.py:238 models.py:514
+#: models.py:238 models.py:518
 msgid "settings"
 msgstr ""
 
@@ -161,15 +161,15 @@ msgstr ""
 msgid "Clone of"
 msgstr ""
 
-#: models.py:486 models.py:490 models.py:496
+#: models.py:490 models.py:494 models.py:500
 msgid "Inherit"
 msgstr ""
 
-#: models.py:509
+#: models.py:513
 msgid "display on load"
 msgstr ""
 
-#: models.py:510
+#: models.py:514
 msgid "Display this layer on load."
 msgstr ""
 

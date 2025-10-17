@@ -424,13 +424,13 @@ msgid ""
 "Oops, I didn't mean it, I want to <a href=\"%(login_url)s\" "
 "class=\"login\">create an account</a> or <a href=\"%(login_url)s\" "
 "class=\"login\">log in</a> (no worry, we'll attach the map to your account)."
-msgstr ""
+msgstr "Ups, det var ikke meningen, jeg vil gerne <a href=\"%(login_url)s\" class=\"login\">oprette en konto</a> eller <a href=\"%(login_url)s\" class=\"login\">logge ind</a> (bare rolig, vi knytter kortet til din konto)."
 
 #: templates/umap/components/alerts/alert.html:35
 msgid ""
 "Yes, I want to continue editing anonymously, I will save the secret edit "
 "link to be able to edit this map later or on another device"
-msgstr ""
+msgstr "Ja, jeg vil fortsætte med at redigere anonymt. Jeg gemmer det hemmelige redigeringslink, så jeg kan redigere dette kort senere eller på en anden enhed."
 
 #: templates/umap/components/alerts/alert.html:39
 msgid "Here is your secret link to edit the map, please keep it safe:"
