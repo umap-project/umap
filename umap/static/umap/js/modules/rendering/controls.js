@@ -166,7 +166,7 @@ export const DataLayersControl = BaseButton.extend({
   },
 
   afterAdd: function (container) {
-    Utils.toggleBadge(container, this._umap.browser?.hasFilters())
+    Utils.toggleBadge(container, this._umap.browser?.hasActiveFilters())
   },
 
   onClick: function () {

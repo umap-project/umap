@@ -97,8 +97,8 @@ export default class Browser {
   }
 
   toggleBadge() {
-    Utils.toggleBadge(this.filtersTitle, this.hasFilters())
-    Utils.toggleBadge('.umap-control-browse', this.hasFilters())
+    Utils.toggleBadge(this.filtersTitle, this.hasActiveFilters())
+    Utils.toggleBadge('.umap-control-browse', this.hasActiveFilters())
   }
 
   onFormChange() {
@@ -118,8 +118,8 @@ export default class Browser {
     return !!document.querySelector('.on .umap-browser')
   }
 
-  hasFilters() {
-    return !!this.options.filter || this._umap.hasFilters()
+  hasActiveFilters() {
+    return !!this.options.filter || this._umap.hasActiveFilters()
   }
 
   onMoveEnd() {
