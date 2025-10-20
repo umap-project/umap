@@ -112,7 +112,9 @@ export const PermanentCreditsControl = Control.extend({
     const container = Utils.loadTemplate(
       `<div class="umap-permanent-credits-container text">${Utils.toHTML(map.options.permanentCredit)}</div>`
     )
-    const background = map.options.permanentCreditBackground ? '#FFFFFFB0' : ''
+    const background = map._umap.getProperty('permanentCreditBackground')
+      ? '#FFFFFFB0'
+      : ''
     container.style.backgroundColor = background
     return container
   },
