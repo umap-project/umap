@@ -390,6 +390,10 @@ export default class Umap {
   }
 
   hasFilters() {
+    return this.filters.size || this.datalayers.active().some((d) => d.filters.size)
+  }
+
+  hasActiveFilters() {
     return (
       this.filters.isActive() ||
       this.datalayers.active().some((d) => d.filters.isActive())
