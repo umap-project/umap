@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.4.0-beta3 - 2025-10-24
+
+* do not use yet the "some" method on an iterator by @yohanboniface in #3029
+* use a select for heatmap intensity property by @yohanboniface in #3019
+* open "add filter" button for layers with non default fields  by @yohanboniface in #3021
+* fix "filter data" button in contextmenu by @yohanboniface in #3022
+* small css fixes by @yohanboniface in #3031
+* make sure filters has default type when clicking from field dialog by @yohanboniface in #3033
+* show all defined fields in table popup by @yohanboniface in #3034
+
 ## 3.4.0-beta2 - 2025-10-16
 * be more defensive and try not add a field with an empty key by @yohanboniface in #3016
 * fix search result button color by @yohanboniface in #3017
