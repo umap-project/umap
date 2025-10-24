@@ -162,7 +162,6 @@ input[type="submit"] {
     background-color: var(--color-mediumGray);
 }
 
-.dark .anonymous:hover,
 .dark .button.anonymous:hover,
 .dark [type="button"].anonymous:hover {
     background-color: var(--color-veryDarkViolet);
@@ -782,12 +781,13 @@ input[type=hidden].blur+[type="button"] {
     border-radius: initial;
 }
 
-.copiable-input button {
+.copiable-input button[type=button] {
     background-color: var(--background-color);
     color: var(--text-color);
     border: 2px solid var(--color-darkBlue);
     border-left: none;
     width: 40px;
+    height: 40px;
 }
 
 input.highlightable:not(:placeholder-shown) {
