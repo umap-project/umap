@@ -93,7 +93,7 @@ class Feature {
 
   get fields() {
     // Fields are user defined properties
-    return [...this.datalayer.fields.all(), ...this._umap.fields.all()]
+    return [...this._umap.fields.all(), ...this.datalayer.fields.all()]
   }
 
   setter(key, value) {
