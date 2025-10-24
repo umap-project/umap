@@ -159,7 +159,6 @@ const locale = {
     "Go to \"{coords}\"": "Go to \"{coords}\"",
     "Go to the homepage": "Go to the homepage",
     "Go to «{feature}»": "Go to «{feature}»",
-    "Heatmap intensity property": "Heatmap intensity property",
     "Heatmap radius": "радиус на Топлинна карта",
     "Heatmap": "Топлинна карта",
     "height": "височина",
@@ -255,7 +254,6 @@ const locale = {
     "Open share & download panel": "Open share & download panel",
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Отворете тази карта в степен редактор на карта, за да предостави по-точни данни,OpenStreetMap",
     "OpenStreetMap": "OpenStreetMap",
-    "Optional intensity property for heatmap": "Optional intensity property for heatmap",
     "Optional. Same as color if not set.": "По избор Същото като цвят, ако не е настроена.",
     "Optional.": "Optional.",
     "Override clustering radius (default 80)": "Override clustering radius (default 80)",
@@ -644,13 +642,15 @@ const locale = {
     "Manage filters": "Manage filters",
     "Map (all layers)": "Map (all layers)",
     "Add a filter for this field": "Add a filter for this field",
-    "short text": "short text",
-    "text": "text",
-    "number": "number",
-    "date": "date",
-    "date and time": "date and time",
-    "list of values": "list of values",
-    "yes / no": "yes / no"
+    "Short text": "Short text",
+    "Text": "Text",
+    "Number": "Number",
+    "Date": "Date",
+    "Date and time": "Date and time",
+    "List of values": "List of values",
+    "Yes / No": "Yes / No",
+    "Select field to compute intensity": "Select field to compute intensity",
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
 }
 L.registerLocale("bg", locale)
 L.setLocale("bg")

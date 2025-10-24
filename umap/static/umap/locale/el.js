@@ -159,7 +159,6 @@ const locale = {
     "Go to \"{coords}\"": "Πήγαινε στις \"{coords}\"",
     "Go to the homepage": "Μετάβαση στην αρχική σελίδα",
     "Go to «{feature}»": "Μετάβαση στο «{feature}»",
-    "Heatmap intensity property": "Ένταση του χάρτη εγγύτητας",
     "Heatmap radius": "Ακτίνα του χάρτη εγγύτητας",
     "Heatmap": "Χάρτης θερμότητας",
     "height": "Ύψος",
@@ -255,7 +254,6 @@ const locale = {
     "Open share & download panel": "Άνοιγμα πλαισίου διαμοιρασμού και λήψης",
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Ανοίξτε τον χάρτη σε έναν επεξεργαστή χαρτών για να παρέχετε πιο ακριβή δεδομένα στο OpenStreetMap",
     "OpenStreetMap": "OpenStreetMap",
-    "Optional intensity property for heatmap": "Προαιρετική ιδιότητα έντασης για τον χάρτη εγγύτητας",
     "Optional. Same as color if not set.": "Προαιρετικό. Ίδιο με το χρώμα αν δεν οριστεί.",
     "Optional.": "Προαιρετικό",
     "Override clustering radius (default 80)": "Παράκαμψη ακτίνας συμπλέγματος (προεπιλογή 80)",
@@ -644,13 +642,15 @@ const locale = {
     "Manage filters": "Manage filters",
     "Map (all layers)": "Map (all layers)",
     "Add a filter for this field": "Add a filter for this field",
-    "short text": "short text",
-    "text": "text",
-    "number": "number",
-    "date": "date",
-    "date and time": "date and time",
-    "list of values": "list of values",
-    "yes / no": "yes / no"
+    "Short text": "Short text",
+    "Text": "Text",
+    "Number": "Number",
+    "Date": "Date",
+    "Date and time": "Date and time",
+    "List of values": "List of values",
+    "Yes / No": "Yes / No",
+    "Select field to compute intensity": "Select field to compute intensity",
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
 }
 L.registerLocale("el", locale)
 L.setLocale("el")

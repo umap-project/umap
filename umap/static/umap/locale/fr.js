@@ -159,7 +159,6 @@ const locale = {
     "Go to \"{coords}\"": "Aller à \"{coords}\"",
     "Go to the homepage": "Retour à la page d'accueil",
     "Go to «{feature}»": "Naviguer jusqu'à «{feature}»",
-    "Heatmap intensity property": "Propriété pour l'intensité de la heatmap",
     "Heatmap radius": "Rayon de heatmap",
     "Heatmap": "Heatmap",
     "height": "hauteur",
@@ -255,7 +254,6 @@ const locale = {
     "Open share & download panel": "Ouvrir le panneau de partage",
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Ouvrir cette carte dans un éditeur OpenStreetMap pour améliorer les données",
     "OpenStreetMap": "OpenStreetMap",
-    "Optional intensity property for heatmap": "Propriété optionnelle à utiliser pour calculer l'intensité de la heatmap",
     "Optional. Same as color if not set.": "Optionnel. La couleur principale sera utilisée si laissé vide.",
     "Optional.": "Facultatif",
     "Override clustering radius (default 80)": "Valeur de rayon personnalisée pour le cluster (par défaut : 80)",
@@ -650,7 +648,9 @@ const locale = {
     "Date": "Date",
     "Date and time": "Date et heure",
     "List of values": "Liste de valeurs",
-    "Yes / No": "Oui / Non"
+    "Yes / No": "Oui / Non",
+    "Select field to compute intensity": "Champ pour le calcul d'intensité",
+    "Optional intensity field to compute heatmap": "Champ optionnel pour le calcul de l'intensité"
 }
 L.registerLocale("fr", locale)
 L.setLocale("fr")

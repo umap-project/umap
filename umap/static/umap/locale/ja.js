@@ -159,7 +159,6 @@ const locale = {
     "Go to \"{coords}\"": "Go to \"{coords}\"",
     "Go to the homepage": "Go to the homepage",
     "Go to «{feature}»": "«{feature}»を表示",
-    "Heatmap intensity property": "ヒートマップ強調設定",
     "Heatmap radius": "ヒートマップ包括半径",
     "Heatmap": "ヒートマップ",
     "height": "縦幅",
@@ -255,7 +254,6 @@ const locale = {
     "Open share & download panel": "Open share & download panel",
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "現在表示中の領域をエディタで編集し、より正確なデータをOpenStreetMapへ書き込む",
     "OpenStreetMap": "OpenStreetMap",
-    "Optional intensity property for heatmap": "ヒートマップ強調表示オプション",
     "Optional. Same as color if not set.": "オプション。設定がない場合、色指定と同様",
     "Optional.": "Optional.",
     "Override clustering radius (default 80)": "クラスタ包括半径を上書き (基本値 80)",
@@ -644,13 +642,15 @@ const locale = {
     "Manage filters": "Manage filters",
     "Map (all layers)": "Map (all layers)",
     "Add a filter for this field": "Add a filter for this field",
-    "short text": "short text",
-    "text": "text",
-    "number": "number",
-    "date": "date",
-    "date and time": "date and time",
-    "list of values": "list of values",
-    "yes / no": "yes / no"
+    "Short text": "Short text",
+    "Text": "Text",
+    "Number": "Number",
+    "Date": "Date",
+    "Date and time": "Date and time",
+    "List of values": "List of values",
+    "Yes / No": "Yes / No",
+    "Select field to compute intensity": "Select field to compute intensity",
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
 }
 L.registerLocale("ja", locale)
 L.setLocale("ja")

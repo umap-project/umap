@@ -159,7 +159,6 @@ const locale = {
     "Go to \"{coords}\"": "Přejít na „{coords}“",
     "Go to the homepage": "Přejít na domovskou stránku",
     "Go to «{feature}»": "Jdi na  \"{feature}\"",
-    "Heatmap intensity property": "Vlastnost pro intenzitu teplotní mapy",
     "Heatmap radius": "Poloměr teplotní mapy",
     "Heatmap": "Teplotní mapa",
     "height": "výška",
@@ -255,7 +254,6 @@ const locale = {
     "Open share & download panel": "Otevřít panel na sdílení a stahování",
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Otevři tuto oblast v editoru OpenStreetMap. Toto vám umožní editovat přímo základní mapová data a přispět tak v tvorbě svobodné mapy pro všechny.",
     "OpenStreetMap": "OpenStreetMap",
-    "Optional intensity property for heatmap": "Volitelná vlastnost pro výpočet intenzity v teplotní mapě",
     "Optional. Same as color if not set.": "Nepovinné. Stejné jako barva, pokud není nastaveno.",
     "Optional.": "Volitelné.",
     "Override clustering radius (default 80)": "Přepsat shlukovací poloměr (výchozí hodnota 80)",
@@ -644,13 +642,15 @@ const locale = {
     "Manage filters": "Manage filters",
     "Map (all layers)": "Map (all layers)",
     "Add a filter for this field": "Add a filter for this field",
-    "short text": "short text",
-    "text": "text",
-    "number": "number",
-    "date": "date",
-    "date and time": "date and time",
-    "list of values": "list of values",
-    "yes / no": "yes / no"
+    "Short text": "Short text",
+    "Text": "Text",
+    "Number": "Number",
+    "Date": "Date",
+    "Date and time": "Date and time",
+    "List of values": "List of values",
+    "Yes / No": "Yes / No",
+    "Select field to compute intensity": "Select field to compute intensity",
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
 }
 L.registerLocale("cs_CZ", locale)
 L.setLocale("cs_CZ")

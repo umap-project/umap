@@ -159,7 +159,6 @@ const locale = {
     "Go to \"{coords}\"": "Go to \"{coords}\"",
     "Go to the homepage": "Go to the homepage",
     "Go to «{feature}»": "Skoči na »{feature}«",
-    "Heatmap intensity property": "Lastnosti jakosti vročinskih točk",
     "Heatmap radius": "Radij vročinskih točk",
     "Heatmap": "Vročinske točke",
     "height": "višina",
@@ -255,7 +254,6 @@ const locale = {
     "Open share & download panel": "Open share & download panel",
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Odpri obseg zemljevida v urejevalniku za prenos podrobnejših podatkov na OpenStreetMap.",
     "OpenStreetMap": "OpenStreetMap",
-    "Optional intensity property for heatmap": "Izbirna lastnost jakosti vročinskih točke",
     "Optional. Same as color if not set.": "Izbirno. Enako, kot nedoločena barva.",
     "Optional.": "Optional.",
     "Override clustering radius (default 80)": "Prekliči radij združevanja (privzeto 80)",
@@ -644,13 +642,15 @@ const locale = {
     "Manage filters": "Manage filters",
     "Map (all layers)": "Map (all layers)",
     "Add a filter for this field": "Add a filter for this field",
-    "short text": "short text",
-    "text": "text",
-    "number": "number",
-    "date": "date",
-    "date and time": "date and time",
-    "list of values": "list of values",
-    "yes / no": "yes / no"
+    "Short text": "Short text",
+    "Text": "Text",
+    "Number": "Number",
+    "Date": "Date",
+    "Date and time": "Date and time",
+    "List of values": "List of values",
+    "Yes / No": "Yes / No",
+    "Select field to compute intensity": "Select field to compute intensity",
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
 }
 L.registerLocale("sl", locale)
 L.setLocale("sl")

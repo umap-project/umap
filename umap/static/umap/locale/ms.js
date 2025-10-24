@@ -159,7 +159,6 @@ const locale = {
     "Go to \"{coords}\"": "Pergi ke \"{coords}\"",
     "Go to the homepage": "Pergi ke halaman utama",
     "Go to «{feature}»": "Pergi ke «{feature}»",
-    "Heatmap intensity property": "Ciri-ciri keamatan peta tompokan",
     "Heatmap radius": "Jejari peta tompokan",
     "Heatmap": "Peta tompokan",
     "height": "tinggi",
@@ -255,7 +254,6 @@ const locale = {
     "Open share & download panel": "Buka panel kongsi & muat turun",
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Buka takat peta ini dalam penyunting peta untuk menyediakan data yang lebih tepat ke OpenStreetMap",
     "OpenStreetMap": "OpenStreetMap",
-    "Optional intensity property for heatmap": "Ciri-ciri keamatan pilihan untuk peta tompokan",
     "Optional. Same as color if not set.": "Pilihan. Sama seperti warna jika tidak ditetapkan.",
     "Optional.": "Pilihan.",
     "Override clustering radius (default 80)": "Menggantikan jejari kelompok (nilai lalai 80)",
@@ -644,13 +642,15 @@ const locale = {
     "Manage filters": "Manage filters",
     "Map (all layers)": "Map (all layers)",
     "Add a filter for this field": "Add a filter for this field",
-    "short text": "short text",
-    "text": "text",
-    "number": "number",
-    "date": "date",
-    "date and time": "date and time",
-    "list of values": "list of values",
-    "yes / no": "yes / no"
+    "Short text": "Short text",
+    "Text": "Text",
+    "Number": "Number",
+    "Date": "Date",
+    "Date and time": "Date and time",
+    "List of values": "List of values",
+    "Yes / No": "Yes / No",
+    "Select field to compute intensity": "Select field to compute intensity",
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
 }
 L.registerLocale("ms", locale)
 L.setLocale("ms")

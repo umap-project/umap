@@ -159,7 +159,6 @@ const locale = {
     "Go to \"{coords}\"": "Go to \"{coords}\"",
     "Go to the homepage": "Go to the homepage",
     "Go to «{feature}»": "«{feature}» git",
-    "Heatmap intensity property": "Isı haritası yoğunluk özelliği",
     "Heatmap radius": "Isı haritası yarıçapı",
     "Heatmap": "Isı haritası",
     "height": "yükseklik",
@@ -255,7 +254,6 @@ const locale = {
     "Open share & download panel": "Open share & download panel",
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "OpenStreetMap'e daha doğru veri sağlayabilmek için bu harita kapsamını bir harita düzenleyicide aç",
     "OpenStreetMap": "OpenStreetMap",
-    "Optional intensity property for heatmap": "Isı haritası için isteğe bağlı yoğunluk özelliği",
     "Optional. Same as color if not set.": "İsteğe bağlı. Eğer ayarlanmazsa renk ile aynı.",
     "Optional.": "İsteğe bağlı.",
     "Override clustering radius (default 80)": "Kümeleme yarıçapını geçersiz kıl (varsayılan 80)",
@@ -644,13 +642,15 @@ const locale = {
     "Manage filters": "Manage filters",
     "Map (all layers)": "Map (all layers)",
     "Add a filter for this field": "Add a filter for this field",
-    "short text": "short text",
-    "text": "text",
-    "number": "number",
-    "date": "date",
-    "date and time": "date and time",
-    "list of values": "list of values",
-    "yes / no": "yes / no"
+    "Short text": "Short text",
+    "Text": "Text",
+    "Number": "Number",
+    "Date": "Date",
+    "Date and time": "Date and time",
+    "List of values": "List of values",
+    "Yes / No": "Yes / No",
+    "Select field to compute intensity": "Select field to compute intensity",
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
 }
 L.registerLocale("tr", locale)
 L.setLocale("tr")

@@ -159,7 +159,6 @@ const locale = {
     "Go to \"{coords}\"": "Go to \"{coords}\"",
     "Go to the homepage": "Go to the homepage",
     "Go to «{feature}»": "Prejsť na «{feature}»",
-    "Heatmap intensity property": "Vlastnosti intenzity heatmapy",
     "Heatmap radius": "Polomer teplotnej mapy",
     "Heatmap": "Teplotná mapa",
     "height": "Výška",
@@ -255,7 +254,6 @@ const locale = {
     "Open share & download panel": "Open share & download panel",
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Otvoriť túto mapovú oblasť v mapovom editore pre presnenie dát v OpenStreetMap",
     "OpenStreetMap": "OpenStreetMap",
-    "Optional intensity property for heatmap": "Voliteľné vlastnosti intenzity pre heatmapu",
     "Optional. Same as color if not set.": "Nepovinné. Rovnaké ako farba, ak nie je nastavené.",
     "Optional.": "Optional.",
     "Override clustering radius (default 80)": "Prepísať polomer zhlukovania (predvolené 80)",
@@ -644,13 +642,15 @@ const locale = {
     "Manage filters": "Manage filters",
     "Map (all layers)": "Map (all layers)",
     "Add a filter for this field": "Add a filter for this field",
-    "short text": "short text",
-    "text": "text",
-    "number": "number",
-    "date": "date",
-    "date and time": "date and time",
-    "list of values": "list of values",
-    "yes / no": "yes / no"
+    "Short text": "Short text",
+    "Text": "Text",
+    "Number": "Number",
+    "Date": "Date",
+    "Date and time": "Date and time",
+    "List of values": "List of values",
+    "Yes / No": "Yes / No",
+    "Select field to compute intensity": "Select field to compute intensity",
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
 }
 L.registerLocale("sk_SK", locale)
 L.setLocale("sk_SK")

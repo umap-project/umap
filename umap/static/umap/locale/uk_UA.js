@@ -159,7 +159,6 @@ const locale = {
     "Go to \"{coords}\"": "Go to \"{coords}\"",
     "Go to the homepage": "Go to the homepage",
     "Go to «{feature}»": "Перейти до «{feature}»",
-    "Heatmap intensity property": "Параметр інтенсивності теплової мапи",
     "Heatmap radius": "Радіус для теплової мапи",
     "Heatmap": "Теплова мапа",
     "height": "висота",
@@ -255,7 +254,6 @@ const locale = {
     "Open share & download panel": "Open share & download panel",
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Відкрийте цю частину мапи в редакторі OpenStreetMap, щоб поліпшити дані",
     "OpenStreetMap": "OpenStreetMap",
-    "Optional intensity property for heatmap": "Додаткові параметри інтенсивності теплової мапи",
     "Optional. Same as color if not set.": "Додатково.  Якщо не вибрано, то як колір.",
     "Optional.": "Необов’язково.",
     "Override clustering radius (default 80)": "Перевизначити радіус кластеризації (типово 80)",
@@ -644,13 +642,15 @@ const locale = {
     "Manage filters": "Manage filters",
     "Map (all layers)": "Map (all layers)",
     "Add a filter for this field": "Add a filter for this field",
-    "short text": "short text",
-    "text": "text",
-    "number": "number",
-    "date": "date",
-    "date and time": "date and time",
-    "list of values": "list of values",
-    "yes / no": "yes / no"
+    "Short text": "Short text",
+    "Text": "Text",
+    "Number": "Number",
+    "Date": "Date",
+    "Date and time": "Date and time",
+    "List of values": "List of values",
+    "Yes / No": "Yes / No",
+    "Select field to compute intensity": "Select field to compute intensity",
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
 }
 L.registerLocale("uk_UA", locale)
 L.setLocale("uk_UA")

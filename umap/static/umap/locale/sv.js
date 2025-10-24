@@ -159,7 +159,6 @@ const locale = {
     "Go to \"{coords}\"": "Go to \"{coords}\"",
     "Go to the homepage": "Go to the homepage",
     "Go to «{feature}»": "Gå till «{feature}»",
-    "Heatmap intensity property": "Värmekartans intensitet",
     "Heatmap radius": "Värmekartans radie",
     "Heatmap": "Värmekarta",
     "height": "höjd",
@@ -255,7 +254,6 @@ const locale = {
     "Open share & download panel": "Open share & download panel",
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Öppna detta kartområde i en redigerare för att bidra med mer och bättre data till OpenStreetMap.",
     "OpenStreetMap": "OpenStreetMap",
-    "Optional intensity property for heatmap": "Valfritt intensitetsläge för värmekartan",
     "Optional. Same as color if not set.": "Valfritt. Annars samma som färg ovan.",
     "Optional.": "Valfri.",
     "Override clustering radius (default 80)": "Åsidosätt kluster radie (80 förvalt)",
@@ -644,13 +642,15 @@ const locale = {
     "Manage filters": "Manage filters",
     "Map (all layers)": "Map (all layers)",
     "Add a filter for this field": "Add a filter for this field",
-    "short text": "short text",
-    "text": "text",
-    "number": "number",
-    "date": "date",
-    "date and time": "date and time",
-    "list of values": "list of values",
-    "yes / no": "yes / no"
+    "Short text": "Short text",
+    "Text": "Text",
+    "Number": "Number",
+    "Date": "Date",
+    "Date and time": "Date and time",
+    "List of values": "List of values",
+    "Yes / No": "Yes / No",
+    "Select field to compute intensity": "Select field to compute intensity",
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
 }
 L.registerLocale("sv", locale)
 L.setLocale("sv")

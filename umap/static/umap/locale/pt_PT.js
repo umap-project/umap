@@ -159,7 +159,6 @@ const locale = {
     "Go to \"{coords}\"": "Ir para \"{coords}\"",
     "Go to the homepage": "Ir para a página inicial",
     "Go to «{feature}»": "Ir a «{feature}»",
-    "Heatmap intensity property": "Propriedade da intensidade do mapa térmico",
     "Heatmap radius": "Raio do mapa térmico",
     "Heatmap": "Mapa térmico",
     "height": "altura",
@@ -255,7 +254,6 @@ const locale = {
     "Open share & download panel": "Abrir painel de partilha e descarregamento",
     "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Abrir esta região do mapa num editor de mapas para fornecer dados mais precisos ao OpenStreetMap",
     "OpenStreetMap": "OpenStreetMap",
-    "Optional intensity property for heatmap": "Propriedade opcional da intensidade do mapa térmico",
     "Optional. Same as color if not set.": "Opcional. Igual à cor se não for definido.",
     "Optional.": "Opcional.",
     "Override clustering radius (default 80)": "Sobrepor raio do aglomerado (padrão: 80)",
@@ -644,13 +642,15 @@ const locale = {
     "Manage filters": "Manage filters",
     "Map (all layers)": "Map (all layers)",
     "Add a filter for this field": "Add a filter for this field",
-    "short text": "short text",
-    "text": "text",
-    "number": "number",
-    "date": "date",
-    "date and time": "date and time",
-    "list of values": "list of values",
-    "yes / no": "yes / no"
+    "Short text": "Short text",
+    "Text": "Text",
+    "Number": "Number",
+    "Date": "Date",
+    "Date and time": "Date and time",
+    "List of values": "List of values",
+    "Yes / No": "Yes / No",
+    "Select field to compute intensity": "Select field to compute intensity",
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
 }
 L.registerLocale("pt_PT", locale)
 L.setLocale("pt_PT")
