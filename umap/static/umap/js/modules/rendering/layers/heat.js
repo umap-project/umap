@@ -68,27 +68,32 @@ export const Heat = L.HeatLayer.extend({
     return latLngBounds(this._latlngs)
   },
 
-  getEditableProperties: () => [
-    [
-      'properties.heat.radius',
-      {
-        handler: 'Range',
-        min: 10,
-        max: 100,
-        step: 5,
-        label: translate('Heatmap radius'),
-        helpText: translate('Override heatmap radius (default 25)'),
-      },
-    ],
-    [
-      'properties.heat.intensityProperty',
-      {
-        handler: 'BlurInput',
-        placeholder: translate('Heatmap intensity property'),
-        helpText: translate('Optional intensity property for heatmap'),
-      },
-    ],
-  ],
+  getEditableProperties: function () {
+    return [
+      [
+        'properties.heat.radius',
+        {
+          handler: 'Range',
+          min: 10,
+          max: 100,
+          step: 5,
+          label: translate('Heatmap radius'),
+          helpText: translate('Override heatmap radius (default 25)'),
+        },
+      ],
+      [
+        'properties.heat.intensityProperty',
+        {
+          handler: 'Select',
+          selectOptions: [
+            ['', translate('Select field to compute intensity')],
+            ...this.datalayer.fields.keys(),
+          ],
+          helpText: translate('Optional intensity field to compute heatmap'),
+        },
+      ],
+    ]
+  },
 
   onEdit: function (field, builder) {
     if (field === 'properties.heat.intensityProperty') {
