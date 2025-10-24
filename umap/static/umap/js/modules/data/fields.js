@@ -201,8 +201,9 @@ export class Fields extends Map {
     body.appendChild(form.build())
     if (this.parent.filters) {
       addFilter.addEventListener('click', () => {
-        this.dialog.accept()
-        this.parent.filters.createFilterForm(field.key)
+        this.dialog.accept().then(() => {
+          this.parent.filters.createFilterForm(field.key)
+        })
       })
       addFilter.hidden = false
     }
