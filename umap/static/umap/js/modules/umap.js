@@ -10,6 +10,7 @@ import {
 import Browser from './browser.js'
 import Caption from './caption.js'
 import { DataLayer } from './data/layer.js'
+import { Fields } from './data/fields.js'
 import { Filters, migrateLegacyFilters } from './filters.js'
 import { MutatingForm } from './form/builder.js'
 import { Formatter } from './formatter.js'
@@ -33,7 +34,7 @@ import Tooltip from './ui/tooltip.js'
 import URLs from './urls.js'
 import * as Utils from './utils.js'
 import * as DOMUtils from './domutils.js'
-import { DataLayerManager, FieldManager } from './managers.js'
+import { DataLayerManager } from './managers.js'
 import { Importer as OpenRouteService } from './importers/openrouteservice.js'
 
 export default class Umap {
@@ -133,7 +134,7 @@ export default class Umap {
     this.contextmenu = new ContextMenu()
     this.server = new ServerRequest()
     this.request = new Request()
-    this.fields = new FieldManager(this, this.dialog)
+    this.fields = new Fields(this, this.dialog)
     this.filters = new Filters(this, this)
     this.browser = new Browser(this, this._leafletMap)
     this.caption = new Caption(this, this._leafletMap)
