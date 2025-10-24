@@ -441,8 +441,9 @@ export class Filters {
     `)
     body.appendChild(form.build())
     editField.addEventListener('click', () => {
-      this._umap.dialog.accept()
-      this._parent.fields.editField(fieldKey)
+      this._umap.dialog.accept().then(() => {
+        this._parent.fields.editField(fieldKey)
+      })
     })
 
     return this._umap.dialog.open({ template: container }).then(() => {

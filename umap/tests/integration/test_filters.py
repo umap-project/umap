@@ -434,8 +434,10 @@ def test_can_create_filter_from_new_field(live_server, page, openmap):
     page.get_by_role("heading", name="Manage Fields").click()
     page.get_by_role("button", name="Add a new field").click()
     page.get_by_role("textbox", name="Field Name ✔").fill("foobar")
+    page.get_by_label("Field Type").select_option("Boolean")
     page.get_by_role("button", name="Add filter for this field").click()
     page.get_by_role("textbox", name="Human readable name of the").fill("Foo Bar")
+    expect(page.get_by_text("Yes/No")).to_be_checked()
     page.wait_for_timeout(300)  # Input throttling.
     page.get_by_text("Edit this field").click()
     expect(page.locator(".umap-filter span").filter(has_text="Foo Bar")).to_be_visible()
@@ -461,7 +463,7 @@ def test_can_create_filter_from_new_field(live_server, page, openmap):
         },
         {
             "key": "foobar",
-            "type": "String",
+            "type": "Boolean",
         },
     ]
 
@@ -469,7 +471,7 @@ def test_can_create_filter_from_new_field(live_server, page, openmap):
         {
             "fieldKey": "foobar",
             "label": "Foo Bar",
-            "widget": "Checkbox",
+            "widget": "Switch",
         },
     ]
 

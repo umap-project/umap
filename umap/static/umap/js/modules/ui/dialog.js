@@ -161,7 +161,16 @@ export default class Dialog extends WithTemplate {
 
   accept() {
     this.dialog.returnValue = 'accept'
-    this.close()
+    return new Promise((resolve) => {
+      this.dialog.addEventListener(
+        'close',
+        () => {
+          resolve()
+        },
+        { once: true }
+      )
+      this.close()
+    })
   }
 
   waitForUser() {
