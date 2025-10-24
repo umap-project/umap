@@ -162,7 +162,6 @@ input[type="submit"] {
     background-color: var(--color-mediumGray);
 }
 
-.dark .anonymous:hover,
 .dark .button.anonymous:hover,
 .dark [type="button"].anonymous:hover {
     background-color: var(--color-veryDarkViolet);
