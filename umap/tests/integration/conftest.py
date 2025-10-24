@@ -48,6 +48,14 @@ def page(new_page):
 
 
 @pytest.fixture
+def wait_for_loaded():
+    def _(page):
+        page.wait_for_function("() => U.MAP.dataloaded === true")
+
+    return _
+
+
+@pytest.fixture
 def login(new_page, settings, live_server):
     def do_login(user, **kwargs):
         # TODO use storage state to do login only once per session
