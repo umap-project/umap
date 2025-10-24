@@ -179,7 +179,7 @@ export class Filters {
   }
 
   isActive() {
-    return this.available.values().some((obj) => obj.isActive())
+    return Array.from(this.available.values()).some((obj) => obj.isActive())
   }
 
   // Loop on the data to compute the list of choices, min
