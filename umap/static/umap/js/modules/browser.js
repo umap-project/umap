@@ -133,9 +133,9 @@ export default class Browser {
   update() {
     if (!this.isOpen()) return
     this.dataContainer.innerHTML = ''
-    this._umap.datalayers.browsable().map((datalayer) => {
+    for (const datalayer of this._umap.datalayers.browsable()) {
       this.addDataLayer(datalayer, this.dataContainer)
-    })
+    }
   }
 
   open(mode) {
