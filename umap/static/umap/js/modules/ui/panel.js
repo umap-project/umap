@@ -61,7 +61,7 @@ export class Panel {
       } else {
         this.container.classList.add('on')
         Promise.all(
-          this.container.getAnimations().map((animation) => animation.finished)
+          this.container.getAnimations?.().map((animation) => animation.finished)
         )
           .then(() => {
             resolve(this)
