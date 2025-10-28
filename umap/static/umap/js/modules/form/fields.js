@@ -746,7 +746,7 @@ Fields.PropertyInput = class extends Fields.BlurInput {
     super.build()
     const autocomplete = new AutocompleteDatalist(this.input)
     // Will be used on Umap and DataLayer
-    const properties = this.builder.obj.fieldKeys
+    const properties = Array.from(this.builder.obj.fields.keys())
     autocomplete.suggestions = properties
   }
 }

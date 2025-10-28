@@ -9,6 +9,163 @@ export const getDefaultFields = () => [
   { key: 'description', type: 'Text' },
 ]
 
+export const Registry = {}
+
+class BaseField {
+  constructor(key) {
+    this.key = key
+  }
+
+  values(features) {
+    return features
+      .map((feature) => this.parse(feature.properties[this.key]))
+      .filter((val, idx, arr) => arr.indexOf(val) === idx)
+  }
+
+  equal(expected, other) {
+    return expected === other
+  }
+
+  not_equal(expected, other) {
+    return expected !== other
+  }
+
+  gt(expected, other) {
+    return other > expected
+  }
+
+  lt(expected, other) {
+    return other < expected
+  }
+
+  dumps() {
+    return {
+      key: this.key,
+      type: this.TYPE,
+    }
+  }
+}
+
+Registry.String = class extends BaseField {
+  constructor(key) {
+    super(key)
+    // FIXME make it dynamic from class name
+    this.TYPE = 'String'
+    this.LABEL = translate('Short text')
+  }
+
+  parse(value) {
+    return String(value ?? '')
+  }
+}
+
+Registry.Text = class extends Registry.String {
+  constructor(key) {
+    super(key)
+    // FIXME make it dynamic from class name
+    this.TYPE = 'Text'
+    this.LABEL = translate('Text')
+  }
+}
+
+Registry.Number = class extends BaseField {
+  constructor(key) {
+    super(key)
+    // FIXME make it dynamic from class name
+    this.TYPE = 'Number'
+    this.LABEL = translate('Number')
+  }
+
+  parse(value) {
+    return Number.parseFloat(value)
+  }
+}
+
+Registry.Datetime = class extends BaseField {
+  constructor(key) {
+    super(key)
+    // FIXME make it dynamic from class name
+    this.TYPE = 'Datetime'
+    this.LABEL = translate('Date and time')
+  }
+
+  parse(value) {
+    return new Date(value)
+  }
+}
+
+Registry.Date = class extends BaseField {
+  constructor(key) {
+    super(key)
+    // FIXME make it dynamic from class name
+    this.TYPE = 'Date'
+    this.LABEL = translate('Date')
+  }
+
+  parse(value) {
+    return Utils.parseNaiveDate(value)
+  }
+}
+
+Registry.Boolean = class extends BaseField {
+  constructor(key) {
+    super(key)
+    // FIXME make it dynamic from class name
+    this.TYPE = 'Boolean'
+    this.LABEL = translate('Yes / No')
+  }
+
+  parse(value) {
+    // 'yes' is used in OpenStreetMap data
+    return ['true', '1', 'yes'].includes(`${value}`.toLowerCase())
+  }
+}
+
+Registry.Enum = class extends BaseField {
+  constructor(key) {
+    super(key)
+    // FIXME make it dynamic from class name
+    this.TYPE = 'Enum'
+    this.LABEL = translate('List of values')
+  }
+
+  parse(value) {
+    return String(value || '')
+      .split(',')
+      .map((s) => s.trim())
+  }
+
+  values(features) {
+    return features
+      .reduce(
+        (acc, feature) => acc.concat(this.parse(feature.properties[this.key])),
+        []
+      )
+      .filter((val, idx, arr) => arr.indexOf(val) === idx)
+  }
+
+  equal(expected, other) {
+    return Boolean(new Set(other).intersection(new Set(expected)).size)
+  }
+
+  not_equal(expected, other) {
+    return !new Set(other).intersection(new Set(expected)).size
+  }
+
+  gt(expected, other) {
+    return false
+  }
+
+  lt(expected, other) {
+    return false
+  }
+}
+
+const FIELD_TYPES = Object.entries(Registry).map(([name, klass]) => [
+  name,
+  new klass().LABEL,
+])
+
 export class Fields extends Map {
   constructor(parent, dialog) {
     super()
@@ -38,7 +195,7 @@ export class Fields extends Map {
     this.parent.properties.fields = this.all().map((field) => {
       // We don't want to keep the reference, otherwise editing
       // it will also change the old value
-      return { ...field }
+      return { ...field.dumps() }
     })
   }
 
@@ -60,10 +217,8 @@ export class Fields extends Map {
       console.error('Invalid field', field)
       return
     }
-    field.type ??= 'String'
-    // Copy object, so not to affect original
-    // when edited.
-    this.set(field.key, { ...field })
+    const klass = Registry[field.type] || Registry.String
+    this.set(field.key, new klass(field.key))
     this.push()
   }
 
@@ -103,7 +258,7 @@ export class Fields extends Map {
       const [row, { edit, del, addFilter, editFilter }] = Utils.loadTemplateWithRefs(
         `<li class="orderable with-toolbox" data-key="${field.key}">
           <span>
-            <i class="icon icon-16 icon-field-${field.type}" title="${field.type}"></i>
+            <i class="icon icon-16 icon-field-${field.TYPE}" title="${field.LABEL}"></i>
             ${field.key}
           </span>
           <span>
@@ -161,16 +316,8 @@ export class Fields extends Map {
 
   async editField(name) {
     if (!name && this.parent.isRemoteLayer?.()) return
-    const FIELD_TYPES = [
-      ['String', translate('Short text')],
-      ['Text', translate('Text')],
-      ['Number', translate('Number')],
-      ['Date', translate('Date')],
-      ['Datetime', translate('Date and time')],
-      ['Enum', translate('List of values')],
-      ['Boolean', translate('Yes / No')],
-    ]
-    const field = this.get(name) || {}
+    const field = this.get(name)
+    const data = field?.dumps() || {}
     const metadatas = [
       [
         'key',
@@ -189,7 +336,7 @@ export class Fields extends Map {
         },
       ],
     ]
-    const form = new Form(field, metadatas)
+    const form = new Form(data, metadatas)
 
     const [container, { body, addFilter }] = Utils.loadTemplateWithRefs(`
       <div>
@@ -202,32 +349,34 @@ export class Fields extends Map {
     if (this.parent.filters) {
       addFilter.addEventListener('click', () => {
         this.dialog.accept().then(() => {
-          this.parent.filters.createFilterForm(field.key)
+          this.parent.filters.createFilterForm(data.key)
         })
       })
       addFilter.hidden = false
     }
 
     return this.dialog.open({ template: container }).then(() => {
-      if (!this.validateName(field.key, field.key !== name)) {
+      if (!this.validateName(data.key, data.key !== name)) {
         this.pull()
         return
       }
       this.parent.sync.startBatch()
       const oldFields = Utils.CopyJSON(this.parent.properties.fields)
       if (!name) {
-        this.add(field)
-      } else if (name !== field.key) {
+        this.add(data)
+      } else if (name !== data.key || field.TYPE !== data.type) {
         this.clear()
         // Keep order on rename
         for (const old of oldFields) {
           if (old.key === name) {
-            this.add(field)
+            this.add(data)
           } else {
             this.add(old)
           }
         }
-        this.parent.renameField(name, field.key)
+        if (name !== data.key) {
+          this.parent.renameField(name, data.key)
+        }
       } else {
         this.push()
       }
