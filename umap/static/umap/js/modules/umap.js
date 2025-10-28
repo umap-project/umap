@@ -672,7 +672,7 @@ export default class Umap {
     const parent = this._leafletMap.getPane('overlayPane')
     const datalayers = Object.values(this.datalayers)
       .filter((datalayer) => !datalayer._isDeleted)
-      .sort((datalayer1, datalayer2) => datalayer1.rank > datalayer2.rank)
+      .sort((datalayer1, datalayer2) => datalayer1.rank - datalayer2.rank)
     for (const datalayer of datalayers) {
       const child = parent.querySelector(`[data-id="${datalayer.id}"]`)
       parent.appendChild(child)
