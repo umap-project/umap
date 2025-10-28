@@ -102,6 +102,7 @@ export class Panel {
       this._leafletMap.invalidateSize({ pan: false })
     }
   }
+
   scrollTo(selector) {
     const fieldset = this.container.querySelector(selector)
     if (!fieldset) return
