@@ -6,27 +6,6 @@ import { Fields } from './form/fields.js'
 
 const EMPTY_VALUE = translate('<empty value>')
 
-const getParser = (type) => {
-  switch (type) {
-    case 'Number':
-      return Number.parseFloat
-    case 'Datetime':
-      return (v) => new Date(v)
-    case 'Date':
-      return Utils.parseNaiveDate
-    case 'Boolean':
-      return Boolean
-    case 'Enum':
-      return (v) => {
-        if (!v) return [EMPTY_VALUE]
-        return String(v || '')
-          .split(',')
-          .map((s) => s.trim())
-      }
-    default:
-      return (v) => String(v || '')
-  }
-}
 const Widgets = {}
 
 class BaseWidget {
@@ -73,13 +52,13 @@ Widgets.MinMax = class extends BaseWidget {
     return this.userData.min !== undefined || this.userData.max !== undefined
   }
   getFormField(field) {
-    if (field.type === 'Number') {
+    if (field.TYPE === 'Number') {
       return 'FilterByNumber'
     }
-    if (field.type === 'Date') {
+    if (field.TYPE === 'Date') {
       return 'FilterByDate'
     }
-    if (field.type === 'Datetime') {
+    if (field.TYPE === 'Datetime') {
       return 'FilterByDateTime'
     }
     return super.getFormField(field)
@@ -192,10 +171,9 @@ export class Filters {
     for (const [name, filter] of this.available.entries()) {
       const field = this._parent.fields.get(name)
       if (!field) continue
-      const parser = getParser(field.type)
       this._parent.eachFeature((feature) => {
         let value = feature.properties[name]
-        value = parser(value)
+        value = field.parse(value)
         filter.computeInitialData(initialData[name], value)
       })
     }
@@ -228,14 +206,8 @@ export class Filters {
   }
 
   load() {
-    let filters = this._parent.properties.filters || []
-    // TMP fix for dev server to update map created before changing
-    // filters to be an array
-    if (typeof filters === 'object' && !Array.isArray(filters) && filters !== null) {
-      filters = Object.entries(filters).map(([fieldKey, props]) => {
-        return { fieldKey, ...props }
-      })
-    }
+    let filters = this._parent.properties.filters
+    if (!Array.isArray(filters)) filters = []
     for (const filter of filters) {
       this._add({ ...filter })
     }
@@ -377,9 +349,9 @@ export class Filters {
   createFilterForm(fieldKey) {
     let widget = 'Checkbox'
     const field = this._parent.fields.get(fieldKey)
-    if (['Number', 'Date', 'Datetime'].includes(field?.type)) {
+    if (['Number', 'Date', 'Datetime'].includes(field?.TYPE)) {
       widget = 'MinMax'
-    } else if (field?.type === 'Boolean') {
+    } else if (field?.TYPE === 'Boolean') {
       widget = 'Switch'
     }
     const properties = {
@@ -392,7 +364,9 @@ export class Filters {
       ? [fieldKey]
       : [
           '',
-          ...this._parent.fieldKeys.filter((fieldKey) => !this.available.has(fieldKey)),
+          ...Array.from(this._parent.fields.keys()).filter(
+            (fieldKey) => !this.available.has(fieldKey)
+          ),
         ]
     const metadata = [
       [
@@ -474,8 +448,7 @@ export class Filters {
       // This field may only exist on another layer.
       if (!field) continue
       let value = feature.properties[fieldKey]
-      const parser = getParser(field.type)
-      value = parser(value)
+      value = field.parse(value)
       if (obj.match(value)) return true
     }
     return false

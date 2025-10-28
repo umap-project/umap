@@ -6,6 +6,7 @@ import Orderable from './orderable.js'
 import * as Utils from './utils.js'
 import * as Icon from './rendering/icon.js'
 import { SCHEMA } from './schema.js'
+import { Registry as Fields } from './data/fields.js'
 
 const EMPTY_VALUES = ['', undefined, null]
 
@@ -28,12 +29,12 @@ class Rule {
     // cf https://caniuse.com/?search=public%20class%20field
     this._condition = null
     this.OPERATORS = [
-      ['>', this.gt],
-      ['<', this.lt],
+      ['>', 'gt'],
+      ['<', 'lt'],
       // When sent by Django
-      ['&lt;', this.lt],
-      ['!=', this.not_equal],
-      ['=', this.equal],
+      ['&lt;', 'lt'],
+      ['!=', 'not_equal'],
+      ['=', 'equal'],
     ]
     this.parent = parent
     this._umap = umap
@@ -47,58 +48,47 @@ class Rule {
     this.parent.render(fields)
   }
 
-  equal(other) {
-    return this.expected === other
-  }
-
-  not_equal(other) {
-    return this.expected !== other
-  }
-
-  gt(other) {
-    return other > this.expected
-  }
-
-  lt(other) {
-    return other < this.expected
-  }
-
   parse() {
     let vars = []
     this.cast = (v) => v
     this.operator = undefined
-    for (const [sign, func] of this.OPERATORS) {
+    let operator = undefined
+    for (const [sign, funcName] of this.OPERATORS) {
       if (this.condition.includes(sign)) {
-        this.operator = func
+        operator = funcName
         vars = this.condition.split(sign)
         break
       }
     }
     if (vars.length !== 2) return
-    this.key = vars[0]
+    this.field = this.parent.fields.get(vars[0]) || new Fields.String(vars[0])
+    this.operator = this.field[operator]
     this.expected = vars[1]
     if (EMPTY_VALUES.includes(this.expected)) {
       this.cast = (v) => EMPTY_VALUES.includes(v)
     }
-    // Special cases where we want to be lousy when checking isNaN without
-    // coercing to a Number first because we handle multiple types.
-    // See https://developer.mozilla.org/en-US/docs/Web/JavaScript/
-    // Reference/Global_Objects/Number/isNaN
-    // biome-ignore lint/suspicious/noGlobalIsNan: expected might not be a number.
-    else if (!isNaN(this.expected)) {
-      this.cast = Number.parseFloat
-    } else if (['true', 'false'].includes(this.expected)) {
-      this.cast = (v) => {
-        if (`${v}`.toLowerCase() === 'true') return true
-        if (`${v}`.toLowerCase() === 'false') return false
+    // TODO: deal with legacy rules on non typed fields
+    else {
+      this.cast = this.field.parse
+      if (
+        // Special cases where we want to be lousy when checking isNaN without
+        // coercing to a Number first because we handle multiple types.
+        // See https://developer.mozilla.org/en-US/docs/Web/JavaScript/
+        // Reference/Global_Objects/Number/isNaN
+        // biome-ignore lint/suspicious/noGlobalIsNan: expected might not be a number.
+        !isNaN(this.expected) &&
+        ['gt', 'lt'].includes(operator) &&
+        this.field.TYPE !== 'Number'
+      ) {
+        this.cast = Number.parseFloat
       }
     }
     this.expected = this.cast(this.expected)
   }
 
   match(props) {
-    if (!this.operator || !this.active) return false
-    return this.operator(this.cast(props[this.key]))
+    if (!this.operator || !this.active || !this.field) return false
+    return this.operator(this.expected, this.cast(props[this.field.key]))
   }
 
   getOption(option) {
@@ -118,6 +108,7 @@ class Rule {
       'name',
       'properties.color',
       'properties.iconClass',
+      'properties.iconSize',
       'properties.iconUrl',
       'properties.iconOpacity',
       'properties.opacity',
@@ -132,7 +123,7 @@ class Rule {
     const container = document.createElement('div')
     container.appendChild(builder.build())
     const autocomplete = new AutocompleteDatalist(builder.helpers.condition.input)
-    const properties = this.parent.fieldKeys
+    const properties = Array.from(this.parent.fields.keys())
     autocomplete.suggestions = properties
     autocomplete.input.addEventListener('input', (event) => {
       const value = event.target.value
@@ -140,9 +131,11 @@ class Rule {
         autocomplete.suggestions = [`${value}=`, `${value}!=`, `${value}>`, `${value}<`]
       } else if (value.endsWith('=')) {
         const key = value.split('!')[0].split('=')[0]
-        autocomplete.suggestions = this.parent
-          .sortedValues(key)
-          .map((str) => `${value}${str ?? ''}`)
+        if (key) {
+          autocomplete.suggestions = this.parent
+            .sortedValues(key)
+            .map((str) => `${value}${str ?? ''}`)
+        }
       }
     })
     const backButton = Utils.loadTemplate(`

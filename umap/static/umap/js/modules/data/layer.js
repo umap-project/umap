@@ -84,17 +84,18 @@ export class DataLayer {
     }
     this.connectToMap()
     this.permissions = new DataLayerPermissions(this._umap, this)
-    this.rules = new Rules(umap, this)
 
     this._needsFetch = this.createdOnServer || this.isRemoteLayer()
-    if (!this.createdOnServer) {
-      if (this.showAtLoad()) this.show()
-    }
     if (!this._needsFetch && !this._umap.fields.size) {
       this.properties.fields = getDefaultFields()
     }
     this.fields = new Fields(this, this._umap.dialog)
     this.filters = new Filters(this, this._umap)
+    this.rules = new Rules(umap, this)
+
+    if (!this.createdOnServer) {
+      if (this.showAtLoad()) this.show()
+    }
 
     // Only layers that are displayed on load must be hidden/shown
     // Automatically, others will be shown manually, and thus will
@@ -144,12 +145,6 @@ export class DataLayer {
 
   set rank(value) {
     this.properties.rank = value
-  }
-
-  get fieldKeys() {
-    // Needed to get a similar API from layer and uMap, but
-    // uMap would return concat of all datalayers fields
-    return Array.from(this.fields.keys())
   }
 
   get sortKey() {
@@ -527,12 +522,10 @@ export class DataLayer {
     this.features.forEach((feature) => callback(feature))
   }
 
-  sortedValues(property) {
-    return this.features
-      .all()
-      .map((feature) => feature.properties[property])
-      .filter((val, idx, arr) => arr.indexOf(val) === idx)
-      .sort(Utils.naturalSort)
+  sortedValues(key) {
+    const field = this.fields.get(key) || this._umap.fields.get(key)
+    if (!field) return []
+    return field.values(this.features.all()).sort(Utils.naturalSort)
   }
 
   addData(geojson, sync) {
@@ -1345,7 +1338,10 @@ export class DataLayer {
         rules.set(rule.condition, rule)
       }
       for (const rule of this._umap.rules) {
-        if (!rules.has(rule.condition) && this.fields.has(rule.key)) {
+        if (
+          !rules.has(rule.condition) &&
+          (this.fields.has(rule.field.key) || this._umap.fields.has(rule.field.key))
+        ) {
           rules.set(rule.condition, rule)
         }
       }

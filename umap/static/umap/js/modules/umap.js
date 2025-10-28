@@ -261,15 +261,6 @@ export default class Umap {
     return window.self !== window.top
   }
 
-  get fieldKeys() {
-    return Array.from(
-      new Set([
-        ...this.fields.keys(),
-        ...this.datalayers.active().reduce((acc, dl) => acc.concat(dl.fieldKeys), []),
-      ])
-    )
-  }
-
   setPropertiesFromQueryString() {
     const asBoolean = (key) => {
       const value = this.searchParams.get(key)

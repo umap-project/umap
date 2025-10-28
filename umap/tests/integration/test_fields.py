@@ -520,3 +520,22 @@ def test_can_change_field_type_with_remote_data(live_server, page, openmap, tile
     expect(page.locator(".panel .umap-filter label")).to_contain_text(
         ["bababar", "feefee", "foofoo"]
     )
+
+
+def test_boolean_field_should_display_a_switch_in_feature_form(
+    live_server, page, openmap, tilelayer
+):
+    openmap.settings["properties"]["fields"] = [
+        {"key": "mystring", "type": "String"},
+        {"key": "mynumber", "type": "Number"},
+        {"key": "mybool", "type": "Boolean"},
+    ]
+    openmap.save()
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    page.get_by_role("button", name="Draw a marker (Ctrl+M)").click()
+    page.locator("#map").click()
+    panel = page.locator(".panel")
+    expect(panel.locator(".umap-field-mynumber input")).to_have_attribute(
+        "type", "number"
+    )
+    expect(panel.locator(".umap-field-mybool.with-switch")).to_be_visible()
