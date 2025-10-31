@@ -642,13 +642,13 @@
     "Manage filters": "Manage filters",
     "Map (all layers)": "Map (all layers)",
     "Add a filter for this field": "Add a filter for this field",
-    "Short text": "Short text",
-    "Text": "Text",
-    "Number": "Number",
-    "Date": "Date",
-    "Date and time": "Date and time",
-    "List of values": "List of values",
-    "Yes / No": "Yes / No",
-    "Select field to compute intensity": "Select field to compute intensity",
-    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
+    "Short text": "簡短文字",
+    "Text": "文字",
+    "Number": "數值",
+    "Date": "日期",
+    "Date and time": "日期與時間",
+    "List of values": "變數列表",
+    "Yes / No": "是 / 否",
+    "Select field to compute intensity": "選擇欄位運算強度",
+    "Optional intensity field to compute heatmap": "選擇性強度欄位來計算熱力圖"
 }
