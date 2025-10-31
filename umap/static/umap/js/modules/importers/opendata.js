@@ -64,6 +64,11 @@ const PORTALS = [
     platform: 'prodige',
   },
   {
+    name: 'Réseau STAR Rennes',
+    url: 'https://data.explore.star.fr',
+    platform: 'opendatasoft',
+  },
+  {
     name: 'Toulouse Métropole',
     url: 'https://data.toulouse-metropole.fr',
     platform: 'opendatasoft',
