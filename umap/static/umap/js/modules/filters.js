@@ -165,7 +165,7 @@ export class Filters {
   // and max values.
   computeInitialData() {
     const initialData = Object.fromEntries(
-      this.available.keys().map((name) => [name, {}])
+      Array.from(this.available.keys()).map((name) => [name, {}])
     )
 
     for (const [name, filter] of this.available.entries()) {

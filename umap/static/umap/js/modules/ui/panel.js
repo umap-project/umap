@@ -59,8 +59,9 @@ export class Panel {
       if (isOpen) {
         resolve(this)
       } else {
+        this.container.classList.add('on')
         Promise.all(
-          this.container.getAnimations().map((animation) => animation.finished)
+          this.container.getAnimations?.().map((animation) => animation.finished)
         )
           .then(() => {
             resolve(this)
@@ -70,7 +71,6 @@ export class Panel {
             // were cancelled, we want the new panel callback to be called anyway.
             resolve(this)
           })
-        this.container.classList.add('on')
       }
     })
     DomEvent.on(closeButton, 'click', this.close, this)
@@ -102,6 +102,7 @@ export class Panel {
       this._leafletMap.invalidateSize({ pan: false })
     }
   }
+
   scrollTo(selector) {
     const fieldset = this.container.querySelector(selector)
     if (!fieldset) return
