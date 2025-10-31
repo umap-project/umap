@@ -236,12 +236,18 @@ export class BottomBar extends WithTemplate {
     this.elements.layers.addEventListener('change', () => {
       const select = this.elements.layers
       const selected = select.options[select.selectedIndex].value
-      if (!selected) return
-      this._umap.datalayers.active().map((datalayer) => {
+      for (const datalayer of this._umap.datalayers.active()) {
         if (datalayer.properties.inCaption !== false) {
-          datalayer.toggle(datalayer.id === selected)
+          if (!selected) {
+            datalayer.autoVisibility = true
+            if (datalayer.showAtZoom() && !datalayer.isVisible()) {
+              datalayer.show()
+            }
+          } else {
+            datalayer.toggle(datalayer.id === selected)
+          }
         }
-      })
+      }
     })
   }
 
@@ -263,7 +269,9 @@ export class BottomBar extends WithTemplate {
     if (datalayers.length < 2) {
       this.elements.layers.hidden = true
     } else {
-      this.elements.layers.appendChild(Utils.loadTemplate(`<option value=""></option>`))
+      this.elements.layers.appendChild(
+        Utils.loadTemplate(`<option value="">${translate('All layers')}</option>`)
+      )
       this.elements.layers.hidden = !this._umap.getProperty('layerSwitcher')
       const visible = datalayers.filter((datalayer) => datalayer.isVisible())
       for (const datalayer of datalayers) {

@@ -260,7 +260,7 @@ export default class Browser {
       if (datalayer.isVisible()) allHidden = false
     })
     this._umap.datalayers.browsable().map((datalayer) => {
-      datalayer.autoLoaded = false
+      datalayer.autoVisibility = false
       if (allHidden) {
         datalayer.show()
       } else {
