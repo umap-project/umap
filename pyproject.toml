@@ -65,7 +65,7 @@ test = [
   "moto[s3]==5.1.14"
 ]
 docker = [
-  "uvicorn==0.37.0",
+  "uvicorn==0.38.0",
 ]
 s3 = [
   "django-storages[s3]==1.14.6",
