@@ -225,27 +225,28 @@ export class DataLayer {
   }
 
   showAtLoad() {
-    return this.autoLoaded && this.showAtZoom()
+    return this.autoVisibility && this.showAtZoom()
   }
 
-  get autoLoaded() {
-    if (this._autoLoaded === undefined) {
+  get autoVisibility() {
+    if (this._autoVisibility === undefined) {
       if (this._umap.datalayersFromQueryString) {
         const datalayerIds = this._umap.datalayersFromQueryString
-        this._autoLoaded = datalayerIds.includes(this.id.toString())
+        this._autoVisibility = datalayerIds.includes(this.id.toString())
         if (this.properties.old_id) {
-          this._autoLoaded =
-            this._autoLoaded || datalayerIds.includes(this.properties.old_id.toString())
+          this._autoVisibility =
+            this._autoVisibility ||
+            datalayerIds.includes(this.properties.old_id.toString())
         }
       } else {
-        this._autoLoaded = this.properties.displayOnLoad
+        this._autoVisibility = this.properties.displayOnLoad
       }
     }
-    return this._autoLoaded
+    return this._autoVisibility
   }
 
-  set autoLoaded(value) {
-    this._autoLoaded = value
+  set autoVisibility(value) {
+    this._autoVisibility = value
   }
 
   insertBefore(other) {
@@ -1117,7 +1118,7 @@ export class DataLayer {
     // From now on, do not try to how/hide
     // automatically this layer, as user
     // has taken control on this.
-    this.autoLoaded = false
+    this.autoVisibility = false
     let display = force
     if (force === undefined) {
       if (!this.isVisible()) display = true
