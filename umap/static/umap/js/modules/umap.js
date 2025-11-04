@@ -1729,6 +1729,7 @@ export default class Umap {
     const fields = Object.keys(importedData.properties).map(
       (field) => `properties.${field}`
     )
+    this.fields.pull()
     this.filters.load()
     this.render(fields)
     this._leafletMap._setDefaultCenter()
