@@ -108,18 +108,9 @@ export const TitleMixin = (Base) =>
   }
 
 class Table extends TitleMixin(PopupTemplate) {
-  getValue(feature, key) {
-    // TODO, manage links (url, mailto, wikipedia...)
-    const value = Utils.escapeHTML(feature.properties[key]).trim()
-    if (value.indexOf('http') === 0) {
-      return `<a href="${value}" target="_blank">${value}</a>`
-    }
-    return value
-  }
-
-  makeRow(feature, key) {
+  makeRow(feature, field) {
     return Utils.loadTemplate(
-      `<tr><th>${key}</th><td>${this.getValue(feature, key)}</td></tr>`
+      `<tr><th>${field.key}</th><td>${field.render(feature.properties[field.key])}</td></tr>`
     )
   }
 
@@ -130,7 +121,7 @@ class Table extends TitleMixin(PopupTemplate) {
       if (U.LABEL_KEYS.includes(field.key)) {
         continue
       }
-      table.appendChild(this.makeRow(feature, field.key))
+      table.appendChild(this.makeRow(feature, field))
     }
     return table
   }
