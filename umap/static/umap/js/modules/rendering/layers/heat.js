@@ -102,6 +102,7 @@ export const Heat = L.HeatLayer.extend({
     }
     if (field === 'properties.heat.radius') {
       this.options.radius = this.datalayer.properties.heat.radius
+      this.redraw()
     }
     this._updateOptions()
   },
