@@ -228,7 +228,7 @@ class IframeExporter {
 
   build() {
     const iframeUrl = this.buildUrl()
-    let code = `<iframe width="${this.dimensions.width}" height="${this.dimensions.height}" frameborder="0" allowfullscreen allow="geolocation" src="${iframeUrl}"></iframe>`
+    let code = `<iframe style="width: ${this.dimensions.width}; height: ${this.dimensions.height}; border: 0;" allowfullscreen allow="geolocation" src="${iframeUrl}"></iframe>`
     if (this.options.includeFullScreenLink) {
       const fullUrl = this.buildUrl({ scrollWheelZoom: true })
       code += `<p><a href="${fullUrl}">${translate('See full screen')}</a></p>`
