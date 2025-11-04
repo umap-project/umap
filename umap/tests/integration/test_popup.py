@@ -42,3 +42,34 @@ def test_openstreetmap_popup(live_server, map, page):
         "src",
         "https://api.panoramax.xyz/api/pictures/d811b398-d930-4cf8-95a2-0c29c34d9fca/sd.jpg",
     )
+
+
+def test_table_popup(live_server, map, page):
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "geometry": {"type": "Point", "coordinates": [2.49, 48.79]},
+                "properties": {
+                    "url": "https://restaurant.org",
+                    "formatted": "with **bold**",
+                },
+                "id": "AzMjk",
+            },
+        ],
+        "_umap_options": {
+            "popupTemplate": "Table",
+            "fields": [
+                {"key": "url", "type": "String"},
+                {"key": "formatted", "type": "Text"},
+            ],
+        },
+    }
+    DataLayerFactory(map=map, data=data)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#18/48.79/2.49")
+    page.locator(".leaflet-marker-icon").click()
+    expect(page.get_by_role("link", name="https://restaurant.org")).to_be_visible()
+    expect(page.get_by_role("cell", name="with bold").locator("strong")).to_have_text(
+        "bold"
+    )

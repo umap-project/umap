@@ -38,6 +38,10 @@ class BaseField {
     return other < expected
   }
 
+  render(value) {
+    return Utils.escapeHTML(value).trim()
+  }
+
   dumps() {
     return {
       key: this.key,
@@ -57,6 +61,15 @@ Registry.String = class extends BaseField {
   parse(value) {
     return String(value ?? '')
   }
+
+  render(value) {
+    value = super.render(value)
+    // TODO, manage links (url, mailto, wikipedia...)
+    if (value.indexOf('http') === 0) {
+      value = `<a href="${value}" target="_blank">${value}</a>`
+    }
+    return value
+  }
 }
 
 Registry.Text = class extends Registry.String {
@@ -65,6 +78,10 @@ Registry.Text = class extends Registry.String {
     // FIXME make it dynamic from class name
     this.TYPE = 'Text'
     this.LABEL = translate('Text')
+  }
+
+  render(value) {
+    return Utils.toHTML(value)
   }
 }
 
