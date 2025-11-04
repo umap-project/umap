@@ -6,7 +6,7 @@ def test_home_control_is_hidden(live_server, map, tilelayer, page):
     <html>
         <head></head>
         <body>
-            <iframe width="100%" height="300px" frameborder="0" allowfullscreen allow="geolocation"
+            <iframe style="width: 100%; height: 300px; border: 0;" allowfullscreen allow="geolocation"
             src="{map.get_absolute_url()}?scaleControl=false&miniMap=false&scrollWheelZoom=false&zoomControl=true&editMode=disabled&moreControl=true&searchControl=null&tilelayersControl=null&embedControl=null&datalayersControl=true&onLoadPanel=caption&captionBar=false&captionMenus=true"></iframe>
         </body>
     </html>
