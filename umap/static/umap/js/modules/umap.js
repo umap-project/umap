@@ -1,7 +1,4 @@
-import {
-  Util as LeafletUtil,
-  latLngBounds,
-} from '../../vendors/leaflet/leaflet-src.esm.js'
+import { Util as LeafletUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import {
   uMapAlert as Alert,
   uMapAlertCreation as AlertCreation,
@@ -1791,16 +1788,12 @@ export default class Umap {
     await this.server.post(sendLink, {}, formData)
   }
 
-  getLayersBounds() {
-    const bounds = new latLngBounds()
-    this.datalayers.browsable().map((d) => {
-      if (d.isVisible()) bounds.extend(d.layer.getBounds())
-    })
-    return bounds
-  }
-
   fitDataBounds() {
-    const bounds = this.getLayersBounds()
+    const layers = this.datalayers
+      .browsable()
+      .filter((d) => d.isVisible())
+      .map((d) => d.layer)
+    const bounds = this._leafletMap.getLayersBounds(layers)
     if (!this.hasData() || !bounds.isValid()) return false
     this._leafletMap.fitBounds(bounds)
   }

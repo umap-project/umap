@@ -390,6 +390,14 @@ export const LeafletMap = BaseMap.extend({
     return BaseMap.prototype.setMaxBounds.call(this, bounds)
   },
 
+  getLayersBounds: (layers) => {
+    const bounds = new latLngBounds()
+    for (const layer of layers) {
+      bounds.extend(layer.getBounds())
+    }
+    return bounds
+  },
+
   initEditTools: function () {
     this.editTools = new U.Editable(this._umap)
   },
