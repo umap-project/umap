@@ -107,3 +107,23 @@ export const contrastedColor = (el, bgcolor) => {
   if (bgcolor) CACHE_CONTRAST[bgcolor] = out
   return out
 }
+
+export const createFieldset = (parent, title, options) => {
+  options = options || {}
+  const [details, {summary, fieldset}] = loadTemplateWithRefs(`
+    <details class="${options.className || ''}">
+      <summary data-ref="summary"><h4>${title}</h4></summary>
+      <fieldset data-ref="fieldset"></fieldset>
+    </details>
+  `)
+  details.open = options.on === true
+  parent.appendChild(details)
+  if (options.icon) {
+    const icon = loadTemplate(`<i class="icon icon-16 ${options.icon}"></i>`)
+    summary.insertBefore(icon, summary.firstChild)
+  }
+  return fieldset
+}
+
+export const loadTemplateWithRefs = Utils.loadTemplateWithRefs
+export const loadTemplate = Utils.loadTemplate
