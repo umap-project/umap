@@ -1,4 +1,3 @@
-import { Util as LeafletUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import {
   uMapAlert as Alert,
   uMapAlertCreation as AlertCreation,
@@ -1057,10 +1056,10 @@ export default class Umap {
     current.addEventListener('click', () => {
       const bounds = this._leafletMap.getBounds()
       const oldLimitBounds = { ...this.properties.limitBounds }
-      this.properties.limitBounds.south = LeafletUtil.formatNum(bounds.getSouth())
-      this.properties.limitBounds.west = LeafletUtil.formatNum(bounds.getWest())
-      this.properties.limitBounds.north = LeafletUtil.formatNum(bounds.getNorth())
-      this.properties.limitBounds.east = LeafletUtil.formatNum(bounds.getEast())
+      this.properties.limitBounds.south = bounds.getSouth().toFixed(6)
+      this.properties.limitBounds.west = bounds.getWest().toFixed(6)
+      this.properties.limitBounds.north = bounds.getNorth().toFixed(6)
+      this.properties.limitBounds.east = bounds.getEast().toFixed(6)
       boundsBuilder.fetchAll()
       this.sync.update(
         'properties.limitBounds',
