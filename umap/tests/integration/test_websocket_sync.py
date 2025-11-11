@@ -612,7 +612,7 @@ def test_saved_datalayer_are_not_duplicated(
     wait_for_loaded(peerA)
     # Create a new datalayer
     peerA.get_by_title("Manage layers").click()
-    peerA.get_by_title("Add a layer").click()
+    peerA.get_by_role("button", name="Add a layer").click()
     peerA.locator("#map").click(position={"x": 220, "y": 220})
     # Save layer to the server, so now the datalayer exist on the server AND
     # is still in the live operations of peer A

@@ -26,8 +26,9 @@ def set_timeout(context):
 
 @pytest.fixture
 def new_page(context):
-    def make_page(prefix="console"):
-        page = context.new_page()
+    def make_page(prefix="console", custom_context=None):
+        _context = custom_context or context
+        page = _context.new_page()
         page.on(
             "console",
             lambda msg: print(f"{prefix}: {msg.text}")

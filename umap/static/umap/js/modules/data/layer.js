@@ -1061,14 +1061,14 @@ export class DataLayer {
       button.addEventListener('click', () => this.restore(data.ref))
     }
 
-    const versionsContainer = DomUtil.createFieldset(container, translate('Versions'), {
-      async callback() {
+    const versionsContainer = DomUtil.createFieldset(container, translate('Versions'))
+    versionsContainer.closest('details').addEventListener('toggle', async (event) => {
+      if (event.target.open) {
         const [{ versions }, response, error] = await this._umap.server.get(
           this.getVersionsUrl()
         )
         if (!error) versions.forEach(appendVersion)
-      },
-      context: this,
+      }
     })
   }
 
