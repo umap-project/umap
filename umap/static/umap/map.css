@@ -420,15 +420,16 @@ ul.photon-autocomplete {
 /* ***************************** */
 /*    Share and download panel   */
 /* ***************************** */
+.downloads {
+    columns: 4;
+    margin-bottom: var(--box-margin);
+}
+
 .downloads li {
     height: 1.7em;
     padding: 0;
     text-align: start;
     vertical-align: bottom;
-}
-
-.vspace {
-    height: 32px;
 }
 
 /* *********** */

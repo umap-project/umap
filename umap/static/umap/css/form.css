@@ -772,6 +772,20 @@ input[type=hidden].blur+[type="button"] {
     align-items: stretch;
 }
 
+.copiable-textarea div {
+    position: relative;
+}
+
+.copiable-textarea textarea {
+    min-height: 4rlh;
+}
+
+.copiable-textarea button {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
 .copiable-input {
     display: flex;
     align-items: end;
@@ -781,13 +795,17 @@ input[type=hidden].blur+[type="button"] {
     border-radius: initial;
 }
 
+.copiable-textarea button,
 .copiable-input button[type=button] {
     background-color: var(--background-color);
     color: var(--text-color);
     border: 2px solid var(--color-darkBlue);
-    border-left: none;
     width: 40px;
     height: 40px;
+}
+
+.copiable-input button[type=button] {
+    border-left: none;
 }
 
 input.highlightable:not(:placeholder-shown) {
