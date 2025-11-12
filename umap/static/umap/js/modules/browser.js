@@ -1,4 +1,4 @@
-import { DomEvent, DomUtil, stamp } from '../../vendors/leaflet/leaflet-src.esm.js'
+import { DomEvent, stamp } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { Form } from './form/builder.js'
 import { EXPORT_FORMATS } from './formatter.js'
 import { translate } from './i18n.js'

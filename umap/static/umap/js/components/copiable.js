@@ -38,7 +38,6 @@ class CopiableTextarea extends HTMLElement {
 }
 
 function register(Class, tagName) {
-  console.log('register')
   if ('customElements' in window && !customElements.get(tagName)) {
     customElements.define(tagName, Class)
   }

@@ -1,22 +1,24 @@
-import { DomUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import { BaseAjax, SingleMixin } from '../autocomplete.js'
 import { translate } from '../i18n.js'
+import * as DOMUtils from '../domutils.js'
 
 const TEMPLATE = `
-  <h3>Overpass</h3>
-  <label>
-    <span data-help="overpassImporter">${translate('Expression')}</span>
-    <input type="text" placeholder="amenity=drinking_water" name="tags" />
-  </label>
-  <label>
-    ${translate('Geometry mode')}
-    <select name="out">
-      <option value="geom" selected>${translate('Default')}</option>
-      <option value="center">${translate('Only geometry centers')}</option>
-    </select>
-  </label>
-  <label id="area"><span>${translate('Search area')}</span></label>
+  <div>
+    <h3>Overpass</h3>
+    <label>
+      <span data-help="overpassImporter">${translate('Expression')}</span>
+      <input type="text" placeholder="amenity=drinking_water" name="tags" data-ref="tags" />
+    </label>
+    <label>
+      ${translate('Geometry mode')}
+      <select name="out">
+        <option value="geom" selected>${translate('Default')}</option>
+        <option value="center">${translate('Only geometry centers')}</option>
+      </select>
+    </label>
+    <label data-ref="area" id="area"><span>${translate('Search area')}</span></label>
+  </div>
 `
 
 class Autocomplete extends SingleMixin(BaseAjax) {
@@ -57,12 +59,11 @@ export class Importer {
   }
 
   async open(importer) {
-    const container = DomUtil.create('div')
-    container.innerHTML = TEMPLATE
+    const [container, { area, tags }] = DOMUtils.loadTemplateWithRefs(TEMPLATE)
     if (this.expression) {
-      container.querySelector('[name=tags]').value = this.expression
+      tags.value = this.expression
     }
-    this.autocomplete = new Autocomplete(container.querySelector('#area'), {
+    this.autocomplete = new Autocomplete(area, {
       url: this.searchUrl,
       placeholder: translate(
         'Type area name, or let empty to load data in current map view'

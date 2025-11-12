@@ -1,9 +1,4 @@
-import {
-  DomEvent,
-  DomUtil,
-  GeoJSON,
-  LineUtil,
-} from '../../../vendors/leaflet/leaflet-src.esm.js'
+import { GeoJSON, LineUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import { MutatingForm } from '../form/builder.js'
 import { translate } from '../i18n.js'
@@ -243,12 +238,11 @@ class Feature {
     if (this._umap.editedFeature === this && !event?.force) return
     // If this feature is active (popup open), let's close it.
     this.deactivate()
-    const container = DomUtil.create('div', 'umap-feature-container')
-    DomUtil.createTitle(
-      container,
-      translate('Feature properties'),
-      `icon-${this.getClassName()}`
-    )
+    const container = DOMUtils.loadTemplate(`
+      <div class="umap-feature-container">
+        <h3><i class="icon icon-16 icon-${this.getClassName()}"></i> ${translate('Feature properties')}</h3>
+      </div>
+    `)
 
     let builder = new MutatingForm(this, [
       ['datalayer', { handler: 'EditableDataLayerSwitcher' }],
@@ -333,7 +327,7 @@ class Feature {
     let builder = new MutatingForm(this, optionsFields, {
       id: 'umap-feature-shape-properties',
     })
-    const shapeProperties = DomUtil.createFieldset(
+    const shapeProperties = DOMUtils.createFieldset(
       container,
       translate('Shape properties')
     )
@@ -345,7 +339,7 @@ class Feature {
     builder = new MutatingForm(this, advancedOptions, {
       id: 'umap-feature-advanced-properties',
     })
-    const advancedProperties = DomUtil.createFieldset(
+    const advancedProperties = DOMUtils.createFieldset(
       container,
       translate('Advanced properties')
     )
@@ -353,7 +347,7 @@ class Feature {
 
     const interactionOptions = this.getInteractionOptions()
     builder = new MutatingForm(this, interactionOptions)
-    const popupFieldset = DomUtil.createFieldset(
+    const popupFieldset = DOMUtils.createFieldset(
       container,
       translate('Interaction options')
     )
@@ -798,7 +792,7 @@ export class Point extends Feature {
       this.pullGeometry()
       this.zoomTo({ easing: false })
     })
-    const fieldset = DomUtil.createFieldset(container, translate('Coordinates'))
+    const fieldset = DOMUtils.createFieldset(container, translate('Coordinates'))
     fieldset.appendChild(builder.build())
   }
 
@@ -966,7 +960,7 @@ class Path extends Feature {
     const builder = new MutatingForm(this, options, {
       id: 'umap-feature-line-decoration',
     })
-    const fieldset = DomUtil.createFieldset(container, translate('Line decoration'))
+    const fieldset = DOMUtils.createFieldset(container, translate('Line decoration'))
     fieldset.appendChild(builder.build())
   }
 }
@@ -1079,7 +1073,7 @@ export class LineString extends Path {
   getAdvancedEditActions(container) {
     super.getAdvancedEditActions(container)
     const button = Utils.loadTemplate(`
-      <button class="button" type="button"><i class="icon icon-24 icon-polygon"></i>${translate('Transform to polygon')}</button>
+      <button type="button"><i class="icon icon-24 icon-polygon"></i>${translate('Transform to polygon')}</button>
     `)
     container.appendChild(button)
     button.addEventListener('click', () => this.toPolygon())
@@ -1385,13 +1379,13 @@ export class Polygon extends Path {
 
   getAdvancedEditActions(container) {
     super.getAdvancedEditActions(container)
-    const toLineString = DomUtil.createButton(
-      'button umap-to-polyline',
-      container,
-      translate('Transform to lines'),
-      this.toLineString,
-      this
+    const toLineString = DOMUtils.loadTemplate(
+      `<button type="button" class="umap-to-polyline">
+        <i class="icon icon-24 icon-polyline"></i>${translate('Transform to lines')}
+      </button>`
     )
+    container.appendChild(toLineString)
+    toLineString.addEventListener('click', () => this.toLineString())
   }
 
   isMulti() {

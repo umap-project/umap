@@ -3,7 +3,6 @@ import {
   Map as BaseMap,
   Control,
   DomEvent,
-  DomUtil,
   latLng,
   latLngBounds,
   setOptions,
@@ -138,11 +137,10 @@ const ControlsMixin = {
       const control = this._controls[name]
       if (!control) continue
       control.addTo(this)
-      if (status === undefined || status === null) {
-        DomUtil.addClass(control._container, 'display-on-more')
-      } else {
-        DomUtil.removeClass(control._container, 'display-on-more')
-      }
+      control._container.classList.toggle(
+        'display-on-more',
+        status === undefined || status === null
+      )
     }
     if (this._umap.getProperty('permanentCredit'))
       this._controls.permanentCredit.addTo(this)

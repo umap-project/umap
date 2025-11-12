@@ -1,8 +1,8 @@
-import { DomEvent, DomUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import { BaseAjax, SingleMixin } from '../autocomplete.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
+import * as DOMUtils from '../domutils.js'
 
 const BOUNDARY_TYPES = {
   admin_6: 'département',
@@ -14,18 +14,20 @@ const BOUNDARY_TYPES = {
 }
 
 const TEMPLATE = `
-  <h3>GeoDataMine</h3>
-  <p>${translate('GeoDataMine: thematic data from OpenStreetMap')}.</p>
-  <div class="formbox">
-    <select name="theme">
-      <option value="">${translate('Choose a theme')}</option>
-    </select>
-    <label>
-      <input type="checkbox" name="aspoint" />
-      ${translate('Simplify all geometries to points')}
-    </label>
-    <label id="boundary">
-    </label>
+  <div>
+    <h3>GeoDataMine</h3>
+    <p>${translate('GeoDataMine: thematic data from OpenStreetMap')}.</p>
+    <div class="formbox">
+      <select name="theme" data-ref="select">
+        <option value="">${translate('Choose a theme')}</option>
+      </select>
+      <label>
+        <input type="checkbox" name="aspoint" />
+        ${translate('Simplify all geometries to points')}
+      </label>
+      <label id="boundary">
+      </label>
+    </div>
   </div>
 `
 
@@ -49,20 +51,16 @@ export class Importer {
   async open(importer) {
     let boundary = null
     let boundaryName = null
-    const container = DomUtil.create('div')
-    container.innerHTML = TEMPLATE
+    const [container, { select }] = DOMUtils.loadTemplateWithRefs(TEMPLATE)
     const response = await this.umap.request.get(`${this.baseUrl}/themes`)
-    const select = container.querySelector('select')
     if (response?.ok) {
       const { themes } = await response.json()
       themes.sort((a, b) => Utils.naturalSort(a['name:fr'], b['name:fr']))
       for (const theme of themes) {
-        DomUtil.element({
-          tagName: 'option',
-          value: theme.id,
-          textContent: theme['name:fr'],
-          parent: select,
-        })
+        const option = DOMUtils.loadTemplate(
+          `<option value="${theme.id}">${theme['name:fr']}</option>`
+        )
+        select.appendChild(option)
       }
     } else {
       console.error(response)
