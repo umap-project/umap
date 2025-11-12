@@ -649,8 +649,10 @@ const locale = {
     "Date and time": "Dato og tid",
     "List of values": "Liste over værdier",
     "Yes / No": "Ja / Nej",
-    "Select field to compute intensity": "Select field to compute intensity",
-    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
+    "Select field to compute intensity": "Vælg felt for at beregne intensitet",
+    "Optional intensity field to compute heatmap": "Valgfrit intensitetsfelt til beregning af heatmap",
+    "All layers": "Alle lag",
+    "Comma separated list of values": "Comma separated list of values"
 }
 L.registerLocale("da", locale)
 L.setLocale("da")

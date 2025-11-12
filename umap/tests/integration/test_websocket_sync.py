@@ -53,6 +53,7 @@ def test_websocket_connection_can_sync_markers(
 
     a_map_el = peerA.locator("#map")
     a_map_el.click(position={"x": 220, "y": 220})
+    peerA.wait_for_timeout(300)  # Time for the panel animation to finish
     expect(a_marker_pane).to_have_count(1)
     expect(b_marker_pane).to_have_count(1)
     # Peer B should not be in state dirty
@@ -330,6 +331,7 @@ def test_websocket_connection_can_sync_late_joining_peer(
 
     a_map_el = peerA.locator("#map")
     a_map_el.click(position={"x": 220, "y": 220})
+    peerA.wait_for_timeout(300)  # Time for the panel animation to finish
     peerA.locator("body").type("First marker")
     peerA.locator("body").press("Escape")
     peerA.wait_for_timeout(300)
@@ -555,8 +557,10 @@ def test_create_and_sync_map(
 
     # Add a marker from peer A
     peerA.get_by_role("button", name="Edit").click()
+    peerA.wait_for_timeout(300)  # Time for the animation to finish
     peerA.get_by_title("Draw a marker").click()
     peerA.locator("#map").click(position={"x": 220, "y": 220})
+    peerA.wait_for_timeout(300)  # Time for the panel animation to finish
     expect(markersA).to_have_count(1)
     expect(markersB).to_have_count(1)
 
@@ -582,6 +586,7 @@ def test_create_and_sync_map(
     # Add a marker from peer B
     peerB.get_by_title("Draw a marker").click()
     peerB.locator("#map").click(position={"x": 200, "y": 200})
+    peerA.wait_for_timeout(300)  # Time for the panel animation to finish
     expect(markersB).to_have_count(2)
     expect(markersA).to_have_count(1)
     with peerB.expect_response(re.compile("./datalayer/update/.*")):
@@ -607,7 +612,7 @@ def test_saved_datalayer_are_not_duplicated(
     wait_for_loaded(peerA)
     # Create a new datalayer
     peerA.get_by_title("Manage layers").click()
-    peerA.get_by_title("Add a layer").click()
+    peerA.get_by_role("button", name="Add a layer").click()
     peerA.locator("#map").click(position={"x": 220, "y": 220})
     # Save layer to the server, so now the datalayer exist on the server AND
     # is still in the live operations of peer A

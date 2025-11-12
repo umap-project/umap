@@ -1,26 +1,6 @@
 # Changelog
 
-## 3.4.0-beta3 - 2025-10-24
-
-* do not use yet the "some" method on an iterator by @yohanboniface in #3029
-* use a select for heatmap intensity property by @yohanboniface in #3019
-* open "add filter" button for layers with non default fields  by @yohanboniface in #3021
-* fix "filter data" button in contextmenu by @yohanboniface in #3022
-* small css fixes by @yohanboniface in #3031
-* make sure filters has default type when clicking from field dialog by @yohanboniface in #3033
-* show all defined fields in table popup by @yohanboniface in #3034
-
-## 3.4.0-beta2 - 2025-10-16
-* be more defensive and try not add a field with an empty key by @yohanboniface in #3016
-* fix search result button color by @yohanboniface in #3017
-* order tags for frontend too
-
-## 3.4.0-beta1 - 2025-10-16
-* update permissions properties after login by @yohanboniface in #3013
-* sort tags in search select by @yohanboniface in #3014
-* redraw cluster when changing color by @yohanboniface in #3015
-
-## 3.4.0-beta0 - 2025-10-16
+## 3.4.0 - 2025-11-04
 
 This release is mainly about a refactor of fields and filters management.
 There is now an UI to create filters, and fields can be loosely typed.
@@ -46,6 +26,11 @@ Also:
 * allow path decoration on polygons too by @yohanboniface in #2987
 * expose feature id in template variables by @yohanboniface in #2989
 * only show Wikipedia intro, and add credit and full link in footer by @yohanboniface in #2983
+* add STAR (Rennes network operator) opendata portal by @yohanboniface in #3051
+* allow to show back all layers from the bottom bar selector by @yohanboniface in #3052
+* add SNCF open data portal by @yohanboniface in #3057
+* use a select for heatmap intensity property by @yohanboniface in #3019
+* sort tags in search select by @yohanboniface in #3014
 
 ### Bug fixes
 * make the edition header responsive by @davidbgk in #2921
@@ -60,11 +45,20 @@ Also:
 * align text in large circle icon by @yohanboniface in #2984
 * add opacity to classified layer legend color by @yohanboniface in #2985
 * do not save data to the server for remote layers by @yohanboniface in #3010
+* redraw cluster when changing color by @yohanboniface in #3015
+* fix datalayer ordering in chrome-like browsers by @davidbgk in #3037
+* use more modern way to set iframe width and height by @yohanboniface in #3065
+* redraw heatmap when user changes the radius by @yohanboniface in #3066
+* honour settings.FILE_UPLOAD_PERMISSIONS when creating gzip files by @yohanboniface in #3068
 
 ### Internal changes
 * move toolbox to the right by @yohanboniface in #2970
 * add example with two keys in overpass help by @yohanboniface in #2991
 * use a separate block for description in caption by @yohanboniface in #2990
+
+## New Contributors
+* @NathanBaulch made their first contribution in #3018
+* @likot180 made their first contribution in #3045
 
 
 ## 3.3.6 - 2025-09-07

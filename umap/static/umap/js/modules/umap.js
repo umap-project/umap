@@ -1,9 +1,4 @@
 import {
-  DomUtil,
-  Util as LeafletUtil,
-  latLngBounds,
-} from '../../vendors/leaflet/leaflet-src.esm.js'
-import {
   uMapAlert as Alert,
   uMapAlertCreation as AlertCreation,
 } from '../components/alerts/alert.js'
@@ -764,14 +759,19 @@ export default class Umap {
   editCaption() {
     if (!this.editEnabled) return
     if (this.properties.editMode !== 'advanced') return
-    const container = DomUtil.create('div')
+    const container = DOMUtils.loadTemplate(`
+      <div>
+        <h3>
+          <i class="icon icon-16 icon-info"></i>
+          ${translate('Edit map details')}
+        </h3>
+      </div>
+    `)
     const metadataFields = [
       'properties.name',
       'properties.description',
       'properties.is_template',
     ]
-
-    DomUtil.createTitle(container, translate('Edit map details'), 'icon-info')
     const builder = new MutatingForm(this, metadataFields, {
       className: 'map-metadata',
       umap: this,
@@ -779,13 +779,13 @@ export default class Umap {
     const form = builder.build()
     container.appendChild(form)
 
-    const tags = DomUtil.createFieldset(container, translate('Tags'))
+    const tags = DOMUtils.createFieldset(container, translate('Tags'))
     const tagsFields = ['properties.tags']
     const tagsBuilder = new MutatingForm(this, tagsFields, {
       umap: this,
     })
     tags.appendChild(tagsBuilder.build())
-    const credits = DomUtil.createFieldset(container, translate('Credits'))
+    const credits = DOMUtils.createFieldset(container, translate('Credits'))
     const creditsFields = [
       'properties.licence',
       'properties.shortCredit',
@@ -801,7 +801,11 @@ export default class Umap {
   editCenter() {
     if (!this.editEnabled) return
     if (this.properties.editMode !== 'advanced') return
-    const container = DomUtil.create('div')
+    const container = DOMUtils.loadTemplate(`
+      <div>
+        <h3><i class="icon icon-16 icon-zoom"></i>${translate('Edit map default view')}</h3>
+      </div>
+    `)
     const metadataFields = [
       ['properties.zoom', { handler: 'IntInput', label: translate('Default zoom') }],
       [
@@ -815,13 +819,12 @@ export default class Umap {
       'properties.defaultView',
     ]
 
-    DomUtil.createTitle(container, translate('Edit map default view'), 'icon-zoom')
     const builder = new MutatingForm(this, metadataFields, {
       className: 'map-metadata',
       umap: this,
     })
     const form = builder.build()
-    const button = Utils.loadTemplate(
+    const button = DOMUtils.loadTemplate(
       `<button type="button">${translate('Use current center and zoom')}</button>`
     )
     button.addEventListener('click', () => {
@@ -850,7 +853,7 @@ export default class Umap {
       'properties.layerSwitcher',
     ])
     const builder = new MutatingForm(this, UIFields, { umap: this })
-    const controlsOptions = DomUtil.createFieldset(
+    const controlsOptions = DOMUtils.createFieldset(
       container,
       translate('User interface options')
     )
@@ -874,7 +877,7 @@ export default class Umap {
     ]
 
     const builder = new MutatingForm(this, shapeOptions, { umap: this })
-    const defaultShapeProperties = DomUtil.createFieldset(
+    const defaultShapeProperties = DOMUtils.createFieldset(
       container,
       translate('Default shape properties')
     )
@@ -892,7 +895,7 @@ export default class Umap {
     ]
 
     const builder = new MutatingForm(this, shapeOptions, { umap: this })
-    const defaultShapeProperties = DomUtil.createFieldset(
+    const defaultShapeProperties = DOMUtils.createFieldset(
       container,
       translate('Default properties')
     )
@@ -910,7 +913,7 @@ export default class Umap {
       'properties.outlinkTarget',
     ]
     const builder = new MutatingForm(this, popupFields, { umap: this })
-    const popupFieldset = DomUtil.createFieldset(
+    const popupFieldset = DOMUtils.createFieldset(
       container,
       translate('Default interaction options')
     )
@@ -962,7 +965,7 @@ export default class Umap {
         { handler: 'Switch', label: translate('TMS format') },
       ],
     ]
-    const customTilelayer = DomUtil.createFieldset(
+    const customTilelayer = DOMUtils.createFieldset(
       container,
       translate('Custom background')
     )
@@ -1013,7 +1016,7 @@ export default class Umap {
       ],
       ['properties.overlay.tms', { handler: 'Switch', label: translate('TMS format') }],
     ]
-    const overlay = DomUtil.createFieldset(container, translate('Custom overlay'))
+    const overlay = DOMUtils.createFieldset(container, translate('Custom overlay'))
     const builder = new MutatingForm(this, overlayFields, { umap: this })
     overlay.appendChild(builder.build())
   }
@@ -1022,7 +1025,7 @@ export default class Umap {
     if (!Utils.isObject(this.properties.limitBounds)) {
       this.properties.limitBounds = {}
     }
-    const limitBounds = DomUtil.createFieldset(container, translate('Limit bounds'))
+    const limitBounds = DOMUtils.createFieldset(container, translate('Limit bounds'))
     const boundsFields = [
       [
         'properties.limitBounds.south',
@@ -1043,28 +1046,29 @@ export default class Umap {
     ]
     const boundsBuilder = new MutatingForm(this, boundsFields, { umap: this })
     limitBounds.appendChild(boundsBuilder.build())
-    const boundsButtons = DomUtil.create('div', 'button-bar half', limitBounds)
-    DomUtil.createButton(
-      'button',
-      boundsButtons,
-      translate('Use current bounds'),
-      () => {
-        const bounds = this._leafletMap.getBounds()
-        const oldLimitBounds = { ...this.properties.limitBounds }
-        this.properties.limitBounds.south = LeafletUtil.formatNum(bounds.getSouth())
-        this.properties.limitBounds.west = LeafletUtil.formatNum(bounds.getWest())
-        this.properties.limitBounds.north = LeafletUtil.formatNum(bounds.getNorth())
-        this.properties.limitBounds.east = LeafletUtil.formatNum(bounds.getEast())
-        boundsBuilder.fetchAll()
-        this.sync.update(
-          'properties.limitBounds',
-          this.properties.limitBounds,
-          oldLimitBounds
-        )
-        this._leafletMap.handleLimitBounds()
-      }
-    )
-    DomUtil.createButton('button', boundsButtons, translate('Empty'), () => {
+    const [boundsButtons, { current, empty }] = DOMUtils.loadTemplateWithRefs(`
+      <div class="button-bar half">
+        <button type="button" data-ref="current">${translate('Use current bounds')}</button>
+        <button type="button" data-ref="empty">${translate('Empty')}</button>
+      </div>
+    `)
+    limitBounds.appendChild(boundsButtons)
+    current.addEventListener('click', () => {
+      const bounds = this._leafletMap.getBounds()
+      const oldLimitBounds = { ...this.properties.limitBounds }
+      this.properties.limitBounds.south = bounds.getSouth().toFixed(6)
+      this.properties.limitBounds.west = bounds.getWest().toFixed(6)
+      this.properties.limitBounds.north = bounds.getNorth().toFixed(6)
+      this.properties.limitBounds.east = bounds.getEast().toFixed(6)
+      boundsBuilder.fetchAll()
+      this.sync.update(
+        'properties.limitBounds',
+        this.properties.limitBounds,
+        oldLimitBounds
+      )
+      this._leafletMap.handleLimitBounds()
+    })
+    empty.addEventListener('click', () => {
       const oldLimitBounds = { ...this.properties.limitBounds }
       this.properties.limitBounds.south = null
       this.properties.limitBounds.west = null
@@ -1081,7 +1085,7 @@ export default class Umap {
   }
 
   _editSlideshow(container) {
-    const slideshow = DomUtil.createFieldset(container, translate('Slideshow'))
+    const slideshow = DOMUtils.createFieldset(container, translate('Slideshow'))
     const slideshowFields = [
       [
         'properties.slideshow.active',
@@ -1114,7 +1118,10 @@ export default class Umap {
   }
 
   _editSync(container) {
-    const sync = DomUtil.createFieldset(container, translate('Real-time collaboration'))
+    const sync = DOMUtils.createFieldset(
+      container,
+      translate('Real-time collaboration')
+    )
     const builder = new MutatingForm(this, ['properties.syncEnabled'], {
       umap: this,
     })
@@ -1122,7 +1129,7 @@ export default class Umap {
   }
 
   _advancedActions(container) {
-    const advancedActions = DomUtil.createFieldset(
+    const advancedActions = DOMUtils.createFieldset(
       container,
       translate('Advanced actions')
     )
@@ -1146,7 +1153,7 @@ export default class Umap {
     </div>
     `
     const [bar, { del, clear, empty, clone, download }] =
-      Utils.loadTemplateWithRefs(tpl)
+      DOMUtils.loadTemplateWithRefs(tpl)
     advancedActions.appendChild(bar)
     if (this.permissions.isOwner()) {
       del.hidden = false
@@ -1163,12 +1170,11 @@ export default class Umap {
   edit() {
     if (!this.editEnabled) return
     if (this.properties.editMode !== 'advanced') return
-    const container = DomUtil.create('div')
-    DomUtil.createTitle(
-      container,
-      translate('Map advanced properties'),
-      'icon-settings'
-    )
+    const container = DOMUtils.loadTemplate(`
+      <div>
+        <h3><i class="icon icon-16 icon-settings"></i>${translate('Map advanced properties')}</h3>
+      </div>
+    `)
     this._editControls(container)
     this._editShapeProperties(container)
     this._editDefaultKeys(container)
@@ -1614,14 +1620,13 @@ export default class Umap {
     }
     const orderable = new Orderable(ul, onReorder)
 
-    const bar = DomUtil.create('div', 'button-bar', container)
-    DomUtil.createButton(
-      'show-on-edit block add-datalayer button',
-      bar,
-      translate('Add a layer'),
-      this.newDataLayer,
-      this
-    )
+    const [bar, { button }] = DOMUtils.loadTemplateWithRefs(`
+      <div class="button-bar">
+        <button type="button" class="show-on-edit block add-datalayer" data-ref="button">${translate('Add a layer')}</button>
+      </div>
+    `)
+    button.addEventListener('click', () => this.newDataLayer())
+    container.appendChild(bar)
 
     this.editPanel.open({ content: container, highlight: 'layers' })
   }
@@ -1729,6 +1734,7 @@ export default class Umap {
     const fields = Object.keys(importedData.properties).map(
       (field) => `properties.${field}`
     )
+    this.fields.pull()
     this.filters.load()
     this.render(fields)
     this._leafletMap._setDefaultCenter()
@@ -1781,16 +1787,12 @@ export default class Umap {
     await this.server.post(sendLink, {}, formData)
   }
 
-  getLayersBounds() {
-    const bounds = new latLngBounds()
-    this.datalayers.browsable().map((d) => {
-      if (d.isVisible()) bounds.extend(d.layer.getBounds())
-    })
-    return bounds
-  }
-
   fitDataBounds() {
-    const bounds = this.getLayersBounds()
+    const layers = this.datalayers
+      .browsable()
+      .filter((d) => d.isVisible())
+      .map((d) => d.layer)
+    const bounds = this._leafletMap.getLayersBounds(layers)
     if (!this.hasData() || !bounds.isValid()) return false
     this._leafletMap.fitBounds(bounds)
   }

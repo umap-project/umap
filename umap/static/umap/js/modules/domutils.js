@@ -32,7 +32,7 @@ export const copyToClipboard = (textToCopy) => {
   tooltip.open({ content: translate('✅ Copied!'), duration: 5000 })
 }
 
-export const copiableInput = (parent, label, value) => {
+export const copiableInput = (parent, label, value = '') => {
   const [container, { input, button }] = Utils.loadTemplateWithRefs(`
     <div class="copiable-input">
       <label>${label}<input type="text" readOnly value="${value}" data-ref=input /></label>
@@ -107,3 +107,23 @@ export const contrastedColor = (el, bgcolor) => {
   if (bgcolor) CACHE_CONTRAST[bgcolor] = out
   return out
 }
+
+export const createFieldset = (parent, title, options) => {
+  options = options || {}
+  const [details, { summary, fieldset }] = loadTemplateWithRefs(`
+    <details class="${options.className || ''}">
+      <summary data-ref="summary"><h4>${title}</h4></summary>
+      <fieldset data-ref="fieldset"></fieldset>
+    </details>
+  `)
+  details.open = options.on === true
+  parent.appendChild(details)
+  if (options.icon) {
+    const icon = loadTemplate(`<i class="icon icon-16 ${options.icon}"></i>`)
+    summary.insertBefore(icon, summary.firstChild)
+  }
+  return fieldset
+}
+
+export const loadTemplateWithRefs = Utils.loadTemplateWithRefs
+export const loadTemplate = Utils.loadTemplate

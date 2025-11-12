@@ -150,6 +150,7 @@ def gzip_file(from_path, to_path):
         with gzip.open(to_path, "wb") as f_out:
             f_out.writelines(f_in)
     os.utime(to_path, ns=(stat.st_mtime_ns, stat.st_mtime_ns))
+    os.chmod(to_path, settings.FILE_UPLOAD_PERMISSIONS)
 
 
 def is_ajax(request):

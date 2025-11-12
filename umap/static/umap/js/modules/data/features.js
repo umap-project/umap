@@ -271,6 +271,8 @@ class Feature {
         options.handler = 'DateTimeInput'
       } else if (field.TYPE === 'Boolean') {
         options.handler = 'Switch'
+      } else if (field.TYPE === 'Enum') {
+        options.helpText = translate('Comma separated list of values')
       }
       properties.push([`properties.${field.key}`, options])
     }

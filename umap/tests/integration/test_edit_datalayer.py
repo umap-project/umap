@@ -15,7 +15,7 @@ def test_should_have_fieldset_for_layer_type_properties(page, live_server, tilel
     page.get_by_title("Manage layers").click()
 
     # Create a layer
-    page.get_by_title("Add a layer").click()
+    page.get_by_role("button", name="Add a layer").click()
     page.locator("input[name=name]").fill("Layer 1")
 
     select = page.locator(".panel.on .umap-field-type select")

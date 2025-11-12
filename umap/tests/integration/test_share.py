@@ -8,7 +8,7 @@ pytestmark = pytest.mark.django_db
 
 def test_iframe_code_can_contain_datalayers(map, live_server, datalayer, page):
     page.goto(f"{live_server.url}{map.get_absolute_url()}?share")
-    textarea = page.locator(".umap-share-iframe")
+    textarea = page.get_by_label("Iframe")
     expect(textarea).to_be_visible()
     expect(textarea).to_have_text(re.compile('src="'))
     expect(textarea).to_have_text(re.compile('href="'))
@@ -28,7 +28,7 @@ def test_iframe_code_can_contain_datalayers(map, live_server, datalayer, page):
 def test_iframe_code_can_contain_feature(map, live_server, datalayer, page):
     page.goto(f"{live_server.url}{map.get_absolute_url()}?share")
     page.locator(".icon-container").click()
-    textarea = page.locator(".umap-share-iframe")
+    textarea = page.get_by_label("Iframe")
     expect(textarea).to_be_visible()
     expect(textarea).not_to_have_text(re.compile("feature=Here"))
     # Open options

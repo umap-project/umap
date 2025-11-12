@@ -1,4 +1,3 @@
-import { DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { MutatingForm } from './form/builder.js'
 import { EXPORT_FORMATS } from './formatter.js'
 import { translate } from './i18n.js'
@@ -11,39 +10,35 @@ export default class Share {
   }
 
   build() {
-    this.container = DomUtil.create('div', '')
-    this.title = DomUtil.createTitle(
-      this.container,
-      translate('Share and download'),
-      'icon-share'
-    )
-
-    DOMUtils.copiableInput(
-      this.container,
-      translate('Link to view the map'),
-      window.location.protocol + Utils.getBaseUrl()
-    )
-
+    const downloadUrl = this._umap.urls.get('map_download', {
+      map_id: this._umap.id,
+    })
+    const [container, { shortUrl, list, customLink, textarea, iframeOptionsWrapper }] =
+      DOMUtils.loadTemplateWithRefs(`
+      <div>
+        <h3><i class="icon icon-16 icon-share"></i> ${translate('Share and download')}</h3>
+        <h4>${translate('Share')}</h4>
+        <copiable-input data-label="${translate('Link to view the map')}" data-value="${window.location.protocol + Utils.getBaseUrl()}"></copiable-input>
+        <copiable-input data-label="${translate('Short link')}" data-value="${this._umap.properties.shortUrl}" data-ref="shortUrl" hidden></copiable-input>
+        <copiable-textarea data-label="${translate('Customized link')}" data-ref="customLink"></copiable-textarea>
+        <copiable-textarea data-label="${translate('Iframe')}" data-ref="textarea"></copiable-textarea>
+        <div data-ref="iframeOptionsWrapper"></div>
+        <hr>
+        <h4>${translate('Download')}</h4>
+        <h5>${translate("Only visible layers' data")}</h5>
+        <ul data-ref="list" class="downloads"></ul>
+        <h5>${translate('All data and settings of the map')}</h5>
+        <p>
+          <a href="${downloadUrl}" download="backup.umap">
+            <i class="icon icon-16 icon-backup"></i>${translate('full backup')}
+          </a>
+        </p>
+      </div>
+    `)
+    this.container = container
     if (this._umap.properties.shortUrl) {
-      DOMUtils.copiableInput(
-        this.container,
-        translate('Short link'),
-        this._umap.properties.shortUrl
-      )
+      shortUrl.hidden = false
     }
-
-    DomUtil.create('hr', '', this.container)
-
-    DomUtil.add('h4', '', this.container, translate('Download'))
-    DomUtil.add(
-      'small',
-      'label',
-      this.container,
-      translate("Only visible layers' data")
-    )
-    const list = document.createElement('ul')
-    list.classList.add('downloads')
-    this.container.appendChild(list)
     for (const format of Object.keys(EXPORT_FORMATS).concat('jpg', 'png')) {
       const button = Utils.loadTemplate(`
         <li>
@@ -55,38 +50,7 @@ export default class Share {
       button.addEventListener('click', () => this.download(format))
       list.appendChild(button)
     }
-    DomUtil.create('div', 'vspace', this.container)
-    DomUtil.add(
-      'small',
-      'label',
-      this.container,
-      translate('All data and settings of the map')
-    )
-    const downloadUrl = this._umap.urls.get('map_download', {
-      map_id: this._umap.id,
-    })
-    const link = Utils.loadTemplate(`
-      <div>
-        <a href="${downloadUrl}">
-          <i class="icon icon-16 icon-backup"></i>${translate('full backup')}
-        </a>
-      </div>
-    `)
-    this.container.appendChild(link)
-    // File will be named by back-office
-    link.setAttribute('download', 'backup.umap')
-    DomUtil.create('hr', '', this.container)
 
-    const embedTitle = DomUtil.add('h4', '', this.container, translate('Embed the map'))
-    const iframe = DomUtil.create('textarea', 'umap-share-iframe', this.container)
-    const urlTitle = DomUtil.add('h4', '', this.container, translate('Direct link'))
-    const exportUrl = DOMUtils.copiableInput(
-      this.container,
-      translate('Share this link to open a customized map view'),
-      ''
-    )
-
-    exportUrl.type = 'text'
     const UIFields = [
       ['dimensions.width', { handler: 'Input', label: translate('width') }],
       ['dimensions.height', { handler: 'Input', label: translate('height') }],
@@ -123,14 +87,17 @@ export default class Share {
     }
     const iframeExporter = new IframeExporter(this._umap)
     const buildIframeCode = () => {
-      iframe.textContent = iframeExporter.build()
-      exportUrl.value = window.location.protocol + iframeExporter.buildUrl()
+      textarea.setAttribute('value', iframeExporter.build())
+      customLink.setAttribute(
+        'value',
+        window.location.protocol + iframeExporter.buildUrl()
+      )
     }
     buildIframeCode()
     const builder = new MutatingForm(iframeExporter, UIFields)
     builder.on('set', buildIframeCode)
-    const iframeOptions = DomUtil.createFieldset(
-      this.container,
+    const iframeOptions = DOMUtils.createFieldset(
+      iframeOptionsWrapper,
       translate('Embed and link options')
     )
     iframeOptions.appendChild(builder.build())
@@ -228,7 +195,7 @@ class IframeExporter {
 
   build() {
     const iframeUrl = this.buildUrl()
-    let code = `<iframe width="${this.dimensions.width}" height="${this.dimensions.height}" frameborder="0" allowfullscreen allow="geolocation" src="${iframeUrl}"></iframe>`
+    let code = `<iframe style="width: ${this.dimensions.width}; height: ${this.dimensions.height}; border: 0;" allowfullscreen allow="geolocation" src="${iframeUrl}"></iframe>`
     if (this.options.includeFullScreenLink) {
       const fullUrl = this.buildUrl({ scrollWheelZoom: true })
       code += `<p><a href="${fullUrl}">${translate('See full screen')}</a></p>`

@@ -176,6 +176,7 @@ def test_can_draw_hole(page, live_server, tilelayer):
     expect(polygons).to_have_count(1)
     expect(vertices).to_have_count(4)
 
+    page.wait_for_timeout(300)  # Time for the panel animation to finish
     # First vertex of the hole will be created here
     map.click(position={"x": 180, "y": 120}, button="right")
     page.get_by_role("button", name="Start a hole here").click()
@@ -373,6 +374,7 @@ def test_can_clone_polygon(live_server, page, tilelayer, settings):
     map.click(position={"x": 100, "y": 100})
     # Click again to finish
     map.click(position={"x": 100, "y": 100})
+    page.wait_for_timeout(300)  # Time for the panel animation to finish
     expect(polygons).to_have_count(1)
     polygons.first.click(button="right")
     page.get_by_role("button", name="Clone this feature").click()
@@ -399,6 +401,7 @@ def test_can_transform_polygon_to_line(live_server, page, tilelayer, settings):
     map.click(position={"x": 100, "y": 100})
     expect(polygons).to_have_count(1)
     expect(paths).to_have_count(1)
+    page.wait_for_timeout(300)  # Time for the panel animation to finish
     polygons.first.click(button="right")
     page.get_by_role("button", name="Transform to lines").click()
     # No more polygons (will fill), but one path, it must be a line
@@ -471,6 +474,7 @@ def test_vertexmarker_not_shown_if_too_many(live_server, map, page, settings):
     settings.UMAP_ALLOW_ANONYMOUS = True
     page.goto(f"{live_server.url}/en/map/new/#15/48.4395/3.3189")
     page.get_by_title("Import data").click()
+    page.wait_for_timeout(300)  # Time for the panel animation to finish
     page.locator(".umap-import textarea").fill(geojson)
     page.locator('select[name="format"]').select_option("geojson")
     page.get_by_role("button", name="Import data", exact=True).click()

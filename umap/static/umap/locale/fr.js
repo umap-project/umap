@@ -650,7 +650,9 @@ const locale = {
     "List of values": "Liste de valeurs",
     "Yes / No": "Oui / Non",
     "Select field to compute intensity": "Champ pour le calcul d'intensité",
-    "Optional intensity field to compute heatmap": "Champ optionnel pour le calcul de l'intensité"
+    "Optional intensity field to compute heatmap": "Champ optionnel pour le calcul de l'intensité",
+    "All layers": "Tous les calques",
+    "Comma separated list of values": "Valeurs séparées par des virgules"
 }
 L.registerLocale("fr", locale)
 L.setLocale("fr")
