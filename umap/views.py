@@ -1484,7 +1484,7 @@ def webmanifest(request):
 
 def logout(request):
     do_logout(request)
-    return HttpResponseRedirect(getattr(settings, "LOGOUT_REDIRECT_URL", "/"))
+    return HttpResponseRedirect(settings.LOGOUT_REDIRECT_URL)
 
 
 class LoginPopupEnd(TemplateView):
