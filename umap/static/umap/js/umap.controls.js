@@ -175,8 +175,8 @@ U.Search = L.PhotonSearch.extend({
       if (!osm_type || !osm_id) return
       const importer = this.map._umap.importer
       importer.build()
-      importer.format = 'osm'
-      importer.url = `https://www.openstreetmap.org/api/0.6/${osm_type}/${osm_id}/full`
+      importer.format = 'geojson'
+      importer.raw = await this.getOSMObject(osm_type, osm_id)
       importer.submit()
     })
     el.appendChild(tools)
@@ -195,6 +195,18 @@ U.Search = L.PhotonSearch.extend({
     el.addEventListener('mouseout', (event) => {
       target.removeFrom(this.layer)
     })
+  },
+
+  async getOSMObject(osm_type, osm_id) {
+    const url = `https://www.openstreetmap.org/api/0.6/${osm_type}/${osm_id}/full`
+    const response = await this.map._umap.request.get(url)
+    if (response?.ok) {
+      const data = await this.map._umap.formatter.fromOSM(await response.text())
+      data.features = data.features.filter(
+        (feature) => feature.properties.id === `${osm_type}/${osm_id}`
+      )
+      return JSON.stringify(data)
+    }
   },
 
   setChoice: function (choice) {
