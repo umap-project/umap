@@ -1,5 +1,5 @@
 import colorbrewer from '../../../../vendors/colorbrewer/colorbrewer.js'
-import { DomUtil, FeatureGroup } from '../../../../vendors/leaflet/leaflet-src.esm.js'
+import { FeatureGroup } from '../../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from '../../i18n.js'
 import * as Utils from '../../utils.js'
 import * as DOMUtils from '../../domutils.js'
@@ -346,7 +346,8 @@ export const Circles = FeatureGroup.extend({
   },
 
   renderLegend: function (container) {
-    const parent = DomUtil.create('ul', 'circles-layer-legend', container)
+    const parent = DOMUtils.loadTemplate('<ul class="circles-layer-legend"></ul>')
+    container.appendChild(parent)
     const color = this.datalayer.getProperty('color')
     const values = this.getValues()
     if (!values.length) return
@@ -360,14 +361,18 @@ export const Circles = FeatureGroup.extend({
       [this.options.maxPX, maxValue],
     ]
     for (const [size, label] of items) {
-      const li = DomUtil.create('li', '', parent)
-      const circleEl = DomUtil.create('span', 'circle', li)
-      circleEl.style.backgroundColor = color
-      circleEl.style.height = `${size * 2}px`
-      circleEl.style.width = `${size * 2}px`
-      circleEl.style.opacity = this.datalayer.getProperty('opacity')
-      const labelEl = DomUtil.create('span', 'label', li)
-      labelEl.textContent = label
+      parent.appendChild(
+        DOMUtils.loadTemplate(`
+        <li>
+          <span class="circle"
+                style="background-color: ${color};
+                       height: ${size * 2}px;
+                       width: ${size * 2}px;
+                       opacity: ${this.datalayer.getProperty('fillOpacity')};"></span>
+          <span class="label">${label}</span>
+        </li>
+      `)
+      )
     }
   },
 })

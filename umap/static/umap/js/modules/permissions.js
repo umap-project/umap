@@ -1,4 +1,3 @@
-import { DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
 import { MutatingForm } from './form/builder.js'
 import { translate } from './i18n.js'
@@ -177,8 +176,11 @@ export class MapPermissions {
       Alert.info(translate('Please save the map first'))
       return
     }
-    const container = DomUtil.create('div', 'umap-edit-permissions')
-    DomUtil.createTitle(container, translate('Update permissions'), 'icon-key')
+    const container = DOMUtils.loadTemplate(`
+      <div class="umap-edit-permissions">
+        <h3><i class="icon icon-16 icon-key"></i> ${translate('Update permissions')}</h3>
+      </div>
+    `)
     if (this.isAnonymousMap()) this._editAnonymous(container)
     else this._editWithOwner(container)
     this._editDatalayers(container)

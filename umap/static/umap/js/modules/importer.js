@@ -1,13 +1,10 @@
-import {
-  DomEvent,
-  DomUtil,
-  LatLngBounds,
-} from '../../vendors/leaflet/leaflet-src.esm.js'
+import { LatLngBounds } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
 import { translate } from './i18n.js'
 import { SCHEMA } from './schema.js'
 import Dialog from './ui/dialog.js'
 import * as Utils from './utils.js'
+import * as DOMUtils from './domutils.js'
 
 const TEMPLATE = `
   <div class="umap-import">
@@ -203,18 +200,15 @@ export default class Importer extends Utils.WithTemplate {
       button.toggleAttribute('hidden', false)
     }
     for (const type of this.TYPES) {
-      DomUtil.element({
-        tagName: 'option',
-        parent: this.qs('[name=format]'),
-        value: type,
-        textContent: type,
-      })
+      this.qs('[name=format]').appendChild(
+        DOMUtils.loadTemplate(`<option value="${type}">${type}</option>`)
+      )
     }
     this._umap.help.parse(this.container)
     this.qs('[name=submit]').addEventListener('click', () => this.submit())
-    DomEvent.on(this.qs('[type=file]'), 'change', this.onFileChange, this)
+    this.qs('[type=file]').addEventListener('change', () => this.onFileChange())
     for (const element of this.container.querySelectorAll('[onchange]')) {
-      DomEvent.on(element, 'change', this.onChange, this)
+      element.addEventListener('change', () => this.onChange())
     }
   }
 
@@ -253,21 +247,18 @@ export default class Importer extends Utils.WithTemplate {
     layerSelect.innerHTML = ''
     this._umap.datalayers.reverse().map((datalayer) => {
       if (datalayer.isLoaded() && !datalayer.isRemoteLayer()) {
-        DomUtil.element({
-          tagName: 'option',
-          parent: layerSelect,
-          textContent: datalayer.getName(),
-          value: datalayer.id,
-        })
+        layerSelect.appendChild(
+          DOMUtils.loadTemplate(
+            `<option value="${datalayer.id}">${datalayer.getName()}</option>`
+          )
+        )
       }
     })
-    DomUtil.element({
-      tagName: 'option',
-      value: '',
-      textContent: translate('Import in a new layer'),
-      parent: layerSelect,
-      selected: true,
-    })
+    layerSelect.appendChild(
+      DOMUtils.loadTemplate(
+        `<option value="" selected>${translate('Import in a new layer')}</option>`
+      )
+    )
   }
 
   open() {

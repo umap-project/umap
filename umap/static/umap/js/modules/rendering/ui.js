@@ -2,7 +2,6 @@
 import {
   CircleMarker as BaseCircleMarker,
   DomEvent,
-  DomUtil,
   GeoJSON,
   LatLng,
   LatLngBounds,

@@ -1,5 +1,5 @@
-import { DomUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from '../i18n.js'
+import * as DOMUtils from '../domutils.js'
 
 export class Importer {
   constructor(map, options) {
@@ -9,20 +9,20 @@ export class Importer {
   }
 
   async open(importer) {
-    const container = DomUtil.create('div', 'formbox')
-    DomUtil.element({ tagName: 'h3', textContent: this.name, parent: container })
-    const select = DomUtil.create('select', '', container)
-    const noPreset = DomUtil.element({
-      tagName: 'option',
-      parent: select,
-      value: '',
-      textContent: translate('Choose a dataset'),
-    })
+    const [container, { select }] = DOMUtils.loadTemplateWithRefs(`
+      <div class="formbox">
+        <h3>${this.name}</h3>
+        <select data-ref="select">
+          <option value="">${translate('Choose a dataset')}</option>
+        </select>
+      </div>
+    `)
+
     for (const dataset of this.choices) {
-      const option = DomUtil.create('option', '', select)
-      option.value = dataset.url
-      option.textContent = dataset.label
-      option.dataset.format = dataset.format || 'geojson'
+      const option = DOMUtils.loadTemplate(
+        `<option value="${dataset.url}" data-format="${dataset.format || 'geojson'}">${dataset.label}</option>`
+      )
+      select.appendChild(option)
     }
     const confirm = () => {
       if (select.value) {

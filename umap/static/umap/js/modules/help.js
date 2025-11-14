@@ -1,7 +1,7 @@
-import { DomEvent, DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
 import Dialog from './ui/dialog.js'
 import * as Utils from './utils.js'
+import * as DOMUtils from './domutils.js'
 
 const SHORTCUTS = {
   DRAW_MARKER: {
@@ -209,15 +209,15 @@ export default class Help {
   }
 
   show(entries) {
-    const container = DomUtil.add('div')
-    DomUtil.createTitle(container, translate('Help'))
+    const container = DOMUtils.loadTemplate(`
+      <div>
+        <h3><i class="icon icon-16 icon-help"></i> ${translate('Help')}</h3>
+      </div>
+    `)
     for (const name of entries) {
-      DomUtil.element({
-        tagName: 'div',
-        className: 'umap-help-entry',
-        parent: container,
-        innerHTML: ENTRIES[name],
-      })
+      container.appendChild(
+        DOMUtils.loadTemplate(`<div class="umap-help-entry">${ENTRIES[name]}</div>`)
+      )
     }
     this.dialog.open({ template: container })
   }
@@ -253,11 +253,10 @@ export default class Help {
   }
 
   button(container, entries) {
-    const button = DomUtil.createButton(
-      'umap-help-button',
-      container,
-      translate('Help')
+    const button = DOMUtils.loadTemplate(
+      `<button class="umap-help-button" type="button">${translate('Help')}</button>`
     )
+    container.appendChild(button)
     button.addEventListener('click', () => this.show(entries))
     return button
   }
