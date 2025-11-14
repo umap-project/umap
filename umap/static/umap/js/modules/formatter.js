@@ -71,7 +71,15 @@ export class Formatter {
     } catch (e) {
       src = this.toDom(str)
     }
-    return osmtogeojson(src, { flatProperties: true })
+    const data = osmtogeojson(src, { flatProperties: true })
+    // FIXME: make a PR to osmtogeojson when it's more active
+    // cf https://github.com/umap-project/umap/issues/3072
+    for (const feature of data.features || []) {
+      const [osm_type, osm_id] = feature.properties.id.split('/')
+      feature.properties.osm_id = osm_id
+      feature.properties.osm_type = osm_type
+    }
+    return data
   }
 
   fromCSV(str, callback) {

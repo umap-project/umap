@@ -94,6 +94,7 @@ Any property of the feature will be available, plus:
 - `{layer}` → the name of the feature's layer
 - `{zoom}` → the current map zoom
 - `{id}` → the unique feature id
+- `{osm_type}`, `{osm_id}` → the unique feature type (node, way, relation) and id, when data comes from OpenStreetMap
 
 ### Available variables in URL for remote data:
 
