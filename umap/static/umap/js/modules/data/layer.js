@@ -86,9 +86,6 @@ export class DataLayer {
     this.permissions = new DataLayerPermissions(this._umap, this)
 
     this._needsFetch = this.createdOnServer || this.isRemoteLayer()
-    if (!this._needsFetch && !this._umap.fields.size) {
-      this.properties.fields = getDefaultFields()
-    }
     this.fields = new Fields(this, this._umap.dialog)
     this.filters = new Filters(this, this._umap)
     this.rules = new Rules(umap, this)
@@ -447,6 +444,10 @@ export class DataLayer {
     this._umap.featuresIndex[feature.getSlug()] = feature
     // TODO: quid for remote data ?
     this.inferFields(feature)
+    if (!this.fields.size && !this._umap.fields.size) {
+      this.properties.fields = getDefaultFields()
+      this.fields.pull()
+    }
     try {
       this.showFeature(feature)
     } catch (error) {

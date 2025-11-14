@@ -16,7 +16,7 @@ def intercept_remote_data(page):
             "features": [
                 {
                     "type": "Feature",
-                    "properties": {"name": "Point 2"},
+                    "properties": {"name": "Point 2", "foobar": "bla"},
                     "geometry": {
                         "type": "Point",
                         "coordinates": [4.3375, 11.2707],
@@ -29,7 +29,7 @@ def intercept_remote_data(page):
             "features": [
                 {
                     "type": "Feature",
-                    "properties": {"name": "Point 1"},
+                    "properties": {"name": "Point 1", "foobar": "baz"},
                     "geometry": {
                         "type": "Point",
                         "coordinates": [4.3375, 12.2707],
@@ -117,8 +117,8 @@ def test_create_remote_data_layer(page, live_server, tilelayer, settings):
                     "type": "String",
                 },
                 {
-                    "key": "description",
-                    "type": "Text",
+                    "key": "foobar",
+                    "type": "String",
                 },
             ],
             "id": str(datalayer.pk),
