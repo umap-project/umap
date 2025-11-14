@@ -99,7 +99,6 @@ const locale = {
     "Delete this vertex (Alt+Click)": "このポイントを削除(Altを押しながらクリック)",
     "Delete": "削除",
     "description": "概要",
-    "Direct link": "Direct link",
     "Directions from here": "ここからの距離",
     "Display label": "ラベルを表示",
     "Display measure": "Display measure",
@@ -135,7 +134,6 @@ const locale = {
     "Edit this feature": "地物を編集",
     "Edit": "編集",
     "Embed and link options": "Embed and link options",
-    "Embed the map": "マップ埋め込み",
     "Emoji & Character": "Emoji & Character",
     "Empty": "内容なし",
     "Equidistant": "Equidistant",
@@ -295,7 +293,6 @@ const locale = {
     "settings": "settings",
     "Shape properties": "シェイプ表示プロパティ",
     "Share and download": "Share and download",
-    "Share this link to open a customized map view": "Share this link to open a customized map view",
     "Short credits": "短縮表示板クレジット",
     "Short link": "Short link",
     "Show this layer in the caption": "Show this layer in the caption",
@@ -650,7 +647,12 @@ const locale = {
     "List of values": "List of values",
     "Yes / No": "Yes / No",
     "Select field to compute intensity": "Select field to compute intensity",
-    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap",
+    "All layers": "All layers",
+    "Comma separated list of values": "Comma separated list of values",
+    "Share": "Share",
+    "Customized link": "Customized link",
+    "Iframe": "Iframe"
 }
 L.registerLocale("ja", locale)
 L.setLocale("ja")

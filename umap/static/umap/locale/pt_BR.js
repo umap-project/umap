@@ -99,7 +99,6 @@ const locale = {
     "Delete this vertex (Alt+Click)": "Eliminar este vértice (Alt+Clique)",
     "Delete": "Eliminar",
     "description": "descrição",
-    "Direct link": "Direct link",
     "Directions from here": "Direções a partir daqui",
     "Display label": "Mostrar etiqueta",
     "Display measure": "Mostrar medição",
@@ -135,7 +134,6 @@ const locale = {
     "Edit this feature": "Editar este elemento",
     "Edit": "Editar",
     "Embed and link options": "Embed and link options",
-    "Embed the map": "Embeber o mapa",
     "Emoji & Character": "Emoji & Character",
     "Empty": "Vazio",
     "Equidistant": "Equidistant",
@@ -295,7 +293,6 @@ const locale = {
     "settings": "settings",
     "Shape properties": "Propriedades de formas geométricas",
     "Share and download": "Share and download",
-    "Share this link to open a customized map view": "Share this link to open a customized map view",
     "Short credits": "Créditos resumidos",
     "Short link": "Short link",
     "Show this layer in the caption": "Show this layer in the caption",
@@ -650,7 +647,12 @@ const locale = {
     "List of values": "List of values",
     "Yes / No": "Yes / No",
     "Select field to compute intensity": "Select field to compute intensity",
-    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap",
+    "All layers": "All layers",
+    "Comma separated list of values": "Comma separated list of values",
+    "Share": "Share",
+    "Customized link": "Customized link",
+    "Iframe": "Iframe"
 }
 L.registerLocale("pt_BR", locale)
 L.setLocale("pt_BR")

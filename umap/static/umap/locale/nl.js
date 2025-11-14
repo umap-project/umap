@@ -99,7 +99,6 @@ const locale = {
     "Delete this vertex (Alt+Click)": "Verwijder dit knooppunt (Alt+Click)",
     "Delete": "Verwijderen",
     "description": "beschrijving",
-    "Direct link": "Directe link",
     "Directions from here": "Wegbeschrijving vanaf hier",
     "Display label": "Toon het label",
     "Display measure": "Toon meting",
@@ -135,7 +134,6 @@ const locale = {
     "Edit this feature": "Dit object bewerken",
     "Edit": "Bewerken",
     "Embed and link options": "Invoegtoepassing- en linkopties",
-    "Embed the map": "Kaart inbedden",
     "Emoji & Character": "Emoji & karakter",
     "Empty": "Leeg",
     "Equidistant": "Equidistant",
@@ -295,7 +293,6 @@ const locale = {
     "settings": "instellingen",
     "Shape properties": "Eigenschappen van de vorm",
     "Share and download": "Deel en download",
-    "Share this link to open a customized map view": "Deel deze link voor een gespecifieerde kaartweergave",
     "Short credits": "Korte bronvermelding",
     "Short link": "Korte link",
     "Show this layer in the caption": "Toon deze laag in het bijschrift",
@@ -650,7 +647,12 @@ const locale = {
     "List of values": "List of values",
     "Yes / No": "Yes / No",
     "Select field to compute intensity": "Select field to compute intensity",
-    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap",
+    "All layers": "All layers",
+    "Comma separated list of values": "Comma separated list of values",
+    "Share": "Share",
+    "Customized link": "Customized link",
+    "Iframe": "Iframe"
 }
 L.registerLocale("nl", locale)
 L.setLocale("nl")

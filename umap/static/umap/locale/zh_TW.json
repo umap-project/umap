@@ -99,7 +99,6 @@
     "Delete this vertex (Alt+Click)": "刪除頂點 (Alt+Click)",
     "Delete": "刪除",
     "description": "描述",
-    "Direct link": "直接連結",
     "Directions from here": "從此處開始導航",
     "Display label": "顯示標籤",
     "Display measure": "Display measure",
@@ -135,7 +134,6 @@
     "Edit this feature": "編輯此圖徵",
     "Edit": "編輯",
     "Embed and link options": "嵌入與連結選項",
-    "Embed the map": "嵌入地圖",
     "Emoji & Character": "表情符號和字元",
     "Empty": "空白",
     "Equidistant": "等距",
@@ -295,7 +293,6 @@
     "settings": "設定",
     "Shape properties": "形狀屬性",
     "Share and download": "分享與下載",
-    "Share this link to open a customized map view": "分享這連結來開啟客製化地圖檢視",
     "Short credits": "簡短工作人員名單",
     "Short link": "短網址",
     "Show this layer in the caption": "在標題顯示此圖層",
@@ -651,5 +648,9 @@
     "Yes / No": "是 / 否",
     "Select field to compute intensity": "選擇欄位運算強度",
     "Optional intensity field to compute heatmap": "選擇性強度欄位來計算熱力圖",
-    "All layers": "All layers"
+    "All layers": "All layers",
+    "Comma separated list of values": "Comma separated list of values",
+    "Share": "Share",
+    "Customized link": "Customized link",
+    "Iframe": "Iframe"
 }

@@ -99,7 +99,6 @@ const locale = {
     "Delete this vertex (Alt+Click)": "Radera noden (Alt+klick)",
     "Delete": "Radera",
     "description": "beskrivning",
-    "Direct link": "Direktlänk",
     "Directions from here": "Vägbeskrivning härifrån",
     "Display label": "Visa etikett",
     "Display measure": "Visa mått",
@@ -135,7 +134,6 @@ const locale = {
     "Edit this feature": "Redigera objektet",
     "Edit": "Redigera",
     "Embed and link options": "Embed and link options",
-    "Embed the map": "Bädda in kartan",
     "Emoji & Character": "Emoji & Character",
     "Empty": "Töm",
     "Equidistant": "Equidistant",
@@ -295,7 +293,6 @@ const locale = {
     "settings": "settings",
     "Shape properties": "Formategenskaper",
     "Share and download": "Share and download",
-    "Share this link to open a customized map view": "Share this link to open a customized map view",
     "Short credits": "Upphov och erkännanden (kort)",
     "Short link": "Short link",
     "Show this layer in the caption": "Show this layer in the caption",
@@ -650,7 +647,12 @@ const locale = {
     "List of values": "List of values",
     "Yes / No": "Yes / No",
     "Select field to compute intensity": "Select field to compute intensity",
-    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap",
+    "All layers": "All layers",
+    "Comma separated list of values": "Comma separated list of values",
+    "Share": "Share",
+    "Customized link": "Customized link",
+    "Iframe": "Iframe"
 }
 L.registerLocale("sv", locale)
 L.setLocale("sv")

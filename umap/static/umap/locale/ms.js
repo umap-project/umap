@@ -99,7 +99,6 @@ const locale = {
     "Delete this vertex (Alt+Click)": "Padam bucu ini (Alt+Klik)",
     "Delete": "Padam",
     "description": "keterangan",
-    "Direct link": "Pautan terus",
     "Directions from here": "Arah dari sini",
     "Display label": "Label paparan",
     "Display measure": "Paparkan ukuran",
@@ -135,7 +134,6 @@ const locale = {
     "Edit this feature": "Sunting sifat ini",
     "Edit": "Sunting",
     "Embed and link options": "Pilihan benaman dan pautan",
-    "Embed the map": "Benamkan peta",
     "Emoji & Character": "Emoji & Aksara",
     "Empty": "Kosongkan",
     "Equidistant": "Sama jarak",
@@ -295,7 +293,6 @@ const locale = {
     "settings": "tetapan",
     "Shape properties": "Ciri-ciri bentuk",
     "Share and download": "Kongsi dan muat turun",
-    "Share this link to open a customized map view": "Kongsi pautan ini untuk buka paparan peta tersuai",
     "Short credits": "Penghargaan pendek",
     "Short link": "Pautan pendek",
     "Show this layer in the caption": "Tunjuk lapisan ini dalam keterangan",
@@ -650,7 +647,12 @@ const locale = {
     "List of values": "List of values",
     "Yes / No": "Yes / No",
     "Select field to compute intensity": "Select field to compute intensity",
-    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap",
+    "All layers": "All layers",
+    "Comma separated list of values": "Comma separated list of values",
+    "Share": "Share",
+    "Customized link": "Customized link",
+    "Iframe": "Iframe"
 }
 L.registerLocale("ms", locale)
 L.setLocale("ms")

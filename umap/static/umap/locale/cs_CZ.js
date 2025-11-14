@@ -99,7 +99,6 @@ const locale = {
     "Delete this vertex (Alt+Click)": "Smazat tento bod (Alt+Klik)",
     "Delete": "Vymazat",
     "description": "popis",
-    "Direct link": "Přímý odkaz",
     "Directions from here": "Navigovat odsud",
     "Display label": "Zobrazit popisek",
     "Display measure": "Zobrazit měřítko",
@@ -135,7 +134,6 @@ const locale = {
     "Edit this feature": "Upravit tento objekt",
     "Edit": "Upravit",
     "Embed and link options": "Možnosti vložení a propojení",
-    "Embed the map": "Vložit mapu do jiného webu",
     "Emoji & Character": "Emoji & Character",
     "Empty": "Vyprázdnit",
     "Equidistant": "Stejně vzdálené",
@@ -295,7 +293,6 @@ const locale = {
     "settings": "nastavení",
     "Shape properties": "Vlastností tvaru",
     "Share and download": "Sdílet a stáhnout",
-    "Share this link to open a customized map view": "Sdílet tento odkaz pro otevření přizpůsobeného zobrazení mapy",
     "Short credits": "Krátký text autorství",
     "Short link": "Krátký odkaz",
     "Show this layer in the caption": "Zobrazit tuto vrstvu v nadpisu",
@@ -650,7 +647,12 @@ const locale = {
     "List of values": "List of values",
     "Yes / No": "Yes / No",
     "Select field to compute intensity": "Select field to compute intensity",
-    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap",
+    "All layers": "All layers",
+    "Comma separated list of values": "Comma separated list of values",
+    "Share": "Share",
+    "Customized link": "Customized link",
+    "Iframe": "Iframe"
 }
 L.registerLocale("cs_CZ", locale)
 L.setLocale("cs_CZ")

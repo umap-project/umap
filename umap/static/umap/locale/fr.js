@@ -99,7 +99,6 @@ const locale = {
     "Delete this vertex (Alt+Click)": "Supprimer ce point (Alt+Clic)",
     "Delete": "Supprimer",
     "description": "description",
-    "Direct link": "Lien",
     "Directions from here": "Itinéraire à partir de ce lieu",
     "Display label": "Afficher une étiquette",
     "Display measure": "Afficher les dimensions",
@@ -134,8 +133,7 @@ const locale = {
     "Edit the title of the map": "Modifier le titre de la carte",
     "Edit this feature": "Éditer cet élément",
     "Edit": "Éditer",
-    "Embed and link options": "Intégration et partage",
-    "Embed the map": "Intégrer la carte dans une iframe",
+    "Embed and link options": "Options d'intégration",
     "Emoji & Character": "Emoji & texte",
     "Empty": "Vider",
     "Equidistant": "Équidistant",
@@ -295,7 +293,6 @@ const locale = {
     "settings": "paramètres",
     "Shape properties": "Propriétés de la forme",
     "Share and download": "Partager et télécharger",
-    "Share this link to open a customized map view": "Partager ce lien pour avoir une vue personnalisée",
     "Short credits": "Crédit court",
     "Short link": "Lien court",
     "Show this layer in the caption": "Montrer ce calque dans la légende",
@@ -652,7 +649,10 @@ const locale = {
     "Select field to compute intensity": "Champ pour le calcul d'intensité",
     "Optional intensity field to compute heatmap": "Champ optionnel pour le calcul de l'intensité",
     "All layers": "Tous les calques",
-    "Comma separated list of values": "Valeurs séparées par des virgules"
+    "Comma separated list of values": "Valeurs séparées par des virgules",
+    "Share": "Partager",
+    "Customized link": "Lien personnalisé",
+    "Iframe": "Iframe"
 }
 L.registerLocale("fr", locale)
 L.setLocale("fr")

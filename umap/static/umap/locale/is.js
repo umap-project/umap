@@ -99,7 +99,6 @@ const locale = {
     "Delete this vertex (Alt+Click)": "Eyða þessum brotpunkti (Alt+Smella)",
     "Delete": "Eyða",
     "description": "lýsing",
-    "Direct link": "Beinn tengill",
     "Directions from here": "Leiðir héðan",
     "Display label": "Birta skýringu",
     "Display measure": "Birta mælingar",
@@ -135,7 +134,6 @@ const locale = {
     "Edit this feature": "Breyta þessari fitju",
     "Edit": "Breyta",
     "Embed and link options": "Embed and link options",
-    "Embed the map": "Setja landakortið inn á vefsíðu",
     "Emoji & Character": "Tákn og stafir",
     "Empty": "Tómt",
     "Equidistant": "Equidistant",
@@ -295,7 +293,6 @@ const locale = {
     "settings": "stillingar",
     "Shape properties": "Eiginleikar lögunar",
     "Share and download": "Deila og sækja",
-    "Share this link to open a customized map view": "Share this link to open a customized map view",
     "Short credits": "Stutt um framlög",
     "Short link": "Short link",
     "Show this layer in the caption": "Show this layer in the caption",
@@ -650,7 +647,12 @@ const locale = {
     "List of values": "List of values",
     "Yes / No": "Yes / No",
     "Select field to compute intensity": "Select field to compute intensity",
-    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap",
+    "All layers": "All layers",
+    "Comma separated list of values": "Comma separated list of values",
+    "Share": "Share",
+    "Customized link": "Customized link",
+    "Iframe": "Iframe"
 }
 L.registerLocale("is", locale)
 L.setLocale("is")

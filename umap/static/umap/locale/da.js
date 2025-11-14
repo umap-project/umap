@@ -99,7 +99,6 @@ const locale = {
     "Delete this vertex (Alt+Click)": "Slet denne vertex (Alt+Click)",
     "Delete": "Slet",
     "description": "beskrivelse",
-    "Direct link": "Direkte link",
     "Directions from here": "Rute herfra",
     "Display label": "Vis etikette",
     "Display measure": "Vis opmåling",
@@ -135,7 +134,6 @@ const locale = {
     "Edit this feature": "Rediger dette objekt",
     "Edit": "Rediger",
     "Embed and link options": "Indlejrings- og linkmuligheder",
-    "Embed the map": "Indlejr kortet",
     "Emoji & Character": "Emoji og tegn",
     "Empty": "Ryd",
     "Equidistant": "Lige langt væk",
@@ -295,7 +293,6 @@ const locale = {
     "settings": "indstillinger",
     "Shape properties": "Figuregenskaber",
     "Share and download": "Del og download",
-    "Share this link to open a customized map view": "Del dette link for at åbne en tilpasset kortvisning",
     "Short credits": "Korte krediteringer",
     "Short link": "Forkortet link",
     "Show this layer in the caption": "Vis dette lag i kortteksten",
@@ -652,7 +649,10 @@ const locale = {
     "Select field to compute intensity": "Vælg felt for at beregne intensitet",
     "Optional intensity field to compute heatmap": "Valgfrit intensitetsfelt til beregning af heatmap",
     "All layers": "Alle lag",
-    "Comma separated list of values": "Comma separated list of values"
+    "Comma separated list of values": "Kommasepareret liste over værdier",
+    "Share": "Share",
+    "Customized link": "Customized link",
+    "Iframe": "Iframe"
 }
 L.registerLocale("da", locale)
 L.setLocale("da")

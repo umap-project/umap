@@ -99,7 +99,6 @@ const locale = {
     "Delete this vertex (Alt+Click)": "حذف این رأس (Alt+Click)",
     "Delete": "حذف",
     "description": "شرح",
-    "Direct link": "پیوند مستقیم",
     "Directions from here": "مسیریابی از اینجا",
     "Display label": "نمایش برچسب",
     "Display measure": "نمایش اندازه‌گیری",
@@ -135,7 +134,6 @@ const locale = {
     "Edit this feature": "این عنصر را ویرایش کنید",
     "Edit": "ویرایش",
     "Embed and link options": "گزینه‌های جاسازی و پیوند",
-    "Embed the map": "نقشه را جاسازی کنید",
     "Emoji & Character": "شکلک و نویسه",
     "Empty": "خالی",
     "Equidistant": "هم‌فاصله",
@@ -295,7 +293,6 @@ const locale = {
     "settings": "تنظیمات",
     "Shape properties": "ویژگی‌های شکل",
     "Share and download": "همرسانی و بارگیری",
-    "Share this link to open a customized map view": "این پیوند را همرسانی کنید تا نقشه در یک نمای سفارشی باز شود",
     "Short credits": "یادکردهای کوتاه",
     "Short link": "پیوند کوتاه",
     "Show this layer in the caption": "این لایه در درباره نشان داده شود",
@@ -650,7 +647,12 @@ const locale = {
     "List of values": "List of values",
     "Yes / No": "Yes / No",
     "Select field to compute intensity": "Select field to compute intensity",
-    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap",
+    "All layers": "All layers",
+    "Comma separated list of values": "Comma separated list of values",
+    "Share": "Share",
+    "Customized link": "Customized link",
+    "Iframe": "Iframe"
 }
 L.registerLocale("fa_IR", locale)
 L.setLocale("fa_IR")

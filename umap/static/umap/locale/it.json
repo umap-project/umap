@@ -99,7 +99,6 @@
     "Delete this vertex (Alt+Click)": "Elimina questo vertice (Alt+Clic)",
     "Delete": "Cancella",
     "description": "descrizione",
-    "Direct link": "Link diretto",
     "Directions from here": "Indicazioni stradali da qui",
     "Display label": "Mostra etichetta",
     "Display measure": "Calcola le distanze",
@@ -135,7 +134,6 @@
     "Edit this feature": "Modifica quest'oggetto",
     "Edit": "Modifica",
     "Embed and link options": "Opzioni di inclusione e collegamento",
-    "Embed the map": "Includi la mappa",
     "Emoji & Character": "Emoji & caratteri",
     "Empty": "Vuoto",
     "Equidistant": "Equidistante",
@@ -295,7 +293,6 @@
     "settings": "impostazioni",
     "Shape properties": "Proprietà della geometria",
     "Share and download": "Condividi e scarica",
-    "Share this link to open a customized map view": "Condividi questo link per aprire una vista personalizzata della mappa",
     "Short credits": "Mostra i ringraziamenti",
     "Short link": "Collegamento corto",
     "Show this layer in the caption": "Mostra questo livello nella didascalia",
@@ -650,5 +647,10 @@
     "List of values": "List of values",
     "Yes / No": "Yes / No",
     "Select field to compute intensity": "Select field to compute intensity",
-    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap",
+    "All layers": "All layers",
+    "Comma separated list of values": "Comma separated list of values",
+    "Share": "Share",
+    "Customized link": "Customized link",
+    "Iframe": "Iframe"
 }

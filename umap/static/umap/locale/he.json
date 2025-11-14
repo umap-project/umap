@@ -99,7 +99,6 @@
     "Delete this vertex (Alt+Click)": "מחיקת הקודקוד הזה ‪(Alt+לחיצה)",
     "Delete": "מחיקה",
     "description": "תיאור",
-    "Direct link": "Direct link",
     "Directions from here": "הכוונה מכאן",
     "Display label": "הצגת תווית",
     "Display measure": "הצגת מדידה",
@@ -135,7 +134,6 @@
     "Edit this feature": "עריכת תכונה זו",
     "Edit": "עריכה",
     "Embed and link options": "Embed and link options",
-    "Embed the map": "הטמעת המפה",
     "Emoji & Character": "Emoji & Character",
     "Empty": "לרוקן",
     "Equidistant": "Equidistant",
@@ -295,7 +293,6 @@
     "settings": "settings",
     "Shape properties": "מאפייני צורה",
     "Share and download": "Share and download",
-    "Share this link to open a customized map view": "Share this link to open a customized map view",
     "Short credits": "תודות מקוצרות",
     "Short link": "Short link",
     "Show this layer in the caption": "Show this layer in the caption",
@@ -650,5 +647,10 @@
     "List of values": "List of values",
     "Yes / No": "Yes / No",
     "Select field to compute intensity": "Select field to compute intensity",
-    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap",
+    "All layers": "All layers",
+    "Comma separated list of values": "Comma separated list of values",
+    "Share": "Share",
+    "Customized link": "Customized link",
+    "Iframe": "Iframe"
 }

@@ -99,7 +99,6 @@
     "Delete this vertex (Alt+Click)": "Delete this vertex (Alt+Click)",
     "Delete": "Suprimeix",
     "description": "descripció",
-    "Direct link": "Enllaç directe",
     "Directions from here": "Direccions des d'aquí",
     "Display label": "Mostra l'etiqueta",
     "Display measure": "Display measure",
@@ -135,7 +134,6 @@
     "Edit this feature": "Edita aquesta característica",
     "Edit": "Edita",
     "Embed and link options": "Opcions d'inserció i enllaç",
-    "Embed the map": "Incrusta el mapa",
     "Emoji & Character": "Emoji & Character",
     "Empty": "Buit",
     "Equidistant": "Equidistant",
@@ -295,7 +293,6 @@
     "settings": "settings",
     "Shape properties": "Propietats de la forma",
     "Share and download": "Comparteix i baixa",
-    "Share this link to open a customized map view": "Comparteix aquest enllaç per obrir una vista de mapa personalitzada",
     "Short credits": "Crèdits curts",
     "Short link": "Enllaç curt",
     "Show this layer in the caption": "Mostra aquesta capa a la llegenda",
@@ -650,5 +647,10 @@
     "List of values": "List of values",
     "Yes / No": "Yes / No",
     "Select field to compute intensity": "Select field to compute intensity",
-    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap",
+    "All layers": "All layers",
+    "Comma separated list of values": "Comma separated list of values",
+    "Share": "Share",
+    "Customized link": "Customized link",
+    "Iframe": "Iframe"
 }

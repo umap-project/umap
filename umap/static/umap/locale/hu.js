@@ -99,7 +99,6 @@ const locale = {
     "Delete this vertex (Alt+Click)": "Sarokpont törlése (Alt+Klikk)",
     "Delete": "Törlés",
     "description": "leírás",
-    "Direct link": "Közvetlen link",
     "Directions from here": "Irányok innen",
     "Display label": "Felirat megjelenítése",
     "Display measure": "Távolságmérő megjelenítése",
@@ -135,7 +134,6 @@ const locale = {
     "Edit this feature": "Objektum szerkesztése",
     "Edit": "Szerkesztés",
     "Embed and link options": "Beágyazási és linkelési beállítások",
-    "Embed the map": "Térkép beágyazása",
     "Emoji & Character": "Emoji vagy karakter",
     "Empty": "Kiürítés",
     "Equidistant": "Azonos távolságok",
@@ -295,7 +293,6 @@ const locale = {
     "settings": "beállítások",
     "Shape properties": "Alakzat tulajdonságai",
     "Share and download": "Megosztás és letöltés",
-    "Share this link to open a customized map view": "Link megosztása testreszabott térképnézet megnyitásához",
     "Short credits": "Alkotók röviden",
     "Short link": "Rövid link",
     "Show this layer in the caption": "Réteg megjelenítése a címsávban",
@@ -650,7 +647,12 @@ const locale = {
     "List of values": "Értékek felsorolása",
     "Yes / No": "igen / nem",
     "Select field to compute intensity": "Select field to compute intensity",
-    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap",
+    "All layers": "All layers",
+    "Comma separated list of values": "Comma separated list of values",
+    "Share": "Share",
+    "Customized link": "Customized link",
+    "Iframe": "Iframe"
 }
 L.registerLocale("hu", locale)
 L.setLocale("hu")

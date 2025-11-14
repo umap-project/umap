@@ -99,7 +99,6 @@ const locale = {
     "Delete this vertex (Alt+Click)": "Обриши овај врх (Alt+Click)",
     "Delete": "Обриши",
     "description": "опис",
-    "Direct link": "Direct link",
     "Directions from here": "Упутства одавде",
     "Display label": "Прикажи ознаку",
     "Display measure": "Мера приказа",
@@ -135,7 +134,6 @@ const locale = {
     "Edit this feature": "Уређивање елемента",
     "Edit": "Уређивање",
     "Embed and link options": "Embed and link options",
-    "Embed the map": "Embed the map",
     "Emoji & Character": "Emoji & Character",
     "Empty": "Empty",
     "Equidistant": "Equidistant",
@@ -295,7 +293,6 @@ const locale = {
     "settings": "settings",
     "Shape properties": "Својства облика",
     "Share and download": "Share and download",
-    "Share this link to open a customized map view": "Share this link to open a customized map view",
     "Short credits": "Short credits",
     "Short link": "Short link",
     "Show this layer in the caption": "Show this layer in the caption",
@@ -650,7 +647,12 @@ const locale = {
     "List of values": "List of values",
     "Yes / No": "Yes / No",
     "Select field to compute intensity": "Select field to compute intensity",
-    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap",
+    "All layers": "All layers",
+    "Comma separated list of values": "Comma separated list of values",
+    "Share": "Share",
+    "Customized link": "Customized link",
+    "Iframe": "Iframe"
 }
 L.registerLocale("sr", locale)
 L.setLocale("sr")

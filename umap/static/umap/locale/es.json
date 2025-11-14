@@ -99,7 +99,6 @@
     "Delete this vertex (Alt+Click)": "Eliminar este vértice (Alt+Clic)",
     "Delete": "Eliminar",
     "description": "descripción",
-    "Direct link": "Enlace directo",
     "Directions from here": "Indicaciones desde aquí",
     "Display label": "Mostrar etiqueta",
     "Display measure": "Mostrar medición",
@@ -135,7 +134,6 @@
     "Edit this feature": "Editar este elemento",
     "Edit": "Editar",
     "Embed and link options": "Opciones de embebido y enlace",
-    "Embed the map": "Embeber el mapa",
     "Emoji & Character": "Emoji y carácter",
     "Empty": "Vaciar",
     "Equidistant": "Equidistante",
@@ -295,7 +293,6 @@
     "settings": "ajustes",
     "Shape properties": "Propiedades de la forma",
     "Share and download": "Compartir y descargar",
-    "Share this link to open a customized map view": "Comparte este enlace para abrir una vista de mapa personalizada",
     "Short credits": "Créditos cortos",
     "Short link": "Enlace corto",
     "Show this layer in the caption": "Mostrar esta capa en la leyenda",
@@ -652,5 +649,8 @@
     "Select field to compute intensity": "Seleccionar campo para calcular intensidad",
     "Optional intensity field to compute heatmap": "Campo de intensidad opcional para calcular el mapa de calor",
     "All layers": "Todas las capas",
-    "Comma separated list of values": "Comma separated list of values"
+    "Comma separated list of values": "Lista de valores separada por comas",
+    "Share": "Share",
+    "Customized link": "Customized link",
+    "Iframe": "Iframe"
 }

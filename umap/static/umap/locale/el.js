@@ -99,7 +99,6 @@ const locale = {
     "Delete this vertex (Alt+Click)": "Διαγραφή αυτής της κορυφής (Alt+Click)",
     "Delete": "Διαγραφή",
     "description": "Περιγραφή",
-    "Direct link": "Απευθείας σύνδεσμος",
     "Directions from here": "Κατευθύνσεις από εδώ",
     "Display label": "Εμφάνιση ετικέτας",
     "Display measure": "Εμφάνιση μέτρησης",
@@ -135,7 +134,6 @@ const locale = {
     "Edit this feature": "Επεξεργασία αυτού του στοιχείου",
     "Edit": "Επεξεργασία",
     "Embed and link options": "Επιλογές ενσωμάτωσης και σύνδεσης",
-    "Embed the map": "Ένθεση του χάρτη",
     "Emoji & Character": "Emoji & Χαρακτήρες",
     "Empty": "Κενό",
     "Equidistant": "Ισαπέχουσα",
@@ -295,7 +293,6 @@ const locale = {
     "settings": "ρυθμίσεις",
     "Shape properties": "Ιδιότητες σχήματος",
     "Share and download": "Κοινοποίηση και λήψη",
-    "Share this link to open a customized map view": "Μοιραστείτε αυτόν τον σύνδεσμο για να ανοίξετε μια προσαρμοσμένη προβολή χάρτη",
     "Short credits": "Εύσημα εν συντομία",
     "Short link": "Σύντομος σύνδεσμος",
     "Show this layer in the caption": "Εμφάνιση αυτού του επιπέδου στη λεζάντα",
@@ -650,7 +647,12 @@ const locale = {
     "List of values": "List of values",
     "Yes / No": "Yes / No",
     "Select field to compute intensity": "Select field to compute intensity",
-    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap",
+    "All layers": "All layers",
+    "Comma separated list of values": "Comma separated list of values",
+    "Share": "Share",
+    "Customized link": "Customized link",
+    "Iframe": "Iframe"
 }
 L.registerLocale("el", locale)
 L.setLocale("el")

@@ -99,7 +99,6 @@ const locale = {
     "Delete this vertex (Alt+Click)": "Delete this vertex (Alt+Click)",
     "Delete": "Trinti",
     "description": "aprašymas",
-    "Direct link": "Direct link",
     "Directions from here": "Nuorodos iš šio taško",
     "Display label": "Display label",
     "Display measure": "Display measure",
@@ -135,7 +134,6 @@ const locale = {
     "Edit this feature": "Redaguoti šį objektą",
     "Edit": "Redaguoti",
     "Embed and link options": "Embed and link options",
-    "Embed the map": "Įsikelti šį žemėlapį",
     "Emoji & Character": "Emoji & Character",
     "Empty": "Tuščias",
     "Equidistant": "Equidistant",
@@ -295,7 +293,6 @@ const locale = {
     "settings": "settings",
     "Shape properties": "Shape properties",
     "Share and download": "Share and download",
-    "Share this link to open a customized map view": "Share this link to open a customized map view",
     "Short credits": "Trumpai apie kūrėjus",
     "Short link": "Short link",
     "Show this layer in the caption": "Show this layer in the caption",
@@ -650,7 +647,12 @@ const locale = {
     "List of values": "List of values",
     "Yes / No": "Yes / No",
     "Select field to compute intensity": "Select field to compute intensity",
-    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap"
+    "Optional intensity field to compute heatmap": "Optional intensity field to compute heatmap",
+    "All layers": "All layers",
+    "Comma separated list of values": "Comma separated list of values",
+    "Share": "Share",
+    "Customized link": "Customized link",
+    "Iframe": "Iframe"
 }
 L.registerLocale("lt", locale)
 L.setLocale("lt")
