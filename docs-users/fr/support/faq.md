@@ -94,6 +94,7 @@ Toute propriété de l'élément sera disponible, ainsi que:
 - `{layer}` → le nom du calque de l'élément
 - `{zoom}` → le zoom actuel de la carte
 - `{id}` → identifiant unique d'un élément
+- `{osm_type}`, `{osm_id}` → type (node, way, relation) et identifiant unique d'un élément, quand les données viennent d'OpenStreetMap
 
 ### Variables disponibles dans les URL de données distantes:
 
