@@ -1,12 +1,14 @@
-import { DomEvent, DomUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
+import { DomEvent } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from '../i18n.js'
+import * as DOMUtils from '../domutils.js'
 
 export class Panel {
   constructor(umap, leafletMap) {
     this.parent = leafletMap._controlContainer
     this._umap = umap
     this._leafletMap = leafletMap
-    this.container = DomUtil.create('div', '', this.parent)
+    this.container = document.createElement('div')
+    this.parent.appendChild(this.container)
     // This will be set once according to the panel configured at load
     // or by using panels as popups
     this.mode = null
@@ -37,24 +39,26 @@ export class Panel {
     }
     document.body.classList.add(`panel-${this.className.split(' ')[0]}-on`)
     this.container.innerHTML = ''
-    const actionsContainer = DomUtil.create('ul', 'buttons', this.container)
-    const body = DomUtil.create('div', 'body', this.container)
+    const template = `
+      <div>
+        <ul class="buttons" data-ref="buttons">
+          <li><button class="icon icon-16 icon-close" data-ref="close" title="${translate('Close')}"></button></li>
+          <li><button class="icon icon-16 icon-resize" data-ref="resize" title="${translate('Toggle size')}"></button></li>
+        </ul>
+        <div class="body" data-ref="body">
+        </div>
+      </div>
+    `
+    const [root, { close, resize, body, buttons }] =
+      DOMUtils.loadTemplateWithRefs(template)
     body.appendChild(content)
-    const closeButton = DomUtil.createButtonIcon(
-      DomUtil.create('li', '', actionsContainer),
-      'icon-close',
-      translate('Close')
-    )
-    const resizeButton = DomUtil.createButtonIcon(
-      DomUtil.create('li', '', actionsContainer),
-      'icon-resize',
-      translate('Toggle size')
-    )
+    this.container.appendChild(root)
     for (const action of actions) {
-      const element = DomUtil.element({ tagName: 'li', parent: actionsContainer })
-      element.appendChild(action)
+      const li = document.createElement('li')
+      li.appendChild(action)
+      buttons.appendChild(li)
     }
-    if (className) DomUtil.addClass(body, className)
+    if (className) body.classList.add(className)
     const promise = new Promise((resolve, reject) => {
       if (isOpen) {
         resolve(this)
@@ -73,8 +77,8 @@ export class Panel {
           })
       }
     })
-    DomEvent.on(closeButton, 'click', this.close, this)
-    DomEvent.on(resizeButton, 'click', this.resize, this)
+    close.addEventListener('click', () => this.close())
+    resize.addEventListener('click', () => this.resize())
     return promise
   }
 
