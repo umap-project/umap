@@ -1,8 +1,4 @@
-import {
-  DomEvent,
-  DomUtil,
-  CircleMarker,
-} from '../../../vendors/leaflet/leaflet-src.esm.js'
+import { DomEvent, CircleMarker } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { getLocale, translate } from '../i18n.js'
 import { Request } from '../request.js'
 import * as Utils from '../utils.js'
@@ -92,7 +88,11 @@ class PopupTemplate {
     const title = this.renderTitle(feature)
     if (title) container.appendChild(title)
     const body = await this.renderBody(feature)
-    if (body) DomUtil.add('div', 'umap-popup-content', container, body)
+    if (body) {
+      const div = DOMUtils.loadTemplate('<div class="umap-popup-content"></div>')
+      div.appendChild(body)
+      container.appendChild(div)
+    }
     const footer = this.renderFooter(feature)
     if (footer) container.appendChild(footer)
   }
@@ -129,16 +129,17 @@ class Table extends TitleMixin(PopupTemplate) {
 
 class GeoRSSImage extends TitleMixin(PopupTemplate) {
   async renderBody(feature) {
-    const body = DomUtil.create('a')
-    body.href = feature.properties.link
-    body.target = '_blank'
+    const body = DOMUtils.loadTemplate(
+      `<a href="${feature.properties.link}" target="_blank"></a>`
+    )
     if (feature.properties.img) {
-      const img = DomUtil.create('img', '', body)
-      img.src = feature.properties.img
       // Sadly, we are unable to override this from JS the clean way
       // See https://github.com/Leaflet/Leaflet/commit/61d746818b99d362108545c151a27f09d60960ee#commitcomment-6061847
-      img.style.maxWidth = '500px'
-      img.style.maxHeight = '500px'
+      body.appendChild(
+        DOMUtils.loadTemplate(
+          `<img src=${feature.properties.img} style="max-width: 500px; max-height: 500px;">`
+        )
+      )
     }
     return body
   }
@@ -156,15 +157,16 @@ class GeoRSSLink extends PopupTemplate {
 
 class OSM extends PopupTemplate {
   renderTitle(feature) {
-    const title = DomUtil.add('h3', 'popup-title')
     const color = feature.getPreviewColor()
-    title.style.backgroundColor = color
+    const [title, { iconContainer }] = DOMUtils.loadTemplateWithRefs(`
+    <h3 class="popup-title" style="background-color: ${color};">
+      <span data-ref="iconContainer"></span> ${this.getName(feature)}
+    </h3>`)
     const iconUrl = feature.getDynamicOption('iconUrl')
-    const icon = Icon.makeElement(iconUrl, title)
-    DomUtil.addClass(icon, 'icon')
+    const icon = Icon.makeElement(iconUrl, iconContainer)
+    icon.classList.add('icon')
     Icon.setContrast(icon, title, iconUrl, color)
     if (DOMUtils.contrastedColor(title, color)) title.style.color = 'white'
-    DomUtil.add('span', '', title, this.getName(feature))
     return title
   }
 
@@ -181,15 +183,16 @@ class OSM extends PopupTemplate {
     const locale = getLocale()
     const street = props['addr:street']
     if (street) {
-      const row = DomUtil.add('address', 'address', body)
       const number = props['addr:housenumber']
+      let content
       if (number) {
         // Poor way to deal with international forms of writing addresses
-        DomUtil.add('span', '', row, `${translate('No.')}: ${number}`)
-        DomUtil.add('span', '', row, `${translate('Street')}: ${street}`)
+        content = `<span>${translate('№')}: ${number}</span><span>${translate('Street')}: ${street}</span>`
       } else {
-        DomUtil.add('span', '', row, street)
+        content = street
       }
+      const row = DOMUtils.loadTemplate(`<address class="address">${content}</address>`)
+      body.appendChild(row)
     }
     if (props.website) {
       body.appendChild(
