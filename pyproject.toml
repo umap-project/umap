@@ -49,7 +49,7 @@ dev = [
   "mkdocs==1.6.1",
   "mkdocs-material==9.6.23",
   "mkdocs-static-i18n==1.3.0",
-  "vermin==1.6.0",
+  "vermin==1.7.0",
   "pymdown-extensions==10.16.1",
   "isort==7.0.0",
 ]
