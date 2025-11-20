@@ -1606,9 +1606,11 @@ export default class Umap {
       else if (finalIndex > initialIndex) movedLayer.insertBefore(targetLayer)
       else movedLayer.insertAfter(targetLayer)
       this.sync.startBatch()
-      this.datalayers.reverse().map((datalayer) => {
+      this.datalayers.reverse().map(async (datalayer) => {
         const rank = datalayer.getDOMOrder()
         if (rank >= minIndex && rank <= maxIndex) {
+          // TODO allow to save only metadata instead of force loading data
+          if (!datalayer.isLoaded()) await datalayer.fetchData()
           const oldRank = datalayer.rank
           datalayer.rank = rank
           datalayer.sync.update('options.rank', rank, oldRank)
