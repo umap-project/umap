@@ -342,12 +342,9 @@ ul.umap-autocomplete {
 
 .umap-singleresult div,
 .umap-multiresult li {
-    width: 100%;
-    background-color: #2e3436;
     border-radius: 2px;
     border: 1px solid #202425;
     padding: 7px;
-    color: #eeeeec;
     margin-bottom: 7px;
 }
 

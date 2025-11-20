@@ -1,13 +1,9 @@
-import {
-  DomEvent,
-  DomUtil,
-  Util,
-  setOptions,
-} from '../../vendors/leaflet/leaflet-src.esm.js'
+import { DomEvent, Util, setOptions } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
 import { Request, ServerRequest } from './request.js'
 import { escapeHTML, generateId } from './utils.js'
 import * as Utils from './utils.js'
+import * as DOMUtils from './domutils.js'
 
 export class BaseAutocomplete {
   constructor(parent, options) {
@@ -41,26 +37,18 @@ export class BaseAutocomplete {
   }
 
   createInput() {
-    this.input = DomUtil.element({
-      tagName: 'input',
-      type: 'text',
-      parent: this.parent,
-      placeholder: this.options.placeholder,
-      autocomplete: 'off',
-      className: this.options.className,
-      name: this.options.name || 'autocomplete',
-    })
-    DomEvent.on(this.input, 'keydown', this.onKeyDown, this)
-    DomEvent.on(this.input, 'keyup', this.onKeyUp, this)
-    DomEvent.on(this.input, 'blur', this.onBlur, this)
+    this.input = DOMUtils.loadTemplate(`
+      <input type="text" placeholder="${this.options.placeholder}" autocomplete="off" class="${this.options.className}" name="${this.options.name || 'autocomplete'}">
+    `)
+    this.parent.appendChild(this.input)
+    this.input.addEventListener('keydown', (event) => this.onKeyDown(event))
+    this.input.addEventListener('keyup', (event) => this.onKeyUp(event))
+    this.input.addEventListener('blur', (event) => this.onBlur(event))
   }
 
   createContainer() {
-    this.container = DomUtil.element({
-      tagName: 'ul',
-      parent: document.body,
-      className: 'umap-autocomplete',
-    })
+    this.container = DOMUtils.loadTemplate('<ul class="umap-autocomplete"></ul>')
+    document.body.appendChild(this.container)
   }
 
   resizeContainer() {
@@ -167,20 +155,17 @@ export class BaseAutocomplete {
   }
 
   createResult(item) {
-    const el = DomUtil.element({
-      tagName: 'li',
-      parent: this.container,
-      textContent: item.label,
-    })
+    const li = DOMUtils.loadTemplate(`<li>${item.label}</li>`)
+    this.container.appendChild(li)
     const result = {
       item: item,
-      el: el,
+      el: li,
     }
-    DomEvent.on(el, 'mouseover', () => {
+    li.addEventListener('mouseover', () => {
       this.current = result
       this.highlight()
     })
-    DomEvent.on(el, 'mousedown', () => this.setChoice())
+    li.addEventListener('mousedown', () => this.setChoice())
     return result
   }
 
@@ -202,8 +187,7 @@ export class BaseAutocomplete {
 
   highlight() {
     this.results.forEach((result, index) => {
-      if (index === this.current) DomUtil.addClass(result.el, 'on')
-      else DomUtil.removeClass(result.el, 'on')
+      result.el.classList.toggle('on', index === this.current)
     })
   }
 
@@ -298,19 +282,15 @@ export const SingleMixin = (Base) =>
     }
 
     displaySelected(result) {
-      const result_el = DomUtil.element({
-        tagName: 'div',
-        parent: this.selectedContainer,
-      })
-      result_el.textContent = result.item.label
-      const close = DomUtil.element({
-        tagName: 'span',
-        parent: result_el,
-        className: 'close',
-        textContent: '×',
-      })
+      const [root, { close }] = DOMUtils.loadTemplateWithRefs(`
+        <div class="with-toolbox">
+          ${result.item.label}
+          <button type="button" class="icon icon-16 icon-close" title="${translate('Close')}" data-ref="close"></button>
+        </div>
+      `)
+      this.selectedContainer.appendChild(root)
       this.input.style.display = 'none'
-      DomEvent.on(close, 'click', () => {
+      close.addEventListener('click', () => {
         this.selectedContainer.innerHTML = ''
         this.input.style.display = 'block'
         this.options.on_unselect?.(result)
@@ -328,19 +308,12 @@ export const MultipleMixin = (Base) =>
     }
 
     displaySelected(result) {
-      const result_el = DomUtil.element({
-        tagName: 'li',
-        parent: this.selectedContainer,
-      })
-      result_el.textContent = result.item.label
-      const close = DomUtil.element({
-        tagName: 'span',
-        parent: result_el,
-        className: 'close',
-        textContent: '×',
-      })
-      DomEvent.on(close, 'click', () => {
-        this.selectedContainer.removeChild(result_el)
+      const [li, { close }] = DOMUtils.loadTemplateWithRefs(`
+        <li class="with-toolbox">${result.item.label} <button class="icon icon-16 icon-close" type="button" data-ref="close"></button></li>
+      `)
+      this.selectedContainer.appendChild(li)
+      close.addEventListener('click', () => {
+        this.selectedContainer.removeChild(li)
         this.options.on_unselect?.(result)
       })
       this.hide()
