@@ -120,28 +120,28 @@ describe('Utils', () => {
     it('should handle iframe', () => {
       assert.equal(
         Utils.toHTML('A simple iframe: {{{http://osm.org/pouet.html}}}'),
-        'A simple iframe: <div><iframe height="300px" width="100%" src="http://osm.org/pouet.html" frameborder="0"></iframe></div>'
+        'A simple iframe: <div><iframe style="width: 100%; height: 300px; border: 0;" src="http://osm.org/pouet.html" allowfullscreen=""></iframe></div>'
       )
     })
 
     it('should handle iframe with height', () => {
       assert.equal(
         Utils.toHTML('A simple iframe: {{{http://osm.org/pouet.html|200}}}'),
-        'A simple iframe: <div><iframe height="200px" width="100%" src="http://osm.org/pouet.html" frameborder="0"></iframe></div>'
+        'A simple iframe: <div><iframe style="width: 100%; height: 200px; border: 0;" src="http://osm.org/pouet.html" allowfullscreen=""></iframe></div>'
       )
     })
 
     it('should handle iframe with height and width', () => {
       assert.equal(
         Utils.toHTML('A simple iframe: {{{http://osm.org/pouet.html|200*400}}}'),
-        'A simple iframe: <div><iframe height="200px" width="400px" src="http://osm.org/pouet.html" frameborder="0"></iframe></div>'
+        'A simple iframe: <div><iframe style="width: 400px; height: 200px; border: 0;" src="http://osm.org/pouet.html" allowfullscreen=""></iframe></div>'
       )
     })
 
     it('should handle iframe with height with px', () => {
       assert.equal(
         Utils.toHTML('A simple iframe: {{{http://osm.org/pouet.html|200px}}}'),
-        'A simple iframe: <div><iframe height="200px" width="100%" src="http://osm.org/pouet.html" frameborder="0"></iframe></div>'
+        'A simple iframe: <div><iframe style="width: 100%; height: 200px; border: 0;" src="http://osm.org/pouet.html" allowfullscreen=""></iframe></div>'
       )
     })
 
@@ -150,7 +150,7 @@ describe('Utils', () => {
         Utils.toHTML(
           'A simple iframe: {{{https://osm.org/?url=https%3A//anotherurl.com}}}'
         ),
-        'A simple iframe: <div><iframe height="300px" width="100%" src="https://osm.org/?url=https%3A//anotherurl.com" frameborder="0"></iframe></div>'
+        'A simple iframe: <div><iframe style="width: 100%; height: 300px; border: 0;" src="https://osm.org/?url=https%3A//anotherurl.com" allowfullscreen=""></iframe></div>'
       )
     })
 
@@ -159,7 +159,7 @@ describe('Utils', () => {
         Utils.toHTML(
           'A double iframe: {{{https://osm.org/pouet}}}{{{https://osm.org/boudin}}}'
         ),
-        'A double iframe: <div><iframe height="300px" width="100%" src="https://osm.org/pouet" frameborder="0"></iframe></div><div><iframe height="300px" width="100%" src="https://osm.org/boudin" frameborder="0"></iframe></div>'
+        'A double iframe: <div><iframe style="width: 100%; height: 300px; border: 0;" src="https://osm.org/pouet" allowfullscreen=""></iframe></div><div><iframe style="width: 100%; height: 300px; border: 0;" src="https://osm.org/boudin" allowfullscreen=""></iframe></div>'
       )
     })
 
@@ -168,7 +168,7 @@ describe('Utils', () => {
         Utils.toHTML(
           'An iframe with query string: {{{https://osm.org/pouet.html?name=foobar&description=baz baz}}}'
         ),
-        'An iframe with query string: <div><iframe height="300px" width="100%" src="https://osm.org/pouet.html?name=foobar&amp;description=baz baz" frameborder="0"></iframe></div>'
+        'An iframe with query string: <div><iframe style="width: 100%; height: 300px; border: 0;" src="https://osm.org/pouet.html?name=foobar&amp;description=baz baz" allowfullscreen=""></iframe></div>'
       )
     })
 

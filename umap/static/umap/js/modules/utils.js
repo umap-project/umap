@@ -177,15 +177,15 @@ export function toHTML(r, options) {
   // iframe
   r = r.replace(
     /{{{(https?[^|{]*)}}}/g,
-    '<div><iframe frameborder="0" src="$1" width="100%" height="300px"></iframe></div>'
+    '<div><iframe allowfullscreen src="$1" style="width: 100%; height: 300px; border: 0;"></iframe></div>'
   )
   r = r.replace(
     /{{{(https?[^|{]*)\|(\d*)(px)?}}}/g,
-    '<div><iframe frameborder="0" src="$1" width="100%" height="$2px"></iframe></div>'
+    '<div><iframe allowfullscreen src="$1" style="width: 100%; height: $2px; border: 0;"></iframe></div>'
   )
   r = r.replace(
     /{{{(https?[^|{]*)\|(\d*)(px)?\*(\d*)(px)?}}}/g,
-    '<div><iframe frameborder="0" src="$1" width="$4px" height="$2px"></iframe></div>'
+    '<div><iframe allowfullscreen src="$1" style="width: $4px; height: $2px; border: 0;"></iframe></div>'
   )
 
   // images
