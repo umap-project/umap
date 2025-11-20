@@ -43,7 +43,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-  "hatch==1.14.2",
+  "hatch==1.15.1",
   "ruff==0.14.5",
   "djlint==1.36.4",
   "mkdocs==1.6.1",
