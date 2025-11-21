@@ -264,9 +264,6 @@ U.Editable = L.Editable.extend({
     this.on('editable:drawing:click editable:drawing:move', this.drawingTooltip)
     // Layer for items added by users
     this.on('editable:drawing:cancel', (event) => {
-      if (event.layer instanceof U.LeafletMarker) {
-        event.layer.feature.del()
-      }
       this.resetButtons()
     })
     this.on('editable:drawing:commit', function (event) {
@@ -425,7 +422,7 @@ U.Editable = L.Editable.extend({
       // (eg. line has only one drawn point)
       // So let's check if the layer has no more shape
       event.layer.feature.pullGeometry(false)
-      if (!event.layer.feature.hasGeom()) {
+      if (!event.layer.feature.hasGeom() || event.layer instanceof U.LeafletMarker) {
         event.layer.feature.del()
       } else {
         event.layer.feature.onCommit()
