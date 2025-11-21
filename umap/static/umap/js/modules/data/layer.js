@@ -1,10 +1,5 @@
 // FIXME: this module should not depend on Leaflet
-import {
-  DomEvent,
-  DomUtil,
-  GeoJSON,
-  stamp,
-} from '../../../vendors/leaflet/leaflet-src.esm.js'
+import { DomEvent, GeoJSON, stamp } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import {
   uMapAlert as Alert,
   uMapAlertConflict as AlertConflict,
@@ -19,6 +14,7 @@ import { Heat } from '../rendering/layers/heat.js'
 import * as Schema from '../schema.js'
 import TableEditor from '../tableeditor.js'
 import * as Utils from '../utils.js'
+import * as DOMUtils from '../domutils.js'
 import { LineString, Point, Polygon } from './features.js'
 import Rules from '../rules.js'
 import { FeatureManager } from '../managers.js'
@@ -772,7 +768,11 @@ export class DataLayer {
         },
       ],
     ]
-    DomUtil.createTitle(container, translate('Layer properties'), 'icon-layers')
+    container.appendChild(
+      DOMUtils.loadTemplate(`
+      <h3><i class="icon icon-16 icon-layers"></i>${translate('Layer properties')}</h3>
+    `)
+    )
     const builder = new MutatingForm(this, metadataFields)
     builder.on('set', ({ detail }) => {
       this._umap.onDataLayersChanged()
@@ -818,7 +818,7 @@ export class DataLayer {
     const builder = new MutatingForm(this, fields, {
       id: 'datalayer-advanced-properties',
     })
-    const shapeFieldset = DomUtil.createFieldset(
+    const shapeFieldset = DOMUtils.createFieldset(
       container,
       translate('Shape properties')
     )
@@ -843,7 +843,7 @@ export class DataLayer {
         this.reindex()
       }
     })
-    const advancedFieldset = DomUtil.createFieldset(
+    const advancedFieldset = DOMUtils.createFieldset(
       container,
       translate('Advanced properties')
     )
@@ -862,7 +862,7 @@ export class DataLayer {
       'properties.interactive',
     ]
     const builder = new MutatingForm(this, fields)
-    const popupFieldset = DomUtil.createFieldset(
+    const popupFieldset = DOMUtils.createFieldset(
       container,
       translate('Interaction options')
     )
@@ -880,7 +880,7 @@ export class DataLayer {
       'properties.textPathPosition',
     ]
     const builder = new MutatingForm(this, fields)
-    const fieldset = DomUtil.createFieldset(container, translate('Line decoration'))
+    const fieldset = DOMUtils.createFieldset(container, translate('Line decoration'))
     fieldset.appendChild(builder.build())
   }
 
@@ -930,23 +930,21 @@ export class DataLayer {
       fields.push('properties.remoteData.ttl')
     }
 
-    const remoteDataContainer = DomUtil.createFieldset(
+    const remoteDataContainer = DOMUtils.createFieldset(
       container,
       translate('Remote data')
     )
     const builder = new MutatingForm(this, fields)
     remoteDataContainer.appendChild(builder.build())
-    DomUtil.createButton(
-      'button umap-verify',
-      remoteDataContainer,
-      translate('Verify remote URL'),
-      () => this.fetchRemoteData(true),
-      this
-    )
+    const button = DOMUtils.loadTemplate(`
+      <button class="umap-verify" type="button">${translate('Verify remote URL')}</button>
+    `)
+    button.addEventListener('click', () => this.fetchRemoteData(true))
+    remoteDataContainer.appendChild(button)
   }
 
   _buildAdvancedActions(container) {
-    const advancedActions = DomUtil.createFieldset(
+    const advancedActions = DOMUtils.createFieldset(
       container,
       translate('Advanced actions')
     )
@@ -986,7 +984,7 @@ export class DataLayer {
     if (!this._umap.editEnabled) {
       return
     }
-    const container = DomUtil.create('div', 'umap-layer-properties-container')
+    const container = document.createElement('div')
     this._editMetadata(container)
     this._editLayerProperties(container)
     this._editShapeProperties(container)
@@ -1003,15 +1001,13 @@ export class DataLayer {
 
     this._buildAdvancedActions(container)
 
-    const backButton = DomUtil.createButtonIcon(
-      undefined,
-      'icon-back',
-      translate('Back to layers')
-    )
+    const backButton = DOMUtils.loadTemplate(`
+      <button class="icon icon-16 icon-back" type="button" title="${translate('Back to layers')}"></button>
+    `)
     // Fixme: remove me when this is merged and released
     // https://github.com/Leaflet/Leaflet/pull/9052
     DomEvent.disableClickPropagation(backButton)
-    DomEvent.on(backButton, 'click', this._umap.editDatalayers, this._umap)
+    backButton.addEventListener('click', () => this._umap.editDatalayers())
 
     return this._umap.editPanel.open({
       content: container,
@@ -1062,7 +1058,7 @@ export class DataLayer {
       button.addEventListener('click', () => this.restore(data.ref))
     }
 
-    const versionsContainer = DomUtil.createFieldset(container, translate('Versions'))
+    const versionsContainer = DOMUtils.createFieldset(container, translate('Versions'))
     versionsContainer.closest('details').addEventListener('toggle', async (event) => {
       if (event.target.open) {
         const [{ versions }, response, error] = await this._umap.server.get(
@@ -1362,31 +1358,17 @@ export class DataLayer {
   }
 
   renderToolbox(container) {
-    const toggle = DomUtil.createButtonIcon(
-      container,
-      'icon-eye',
-      translate('Show/hide layer')
-    )
-    const table = DomUtil.createButtonIcon(
-      container,
-      'icon-table show-on-edit',
-      translate('Edit properties in a table')
-    )
-    const zoomTo = DomUtil.createButtonIcon(
-      container,
-      'icon-zoom',
-      translate('Zoom to layer extent')
-    )
-    const edit = DomUtil.createButtonIcon(
-      container,
-      'icon-edit show-on-edit',
-      translate('Edit')
-    )
-    const remove = DomUtil.createButtonIcon(
-      container,
-      'icon-delete show-on-edit',
-      translate('Delete layer')
-    )
+    const [span, { toggle, table, zoomTo, edit, remove }] =
+      DOMUtils.loadTemplateWithRefs(`
+      <span>
+        <button class="icon icon-16 icon-eye" title="${translate('Show/hide layer')}" type="button" data-ref="toggle"></button>
+        <button class="icon icon-16 icon-table show-on-edit" title="${translate('Edit properties in a table')}" type="button" data-ref="table"></button>
+        <button class="icon icon-16 icon-zoom" title="${translate('Zoom to layer extent')}" type="button" data-ref="zoomTo"></button>
+        <button class="icon icon-16 icon-edit show-on-edit" title="${translate('Edit')}" type="button" data-ref="edit"></button>
+        <button class="icon icon-16 icon-delete show-on-edit" title="${translate('Delete layer')}" type="button" data-ref="remove"></button>
+      </span>
+    `)
+    container.appendChild(span)
     if (this.isReadOnly()) {
       container.classList.add('readonly')
     } else {
@@ -1410,7 +1392,7 @@ export class DataLayer {
   propagateDelete() {
     const els = this.getHidableElements()
     for (const el of els) {
-      DomUtil.remove(el)
+      el.remove()
     }
   }
 
@@ -1423,15 +1405,15 @@ export class DataLayer {
 
   propagateHide() {
     const els = this.getHidableElements()
-    for (let i = 0; i < els.length; i++) {
-      DomUtil.addClass(els[i], 'off')
+    for (const el of els) {
+      el.classList.add('off')
     }
   }
 
   propagateShow() {
     const els = this.getHidableElements()
-    for (let i = 0; i < els.length; i++) {
-      DomUtil.removeClass(els[i], 'off')
+    for (const el of els) {
+      el.classList.remove('off')
     }
   }
 }

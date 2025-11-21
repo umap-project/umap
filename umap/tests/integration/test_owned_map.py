@@ -217,7 +217,7 @@ def test_can_change_owner(map, live_server, login, user):
     page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
     edit_permissions = page.get_by_title("Update permissions and editors")
     edit_permissions.click()
-    close = page.locator(".umap-field-owner .close")
+    close = page.locator(".umap-field-owner .icon-close")
     close.click()
     input = page.locator("input.edit-owner")
     with page.expect_response(re.compile(r".*/agnocomplete/.*")):
