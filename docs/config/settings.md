@@ -295,7 +295,8 @@ Information about the entity hosting this uMap instance.
 UMAP_HOST_INFOS = {
     "name": "OpenStreetMap France",
     "url": "https://openstreetmap.fr",
-    "contact": "blah@openstreetmap.fr"
+    "email": "blah@openstreetmap.fr",
+    "tos": "https://terms-of-service.org",
 }
 ```
 
