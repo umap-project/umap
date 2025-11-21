@@ -264,9 +264,10 @@ U.Editable = L.Editable.extend({
     this.on('editable:drawing:click editable:drawing:move', this.drawingTooltip)
     // Layer for items added by users
     this.on('editable:drawing:cancel', (event) => {
-      if (event.layer instanceof U.LeafletMarker) event.layer.feature.del()
+      this.resetButtons()
     })
     this.on('editable:drawing:commit', function (event) {
+      this.resetButtons()
       if (this._umap.editedFeature !== event.layer) {
         const promise = event.layer.feature.edit(event)
         if (event.layer.feature.isRoute?.()) {
@@ -288,6 +289,13 @@ U.Editable = L.Editable.extend({
       if (event.vertex.editor.vertexCanBeDeleted(event.vertex)) event.vertex.delete()
     })
     this.on('editable:vertex:rawclick', this.onVertexRawClick)
+  },
+
+  resetButtons: () => {
+    const buttons = document.querySelectorAll('.umap-edit-bar .drawing-tool')
+    for (const button of buttons) {
+      button.classList.remove('on')
+    }
   },
 
   startRoute: function (latlng) {
@@ -414,7 +422,7 @@ U.Editable = L.Editable.extend({
       // (eg. line has only one drawn point)
       // So let's check if the layer has no more shape
       event.layer.feature.pullGeometry(false)
-      if (!event.layer.feature.hasGeom()) {
+      if (!event.layer.feature.hasGeom() || event.layer instanceof U.LeafletMarker) {
         event.layer.feature.del()
       } else {
         event.layer.feature.onCommit()

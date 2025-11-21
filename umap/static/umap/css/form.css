@@ -142,6 +142,10 @@ input[type="submit"] {
     font-weight: bold;
 }
 
+[type="button"].on {
+    background-color: var(--color-darkCyan);
+}
+
 .dark .button.primary:not([disabled]),
 .dark [type="button"].primary:not([disabled]) {
     background-color: var(--color-verySoftCyan);

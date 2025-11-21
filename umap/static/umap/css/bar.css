@@ -255,12 +255,19 @@
     flex-direction: column;
     z-index: calc(var(--zindex-panels) - 1);
     width: var(--control-size);
-    background-color: var(--background-color);
-    border-radius: var(--border-radius);
 }
 
 .umap-edit-enabled .umap-edit-bar {
     display: flex;
+}
+
+.umap-edit-bar ul {
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+}
+
+.umap-edit-bar ul+ul {
+    margin-top: var(--box-margin);
 }
 
 .umap-edit-bar li {
@@ -281,10 +288,6 @@
     border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
-.umap-edit-bar hr {
-    padding: 0;
-    margin: 0;
-}
 
 @media all and (max-width: 980px) {
     .umap-main-edit-toolbox button span {
