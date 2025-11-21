@@ -287,27 +287,30 @@ export class BottomBar extends WithTemplate {
 }
 
 const EDIT_BAR_TEMPLATE = `
-  <ul class="umap-edit-bar dark with-transition">
-    <li data-ref="marker"><button class="drawing-tool" type="button" data-getstarted><i class="icon icon-24 icon-marker"></i></button></li>
-    <li data-ref="polyline"><button class="drawing-tool" type="button" data-getstarted><i class="icon icon-24 icon-polyline"></i></button></li>
-    <li data-ref="multiline" hidden>
-      <button class="drawing-tool" type="button" title="${translate('Add a line to the current multi')}"><i class="icon icon-24 icon-multiline"></i></button>
-    </li>
-    <li data-ref="polygon"><button class="drawing-tool" type="button" data-getstarted><i class="icon icon-24 icon-polygon"></i></button></li>
-    <li data-ref="multipolygon" hidden>
-      <button class="drawing-tool" type="button" title="${translate('Add a polygon to the current multi')}"><i class="icon icon-24 icon-multipolygon"></i></button>
-    </li>
-    <li data-ref="route" hidden><button class="drawing-tool" type="button" data-getstarted title="${translate('Draw along routes')}"><i class="icon icon-24 icon-route"></i></button></li>
-    <hr>
-    <li data-ref="caption" hidden><button data-getstarted type="button" title="${translate('Edit map name and caption')}"><i class="icon icon-24 icon-info"></i></button></li>
-    <li data-ref="import" hidden><button type="button"><i class="icon icon-24 icon-upload"></i></button></li>
-    <li data-ref="templates" hidden><button type="button" title="${translate('Load template')}" data-getstarted><i class="icon icon-24 icon-template"></i></button></li>
-    <li data-ref="layers" hidden><button type="button" title="${translate('Manage layers')}"><i class="icon icon-24 icon-layers"></i></button></li>
-    <li data-ref="tilelayers" hidden><button type="button" title="${translate('Change tilelayers')}"><i class="icon icon-24 icon-tilelayer"></i></button></li>
-    <li data-ref="center" hidden><button type="button"><i class="icon icon-24 icon-center"></i></button></li>
-    <li data-ref="permissions" hidden><button type="button" title="${translate('Update permissions and editors')}"><i class="icon icon-24 icon-key"></i></button></li>
-    <li data-ref="settings" hidden><button data-getstarted type="button" title="${translate('Map advanced properties')}"><i class="icon icon-24 icon-settings"></i></button></li>
-  </ul>
+  <div class="umap-edit-bar dark with-transition">
+    <ul>
+      <li data-ref="marker"><button class="drawing-tool" type="button" data-getstarted><i class="icon icon-24 icon-marker"></i></button></li>
+      <li data-ref="polyline"><button class="drawing-tool" type="button" data-getstarted><i class="icon icon-24 icon-polyline"></i></button></li>
+      <li data-ref="multiline" hidden>
+        <button class="drawing-tool" type="button" title="${translate('Add a line to the current multi')}"><i class="icon icon-24 icon-multiline"></i></button>
+      </li>
+      <li data-ref="polygon"><button class="drawing-tool" type="button" data-getstarted><i class="icon icon-24 icon-polygon"></i></button></li>
+      <li data-ref="multipolygon" hidden>
+        <button class="drawing-tool" type="button" title="${translate('Add a polygon to the current multi')}"><i class="icon icon-24 icon-multipolygon"></i></button>
+      </li>
+      <li data-ref="route" hidden><button class="drawing-tool" type="button" data-getstarted title="${translate('Draw along routes')}"><i class="icon icon-24 icon-route"></i></button></li>
+    </ul>
+    <ul>
+      <li data-ref="caption" hidden><button data-getstarted type="button" title="${translate('Edit map name and caption')}"><i class="icon icon-24 icon-info"></i></button></li>
+      <li data-ref="import" hidden><button type="button"><i class="icon icon-24 icon-upload"></i></button></li>
+      <li data-ref="templates" hidden><button type="button" title="${translate('Load template')}" data-getstarted><i class="icon icon-24 icon-template"></i></button></li>
+      <li data-ref="layers" hidden><button type="button" title="${translate('Manage layers')}"><i class="icon icon-24 icon-layers"></i></button></li>
+      <li data-ref="tilelayers" hidden><button type="button" title="${translate('Change tilelayers')}"><i class="icon icon-24 icon-tilelayer"></i></button></li>
+      <li data-ref="center" hidden><button type="button"><i class="icon icon-24 icon-center"></i></button></li>
+      <li data-ref="permissions" hidden><button type="button" title="${translate('Update permissions and editors')}"><i class="icon icon-24 icon-key"></i></button></li>
+      <li data-ref="settings" hidden><button data-getstarted type="button" title="${translate('Map advanced properties')}"><i class="icon icon-24 icon-settings"></i></button></li>
+    </ul>
+  </div>
 `
 
 export class EditBar extends WithTemplate {
