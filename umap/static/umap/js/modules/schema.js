@@ -123,13 +123,6 @@ export const SCHEMA = {
   edit_status: {
     type: Number,
   },
-  editinosmControl: {
-    type: Boolean,
-    impacts: ['ui'],
-    nullable: true,
-    label: translate('Display the control to open OpenStreetMap editor'),
-    default: null,
-  },
   editors: {
     type: Array,
   },

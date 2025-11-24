@@ -48,7 +48,6 @@ const ControlsMixin = {
     'caption',
     'locate',
     'measure',
-    'editinosm',
     'print',
     'tilelayers',
   ],
@@ -93,14 +92,6 @@ const ControlsMixin = {
     this._controls.embed = new EmbedControl(this._umap)
     this._controls.print = new PrintControl(this._umap)
     this._controls.tilelayersChooser = new TileLayerChooser(this._umap)
-    this._controls.editinosm = new Control.EditInOSM({
-      position: 'topleft',
-      widgetOptions: {
-        helpText: translate(
-          'Open this map extent in a map editor to provide more accurate data to OpenStreetMap'
-        ),
-      },
-    })
     this._controls.measure = new L.MeasureControl().initHandler(this)
     this._controls.more = new MoreControl()
     this._controls.scale = new Control.Scale()
