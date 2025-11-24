@@ -71,7 +71,7 @@ s3 = [
   "django-storages[s3]==1.14.6",
 ]
 sync = [
-  "pydantic==2.12.3",
+  "pydantic==2.12.4",
   "redis==7.1.0",
   "websockets==15.0.1",
 ]
