@@ -1,11 +1,14 @@
 // Goes here all code related to Leaflet, DOM and user interactions.
 import {
   Map as BaseMap,
+  Browser,
   Control,
   DomEvent,
   latLng,
-  latLngBounds,
+  LatLng,
+  LatLngBounds,
   setOptions,
+  TileLayer,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import DropControl from '../drop.js'
@@ -100,7 +103,7 @@ const ControlsMixin = {
     })
     this._controls.measure = new L.MeasureControl().initHandler(this)
     this._controls.more = new MoreControl()
-    this._controls.scale = L.control.scale()
+    this._controls.scale = new Control.Scale()
     this._controls.permanentCredit = new PermanentCreditsControl(this)
     this._umap.drop = new DropControl(this._umap, this, this._container)
     this._controls.tilelayers = new U.TileLayerControl(this)
@@ -174,7 +177,7 @@ const ManageTilelayerMixin = {
     if (this._controls) this._controls.tilelayers.setLayers()
   },
 
-  createTileLayer: (tilelayer) => new L.TileLayer(tilelayer.url_template, tilelayer),
+  createTileLayer: (tilelayer) => new TileLayer(tilelayer.url_template, tilelayer),
 
   selectTileLayer: function (tilelayer) {
     if (tilelayer === this.selectedTilelayer) {
@@ -301,7 +304,7 @@ export const LeafletMap = BaseMap.extend({
       // when scrolling the main page and touching the
       // map in an iframe. May be a bit dumb, but let's
       // try like this for now.
-      if (L.Browser.mobile) this.dragging.disable()
+      if (Browser.mobile) this.dragging.disable()
     }
     // Needs tilelayer to exist for minimap
     this.renderControls()
@@ -310,7 +313,7 @@ export const LeafletMap = BaseMap.extend({
 
   latLng: (a, b, c) => {
     // manage geojson case and call original method
-    if (!(a instanceof L.LatLng) && a.coordinates) {
+    if (!(a instanceof LatLng) && a.coordinates) {
       // Guess it's a geojson
       a = [a.coordinates[1], a.coordinates[0]]
     }
@@ -359,7 +362,7 @@ export const LeafletMap = BaseMap.extend({
       !Number.isNaN(north) &&
       !Number.isNaN(east)
     ) {
-      const bounds = latLngBounds([
+      const bounds = new LatLngBounds([
         [south, west],
         [north, east],
       ])
@@ -379,7 +382,7 @@ export const LeafletMap = BaseMap.extend({
   setMaxBounds: function (bounds) {
     // Hack. Remove me when fix is released:
     // https://github.com/Leaflet/Leaflet/pull/4494
-    bounds = latLngBounds(bounds)
+    bounds = new LatLngBounds(bounds)
 
     if (!bounds.isValid()) {
       this.options.maxBounds = null
@@ -389,7 +392,7 @@ export const LeafletMap = BaseMap.extend({
   },
 
   getLayersBounds: (layers) => {
-    const bounds = new latLngBounds()
+    const bounds = new LatLngBounds()
     for (const layer of layers) {
       bounds.extend(layer.getBounds())
     }

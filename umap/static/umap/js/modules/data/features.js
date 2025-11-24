@@ -1,7 +1,7 @@
 import { GeoJSON, LineUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import { MutatingForm } from '../form/builder.js'
-import { translate } from '../i18n.js'
+import { translate, getLocale } from '../i18n.js'
 import {
   PREFERENCES as ORS_PREFERENCES,
   PROFILES as ORS_PROFILES,
@@ -438,7 +438,7 @@ class Feature {
     this.properties = Object.fromEntries(
       Object.entries(geojson.properties || {}).map(this.cleanProperty)
     )
-    this.properties._umap_options = L.extend(
+    this.properties._umap_options = Object.assign(
       {},
       this.properties._storage_options,
       this.properties._umap_options
@@ -510,8 +510,8 @@ class Feature {
   }
 
   cloneProperties() {
-    const properties = L.extend({}, this.properties)
-    properties._umap_options = L.extend({}, properties._umap_options)
+    const properties = Object.assign({}, this.properties)
+    properties._umap_options = Object.assign({}, properties._umap_options)
     if (Object.keys && Object.keys(properties._umap_options).length === 0) {
       delete properties._umap_options // It can make a difference on big data sets
     }
@@ -587,9 +587,10 @@ class Feature {
   }
 
   extendedProperties() {
+    console.trace()
     // Include context properties
     const properties = this._umap.getGeoContext()
-    const locale = L.getLocale()
+    const locale = getLocale()
     if (locale) properties.locale = locale
     if (U.lang) properties.lang = U.lang
     properties.rank = this.getRank() + 1

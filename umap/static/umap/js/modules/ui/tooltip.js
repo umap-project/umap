@@ -27,7 +27,7 @@ export default class Tooltip extends Positioned {
       this.parent.appendChild(this.container)
       this.openAt(opts)
     }
-    this.TOOLTIP_ID = window.setTimeout(L.bind(showIt, this), opts.delay || 0)
+    this.TOOLTIP_ID = window.setTimeout(() => showIt(), opts.delay || 0)
     const id = this.TOOLTIP_ID
     const closeIt = () => {
       this.close(id)

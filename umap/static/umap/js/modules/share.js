@@ -189,7 +189,7 @@ class IframeExporter {
       delete this.queryString.datalayers
     }
     const currentView = this.options.currentView ? window.location.hash : ''
-    const queryString = L.extend({}, this.queryString, options)
+    const queryString = Object.assign({}, this.queryString, options)
     return `${this.baseUrl}?${Utils.buildQueryString(queryString)}${currentView}`
   }
 

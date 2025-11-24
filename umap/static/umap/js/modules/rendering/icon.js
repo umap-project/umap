@@ -237,14 +237,7 @@ const Ball = DefaultIcon.extend({
   _setIconStyles: function (img, name) {
     BaseIcon.prototype._setIconStyles.call(this, img, name)
     const color = this._getColor('color')
-    let background
-    if (L.Browser.ielt9) {
-      background = color
-    } else if (L.Browser.webkit) {
-      background = `-webkit-gradient( radial, 6 38%, 0, 6 38%, 8, from(white), to(${color}) )`
-    } else {
-      background = `radial-gradient(circle at 6px 38% , white -4px, ${color} 8px) repeat scroll 0 0 transparent`
-    }
+    const background = `radial-gradient(circle at 6px 38% , white -4px, ${color} 8px) repeat scroll 0 0 transparent`
     this.elements.ball.style.background = background
     this.elements.ball.style.opacity = this._getOpacity()
   },
@@ -309,5 +302,8 @@ export function setContrast(icon, parent, src, bgcolor) {
 }
 
 export function formatUrl(url, feature) {
-  return Utils.greedyTemplate(url || '', feature ? feature.extendedProperties() : {})
+  if (Utils.hasVar(url)) {
+    return Utils.greedyTemplate(url || '', feature ? feature.extendedProperties() : {})
+  }
+  return url
 }
