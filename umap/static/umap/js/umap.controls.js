@@ -45,14 +45,12 @@ U.TileLayerControl = L.Control.IconLayers.extend({
     const lastRow = this._container.querySelector(
       '.leaflet-iconLayers-layersRow:last-child'
     )
-    const button = L.DomUtil.element({
-      tagName: 'button',
-      className:
-        'leaflet-iconLayers-layerCell leaflet-iconLayers-layerCell-plus button',
-      textContent: '+',
-      parent: lastRow,
-    })
-    L.DomEvent.on(button, 'click', () =>
+    const button = document.createElement('button')
+    button.className =
+      'leaflet-iconLayers-layerCell leaflet-iconLayers-layerCell-plus button'
+    button.textContent = '+'
+    lastRow.appendChild(button)
+    button.addEventListener('click', () =>
       this.map._controls.tilelayersChooser.openSwitcher()
     )
   },
@@ -130,7 +128,7 @@ U.Search = L.PhotonSearch.extend({
       this.hide()
       const { lat, lng } = pattern.exec(this.input.value).groups
       const latlng = L.latLng(lat, lng)
-      if (latlng.isValid()) {
+      if (L.Utils.LatLngIsValid(latlng)) {
         this.reverse.doReverse(latlng)
       } else {
         U.Alert.error(L._('Invalid latitude or longitude'))
@@ -242,7 +240,8 @@ L.Control.MiniMap.include({
 
 L.Control.Loading.include({
   onAdd: function (map) {
-    this._container = L.DomUtil.create('div', 'umap-loader', map._controlContainer)
+    this._container = document.createElement('div')
+    this._container.classList.add('umap-loader')
     map.on('baselayerchange', this._layerAdd, this)
     this._addMapListeners(map)
     this._map = map
