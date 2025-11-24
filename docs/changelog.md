@@ -1,5 +1,21 @@
 # Changelog
 
+## 3.4.1 - 2025-11-24
+
+This release contains a security patch and the upgrade is highly recommanded.
+
+Other than that, it contains a bit of cleaning Leaflet dependency in uMap core
+(mainly removing usage of L.DomUtil). It also bumps social-auth, so Bitbucket
+backend is EOL. Plus:
+
+* target asked OSM object when importing area/way from search by @yohanboniface in #3084
+* do not create default fields for remote data layers by @yohanboniface in #3083
+* add osm_type and osm_id properties for OSM data by @yohanboniface in #3085
+* add allowfullscreen parameter to iframe by @yohanboniface in #3098
+* make sure to fetch layer data before updating it by @yohanboniface in #3097
+* add "Terms of servive" link in footer by @yohanboniface in #3099
+* highlight drawing tools on click by @yohanboniface in #3100
+
 ## 3.4.0 - 2025-11-04
 
 This release is mainly about a refactor of fields and filters management.
