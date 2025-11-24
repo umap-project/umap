@@ -681,3 +681,12 @@ export const COLORS = [
   'Ivory',
   'White',
 ]
+
+export const LatLngIsValid = (latlng) => {
+  return (
+    Number.isFinite(latlng.lat) &&
+    Math.abs(latlng.lat) <= 90 &&
+    Number.isFinite(latlng.lng) &&
+    Math.abs(latlng.lng) <= 180
+  )
+}

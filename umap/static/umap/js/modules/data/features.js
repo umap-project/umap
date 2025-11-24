@@ -784,7 +784,7 @@ export class Point extends Feature {
     ]
     const builder = new MutatingForm(this, coordinatesOptions)
     builder.on('set', () => {
-      if (!this.ui._latlng.isValid()) {
+      if (!Utils.LatLngIsValid(this.ui._latlng)) {
         Alert.error(translate('Invalid latitude or longitude'))
         builder.restoreField('ui._latlng.lat')
         builder.restoreField('ui._latlng.lng')
