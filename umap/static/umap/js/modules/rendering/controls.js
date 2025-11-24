@@ -1,4 +1,4 @@
-import { Control } from '../../../vendors/leaflet/leaflet-src.esm.js'
+import { Control, LayerGroup } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import * as Utils from '../utils.js'
 import { translate } from '../i18n.js'
 
@@ -221,7 +221,7 @@ export const SearchControl = BaseButton.extend({
   },
 
   afterAdd(container, map) {
-    this.layer = L.layerGroup().addTo(map)
+    this.layer = new LayerGroup().addTo(map)
     this.photonOptions = {
       limit: 10,
       noResultLabel: translate('No results'),

@@ -1,5 +1,10 @@
 // FIXME: this module should not depend on Leaflet
-import { DomEvent, GeoJSON, stamp } from '../../../vendors/leaflet/leaflet-src.esm.js'
+import {
+  DomEvent,
+  GeoJSON,
+  stamp,
+  SVG,
+} from '../../../vendors/leaflet/leaflet-src.esm.js'
 import {
   uMapAlert as Alert,
   uMapAlertConflict as AlertConflict,
@@ -46,7 +51,7 @@ export class DataLayer {
     this.parentPane = this._leafletMap.getPane('overlayPane')
     this.pane = this._leafletMap.createPane(`datalayer${stamp(this)}`, this.parentPane)
     // FIXME: should be on layer
-    this.renderer = L.svg({ pane: this.pane })
+    this.renderer = new SVG({ pane: this.pane })
     this.defaultProperties = {
       displayOnLoad: true,
       inCaption: true,

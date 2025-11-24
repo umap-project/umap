@@ -313,7 +313,7 @@ const PathMixin = {
       this.enableEdit()
     } else {
       this._map._umap.tooltip.open({
-        content: L._('Please zoom in to edit the geometry'),
+        content: translate('Please zoom in to edit the geometry'),
       })
       this.disableEdit()
     }

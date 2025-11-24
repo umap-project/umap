@@ -1217,7 +1217,7 @@ Fields.ManageOwner = class extends Fields.Base {
     super.build()
     const options = {
       className: 'edit-owner',
-      on_select: L.bind(this.onSelect, this),
+      on_select: (choice) => this.onSelect(choice),
       placeholder: translate("Type new owner's username"),
     }
     this.autocomplete = new AjaxAutocomplete(this.container, options)
@@ -1248,8 +1248,8 @@ Fields.ManageEditors = class extends Fields.Base {
     super.build()
     const options = {
       className: 'edit-editors',
-      on_select: L.bind(this.onSelect, this),
-      on_unselect: L.bind(this.onUnselect, this),
+      on_select: (choice) => this.onSelect(choice),
+      on_unselect: (choice) => this.onUnselect(choice),
       placeholder: translate("Type editor's username"),
     }
     this.autocomplete = new AjaxAutocompleteMultiple(this.container, options)
