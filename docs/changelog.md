@@ -16,6 +16,8 @@ backend is EOL. Plus:
 * add "Terms of servive" link in footer by @yohanboniface in #3099
 * highlight drawing tools on click by @yohanboniface in #3100
 
+If you override `js.html` template, make sure to remove `umap.core.js` import line.
+
 ## 3.4.0 - 2025-11-04
 
 This release is mainly about a refactor of fields and filters management.
