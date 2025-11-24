@@ -237,7 +237,6 @@ const locale = {
     "No licence has been set": "Δεν έχει οριστεί άδεια χρήσης",
     "No results": "Δεν υπάρχουν αποτελέσματα",
     "no": "όχι",
-    "No.": "Όχι.",
     "None": "Κανένα",
     "Number of desired classes (default 5)": "Αριθμός επιθυμητών κατηγοριών (προεπιλογή 5)",
     "On the bottom": "Στο κάτω μέρος",
@@ -652,7 +651,8 @@ const locale = {
     "Comma separated list of values": "Comma separated list of values",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }
 L.registerLocale("el", locale)
 L.setLocale("el")

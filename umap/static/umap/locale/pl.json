@@ -237,7 +237,6 @@
     "No licence has been set": "Nie wybrano licencji",
     "No results": "Brak wyników",
     "no": "nie",
-    "No.": "Nie.",
     "None": "Brak",
     "Number of desired classes (default 5)": "Number of desired classes (default 5)",
     "On the bottom": "Na dole",
@@ -652,5 +651,6 @@
     "Comma separated list of values": "Lista wartości oddzielonych przecinkami",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }

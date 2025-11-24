@@ -237,7 +237,6 @@ const locale = {
     "No licence has been set": "مجوزی تنظیم نشده است",
     "No results": "بی‌نتیجه",
     "no": "نه",
-    "No.": "شمارهٔ",
     "None": "هیچکدام",
     "Number of desired classes (default 5)": "تعداد دسته‌های موردنیاز (پیشفرض 5)",
     "On the bottom": "پایین",
@@ -652,7 +651,8 @@ const locale = {
     "Comma separated list of values": "Comma separated list of values",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }
 L.registerLocale("fa_IR", locale)
 L.setLocale("fa_IR")

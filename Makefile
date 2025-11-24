@@ -87,6 +87,7 @@ testjs: node_modules
 	node_modules/mocha/bin/mocha.js umap/static/umap/unittests/
 tx_push:
 	tx push -s
+	@printf "\nTo translate, open https://app.transifex.com/openstreetmap/umap/translate/#fr/frontend?q=translated%3Ano"
 tx_pull:
 	tx pull
 changelog:

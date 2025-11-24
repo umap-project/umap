@@ -237,7 +237,6 @@ const locale = {
     "No licence has been set": "No se ha establecido ninguna licencia",
     "No results": "Sin resultados",
     "no": "no",
-    "No.": "Núm.",
     "None": "Ninguno",
     "Number of desired classes (default 5)": "Número de clases deseadas (5 por defecto)",
     "On the bottom": "En la parte inferior",
@@ -650,9 +649,10 @@ const locale = {
     "Optional intensity field to compute heatmap": "Campo de intensidad opcional para calcular el mapa de calor",
     "All layers": "Todas las capas",
     "Comma separated list of values": "Lista de valores separada por comas",
-    "Share": "Share",
-    "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Share": "Compartir",
+    "Customized link": "Enlace personalizado",
+    "Iframe": "Iframe",
+    "№": "№"
 }
 L.registerLocale("es", locale)
 L.setLocale("es")

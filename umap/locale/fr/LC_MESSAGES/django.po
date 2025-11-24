@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-14 15:28+0000\n"
+"POT-Creation-Date: 2025-11-24 14:49+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: yohanboniface <yohanboniface@free.fr>, 2013-2014,2018-2019,2023-2025\n"
 "Language-Team: French (http://app.transifex.com/openstreetmap/umap/language/fr/)\n"
@@ -58,7 +58,7 @@ msgstr "L’utilisation de “%(name)s” pour s’authentifier est dépréciée
 msgid "name"
 msgstr "nom"
 
-#: models.py:63 models.py:503
+#: models.py:63 models.py:507
 msgid "description"
 msgstr "description"
 
@@ -78,23 +78,23 @@ msgstr "Modèle d'URL au format des tuiles OSM"
 msgid "Order of the tilelayers in the edit box"
 msgstr "Ordre des calques de tuiles dans le panneau de modification"
 
-#: models.py:176 models.py:497
+#: models.py:176 models.py:501
 msgid "Only editable with secret edit link"
 msgstr "Modifiable seulement avec le lien de modification secret"
 
-#: models.py:177 models.py:498
+#: models.py:177 models.py:502
 msgid "Everyone can edit"
 msgstr "Tout le monde peut modifier"
 
-#: models.py:180 models.py:491
+#: models.py:180 models.py:495
 msgid "Everyone"
 msgstr "Tout le monde"
 
-#: models.py:181 models.py:190 models.py:492
+#: models.py:181 models.py:190 models.py:496
 msgid "Editors and team only"
 msgstr "Éditeurs et équipe seulement"
 
-#: models.py:182 models.py:493
+#: models.py:182 models.py:497
 msgid "Owner only"
 msgstr "Propriétaire uniquement"
 
@@ -114,7 +114,7 @@ msgstr "Quiconque a le lien"
 msgid "Blocked"
 msgstr "Bloquée"
 
-#: models.py:192 models.py:487
+#: models.py:192 models.py:491
 msgid "Deleted"
 msgstr "Supprimé"
 
@@ -154,15 +154,15 @@ msgstr "éditeurs"
 msgid "team"
 msgstr "équipe"
 
-#: models.py:230 models.py:519
+#: models.py:230 models.py:523
 msgid "edit status"
 msgstr "statut de modification"
 
-#: models.py:235 models.py:524
+#: models.py:235 models.py:528
 msgid "share status"
 msgstr "qui a accès"
 
-#: models.py:238 models.py:514
+#: models.py:238 models.py:518
 msgid "settings"
 msgstr "réglages"
 
@@ -178,15 +178,15 @@ msgstr "Cette carte est un modèle."
 msgid "Clone of"
 msgstr "Clone de"
 
-#: models.py:486 models.py:490 models.py:496
+#: models.py:490 models.py:494 models.py:500
 msgid "Inherit"
 msgstr "Par défaut"
 
-#: models.py:509
+#: models.py:513
 msgid "display on load"
 msgstr "afficher au chargement."
 
-#: models.py:510
+#: models.py:514
 msgid "Display this layer on load."
 msgstr "Afficher ce calque au chargement."
 
@@ -510,6 +510,10 @@ msgstr "Contact"
 #: templates/umap/content_footer.html:9 templates/umap/navigation.html:25
 msgid "Help"
 msgstr "Aide"
+
+#: templates/umap/content_footer.html:10
+msgid "Terms of Service"
+msgstr "Conditions d'utilisation"
 
 #: templates/umap/dashboard_menu.html:6
 #, python-format

@@ -237,7 +237,6 @@ const locale = {
     "No licence has been set": "Er is geen licentie ingesteld",
     "No results": "Geen resultaten",
     "no": "neen",
-    "No.": "Neen.",
     "None": "Geen",
     "Number of desired classes (default 5)": "Gewenst aantal klassen (standaard 5)",
     "On the bottom": "Aan de onderkant",
@@ -652,7 +651,8 @@ const locale = {
     "Comma separated list of values": "Comma separated list of values",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }
 L.registerLocale("nl", locale)
 L.setLocale("nl")

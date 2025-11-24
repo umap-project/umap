@@ -237,7 +237,6 @@ const locale = {
     "No licence has been set": "Ez da lizentziarik ezarri",
     "No results": "Emaitzarik ez",
     "no": "ez",
-    "No.": "Ez.",
     "None": "Bat ere ez",
     "Number of desired classes (default 5)": "Nahi diren klase kopurua (lehenetsia 5)",
     "On the bottom": "Behean",
@@ -652,7 +651,8 @@ const locale = {
     "Comma separated list of values": "Komaz bereizitako balioen zerrenda",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }
 L.registerLocale("eu", locale)
 L.setLocale("eu")

@@ -237,7 +237,6 @@ const locale = {
     "No licence has been set": "Ingen licens angivet",
     "No results": "Ingen resultater",
     "no": "nej",
-    "No.": "Nej.",
     "None": "Ingen",
     "Number of desired classes (default 5)": "Antal ønskede klasser (standard 5)",
     "On the bottom": "I bunden",
@@ -650,9 +649,10 @@ const locale = {
     "Optional intensity field to compute heatmap": "Valgfrit intensitetsfelt til beregning af heatmap",
     "All layers": "Alle lag",
     "Comma separated list of values": "Kommasepareret liste over værdier",
-    "Share": "Share",
-    "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Share": "Del",
+    "Customized link": "Tilpasset link",
+    "Iframe": "Iframe",
+    "№": "№"
 }
 L.registerLocale("da", locale)
 L.setLocale("da")

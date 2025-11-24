@@ -237,7 +237,6 @@ const locale = {
     "No licence has been set": "Tiada lesen ditetapkan",
     "No results": "Tiada hasil",
     "no": "tidak",
-    "No.": "No.",
     "None": "Tiada",
     "Number of desired classes (default 5)": "Jumlah kelas yang diingini (lalainya 5)",
     "On the bottom": "Di bawah",
@@ -652,7 +651,8 @@ const locale = {
     "Comma separated list of values": "Comma separated list of values",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }
 L.registerLocale("ms", locale)
 L.setLocale("ms")

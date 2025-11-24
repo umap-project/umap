@@ -237,7 +237,6 @@ const locale = {
     "No licence has been set": "Non foi definida ningunha licenza",
     "No results": "Sen resultados",
     "no": "non",
-    "No.": "Núm.",
     "None": "Ningún",
     "Number of desired classes (default 5)": "Número de clases desexadas (predeterminado 5)",
     "On the bottom": "Na parte de embaixo",
@@ -652,7 +651,8 @@ const locale = {
     "Comma separated list of values": "Lista de valores separados por comas",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }
 L.registerLocale("gl", locale)
 L.setLocale("gl")

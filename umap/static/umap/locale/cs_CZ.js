@@ -237,7 +237,6 @@ const locale = {
     "No licence has been set": "Nebyla nastavena licence",
     "No results": "Žádné výsledky",
     "no": "ne",
-    "No.": "Ne.",
     "None": "Žádný",
     "Number of desired classes (default 5)": "Počet požadovaných tříd (výchozí 5)",
     "On the bottom": "Zespod",
@@ -652,7 +651,8 @@ const locale = {
     "Comma separated list of values": "Comma separated list of values",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }
 L.registerLocale("cs_CZ", locale)
 L.setLocale("cs_CZ")

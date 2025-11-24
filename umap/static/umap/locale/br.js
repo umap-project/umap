@@ -237,7 +237,6 @@ const locale = {
     "No licence has been set": "Aotre-implijout ebet bet termenet",
     "No results": "Disoc'h ebet",
     "no": "ket",
-    "No.": "Ket.",
     "None": "Hini ebet",
     "Number of desired classes (default 5)": "Niver a renkadoù hoc'h eus c'hoant (5 dre ziouer)",
     "On the bottom": "D'an traoñ",
@@ -652,7 +651,8 @@ const locale = {
     "Comma separated list of values": "Comma separated list of values",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }
 L.registerLocale("br", locale)
 L.setLocale("br")

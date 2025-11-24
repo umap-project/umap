@@ -237,7 +237,6 @@
     "No licence has been set": "Licenc még nincs megadva",
     "No results": "Nincs eredmény",
     "no": "nincs",
-    "No.": "sz.",
     "None": "Semmi",
     "Number of desired classes (default 5)": "Kívánt kategóriák száma (alapértelmezés: 5)",
     "On the bottom": "Lent",
@@ -652,5 +651,6 @@
     "Comma separated list of values": "Comma separated list of values",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }

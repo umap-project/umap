@@ -237,7 +237,6 @@
     "No licence has been set": "尚未設定授權條例",
     "No results": "沒有結果",
     "no": "否",
-    "No.": "無。",
     "None": "以上皆非",
     "Number of desired classes (default 5)": "偏好的類別數量 (預設為 5)",
     "On the bottom": "在底部",
@@ -648,9 +647,10 @@
     "Yes / No": "是 / 否",
     "Select field to compute intensity": "選擇欄位運算強度",
     "Optional intensity field to compute heatmap": "選擇性強度欄位來計算熱力圖",
-    "All layers": "All layers",
-    "Comma separated list of values": "Comma separated list of values",
-    "Share": "Share",
-    "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "All layers": "所有圖層",
+    "Comma separated list of values": "逗號分隔清單的值",
+    "Share": "分享",
+    "Customized link": "自訂連結",
+    "Iframe": "頁面框",
+    "№": "№"
 }

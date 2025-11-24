@@ -237,7 +237,6 @@ const locale = {
     "No licence has been set": "Ekkert notkunarleyfi hefur verið sett",
     "No results": "Engar niðurstöður",
     "no": "nei",
-    "No.": "Nr.",
     "None": "Ekkert",
     "Number of desired classes (default 5)": "Number of desired classes (default 5)",
     "On the bottom": "Neðst",
@@ -652,7 +651,8 @@ const locale = {
     "Comma separated list of values": "Comma separated list of values",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }
 L.registerLocale("is", locale)
 L.setLocale("is")
