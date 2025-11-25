@@ -128,7 +128,7 @@ U.Search = L.PhotonSearch.extend({
       this.hide()
       const { lat, lng } = pattern.exec(this.input.value).groups
       const latlng = L.latLng(lat, lng)
-      if (L.Utils.LatLngIsValid(latlng)) {
+      if (U.Utils.LatLngIsValid(latlng)) {
         this.reverse.doReverse(latlng)
       } else {
         U.Alert.error(L._('Invalid latitude or longitude'))
