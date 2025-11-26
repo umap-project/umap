@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.4.2 - 2025-11-26
+
+* fix search by lat/lng
+
 ## 3.4.1 - 2025-11-24
 
 This release contains a security patch and the upgrade is highly recommanded.
