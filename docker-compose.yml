@@ -46,6 +46,7 @@ services:
     ports:
       - "8000:80"
     volumes:
+      - ./docker/umap-snippet.conf:/etc/nginx/snippets/umap.conf:ro
       - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
       - static:/static:ro
       - data:/data:ro
