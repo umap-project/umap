@@ -14,11 +14,19 @@ path = os.environ.get("UMAP_SETTINGS")
 if not path:
     # Retrocompat
     path = os.path.join("/etc", "umap", "umap.conf")
+    print(f"No UMAP_SETTINGS defined in env var. Trying in {path}")
     if not os.path.exists(path):
         # Retrocompat
         path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "local.py")
+        print(f"File /etc/umap/umap.conf not found, now trying {path}")
         if not os.path.exists(path):
-            print(colorize("No valid UMAP_SETTINGS found", fg="yellow"))
+            print(
+                colorize(
+                    "No regular settings found. "
+                    "You can still use env vars for configuring uMap.",
+                    fg="yellow",
+                )
+            )
             path = None
 
 if path:
