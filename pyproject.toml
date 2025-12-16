@@ -28,7 +28,8 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
-  "Django==5.2.9",
+  # Yunohost needs to be pinned at 5.1.X to keep psql==13 compat.
+  "Django>=5.1,<6.0",
   "django-agnocomplete==2.2.0",
   "django-environ==0.12.0",
   "django-probes==1.7.0",
@@ -43,6 +44,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
+  "Django==5.2.9",
   "hatch==1.15.1",
   "ruff==0.14.6",
   "djlint==1.36.4",
@@ -64,13 +66,19 @@ test = [
   "pytest-xdist>=3.5.0,<4",
   "moto[s3]==5.1.14"
 ]
-docker = [
+deploy = [
+  "Django==5.2.9",
+]
+yunohost = [
   "uvicorn==0.38.0",
+  "Django==5.1.15",
+  "django_yunohost_integration==0.10.9",
 ]
 s3 = [
   "django-storages[s3]==1.14.6",
 ]
 sync = [
+  "uvicorn==0.38.0",
   "pydantic==2.12.3",
   "redis==7.1.0",
   "websockets==15.0.1",
