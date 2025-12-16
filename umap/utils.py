@@ -35,8 +35,12 @@ def _urls_for_js():
         modules.append("umap.sync.app")
     for module in modules:
         names = _get_url_names(module)
+        prefix = settings.FORCE_SCRIPT_NAME or ""
         urls.update(
-            dict(zip(names, [get_uri_template(url, module=module) for url in names]))
+            zip(
+                names,
+                [get_uri_template(url, prefix=prefix, module=module) for url in names],
+            )
         )
     urls.update(getattr(settings, "UMAP_EXTRA_URLS", {}))
     return urls
