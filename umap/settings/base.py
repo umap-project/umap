@@ -120,7 +120,7 @@ LANGUAGES = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = env("SECRET_KEY", default=None)
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -136,7 +136,7 @@ INSTALLED_APPS = (
     # Django does not find the app config in the default place, so the app is not loaded
     # so the "autodiscover" is not run.
     "agnocomplete.app.AgnocompleteConfig",
-)
+]
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
@@ -229,7 +229,7 @@ TEMPLATES = [
 # Middleware
 # =============================================================================
 
-MIDDLEWARE = (
+MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -238,7 +238,7 @@ MIDDLEWARE = (
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "umap.middleware.deprecated_auth_backend",
-)
+]
 
 
 # =============================================================================
