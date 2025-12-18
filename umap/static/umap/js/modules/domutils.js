@@ -82,6 +82,10 @@ export const hexToRGB = (hex) => {
     .match(/.{2}/g)
     .map((x) => Number.parseInt(x, 16))
 }
+export const colorToRGB = (color) => {
+  if (!color.startsWith('#')) color = colorNameToHex(color)
+  return hexToRGB(color)
+}
 
 const CACHE_CONTRAST = {}
 export const contrastedColor = (el, bgcolor) => {

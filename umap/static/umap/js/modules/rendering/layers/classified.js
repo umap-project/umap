@@ -80,7 +80,7 @@ const ClassifiedMixin = {
     const ul = Utils.loadTemplate('<ul></ul>')
     const items = this.getLegendItems()
     for (const [color, label] of items) {
-      const rgbColor = DOMUtils.hexToRGB(color)
+      const rgbColor = DOMUtils.colorToRGB(color)
       const opacity = this.datalayer.getOption('fillOpacity')
       const bgColor = `rgba(${rgbColor.join(',')}, ${opacity})`
       const li = Utils.loadTemplate(`
