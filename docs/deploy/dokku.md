@@ -1,10 +1,10 @@
 # Deploying uMap with Dokku
 
-You must have a Dokku host up. This can be either self hosted, or from a provider.
+You must have a Dokku host up and running. This can be either self hosted, or from a provider.
 
 To set up Dokku on your own server, see https://dokku.com/docs/getting-started/installation/
 
-Dokku has several deployement method, in this guide we'll use the Docker based one, using our maintained Dockerfile.
+Dokku has several deployement method, in this guide we'll use the Docker based one, using our [maintained Dockerfile](docker.md).
 
 ## Installation
 
@@ -19,7 +19,7 @@ sudo dokku plugin:install https://github.com/dokku/dokku-redis.git --name redis
 
 Note: if you do not use the real time collaboration feature, you can skip the redis part.
 
-Create the `umap` app (or name it as you prefer), and posgis and redis services :
+Create the `umap` app (or name it as you prefer), and posgis and redis services:
 
 ```bash
 dokku apps:create umap
@@ -49,7 +49,7 @@ dokku letsencrypt:enable umap
 dokku letsencrypt:cron-job --add
 ```
 
-Note: we are using Letsencrypt here, see [doc](https://dokku.com/docs/configuration/ssl/)
+Note: we are using Letsencrypt here, see [Dokku's doc](https://dokku.com/docs/configuration/ssl/)
 for a custom certificate.
 
 Configure via env vars:
