@@ -126,7 +126,11 @@ export class MapPermissions {
       ])
       collaboratorsFields.push([
         'properties.owner',
-        { handler: 'ManageOwner', label: translate("Map's owner") },
+        {
+          handler: 'ManageOwner',
+          label: translate("Map's owner"),
+          url: this._umap.properties.urls.agnocomplete,
+        },
       ])
       if (this._umap.properties.user?.teams?.length) {
         collaboratorsFields.push([
@@ -141,7 +145,11 @@ export class MapPermissions {
     }
     collaboratorsFields.push([
       'properties.editors',
-      { handler: 'ManageEditors', label: translate("Map's editors") },
+      {
+        handler: 'ManageEditors',
+        label: translate("Map's editors"),
+        url: this._umap.properties.urls.agnocomplete,
+      },
     ])
 
     const builder = new MutatingForm(this, topFields)

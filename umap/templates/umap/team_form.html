@@ -48,7 +48,8 @@
         className: 'edit-team-members',
         on_select: onSelect,
         on_unselect: onUnselect,
-        placeholder: "{% trans "Add user" %}"
+        placeholder: "{% trans "Add user" %}",
+        url: "{% url 'agnocomplete:agnocomplete' 'AutocompleteUser' %}?q={q}"
       }
       const autocomplete = new U.AjaxAutocompleteMultiple(form, options)
       for (const option of select.options) {

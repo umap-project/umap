@@ -1219,6 +1219,7 @@ Fields.ManageOwner = class extends Fields.Base {
       className: 'edit-owner',
       on_select: (choice) => this.onSelect(choice),
       placeholder: translate("Type new owner's username"),
+      url: this.properties.url,
     }
     this.autocomplete = new AjaxAutocomplete(this.container, options)
     const owner = this.toHTML()
@@ -1251,6 +1252,7 @@ Fields.ManageEditors = class extends Fields.Base {
       on_select: (choice) => this.onSelect(choice),
       on_unselect: (choice) => this.onUnselect(choice),
       placeholder: translate("Type editor's username"),
+      url: this.properties.url,
     }
     this.autocomplete = new AjaxAutocompleteMultiple(this.container, options)
     this._values = this.toHTML() || []

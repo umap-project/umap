@@ -215,12 +215,8 @@ export class BaseAutocomplete {
 export class BaseAjax extends BaseAutocomplete {
   constructor(el, options) {
     super(el, options)
-    this.setUrl()
+    this.url = this.options.url
     this.initRequest()
-  }
-
-  setUrl() {
-    this.url = this.options?.url
   }
 
   initRequest() {
@@ -260,10 +256,6 @@ export class BaseAjax extends BaseAutocomplete {
 }
 
 class BaseServerAjax extends BaseAjax {
-  setUrl() {
-    this.url = '/agnocomplete/AutocompleteUser/?q={q}'
-  }
-
   initRequest() {
     this.server = new ServerRequest()
   }
