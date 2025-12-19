@@ -2,7 +2,18 @@
 
 uMap is a python package, running [Django](https://docs.djangoproject.com/en/5.2/howto/deployment/),
 so anyone experimented with this stack will find it familiar, but there are some specific details
-to know about.
+and requirements to know about.
+
+!!! info "Note"
+
+    We officially support these tools/platforms:
+
+    1. [Docker](https://www.docker.com/): “A safer container ecosystem, for everyone”, see [our dedicated documentation](docker.md).
+    2. [Dokku](https://dokku.com/): “An open source PAAS alternative to Heroku”, see [our dedicated documentation](dokku.md).
+    3. [YunoHost](https://yunohost.org/): “Garden your own piece of the Internet!”, see [our dedicated documentation](yunohost.md).
+
+    Alternatively, you should be able to install it by hand following this documentation.
+
 
 ## Data
 One important design point of uMap is that while metadata are stored in a PostgreSQL database, the
@@ -19,15 +30,15 @@ much more efficiency than python.
 In DEBUG mode, uMap will serve the geojson itself, but this is not recommended in production,
 unless you have a very small audience.
 
-Data can also be stored in a [S3 like storage](../config/storage/#using-s3).
+Data can also be stored in a [S3 like storage](../config/storage.md#using-s3).
 
 ## Assets (JS, CSS…)
 As any web app, uMap also needs static files to be served. In DEBUG mode, Django will do this
 kindly, but not in production. See [Nginx configuration](nginx.md) for this.
 
-Assets can also be stored in a [S3 like storage](../config/storage/#using-s3).
+Assets can also be stored in a [S3 like storage](../config/storage.md#using-s3).
 
-## python app (metadata, permissions…)
+## Python app (metadata, permissions…)
 
 uMap needs a python server, which can either be of [WSGI](wsgi.md) or [ASGI](asgi.md) (this later
 is needed in order to use the collaborative live editing).

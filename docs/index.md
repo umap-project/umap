@@ -4,7 +4,7 @@
 
     This documentation is intended for developers or system administrators.
     
-    If you are looking for user documentation, have a look at [the OSM wiki page](http://wiki.openstreetmap.org/wiki/UMap#Tutorials).
+    If you are looking for user documentation, have a look at [this dedicated documentation](https://discover.umap-project.org/).
 
 uMap lets you create maps with OpenStreetMap layers in a minute, and embed them in your site.
 

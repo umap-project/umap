@@ -1,5 +1,11 @@
 # Installation
 
+!!! info "Goal"
+
+    This is the documentation to install uMap on your computer.
+    Check out the [deployment documentation](./deploy/overview.md) if you want to install uMap on your server.
+    A Docker image is also available which [can be used as a local installation](./deploy/docker.md#developing-with-docker).
+
 ## System dependencies
 
 uMap is built with the [Python](https://python.org) language, and the [Django](https://djangoproject.com) framework. It needs a [PostgreSQL](https://www.postgresql.org/) database, with the [Postgis](https://postgis.net/) extension enabled.
