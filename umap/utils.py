@@ -7,7 +7,7 @@ from pathlib import Path
 from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.core.serializers.json import DjangoJSONEncoder
-from django.urls import URLPattern, URLResolver, get_resolver
+from django.urls import URLPattern, URLResolver, get_resolver, reverse
 
 
 def _get_url_names(module):
@@ -29,14 +29,20 @@ def _urls_for_js():
     """
     Return templated URLs prepared for javascript.
     """
-    urls = {}
+    urls = {
+        "agnocomplete": f"{reverse('agnocomplete:agnocomplete', kwargs={'klass': 'AutocompleteUser'})}?q={{q}}"
+    }
     modules = ["umap.urls"]
     if settings.REALTIME_ENABLED:
         modules.append("umap.sync.app")
     for module in modules:
         names = _get_url_names(module)
+        prefix = settings.FORCE_SCRIPT_NAME or ""
         urls.update(
-            dict(zip(names, [get_uri_template(url, module=module) for url in names]))
+            zip(
+                names,
+                [get_uri_template(url, prefix=prefix, module=module) for url in names],
+            )
         )
     urls.update(getattr(settings, "UMAP_EXTRA_URLS", {}))
     return urls

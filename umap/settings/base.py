@@ -120,7 +120,7 @@ LANGUAGES = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = env("SECRET_KEY", default=None)
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -136,7 +136,7 @@ INSTALLED_APPS = (
     # Django does not find the app config in the default place, so the app is not loaded
     # so the "autodiscover" is not run.
     "agnocomplete.app.AgnocompleteConfig",
-)
+]
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
@@ -229,7 +229,7 @@ TEMPLATES = [
 # Middleware
 # =============================================================================
 
-MIDDLEWARE = (
+MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -238,7 +238,7 @@ MIDDLEWARE = (
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "umap.middleware.deprecated_auth_backend",
-)
+]
 
 
 # =============================================================================
@@ -338,8 +338,8 @@ UMAP_READONLY = env("UMAP_READONLY", default=False)
 UMAP_GZIP = True
 LOCALE_PATHS = [os.path.join(PROJECT_DIR, "locale")]
 
-LEAFLET_LONGITUDE = env.int("LEAFLET_LONGITUDE", default=2)
-LEAFLET_LATITUDE = env.int("LEAFLET_LATITUDE", default=51)
+LEAFLET_LONGITUDE = env.float("LEAFLET_LONGITUDE", default=2)
+LEAFLET_LATITUDE = env.float("LEAFLET_LATITUDE", default=51)
 LEAFLET_ZOOM = env.int("LEAFLET_ZOOM", default=6)
 UMAP_PICTOGRAMS_COLLECTIONS = {}
 

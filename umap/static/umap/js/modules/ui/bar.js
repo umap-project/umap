@@ -9,7 +9,7 @@ import TemplateImporter from '../templates.js'
 const TOP_BAR_TEMPLATE = `
 <div class="umap-main-edit-toolbox with-transition dark">
     <div class="umap-left-edit-toolbox" data-ref="left">
-        <div class="logo"><a class="" href="/" title="${translate('Go to the homepage')}">uMap</a></div>
+        <div class="logo"><a class="" href="#" title="${translate('Go to the homepage')}" data-ref="home">uMap</a></div>
         <button class="map-name flat truncate" type="button" data-ref="name"></button>
         <button class="flat truncate" type="button" data-ref="share">
           <i class="icon icon-16 icon-draft show-on-draft"></i><span class="share-status"></span>
@@ -59,6 +59,7 @@ export class TopBar extends WithTemplate {
 
   setup() {
     this.parent.appendChild(this.element)
+    this.elements.home.href = this._umap.urls.get("home")
     this.elements.name.addEventListener('mouseover', () => {
       this._umap.tooltip.open({
         content: translate('Edit the title of the map'),

@@ -9,8 +9,9 @@ export const HomeControl = Control.extend({
 
   onAdd: (map) => {
     const path = map._umap.getStaticPathFor('home.svg')
+    const homeURL = map._umap.urls.get("home")
     const container = Utils.loadTemplate(
-      `<a href="/" class="home-button" title="${translate('Back to home')}"><img src="${path}" alt="${translate('Home logo')}" width="38px" height="38px" /></a>`
+      `<a href="${homeURL}" class="home-button" title="${translate('Back to home')}"><img src="${path}" alt="${translate('Home logo')}" width="38px" height="38px" /></a>`
     )
     return container
   },
@@ -282,19 +283,17 @@ export const AttributionControl = Control.Attribution.extend({
         ${originalCredits}
         <span data-ref="short"> — ${Utils.toHTML(shortCredit)}</span>
         <a  href="#" data-ref="caption"> — ${translate('Open caption')}</a>
-        <a href="/" data-ref="home"> — ${translate('Home')}</a>
         <a href="https://umap-project.org/" data-ref="site"> — ${translate('Powered by uMap')}</a>
         <a href="#" class="attribution-toggle"></a>
       </div>
     `
-    const [container, { short, caption, home, site }] =
+    const [container, { short, caption, site }] =
       Utils.loadTemplateWithRefs(template)
     caption.addEventListener('click', () => this._map._umap.openCaption())
     this._container.appendChild(container)
     short.hidden = !shortCredit
     caption.hidden = !captionMenus
     site.hidden = !captionMenus
-    home.hidden = this._map._umap.isEmbed || !captionMenus
   },
 })
 

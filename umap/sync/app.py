@@ -184,4 +184,7 @@ class Peer:
             logging.debug(err)
 
 
-urlpatterns = [path("ws/sync/<str:map_id>", name="ws_sync", view=sync)]
+script_name = ""
+if settings.FORCE_SCRIPT_NAME:
+    script_name = f"{settings.FORCE_SCRIPT_NAME.strip('/')}/"
+urlpatterns = [path(f"{script_name}ws/sync/<str:map_id>", name="ws_sync", view=sync)]
