@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.5.0 - 2025-12-22
+
+This release is mainly making uMap installable in YunoHost as an official app.
+
+* adaptations for YunoHost installation in #3122
+* add "how to" deploy with Dokku in documentation in #3115
+* improve deployment documentation by @davidbgk in #3125
+* do not fail when classified colors are named colors by @yohanboniface in #3124
+
 ## 3.4.2 - 2025-11-26
 
 * fix search by lat/lng
