@@ -21,9 +21,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-14 15:28+0000\n"
+"POT-Creation-Date: 2025-11-24 14:49+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: s r, 2025\n"
+"Last-Translator: Metzor Metzingen, 2025\n"
 "Language-Team: German (http://app.transifex.com/openstreetmap/umap/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -55,7 +55,7 @@ msgstr "Anmelden mittels “%(name)s” ist veraltet und wird bald nicht mehr m�
 msgid "name"
 msgstr "Name"
 
-#: models.py:63 models.py:503
+#: models.py:63 models.py:507
 msgid "description"
 msgstr "Beschreibung"
 
@@ -75,23 +75,23 @@ msgstr "Das URL-Template nutzt das OSM Tile Format"
 msgid "Order of the tilelayers in the edit box"
 msgstr "Reihenfolge der Karten-Ebenen in der Bearbeiten-Box"
 
-#: models.py:176 models.py:497
+#: models.py:176 models.py:501
 msgid "Only editable with secret edit link"
 msgstr "Nur mit geheimem Bearbeitungslink zu bearbeiten"
 
-#: models.py:177 models.py:498
+#: models.py:177 models.py:502
 msgid "Everyone can edit"
 msgstr "Jeder kann bearbeiten"
 
-#: models.py:180 models.py:491
+#: models.py:180 models.py:495
 msgid "Everyone"
 msgstr "Jeder"
 
-#: models.py:181 models.py:190 models.py:492
+#: models.py:181 models.py:190 models.py:496
 msgid "Editors and team only"
 msgstr "Nur Bearbeiter und Team"
 
-#: models.py:182 models.py:493
+#: models.py:182 models.py:497
 msgid "Owner only"
 msgstr "Nur Ersteller"
 
@@ -111,7 +111,7 @@ msgstr "Jeder mit Link"
 msgid "Blocked"
 msgstr "blockiert"
 
-#: models.py:192 models.py:487
+#: models.py:192 models.py:491
 msgid "Deleted"
 msgstr "Gelöscht"
 
@@ -151,15 +151,15 @@ msgstr "Bearbeiter"
 msgid "team"
 msgstr "Team"
 
-#: models.py:230 models.py:519
+#: models.py:230 models.py:523
 msgid "edit status"
 msgstr "Bearbeitungsstatus"
 
-#: models.py:235 models.py:524
+#: models.py:235 models.py:528
 msgid "share status"
 msgstr "Teilen-Status"
 
-#: models.py:238 models.py:514
+#: models.py:238 models.py:518
 msgid "settings"
 msgstr "Einstellungen"
 
@@ -175,15 +175,15 @@ msgstr "Diese Karte ist eine Vorlage."
 msgid "Clone of"
 msgstr "Duplikat von"
 
-#: models.py:486 models.py:490 models.py:496
+#: models.py:490 models.py:494 models.py:500
 msgid "Inherit"
 msgstr "erben"
 
-#: models.py:509
+#: models.py:513
 msgid "display on load"
 msgstr "Beim Seitenaufruf einblenden"
 
-#: models.py:510
+#: models.py:514
 msgid "Display this layer on load."
 msgstr "Diese Ebene beim Seitenaufruf einblenden."
 
@@ -439,7 +439,7 @@ msgstr ""
 msgid ""
 "Yes, I want to continue editing anonymously, I will save the secret edit "
 "link to be able to edit this map later or on another device"
-msgstr ""
+msgstr "Ja, ich möchte weiter anonym editieren und ich werde die geheime Verknüpfung speichern, um über diese die Karte später, oder von einem anderen Gerät, weiter bearbeiten zu können"
 
 #: templates/umap/components/alerts/alert.html:39
 msgid "Here is your secret link to edit the map, please keep it safe:"
@@ -507,6 +507,10 @@ msgstr "Kontakt"
 #: templates/umap/content_footer.html:9 templates/umap/navigation.html:25
 msgid "Help"
 msgstr "Hilfe"
+
+#: templates/umap/content_footer.html:10
+msgid "Terms of Service"
+msgstr "Nutzungsbestimmungen"
 
 #: templates/umap/dashboard_menu.html:6
 #, python-format

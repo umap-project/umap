@@ -10,6 +10,7 @@
 # Krzysztof Chorzempa, 2023-2024
 # Maciej Kowalik <m.kowalik.79@gmail.com>, 2016
 # maro21 OSM, 2020-2021
+# Piotr Deres, 2025
 # Piotr Strebski <strebski@gmail.com>, 2020
 # Piotr Strebski <strebski@gmail.com>, 2020
 # Teiron, 2016
@@ -18,9 +19,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-17 06:00+0000\n"
+"POT-Creation-Date: 2025-11-24 14:49+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Tomasz Nycz <tomasz.merkato@gmail.com>, 2018\n"
+"Last-Translator: Piotr Deres, 2025\n"
 "Language-Team: Polish (http://app.transifex.com/openstreetmap/umap/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,7 +31,7 @@ msgstr ""
 
 #: admin.py:16
 msgid "CSV Export"
-msgstr ""
+msgstr "Eksport CSV"
 
 #: decorators.py:60
 msgid "This map is not publicly available"
@@ -46,7 +47,7 @@ msgid ""
 "Using “%(name)s” to authenticate is deprecated and will be removed soon. "
 "Please configure another provider below before losing access to your account"
 " and maps. Then, please logout and login again with the new provider."
-msgstr ""
+msgstr "Uwierzytelnianie przy pomocy „%(name)s” jest przestarzałe i wkrótce zostanie usunięte. Skonfiguruj innego dostawcę, zanim utracisz dostęp do konta i map. Następnie wyloguj się i zaloguj ponownie, używając nowego dostawcy."
 
 #: models.py:61 models.py:80
 msgid "name"
@@ -273,7 +274,7 @@ msgid ""
 "<a href=\"https://discover.umap-project.org/support/faq/#map-statuses\" "
 "target=\"_blank\">Find out here the documentation</a> on how to manage map’s"
 " permissions."
-msgstr ""
+msgstr "<a href=\"https://discover.umap-project.org/support/faq/#map-statuses\" target=\"_blank\">Tutaj znajdziesz dokumentację</a>, jak zarządzać uprawnieniami mapy."
 
 #: templates/403.html:10 templates/404.html:8
 msgid "← Go to the homepage"
@@ -323,7 +324,7 @@ msgstr "Dobrym nawykiem jest połączenie Twojego konta z więcej niż jednym do
 #: templates/auth/user_stars.html:6
 #, python-format
 msgid "%(current_user)s’s starred maps"
-msgstr ""
+msgstr "Mapy oznaczone gwiazdką użytkownika %(current_user)s"
 
 #: templates/auth/user_stars.html:12
 #, python-format
@@ -347,11 +348,11 @@ msgstr "Zaloguj się"
 
 #: templates/registration/login.html:22
 msgid "To save and easily find your maps, identify yourself."
-msgstr ""
+msgstr "Aby zapisać i łatwo odnaleźć swoje mapy, zidentyfikuj się."
 
 #: templates/registration/login.html:25
 msgid "Please log in with your account:"
-msgstr ""
+msgstr "Zaloguj się przy pomocy swojego konta:"
 
 #: templates/registration/login.html:42
 msgid "Username"
@@ -430,17 +431,17 @@ msgid ""
 "Oops, I didn't mean it, I want to <a href=\"%(login_url)s\" "
 "class=\"login\">create an account</a> or <a href=\"%(login_url)s\" "
 "class=\"login\">log in</a> (no worry, we'll attach the map to your account)."
-msgstr ""
+msgstr " Ups, nie to miałem na myśli. Chcę <a href=\"%(login_url)s\" class=\"login\">utworzyć konto</a> lub <a href=\"%(login_url)s\" class=\"login\">zalogować się</a> (nie martw się, dodamy mapę do Twojego konta)."
 
 #: templates/umap/components/alerts/alert.html:35
 msgid ""
 "Yes, I want to continue editing anonymously, I will save the secret edit "
 "link to be able to edit this map later or on another device"
-msgstr ""
+msgstr "Tak, chcę kontynuować edycję anonimowo. Zachowam tajny link do edycji, aby móc edytować tę mapę później lub na innym urządzeniu."
 
 #: templates/umap/components/alerts/alert.html:39
 msgid "Here is your secret link to edit the map, please keep it safe:"
-msgstr ""
+msgstr "To jest tajny link, który umożliwia edycję mapy. Zachowaj go w bezpiecznym miejscu:"
 
 #: templates/umap/components/alerts/alert.html:43
 msgid "Copy link"
@@ -505,6 +506,10 @@ msgstr "Kontakt"
 msgid "Help"
 msgstr "Pomoc"
 
+#: templates/umap/content_footer.html:10
+msgid "Terms of Service"
+msgstr "Regulamin"
+
 #: templates/umap/dashboard_menu.html:6
 #, python-format
 msgid "My Maps (%(count)s)"
@@ -529,7 +534,7 @@ msgstr "Mój profil"
 
 #: templates/umap/dashboard_menu.html:20
 msgid "My teams"
-msgstr "Mój zespół"
+msgstr "Moje zespoły"
 
 #: templates/umap/home.html:14
 msgid "Map of the uMaps"
@@ -709,7 +714,7 @@ msgstr "Twoje hasło zostało zmienione."
 
 #: templates/umap/search.html:6
 msgid "Explore maps"
-msgstr ""
+msgstr "Przeglądaj mapy"
 
 #: templates/umap/search.html:19
 #, python-format
@@ -781,7 +786,7 @@ msgstr "Przeszukaj moje mapy"
 
 #: templates/umap/user_dashboard.html:11
 msgid "Map’s name"
-msgstr ""
+msgstr "Nazwa mapy"
 
 #: templates/umap/user_dashboard.html:12
 #, python-format
@@ -794,49 +799,49 @@ msgstr "Nie masz jeszcze żadnej mapy."
 
 #: templates/umap/user_teams.html:6
 msgid "My Teams"
-msgstr ""
+msgstr "Moje zespoły"
 
 #: templates/umap/user_teams.html:21
 msgid "Users"
-msgstr ""
+msgstr "Użytkownicy"
 
 #: templates/umap/user_teams.html:52
 msgid "New team"
-msgstr ""
+msgstr "Nowy zespół"
 
 #: templates/umap/user_templates.html:10
 msgid "Search my templates"
-msgstr ""
+msgstr "Szukaj moich szablonów"
 
 #: templates/umap/user_templates.html:11
 msgid "Template’s name"
-msgstr ""
+msgstr "Nazwa szablonu"
 
 #: templates/umap/user_templates.html:12
 #, python-format
 msgid "Download %(count)s templates"
-msgstr ""
+msgstr "Pobierz %(count)s szablon"
 
 #: templates/umap/user_templates.html:15
 msgid "You have no template yet."
-msgstr ""
+msgstr "Nie masz jeszcze szablonów."
 
 #: templates/umap/user_templates.html:16
 msgid "Create a template"
-msgstr ""
+msgstr "Utwórz szablon"
 
 #: templates/umap/user_templates.html:17
 msgid "No template found."
-msgstr ""
+msgstr "Nie znaleziono szablonu."
 
 #: views.py:235
 msgid "Cannot delete a team with more than one member"
-msgstr ""
+msgstr "Nie można usunąć zespołu z więcej niż jednym członkiem"
 
 #: views.py:239
 #, python-format
 msgid "Team “%(name)s” has been deleted"
-msgstr ""
+msgstr "Zespół “%(name)s” został usunięty"
 
 #: views.py:464
 msgid "View the map"
@@ -844,7 +849,7 @@ msgstr "Zobacz mapę"
 
 #: views.py:872
 msgid "See full screen"
-msgstr ""
+msgstr "Zobacz pełny ekran"
 
 #: views.py:1015
 msgid "Map editors updated with success!"
@@ -899,4 +904,4 @@ msgstr "Pomyślnie zaktualizowano uprawnienia!"
 
 #: views.py:1405
 msgid "Generic"
-msgstr ""
+msgstr "Ogólny"

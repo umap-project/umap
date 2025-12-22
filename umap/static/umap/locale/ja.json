@@ -104,7 +104,6 @@
     "Display measure": "Display measure",
     "display name": "表示名",
     "Display on load": "読み込み時に表示",
-    "Display the control to open OpenStreetMap editor": "OpenStreetMapエディタを起動するパネルを表示",
     "Display the embed control": "サイトへのマップ埋め込みパネルを表示",
     "Display the fullscreen control": "フルスクリーンパネルを表示",
     "Display the locate control": "現在地パネルを表示",
@@ -163,7 +162,6 @@
     "Help": "ヘルプ",
     "hidden": "隠す",
     "Hide controls": "操作パネルを非表示",
-    "Home": "ホーム",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "各ズームレベルでのポリゴン簡略化 (more = パフォーマンスと滑らかさ重視, less = 正確さ重視)",
     "icon opacity": "icon opacity",
     "Icon shape": "アイコン形状",
@@ -237,7 +235,6 @@
     "No licence has been set": "ライセンス指定がありません",
     "No results": "検索結果なし",
     "no": "いいえ",
-    "No.": "No.",
     "None": "なし",
     "Number of desired classes (default 5)": "Number of desired classes (default 5)",
     "On the bottom": "下寄せ",
@@ -250,7 +247,6 @@
     "Open current feature on load": "Open current feature on load",
     "Open link in…": "リンクの開き方",
     "Open share & download panel": "Open share & download panel",
-    "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "現在表示中の領域をエディタで編集し、より正確なデータをOpenStreetMapへ書き込む",
     "OpenStreetMap": "OpenStreetMap",
     "Optional. Same as color if not set.": "オプション。設定がない場合、色指定と同様",
     "Optional.": "Optional.",
@@ -652,5 +648,6 @@
     "Comma separated list of values": "Comma separated list of values",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }

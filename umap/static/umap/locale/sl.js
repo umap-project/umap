@@ -104,7 +104,6 @@ const locale = {
     "Display measure": "Pokaži merilo",
     "display name": "prikazno ime",
     "Display on load": "Prikaži ob nalaganju",
-    "Display the control to open OpenStreetMap editor": "Pokaži gumb za odpiranje urejevalnika OpenstreetMap",
     "Display the embed control": "Pokaži gumb za vstavljanje predmetov",
     "Display the fullscreen control": "Pokaži gumb za preklop v celozaslonski način",
     "Display the locate control": "Pokaži gumb za omogočanje lokacijskih storitev",
@@ -163,7 +162,6 @@ const locale = {
     "Help": "Pomoč",
     "hidden": "skrito",
     "Hide controls": "Skrij orodja",
-    "Home": "Začetna stran",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "Kako močno naj bodo poenostavljene prte na posamezni ravni približanja (močno = boljše delovanje in prijetnejši videz ali malo = bolj natančen prikaz)",
     "icon opacity": "icon opacity",
     "Icon shape": "Oblika ikone",
@@ -237,7 +235,6 @@ const locale = {
     "No licence has been set": "Ni določenega dovoljenja za uporabo",
     "No results": "Ni zadetkov",
     "no": "ne",
-    "No.": "No.",
     "None": "Brez",
     "Number of desired classes (default 5)": "Number of desired classes (default 5)",
     "On the bottom": "Na dnu",
@@ -250,7 +247,6 @@ const locale = {
     "Open current feature on load": "Open current feature on load",
     "Open link in…": "Odpri povezavo v ...",
     "Open share & download panel": "Open share & download panel",
-    "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Odpri obseg zemljevida v urejevalniku za prenos podrobnejših podatkov na OpenStreetMap.",
     "OpenStreetMap": "OpenStreetMap",
     "Optional. Same as color if not set.": "Izbirno. Enako, kot nedoločena barva.",
     "Optional.": "Optional.",
@@ -652,7 +648,8 @@ const locale = {
     "Comma separated list of values": "Comma separated list of values",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }
 L.registerLocale("sl", locale)
 L.setLocale("sl")

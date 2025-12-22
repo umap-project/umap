@@ -104,7 +104,6 @@ const locale = {
     "Display measure": "Vis opmåling",
     "display name": "visningsnavn",
     "Display on load": "Vis ved indlæsning",
-    "Display the control to open OpenStreetMap editor": "Vis kontrollen til åbning af OpenStreetMap-editoren",
     "Display the embed control": "Vis indlejringskontrollen",
     "Display the fullscreen control": "Vis fuldskærmskontrollen",
     "Display the locate control": "Vis lokaliseringskontrollen",
@@ -163,7 +162,6 @@ const locale = {
     "Help": "Hjælp",
     "hidden": "skjult",
     "Hide controls": "Skjul kontroller",
-    "Home": "Startside",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "Hvor meget polylinjen skal forenkles på hvert zoomniveau (mere = bedre ydeevne og jævnere udseende, mindre = mere præcist)",
     "icon opacity": "Ikonets gennemsigtighed",
     "Icon shape": "Ikonfacon",
@@ -249,7 +247,6 @@ const locale = {
     "Open current feature on load": "Åbn aktuelt objekt ved indlæsning",
     "Open link in…": "Åbn link i…",
     "Open share & download panel": "Åbn panelet for deling og download",
-    "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Åbn dette kort i en korteditor for at levere mere nøjagtige data til OpenStreetMap",
     "OpenStreetMap": "OpenStreetMap",
     "Optional. Same as color if not set.": "Valgfri. Samme som farve, hvis ikke angivet.",
     "Optional.": "Valgfri.",
@@ -652,7 +649,7 @@ const locale = {
     "Share": "Del",
     "Customized link": "Tilpasset link",
     "Iframe": "Iframe",
-    "№": "№"
+    "№": "nr."
 }
 L.registerLocale("da", locale)
 L.setLocale("da")

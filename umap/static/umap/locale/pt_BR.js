@@ -104,7 +104,6 @@ const locale = {
     "Display measure": "Mostrar medição",
     "display name": "mostrar nome",
     "Display on load": "Mostrar ao carregar",
-    "Display the control to open OpenStreetMap editor": "Mostrar o controle para abrir o editor OpenStreetMap",
     "Display the embed control": "Mostrar o controle de embeber",
     "Display the fullscreen control": "Mostrar o controle de ecrã total",
     "Display the locate control": "Mostrar o controle de localizar",
@@ -163,7 +162,6 @@ const locale = {
     "Help": "Ajuda",
     "hidden": "oculto",
     "Hide controls": "Ocultar controles",
-    "Home": "Início",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "Por quanto simplificar a polilinha em cada nível de aproximação (mais = melhor desempenho e aspeto mais suave, menos = mais preciso)",
     "icon opacity": "icon opacity",
     "Icon shape": "Forma do ícone",
@@ -237,7 +235,6 @@ const locale = {
     "No licence has been set": "Não foi definida nenhuma licença",
     "No results": "Sem resultados",
     "no": "não",
-    "No.": "No.",
     "None": "Nenhum",
     "Number of desired classes (default 5)": "Number of desired classes (default 5)",
     "On the bottom": "No fundo",
@@ -250,7 +247,6 @@ const locale = {
     "Open current feature on load": "Open current feature on load",
     "Open link in…": "Abrir link numa...",
     "Open share & download panel": "Open share & download panel",
-    "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Abrir esta região do mapa num editor de mapas para fornecer dados mais precisos ao OpenStreetMap",
     "OpenStreetMap": "OpenStreetMap",
     "Optional. Same as color if not set.": "Opcional. Igual à cor se não for definido.",
     "Optional.": "Opcional.",
@@ -652,7 +648,8 @@ const locale = {
     "Comma separated list of values": "Comma separated list of values",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }
 L.registerLocale("pt_BR", locale)
 L.setLocale("pt_BR")

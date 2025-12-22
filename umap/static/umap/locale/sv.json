@@ -104,7 +104,6 @@
     "Display measure": "Visa mått",
     "display name": "namn",
     "Display on load": "Visa vid uppstart",
-    "Display the control to open OpenStreetMap editor": "Visa knapp för att öppna OpenStreetMap redigerare",
     "Display the embed control": "Visa verktyg för att bädda in och dela",
     "Display the fullscreen control": "Visa verktyg för fullskärm",
     "Display the locate control": "Visa lokaliseringsverktyg",
@@ -163,7 +162,6 @@
     "Help": "Hjälp",
     "hidden": "dold",
     "Hide controls": "Dölj verktygsfälten",
-    "Home": "Hem",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "Hur mycket ska polygoner och multilinjer förenklas vid olika zoom-nivåer? (Mer = bättre prestanda och mjukare utseende, Mindre = mer exakt)",
     "icon opacity": "Ikonsynlighet",
     "Icon shape": "Ikonform",
@@ -237,7 +235,6 @@
     "No licence has been set": "Ingen licens har valts.",
     "No results": "Inga träffar tyvärr. Har du stavat rätt?",
     "no": "nej",
-    "No.": "No.",
     "None": "Ingen",
     "Number of desired classes (default 5)": "Number of desired classes (default 5)",
     "On the bottom": "Under",
@@ -250,7 +247,6 @@
     "Open current feature on load": "Öppna nuvarande objekt vid uppstart",
     "Open link in…": "Öppna länk med...",
     "Open share & download panel": "Open share & download panel",
-    "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Öppna detta kartområde i en redigerare för att bidra med mer och bättre data till OpenStreetMap.",
     "OpenStreetMap": "OpenStreetMap",
     "Optional. Same as color if not set.": "Valfritt. Annars samma som färg ovan.",
     "Optional.": "Valfri.",
@@ -652,5 +648,6 @@
     "Comma separated list of values": "Comma separated list of values",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }

@@ -104,7 +104,6 @@
     "Display measure": "Display measure",
     "display name": "отображаемое название",
     "Display on load": "Показывать при загрузке",
-    "Display the control to open OpenStreetMap editor": "Отображать кнопку редактора OpenStreetMap",
     "Display the embed control": "Отображать кнопку встраивания",
     "Display the fullscreen control": "Отображать кнопку полноэкранного режима",
     "Display the locate control": "Отображать кнопку определения местоположения",
@@ -163,7 +162,6 @@
     "Help": "Помощь",
     "hidden": "скрыт",
     "Hide controls": "Убрать элементы управления",
-    "Home": "Заглавная",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "Насколько сильно упрощать линии на каждом масштабе (больше значение — больше скорость, но выглядит хуже; меньше значение — более гладкое отображение)",
     "icon opacity": "icon opacity",
     "Icon shape": "Форма иконки",
@@ -237,7 +235,6 @@
     "No licence has been set": "Лицензия не была указана",
     "No results": "Нет данных",
     "no": "нет",
-    "No.": "No.",
     "None": "Нет",
     "Number of desired classes (default 5)": "Number of desired classes (default 5)",
     "On the bottom": "Внизу",
@@ -250,7 +247,6 @@
     "Open current feature on load": "Open current feature on load",
     "Open link in…": "Открыть ссылку в ...",
     "Open share & download panel": "Open share & download panel",
-    "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Откройте эту часть карты в редакторе OpenStreetMap, чтобы улучшить данные",
     "OpenStreetMap": "OpenStreetMap",
     "Optional. Same as color if not set.": "Дополнительно. Если не выбрано, то как цвет.",
     "Optional.": "Необязательный.",
@@ -652,5 +648,6 @@
     "Comma separated list of values": "Comma separated list of values",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }

@@ -104,7 +104,6 @@ const locale = {
     "Display measure": "Display measure",
     "display name": "display name",
     "Display on load": "Display on load",
-    "Display the control to open OpenStreetMap editor": "OpenStreetMap 편집기 열기 버튼 표시",
     "Display the embed control": "삽입 버튼 표시",
     "Display the fullscreen control": "전체 화면 버튼 표시",
     "Display the locate control": "위치 버튼 표시",
@@ -163,7 +162,6 @@ const locale = {
     "Help": "Help",
     "hidden": "숨기기",
     "Hide controls": "Hide controls",
-    "Home": "Home",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)",
     "icon opacity": "icon opacity",
     "Icon shape": "아이콘 모양",
@@ -237,7 +235,6 @@ const locale = {
     "No licence has been set": "No licence has been set",
     "No results": "No results",
     "no": "아니오",
-    "No.": "No.",
     "None": "없음",
     "Number of desired classes (default 5)": "Number of desired classes (default 5)",
     "On the bottom": "아래쪽",
@@ -250,7 +247,6 @@ const locale = {
     "Open current feature on load": "Open current feature on load",
     "Open link in…": "Open link in…",
     "Open share & download panel": "Open share & download panel",
-    "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Open this map extent in a map editor to provide more accurate data to OpenStreetMap",
     "OpenStreetMap": "OpenStreetMap",
     "Optional. Same as color if not set.": "Optional. Same as color if not set.",
     "Optional.": "Optional.",
@@ -652,7 +648,8 @@ const locale = {
     "Comma separated list of values": "Comma separated list of values",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }
 L.registerLocale("ko", locale)
 L.setLocale("ko")

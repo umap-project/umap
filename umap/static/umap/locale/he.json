@@ -104,7 +104,6 @@
     "Display measure": "הצגת מדידה",
     "display name": "שם תצוגה",
     "Display on load": "הצגה עם הטעינה",
-    "Display the control to open OpenStreetMap editor": "יש להציג את הפקד לפתיחת העורך של OpenStreetMap",
     "Display the embed control": "הצגת פקד ההטמעה",
     "Display the fullscreen control": "הצגת פקד מסך מלא",
     "Display the locate control": "הצגת פקד האיתור",
@@ -163,7 +162,6 @@
     "Help": "עזרה",
     "hidden": "מוסתר",
     "Hide controls": "הסתרת פקדים",
-    "Home": "בית",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "כמה לפשט את הקו השבור בכל רמת תקריב (יותר = ביצועים משופרים ומראה חלק יותר, פחות = דיוק גבוה יותר)",
     "icon opacity": "icon opacity",
     "Icon shape": "צורת סמל",
@@ -237,7 +235,6 @@
     "No licence has been set": "לא הוגדר רישיון",
     "No results": "אין תוצאות",
     "no": "לא",
-    "No.": "No.",
     "None": "ללא",
     "Number of desired classes (default 5)": "Number of desired classes (default 5)",
     "On the bottom": "בתחתית",
@@ -250,7 +247,6 @@
     "Open current feature on load": "Open current feature on load",
     "Open link in…": "פתיחת קישור עם…",
     "Open share & download panel": "Open share & download panel",
-    "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "פתיחת היקף מפה זו בעורך מפות כדי לספק נתונים מדויקים יותר ל־OpenStreetMap",
     "OpenStreetMap": "OpenStreetMap",
     "Optional. Same as color if not set.": "רשות. כנ״ל לגבי צבע אם לא הוגדר.",
     "Optional.": "רשות.",
@@ -652,5 +648,6 @@
     "Comma separated list of values": "Comma separated list of values",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }

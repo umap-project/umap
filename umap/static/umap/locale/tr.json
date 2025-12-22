@@ -104,7 +104,6 @@
     "Display measure": "Ölçüyü göster",
     "display name": "görünen ad",
     "Display on load": "Yüklerken görüntüle",
-    "Display the control to open OpenStreetMap editor": "OpenStreetMap editörünü açmak için denetimi görüntüle",
     "Display the embed control": "Yerleştirme denetim görüntüle",
     "Display the fullscreen control": "Tam ekran denetimini görüntüle",
     "Display the locate control": "Konum denetimini görüntüle",
@@ -163,7 +162,6 @@
     "Help": "Yardım",
     "hidden": "saklı",
     "Hide controls": "Kontrolleri gizle",
-    "Home": "Ana sayfa",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)",
     "icon opacity": "icon opacity",
     "Icon shape": "Simge şekli",
@@ -237,7 +235,6 @@
     "No licence has been set": "Hiçbir lisans ayarlanmadı",
     "No results": "Sonuç yok",
     "no": "hayır",
-    "No.": "No.",
     "None": "Hiçbiri",
     "Number of desired classes (default 5)": "Number of desired classes (default 5)",
     "On the bottom": "Altta",
@@ -250,7 +247,6 @@
     "Open current feature on load": "Mevcut yüklemede olan nesneyi aç",
     "Open link in…": "Bağlantıyı şurada aç",
     "Open share & download panel": "Open share & download panel",
-    "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "OpenStreetMap'e daha doğru veri sağlayabilmek için bu harita kapsamını bir harita düzenleyicide aç",
     "OpenStreetMap": "OpenStreetMap",
     "Optional. Same as color if not set.": "İsteğe bağlı. Eğer ayarlanmazsa renk ile aynı.",
     "Optional.": "İsteğe bağlı.",
@@ -652,5 +648,6 @@
     "Comma separated list of values": "Comma separated list of values",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }

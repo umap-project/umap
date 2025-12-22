@@ -104,7 +104,6 @@
     "Display measure": "Display measure",
     "display name": "zobraziť názov",
     "Display on load": "Zobraziť pri štarte",
-    "Display the control to open OpenStreetMap editor": "Zobraziť ovládanie na otvorenie editora OpenStreetMap",
     "Display the embed control": "Zobraziť ovládanie vkladania",
     "Display the fullscreen control": "Zobraziť ovládanie celej obrazovky",
     "Display the locate control": "Zobraziť ovládanie polohy",
@@ -163,7 +162,6 @@
     "Help": "Nápoveda",
     "hidden": "skryté",
     "Hide controls": "Skryť ovládacie prvky",
-    "Home": "Domov",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "Ako veľmi vyhladzovať a zjednodušovať pri oddialeni (väčšie = rýchlejša odozva a plynulejší vzhľad, menšie = presnejšie)",
     "icon opacity": "icon opacity",
     "Icon shape": "Tvar ikony",
@@ -237,7 +235,6 @@
     "No licence has been set": "Nebola nastavená žiadna licencia",
     "No results": "Žiadne výsledky",
     "no": "nie",
-    "No.": "No.",
     "None": "Žiadny",
     "Number of desired classes (default 5)": "Number of desired classes (default 5)",
     "On the bottom": "V spodnej časti",
@@ -250,7 +247,6 @@
     "Open current feature on load": "Open current feature on load",
     "Open link in…": "Otvoriť odkaz v…",
     "Open share & download panel": "Open share & download panel",
-    "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Otvoriť túto mapovú oblasť v mapovom editore pre presnenie dát v OpenStreetMap",
     "OpenStreetMap": "OpenStreetMap",
     "Optional. Same as color if not set.": "Nepovinné. Rovnaké ako farba, ak nie je nastavené.",
     "Optional.": "Optional.",
@@ -652,5 +648,6 @@
     "Comma separated list of values": "Comma separated list of values",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }

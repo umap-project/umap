@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-14 15:28+0000\n"
+"POT-Creation-Date: 2025-11-24 14:49+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Supaplex <bejokeup@gmail.com>, 2019,2023-2025\n"
 "Language-Team: Chinese (Taiwan) (http://app.transifex.com/openstreetmap/umap/language/zh_TW/)\n"
@@ -49,7 +49,7 @@ msgstr "使用 \"%(name)s\" 來認證已經棄用並且很快將移除。請設�
 msgid "name"
 msgstr "名稱"
 
-#: models.py:63 models.py:503
+#: models.py:63 models.py:507
 msgid "description"
 msgstr "描述"
 
@@ -69,23 +69,23 @@ msgstr "URL 樣板，使用 OSM 地圖磚格式"
 msgid "Order of the tilelayers in the edit box"
 msgstr "編輯方塊中地圖磚的圖層順序"
 
-#: models.py:176 models.py:497
+#: models.py:176 models.py:501
 msgid "Only editable with secret edit link"
 msgstr "僅能由私密連結編輯"
 
-#: models.py:177 models.py:498
+#: models.py:177 models.py:502
 msgid "Everyone can edit"
 msgstr "所有人皆可編輯"
 
-#: models.py:180 models.py:491
+#: models.py:180 models.py:495
 msgid "Everyone"
 msgstr "所有人"
 
-#: models.py:181 models.py:190 models.py:492
+#: models.py:181 models.py:190 models.py:496
 msgid "Editors and team only"
 msgstr "只有編輯者與團隊"
 
-#: models.py:182 models.py:493
+#: models.py:182 models.py:497
 msgid "Owner only"
 msgstr "只有擁有者"
 
@@ -105,7 +105,7 @@ msgstr "任何有連結的人"
 msgid "Blocked"
 msgstr "已經封銷了"
 
-#: models.py:192 models.py:487
+#: models.py:192 models.py:491
 msgid "Deleted"
 msgstr "已刪除"
 
@@ -145,15 +145,15 @@ msgstr "編輯者"
 msgid "team"
 msgstr "團隊"
 
-#: models.py:230 models.py:519
+#: models.py:230 models.py:523
 msgid "edit status"
 msgstr "編輯狀態"
 
-#: models.py:235 models.py:524
+#: models.py:235 models.py:528
 msgid "share status"
 msgstr "分享狀態"
 
-#: models.py:238 models.py:514
+#: models.py:238 models.py:518
 msgid "settings"
 msgstr "設定"
 
@@ -169,15 +169,15 @@ msgstr "這份地圖是模版地圖"
 msgid "Clone of"
 msgstr "複製"
 
-#: models.py:486 models.py:490 models.py:496
+#: models.py:490 models.py:494 models.py:500
 msgid "Inherit"
 msgstr "繼承"
 
-#: models.py:509
+#: models.py:513
 msgid "display on load"
 msgstr "載入時顯示"
 
-#: models.py:510
+#: models.py:514
 msgid "Display this layer on load."
 msgstr "載入此圖層時顯示"
 
@@ -427,13 +427,13 @@ msgid ""
 "Oops, I didn't mean it, I want to <a href=\"%(login_url)s\" "
 "class=\"login\">create an account</a> or <a href=\"%(login_url)s\" "
 "class=\"login\">log in</a> (no worry, we'll attach the map to your account)."
-msgstr ""
+msgstr "噢，我意思並非如此，我想要<a href=\"%(login_url)s\" class=\"login\">創建帳號</a>或是<a href=\"%(login_url)s\" class=\"login\">登入</a>(不用擔心，我們會連結地圖到你的帳號)。"
 
 #: templates/umap/components/alerts/alert.html:35
 msgid ""
 "Yes, I want to continue editing anonymously, I will save the secret edit "
 "link to be able to edit this map later or on another device"
-msgstr ""
+msgstr "是，我想以暱名方式繼續編輯，我會存下祕密編輯連結，讓我之後能編輯這份地圖，或是在其他裝置編輯"
 
 #: templates/umap/components/alerts/alert.html:39
 msgid "Here is your secret link to edit the map, please keep it safe:"
@@ -501,6 +501,10 @@ msgstr "聯絡"
 #: templates/umap/content_footer.html:9 templates/umap/navigation.html:25
 msgid "Help"
 msgstr "幫助"
+
+#: templates/umap/content_footer.html:10
+msgid "Terms of Service"
+msgstr "服務條款"
 
 #: templates/umap/dashboard_menu.html:6
 #, python-format

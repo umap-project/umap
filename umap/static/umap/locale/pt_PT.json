@@ -104,7 +104,6 @@
     "Display measure": "Mostrar medição",
     "display name": "mostrar nome",
     "Display on load": "Mostrar ao carregar",
-    "Display the control to open OpenStreetMap editor": "Mostrar o controlo para abrir o editor OpenStreetMap",
     "Display the embed control": "Mostrar o controlo de embeber",
     "Display the fullscreen control": "Mostrar o controlo de ecrã total",
     "Display the locate control": "Mostrar o controlo de localizar",
@@ -163,7 +162,6 @@
     "Help": "Ajuda",
     "hidden": "oculto",
     "Hide controls": "Ocultar controlos",
-    "Home": "Início",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "Por quanto simplificar a polilinha em cada nível de aproximação (mais = melhor desempenho e aspeto mais suave, menos = mais preciso)",
     "icon opacity": "opacidade do ícone",
     "Icon shape": "Forma do ícone",
@@ -237,7 +235,6 @@
     "No licence has been set": "Não foi definida nenhuma licença",
     "No results": "Sem resultados",
     "no": "não",
-    "No.": "No.",
     "None": "Nenhum",
     "Number of desired classes (default 5)": "Número de classes pretendidas (padrão: 5)",
     "On the bottom": "No fundo",
@@ -250,7 +247,6 @@
     "Open current feature on load": "Abrir o elemento atual ao carregar",
     "Open link in…": "Abrir hiperligação em…",
     "Open share & download panel": "Abrir painel de partilha e descarregamento",
-    "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Abrir esta região do mapa num editor de mapas para fornecer dados mais precisos ao OpenStreetMap",
     "OpenStreetMap": "OpenStreetMap",
     "Optional. Same as color if not set.": "Opcional. Igual à cor se não for definido.",
     "Optional.": "Opcional.",
@@ -652,5 +648,6 @@
     "Comma separated list of values": "Comma separated list of values",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }

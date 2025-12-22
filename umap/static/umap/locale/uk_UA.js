@@ -104,7 +104,6 @@ const locale = {
     "Display measure": "Показати вимірювання",
     "display name": "показана назва",
     "Display on load": "Показувати під час завантаження",
-    "Display the control to open OpenStreetMap editor": "Показувати кнопку переходу в редактор OpenStreetMap",
     "Display the embed control": "Показувати вбудовані елементи керування",
     "Display the fullscreen control": "Показувати перемикач повноекранного режиму",
     "Display the locate control": "Показувати кнопку визначення місцезнаходження",
@@ -163,7 +162,6 @@ const locale = {
     "Help": "Довідка",
     "hidden": "приховано",
     "Hide controls": "Прибрати елементи керування",
-    "Home": "Головна",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "Наскільки сильно спрощувати лінії на кожному масштабі (більше значення — більша швидкість, але виглядає гірше; менше значення — більш точне зображення)",
     "icon opacity": "icon opacity",
     "Icon shape": "Форма значка",
@@ -237,7 +235,6 @@ const locale = {
     "No licence has been set": "Ліцензію не було зазначено",
     "No results": "Немає результатів",
     "no": "ні",
-    "No.": "No.",
     "None": "Ні",
     "Number of desired classes (default 5)": "Number of desired classes (default 5)",
     "On the bottom": "Знизу",
@@ -250,7 +247,6 @@ const locale = {
     "Open current feature on load": "Open current feature on load",
     "Open link in…": "Відкрити посилання у…",
     "Open share & download panel": "Open share & download panel",
-    "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Відкрийте цю частину мапи в редакторі OpenStreetMap, щоб поліпшити дані",
     "OpenStreetMap": "OpenStreetMap",
     "Optional. Same as color if not set.": "Додатково.  Якщо не вибрано, то як колір.",
     "Optional.": "Необов’язково.",
@@ -652,7 +648,8 @@ const locale = {
     "Comma separated list of values": "Comma separated list of values",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }
 L.registerLocale("uk_UA", locale)
 L.setLocale("uk_UA")

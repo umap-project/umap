@@ -104,7 +104,6 @@
     "Display measure": "Display measure",
     "display name": "display name",
     "Display on load": "Display on load",
-    "Display the control to open OpenStreetMap editor": "Display the control to open OpenStreetMap editor",
     "Display the embed control": "Display the embed control",
     "Display the fullscreen control": "Display the fullscreen control",
     "Display the locate control": "Display the locate control",
@@ -163,7 +162,6 @@
     "Help": "Help",
     "hidden": "hidden",
     "Hide controls": "Hide controls",
-    "Home": "Home",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)",
     "icon opacity": "icon opacity",
     "Icon shape": "Icon shape",
@@ -237,7 +235,6 @@
     "No licence has been set": "No licence has been set",
     "No results": "No results",
     "no": "no",
-    "No.": "No.",
     "None": "None",
     "Number of desired classes (default 5)": "Number of desired classes (default 5)",
     "On the bottom": "On the bottom",
@@ -250,7 +247,6 @@
     "Open current feature on load": "Open current feature on load",
     "Open link in…": "Open link in…",
     "Open share & download panel": "Open share & download panel",
-    "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Open this map extent in a map editor to provide more accurate data to OpenStreetMap",
     "OpenStreetMap": "OpenStreetMap",
     "Optional. Same as color if not set.": "Optional. Same as color if not set.",
     "Optional.": "Optional.",
@@ -652,5 +648,6 @@
     "Comma separated list of values": "Comma separated list of values",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }

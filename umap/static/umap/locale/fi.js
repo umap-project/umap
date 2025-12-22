@@ -104,7 +104,6 @@ const locale = {
     "Display measure": "Display measure",
     "display name": "näytettävä nimi",
     "Display on load": "Näytä ladattaessa",
-    "Display the control to open OpenStreetMap editor": "Display the control to open OpenStreetMap editor",
     "Display the embed control": "Display the embed control",
     "Display the fullscreen control": "Display the fullscreen control",
     "Display the locate control": "Display the locate control",
@@ -163,7 +162,6 @@ const locale = {
     "Help": "Apua",
     "hidden": "piilotettu",
     "Hide controls": "Piilota ohjaimet",
-    "Home": "Alku",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "Kuinka paljon viivaa yleistetäänkullakin zoomaustasolla (enemmän = parempi suorituskyky, vähemmän = suurempi tarkkuus)",
     "icon opacity": "icon opacity",
     "Icon shape": "Ikonin muoto",
@@ -237,7 +235,6 @@ const locale = {
     "No licence has been set": "Lisenssiä ei ole määritetty",
     "No results": "Ei tuloksia",
     "no": "ei",
-    "No.": "No.",
     "None": "Ei mitään",
     "Number of desired classes (default 5)": "Number of desired classes (default 5)",
     "On the bottom": "Alhaalla",
@@ -250,7 +247,6 @@ const locale = {
     "Open current feature on load": "Open current feature on load",
     "Open link in…": "Open link in…",
     "Open share & download panel": "Open share & download panel",
-    "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Avaa rajauksen mukainen alue editorissa parantaaksesi OpenStreetMapin tietosisältöä.",
     "OpenStreetMap": "OpenStreetMap",
     "Optional. Same as color if not set.": "Valinnainen. Sama kuin väri jos ei asetettu.",
     "Optional.": "Optional.",
@@ -652,7 +648,8 @@ const locale = {
     "Comma separated list of values": "Comma separated list of values",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }
 L.registerLocale("fi", locale)
 L.setLocale("fi")

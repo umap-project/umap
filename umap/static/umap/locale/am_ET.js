@@ -104,7 +104,6 @@ const locale = {
     "Display measure": "Display measure",
     "display name": "ስሙን አሳይ",
     "Display on load": "በመጫን ላይ እያለ አሳይ",
-    "Display the control to open OpenStreetMap editor": "Display the control to open OpenStreetMap editor",
     "Display the embed control": "Display the embed control",
     "Display the fullscreen control": "Display the fullscreen control",
     "Display the locate control": "Display the locate control",
@@ -163,7 +162,6 @@ const locale = {
     "Help": "እርዳታ",
     "hidden": "hidden",
     "Hide controls": "መቆጣጠሪያዎቹን ደብቅ",
-    "Home": "Home",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "በእያንዳንዱ የዙም መጠን ፖሊላይኑን ምን ያህል ያቃልል (ብዙ = ጥሩ አገልግሎት እና ጥሩ መልክ፣ ትንሽ = ይበልጥ ትክክለኛ)",
     "icon opacity": "icon opacity",
     "Icon shape": "Icon shape",
@@ -237,7 +235,6 @@ const locale = {
     "No licence has been set": "ምንም ፈቃድ አልተሰጠም",
     "No results": "No results",
     "no": "አይደለም",
-    "No.": "No.",
     "None": "ምንም",
     "Number of desired classes (default 5)": "Number of desired classes (default 5)",
     "On the bottom": "On the bottom",
@@ -250,7 +247,6 @@ const locale = {
     "Open current feature on load": "Open current feature on load",
     "Open link in…": "Open link in…",
     "Open share & download panel": "Open share & download panel",
-    "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "ለOpernStreetMap ይበልጥ ትክክል ይሆነ መረጃ ለመስጠ የካርታውን ኤክስቴንት በካርታ ማረሚያ ክፈት",
     "OpenStreetMap": "OpenStreetMap",
     "Optional. Same as color if not set.": "አማራጭ፣ ካልተመረጠለት እንደቀለሙ የሚሆን",
     "Optional.": "Optional.",
@@ -652,7 +648,8 @@ const locale = {
     "Comma separated list of values": "Comma separated list of values",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }
 L.registerLocale("am_ET", locale)
 L.setLocale("am_ET")

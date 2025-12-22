@@ -104,7 +104,6 @@
     "Display measure": "Display measure",
     "display name": "mostra el nom",
     "Display on load": "Mostrar en carregar",
-    "Display the control to open OpenStreetMap editor": "Mostra el botó per obrir l'editor d'OpenStreetMap",
     "Display the embed control": "Mostra el control d'inserció",
     "Display the fullscreen control": "Mostrar el control de la pantalla completa",
     "Display the locate control": "Mostra el control de ubicar",
@@ -163,7 +162,6 @@
     "Help": "Ajuda",
     "hidden": "amagat",
     "Hide controls": "Amaga els controls",
-    "Home": "Home",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "Quant simplificar la polilínia a cada nivell de l'escala (més = millor rendiment i aspecte més suau, menys = més precís)",
     "icon opacity": "opacitat de la icona",
     "Icon shape": "forma de la icona",
@@ -237,7 +235,6 @@
     "No licence has been set": "No s'ha establert cap llicència",
     "No results": "No results",
     "no": "no",
-    "No.": "No.",
     "None": "Cap",
     "Number of desired classes (default 5)": "Number of desired classes (default 5)",
     "On the bottom": "A la part inferior",
@@ -250,7 +247,6 @@
     "Open current feature on load": "Obrir el element actual en càrregar",
     "Open link in…": "Obriu l'enllaç a…",
     "Open share & download panel": "Obrir el panell Comparteix i baixa",
-    "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Open this map extent in a map editor to provide more accurate data to OpenStreetMap",
     "OpenStreetMap": "OpenStreetMap",
     "Optional. Same as color if not set.": "Opcional. El mateix color si no s'estableix.",
     "Optional.": "Opcional.",
@@ -652,5 +648,6 @@
     "Comma separated list of values": "Comma separated list of values",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }

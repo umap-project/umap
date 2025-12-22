@@ -104,7 +104,6 @@
     "Display measure": "Display measure",
     "display name": "показвано име",
     "Display on load": "Дисплей на зареждане",
-    "Display the control to open OpenStreetMap editor": "Display the control to open OpenStreetMap editor",
     "Display the embed control": "Display the embed control",
     "Display the fullscreen control": "Показване управлението за цял екран",
     "Display the locate control": "Display the locate control",
@@ -163,7 +162,6 @@
     "Help": "Помощ",
     "hidden": "hidden",
     "Hide controls": "Скрий контролите",
-    "Home": "Home",
     "How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)": "Колко да опрости полилинията на всяко ниво увеличение (повече = по-добра производителност и по-гладко на вид, по-малко = по-точно)",
     "icon opacity": "icon opacity",
     "Icon shape": "Форма на иконата",
@@ -237,7 +235,6 @@
     "No licence has been set": "No licence has been set",
     "No results": "No results",
     "no": "не",
-    "No.": "No.",
     "None": "Нищо",
     "Number of desired classes (default 5)": "Number of desired classes (default 5)",
     "On the bottom": "Отдолу",
@@ -250,7 +247,6 @@
     "Open current feature on load": "Open current feature on load",
     "Open link in…": "Open link in…",
     "Open share & download panel": "Open share & download panel",
-    "Open this map extent in a map editor to provide more accurate data to OpenStreetMap": "Отворете тази карта в степен редактор на карта, за да предостави по-точни данни,OpenStreetMap",
     "OpenStreetMap": "OpenStreetMap",
     "Optional. Same as color if not set.": "По избор Същото като цвят, ако не е настроена.",
     "Optional.": "Optional.",
@@ -652,5 +648,6 @@
     "Comma separated list of values": "Comma separated list of values",
     "Share": "Share",
     "Customized link": "Customized link",
-    "Iframe": "Iframe"
+    "Iframe": "Iframe",
+    "№": "№"
 }
