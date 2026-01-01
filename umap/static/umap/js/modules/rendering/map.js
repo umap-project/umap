@@ -343,10 +343,10 @@ export const LeafletMap = BaseMap.extend({
   },
 
   handleLimitBounds: function () {
-    const south = Number.parseFloat(this.options.limitBounds.south)
-    const west = Number.parseFloat(this.options.limitBounds.west)
-    const north = Number.parseFloat(this.options.limitBounds.north)
-    const east = Number.parseFloat(this.options.limitBounds.east)
+    const south = Number.parseFloat(this.options.limitBounds?.south)
+    const west = Number.parseFloat(this.options.limitBounds?.west)
+    const north = Number.parseFloat(this.options.limitBounds?.north)
+    const east = Number.parseFloat(this.options.limitBounds?.east)
     if (
       !Number.isNaN(south) &&
       !Number.isNaN(west) &&
