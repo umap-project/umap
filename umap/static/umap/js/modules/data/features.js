@@ -587,7 +587,6 @@ class Feature {
   }
 
   extendedProperties() {
-    console.trace()
     // Include context properties
     const properties = this._umap.getGeoContext()
     const locale = getLocale()
