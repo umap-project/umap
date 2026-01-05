@@ -9,7 +9,7 @@ export const HomeControl = Control.extend({
 
   onAdd: (map) => {
     const path = map._umap.getStaticPathFor('home.svg')
-    const homeURL = map._umap.urls.get("home")
+    const homeURL = map._umap.urls.get('home')
     const container = Utils.loadTemplate(
       `<a href="${homeURL}" class="home-button" title="${translate('Back to home')}"><img src="${path}" alt="${translate('Home logo')}" width="38px" height="38px" /></a>`
     )
@@ -125,6 +125,7 @@ const BaseButton = Control.extend({
   initialize: function (umap, options) {
     this._umap = umap
     Control.prototype.initialize.call(this, options)
+    this.afterInit()
   },
 
   onAdd: function (map) {
@@ -154,6 +155,7 @@ const BaseButton = Control.extend({
     this.afterRemove(map)
   },
 
+  afterInit: () => {},
   afterAdd: (container, map) => {},
   afterRemove: (map) => {},
 })
@@ -287,8 +289,7 @@ export const AttributionControl = Control.Attribution.extend({
         <a href="#" class="attribution-toggle"></a>
       </div>
     `
-    const [container, { short, caption, site }] =
-      Utils.loadTemplateWithRefs(template)
+    const [container, { short, caption, site }] = Utils.loadTemplateWithRefs(template)
     caption.addEventListener('click', () => this._map._umap.openCaption())
     this._container.appendChild(container)
     short.hidden = !shortCredit
@@ -356,5 +357,60 @@ export const TileLayerChooser = BaseButton.extend({
       }
     })
     return li
+  },
+})
+
+export const LocateControl = BaseButton.extend({
+  options: {
+    position: 'topleft',
+    title: translate('Center map on your location'),
+    icon: 'icon-locate',
+  },
+
+  async start() {
+    await this.loadPlugin()
+    this._locate.start()
+  },
+
+  stop() {
+    this._locate?.stop()
+  },
+
+  async loadPlugin() {
+    if (this._locate) return
+    const { LocateControl } = await import(
+      '../../../vendors/locatecontrol/L.Control.Locate.esm.js'
+    )
+    this._locate = new LocateControl({
+      strings: {
+        title: translate('Center map on your location'),
+      },
+      showPopup: false,
+      flyTo: this.options.easing,
+      onLocationError: (err) => Alert.error(err.message),
+    })
+    this._locate._map = this._umap._leafletMap
+    this._locate.onAdd(this._umap._leafletMap)
+  },
+
+  async onClick() {
+    if (this._locate?._active) {
+      this.stop()
+    } else {
+      this.start()
+    }
+  },
+
+  afterRemove() {
+    this.stop()
+  },
+
+  afterInit() {
+    this._umap._leafletMap.on('locateactivate', () => {
+      this._container.classList.add('active')
+    })
+    this._umap._leafletMap.on('locatedeactivate', () => {
+      this._container.classList.remove('active')
+    })
   },
 })
