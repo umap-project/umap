@@ -610,7 +610,8 @@ class MapDetailMixin(SessionMixin):
 
     def set_preconnect(self, properties, context):
         # Try to extract the tilelayer domain, in order to but a preconnect meta.
-        url_template = properties.get("tilelayer", {}).get("url_template")
+        tilelayer = properties.get("tilelayer") or {}
+        url_template = tilelayer.get("url_template")
         # Not explicit tilelayer set, take the first of the list, which will be
         # used by frontend too.
         if not url_template:
