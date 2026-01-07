@@ -71,7 +71,7 @@ deploy = [
 ]
 yunohost = [
   "uvicorn==0.38.0",
-  "Django==5.1.15",
+  "Django==6.0.1",
   "django_yunohost_integration==0.10.9",
 ]
 s3 = [
