@@ -58,7 +58,7 @@
     "leaflet-textpath": "github:umap-project/Leaflet.TextPath#patched",
     "leaflet-toolbar": "umap-project/Leaflet.toolbar",
     "leaflet.heat": "0.2.0",
-    "leaflet.locatecontrol": "0.81.1",
+    "leaflet.locatecontrol": "0.85.1",
     "leaflet.markercluster": "^1.5.3",
     "leaflet.path.drag": "0.0.6",
     "leaflet.photon": "0.9.2",

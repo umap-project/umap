@@ -228,6 +228,14 @@ html[dir="rtl"] .icon {
     background-position: var(--tile) calc(var(--tile) * 4);
 }
 
+.icon-locate {
+    background-position: 0px calc(var(--tile) * 3);
+}
+
+.active .icon-locate {
+    background-position: calc(var(--tile) * 2) calc(var(--tile) * 4);
+}
+
 .icon-magic {
     background-position: calc(var(--tile) * 7) 0;
 }

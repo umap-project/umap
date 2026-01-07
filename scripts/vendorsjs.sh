@@ -21,7 +21,7 @@ mkdir -p umap/static/umap/vendors/tokml/ && cp node_modules/@placemarkio/tokml/d
 mkdir -p umap/static/umap/vendors/tokml/ && cp node_modules/@placemarkio/tokml/dist/tokml.es.mjs.map umap/static/umap/vendors/tokml/tokml.es.mjs.map
 mkdir -p umap/static/umap/vendors/osmtogeojson/ && cp -r node_modules/osmtogeojson/osmtogeojson.js umap/static/umap/vendors/osmtogeojson/
 mkdir -p umap/static/umap/vendors/georsstogeojson/ && cp -r node_modules/georsstogeojson/GeoRSSToGeoJSON.js umap/static/umap/vendors/georsstogeojson/
-mkdir -p umap/static/umap/vendors/locatecontrol/ && cp -r node_modules/leaflet.locatecontrol/dist/L.Control.Locate.min.* umap/static/umap/vendors/locatecontrol/
+mkdir -p umap/static/umap/vendors/locatecontrol/ && cp -r node_modules/leaflet.locatecontrol/dist/L.Control.Locate.esm.js umap/static/umap/vendors/locatecontrol/
 mkdir -p umap/static/umap/vendors/dompurify/ && cp -r node_modules/dompurify/dist/purify.es.mjs umap/static/umap/vendors/dompurify/purify.es.js
 mkdir -p umap/static/umap/vendors/dompurify/ && cp -r node_modules/dompurify/dist/purify.es.mjs.map umap/static/umap/vendors/dompurify/purify.es.mjs.map
 mkdir -p umap/static/umap/vendors/colorbrewer/ && cp node_modules/colorbrewer/index.es.js umap/static/umap/vendors/colorbrewer/colorbrewer.js

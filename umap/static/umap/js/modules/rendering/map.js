@@ -20,6 +20,7 @@ import {
   EmbedControl,
   EditControl,
   HomeControl,
+  LocateControl,
   MoreControl,
   PermanentCreditsControl,
   TileLayerChooser,
@@ -69,19 +70,7 @@ const ControlsMixin = {
     })
     this._controls.datalayers = new DataLayersControl(this._umap)
     this._controls.caption = new CaptionControl(this._umap)
-    this._controls.locate = new U.Locate(this, {
-      strings: {
-        title: translate('Center map on your location'),
-      },
-      showPopup: false,
-      // We style this control in our own CSS for consistency with other controls,
-      // but the control breaks if we don't specify a class here, so a fake class
-      // will do.
-      icon: 'umap-fake-class',
-      iconLoading: 'umap-fake-class',
-      flyTo: this.options.easing,
-      onLocationError: (err) => U.Alert.error(err.message),
-    })
+    this._controls.locate = new LocateControl(this._umap)
     this._controls.fullscreen = new Control.Fullscreen({
       title: {
         false: translate('View Fullscreen'),
@@ -316,14 +305,14 @@ export const LeafletMap = BaseMap.extend({
     this.setView(this.options.center, this.options.zoom)
   },
 
-  initCenter: function () {
+  initCenter: async function () {
     this._setDefaultCenter()
     if (this.options.hash) this.addHash()
     if (this.options.hash && this._hash.parseHash(location.hash)) {
       // FIXME An invalid hash will cause the load to fail
       this._hash.update()
     } else if (this.options.defaultView === 'locate' && !this.options.noControl) {
-      this._controls.locate.start()
+      await this._controls.locate.start()
     } else if (this.options.defaultView === 'data') {
       this._umap.onceDataLoaded(this._umap.fitDataBounds)
     } else if (this.options.defaultView === 'latest') {
