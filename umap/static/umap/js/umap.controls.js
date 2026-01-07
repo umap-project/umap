@@ -201,24 +201,6 @@ L.Control.MiniMap.include({
   _cloneLayer: (layer) => new L.TileLayer(layer._url, L.Util.extend({}, layer.options)),
 })
 
-L.Control.Loading.include({
-  onAdd: function (map) {
-    this._container = document.createElement('div')
-    this._container.classList.add('umap-loader')
-    map.on('baselayerchange', this._layerAdd, this)
-    this._addMapListeners(map)
-    this._map = map
-  },
-
-  _showIndicator: function () {
-    this._map._container.classList.add('umap-loading')
-  },
-
-  _hideIndicator: function () {
-    this._map._container.classList.remove('umap-loading')
-  },
-})
-
 U.Editable = L.Editable.extend({
   initialize: function (umap, options) {
     this._umap = umap

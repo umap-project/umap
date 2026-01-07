@@ -59,7 +59,7 @@ export class TopBar extends WithTemplate {
 
   setup() {
     this.parent.appendChild(this.element)
-    this.elements.home.href = this._umap.urls.get("home")
+    this.elements.home.href = this._umap.urls.get('home')
     this.elements.name.addEventListener('mouseover', () => {
       this._umap.tooltip.open({
         content: translate('Edit the title of the map'),
