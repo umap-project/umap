@@ -1,12 +1,7 @@
 {
-  "files": {
-    "include": ["umap/static/umap/js/**"],
-    "ignore": ["umap/static/umap/vendors/**"]
-  },
   "formatter": {
     "enabled": true,
     "formatWithErrors": false,
-    "ignore": [],
     "attributePosition": "auto",
     "indentStyle": "space",
     "indentWidth": 2,
@@ -45,8 +40,5 @@
     "formatter": {
       "trailingCommas": "none"
     }
-  },
-  "organizeImports": {
-    "enabled": true
   }
 }
