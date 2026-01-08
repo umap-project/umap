@@ -1337,7 +1337,7 @@ class DataLayerUpdate(FormLessEditMixin, UpdateView):
 
             # Replace the uploaded file by the merged version.
             # The geojson here can be either a NamedTemporaryFile or an
-            # InMemoryUploadedFile, depending on whether is bigger thant the
+            # InMemoryUploadedFile, depending on whether is bigger than the
             # FILE_UPLOAD_MAX_MEMORY_SIZE setting (2.5Mo by default).
             # Now that we loaded all in RAM, let's use an InMemoryUploadedFile.
             orig = self.request.FILES["geojson"]
