@@ -3,6 +3,7 @@ import re
 from pathlib import Path
 from time import sleep
 
+import pytest
 from playwright.sync_api import expect
 
 from umap.models import DataLayer
@@ -12,7 +13,12 @@ from ..base import DataLayerFactory, MapFactory
 DATALAYER_UPDATE = re.compile(r".*/datalayer/update/.*")
 
 
-def test_created_markers_are_merged(new_page, live_server, tilelayer):
+# Test with in memory upload AND streamed upload
+@pytest.mark.parametrize("upload_limit", (2621440, 0))
+def test_created_markers_are_merged(
+    new_page, live_server, tilelayer, settings, upload_limit
+):
+    settings.FILE_UPLOAD_MAX_MEMORY_SIZE = upload_limit
     # Let's create a new map with an empty datalayer
     map = MapFactory(name="server-side merge")
     datalayer = DataLayerFactory(map=map, edit_status=DataLayer.ANONYMOUS, data={})

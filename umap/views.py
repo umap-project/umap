@@ -6,7 +6,6 @@ import socket
 import zipfile
 from datetime import datetime, timedelta
 from http.client import InvalidURL
-from io import BytesIO
 from pathlib import Path
 from smtplib import SMTPException
 from urllib.error import HTTPError, URLError
@@ -22,6 +21,7 @@ from django.contrib.postgres.search import SearchQuery, SearchVector
 from django.contrib.sessions.models import Session
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.exceptions import PermissionDenied
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.mail import send_mail
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.signing import BadSignature, Signer, TimestampSigner
@@ -1336,8 +1336,20 @@ class DataLayerUpdate(FormLessEditMixin, UpdateView):
                 return HttpResponse(status=412)
 
             # Replace the uploaded file by the merged version.
-            self.request.FILES["geojson"].file = BytesIO(
-                json_dumps(merged).encode("utf-8")
+            # The geojson here can be either a NamedTemporaryFile or an
+            # InMemoryUploadedFile, depending on whether is bigger thant the
+            # FILE_UPLOAD_MAX_MEMORY_SIZE setting (2.5Mo by default).
+            # Now that we loaded all in RAM, let's use an InMemoryUploadedFile.
+            orig = self.request.FILES["geojson"]
+            file = io.BytesIO(json_dumps(merged).encode("utf-8"))
+            file_size = file.getbuffer().nbytes
+            self.request.FILES["geojson"] = InMemoryUploadedFile(
+                file=file,
+                field_name="geojson",
+                name=orig.name,
+                content_type="application/geo+json",
+                size=file_size,
+                charset="utf-8",
             )
 
             # Mark the data to be reloaded by form_valid
