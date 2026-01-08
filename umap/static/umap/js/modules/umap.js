@@ -31,6 +31,7 @@ import * as Utils from './utils.js'
 import * as DOMUtils from './domutils.js'
 import { DataLayerManager } from './managers.js'
 import { Importer as OpenRouteService } from './importers/openrouteservice.js'
+import Loader from './ui/loader.js'
 
 export default class Umap {
   constructor(element, geojson) {
@@ -110,6 +111,7 @@ export default class Umap {
       this.properties.homeControl = false
     }
 
+    this.loader = new Loader(this._leafletMap._container)
     this._leafletMap.setup()
 
     this.panel = new Panel(this, this._leafletMap)

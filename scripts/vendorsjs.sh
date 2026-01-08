@@ -9,7 +9,6 @@ mkdir -p umap/static/umap/vendors/editable/ && cp -r node_modules/leaflet.path.d
 mkdir -p umap/static/umap/vendors/hash/ && cp -r node_modules/leaflet-hash/leaflet-hash.js umap/static/umap/vendors/hash/
 mkdir -p umap/static/umap/vendors/i18n/ && cp -r node_modules/leaflet-i18n/Leaflet.i18n.js umap/static/umap/vendors/i18n/
 mkdir -p umap/static/umap/vendors/minimap/ && cp -r node_modules/leaflet-minimap/dist/** umap/static/umap/vendors/minimap/
-mkdir -p umap/static/umap/vendors/loading/ && cp -r node_modules/leaflet-loading/src/Control.Loading.* umap/static/umap/vendors/loading/
 mkdir -p umap/static/umap/vendors/heat/ && cp -r node_modules/leaflet.heat/dist/leaflet-heat.js umap/static/umap/vendors/heat/
 mkdir -p umap/static/umap/vendors/fullscreen/ && cp -r node_modules/leaflet-fullscreen/dist/** umap/static/umap/vendors/fullscreen/
 mkdir -p umap/static/umap/vendors/measurable/ && cp -r node_modules/leaflet-measurable/Leaflet.Measurable.* umap/static/umap/vendors/measurable/

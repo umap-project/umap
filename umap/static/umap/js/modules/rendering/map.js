@@ -7,6 +7,7 @@ import {
   latLng,
   LatLng,
   LatLngBounds,
+  stamp,
   setOptions,
   TileLayer,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
@@ -163,7 +164,19 @@ const ManageTilelayerMixin = {
     if (tilelayer === this.selectedTilelayer) {
       return
     }
+    const onLoading = () => {
+      this._umap.loader.start(stamp(tilelayer))
+    }
+    const onLoad = () => {
+      this._umap.loader.stop(stamp(tilelayer))
+    }
     try {
+      tilelayer.on('loading', onLoading)
+      tilelayer.on('load', onLoad)
+      tilelayer.on('remove', () => {
+        tilelayer.off('loading', onLoading)
+        tilelayer.off('load', onLoad)
+      })
       this.addLayer(tilelayer)
       this.fire('baselayerchange', { layer: tilelayer })
       if (this.selectedTilelayer) {
@@ -241,20 +254,6 @@ export const LeafletMap = BaseMap.extend({
     const options = this._umap.properties
 
     BaseMap.prototype.initialize.call(this, element, options)
-
-    // After calling parent initialize, as we are doing initCenter our-selves
-
-    this.loader = new Control.Loading()
-    this.loader.onAdd(this)
-
-    if (!this.options.noControl) {
-      DomEvent.on(document.body, 'dataloading', (event) =>
-        this.fire('dataloading', event.detail)
-      )
-      DomEvent.on(document.body, 'dataload', (event) =>
-        this.fire('dataload', event.detail)
-      )
-    }
 
     this.on('baselayerchange', (e) => {
       if (this._controls.miniMap) this._controls.miniMap.onMainMapBaseLayerChange(e)

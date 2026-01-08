@@ -350,10 +350,15 @@ export class DataLayer {
 
   async getUrl(url, initialUrl) {
     const response = await this._umap.request.get(url)
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
       if (response?.ok) {
         this._umap.modifiedAt = response.headers.get('last-modified')
-        return resolve(response.text())
+        const id = Math.random()
+        this._umap.loader.start(id)
+        const raw = await response.text()
+        const promise = resolve(raw)
+        this._umap.loader.stop(id)
+        return promise
       }
       Alert.error(
         translate('Cannot load remote data for layer "{layer}" with url "{url}"', {
@@ -532,6 +537,8 @@ export class DataLayer {
   }
 
   addData(geojson, sync) {
+    const id = Math.random()
+    this._umap.loader.start(id)
     let data = []
     this._batch = true
     try {
@@ -544,6 +551,7 @@ export class DataLayer {
     }
     this._batch = false
     this.dataChanged()
+    this._umap.loader.stop(id)
     return data
   }
 
