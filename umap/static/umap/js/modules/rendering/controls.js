@@ -1,6 +1,8 @@
-import { Control, LayerGroup } from '../../../vendors/leaflet/leaflet-src.esm.js'
+import { Control, LayerGroup, latLng, Icon, Marker } from '../../../vendors/leaflet/leaflet-src.esm.js'
+import { PhotonSearch, PhotonReverse } from '../../../vendors/photon/leaflet.photon.esm.js'
 import * as Utils from '../utils.js'
 import { translate } from '../i18n.js'
+import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 
 export const HomeControl = Control.extend({
   options: {
@@ -247,7 +249,7 @@ export const SearchControl = BaseButton.extend({
     const [container, { input, resultsContainer }] =
       Utils.loadTemplateWithRefs(template)
     const id = Math.random()
-    this.search = new U.Search(
+    this.search = new Search(
       this._umap._leafletMap,
       input,
       this.layer,
@@ -255,10 +257,10 @@ export const SearchControl = BaseButton.extend({
     )
     this._umap.panel.open({ content: container }).then(() => {
       this.search.on('ajax:send', () => {
-        this._umap.fire('dataloading', { id: id })
+        this._umap.loader.start(id)
       })
       this.search.on('ajax:return', () => {
-        this._umap.fire('dataload', { id: id })
+        this._umap.loader.stop(id)
       })
       this.search.resultsContainer = resultsContainer
       input.focus()
@@ -412,5 +414,132 @@ export const LocateControl = BaseButton.extend({
     this._umap._leafletMap.on('locatedeactivate', () => {
       this._container.classList.remove('active')
     })
+  },
+})
+
+export const Search = PhotonSearch.extend({
+  initialize: function (map, input, layer, options) {
+    this.options.placeholder = translate('Type a place name or coordinates')
+    this.options.location_bias_scale = 0.5
+    PhotonSearch.prototype.initialize.call(this, map, input, options)
+    this.options.url = map.options.urls.search
+    if (map.options.maxBounds) this.options.bbox = map.options.maxBounds.toBBoxString()
+    this.reverse = new PhotonReverse({
+      handleResults: (geojson) => {
+        this.handleResultsWithReverse(geojson)
+      },
+    })
+    this.layer = layer
+  },
+
+  handleResultsWithReverse: function (geojson) {
+    const latlng = this.reverse.latlng
+    geojson.features.unshift({
+      type: 'Feature',
+      geometry: { type: 'Point', coordinates: [latlng.lng, latlng.lat] },
+      properties: {
+        name: translate('Go to "{coords}"', { coords: `${latlng.lat} ${latlng.lng}` }),
+      },
+    })
+
+    this.handleResults(geojson)
+  },
+
+  search: function () {
+    this.layer.clearLayers()
+    const pattern = /^(?<lat>[-+]?\d{1,2}[.,]\d+)\s*[ ,]\s*(?<lng>[-+]?\d{1,3}[.,]\d+)$/
+    if (pattern.test(this.input.value)) {
+      this.hide()
+      const { lat, lng } = pattern.exec(this.input.value).groups
+      const latlng = latLng(lat, lng)
+      if (Utils.LatLngIsValid(latlng)) {
+        this.reverse.doReverse(latlng)
+      } else {
+        Alert.error(translate('Invalid latitude or longitude'))
+      }
+      return
+    }
+    // Only numbers, abort.
+    if (/^[\d .,]*$/.test(this.input.value)) return
+    // Do normal search
+    this.options.includePosition = this.map.getZoom() > 10
+    PhotonSearch.prototype.search.call(this)
+  },
+
+  onBlur: function (e) {
+    // Overrided because we don't want to hide the results on blur.
+    this.fire('blur')
+  },
+
+  formatResult: function (feature, el) {
+    const [tools, { point, geom }] = Utils.loadTemplateWithRefs(`
+      <span class="search-result-tools">
+        <button type="button" title="${translate('Add this geometry to my map')}" data-ref=geom><i class="icon icon-16 icon-polygon-plus"></i></button>
+        <button type="button" title="${translate('Add this place to my map')}" data-ref=point><i class="icon icon-16 icon-marker-plus"></i></button>
+      </span>
+    `)
+    geom.hidden = !['R', 'W'].includes(feature.properties.osm_type)
+    point.addEventListener('mousedown', (event) => {
+      event.stopPropagation()
+      const datalayer = this.map._umap.defaultEditDataLayer()
+      const marker = datalayer.makeFeature(feature)
+      marker.edit()
+    })
+    geom.addEventListener('mousedown', async (event) => {
+      event.stopPropagation()
+      const osm_id = feature.properties.osm_id
+      const types = {
+        R: 'relation',
+        W: 'way',
+        N: 'node',
+      }
+      const osm_type = types[feature.properties.osm_type]
+      if (!osm_type || !osm_id) return
+      const importer = this.map._umap.importer
+      importer.build()
+      importer.format = 'geojson'
+      importer.raw = await this.getOSMObject(osm_type, osm_id)
+      importer.submit()
+    })
+    el.appendChild(tools)
+    this._formatResult(feature, el)
+    const path = this.map._umap.getStaticPathFor('target.svg')
+    const icon = new Icon({
+      iconUrl: path,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+    })
+    const coords = feature.geometry.coordinates
+    const target = new Marker([coords[1], coords[0]], { icon })
+    el.addEventListener('mouseover', (event) => {
+      target.addTo(this.layer)
+    })
+    el.addEventListener('mouseout', (event) => {
+      target.removeFrom(this.layer)
+    })
+  },
+
+  async getOSMObject(osm_type, osm_id) {
+    const url = `https://www.openstreetmap.org/api/0.6/${osm_type}/${osm_id}/full`
+    const response = await this.map._umap.request.get(url)
+    if (response?.ok) {
+      const data = await this.map._umap.formatter.fromOSM(await response.text())
+      data.features = data.features.filter(
+        (feature) => feature.properties.id === `${osm_type}/${osm_id}`
+      )
+      return JSON.stringify(data)
+    }
+  },
+
+  setChoice: function (choice) {
+    choice = choice || this.RESULTS[this.CURRENT]
+    if (choice) {
+      const feature = choice.feature
+      const zoom = Math.max(this.map.getZoom(), 14) // Never unzoom.
+      this.map.setView(
+        [feature.geometry.coordinates[1], feature.geometry.coordinates[0]],
+        zoom
+      )
+    }
   },
 })
