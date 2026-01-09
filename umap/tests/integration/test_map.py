@@ -156,7 +156,7 @@ def test_default_view_locate(browser, live_server, map, new_page):
     map.save()
     page = new_page(custom_context=context)
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    expect(page).to_have_url(re.compile(r".*#18/39\.16267/8\.52967"))
+    expect(page).to_have_url(re.compile(r".*#18/39\.162670/8\.529670"))
 
 
 def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(

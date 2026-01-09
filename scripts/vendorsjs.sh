@@ -6,7 +6,6 @@ mkdir -p umap/static/umap/vendors/leaflet/ && cp -r node_modules/leaflet/dist/*.
 mkdir -p umap/static/umap/vendors/leaflet/ && cp -r node_modules/leaflet/dist/images umap/static/umap/vendors/leaflet/images
 mkdir -p umap/static/umap/vendors/editable/ && cp -r node_modules/leaflet-editable/src/Leaflet.Editable.js umap/static/umap/vendors/editable/
 mkdir -p umap/static/umap/vendors/editable/ && cp -r node_modules/leaflet.path.drag/src/Path.Drag.js umap/static/umap/vendors/editable/
-mkdir -p umap/static/umap/vendors/hash/ && cp -r node_modules/leaflet-hash/leaflet-hash.js umap/static/umap/vendors/hash/
 mkdir -p umap/static/umap/vendors/i18n/ && cp -r node_modules/leaflet-i18n/Leaflet.i18n.js umap/static/umap/vendors/i18n/
 mkdir -p umap/static/umap/vendors/minimap/ && cp -r node_modules/leaflet-minimap/dist/** umap/static/umap/vendors/minimap/
 mkdir -p umap/static/umap/vendors/heat/ && cp -r node_modules/leaflet.heat/dist/leaflet-heat.js umap/static/umap/vendors/heat/

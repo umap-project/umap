@@ -255,6 +255,14 @@ export const LeafletMap = BaseMap.extend({
 
     BaseMap.prototype.initialize.call(this, element, options)
 
+    document.body.addEventListener('mapview:update', (event) => {
+      let { zoom, latlng } = event.detail
+      if (!Utils.LatLngIsValid(latlng)) return
+      zoom = Math.min(zoom, this.getMaxZoom())
+      zoom = Math.max(zoom, this.getMinZoom())
+      this.setView(latlng, zoom)
+    })
+
     this.on('baselayerchange', (e) => {
       if (this._controls.miniMap) this._controls.miniMap.onMainMapBaseLayerChange(e)
     })
@@ -264,6 +272,21 @@ export const LeafletMap = BaseMap.extend({
     this.initControls()
     // Needs locate control and hash to exist
     this.initCenter()
+
+    // Wait for URL to have been parsed before modifying the hash
+    const updateHash = () => {
+      const center = this.getCenter()
+      document.body.dispatchEvent(
+        new CustomEvent('mapview:updated', {
+          detail: {
+            zoom: this.getZoom(),
+            latlng: [center.lat.toFixed(6), center.lng.toFixed(6)],
+          },
+        })
+      )
+    }
+    this.on('moveend', updateHash)
+    updateHash()
     this.initTileLayers()
     this.renderUI()
   },
@@ -306,10 +329,9 @@ export const LeafletMap = BaseMap.extend({
 
   initCenter: async function () {
     this._setDefaultCenter()
-    if (this.options.hash) this.addHash()
-    if (this.options.hash && this._hash.parseHash(location.hash)) {
+    if (this.options.hash && window.location.hash) {
       // FIXME An invalid hash will cause the load to fail
-      this._hash.update()
+      this._umap.hash.parse()
     } else if (this.options.defaultView === 'locate' && !this.options.noControl) {
       await this._controls.locate.start()
     } else if (this.options.defaultView === 'data') {
