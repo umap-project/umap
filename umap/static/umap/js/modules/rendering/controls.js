@@ -1,5 +1,14 @@
-import { Control, LayerGroup, latLng, Icon, Marker } from '../../../vendors/leaflet/leaflet-src.esm.js'
-import { PhotonSearch, PhotonReverse } from '../../../vendors/photon/leaflet.photon.esm.js'
+import {
+  Control,
+  LayerGroup,
+  latLng,
+  Icon,
+  Marker,
+} from '../../../vendors/leaflet/leaflet-src.esm.js'
+import {
+  PhotonSearch,
+  PhotonReverse,
+} from '../../../vendors/photon/leaflet.photon.esm.js'
 import * as Utils from '../utils.js'
 import { translate } from '../i18n.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
