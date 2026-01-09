@@ -12,7 +12,7 @@ mkdir -p umap/static/umap/vendors/minimap/ && cp -r node_modules/leaflet-minimap
 mkdir -p umap/static/umap/vendors/heat/ && cp -r node_modules/leaflet.heat/dist/leaflet-heat.js umap/static/umap/vendors/heat/
 mkdir -p umap/static/umap/vendors/fullscreen/ && cp -r node_modules/leaflet-fullscreen/dist/** umap/static/umap/vendors/fullscreen/
 mkdir -p umap/static/umap/vendors/measurable/ && cp -r node_modules/leaflet-measurable/Leaflet.Measurable.* umap/static/umap/vendors/measurable/
-mkdir -p umap/static/umap/vendors/photon/ && cp -r node_modules/leaflet.photon/leaflet.photon.js umap/static/umap/vendors/photon/
+mkdir -p umap/static/umap/vendors/photon/ && cp -r node_modules/leaflet.photon/leaflet.photon.esm.js umap/static/umap/vendors/photon/
 mkdir -p umap/static/umap/vendors/csv2geojson/ && cp -r node_modules/csv2geojson/csv2geojson.js umap/static/umap/vendors/csv2geojson/
 mkdir -p umap/static/umap/vendors/togeojson/ && cp node_modules/@tmcw/togeojson/dist/togeojson.es.mjs umap/static/umap/vendors/togeojson/togeojson.es.js
 mkdir -p umap/static/umap/vendors/togeojson/ && cp node_modules/@tmcw/togeojson/dist/togeojson.es.mjs.map umap/static/umap/vendors/togeojson/togeojson.es.mjs.map

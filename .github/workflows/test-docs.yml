@@ -67,7 +67,7 @@ jobs:
       - name: Install dependencies
         run: |
           python3 -m pip install -e .[test,dev]
-          make installjs
+          npm install eslint
 
       - name: Run Lint
         run: make lint
