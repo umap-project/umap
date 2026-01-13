@@ -67,7 +67,7 @@ test = [
   "moto[s3]==5.1.18"
 ]
 deploy = [
-  "Django==5.2.9",
+  "Django==5.2.10",
 ]
 yunohost = [
   "uvicorn==0.38.0",
