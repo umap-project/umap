@@ -51,10 +51,6 @@ export default class Browser {
     parent.appendChild(row)
   }
 
-  datalayerId(datalayer) {
-    return `browse_data_datalayer_${stamp(datalayer)}`
-  }
-
   addDataLayer(datalayer, parent) {
     const open = this.mode !== 'layers' ? ' open' : ''
     const [container, { details, toolbox, label, ul }] = Utils.loadTemplateWithRefs(`
@@ -141,11 +137,32 @@ export default class Browser {
     })
   }
 
+  addGroup(parent, children) {
+    const [root, { container, toolbox }] = Utils.loadTemplateWithRefs(`
+      <details open>
+        <summary class="with-toolbox">${parent.getName()}<span class="toolbox" data-ref="toolbox"></span></summary>
+        <div data-ref="container"></div>
+      </details>
+    `)
+    parent.renderToolbox(toolbox)
+    this.dataContainer.appendChild(root)
+    for (const datalayer of children) {
+      this.addDataLayer(datalayer, container)
+    }
+  }
+
   update() {
     if (!this.isOpen()) return
     this.dataContainer.innerHTML = ''
-    for (const datalayer of this._umap.datalayers.browsable()) {
-      this.addDataLayer(datalayer, this.dataContainer)
+    const tree = this._umap.datalayers.tree()
+    for (const [parent, children] of tree.entries()) {
+      if (parent) {
+        this.addGroup(parent, children)
+      } else {
+        for (const datalayer of children) {
+          this.addDataLayer(datalayer, this.dataContainer)
+        }
+      }
     }
   }
 
@@ -193,7 +210,9 @@ export default class Browser {
     // https://github.com/Leaflet/Leaflet/pull/9052
     DomEvent.disableClickPropagation(container)
     details.open = this.mode === 'filters'
-    toggle.addEventListener('click', () => this.toggleLayers())
+    toggle.addEventListener('click', () =>
+      Utils.toggleLayers(this._umap.datalayers.browsable())
+    )
     fitBounds.addEventListener('click', () => this._umap.fitDataBounds())
     download.addEventListener('click', () => this.downloadVisible(download))
     download.hidden = this._umap.getProperty('embedControl') === false
@@ -267,23 +286,6 @@ export default class Browser {
       })
     }
     menu.openBelow(element, items)
-  }
-
-  toggleLayers() {
-    // If at least one layer is shown, hide it
-    // otherwise show all
-    let allHidden = true
-    this._umap.datalayers.browsable().map((datalayer) => {
-      if (datalayer.isVisible()) allHidden = false
-    })
-    this._umap.datalayers.browsable().map((datalayer) => {
-      datalayer.autoVisibility = false
-      if (allHidden) {
-        datalayer.show()
-      } else {
-        if (datalayer.isVisible()) datalayer.hide()
-      }
-    })
   }
 
   static backButton(umap) {
