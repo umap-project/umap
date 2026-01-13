@@ -395,6 +395,9 @@ export const SCHEMA = {
   owner: {
     type: Object,
   },
+  parent: {
+    type: Object,
+  },
   permanentCredit: {
     type: 'Text',
     impacts: ['ui'],
@@ -643,6 +646,11 @@ export const SCHEMA = {
   type: {
     type: String,
     impacts: ['data'],
+  },
+  unfoldOnLoad: {
+    type: Boolean,
+    default: true,
+    label: translate('Unfold on load'),
   },
   weight: {
     type: Number,

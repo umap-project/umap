@@ -504,6 +504,7 @@ class DataLayer(NamedModel):
     uuid = models.UUIDField(unique=True, primary_key=True, editable=False)
     old_id = models.IntegerField(null=True, blank=True)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
+    parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True)
     description = models.TextField(blank=True, null=True, verbose_name=_("description"))
     geojson = models.FileField(
         upload_to=upload_to, blank=True, null=True, storage=set_storage
@@ -530,7 +531,7 @@ class DataLayer(NamedModel):
     modified_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ("rank",)
+        ordering = ("-parent__pk", "rank")
 
     def save(self, **kwargs):
         super(DataLayer, self).save(**kwargs)
@@ -566,6 +567,7 @@ class DataLayer(NamedModel):
             metadata["old_id"] = self.old_id
         metadata["id"] = self.pk
         metadata["rank"] = self.rank
+        metadata["parent"] = self.parent.pk if self.parent else None
         metadata["permissions"] = {"edit_status": self.edit_status}
         metadata["editMode"] = "advanced" if self.can_edit(request) else "disabled"
         metadata["_referenceVersion"] = self.reference_version

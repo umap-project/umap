@@ -691,3 +691,20 @@ export const LatLngIsValid = (latlng) => {
     Math.abs(lng) <= 180
   )
 }
+
+export const toggleLayers = (layers) => {
+  // If at least one layer is shown, hide it
+  // otherwise show all
+  let allHidden = true
+  layers.map((datalayer) => {
+    if (datalayer.isVisible()) allHidden = false
+  })
+  layers.map((datalayer) => {
+    datalayer.autoVisibility = false
+    if (allHidden) {
+      datalayer.show()
+    } else {
+      if (datalayer.isVisible()) datalayer.hide()
+    }
+  })
+}
