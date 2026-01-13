@@ -15,6 +15,9 @@ export class DataLayerManager extends Object {
   count() {
     return this.active().length
   }
+  some(func) {
+    return this.active().some(func)
+  }
   find(func) {
     for (const datalayer of this.reverse()) {
       if (func.call(datalayer, datalayer)) {
@@ -51,6 +54,20 @@ export class DataLayerManager extends Object {
   last() {
     const layers = this.active()
     return layers[layers.length - 1]
+  }
+  tree() {
+    const groups = new Map()
+    for (const datalayer of this.active()) {
+      if (!groups.get(datalayer.parent)) {
+        groups.set(datalayer.parent, [])
+      }
+    }
+    for (const datalayer of this.active()) {
+      if (groups.get(datalayer)) continue
+      groups.get(datalayer.parent).push(datalayer)
+    }
+    console.log(groups)
+    return groups
   }
 }
 

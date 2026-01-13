@@ -654,6 +654,18 @@ Fields.NullableDataLayerSwitcher = class extends BaseDataLayerSwitcher {
   }
 }
 
+Fields.ParentSwitcher = class extends BaseDataLayerSwitcher {
+  getOptions() {
+    const options = super.getOptions()
+    options.unshift([null, translate('Choose a parent layer')])
+    return options
+  }
+
+  toHTML() {
+    return this.builder.getter(this.field)?.id
+  }
+}
+
 Fields.EditableDataLayerSwitcher = class extends BaseDataLayerSwitcher {
   getTemplate() {
     return `
