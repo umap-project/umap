@@ -605,6 +605,8 @@ class DataLayer(NamedModel):
         or the request.
         """
         if self.edit_status == self.INHERIT:
+            if self.parent:
+                return self.parent.can_edit(request)
             return self.map.can_edit(request)
         can = False
         if not request:
