@@ -798,8 +798,6 @@ export class DataLayer {
           },
         ]
       )
-    } else {
-      metadataFields.push('properties.unfoldOnLoad')
     }
     if (!this.hasChildren()) {
       metadataFields.unshift([
