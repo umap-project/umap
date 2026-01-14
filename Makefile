@@ -10,6 +10,11 @@ develop: ## Install the test and dev dependencies
 	python3 -m pip install -e .[test,dev,sync,s3]
 	playwright install
 
+.PHONY: ci
+ci: ## Install the test and dev dependencies for ci
+	python3 -m pip install -e .[test,dev,sync,s3]
+	playwright install chromium-headless-shell
+
 .PHONY: format
 format: ## Format the code and templates files
 	-djlint umap/templates --reformat
