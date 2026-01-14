@@ -12,7 +12,7 @@ from django.urls import reverse
 
 from umap.models import DataLayer, Map
 
-from .base import MapFactory
+from .base import DataLayerFactory, MapFactory
 
 pytestmark = pytest.mark.django_db
 
@@ -459,6 +459,47 @@ def test_anonymous_user_can_edit_if_inherit_and_map_in_public_mode(
     response = client.post(url, post_data, follow=True)
     assert response.status_code == 200
     modified_datalayer = DataLayer.objects.get(pk=datalayer.pk)
+    assert modified_datalayer.name == name
+
+
+def test_datalayer_inherit_from_parent(datalayer, client, map, post_data):
+    map.edit_status = Map.OWNER
+    map.save()
+    datalayer.edit_status = DataLayer.ANONYMOUS
+    datalayer.save()
+    child = DataLayerFactory(map=map, parent=datalayer, edit_status=DataLayer.INHERIT)
+    url = reverse("datalayer_update", args=(map.pk, child.pk))
+    name = "new name"
+    post_data["name"] = name
+    response = client.post(url, post_data, follow=True)
+    assert response.status_code == 200
+    modified_datalayer = DataLayer.objects.get(pk=child.pk)
+    assert modified_datalayer.name == name
+
+
+def test_datalayer_should_override_parent(datalayer, client, map, post_data, user):
+    map.edit_status = Map.COLLABORATORS
+    map.editors.add(user)
+    map.save()
+    datalayer.edit_status = DataLayer.ANONYMOUS
+    datalayer.save()
+    child = DataLayerFactory(map=map, parent=datalayer, edit_status=DataLayer.OWNER)
+    url = reverse("datalayer_update", args=(map.pk, child.pk))
+    name = "new name"
+    post_data["name"] = name
+    client.login(username=user, password="123123")
+    response = client.post(url, post_data, follow=True)
+    # User is only editor, and layer is in OWNER mode
+    assert response.status_code == 403
+    client.logout()
+
+    # Now test with map owner
+    client.login(username=map.owner, password="123123")
+    # Reset file in post_data, consumed in previous call
+    post_data["geojson"].seek(0)
+    response = client.post(url, post_data, follow=True)
+    assert response.status_code == 200
+    modified_datalayer = DataLayer.objects.get(pk=child.pk)
     assert modified_datalayer.name == name
 
 
