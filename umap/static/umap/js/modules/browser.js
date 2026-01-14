@@ -138,8 +138,9 @@ export default class Browser {
   }
 
   addGroup(parent, children) {
+    const open = children.some((d) => d.isVisible()) ? ' open' : ''
     const [root, { container, toolbox }] = Utils.loadTemplateWithRefs(`
-      <details open>
+      <details${open}>
         <summary class="with-toolbox">${parent.getName()}<span class="toolbox" data-ref="toolbox"></span></summary>
         <div data-ref="container"></div>
       </details>

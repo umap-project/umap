@@ -647,11 +647,6 @@ export const SCHEMA = {
     type: String,
     impacts: ['data'],
   },
-  unfoldOnLoad: {
-    type: Boolean,
-    default: true,
-    label: translate('Unfold on load'),
-  },
   weight: {
     type: Number,
     impacts: ['data'],
