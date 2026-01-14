@@ -115,6 +115,7 @@ def test_limitbounds_impacts_ui(live_server, page, tilelayer):
     page.get_by_text("Limit bounds").click()
     default_zoom_url = f"{live_server.url}/en/map/new/#5/51.110/7.053"
     page.goto(default_zoom_url)
+    page.wait_for_timeout(300)
     page.get_by_role("button", name="Use current bounds").click()
 
     zoom_in = page.get_by_label("Zoom in")
