@@ -30,7 +30,7 @@ def test_can_create_heatmap_after_import(live_server, page, tilelayer, settings)
     page.get_by_role("button", name="Import data", exact=True).click()
     page.get_by_role("button", name="Manage layers").click()
     page.get_by_role("button", name="Edit", exact=True).click()
-    page.get_by_role("combobox").select_option("Heat")
+    page.locator("select[name=type]").select_option("Heat")
     page.get_by_role("button", name="Save draft").click()
     expect(page.locator("canvas.leaflet-heatmap-layer")).to_be_visible()
 

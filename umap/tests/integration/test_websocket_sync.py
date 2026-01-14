@@ -236,7 +236,7 @@ def test_websocket_connection_can_sync_datalayer_properties(
     peerA.get_by_role("button", name="Add a layer").click()
     peerA.locator('input[name="name"]').click()
     peerA.locator('input[name="name"]').fill("synced layer!")
-    peerA.get_by_role("combobox").select_option("Choropleth")
+    peerA.locator('select[name="type"]').select_option("Choropleth")
     peerA.locator("body").press("Escape")
 
     peerB.get_by_role("button", name="Manage layers").click()
@@ -244,7 +244,7 @@ def test_websocket_connection_can_sync_datalayer_properties(
         "button", name="Edit", exact=True
     ).first.click()
     expect(peerB.locator('input[name="name"]')).to_have_value("synced layer!")
-    expect(peerB.get_by_role("combobox")).to_have_value("Choropleth")
+    expect(peerB.locator('select[name="type"]')).to_have_value("Choropleth")
 
 
 @pytest.mark.xdist_group(name="websockets")
