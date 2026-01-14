@@ -55,18 +55,17 @@ export class DataLayerManager extends Object {
     const layers = this.active()
     return layers[layers.length - 1]
   }
-  tree() {
+  tree(layers) {
     const groups = new Map()
-    for (const datalayer of this.active()) {
+    for (const datalayer of layers) {
       if (!groups.get(datalayer.parent)) {
         groups.set(datalayer.parent, [])
       }
     }
-    for (const datalayer of this.active()) {
+    for (const datalayer of layers) {
       if (groups.get(datalayer)) continue
       groups.get(datalayer.parent).push(datalayer)
     }
-    console.log(groups)
     return groups
   }
 }

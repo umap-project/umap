@@ -154,7 +154,7 @@ export default class Browser {
   update() {
     if (!this.isOpen()) return
     this.dataContainer.innerHTML = ''
-    const tree = this._umap.datalayers.tree()
+    const tree = this._umap.datalayers.tree(this._umap.datalayers.browsable())
     for (const [parent, children] of tree.entries()) {
       if (parent) {
         this.addGroup(parent, children)
