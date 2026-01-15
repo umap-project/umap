@@ -395,6 +395,9 @@ export const SCHEMA = {
   owner: {
     type: Object,
   },
+  parent: {
+    type: Object,
+  },
   permanentCredit: {
     type: 'Text',
     impacts: ['ui'],
