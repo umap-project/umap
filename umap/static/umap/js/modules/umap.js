@@ -1575,34 +1575,6 @@ export default class Umap {
 
   editDatalayers() {
     if (!this.editEnabled) return
-    const template = `
-      <div>
-        <h3><i class="icon icon-16 icon-layers"></i>${translate('Manage layers')}</h3>
-        <ul data-ref=ul></ul>
-      </div>
-    `
-    const [container, { ul }] = Utils.loadTemplateWithRefs(template)
-    this.datalayers.reverse().map((datalayer) => {
-      const [row, { toolbox, formbox }] = Utils.loadTemplateWithRefs(`
-        <li class="orderable with-toolbox ${datalayer.cssId}">
-          <span data-ref=formbox class="datalayer-editable-title truncate"></span>
-          <span data-ref=toolbox>
-            <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
-          </span>
-        </li>
-      `)
-      datalayer.renderToolbox(toolbox)
-      const builder = new MutatingForm(
-        datalayer,
-        [['properties.name', { handler: 'EditableText' }]],
-        { className: 'umap-form-inline' }
-      )
-      const form = builder.build()
-      formbox.appendChild(form)
-      row.classList.toggle('off', !datalayer.isVisible())
-      row.dataset.id = datalayer.id
-      ul.appendChild(row)
-    })
     const onReorder = (src, dst, initialIndex, finalIndex) => {
       const movedLayer = this.datalayers[src.dataset.id]
       const targetLayer = this.datalayers[dst.dataset.id]
@@ -1626,7 +1598,66 @@ export default class Umap {
       this.sync.commitBatch()
       this.onDataLayersChanged()
     }
-    const orderable = new Orderable(ul, onReorder)
+
+    const template = `
+      <div>
+        <h3><i class="icon icon-16 icon-layers"></i>${translate('Manage layers')}</h3>
+        <ul data-ref=ul></ul>
+      </div>
+    `
+    const [container, { ul }] = Utils.loadTemplateWithRefs(template)
+    const tree = this.datalayers.tree(this.datalayers.reverse())
+    for (const [parent, children] of tree.entries()) {
+      let container = ul
+      if (parent) {
+        const [li, { body, toolbox, formbox }] = Utils.loadTemplateWithRefs(`
+          <li class="orderable">
+            <details open>
+              <summary with-toolbox ${parent.cssId}>
+                <span data-ref=formbox class="datalayer-editable-title truncate"></span>
+                <span data-ref=toolbox>
+                  <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
+                </span>
+              </summary>
+              <ul data-ref="body"></ul>
+            </details>
+          </li>
+        `)
+        parent.renderToolbox(toolbox)
+        const builder = new MutatingForm(
+          parent,
+          [['properties.name', { handler: 'EditableText' }]],
+          { className: 'umap-form-inline' }
+        )
+        const form = builder.build()
+        formbox.appendChild(form)
+        li.dataset.id = parent.id
+        ul.appendChild(li)
+        container = body
+      }
+      for (const child of children) {
+        const [row, { toolbox, formbox }] = Utils.loadTemplateWithRefs(`
+          <li class="orderable with-toolbox ${child.cssId}">
+            <span data-ref=formbox class="datalayer-editable-title truncate"></span>
+            <span data-ref=toolbox>
+              <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
+            </span>
+          </li>
+        `)
+        child.renderToolbox(toolbox)
+        const builder = new MutatingForm(
+          child,
+          [['properties.name', { handler: 'EditableText' }]],
+          { className: 'umap-form-inline' }
+        )
+        const form = builder.build()
+        formbox.appendChild(form)
+        row.classList.toggle('off', !child.isVisible())
+        row.dataset.id = child.id
+        container.appendChild(row)
+      }
+    }
+    new Orderable(ul, onReorder)
 
     const [bar, { button }] = DOMUtils.loadTemplateWithRefs(`
       <div class="button-bar">
