@@ -56,30 +56,31 @@ export class Form extends Utils.WithEvents {
     return this.helpers[field]
   }
 
-  getter(field) {
-    const path = field.split('.')
+  getter(helper) {
+    const path = helper.field.split('.')
     let value = this.obj
     for (const sub of path) {
       try {
         value = value[sub]
       } catch {
-        console.debug(field)
+        console.debug(helper.field)
       }
     }
     return value
   }
 
-  setter(field, value) {
+  setter(helper, value) {
     if ('setter' in this.obj) {
-      this.obj.setter(field, value)
+      this.obj.setter(helper.field, value)
     } else {
-      Utils.setObjectValue(this.obj, field, value)
+      Utils.setObjectValue(this.obj, helper.field, value)
     }
   }
 
   restoreField(field) {
-    const initial = this.helpers[field].initial
-    this.setter(field, initial)
+    const helper = this.helpers[field]
+    const initial = helper.initial
+    this.setter(helper.field, initial)
   }
 
   getName(field) {
@@ -180,21 +181,21 @@ export class MutatingForm extends Form {
     }
   }
 
-  setter(field, value) {
-    const oldValue = this.getter(field)
-    super.setter(field, value)
+  setter(helper, value) {
+    const oldValue = this.getter(helper)
+    super.setter(helper, value)
     if ('render' in this.obj) {
-      this.obj.render([field], this)
+      this.obj.render([helper.field], this)
     }
-    if ('sync' in this.obj) {
-      this.obj.sync.update(field, value, oldValue)
+    if ('sync' in this.obj && helper.properties.sync !== false) {
+      this.obj.sync.update(helper.field, value, oldValue)
     }
   }
 
   getTemplate(helper) {
     let template
     if (helper.properties.inheritable) {
-      const extraClassName = this.getter(helper.field) === undefined ? ' undefined' : ''
+      const extraClassName = this.getter(helper) === undefined ? ' undefined' : ''
       template = `
         <div class="umap-field-${helper.name} formbox inheritable${extraClassName}">
           <div class="header" data-ref=header>
