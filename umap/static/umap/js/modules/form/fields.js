@@ -87,7 +87,7 @@ Fields.Base = class {
     const path = this.field.split('.')
     const key = path[path.length - 1]
     if (!this.properties.inheritable) {
-      value = this.builder.getter(this.field)
+      value = this.builder.getter(this)
     } else {
       value = this.obj.getOption(key)
     }
@@ -109,7 +109,7 @@ Fields.Base = class {
   }
 
   set() {
-    this.builder.setter(this.field, this.toJS())
+    this.builder.setter(this, this.toJS())
   }
 
   getLabelTemplate() {
@@ -644,7 +644,7 @@ const BaseDataLayerSwitcher = class extends Fields.Select {
 
   set() {
     this.builder._umap.lastUsedDataLayer = this.toJS()
-    this.builder.setter(this.field, this.toJS())
+    this.builder.setter(this, this.toJS())
   }
 }
 
@@ -762,7 +762,7 @@ Fields.IconUrl = class extends Fields.BlurInput {
     // in the super method, maybe it's useless for all fields.
     const path = this.field.split('.')
     const key = path[path.length - 1]
-    return this.builder.getter(this.field)
+    return this.builder.getter(this)
   }
 
   getTemplate() {

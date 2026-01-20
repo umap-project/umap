@@ -244,8 +244,10 @@ class Feature {
       </div>
     `)
 
+    // No need to sync the datalayer key, given we already do a delete/upsert when
+    // it changes.
     let builder = new MutatingForm(this, [
-      ['datalayer', { handler: 'EditableDataLayerSwitcher' }],
+      ['datalayer', { handler: 'EditableDataLayerSwitcher', sync: false }],
     ])
     // removeLayer step will close the edit panel, let's reopen it
     builder.on('set', () => this.edit(event))
