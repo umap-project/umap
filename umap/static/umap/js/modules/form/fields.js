@@ -662,7 +662,14 @@ Fields.ParentSwitcher = class extends BaseDataLayerSwitcher {
   }
 
   toHTML() {
-    return this.builder.getter(this.field)?.id
+    return this.builder.getter(this)
+  }
+
+  toJS() {
+    // Only return the UUID, as the DataLayer.parent setter will
+    // convert it to a DataLayer instance, and this allows to sync
+    // the value to other peers (we cannot sync object instances).
+    return this.value()
   }
 }
 

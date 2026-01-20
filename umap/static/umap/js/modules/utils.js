@@ -525,10 +525,12 @@ export function setObjectValue(obj, key, value) {
   if (objectToSet === undefined) return
 
   // Set the value (or delete it)
+  objectToSet[lastKey] = value
+  // This will not work for setter (eg. DataLayer.parentId)
+  // but the line above (setting the property as undefined)
+  // will do the job.
   if (typeof value === 'undefined') {
     delete objectToSet[lastKey]
-  } else {
-    objectToSet[lastKey] = value
   }
 }
 

@@ -48,10 +48,6 @@ export class DataLayer {
     this._propertiesIndex = []
 
     this._leafletMap = leafletMap
-    this.parentPane = this._leafletMap.getPane('overlayPane')
-    this.pane = this._leafletMap.createPane(`datalayer${stamp(this)}`, this.parentPane)
-    // FIXME: should be on layer
-    this.renderer = new SVG({ pane: this.pane })
     this.defaultProperties = {
       displayOnLoad: true,
       inCaption: true,
@@ -66,14 +62,20 @@ export class DataLayer {
     data.id = data.id || crypto.randomUUID()
 
     this.setProperties(data)
+    this.rootPane = this._leafletMap.getPane('overlayPane')
+    this.parentPane = this.rootPane
     if (this.properties.parent) {
-      this.parent = this._umap.datalayers[this.properties.parent]
+      this.parentId = this.properties.parent
       if (!this.parent) {
         console.error(
           `Parent defined but not found: ${this.properties.parent} (self: ${this.id})`
         )
       }
+      this.parentPane = this.parent.pane
     }
+    this.pane = this._leafletMap.createPane(`pane-${this.cssId}`, this.parentPane)
+    // FIXME: should be on layer
+    this.renderer = new SVG({ pane: this.pane })
     this.pane.dataset.id = this.id
     if (this.properties.rank === undefined) {
       this.properties.rank = this._umap.datalayers.count()
@@ -258,12 +260,24 @@ export class DataLayer {
 
   insertBefore(other) {
     if (!other) return
-    this.parentPane.insertBefore(this.pane, other.pane)
+    const oldParentId = this.parent?.id
+    this.parent = other.parent
+    this.parentPane = this.parent?.pane || this.rootPane
+    this.sync.update('parentId', this.parent?.id, oldParentId)
+    other.parentPane.insertBefore(this.pane, other.pane)
   }
 
   insertAfter(other) {
     if (!other) return
-    this.parentPane.insertBefore(this.pane, other.pane.nextSibling)
+    const oldParentId = this.parent?.id
+    this.parent = other.parent
+    this.parentPane = this.parent?.pane || this.rootPane
+    this.sync.update('parentId', this.parent?.id, oldParentId)
+    if (other.pane.nextSibling) {
+      other.parentPane.insertBefore(this.pane, other.pane.nextSibling)
+    } else {
+      other.parentPane.appendChild(this.pane)
+    }
   }
 
   bringToTop() {
@@ -760,6 +774,14 @@ export class DataLayer {
     }
   }
 
+  get parentId() {
+    return this.parent?.id
+  }
+
+  set parentId(uuid) {
+    this.parent = this._umap.datalayers[uuid]
+  }
+
   get children() {
     return this._umap.datalayers.filter((d) => d.parent?.id === this.id)
   }
@@ -770,6 +792,12 @@ export class DataLayer {
 
   _editMetadata(container) {
     const metadataFields = ['properties.name', 'properties.description']
+    if (!this.hasChildren()) {
+      metadataFields.unshift([
+        'parentId',
+        { handler: 'ParentSwitcher', label: translate('Parent') },
+      ])
+    }
     if (!this.hasChildren()) {
       metadataFields.push([
         'properties.type',
@@ -798,12 +826,6 @@ export class DataLayer {
           },
         ]
       )
-    }
-    if (!this.hasChildren()) {
-      metadataFields.unshift([
-        'parent',
-        { handler: 'ParentSwitcher', label: translate('Parent') },
-      ])
     }
     container.appendChild(
       DOMUtils.loadTemplate(`

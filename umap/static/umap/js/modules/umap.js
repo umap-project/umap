@@ -1573,28 +1573,31 @@ export default class Umap {
     })
   }
 
-  editDatalayers() {
+  async editDatalayers() {
     if (!this.editEnabled) return
-    const onReorder = (src, dst, initialIndex, finalIndex) => {
+    const onReorder = async (src, dst, initialIndex, finalIndex, dragMode) => {
       const movedLayer = this.datalayers[src.dataset.id]
       const targetLayer = this.datalayers[dst.dataset.id]
-      const minIndex = Math.min(movedLayer.getDOMOrder(), targetLayer.getDOMOrder())
-      const maxIndex = Math.max(movedLayer.getDOMOrder(), targetLayer.getDOMOrder())
-      if (finalIndex === 0) movedLayer.bringToTop()
-      else if (finalIndex > initialIndex) movedLayer.insertBefore(targetLayer)
-      else movedLayer.insertAfter(targetLayer)
       this.sync.startBatch()
-      this.datalayers.reverse().map(async (datalayer) => {
+      // TODO: deal with dragMode == middle (add new child)
+      if (dragMode === 'above') movedLayer.insertBefore(targetLayer)
+      else movedLayer.insertAfter(targetLayer)
+      const els = Array.from(src.parentNode.children)
+      if (src.parentNode !== dst.parentNode) {
+        els.push(...dst.parentNode.children)
+      }
+      for (const el of els) {
+        const datalayer = this.datalayers[el.dataset.id]
         const rank = datalayer.getDOMOrder()
-        if (rank >= minIndex && rank <= maxIndex) {
-          // TODO allow to save only metadata instead of force loading data
+        // TODO: deal with parent changed but not rank
+        if (rank !== datalayer.rank) {
           if (!datalayer.isLoaded()) await datalayer.fetchData()
           const oldRank = datalayer.rank
           datalayer.rank = rank
           datalayer.sync.update('options.rank', rank, oldRank)
           datalayer.redraw()
         }
-      })
+      }
       this.sync.commitBatch()
       this.onDataLayersChanged()
     }
