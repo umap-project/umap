@@ -49,6 +49,19 @@ export default class Orderable {
     event.stopPropagation()
     event.preventDefault() // Necessary. Allows us to drop.
     event.dataTransfer.dropEffect = 'move'
+    this.pointerY = event.clientY
+    const dst = this.findTarget(event.target)
+    const top = dst.getBoundingClientRect().top
+    const bottom = dst.getBoundingClientRect().bottom
+    const height = bottom - top
+    const third = height / 3
+    if (this.pointerY < top + third) {
+      this.dragMode = 'above'
+    } else if (this.pointerY > bottom - third) {
+      this.dragMode = 'below'
+    } else {
+      this.dragMode = 'middle'
+    }
     return false
   }
 
@@ -62,7 +75,8 @@ export default class Orderable {
     const targetIndex = this.nodeIndex(this.dst)
     const srcIndex = this.nodeIndex(this.src)
     const parentNode = this.dst.parentNode
-    if (targetIndex > srcIndex) {
+    // TODO: deal with middle / adding a new child
+    if (this.dragMode === 'below') {
       if (this.dst.nextSibling) {
         parentNode.insertBefore(this.src, this.dst.nextSibling)
       } else {
@@ -81,7 +95,13 @@ export default class Orderable {
     // event.target is current target element.
     if (event.stopPropagation) event.stopPropagation() // Stops the browser from redirecting.
     if (!this.dst) return
-    this.onCommit(this.src, this.dst, this.initialIndex, this.nodeIndex(this.src))
+    this.onCommit(
+      this.src,
+      this.dst,
+      this.initialIndex,
+      this.nodeIndex(this.src),
+      this.dragMode
+    )
     return false
   }
 
