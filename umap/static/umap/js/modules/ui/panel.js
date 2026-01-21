@@ -98,6 +98,13 @@ export class Panel {
     document.body.classList.remove(`panel-${this.className.split(' ')[0]}-on`)
     this.container.dataset.highlight = null
     this.onClose()
+    Promise.all(
+      this.container.getAnimations?.().map((animation) => animation.finished)
+    ).then(() => {
+      if (!this.isOpen()) {
+        this.container.innerHTML = ''
+      }
+    })
   }
 
   onClose() {
