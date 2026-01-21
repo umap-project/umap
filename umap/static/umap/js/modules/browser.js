@@ -51,9 +51,16 @@ export default class Browser {
     parent.appendChild(row)
   }
 
-  addDataLayer(datalayer, parent) {
-    const open = this.mode !== 'layers' ? ' open' : ''
-    const [container, { details, toolbox, label, ul }] = Utils.loadTemplateWithRefs(`
+  addDataLayer(datalayer, children, parentContainer) {
+    const open =
+      this.mode !== 'layers'
+        ? ' open'
+        : children.some((d) => d.parent.isVisible())
+          ? ' open'
+          : ''
+
+    const [container, { details, toolbox, label, ul, childrenContainer }] =
+      Utils.loadTemplateWithRefs(`
       <details data-ref=details class="datalayer ${datalayer.cssId}" id="${datalayer.cssId}"${open}>
         <summary class="with-toolbox">
           <span>
@@ -63,6 +70,7 @@ export default class Browser {
           <span data-ref=toolbox></span>
         </summary>
         <ul data-ref=ul></ul>
+        <div data-ref=childrenContainer></div>
       </details>
     `)
     details.addEventListener('toggle', () => {
@@ -71,7 +79,10 @@ export default class Browser {
       }
     })
     datalayer.renderToolbox(toolbox)
-    parent.appendChild(container)
+    parentContainer.appendChild(container)
+    for (const child of children) {
+      this.addDataLayer(child.parent, child.children, childrenContainer)
+    }
     this.updateFeaturesList(datalayer)
   }
 
@@ -137,33 +148,12 @@ export default class Browser {
     })
   }
 
-  addGroup(parent, children) {
-    const open = children.some((d) => d.isVisible()) ? ' open' : ''
-    const [root, { container, toolbox }] = Utils.loadTemplateWithRefs(`
-      <details${open}>
-        <summary class="with-toolbox">${parent.getName()}<span class="toolbox" data-ref="toolbox"></span></summary>
-        <div data-ref="container"></div>
-      </details>
-    `)
-    parent.renderToolbox(toolbox)
-    this.dataContainer.appendChild(root)
-    for (const datalayer of children) {
-      this.addDataLayer(datalayer, container)
-    }
-  }
-
   update() {
     if (!this.isOpen()) return
     this.dataContainer.innerHTML = ''
-    const tree = this._umap.datalayers.tree(this._umap.datalayers.browsable())
-    for (const [parent, children] of tree.entries()) {
-      if (parent) {
-        this.addGroup(parent, children)
-      } else {
-        for (const datalayer of children) {
-          this.addDataLayer(datalayer, this.dataContainer)
-        }
-      }
+    const { _, children } = this._umap.datalayers.tree(this._umap.datalayers.reverse())
+    for (const child of children) {
+      this.addDataLayer(child.parent, child.children, this.dataContainer)
     }
   }
 

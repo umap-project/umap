@@ -157,12 +157,14 @@ class Rule {
 
   renderToolbox(ul) {
     const template = `
-      <li data-id="${stamp(this)}" class="orderable">
-        <button class="icon icon-16 icon-eye" title="${translate('Toggle rule')}" data-ref=toggle></button>
-        <button class="icon icon-16 icon-edit show-on-edit" title="${translate('Edit')}" data-ref=edit></button>
-        <button class="icon icon-16 icon-delete show-on-edit" title="${translate('Delete rule')}" data-ref=remove></button>
+      <li data-id="${stamp(this)}" class="orderable with-toolbox">
         <span>${this.label || translate('empty rule')}</span>
-        <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
+        <span>
+          <button class="icon icon-16 icon-eye" title="${translate('Toggle rule')}" data-ref=toggle></button>
+          <button class="icon icon-16 icon-edit show-on-edit" title="${translate('Edit')}" data-ref=edit></button>
+          <button class="icon icon-16 icon-delete show-on-edit" title="${translate('Delete rule')}" data-ref=remove></button>
+          <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
+        </span>
       </li>
     `
     const [li, { toggle, edit, remove }] = Utils.loadTemplateWithRefs(template)

@@ -710,3 +710,15 @@ export const toggleLayers = (layers) => {
     }
   })
 }
+
+export const asciiTree = ({ parent, children }) => {
+  if (parent) {
+    console.group(parent.rank, parent.getName())
+  }
+  for (const child of children) {
+    asciiTree(child)
+  }
+  if (parent) {
+    console.groupEnd()
+  }
+}

@@ -258,6 +258,14 @@ export class DataLayer {
     this._autoVisibility = value
   }
 
+  changeParent(parent) {
+    const oldParentId = this.parent?.id
+    this.parent = parent
+    this.parentPane = parent.pane
+    this.sync.update('parentId', parent.id, oldParentId)
+    parent.pane.appendChild(this.pane)
+  }
+
   insertBefore(other) {
     if (!other) return
     const oldParentId = this.parent?.id

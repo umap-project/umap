@@ -1579,9 +1579,13 @@ export default class Umap {
       const movedLayer = this.datalayers[src.dataset.id]
       const targetLayer = this.datalayers[dst.dataset.id]
       this.sync.startBatch()
-      // TODO: deal with dragMode == middle (add new child)
-      if (dragMode === 'above') movedLayer.insertBefore(targetLayer)
-      else movedLayer.insertAfter(targetLayer)
+      if (dragMode === 'above') {
+        movedLayer.insertAfter(targetLayer)
+      } else if (dragMode === 'below') {
+        movedLayer.insertBefore(targetLayer)
+      } else if (dragMode === 'middle') {
+        movedLayer.changeParent(targetLayer)
+      }
       const els = Array.from(src.parentNode.children)
       if (src.parentNode !== dst.parentNode) {
         els.push(...dst.parentNode.children)
@@ -1609,56 +1613,37 @@ export default class Umap {
       </div>
     `
     const [container, { ul }] = Utils.loadTemplateWithRefs(template)
-    const tree = this.datalayers.tree(this.datalayers.reverse())
-    for (const [parent, children] of tree.entries()) {
-      let container = ul
-      if (parent) {
-        const [li, { body, toolbox, formbox }] = Utils.loadTemplateWithRefs(`
+    const showLayer = (parent, children, container) => {
+      const [li, { body, toolbox, formbox }] = Utils.loadTemplateWithRefs(`
           <li class="orderable">
             <details open>
-              <summary with-toolbox ${parent.cssId}>
+              <summary class="with-toolbox ${parent.cssId}">
                 <span data-ref=formbox class="datalayer-editable-title truncate"></span>
                 <span data-ref=toolbox>
                   <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
                 </span>
               </summary>
-              <ul data-ref="body"></ul>
+              <ul data-ref="body" class="orderable-container"></ul>
             </details>
           </li>
         `)
-        parent.renderToolbox(toolbox)
-        const builder = new MutatingForm(
-          parent,
-          [['properties.name', { handler: 'EditableText' }]],
-          { className: 'umap-form-inline' }
-        )
-        const form = builder.build()
-        formbox.appendChild(form)
-        li.dataset.id = parent.id
-        ul.appendChild(li)
-        container = body
-      }
+      parent.renderToolbox(toolbox)
+      const builder = new MutatingForm(
+        parent,
+        [['properties.name', { handler: 'EditableText' }]],
+        { className: 'umap-form-inline' }
+      )
+      const form = builder.build()
+      formbox.appendChild(form)
+      li.dataset.id = parent.id
+      container.appendChild(li)
       for (const child of children) {
-        const [row, { toolbox, formbox }] = Utils.loadTemplateWithRefs(`
-          <li class="orderable with-toolbox ${child.cssId}">
-            <span data-ref=formbox class="datalayer-editable-title truncate"></span>
-            <span data-ref=toolbox>
-              <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
-            </span>
-          </li>
-        `)
-        child.renderToolbox(toolbox)
-        const builder = new MutatingForm(
-          child,
-          [['properties.name', { handler: 'EditableText' }]],
-          { className: 'umap-form-inline' }
-        )
-        const form = builder.build()
-        formbox.appendChild(form)
-        row.classList.toggle('off', !child.isVisible())
-        row.dataset.id = child.id
-        container.appendChild(row)
+        showLayer(child.parent, child.children, body)
       }
+    }
+    const { _, children } = this.datalayers.tree(this.datalayers.browsable())
+    for (const child of children) {
+      showLayer(child.parent, child.children, ul)
     }
     new Orderable(ul, onReorder)
 
