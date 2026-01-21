@@ -1002,6 +1002,55 @@ ul.photon-autocomplete {
     color: black;
 }
 
+/* ********* */
+/* Orderable */
+/* ********* */
+
+.orderable.target-above {
+    border-top: 2px solid var(--color-accent);
+}
+.orderable.target-below {
+    border-bottom: 2px solid var(--color-accent);
+}
+.orderable.target-middle {
+    border: 2px solid var(--color-accent);
+}
+
+/* Dragging visual overlay */
+.ordering {
+    background: var(--color-darkerGray);
+}
+.orderable {
+    position: relative;
+}
+.orderable::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;   /* don't interfere */
+  display: none;
+}
+
+.orderable.drageffect::after {
+  display: block;
+  animation: ripple 0.6s ease-out;
+}
+@keyframes ripple {
+  from { transform: scale(1); background: var(--color-veryDarkCyan); }
+  to   { transform: scale(1.3); opacity: 0; background: transparent; }
+}
+
+details details {
+    margin-left: var(--text-margin);
+}
+.panel.dark .orderable details[open] {
+    border-left: none;
+}
+.orderable .with-toolbox {
+    padding: var(--small-box-padding);
+}
+
 /* ****** */
 /* Mobile */
 /* ****** */

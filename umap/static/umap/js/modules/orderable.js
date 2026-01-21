@@ -30,6 +30,12 @@ export default class Orderable {
     }
   }
 
+  resetCSS(el) {
+    el.classList.remove('target-above')
+    el.classList.remove('target-middle')
+    el.classList.remove('target-below')
+  }
+
   onDragStart(event) {
     // event.target is the source nodevent.
     const realSrc = document.elementFromPoint(event.clientX, event.clientY)
@@ -39,18 +45,19 @@ export default class Orderable {
       return
     }
     this.src = event.target
+    if (!this.src) return
     this.initialIndex = this.nodeIndex(this.src)
     this.src.classList.add('ordering')
-    event.dataTransfer.effectAllowed = 'move'
-    event.dataTransfer.setData('text/html', this.src.innerHTML)
   }
 
   onDragOver(event) {
     event.stopPropagation()
     event.preventDefault() // Necessary. Allows us to drop.
     event.dataTransfer.dropEffect = 'move'
-    this.pointerY = event.clientY
     const dst = this.findTarget(event.target)
+    if (!dst || dst === this.src) return false
+    this.pointerY = event.clientY
+    this.dst = dst
     const top = dst.getBoundingClientRect().top
     const bottom = dst.getBoundingClientRect().bottom
     const height = bottom - top
@@ -62,39 +69,48 @@ export default class Orderable {
     } else {
       this.dragMode = 'middle'
     }
+    this.resetCSS(dst)
+    dst.classList.add(`target-${this.dragMode}`)
+    this.src.classList.remove('drageffect')
+
+    window.setTimeout(() => {
+      if (this.pointerY !== event.clientY) return
+      this.src.classList.add('drageffect')
+      const parentNode = dst.parentNode
+      if (this.dragMode === 'above') {
+        parentNode.insertBefore(this.src, this.dst)
+      } else if (this.dragMode === 'below') {
+        if (this.dst.nextSibling) {
+          parentNode.insertBefore(this.src, this.dst.nextSibling)
+        } else {
+          parentNode.appendChild(this.src)
+        }
+      } else if (this.dragMode === 'middle') {
+        const container = this.dst.querySelector('.orderable-container')
+        if (container) {
+          container.appendChild(this.src)
+        }
+      }
+    }, 500)
     return false
   }
 
   onDragEnter(event) {
     event.stopPropagation()
     event.preventDefault()
-    // event.target is the current hover target.
-    const dst = this.findTarget(event.target)
-    if (!dst || dst === this.src) return
-    this.dst = dst
-    const targetIndex = this.nodeIndex(this.dst)
-    const srcIndex = this.nodeIndex(this.src)
-    const parentNode = this.dst.parentNode
-    // TODO: deal with middle / adding a new child
-    if (this.dragMode === 'below') {
-      if (this.dst.nextSibling) {
-        parentNode.insertBefore(this.src, this.dst.nextSibling)
-      } else {
-        parentNode.appendChild(this.src)
-      }
-    } else {
-      parentNode.insertBefore(this.src, this.dst)
-    }
   }
 
   onDragLeave(event) {
     // event.target is previous target element.
+    const dst = this.findTarget(event.target)
+    if (dst) this.resetCSS(dst)
   }
 
   onDrop(event) {
     // event.target is current target element.
     if (event.stopPropagation) event.stopPropagation() // Stops the browser from redirecting.
     if (!this.dst) return
+    this.resetCSS(this.dst)
     this.onCommit(
       this.src,
       this.dst,

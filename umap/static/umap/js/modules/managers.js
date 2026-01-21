@@ -55,18 +55,39 @@ export class DataLayerManager extends Object {
     const layers = this.active()
     return layers[layers.length - 1]
   }
+
   tree(layers) {
-    const groups = new Map()
-    for (const datalayer of layers) {
-      if (!groups.get(datalayer.parent)) {
-        groups.set(datalayer.parent, [])
+    const nodeMap = new Map()
+    for (const layer of layers) {
+      nodeMap.set(layer.id, { parent: layer, children: [] })
+    }
+
+    for (const layer of layers) {
+      if (!layer.parent) continue
+      const parenNode = nodeMap.get(layer.parent.id)
+      parenNode.children.push(nodeMap.get(layer.id))
+    }
+
+    function sortChildrenRecursively(children) {
+      if (Array.isArray(children)) {
+        children.sort((a, b) => a.rank - b.rank)
+        for (const node of children) {
+          sortChildrenRecursively(node.children)
+        }
       }
     }
-    for (const datalayer of layers) {
-      if (groups.get(datalayer)) continue
-      groups.get(datalayer.parent).push(datalayer)
+
+    const roots = Array.from(nodeMap.values()).filter((n) => !n.parent.parent)
+
+    return {
+      parent: null,
+      children: roots
+        .sort((a, b) => a.rank - b.rank)
+        .map((root) => {
+          sortChildrenRecursively(root) // trie toute la sous‑arborescence
+          return root
+        }),
     }
-    return groups
   }
 }
 
