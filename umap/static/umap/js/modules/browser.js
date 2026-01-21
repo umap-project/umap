@@ -139,6 +139,7 @@ export default class Browser {
   }
 
   open(mode) {
+    // TODO add loader
     // Force only if mode is known, otherwise keep current mode.
     if (mode) this.mode = mode
     const template = `
@@ -200,11 +201,16 @@ export default class Browser {
       content: container,
       className: 'umap-browser',
     })
-
+    details.addEventListener('toggle', () => {
+      if (details.open && !formContainer.innerHTML.trim()) {
+        this.buildFilters()
+      }
+    })
     this.update()
   }
 
   buildFilters() {
+    if (!this.filtersTitle.parentNode.open) return
     this.formContainer.innerHTML = ''
     const fields = [
       [
