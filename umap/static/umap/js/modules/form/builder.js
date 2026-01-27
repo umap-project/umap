@@ -128,9 +128,9 @@ export class Form extends Utils.WithEvents {
 export class MutatingForm extends Form {
   constructor(obj, fields, properties) {
     super(obj, fields, properties)
+    this.debounce = true
     this._umap = obj._umap || properties.umap
     this.computeDefaultProperties()
-    // this.on('finish', this.finish)
   }
 
   computeDefaultProperties() {

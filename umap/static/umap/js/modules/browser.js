@@ -57,18 +57,23 @@ export default class Browser {
 
   addDataLayer(datalayer, parent) {
     const open = this.mode !== 'layers' ? ' open' : ''
-    const [container, { headline, toolbox, label }] = Utils.loadTemplateWithRefs(`
-      <details class="datalayer ${datalayer.cssId}" id="${this.datalayerId(datalayer)}"${open}>
-        <summary data-ref=headline class="with-toolbox">
+    const [container, { details, toolbox, label, ul }] = Utils.loadTemplateWithRefs(`
+      <details data-ref=details class="datalayer ${datalayer.cssId}" id="${datalayer.cssId}"${open}>
+        <summary class="with-toolbox">
           <span>
             <span class="datalayer-name truncate" data-id="${datalayer.id}" data-ref=label></span>
             <span class="datalayer-counter"></span>
           </span>
           <span data-ref=toolbox></span>
         </summary>
-        <ul></ul>
+        <ul data-ref=ul></ul>
       </details>
     `)
+    details.addEventListener('toggle', () => {
+      if (details.open && !ul.innerHTML.trim()) {
+        this._appendFeaturesDOM(datalayer, ul)
+      }
+    })
     datalayer.renderToolbox(toolbox)
     parent.appendChild(container)
     this.updateFeaturesList(datalayer)
@@ -77,23 +82,29 @@ export default class Browser {
   updateFeaturesList(datalayer) {
     // Compute once, but use it for each feature later.
     this.bounds = this._leafletMap.getBounds()
-    const id = this.datalayerId(datalayer)
-    const parent = document.getElementById(id)
-    // Panel is not open
+    const parent = document.getElementById(datalayer.cssId)
+    // Browser is not open
     if (!parent) return
     parent.classList.toggle('off', !datalayer.isVisible())
     const label = parent.querySelector('.datalayer-name')
     const container = parent.querySelector('ul')
     container.innerHTML = ''
-    datalayer.features.forEach((feature) => this.addFeature(feature, container))
+    const isOpen = container.parentNode.open
+    if (isOpen || this.hasActiveFilters()) {
+      this._appendFeaturesDOM(datalayer, container)
+    }
     datalayer.propagate(['properties.name'])
     const total = datalayer.count()
     if (!total) return
     const current = container.querySelectorAll('li').length
-    const count = total === current ? total : `${current}/${total}`
+    const count = !this.hasActiveFilters() ? total : `${current}/${total}`
     const counter = parent.querySelector('.datalayer-counter')
     counter.textContent = `(${count})`
     counter.title = translate(`Features in this layer: ${count}`)
+  }
+
+  _appendFeaturesDOM(datalayer, container) {
+    datalayer.features.forEach((feature) => this.addFeature(feature, container))
   }
 
   toggleBadge() {
@@ -139,6 +150,7 @@ export default class Browser {
   }
 
   open(mode) {
+    // TODO add loader
     // Force only if mode is known, otherwise keep current mode.
     if (mode) this.mode = mode
     const template = `
@@ -200,11 +212,16 @@ export default class Browser {
       content: container,
       className: 'umap-browser',
     })
-
+    details.addEventListener('toggle', () => {
+      if (details.open && !formContainer.innerHTML.trim()) {
+        this.buildFilters()
+      }
+    })
     this.update()
   }
 
   buildFilters() {
+    if (!this.filtersTitle.parentNode.open) return
     this.formContainer.innerHTML = ''
     const fields = [
       [

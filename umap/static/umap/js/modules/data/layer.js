@@ -70,6 +70,7 @@ export class DataLayer {
     if (this.properties.rank === undefined) {
       this.properties.rank = this._umap.datalayers.count()
     }
+    this._umap.datalayers.add(this)
 
     if (!Utils.isObject(this.properties.remoteData)) {
       this.properties.remoteData = {}
@@ -83,13 +84,13 @@ export class DataLayer {
       this.properties.toZoom = this.properties.remoteData.to
       delete this.properties.remoteData.to
     }
-    this.connectToMap()
     this.permissions = new DataLayerPermissions(this._umap, this)
 
     this._needsFetch = this.createdOnServer || this.isRemoteLayer()
     this.fields = new Fields(this, this._umap.dialog)
     this.filters = new Filters(this, this._umap)
     this.rules = new Rules(umap, this)
+    this._umap.onDataLayersChanged()
 
     if (!this.createdOnServer) {
       if (this.showAtLoad()) this.show()
@@ -409,11 +410,6 @@ export class DataLayer {
   updateProperties(properties) {
     this.properties = Object.assign(this.properties, properties)
     this.resetLayer()
-  }
-
-  connectToMap() {
-    this._umap.datalayers.add(this)
-    this._umap.onDataLayersChanged()
   }
 
   _dataUrl() {
@@ -1294,7 +1290,7 @@ export class DataLayer {
 
       this.setReferenceVersion({ response, sync: true })
 
-      this.connectToMap()
+      this._umap.onDataLayersChanged()
       this.redraw() // Needed for reordering features
       return true
     }

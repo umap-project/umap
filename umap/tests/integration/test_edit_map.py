@@ -199,6 +199,7 @@ def test_sortkey_impacts_datalayerindex(map, live_server, page):
     page.locator(".panel .umap-field-sortKey .blur-container button").click()
 
     # Features should be sorted by key  (First, Second, Third)
+    page.locator(".umap-browser .datalayer-name").click()
     first_listed_feature = page.locator(".umap-browser .datalayer ul > li").nth(0)
     second_listed_feature = page.locator(".umap-browser .datalayer ul > li").nth(1)
     third_listed_feature = page.locator(".umap-browser .datalayer ul > li").nth(2)
