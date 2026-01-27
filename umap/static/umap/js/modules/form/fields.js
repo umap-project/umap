@@ -108,6 +108,14 @@ Fields.Base = class {
     this.builder.fire('set', { helper: this })
   }
 
+  listenForSync(element) {
+    let callback = () => this.sync()
+    if (this.builder.form.debounce) {
+      callback = Utils.debounce(callback, 300)
+    }
+    element.addEventListener('input', callback)
+  }
+
   set() {
     this.builder.setter(this.field, this.toJS())
   }
@@ -139,10 +147,7 @@ Fields.Textarea = class extends Fields.Base {
     this.textarea = this.elements.textarea
     this.input = this.textarea
     this.fetch()
-    this.textarea.addEventListener(
-      'input',
-      Utils.debounce(() => this.sync(), 300)
-    )
+    this.listenForSync(this.textarea)
     this.textarea.addEventListener('keypress', (event) => this.onKeyPress(event))
   }
 
@@ -194,7 +199,7 @@ Fields.Input = class extends Fields.Base {
       this.input.disabled = true
     }
     this.fetch()
-    this.listenForSync()
+    this.listenForSync(this.input)
     this.input.addEventListener('keydown', (event) => this.onKeyDown(event))
   }
 
@@ -202,13 +207,6 @@ Fields.Input = class extends Fields.Base {
     const value = this.toHTML() !== undefined ? this.toHTML() : null
     this.initial = value
     this.input.value = value
-  }
-
-  listenForSync() {
-    this.input.addEventListener(
-      'input',
-      Utils.debounce(() => this.sync(), 300)
-    )
   }
 
   type() {
