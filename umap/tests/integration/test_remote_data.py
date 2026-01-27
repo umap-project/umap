@@ -44,7 +44,6 @@ def intercept_remote_data(page):
 
     # Intercept the route to the proxy
     page.route("https://remote.org/data.json", handle)
-    page.on("request", lambda *a, **k: print(a, k))
 
 
 def test_dynamic_remote_data(page, live_server, tilelayer, map):
@@ -104,6 +103,7 @@ def test_create_remote_data_layer(page, live_server, tilelayer, settings):
     expect(page.locator(".leaflet-marker-icon")).to_have_count(1)
     with page.expect_response(re.compile(".*/datalayer/create/.*")):
         page.get_by_role("button", name="Save draft", exact=True).click()
+    assert DataLayer.objects.count() == 1
     datalayer = DataLayer.objects.last()
     data = json.loads(Path(datalayer.geojson.path).read_text())
     assert data == {

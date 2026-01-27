@@ -66,11 +66,11 @@ export class DataLayer {
     data.id = data.id || crypto.randomUUID()
 
     this.setProperties(data)
-    this._umap.datalayers.add(this)
     this.pane.dataset.id = this.id
     if (this.properties.rank === undefined) {
       this.properties.rank = this._umap.datalayers.count()
     }
+    this._umap.datalayers.add(this)
 
     if (!Utils.isObject(this.properties.remoteData)) {
       this.properties.remoteData = {}
