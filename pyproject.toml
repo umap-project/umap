@@ -70,7 +70,7 @@ deploy = [
   "Django==5.2.10",
 ]
 yunohost = [
-  "uvicorn==0.38.0",
+  "uvicorn==0.40.0",
   "Django==5.1.15",
   "django_yunohost_integration==0.10.9",
 ]
@@ -78,7 +78,7 @@ s3 = [
   "django-storages[s3]==1.14.6",
 ]
 sync = [
-  "uvicorn==0.38.0",
+  "uvicorn==0.40.0",
   "pydantic==2.12.5",
   "redis==7.1.0",
   "websockets==16.0",
