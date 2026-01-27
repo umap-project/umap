@@ -48,10 +48,6 @@ export class DataLayer {
     this._propertiesIndex = []
 
     this._leafletMap = leafletMap
-    this.parentPane = this._leafletMap.getPane('overlayPane')
-    this.pane = this._leafletMap.createPane(`datalayer${stamp(this)}`, this.parentPane)
-    // FIXME: should be on layer
-    this.renderer = new SVG({ pane: this.pane })
     this.defaultProperties = {
       displayOnLoad: true,
       inCaption: true,
@@ -66,6 +62,20 @@ export class DataLayer {
     data.id = data.id || crypto.randomUUID()
 
     this.setProperties(data)
+    this.rootPane = this._leafletMap.getPane('overlayPane')
+    this.parentPane = this.rootPane
+    if (this.properties.parent) {
+      this.parentId = this.properties.parent
+      if (!this.parent) {
+        console.error(
+          `Parent defined but not found: ${this.properties.parent} (self: ${this.id})`
+        )
+      }
+      this.parentPane = this.parent.pane
+    }
+    this.pane = this._leafletMap.createPane(`pane-${this.cssId}`, this.parentPane)
+    // FIXME: should be on layer
+    this.renderer = new SVG({ pane: this.pane })
     this.pane.dataset.id = this.id
     if (this.properties.rank === undefined) {
       this.properties.rank = this._umap.datalayers.count()
@@ -248,14 +258,34 @@ export class DataLayer {
     this._autoVisibility = value
   }
 
+  changeParent(parent) {
+    const oldParentId = this.parent?.id
+    this.parent = parent
+    this.parentPane = parent.pane
+    this.sync.update('parentId', parent.id, oldParentId)
+    parent.pane.appendChild(this.pane)
+  }
+
   insertBefore(other) {
     if (!other) return
-    this.parentPane.insertBefore(this.pane, other.pane)
+    const oldParentId = this.parent?.id
+    this.parent = other.parent
+    this.parentPane = this.parent?.pane || this.rootPane
+    this.sync.update('parentId', this.parent?.id, oldParentId)
+    other.parentPane.insertBefore(this.pane, other.pane)
   }
 
   insertAfter(other) {
     if (!other) return
-    this.parentPane.insertBefore(this.pane, other.pane.nextSibling)
+    const oldParentId = this.parent?.id
+    this.parent = other.parent
+    this.parentPane = this.parent?.pane || this.rootPane
+    this.sync.update('parentId', this.parent?.id, oldParentId)
+    if (other.pane.nextSibling) {
+      other.parentPane.insertBefore(this.pane, other.pane.nextSibling)
+    } else {
+      other.parentPane.appendChild(this.pane)
+    }
   }
 
   bringToTop() {
@@ -737,6 +767,10 @@ export class DataLayer {
   }
 
   redraw() {
+    if (this.hasChildren()) {
+      this.children.forEach((datalayer) => datalayer.redraw())
+      return
+    }
     if (!this.isVisible()) return
     this.features.forEach((feature) => feature.redraw())
   }
@@ -748,35 +782,59 @@ export class DataLayer {
     }
   }
 
+  get parentId() {
+    return this.parent?.id
+  }
+
+  set parentId(uuid) {
+    this.parent = this._umap.datalayers[uuid]
+  }
+
+  get children() {
+    return this._umap.datalayers.filter((d) => d.parent?.id === this.id)
+  }
+
+  hasChildren() {
+    return this._umap.datalayers.some((d) => d.parent?.id === this.id)
+  }
+
   _editMetadata(container) {
-    const metadataFields = [
-      'properties.name',
-      'properties.description',
-      [
+    const metadataFields = ['properties.name', 'properties.description']
+    if (!this.hasChildren()) {
+      metadataFields.unshift([
+        'parentId',
+        { handler: 'ParentSwitcher', label: translate('Parent') },
+      ])
+    }
+    if (!this.hasChildren()) {
+      metadataFields.push([
         'properties.type',
         { handler: 'LayerTypeChooser', label: translate('Type of layer') },
-      ],
-      'properties.labelKey',
-      [
-        'properties.displayOnLoad',
-        { label: translate('Display on load'), handler: 'Switch' },
-      ],
-      [
-        'properties.browsable',
-        {
-          label: translate('Data is browsable'),
-          handler: 'Switch',
-          helpEntries: ['browsable'],
-        },
-      ],
-      [
-        'properties.inCaption',
-        {
-          label: translate('Show this layer in the caption'),
-          handler: 'Switch',
-        },
-      ],
-    ]
+      ])
+    }
+    metadataFields.push('properties.labelKey', [
+      'properties.displayOnLoad',
+      { label: translate('Display on load'), handler: 'Switch' },
+    ])
+    if (!this.hasChildren()) {
+      metadataFields.push(
+        [
+          'properties.browsable',
+          {
+            label: translate('Data is browsable'),
+            handler: 'Switch',
+            helpEntries: ['browsable'],
+          },
+        ],
+        [
+          'properties.inCaption',
+          {
+            label: translate('Show this layer in the caption'),
+            handler: 'Switch',
+          },
+        ]
+      )
+    }
     container.appendChild(
       DOMUtils.loadTemplate(`
       <h3><i class="icon icon-16 icon-layers"></i>${translate('Layer properties')}</h3>
@@ -1000,7 +1058,9 @@ export class DataLayer {
     this._editAdvancedProperties(container)
     this._editInteractionProperties(container)
     this._editTextPathProperties(container)
-    this._editRemoteDataProperties(container)
+    if (!this.hasChildren()) {
+      this._editRemoteDataProperties(container)
+    }
     this.fields.edit(container)
     this.rules.edit(container)
 
@@ -1008,7 +1068,9 @@ export class DataLayer {
       this.buildVersionsFieldset(container)
     }
 
-    this._buildAdvancedActions(container)
+    if (!this.hasChildren()) {
+      this._buildAdvancedActions(container)
+    }
 
     const backButton = DOMUtils.loadTemplate(`
       <button class="icon icon-16 icon-back" type="button" title="${translate('Back to layers')}"></button>
@@ -1043,6 +1105,9 @@ export class DataLayer {
     }
     if (this.layer?.defaults?.[key]) {
       return this.layer.defaults[key]
+    }
+    if (this.parent) {
+      return this.parent.getProperty(key, feature)
     }
     return this._umap.getProperty(key, feature)
   }
@@ -1121,6 +1186,10 @@ export class DataLayer {
   }
 
   toggle(force) {
+    if (this.hasChildren()) {
+      Utils.toggleLayers(this.children)
+      return
+    }
     // From now on, do not try to how/hide
     // automatically this layer, as user
     // has taken control on this.
@@ -1235,6 +1304,7 @@ export class DataLayer {
     if (!this.isRemoteLayer() && !this.isLoaded()) return
     const formData = new FormData()
     formData.append('name', this.properties.name)
+    formData.append('parent', this.parent?.id || '')
     formData.append('display_on_load', !!this.properties.displayOnLoad)
     formData.append('rank', this.rank)
     formData.append('settings', this.prepareProperties())

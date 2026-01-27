@@ -1573,8 +1573,39 @@ export default class Umap {
     })
   }
 
-  editDatalayers() {
+  async editDatalayers() {
     if (!this.editEnabled) return
+    const onReorder = async (src, dst, initialIndex, finalIndex, dragMode) => {
+      const movedLayer = this.datalayers[src.dataset.id]
+      const targetLayer = this.datalayers[dst.dataset.id]
+      this.sync.startBatch()
+      if (dragMode === 'above') {
+        movedLayer.insertAfter(targetLayer)
+      } else if (dragMode === 'below') {
+        movedLayer.insertBefore(targetLayer)
+      } else if (dragMode === 'middle') {
+        movedLayer.changeParent(targetLayer)
+      }
+      const els = Array.from(src.parentNode.children)
+      if (src.parentNode !== dst.parentNode) {
+        els.push(...dst.parentNode.children)
+      }
+      for (const el of els) {
+        const datalayer = this.datalayers[el.dataset.id]
+        const rank = datalayer.getDOMOrder()
+        // TODO: deal with parent changed but not rank
+        if (rank !== datalayer.rank) {
+          if (!datalayer.isLoaded()) await datalayer.fetchData()
+          const oldRank = datalayer.rank
+          datalayer.rank = rank
+          datalayer.sync.update('options.rank', rank, oldRank)
+          datalayer.redraw()
+        }
+      }
+      this.sync.commitBatch()
+      this.onDataLayersChanged()
+    }
+
     const template = `
       <div>
         <h3><i class="icon icon-16 icon-layers"></i>${translate('Manage layers')}</h3>
@@ -1582,51 +1613,39 @@ export default class Umap {
       </div>
     `
     const [container, { ul }] = Utils.loadTemplateWithRefs(template)
-    this.datalayers.reverse().map((datalayer) => {
-      const [row, { toolbox, formbox }] = Utils.loadTemplateWithRefs(`
-        <li class="orderable with-toolbox ${datalayer.cssId}">
-          <span data-ref=formbox class="datalayer-editable-title truncate"></span>
-          <span data-ref=toolbox>
-            <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
-          </span>
-        </li>
-      `)
-      datalayer.renderToolbox(toolbox)
+    const showLayer = (parent, children, container) => {
+      const [li, { body, toolbox, formbox }] = Utils.loadTemplateWithRefs(`
+          <li class="orderable">
+            <details open>
+              <summary class="with-toolbox ${parent.cssId}">
+                <span data-ref=formbox class="datalayer-editable-title truncate"></span>
+                <span data-ref=toolbox>
+                  <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
+                </span>
+              </summary>
+              <ul data-ref="body" class="orderable-container"></ul>
+            </details>
+          </li>
+        `)
+      parent.renderToolbox(toolbox)
       const builder = new MutatingForm(
-        datalayer,
+        parent,
         [['properties.name', { handler: 'EditableText' }]],
         { className: 'umap-form-inline' }
       )
       const form = builder.build()
       formbox.appendChild(form)
-      row.classList.toggle('off', !datalayer.isVisible())
-      row.dataset.id = datalayer.id
-      ul.appendChild(row)
-    })
-    const onReorder = (src, dst, initialIndex, finalIndex) => {
-      const movedLayer = this.datalayers[src.dataset.id]
-      const targetLayer = this.datalayers[dst.dataset.id]
-      const minIndex = Math.min(movedLayer.getDOMOrder(), targetLayer.getDOMOrder())
-      const maxIndex = Math.max(movedLayer.getDOMOrder(), targetLayer.getDOMOrder())
-      if (finalIndex === 0) movedLayer.bringToTop()
-      else if (finalIndex > initialIndex) movedLayer.insertBefore(targetLayer)
-      else movedLayer.insertAfter(targetLayer)
-      this.sync.startBatch()
-      this.datalayers.reverse().map(async (datalayer) => {
-        const rank = datalayer.getDOMOrder()
-        if (rank >= minIndex && rank <= maxIndex) {
-          // TODO allow to save only metadata instead of force loading data
-          if (!datalayer.isLoaded()) await datalayer.fetchData()
-          const oldRank = datalayer.rank
-          datalayer.rank = rank
-          datalayer.sync.update('options.rank', rank, oldRank)
-          datalayer.redraw()
-        }
-      })
-      this.sync.commitBatch()
-      this.onDataLayersChanged()
+      li.dataset.id = parent.id
+      container.appendChild(li)
+      for (const child of children) {
+        showLayer(child.parent, child.children, body)
+      }
     }
-    const orderable = new Orderable(ul, onReorder)
+    const { _, children } = this.datalayers.tree(this.datalayers.browsable())
+    for (const child of children) {
+      showLayer(child.parent, child.children, ul)
+    }
+    new Orderable(ul, onReorder)
 
     const [bar, { button }] = DOMUtils.loadTemplateWithRefs(`
       <div class="button-bar">

@@ -51,13 +51,16 @@ export default class Browser {
     parent.appendChild(row)
   }
 
-  datalayerId(datalayer) {
-    return `browse_data_datalayer_${stamp(datalayer)}`
-  }
+  addDataLayer(datalayer, children, parentContainer) {
+    const open =
+      this.mode !== 'layers'
+        ? ' open'
+        : children.some((d) => d.parent.isVisible())
+          ? ' open'
+          : ''
 
-  addDataLayer(datalayer, parent) {
-    const open = this.mode !== 'layers' ? ' open' : ''
-    const [container, { details, toolbox, label, ul }] = Utils.loadTemplateWithRefs(`
+    const [container, { details, toolbox, label, ul, childrenContainer }] =
+      Utils.loadTemplateWithRefs(`
       <details data-ref=details class="datalayer ${datalayer.cssId}" id="${datalayer.cssId}"${open}>
         <summary class="with-toolbox">
           <span>
@@ -67,6 +70,7 @@ export default class Browser {
           <span data-ref=toolbox></span>
         </summary>
         <ul data-ref=ul></ul>
+        <div data-ref=childrenContainer></div>
       </details>
     `)
     details.addEventListener('toggle', () => {
@@ -75,7 +79,10 @@ export default class Browser {
       }
     })
     datalayer.renderToolbox(toolbox)
-    parent.appendChild(container)
+    parentContainer.appendChild(container)
+    for (const child of children) {
+      this.addDataLayer(child.parent, child.children, childrenContainer)
+    }
     this.updateFeaturesList(datalayer)
   }
 
@@ -144,8 +151,9 @@ export default class Browser {
   update() {
     if (!this.isOpen()) return
     this.dataContainer.innerHTML = ''
-    for (const datalayer of this._umap.datalayers.browsable()) {
-      this.addDataLayer(datalayer, this.dataContainer)
+    const { _, children } = this._umap.datalayers.tree(this._umap.datalayers.reverse())
+    for (const child of children) {
+      this.addDataLayer(child.parent, child.children, this.dataContainer)
     }
   }
 
@@ -193,7 +201,9 @@ export default class Browser {
     // https://github.com/Leaflet/Leaflet/pull/9052
     DomEvent.disableClickPropagation(container)
     details.open = this.mode === 'filters'
-    toggle.addEventListener('click', () => this.toggleLayers())
+    toggle.addEventListener('click', () =>
+      Utils.toggleLayers(this._umap.datalayers.browsable())
+    )
     fitBounds.addEventListener('click', () => this._umap.fitDataBounds())
     download.addEventListener('click', () => this.downloadVisible(download))
     download.hidden = this._umap.getProperty('embedControl') === false
@@ -267,23 +277,6 @@ export default class Browser {
       })
     }
     menu.openBelow(element, items)
-  }
-
-  toggleLayers() {
-    // If at least one layer is shown, hide it
-    // otherwise show all
-    let allHidden = true
-    this._umap.datalayers.browsable().map((datalayer) => {
-      if (datalayer.isVisible()) allHidden = false
-    })
-    this._umap.datalayers.browsable().map((datalayer) => {
-      datalayer.autoVisibility = false
-      if (allHidden) {
-        datalayer.show()
-      } else {
-        if (datalayer.isVisible()) datalayer.hide()
-      }
-    })
   }
 
   static backButton(umap) {

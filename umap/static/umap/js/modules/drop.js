@@ -26,6 +26,7 @@ export default class DropControl {
   }
 
   dragenter(event) {
+    if (event.target !== this.dropzone) return false
     event.stopPropagation()
     event.preventDefault()
     this._leafletMap.scrollWheelZoom.disable()
@@ -38,6 +39,7 @@ export default class DropControl {
   }
 
   drop(event) {
+    if (event.target !== this.dropzone) return false
     this._leafletMap.scrollWheelZoom.enable()
     this.dropzone.classList.remove('umap-dragover')
     event.stopPropagation()
