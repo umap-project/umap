@@ -12,7 +12,7 @@ def confirm(prompt):
 
 
 class Command(BaseCommand):
-    help = "Search maps and delete, block or restore them."
+    help = "Search maps in bulk, and delete, block or restore them."
 
     def add_arguments(self, parser):
         parser.add_argument("search", help="Actual search.")
