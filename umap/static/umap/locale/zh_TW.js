@@ -648,7 +648,7 @@ const locale = {
     "Comma separated list of values": "逗號分隔清單的值",
     "Share": "分享",
     "Customized link": "自訂連結",
-    "Iframe": "頁面框",
+    "Iframe": "內崁頁面",
     "№": "№"
 }
 L.registerLocale("zh_TW", locale)
