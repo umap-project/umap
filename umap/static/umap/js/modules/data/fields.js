@@ -42,6 +42,10 @@ class BaseField {
     return Utils.escapeHTML(value).trim()
   }
 
+  cast(value) {
+    return this.parse(value)
+  }
+
   dumps() {
     return {
       key: this.key,
@@ -94,7 +98,9 @@ Registry.Number = class extends BaseField {
   }
 
   parse(value) {
-    return Number.parseFloat(value)
+    const parsed = Number.parseFloat(value)
+    if (Number.isNaN(parsed)) return null
+    return parsed
   }
 }
 
@@ -146,8 +152,12 @@ Registry.Enum = class extends BaseField {
     this.LABEL = translate('List of values')
   }
 
-  parse(value) {
+  cast(value) {
     return String(value || '')
+  }
+
+  parse(value) {
+    return this.cast(value)
       .split(',')
       .map((s) => s.trim())
   }

@@ -192,6 +192,7 @@ export class Filters {
         {
           initialData: initialData[name] || {},
           handler: filter.getFormField(field),
+          dataField: field,
           label: Utils.escapeHTML(this.available.get(name).label || field.key),
           onClick: () => {
             this._parent
@@ -483,6 +484,10 @@ class FiltersForm extends Form {
 
 const FilterBase = class extends Fields.Base {
   buildLabel() {}
+
+  cast(value) {
+    return this.properties.dataField.cast(value) || EMPTY_VALUE
+  }
 }
 
 const FilterByChoices = class extends FilterBase {
@@ -518,8 +523,8 @@ const FilterByChoices = class extends FilterBase {
 
   toJS() {
     return {
-      selected: [...this.elements.ul.querySelectorAll('input:checked')].map(
-        (i) => i.dataset.value
+      selected: [...this.elements.ul.querySelectorAll('input:checked')].map((i) =>
+        this.cast(i.dataset.value)
       ),
     }
   }
@@ -544,6 +549,10 @@ Fields.MinMaxBase = class extends FilterBase {
 
   prepareForHTML(value) {
     return value?.valueOf() ?? null
+  }
+
+  prepareForJS(value) {
+    return this.cast(value)
   }
 
   getTemplate() {
@@ -627,19 +636,11 @@ Fields.FilterByNumber = class extends Fields.MinMaxBase {
   getInputType(type) {
     return 'number'
   }
-
-  prepareForJS(value) {
-    return new Number(value)
-  }
 }
 
 Fields.FilterByDate = class extends Fields.MinMaxBase {
   getInputType(type) {
     return 'date'
-  }
-
-  prepareForJS(value) {
-    return new Date(value)
   }
 
   toLocaleDateTime(dt) {

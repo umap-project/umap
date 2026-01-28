@@ -219,6 +219,30 @@ def test_choice_with_empty_value(live_server, page, map):
     expect(markers).to_have_count(2)
 
 
+def test_choice_with_numbers(live_server, page, map):
+    map.settings["properties"]["onLoadPanel"] = "datafilters"
+    map.settings["properties"]["fields"] = [{"key": "mynumber", "type": "Number"}]
+    map.settings["properties"]["filters"] = [
+        {"fieldKey": "mynumber", "label": "My Number"}
+    ]
+    map.save()
+    data = copy.deepcopy(DATALAYER_DATA1)
+    data["features"][0]["properties"]["mynumber"] = ""
+    del data["features"][1]["properties"]["mynumber"]
+    DataLayerFactory(map=map, data=data)
+    DataLayerFactory(map=map, data=DATALAYER_DATA2)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/47.5/-1.5")
+    expect(page.get_by_text("<empty value>")).to_be_visible()
+    expect(page.get_by_text("14")).to_be_visible()
+    markers = page.locator(".leaflet-marker-icon")
+    expect(markers).to_have_count(4)
+    page.get_by_text("14", exact=True).click()
+    expect(markers).to_have_count(1)
+    page.get_by_text("14", exact=True).click()  # Unselect this filter.
+    page.get_by_text("<empty value>", exact=True).click()
+    expect(markers).to_have_count(2)
+
+
 def test_number_with_zero_value(live_server, page, map):
     map.settings["properties"]["onLoadPanel"] = "datafilters"
     map.settings["properties"]["filters"] = [
