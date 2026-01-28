@@ -80,7 +80,7 @@ export class Form extends Utils.WithEvents {
   restoreField(field) {
     const helper = this.helpers[field]
     const initial = helper.initial
-    this.setter(helper.field, initial)
+    this.setter(helper, initial)
   }
 
   getName(field) {
