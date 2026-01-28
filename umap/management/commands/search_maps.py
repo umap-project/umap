@@ -80,7 +80,9 @@ class Command(BaseCommand):
                 mm.move_to_trash()
             print("Done!")
         elif options["restore"]:
-            to_restore = [mm for mm in qs if mm.share_status == Map.DELETED]
+            to_restore = [
+                mm for mm in qs if mm.share_status in [Map.DELETED, Map.BLOCKED]
+            ]
             if self.confirm(f"Restore {len(to_restore)} maps?"):
                 for mm in to_restore:
                     mm.share_status = Map.DRAFT
