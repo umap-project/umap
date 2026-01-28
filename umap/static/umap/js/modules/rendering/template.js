@@ -34,8 +34,7 @@ export default async function loadTemplate(name, feature, container) {
 class PopupTemplate {
   renderTitle(feature) {}
 
-  renderBody(feature) {
-    const template = feature.getOption('popupContentTemplate')
+  toHTML(feature, template) {
     const target = feature.getOption('outlinkTarget')
     const properties = feature.extendedProperties()
     // Resolve properties inside description
@@ -44,9 +43,15 @@ class PopupTemplate {
       properties
     )
     properties.name = properties.name ?? feature.getDisplayName()
-    let content = Utils.greedyTemplate(template, properties)
-    content = Utils.toHTML(content, { target: target })
-    return Utils.loadTemplate(`<div class="umap-popup-container text">${content}</div>`)
+    const content = Utils.greedyTemplate(template, properties)
+    return Utils.toHTML(content, { target })
+  }
+
+  renderBody(feature) {
+    const template = feature.getOption('popupContentTemplate')
+    return Utils.loadTemplate(
+      `<div class="umap-popup-container text">${this.toHTML(feature, template)}</div>`
+    )
   }
 
   renderFooter(feature) {
@@ -377,7 +382,8 @@ class Route extends TitleMixin(PopupTemplate) {
       }).addTo(map)
     })
     if (feature.properties.description) {
-      root.appendChild(Utils.loadTemplate(`<p>${feature.properties.description}</p>`))
+      const content = this.toHTML(feature, feature.properties.description)
+      root.appendChild(Utils.loadTemplate(`<p>${content}</p>`))
     }
     return root
   }
