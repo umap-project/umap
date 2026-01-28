@@ -10,7 +10,7 @@ Eg.: `umap anonymous_edit_url 1234`
 
 * `--lang LANG`: Language code to use in the URL (default `en`).
 
-## `clean_tilelayer.py`
+## `clean_tilelayer`
 
 Clean tilelayers in map settings.
 
@@ -81,6 +81,20 @@ exactly 360 days ago.
 * `--dry-run`: only print candidate datalayers without any effective deletion.
 * `--days-ago`: select datalayers which where last modified that many days ago (default: 360).
 * `--days-to-select`: how many days before `days-ago` to consider, use `0` to put not limit (default: 1).
+
+## `search_maps`
+
+Search maps in bulk, and delete, block or restore them.
+
+Eg.: `umap search_maps spam --block`
+
+### Options
+*  `--dry-run`: do not make actions, just display
+*  `--delete`: mark maps as deleted
+*  `--restore`: restore delete maps in the search results
+*  `--block`: block maps in the search results
+*  `--public`: search only public maps
+
 
 ## `switch_user`
 
