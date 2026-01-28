@@ -1,5 +1,26 @@
 # Changelog
 
+## 3.6.0 - 2026-01-28
+
+### New features
+* do not add features and filters in data browser DOM until user use them by @yohanboniface in #3165
+* add management command to search, delete, block and restore maps by @yohanboniface in #3156
+
+### Bug fixes
+* be more defensive when computing handleLimitBounds by @yohanboniface in #3130
+* be more defensive when using "tilelayer" property by @yohanboniface in #3131
+* code crash with a geojson > 2.5Mo after a conflict by @yohanboniface in #3141
+* do not try to sync datalayer objects by @yohanboniface in #3163
+* allow to use choices filter with a number field by @yohanboniface in #3178
+* format description in route popup template in #3177
+
+### Internal changes
+* use ESM version of Leaflet.LocateControl by @yohanboniface in #3137
+* reintegrate logic of Leaflet.Loading (unmaintained) by @yohanboniface in #3140
+* use ESM version of Leaflet.Photon by @yohanboniface in #3142
+* reintegrate hash (leaflet.hash is unmaintained) by @yohanboniface in #3143
+
+
 ## 3.5.0 - 2025-12-22
 
 This release is mainly making uMap installable in YunoHost as an official app.
