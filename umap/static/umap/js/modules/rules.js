@@ -238,20 +238,19 @@ export default class Rules {
     }
   }
 
-  onReorder(src, dst, initialIndex, finalIndex) {
+  onReorder(src, target, dragMode) {
     const oldRules = Utils.CopyJSON(this.parent.properties.rules || {})
     const moved = this.rules.find((rule) => stamp(rule) === +src.dataset.id)
-    const reference = this.rules.find((rule) => stamp(rule) === +dst.dataset.id)
+    const reference = this.rules.find((rule) => stamp(rule) === +target.dataset.id)
     const movedIdx = this.rules.indexOf(moved)
-    let referenceIdx = this.rules.indexOf(reference)
-    const minIndex = Math.min(movedIdx, referenceIdx)
-    const maxIndex = Math.max(movedIdx, referenceIdx)
+    const referenceIdx = this.rules.indexOf(reference)
     moved._delete() // Remove from array
-    referenceIdx = this.rules.indexOf(reference)
     let newIdx
-    if (finalIndex === 0) newIdx = 0
-    else if (finalIndex > initialIndex) newIdx = referenceIdx
-    else newIdx = referenceIdx + 1
+    if (dragMode === 'above') {
+      newIdx = referenceIdx
+    } else if (dragMode === 'below') {
+      newIdx = referenceIdx + 1
+    }
     this.rules.splice(newIdx, 0, moved)
     this.parent.render(['rules'])
     this.commit()
