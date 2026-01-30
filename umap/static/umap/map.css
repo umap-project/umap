@@ -1007,13 +1007,16 @@ ul.photon-autocomplete {
 /* ********* */
 
 .orderable.target-above {
-    border-top: 2px solid var(--color-accent);
+    border-top: 2px dashed var(--color-accent);
 }
 .orderable.target-below {
-    border-bottom: 2px solid var(--color-accent);
+    border-bottom: 2px dashed var(--color-accent);
 }
 .orderable.target-middle {
-    border: 2px solid var(--color-accent);
+    border: 2px dashed var(--color-accent);
+}
+.orderable.target-not-allowed {
+    border: 2px dashed var(--color-darkOrange);
 }
 
 /* Dragging visual overlay */
@@ -1042,10 +1045,10 @@ ul.photon-autocomplete {
 }
 
 details details {
-    margin-left: var(--text-margin);
+    margin-left: var(--box-margin);
 }
 .panel.dark .orderable details[open] {
-    border-left: none;
+    border: none;
 }
 .orderable .with-toolbox {
     padding: var(--small-box-padding);

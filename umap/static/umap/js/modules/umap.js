@@ -1575,9 +1575,9 @@ export default class Umap {
 
   async editDatalayers() {
     if (!this.editEnabled) return
-    const onReorder = async (src, dst, initialIndex, finalIndex, dragMode) => {
-      const movedLayer = this.datalayers[src.dataset.id]
-      const targetLayer = this.datalayers[dst.dataset.id]
+    const onReorder = async (moved, target, dragMode) => {
+      const movedLayer = this.datalayers[moved.dataset.id]
+      const targetLayer = this.datalayers[target.dataset.id]
       this.sync.startBatch()
       if (dragMode === 'above') {
         movedLayer.insertAfter(targetLayer)
@@ -1586,9 +1586,9 @@ export default class Umap {
       } else if (dragMode === 'middle') {
         movedLayer.changeParent(targetLayer)
       }
-      const els = Array.from(src.parentNode.children)
-      if (src.parentNode !== dst.parentNode) {
-        els.push(...dst.parentNode.children)
+      const els = Array.from(moved.parentNode.children)
+      if (moved.parentNode !== target.parentNode) {
+        els.push(...target.parentNode.children)
       }
       for (const el of els) {
         const datalayer = this.datalayers[el.dataset.id]
@@ -1614,8 +1614,10 @@ export default class Umap {
     `
     const [container, { ul }] = Utils.loadTemplateWithRefs(template)
     const showLayer = (parent, children, container) => {
+      const nochildren =
+        parent.features.count() || parent.isRemoteLayer() ? ' no-children' : ''
       const [li, { body, toolbox, formbox }] = Utils.loadTemplateWithRefs(`
-          <li class="orderable">
+          <li class="orderable${nochildren}">
             <details open>
               <summary class="with-toolbox ${parent.cssId}">
                 <span data-ref=formbox class="datalayer-editable-title truncate"></span>
@@ -1645,7 +1647,7 @@ export default class Umap {
     for (const child of children) {
       showLayer(child.parent, child.children, ul)
     }
-    new Orderable(ul, onReorder)
+    new Orderable(ul, onReorder, { allowTree: true })
 
     const [bar, { button }] = DOMUtils.loadTemplateWithRefs(`
       <div class="button-bar">
