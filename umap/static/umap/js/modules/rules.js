@@ -69,7 +69,7 @@ class Rule {
     }
     // TODO: deal with legacy rules on non typed fields
     else {
-      this.cast = this.field.parse
+      this.cast = (value) => this.field.parse(value)
       if (
         // Special cases where we want to be lousy when checking isNaN without
         // coercing to a Number first because we handle multiple types.

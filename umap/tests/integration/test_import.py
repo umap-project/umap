@@ -1123,3 +1123,17 @@ def test_umap_import_with_iconurl(live_server, tilelayer, page):
             'img[src="https://umap.incubateur.anct.gouv.fr/uploads/pictogram/car-24.png"]'
         )
     ).to_have_count(2)
+
+
+def test_umap_import_with_enum_and_filter(live_server, tilelayer, page):
+    page.goto(f"{live_server.url}/map/new/")
+    page.get_by_title("Import data").click()
+    file_input = page.locator("input[type='file']")
+    with page.expect_file_chooser() as fc_info:
+        file_input.click()
+    file_chooser = fc_info.value
+    path = Path(__file__).parent.parent / "fixtures/test_upload_data_with_enum.umap"
+    file_chooser.set_files(path)
+    page.get_by_role("button", name="Import data", exact=True).click()
+    markers = page.locator(".umap-large-circle-icon")
+    expect(markers).to_have_count(4)
