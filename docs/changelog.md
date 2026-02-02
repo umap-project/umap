@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.6.1 - 2026-02-02
+
+* do not assign Field method to Rule by @yohanboniface in #3181
+
 ## 3.6.0 - 2026-01-28
 
 ### New features
