@@ -235,3 +235,16 @@ def collect_pictograms():
 def normalize_string(s):
     n = unicodedata.normalize("NFKD", str(s))
     return "".join([c for c in n if not unicodedata.combining(c)]).lower()
+
+
+def layers_tree(layers, request=None):
+    tree = {
+        str(layer.pk): {"layers": [], **layer.metadata(request)} for layer in layers
+    }
+    for branch in tree.values():
+        if branch["parent"]:
+            tree[str(branch["parent"])]["layers"].append(branch)
+    for [pk, branch] in tree.copy().items():
+        if branch["parent"]:
+            del tree[pk]
+    return list(tree.values())

@@ -75,6 +75,7 @@ from .utils import (
     gzip_file,
     is_ajax,
     json_dumps,
+    layers_tree,
     merge_features,
 )
 
@@ -771,9 +772,8 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
         return self.object.get_absolute_url()
 
     def get_datalayers(self):
-        # When initializing datalayers from map, we cannot get the reference version
-        # the normal way, which is from the header X-Reference-Version
         return [dl.metadata(self.request) for dl in self.object.datalayers]
+        # return layers_tree(self.object.datalayers, self.request)
 
     @property
     def edit_mode(self):
