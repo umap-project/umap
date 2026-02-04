@@ -624,6 +624,8 @@ export default class Umap {
 
   async initDataLayers(datalayers) {
     datalayers = datalayers || this.properties.datalayers
+    datalayers.sort((a, b) => a.rank - b.rank)
+    datalayers = Utils.tree(datalayers)
     for (const options of datalayers) {
       // `false` to not propagate syncing elements served from uMap
       this.createDataLayer(options, false)
@@ -650,6 +652,9 @@ export default class Umap {
 
     if (sync !== false) {
       datalayer.sync.upsert(datalayer.properties)
+    }
+    for (const childProps of properties.layers || []) {
+      this.createDataLayer(childProps, sync)
     }
     return datalayer
   }
@@ -1613,13 +1618,15 @@ export default class Umap {
       </div>
     `
     const [container, { ul }] = Utils.loadTemplateWithRefs(template)
-    const showLayer = (parent, children, container) => {
+    const showLayer = (layer, children, container) => {
       const nochildren =
-        parent.features.count() || parent.isRemoteLayer() ? ' no-children' : ''
+        !layer.isLoaded() || layer.features.count() || layer.isRemoteLayer()
+          ? ' no-children'
+          : ''
       const [li, { body, toolbox, formbox }] = Utils.loadTemplateWithRefs(`
           <li class="orderable${nochildren}">
             <details open>
-              <summary class="with-toolbox ${parent.cssId}">
+              <summary class="with-toolbox ${layer.cssId}">
                 <span data-ref=formbox class="datalayer-editable-title truncate"></span>
                 <span data-ref=toolbox>
                   <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
@@ -1629,23 +1636,23 @@ export default class Umap {
             </details>
           </li>
         `)
-      parent.renderToolbox(toolbox)
+      layer.renderToolbox(toolbox)
       const builder = new MutatingForm(
-        parent,
+        layer,
         [['properties.name', { handler: 'EditableText' }]],
         { className: 'umap-form-inline' }
       )
       const form = builder.build()
       formbox.appendChild(form)
-      li.dataset.id = parent.id
+      li.dataset.id = layer.id
       container.appendChild(li)
       for (const child of children) {
-        showLayer(child.parent, child.children, body)
+        showLayer(child, child.layers, body)
       }
     }
-    const { _, children } = this.datalayers.tree(this.datalayers.browsable())
-    for (const child of children) {
-      showLayer(child.parent, child.children, ul)
+    const layers = Utils.tree(this.datalayers.browsable())
+    for (const layer of layers) {
+      showLayer(layer, layer.layers, ul)
     }
     new Orderable(ul, onReorder, { allowTree: true })
 
