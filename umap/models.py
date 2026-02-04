@@ -264,10 +264,11 @@ class Map(NamedModel):
         map_settings = self.settings
         if "properties" not in map_settings:
             map_settings["properties"] = {}
+        layers = [l.metadata() for l in self.datalayers]
         map_settings["properties"].update(
             {
                 "tilelayers": [TileLayer.get_default().json],
-                "datalayers": layers_tree(self.datalayers),
+                "datalayers": layers_tree(layers),
                 "urls": _urls_for_js(),
                 "STATIC_URL": settings.STATIC_URL,
                 "editMode": "disabled",
@@ -307,9 +308,12 @@ class Map(NamedModel):
                     layer = json.loads(f.read())
             if datalayer.settings:
                 datalayer.settings.pop("id", None)
+                datalayer.settings.pop("parent", None)
+                layer["id"] = datalayer.pk
+                layer["parent"] = datalayer.parent.pk if datalayer.parent else None
                 layer["_umap_options"] = datalayer.settings
             datalayers.append(layer)
-        umapjson["layers"] = datalayers
+        umapjson["layers"] = layers_tree(datalayers, keep_ids=False)
         return umapjson
 
     def get_absolute_url(self):

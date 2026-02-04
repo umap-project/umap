@@ -48,30 +48,26 @@ def test_layers_tree(map):
     p2_grandchild2 = DataLayerFactory(
         name="p2 grandchild 2", rank=0, parent=p2_child1, map=map
     )
-    tree = layers_tree(map.datalayers)
+    tree = layers_tree([d.metadata() for d in map.datalayers])
     expected = [
         {
             "layers": [
                 {
-                    "layers": [],
                     "name": p1_child1.name,
                     "browsable": True,
                     "displayOnLoad": True,
                     "id": p1_child1.pk,
                     "rank": 0,
-                    "parent": parent1.pk,
                     "permissions": {"edit_status": 0},
                     "editMode": "disabled",
                     "_referenceVersion": p1_child1.reference_version,
                 },
                 {
-                    "layers": [],
                     "name": p1_child2.name,
                     "browsable": True,
                     "displayOnLoad": True,
                     "id": p1_child2.pk,
                     "rank": 1,
-                    "parent": parent1.pk,
                     "permissions": {"edit_status": 0},
                     "editMode": "disabled",
                     "_referenceVersion": p1_child2.reference_version,
@@ -82,7 +78,6 @@ def test_layers_tree(map):
             "displayOnLoad": True,
             "id": parent1.pk,
             "rank": 0,
-            "parent": None,
             "permissions": {"edit_status": 0},
             "editMode": "disabled",
             "_referenceVersion": parent1.reference_version,
@@ -97,9 +92,7 @@ def test_layers_tree(map):
                             "displayOnLoad": True,
                             "editMode": "disabled",
                             "id": p2_grandchild1.pk,
-                            "layers": [],
                             "name": "p2 grandchild 1",
-                            "parent": p2_child1.pk,
                             "permissions": {
                                 "edit_status": 0,
                             },
@@ -111,9 +104,7 @@ def test_layers_tree(map):
                             "displayOnLoad": True,
                             "editMode": "disabled",
                             "id": p2_grandchild2.pk,
-                            "layers": [],
                             "name": "p2 grandchild 2",
-                            "parent": p2_child1.pk,
                             "permissions": {
                                 "edit_status": 0,
                             },
@@ -125,19 +116,16 @@ def test_layers_tree(map):
                     "displayOnLoad": True,
                     "id": p2_child1.pk,
                     "rank": 0,
-                    "parent": parent2.pk,
                     "permissions": {"edit_status": 0},
                     "editMode": "disabled",
                     "_referenceVersion": p2_child1.reference_version,
                 },
                 {
-                    "layers": [],
                     "name": p2_child2.name,
                     "browsable": True,
                     "displayOnLoad": True,
                     "id": p2_child2.pk,
                     "rank": 1,
-                    "parent": parent2.pk,
                     "permissions": {"edit_status": 0},
                     "editMode": "disabled",
                     "_referenceVersion": p2_child2.reference_version,
@@ -148,7 +136,94 @@ def test_layers_tree(map):
             "displayOnLoad": True,
             "id": parent2.pk,
             "rank": 1,
-            "parent": None,
+            "permissions": {"edit_status": 0},
+            "editMode": "disabled",
+            "_referenceVersion": parent2.reference_version,
+        },
+    ]
+    assert tree == expected
+
+    # Now without ids
+    tree = layers_tree([d.metadata() for d in map.datalayers], keep_ids=False)
+    expected = [
+        {
+            "layers": [
+                {
+                    "name": p1_child1.name,
+                    "browsable": True,
+                    "displayOnLoad": True,
+                    "rank": 0,
+                    "permissions": {"edit_status": 0},
+                    "editMode": "disabled",
+                    "_referenceVersion": p1_child1.reference_version,
+                },
+                {
+                    "name": p1_child2.name,
+                    "browsable": True,
+                    "displayOnLoad": True,
+                    "rank": 1,
+                    "permissions": {"edit_status": 0},
+                    "editMode": "disabled",
+                    "_referenceVersion": p1_child2.reference_version,
+                },
+            ],
+            "name": parent1.name,
+            "browsable": True,
+            "displayOnLoad": True,
+            "rank": 0,
+            "permissions": {"edit_status": 0},
+            "editMode": "disabled",
+            "_referenceVersion": parent1.reference_version,
+        },
+        {
+            "layers": [
+                {
+                    "layers": [
+                        {
+                            "_referenceVersion": p2_grandchild1.reference_version,
+                            "browsable": True,
+                            "displayOnLoad": True,
+                            "editMode": "disabled",
+                            "name": "p2 grandchild 1",
+                            "permissions": {
+                                "edit_status": 0,
+                            },
+                            "rank": 0,
+                        },
+                        {
+                            "_referenceVersion": p2_grandchild2.reference_version,
+                            "browsable": True,
+                            "displayOnLoad": True,
+                            "editMode": "disabled",
+                            "name": "p2 grandchild 2",
+                            "permissions": {
+                                "edit_status": 0,
+                            },
+                            "rank": 0,
+                        },
+                    ],
+                    "name": p2_child1.name,
+                    "browsable": True,
+                    "displayOnLoad": True,
+                    "rank": 0,
+                    "permissions": {"edit_status": 0},
+                    "editMode": "disabled",
+                    "_referenceVersion": p2_child1.reference_version,
+                },
+                {
+                    "name": p2_child2.name,
+                    "browsable": True,
+                    "displayOnLoad": True,
+                    "rank": 1,
+                    "permissions": {"edit_status": 0},
+                    "editMode": "disabled",
+                    "_referenceVersion": p2_child2.reference_version,
+                },
+            ],
+            "name": parent2.name,
+            "browsable": True,
+            "displayOnLoad": True,
+            "rank": 1,
             "permissions": {"edit_status": 0},
             "editMode": "disabled",
             "_referenceVersion": parent2.reference_version,

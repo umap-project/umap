@@ -772,8 +772,8 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
         return self.object.get_absolute_url()
 
     def get_datalayers(self):
-        return [dl.metadata(self.request) for dl in self.object.datalayers]
-        # return layers_tree(self.object.datalayers, self.request)
+        layers = [l.metadata(self.request) for l in self.object.datalayers]
+        return layers_tree(layers)
 
     @property
     def edit_mode(self):
