@@ -624,8 +624,6 @@ export default class Umap {
 
   async initDataLayers(datalayers) {
     datalayers = datalayers || this.properties.datalayers
-    datalayers.sort((a, b) => a.rank - b.rank)
-    datalayers = Utils.tree(datalayers)
     for (const options of datalayers) {
       // `false` to not propagate syncing elements served from uMap
       this.createDataLayer(options, false)
@@ -654,6 +652,7 @@ export default class Umap {
       datalayer.sync.upsert(datalayer.properties)
     }
     for (const childProps of properties.layers || []) {
+      childProps.parent = datalayer.id
       this.createDataLayer(childProps, sync)
     }
     return datalayer
@@ -1752,7 +1751,7 @@ export default class Umap {
     if (importedData.geometry) {
       this.properties.center = this._leafletMap.latLng(importedData.geometry)
     }
-    for (const geojson of importedData.layers) {
+    const importLayer = (geojson) => {
       if (!geojson._umap_options && geojson._storage) {
         geojson._umap_options = geojson._storage
       }
@@ -1761,8 +1760,15 @@ export default class Umap {
       if (geojson._umap_options?.iconUrl?.startsWith('/')) {
         geojson._umap_options.iconUrl = remoteOrigin + geojson._umap_options.iconUrl
       }
-      const dataLayer = this.createDirtyDataLayer(geojson._umap_options)
-      dataLayer.fromUmapGeoJSON(geojson)
+      const datalayer = this.createDirtyDataLayer(geojson._umap_options)
+      datalayer.fromUmapGeoJSON(geojson)
+      for (const childProps of geojson.layers || []) {
+        childProps.parent = datalayer.id
+        importLayer(childProps)
+      }
+    }
+    for (const geojson of importedData.layers) {
+      importLayer(geojson)
     }
 
     // For now render->propagate expect a `properties.` prefix.

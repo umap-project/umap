@@ -1295,6 +1295,7 @@ export class DataLayer {
 
   prepareProperties() {
     const properties = Utils.CopyJSON(this.properties)
+    delete properties.parent
     delete properties.permissions
     return JSON.stringify(properties)
   }
