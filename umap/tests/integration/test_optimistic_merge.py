@@ -58,7 +58,6 @@ def test_created_markers_are_merged(
         "id": str(datalayer.pk),
         "rank": 0,
         "remoteData": {},
-        "parent": None,
         "fields": [
             {
                 "key": "name",
@@ -108,7 +107,6 @@ def test_created_markers_are_merged(
         "id": str(datalayer.pk),
         "rank": 0,
         "remoteData": {},
-        "parent": None,
         "fields": [
             {
                 "key": "name",
@@ -139,7 +137,6 @@ def test_created_markers_are_merged(
         "id": str(datalayer.pk),
         "rank": 0,
         "remoteData": {},
-        "parent": None,
         "fields": [
             {
                 "key": "name",
@@ -170,7 +167,6 @@ def test_created_markers_are_merged(
         "id": str(datalayer.pk),
         "rank": 0,
         "remoteData": {},
-        "parent": None,
         "fields": [
             {
                 "key": "name",
@@ -203,7 +199,6 @@ def test_created_markers_are_merged(
         "id": str(datalayer.pk),
         "rank": 0,
         "remoteData": {},
-        "parent": None,
         "fields": [
             {
                 "key": "name",
@@ -341,7 +336,6 @@ def test_same_second_edit_doesnt_conflict(new_page, live_server, tilelayer):
         "id": str(datalayer.pk),
         "rank": 0,
         "remoteData": {},
-        "parent": None,
         "fields": [
             {
                 "key": "name",

@@ -244,14 +244,17 @@ def get_login_url():
     return reverse(settings.LOGIN_URL)
 
 
-def layers_tree(layers, request=None):
-    tree = {
-        str(layer.pk): {"layers": [], **layer.metadata(request)} for layer in layers
-    }
-    for branch in tree.values():
+def layers_tree(layers, keep_ids=True):
+    root = {str(layer["id"]): {"layers": [], **layer} for layer in layers}
+    for branch in root.values():
         if branch["parent"]:
-            tree[str(branch["parent"])]["layers"].append(branch)
-    for [pk, branch] in tree.copy().items():
+            root[str(branch["parent"])]["layers"].append(branch)
+    for [id, branch] in root.copy().items():
+        if not keep_ids:
+            del branch["id"]
         if branch["parent"]:
-            del tree[pk]
-    return list(tree.values())
+            del root[id]
+        del branch["parent"]
+        if not branch["layers"]:
+            del branch["layers"]
+    return list(root.values())
