@@ -231,3 +231,40 @@ def test_can_edit_datalayer_name_in_list(live_server, openmap, datalayer, page):
     expect(
         page.locator(".panel.left").get_by_text("test datalayer foobar")
     ).to_be_visible()
+
+
+def test_parent_layer_should_always_be_saved_before_children(
+    live_server, page, tilelayer, settings
+):
+    settings.UMAP_ALLOW_ANONYMOUS = True
+    page.goto(f"{live_server.url}/en/map/new/")
+    page.get_by_role("button", name="Manage layers").click()
+    assert not DataLayer.objects.count()
+
+    # Create a first layer
+    page.get_by_role("button", name="Add a layer").click()
+    page.locator('input[name="name"]').fill("child")
+    page.get_by_role("button", name="Manage layers").click()
+
+    # Create a second layer
+    page.get_by_role("button", name="Add a layer").click()
+    page.locator('input[name="name"]').fill("parent")
+
+    # Now make the second the parent of the first
+    page.get_by_role("button", name="Manage layers").click()
+    page.get_by_role("button", name="Edit").nth(3).click()
+    page.locator('select[name="parentId"]').select_option("parent")
+    # Retrieve the layers ids, so to be able to wait for the create response explicitely
+    [child_id, parent_id] = page.evaluate(
+        "() => U.MAP.datalayers.active().map((d) => d.id)"
+    )
+
+    # Wait for the two layers to be saved
+    with page.expect_response(re.compile(f".*/datalayer/create/{child_id}/")):
+        with page.expect_response(re.compile(f".*/datalayer/create/{parent_id}/")):
+            page.get_by_role("button", name="Save draft").click()
+
+    assert DataLayer.objects.count() == 2
+    child = DataLayer.objects.get(name="child")
+    parent = DataLayer.objects.get(name="parent")
+    assert child.parent == parent

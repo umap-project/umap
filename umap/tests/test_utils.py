@@ -3,7 +3,11 @@ from pathlib import Path
 
 import pytest
 
-from umap.utils import gzip_file, normalize_string
+from umap.utils import gzip_file, layers_tree, normalize_string
+
+from .base import DataLayerFactory
+
+pytestmark = pytest.mark.django_db
 
 
 def test_gzip_file(settings):
@@ -29,3 +33,125 @@ def test_gzip_file(settings):
 )
 def test_normalize_string(input, output):
     assert normalize_string(input) == output
+
+
+def test_layers_tree(map):
+    parent1 = DataLayerFactory(name="parent 1", rank=0, map=map)
+    parent2 = DataLayerFactory(name="parent 2", rank=1, map=map)
+    p1_child2 = DataLayerFactory(name="p1 child 2", rank=1, parent=parent1, map=map)
+    p1_child1 = DataLayerFactory(name="p1 child 1", rank=0, parent=parent1, map=map)
+    p2_child2 = DataLayerFactory(name="p2 child 2", rank=1, parent=parent2, map=map)
+    p2_child1 = DataLayerFactory(name="p2 child 1", rank=0, parent=parent2, map=map)
+    p2_grandchild1 = DataLayerFactory(
+        name="p2 grandchild 1", rank=0, parent=p2_child1, map=map
+    )
+    p2_grandchild2 = DataLayerFactory(
+        name="p2 grandchild 2", rank=0, parent=p2_child1, map=map
+    )
+    tree = layers_tree(map.datalayers)
+    expected = [
+        {
+            "layers": [
+                {
+                    "layers": [],
+                    "name": p1_child1.name,
+                    "browsable": True,
+                    "displayOnLoad": True,
+                    "id": p1_child1.pk,
+                    "rank": 0,
+                    "parent": parent1.pk,
+                    "permissions": {"edit_status": 0},
+                    "editMode": "disabled",
+                    "_referenceVersion": p1_child1.reference_version,
+                },
+                {
+                    "layers": [],
+                    "name": p1_child2.name,
+                    "browsable": True,
+                    "displayOnLoad": True,
+                    "id": p1_child2.pk,
+                    "rank": 1,
+                    "parent": parent1.pk,
+                    "permissions": {"edit_status": 0},
+                    "editMode": "disabled",
+                    "_referenceVersion": p1_child2.reference_version,
+                },
+            ],
+            "name": parent1.name,
+            "browsable": True,
+            "displayOnLoad": True,
+            "id": parent1.pk,
+            "rank": 0,
+            "parent": None,
+            "permissions": {"edit_status": 0},
+            "editMode": "disabled",
+            "_referenceVersion": parent1.reference_version,
+        },
+        {
+            "layers": [
+                {
+                    "layers": [
+                        {
+                            "_referenceVersion": p2_grandchild1.reference_version,
+                            "browsable": True,
+                            "displayOnLoad": True,
+                            "editMode": "disabled",
+                            "id": p2_grandchild1.pk,
+                            "layers": [],
+                            "name": "p2 grandchild 1",
+                            "parent": p2_child1.pk,
+                            "permissions": {
+                                "edit_status": 0,
+                            },
+                            "rank": 0,
+                        },
+                        {
+                            "_referenceVersion": p2_grandchild2.reference_version,
+                            "browsable": True,
+                            "displayOnLoad": True,
+                            "editMode": "disabled",
+                            "id": p2_grandchild2.pk,
+                            "layers": [],
+                            "name": "p2 grandchild 2",
+                            "parent": p2_child1.pk,
+                            "permissions": {
+                                "edit_status": 0,
+                            },
+                            "rank": 0,
+                        },
+                    ],
+                    "name": p2_child1.name,
+                    "browsable": True,
+                    "displayOnLoad": True,
+                    "id": p2_child1.pk,
+                    "rank": 0,
+                    "parent": parent2.pk,
+                    "permissions": {"edit_status": 0},
+                    "editMode": "disabled",
+                    "_referenceVersion": p2_child1.reference_version,
+                },
+                {
+                    "layers": [],
+                    "name": p2_child2.name,
+                    "browsable": True,
+                    "displayOnLoad": True,
+                    "id": p2_child2.pk,
+                    "rank": 1,
+                    "parent": parent2.pk,
+                    "permissions": {"edit_status": 0},
+                    "editMode": "disabled",
+                    "_referenceVersion": p2_child2.reference_version,
+                },
+            ],
+            "name": parent2.name,
+            "browsable": True,
+            "displayOnLoad": True,
+            "id": parent2.pk,
+            "rank": 1,
+            "parent": None,
+            "permissions": {"edit_status": 0},
+            "editMode": "disabled",
+            "_referenceVersion": parent2.reference_version,
+        },
+    ]
+    assert tree == expected
