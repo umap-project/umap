@@ -13,7 +13,7 @@ from django.utils.functional import classproperty
 from django.utils.translation import gettext_lazy as _
 
 from .managers import PrivateManager, PublicManager
-from .utils import _urls_for_js, normalize_string
+from .utils import _urls_for_js, layers_tree, normalize_string
 
 
 # Did not find a clean way to do this in Django
@@ -261,15 +261,13 @@ class Map(NamedModel):
 
     @property
     def preview_settings(self):
-        layers = self.datalayers
-        datalayer_data = [c.metadata() for c in layers]
         map_settings = self.settings
         if "properties" not in map_settings:
             map_settings["properties"] = {}
         map_settings["properties"].update(
             {
                 "tilelayers": [TileLayer.get_default().json],
-                "datalayers": datalayer_data,
+                "datalayers": layers_tree(self.datalayers),
                 "urls": _urls_for_js(),
                 "STATIC_URL": settings.STATIC_URL,
                 "editMode": "disabled",
@@ -531,7 +529,7 @@ class DataLayer(NamedModel):
     modified_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ("-parent__pk", "rank")
+        ordering = ("rank",)
 
     def save(self, **kwargs):
         super(DataLayer, self).save(**kwargs)

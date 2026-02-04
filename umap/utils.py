@@ -281,3 +281,16 @@ def validate_url(request):
             if ipaddress.ip_address(ip).is_private:
                 raise ValueError("Private IP")
     return url
+
+
+def layers_tree(layers, request=None):
+    tree = {
+        str(layer.pk): {"layers": [], **layer.metadata(request)} for layer in layers
+    }
+    for branch in tree.values():
+        if branch["parent"]:
+            tree[str(branch["parent"])]["layers"].append(branch)
+    for [pk, branch] in tree.copy().items():
+        if branch["parent"]:
+            del tree[pk]
+    return list(tree.values())
