@@ -104,8 +104,7 @@ describe('HybridLogicalClock', () => {
       expect(result.walltime).to.be.least(now)
       if (result.walltime > now) {
         expect(result.nn).to.equal(5)
-      }
-      else {
+      } else {
         expect(result.nn).to.equal(6)
       }
       expect(result.id).to.equal('local')
