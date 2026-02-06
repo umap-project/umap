@@ -395,6 +395,10 @@ export const SCHEMA = {
   owner: {
     type: Object,
   },
+  parentId: {
+    type: String,
+    impacts: ['data'],
+  },
   permanentCredit: {
     type: 'Text',
     impacts: ['ui'],

@@ -654,6 +654,25 @@ Fields.NullableDataLayerSwitcher = class extends BaseDataLayerSwitcher {
   }
 }
 
+Fields.ParentSwitcher = class extends BaseDataLayerSwitcher {
+  getOptions() {
+    const options = super.getOptions()
+    options.unshift([null, translate('Choose a parent layer')])
+    return options
+  }
+
+  toHTML() {
+    return this.builder.getter(this)
+  }
+
+  toJS() {
+    // Only return the UUID, as the DataLayer.parent setter will
+    // convert it to a DataLayer instance, and this allows to sync
+    // the value to other peers (we cannot sync object instances).
+    return this.value()
+  }
+}
+
 Fields.EditableDataLayerSwitcher = class extends BaseDataLayerSwitcher {
   getTemplate() {
     return `

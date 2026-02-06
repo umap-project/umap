@@ -51,22 +51,24 @@ export default class Browser {
     parent.appendChild(row)
   }
 
-  datalayerId(datalayer) {
-    return `browse_data_datalayer_${stamp(datalayer)}`
-  }
+  addDataLayer(datalayer, children, parentContainer) {
+    let open = ''
+    if (this.mode !== 'layers' || children.some((child) => child.hasVisibleChild())) {
+      open = ' open'
+    }
 
-  addDataLayer(datalayer, parent) {
-    const open = this.mode !== 'layers' ? ' open' : ''
-    const [container, { details, toolbox, label, ul }] = Utils.loadTemplateWithRefs(`
-      <details data-ref=details class="datalayer ${datalayer.cssId}" id="${datalayer.cssId}"${open}>
-        <summary class="with-toolbox">
+    const [container, { details, toolbox, label, ul, childrenContainer }] =
+      Utils.loadTemplateWithRefs(`
+      <details data-ref=details class="datalayer" id="${datalayer.cssId}"${open}>
+        <summary class="with-toolbox ${datalayer.cssId}">
           <span>
-            <span class="datalayer-name truncate" data-id="${datalayer.id}" data-ref=label></span>
+            <h4 class="datalayer-name truncate" data-id="${datalayer.id}" data-ref=label></h4>
             <span class="datalayer-counter"></span>
           </span>
           <span data-ref=toolbox></span>
         </summary>
         <ul data-ref=ul></ul>
+        <div data-ref=childrenContainer></div>
       </details>
     `)
     details.addEventListener('toggle', () => {
@@ -75,7 +77,10 @@ export default class Browser {
       }
     })
     datalayer.renderToolbox(toolbox)
-    parent.appendChild(container)
+    parentContainer.appendChild(container)
+    for (const child of children) {
+      this.addDataLayer(child, child.layers, childrenContainer)
+    }
     this.updateFeaturesList(datalayer)
   }
 
@@ -85,7 +90,6 @@ export default class Browser {
     const parent = document.getElementById(datalayer.cssId)
     // Browser is not open
     if (!parent) return
-    parent.classList.toggle('off', !datalayer.isVisible())
     const label = parent.querySelector('.datalayer-name')
     const container = parent.querySelector('ul')
     container.innerHTML = ''
@@ -144,8 +148,9 @@ export default class Browser {
   update() {
     if (!this.isOpen()) return
     this.dataContainer.innerHTML = ''
-    for (const datalayer of this._umap.datalayers.browsable()) {
-      this.addDataLayer(datalayer, this.dataContainer)
+    const layers = Utils.tree(this._umap.datalayers.reverse())
+    for (const layer of layers) {
+      this.addDataLayer(layer, layer.layers, this.dataContainer)
     }
   }
 
@@ -193,7 +198,9 @@ export default class Browser {
     // https://github.com/Leaflet/Leaflet/pull/9052
     DomEvent.disableClickPropagation(container)
     details.open = this.mode === 'filters'
-    toggle.addEventListener('click', () => this.toggleLayers())
+    toggle.addEventListener('click', () =>
+      Utils.toggleLayers(this._umap.datalayers.browsable())
+    )
     fitBounds.addEventListener('click', () => this._umap.fitDataBounds())
     download.addEventListener('click', () => this.downloadVisible(download))
     download.hidden = this._umap.getProperty('embedControl') === false
@@ -267,23 +274,6 @@ export default class Browser {
       })
     }
     menu.openBelow(element, items)
-  }
-
-  toggleLayers() {
-    // If at least one layer is shown, hide it
-    // otherwise show all
-    let allHidden = true
-    this._umap.datalayers.browsable().map((datalayer) => {
-      if (datalayer.isVisible()) allHidden = false
-    })
-    this._umap.datalayers.browsable().map((datalayer) => {
-      datalayer.autoVisibility = false
-      if (allHidden) {
-        datalayer.show()
-      } else {
-        if (datalayer.isVisible()) datalayer.hide()
-      }
-    })
   }
 
   static backButton(umap) {

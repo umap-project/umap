@@ -136,7 +136,8 @@ html[dir="rtl"] .icon {
     visibility: hidden;
 }
 
-.orderable:hover .icon-drag {
+.orderable.with-toolbox:hover .icon-drag,
+.orderable .with-toolbox:hover .icon-drag {
     visibility: visible;
 }
 

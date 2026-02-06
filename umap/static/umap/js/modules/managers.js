@@ -15,6 +15,9 @@ export class DataLayerManager extends Object {
   count() {
     return this.active().length
   }
+  some(func) {
+    return this.active().some(func)
+  }
   find(func) {
     for (const datalayer of this.reverse()) {
       if (func.call(datalayer, datalayer)) {

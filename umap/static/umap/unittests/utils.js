@@ -881,6 +881,122 @@ describe('Utils', () => {
     })
   })
 
+  describe('tree', () => {
+    it('should make a tree from a flat list of layers with rank and parents', () => {
+      const layers = [
+        {
+          name: 'P1 child 2',
+          id: 'p1_child2',
+          rank: 1,
+          parent: 'parent1',
+        },
+        {
+          name: 'p1 child 1',
+          id: 'p1_child1',
+          rank: 0,
+          parent: 'parent1',
+        },
+        {
+          name: 'parent 1',
+          id: 'parent1',
+          rank: 0,
+          parent: null,
+        },
+        {
+          id: 'p2_grandchild1',
+          name: 'p2 grandchild 1',
+          parent: 'p2_child1',
+          rank: 0,
+        },
+        {
+          name: 'p2 child 2',
+          id: 'p2_child2',
+          rank: 1,
+          parent: 'parent2',
+        },
+        {
+          id: 'p2_grandchild2',
+          name: 'p2 grandchild 2',
+          parent: 'p2_child1',
+          rank: 1,
+        },
+        {
+          name: 'p2 child 1',
+          id: 'p2_child1',
+          rank: 0,
+          parent: 'parent2',
+        },
+        {
+          name: 'parent 2',
+          id: 'parent2',
+          rank: 1,
+          parent: null,
+        },
+      ]
+      expect(Utils.tree(layers.toSorted((a, b) => a.rank - b.rank))).deep.equal([
+        {
+          id: 'parent1',
+          layers: [
+            {
+              id: 'p1_child1',
+              layers: [],
+              name: 'p1 child 1',
+              parent: 'parent1',
+              rank: 0,
+            },
+            {
+              id: 'p1_child2',
+              layers: [],
+              name: 'P1 child 2',
+              parent: 'parent1',
+              rank: 1,
+            },
+          ],
+          name: 'parent 1',
+          parent: null,
+          rank: 0,
+        },
+        {
+          id: 'parent2',
+          layers: [
+            {
+              id: 'p2_child1',
+              layers: [
+                {
+                  id: 'p2_grandchild1',
+                  layers: [],
+                  name: 'p2 grandchild 1',
+                  parent: 'p2_child1',
+                  rank: 0,
+                },
+                {
+                  id: 'p2_grandchild2',
+                  layers: [],
+                  name: 'p2 grandchild 2',
+                  parent: 'p2_child1',
+                  rank: 1,
+                },
+              ],
+              name: 'p2 child 1',
+              parent: 'parent2',
+              rank: 0,
+            },
+            {
+              id: 'p2_child2',
+              layers: [],
+              name: 'p2 child 2',
+              parent: 'parent2',
+              rank: 1,
+            },
+          ],
+          name: 'parent 2',
+          parent: null,
+          rank: 1,
+        },
+      ])
+    })
+  })
+
   describe('setObjectValue', () => {
     it('should be able to set object properties', () => {
       let obj = {}

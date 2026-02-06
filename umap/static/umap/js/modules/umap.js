@@ -651,6 +651,10 @@ export default class Umap {
     if (sync !== false) {
       datalayer.sync.upsert(datalayer.properties)
     }
+    for (const childProps of properties.layers || []) {
+      childProps.parent = datalayer.id
+      this.createDataLayer(childProps, sync)
+    }
     return datalayer
   }
 
@@ -1573,8 +1577,39 @@ export default class Umap {
     })
   }
 
-  editDatalayers() {
+  async editDatalayers() {
     if (!this.editEnabled) return
+    const onReorder = async (moved, target, dragMode) => {
+      const movedLayer = this.datalayers[moved.dataset.id]
+      const targetLayer = this.datalayers[target.dataset.id]
+      this.sync.startBatch()
+      if (dragMode === 'above') {
+        movedLayer.insertAfter(targetLayer)
+      } else if (dragMode === 'below') {
+        movedLayer.insertBefore(targetLayer)
+      } else if (dragMode === 'middle') {
+        movedLayer.changeParent(targetLayer)
+      }
+      const els = Array.from(moved.parentNode.children)
+      if (moved.parentNode !== target.parentNode) {
+        els.push(...target.parentNode.children)
+      }
+      for (const el of els) {
+        const datalayer = this.datalayers[el.dataset.id]
+        const rank = datalayer.getDOMOrder()
+        // TODO: deal with parent changed but not rank
+        if (rank !== datalayer.rank) {
+          if (!datalayer.isLoaded()) await datalayer.fetchData()
+          const oldRank = datalayer.rank
+          datalayer.rank = rank
+          datalayer.sync.update('options.rank', rank, oldRank)
+          datalayer.redraw()
+        }
+      }
+      this.sync.commitBatch()
+      this.onDataLayersChanged()
+    }
+
     const template = `
       <div>
         <h3><i class="icon icon-16 icon-layers"></i>${translate('Manage layers')}</h3>
@@ -1582,51 +1617,43 @@ export default class Umap {
       </div>
     `
     const [container, { ul }] = Utils.loadTemplateWithRefs(template)
-    this.datalayers.reverse().map((datalayer) => {
-      const [row, { toolbox, formbox }] = Utils.loadTemplateWithRefs(`
-        <li class="orderable with-toolbox ${datalayer.cssId}">
-          <span data-ref=formbox class="datalayer-editable-title truncate"></span>
-          <span data-ref=toolbox>
-            <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
-          </span>
-        </li>
-      `)
-      datalayer.renderToolbox(toolbox)
+    const showLayer = (layer, children, container) => {
+      const nochildren =
+        !layer.isLoaded() || layer.features.count() || layer.isRemoteLayer()
+          ? ' no-children'
+          : ''
+      const [li, { body, toolbox, formbox }] = Utils.loadTemplateWithRefs(`
+          <li class="orderable${nochildren}">
+            <details open>
+              <summary class="with-toolbox ${layer.cssId}">
+                <span data-ref=formbox class="datalayer-editable-title truncate"></span>
+                <span data-ref=toolbox>
+                  <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
+                </span>
+              </summary>
+              <ul data-ref="body" class="orderable-container"></ul>
+            </details>
+          </li>
+        `)
+      layer.renderToolbox(toolbox)
       const builder = new MutatingForm(
-        datalayer,
+        layer,
         [['properties.name', { handler: 'EditableText' }]],
         { className: 'umap-form-inline' }
       )
       const form = builder.build()
       formbox.appendChild(form)
-      row.classList.toggle('off', !datalayer.isVisible())
-      row.dataset.id = datalayer.id
-      ul.appendChild(row)
-    })
-    const onReorder = (src, dst, initialIndex, finalIndex) => {
-      const movedLayer = this.datalayers[src.dataset.id]
-      const targetLayer = this.datalayers[dst.dataset.id]
-      const minIndex = Math.min(movedLayer.getDOMOrder(), targetLayer.getDOMOrder())
-      const maxIndex = Math.max(movedLayer.getDOMOrder(), targetLayer.getDOMOrder())
-      if (finalIndex === 0) movedLayer.bringToTop()
-      else if (finalIndex > initialIndex) movedLayer.insertBefore(targetLayer)
-      else movedLayer.insertAfter(targetLayer)
-      this.sync.startBatch()
-      this.datalayers.reverse().map(async (datalayer) => {
-        const rank = datalayer.getDOMOrder()
-        if (rank >= minIndex && rank <= maxIndex) {
-          // TODO allow to save only metadata instead of force loading data
-          if (!datalayer.isLoaded()) await datalayer.fetchData()
-          const oldRank = datalayer.rank
-          datalayer.rank = rank
-          datalayer.sync.update('options.rank', rank, oldRank)
-          datalayer.redraw()
-        }
-      })
-      this.sync.commitBatch()
-      this.onDataLayersChanged()
+      li.dataset.id = layer.id
+      container.appendChild(li)
+      for (const child of children) {
+        showLayer(child, child.layers, body)
+      }
     }
-    const orderable = new Orderable(ul, onReorder)
+    const layers = Utils.tree(this.datalayers.browsable())
+    for (const layer of layers) {
+      showLayer(layer, layer.layers, ul)
+    }
+    new Orderable(ul, onReorder, { allowTree: true })
 
     const [bar, { button }] = DOMUtils.loadTemplateWithRefs(`
       <div class="button-bar">
@@ -1724,7 +1751,7 @@ export default class Umap {
     if (importedData.geometry) {
       this.properties.center = this._leafletMap.latLng(importedData.geometry)
     }
-    for (const geojson of importedData.layers) {
+    const importLayer = (geojson) => {
       if (!geojson._umap_options && geojson._storage) {
         geojson._umap_options = geojson._storage
       }
@@ -1733,8 +1760,15 @@ export default class Umap {
       if (geojson._umap_options?.iconUrl?.startsWith('/')) {
         geojson._umap_options.iconUrl = remoteOrigin + geojson._umap_options.iconUrl
       }
-      const dataLayer = this.createDirtyDataLayer(geojson._umap_options)
-      dataLayer.fromUmapGeoJSON(geojson)
+      const datalayer = this.createDirtyDataLayer(geojson._umap_options)
+      datalayer.fromUmapGeoJSON(geojson)
+      for (const childProps of geojson.layers || []) {
+        childProps.parent = datalayer.id
+        importLayer(childProps)
+      }
+    }
+    for (const geojson of importedData.layers) {
+      importLayer(geojson)
     }
 
     // For now render->propagate expect a `properties.` prefix.
