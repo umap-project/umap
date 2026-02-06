@@ -2,7 +2,7 @@ services:
 
   # Useful only to use the real time collaboration
   redis:
-    image: redis:latest
+    image: docker.io/redis:latest
     healthcheck:
       test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
       interval: 1s
@@ -14,7 +14,7 @@ services:
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 2s
-    image: postgis/postgis:14-3.3-alpine
+    image: docker.io/postgis/postgis:14-3.3-alpine
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
@@ -26,23 +26,23 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    image: umap/umap:3.0.2
+    image: docker.io/umap/umap:3.6.1
     environment:
-      - STATIC_ROOT=/srv/umap/static
-      - MEDIA_ROOT=/srv/umap/uploads
-      - DATABASE_URL=postgis://postgres@db/postgres
-      - SECRET_KEY=some-long-and-weirdly-unrandom-secret-key
-      - SITE_URL=https://umap.local/
-      - UMAP_ALLOW_ANONYMOUS=True
-      - DEBUG=1
-      - REALTIME_ENABLED=1
-      - REDIS_URL=redis://redis:6379
+        - STATIC_ROOT=/srv/umap/static
+        - MEDIA_ROOT=/srv/umap/uploads
+        - DATABASE_URL=postgis://postgres@db/postgres
+        - SECRET_KEY=some-long-and-weirdly-unrandom-secret-key
+        - SITE_URL=https://umap.local/
+        - UMAP_ALLOW_ANONYMOUS=True
+        - DEBUG=1
+        - REALTIME_ENABLED=1
+        - REDIS_URL=redis://redis:6379
     volumes:
       - data:/srv/umap/uploads
       - static:/srv/umap/static
 
   proxy:
-    image: nginx:latest
+    image: docker.io/nginx:latest
     ports:
       - "8000:80"
     volumes:
