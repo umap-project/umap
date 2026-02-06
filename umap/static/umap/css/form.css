@@ -353,6 +353,7 @@ details summary {
 
 summary h4 {
     display: inline;
+    margin-bottom: 0;
 }
 
 fieldset legend {
