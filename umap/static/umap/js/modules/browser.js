@@ -52,19 +52,17 @@ export default class Browser {
   }
 
   addDataLayer(datalayer, children, parentContainer) {
-    const open =
-      this.mode !== 'layers'
-        ? ' open'
-        : children.some((d) => d.parent.isVisible())
-          ? ' open'
-          : ''
+    let open = ''
+    if (this.mode !== 'layers' || children.some((child) => child.hasVisibleChild())) {
+      open = ' open'
+    }
 
     const [container, { details, toolbox, label, ul, childrenContainer }] =
       Utils.loadTemplateWithRefs(`
-      <details data-ref=details class="datalayer ${datalayer.cssId}" id="${datalayer.cssId}"${open}>
-        <summary class="with-toolbox">
+      <details data-ref=details class="datalayer" id="${datalayer.cssId}"${open}>
+        <summary class="with-toolbox ${datalayer.cssId}">
           <span>
-            <span class="datalayer-name truncate" data-id="${datalayer.id}" data-ref=label></span>
+            <h4 class="datalayer-name truncate" data-id="${datalayer.id}" data-ref=label></h4>
             <span class="datalayer-counter"></span>
           </span>
           <span data-ref=toolbox></span>
@@ -92,7 +90,6 @@ export default class Browser {
     const parent = document.getElementById(datalayer.cssId)
     // Browser is not open
     if (!parent) return
-    parent.classList.toggle('off', !datalayer.isVisible())
     const label = parent.querySelector('.datalayer-name')
     const container = parent.querySelector('ul')
     container.innerHTML = ''

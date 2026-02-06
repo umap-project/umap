@@ -529,34 +529,6 @@ ul.photon-autocomplete {
     background-color: var(--color-darkGray);
 }
 
-.layer-toggle {
-    background-position: -49px -31px;
-}
-
-.off .layer-toggle {
-    background-position: -73px -31px;
-}
-
-.feature-delete,
-.layer-delete {
-    background-position: -122px -49px;
-}
-
-.feature-edit,
-.layer-edit {
-    background-position: -50px -49px;
-}
-
-.readonly .layer-edit,
-.off .layer-edit {
-    background-position: -50px -73px;
-}
-
-.readonly .layer-delete,
-.off .layer-delete {
-    background-position: -122px -121px;
-}
-
 .show-on-edit {
     display: none !important;
 }
@@ -652,10 +624,12 @@ ul.photon-autocomplete {
 }
 
 .caption-item {
-    padding: var(--text-margin);
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--color-veryLightGray);
     border-radius: var(--border-radius);
     margin-bottom: var(--box-margin);
+}
+.caption-item p {
+    margin: var(--text-margin);
 }
 
 .caption-item ul {

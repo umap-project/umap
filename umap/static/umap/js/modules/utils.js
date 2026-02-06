@@ -694,21 +694,20 @@ export const LatLngIsValid = (latlng) => {
   )
 }
 
-export const toggleLayers = (layers) => {
+export const toggleLayers = (layers, force) => {
   // If at least one layer is shown, hide it
   // otherwise show all
-  let allHidden = true
+  let allHidden = force
+  if (force === undefined) {
+    allHidden = true
+    layers.map((datalayer) => {
+      if (datalayer.hasVisibleChild()) allHidden = false
+    })
+  }
   layers.map((datalayer) => {
-    if (datalayer.isVisible()) allHidden = false
+    datalayer.toggle(allHidden)
   })
-  layers.map((datalayer) => {
-    datalayer.autoVisibility = false
-    if (allHidden) {
-      datalayer.show()
-    } else {
-      if (datalayer.isVisible()) datalayer.hide()
-    }
-  })
+  return allHidden
 }
 
 export const asciiTree = ({ parent, children }) => {

@@ -109,7 +109,7 @@ export class DataLayer {
     // Only layers that are displayed on load must be hidden/shown
     // Automatically, others will be shown manually, and thus will
     // be in the "forced visibility" mode
-    if (this.isVisible()) this.propagateShow()
+    this.propagateVisibility()
   }
 
   get id() {
@@ -1177,18 +1177,17 @@ export class DataLayer {
   async show() {
     this._leafletMap.addLayer(this.layer)
     if (!this.isLoaded()) await this.fetchData()
-    this.propagateShow()
+    this.propagateVisibility({ force: true })
   }
 
   hide() {
     this._leafletMap.removeLayer(this.layer)
-    this.propagateHide()
+    this.propagateVisibility({ force: false })
   }
 
   toggle(force) {
     if (this.hasChildren()) {
-      Utils.toggleLayers(this.children)
-      return
+      force = Utils.toggleLayers(this.children, force)
     }
     // From now on, do not try to how/hide
     // automatically this layer, as user
@@ -1196,12 +1195,28 @@ export class DataLayer {
     this.autoVisibility = false
     let display = force
     if (force === undefined) {
-      if (!this.isVisible()) display = true
-      else display = false
+      display = !this.hasVisibleChild()
     }
-    if (display) this.show()
-    else this.hide()
+    if (display) {
+      this.show()
+    } else {
+      this.hide()
+    }
     this._umap.bottomBar.redraw()
+  }
+
+  isVisible() {
+    if (this.hasChildren()) {
+      return this.children.every((child) => child.isVisible())
+    }
+    return Boolean(this.layer && this._leafletMap.hasLayer(this.layer))
+  }
+
+  hasVisibleChild() {
+    if (!this.hasChildren()) {
+      return this.isVisible()
+    }
+    return this.children.some((child) => child.isVisible())
   }
 
   zoomTo() {
@@ -1241,10 +1256,6 @@ export class DataLayer {
 
   hasData() {
     return !!this.count()
-  }
-
-  isVisible() {
-    return Boolean(this.layer && this._leafletMap.hasLayer(this.layer))
   }
 
   getNextFeature(feature) {
@@ -1462,11 +1473,11 @@ export class DataLayer {
     DomEvent.on(toggle, 'click', () => this.toggle())
     DomEvent.on(zoomTo, 'click', this.zoomTo, this)
     container.classList.add(this.cssId)
-    container.classList.toggle('off', !this.isVisible())
+    this.propagateVisibility({ element: container.closest('details') })
   }
 
-  getHidableElements() {
-    return document.querySelectorAll(`.${this.cssId}`)
+  getHidableElements({ element = document } = {}) {
+    return element.querySelectorAll(`.${this.cssId}`)
   }
 
   propagateDelete() {
@@ -1483,17 +1494,10 @@ export class DataLayer {
     }
   }
 
-  propagateHide() {
-    const els = this.getHidableElements()
+  propagateVisibility({ element = document, force } = {}) {
+    const els = this.getHidableElements({ element })
     for (const el of els) {
-      el.classList.add('off')
-    }
-  }
-
-  propagateShow() {
-    const els = this.getHidableElements()
-    for (const el of els) {
-      el.classList.remove('off')
+      el.classList.toggle('off', !(force ?? this.isVisible()))
     }
   }
 }
