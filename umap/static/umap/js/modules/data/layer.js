@@ -789,6 +789,20 @@ export class DataLayer {
     }
   }
 
+  get parent() {
+    return this._parent
+  }
+
+  set parent(other) {
+    if (other) {
+      delete other._children
+    }
+    if (this._parent) {
+      delete this._parent._children
+    }
+    this._parent = other
+  }
+
   get parentId() {
     return this.parent?.id
   }
@@ -798,11 +812,14 @@ export class DataLayer {
   }
 
   get children() {
-    return this._umap.datalayers.filter((d) => d.parent?.id === this.id)
+    if (!this._children) {
+      this._children = this._umap.datalayers.filter((d) => d.parent?.id === this.id)
+    }
+    return this._children
   }
 
   hasChildren() {
-    return this._umap.datalayers.some((d) => d.parent?.id === this.id)
+    return Boolean(this.children?.length)
   }
 
   _editMetadata(container) {

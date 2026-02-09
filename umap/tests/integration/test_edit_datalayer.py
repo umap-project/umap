@@ -122,7 +122,7 @@ def test_can_change_name(live_server, openmap, page, datalayer):
     page.locator('input[name="name"]').press("Control+a")
     page.locator('input[name="name"]').fill("new name")
     expect(page.locator(".umap-browser .datalayer")).to_contain_text("new name")
-    expect(page.locator("body")).to_have_class(re.compile(".*umap-is-dirty.*"))
+    expect(page.locator("body")).to_contain_class("umap-is-dirty")
     with page.expect_response(re.compile(".*/datalayer/update/.*")):
         page.get_by_role("button", name="Save").click()
     saved = DataLayer.objects.last()
@@ -173,19 +173,19 @@ def test_can_create_new_datalayer(live_server, openmap, page, datalayer):
 def test_can_restore_version(live_server, openmap, page, datalayer):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     marker = page.locator(".leaflet-marker-icon")
-    expect(marker).to_have_class(re.compile(".*umap-ball-icon.*"))
+    expect(marker).to_contain_class("umap-ball-icon")
     marker.click(modifiers=["Shift"])
     page.get_by_text("Shape properties").click()
     page.locator("#umap-feature-shape-properties").get_by_text("Default").click()
     with page.expect_response(re.compile(".*/datalayer/update/.*")):
         page.get_by_role("button", name="Save").click()
-    expect(marker).to_have_class(re.compile(".*umap-div-icon.*"))
+    expect(marker).to_contain_class("umap-div-icon")
     page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel.right").get_by_title("Edit", exact=True).click()
     page.get_by_text("Versions").click()
     page.get_by_title("Restore this version").last.click()
     page.get_by_role("button", name="OK").click()
-    expect(marker).to_have_class(re.compile(".*umap-ball-icon.*"))
+    expect(marker).to_contain_class("umap-ball-icon")
 
 
 def test_can_edit_layer_on_ctrl_shift_click(live_server, openmap, page, datalayer):
