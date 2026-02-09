@@ -69,11 +69,10 @@ export default class Caption extends Utils.WithTemplate {
       this.elements.description.hidden = true
     }
     this.elements.datalayersContainer.innerHTML = ''
-    this._umap.datalayers
-      .reverse()
-      .map((datalayer) =>
-        this.addDataLayer(datalayer, this.elements.datalayersContainer)
-      )
+    const root = Utils.tree(this._umap.datalayers.reverse())
+    for (const layer of root) {
+      this.addDataLayer(layer, this.elements.datalayersContainer)
+    }
     this.addCredits()
     if (this._umap.properties.created_at) {
       const created_at = translate('created at {date}', {
@@ -93,7 +92,7 @@ export default class Caption extends Utils.WithTemplate {
     })
   }
 
-  addDataLayer(datalayer, parent) {
+  addDataLayer(datalayer, container) {
     if (!datalayer.properties.inCaption) return
 
     const template = `
@@ -103,19 +102,24 @@ export default class Caption extends Utils.WithTemplate {
         <span data-ref="toolbox"></span>
       </summary>
       <p class="text" data-ref="description"></p>
+      <div data-ref="children"></div>
     </details>
     `
-    const [element, { toolbox, description }] = Utils.loadTemplateWithRefs(template)
+    const [element, { toolbox, description, children }] =
+      Utils.loadTemplateWithRefs(template)
     if (datalayer.properties.description) {
       description.innerHTML = Utils.toHTML(datalayer.properties.description)
-    } else {
+    } else if (!datalayer.hasChildren()) {
       element.open = false
     }
     datalayer.renderToolbox(toolbox)
-    parent.appendChild(element)
+    container.appendChild(element)
     // Use textContent for security
     const name = Utils.loadTemplate('<h4></h4>')
     name.textContent = datalayer.getName()
+    for (const child of datalayer.children) {
+      this.addDataLayer(child, children)
+    }
     toolbox.appendChild(name)
   }
 
