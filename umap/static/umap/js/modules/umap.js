@@ -1624,8 +1624,8 @@ export default class Umap {
           : ''
       const [li, { body, toolbox, formbox }] = Utils.loadTemplateWithRefs(`
           <li class="orderable${nochildren}">
-            <details open>
-              <summary class="with-toolbox ${layer.cssId}">
+            <details open data-ondelete data-id="${layer.id}">
+              <summary class="with-toolbox" data-ontoggle data-id="${layer.id}">
                 <span data-ref=formbox class="datalayer-editable-title truncate"></span>
                 <span data-ref=toolbox>
                   <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
