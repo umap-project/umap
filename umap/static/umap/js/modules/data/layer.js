@@ -249,6 +249,13 @@ export class DataLayer {
         }
       } else {
         this._autoVisibility = this.properties.displayOnLoad
+        // Use parent visibility for displayOnLoad default value (true)
+        // TODO should we have an undefined default value, so be more
+        // explicit here ? Eg. not possible to override a parent with
+        // displayOnLoad=false
+        if (this._autoVisibility && this.parent) {
+          this._autoVisibility = this.parent.autoVisibility
+        }
       }
     }
     return this._autoVisibility
@@ -1207,7 +1214,7 @@ export class DataLayer {
 
   isVisible() {
     if (this.hasChildren()) {
-      return this.children.every((child) => child.isVisible())
+      return this.children.some((child) => child.isVisible())
     }
     return Boolean(this.layer && this._leafletMap.hasLayer(this.layer))
   }
@@ -1496,8 +1503,9 @@ export class DataLayer {
 
   propagateVisibility({ element = document, force } = {}) {
     const els = this.getHidableElements({ element })
+    force = force ?? this.isVisible()
     for (const el of els) {
-      el.classList.toggle('off', !(force ?? this.isVisible()))
+      el.classList.toggle('off', !force)
     }
   }
 }

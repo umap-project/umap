@@ -67,7 +67,7 @@ export default class Browser {
           </span>
           <span data-ref=toolbox></span>
         </summary>
-        <ul data-ref=ul></ul>
+        <ul class="${datalayer.cssId}" data-ref=ul></ul>
         <div data-ref=childrenContainer></div>
       </details>
     `)
