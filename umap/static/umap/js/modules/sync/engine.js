@@ -136,6 +136,10 @@ export class SyncEngine {
     this._batch = []
   }
 
+  hasBatch() {
+    return Boolean(this._batch?.length)
+  }
+
   commitBatch(subject, metadata) {
     if (!this._batch.length) {
       this._batch = null

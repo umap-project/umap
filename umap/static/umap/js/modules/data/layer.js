@@ -260,11 +260,12 @@ export class DataLayer {
   }
 
   changeParent(parent) {
+    if (this.parent === parent) return
     const oldParentId = this.parent?.id
     this.parent = parent
-    this.parentPane = parent.pane
-    this.sync.update('parentId', parent.id, oldParentId)
-    parent.pane.appendChild(this.pane)
+    this.parentPane = parent?.pane || this.rootPane
+    this.sync.update('parentId', parent?.id, oldParentId)
+    this.parentPane.appendChild(this.pane)
   }
 
   insertBefore(other) {
@@ -337,7 +338,7 @@ export class DataLayer {
   }
 
   dataChanged() {
-    if (!this.isLoaded() || this._batch) return
+    if (!this.isLoaded() || this._batch || this.sync.hasBatch()) return
     this._umap.onDataLayersChanged()
     this.layer.dataChanged()
   }
@@ -725,18 +726,24 @@ export class DataLayer {
     })
   }
 
-  del(sync = true) {
+  del(sync = true, batch = true) {
+    if (batch) this.sync.startBatch()
     const oldValue = Utils.CopyJSON(this.umapGeoJSON())
     // TODO merge datalayer del and features del in same
     // batch
+    this.parent = undefined
     this.clear()
     if (sync) {
       this.isDeleted = true
       this.sync.delete(oldValue)
     }
+    for (const child of this.children || []) {
+      child.del(sync, false)
+    }
+    if (batch) this.sync.commitBatch()
     this.hide()
     this.parentPane.removeChild(this.pane)
-    this._umap.onDataLayersChanged()
+    if (!this.sync.hasBatch()) this._umap.onDataLayersChanged()
     this.layer.onDelete(this._leafletMap)
     this.propagateDelete()
     this._leaflet_events_bk = this._leaflet_events
@@ -1295,6 +1302,7 @@ export class DataLayer {
     const features = this.isRemoteLayer() ? [] : this.features.all()
     const geojson = this._umap.formatter.toFeatureCollection(features)
     geojson._umap_options = this.properties
+    delete geojson._umap_options.layers
     return geojson
   }
 

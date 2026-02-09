@@ -41,7 +41,7 @@
     background-color: var(--color-veryLightGray);
 }
 
-.umap-browser summary.off h4 {
+summary.off h4 {
     opacity: 0.4;
 }
 

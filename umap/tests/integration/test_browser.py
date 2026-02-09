@@ -600,10 +600,10 @@ def test_can_toggle_visibility_from_parent(live_server, map, page):
     expect(page.get_by_text("root2 feature")).to_be_visible()
     # Clicking on root 1 loop should also hide child2
     page.locator(f"summary.datalayer-{root1.pk} .icon-eye").click()
-    expect(page.locator(f"summary.datalayer-{root1.pk}")).to_contain_class("off")
-    expect(page.locator(f"summary.datalayer-{p1_child2.pk}")).to_contain_class("off")
-    expect(page.locator(f"summary.datalayer-{p1_child1.pk}")).to_contain_class("off")
-    expect(page.locator(f"summary.datalayer-{p1_grandchild1.pk}")).to_contain_class(
+    expect(page.locator(f"summary[data-id='{root1.pk}']")).to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_child2.pk}']")).to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_child1.pk}']")).to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_grandchild1.pk}']")).to_contain_class(
         "off"
     )
     expect(page.get_by_text("grandchild feature")).to_be_hidden()
@@ -611,15 +611,15 @@ def test_can_toggle_visibility_from_parent(live_server, map, page):
     expect(page.get_by_text("root2 feature")).to_be_visible()
 
     # Clicking on child 1 loop should also show grandchild
-    page.locator(f"summary.datalayer-{p1_child1.pk} .icon-eye").click()
-    expect(page.locator(f"summary.datalayer-{root1.pk}")).not_to_contain_class("off")
-    expect(page.locator(f"summary.datalayer-{p1_child2.pk}")).to_contain_class("off")
-    expect(page.locator(f"summary.datalayer-{p1_child1.pk}")).not_to_contain_class(
+    page.locator(f"summary[data-id='{p1_child1.pk}'] .icon-eye").click()
+    expect(page.locator(f"summary[data-id='{root1.pk}']")).not_to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_child2.pk}']")).to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_child1.pk}']")).not_to_contain_class(
         "off"
     )
-    expect(page.locator(f"summary.datalayer-{p1_grandchild1.pk}")).not_to_contain_class(
-        "off"
-    )
+    expect(
+        page.locator(f"summary[data-id='{p1_grandchild1.pk}']")
+    ).not_to_contain_class("off")
     expect(page.get_by_text("grandchild feature")).to_be_visible()
     expect(page.get_by_text("child2 feature")).to_be_hidden()
     expect(page.get_by_text("root2 feature")).to_be_visible()

@@ -710,14 +710,12 @@ export const toggleLayers = (layers, force) => {
   return allHidden
 }
 
-export const asciiTree = ({ parent, children }) => {
-  if (parent) {
-    console.group(parent.rank, parent.getName())
-  }
-  for (const child of children) {
-    asciiTree(child)
-  }
-  if (parent) {
+export const asciiTree = (layers) => {
+  for (const layer of layers) {
+    console.group(layer.rank, layer.getName())
+    for (const child of layer.children) {
+      asciiTree(child.children || [])
+    }
     console.groupEnd()
   }
 }
