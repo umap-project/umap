@@ -68,7 +68,7 @@ export class DataLayerUpdater extends BaseUpdater {
   delete({ metadata }) {
     const datalayer = this.getDataLayerFromID(metadata.id)
     if (datalayer) {
-      datalayer.del(false)
+      datalayer.del(false, false)
       datalayer.commitDelete()
     }
   }

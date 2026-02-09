@@ -17,15 +17,15 @@ export class WebSocketTransport {
       }
       this.websocket.addEventListener('message', this.onMessage.bind(this))
       this.websocket.onclose = () => {
-        console.log('websocket closed')
+        console.debug('websocket closed')
         if (!this.receiver.closeRequested) {
-          console.log('Not requested, reconnecting...')
+          console.debug('Not requested, reconnecting...')
           this.receiver.reconnect()
         }
       }
 
       this.websocket.onerror = (error) => {
-        console.log('WS ERROR', error)
+        console.debug('WS ERROR', error)
       }
 
       this.ensureOpen = setInterval(() => {
@@ -41,7 +41,7 @@ export class WebSocketTransport {
       // See https://making.close.com/posts/reliable-websockets/ for more details.
       this.pingInterval = setInterval(() => {
         if (this.websocket.readyState === WebSocket.OPEN) {
-          console.log('sending ping')
+          console.debug('sending ping')
           this.websocket.send('ping')
           this.pongReceived = false
           setTimeout(() => {
@@ -72,7 +72,7 @@ export class WebSocketTransport {
   }
 
   close() {
-    console.log('Closing')
+    console.debug('Closing')
     this.receiver.closeRequested = true
     this.websocket.close()
   }
