@@ -59,15 +59,15 @@ export default class Browser {
 
     const [container, { details, toolbox, label, ul, childrenContainer }] =
       Utils.loadTemplateWithRefs(`
-      <details data-ref=details class="datalayer" id="${datalayer.cssId}"${open}>
-        <summary class="with-toolbox ${datalayer.cssId}">
+      <details data-ref=details class="datalayer" data-ondelete data-id="${datalayer.id}"${open}>
+        <summary class="with-toolbox" data-ontoggle data-id="${datalayer.id}">
           <span>
-            <h4 class="datalayer-name truncate" data-id="${datalayer.id}" data-ref=label></h4>
+            <h4 class="datalayer-name truncate" data-onrename data-id="${datalayer.id}" data-ref=label></h4>
             <span class="datalayer-counter"></span>
           </span>
           <span data-ref=toolbox></span>
         </summary>
-        <ul class="${datalayer.cssId}" data-ref=ul></ul>
+        <ul data-ontoggle data-id="${datalayer.id}" data-ref=ul></ul>
         <div data-ref=childrenContainer></div>
       </details>
     `)
@@ -87,11 +87,11 @@ export default class Browser {
   updateFeaturesList(datalayer) {
     // Compute once, but use it for each feature later.
     this.bounds = this._leafletMap.getBounds()
-    const parent = document.getElementById(datalayer.cssId)
+    const details = document.querySelector(`details[data-id="${datalayer.id}"]`)
     // Browser is not open
-    if (!parent) return
-    const label = parent.querySelector('.datalayer-name')
-    const container = parent.querySelector('ul')
+    if (!details) return
+    const label = details.querySelector('.datalayer-name')
+    const container = details.querySelector('ul')
     container.innerHTML = ''
     const isOpen = container.parentNode.open
     if (isOpen || this.hasActiveFilters()) {
@@ -102,7 +102,7 @@ export default class Browser {
     if (!total) return
     const current = container.querySelectorAll('li').length
     const count = !this.hasActiveFilters() ? total : `${current}/${total}`
-    const counter = parent.querySelector('.datalayer-counter')
+    const counter = details.querySelector('.datalayer-counter')
     counter.textContent = `(${count})`
     counter.title = translate(`Features in this layer: ${count}`)
   }

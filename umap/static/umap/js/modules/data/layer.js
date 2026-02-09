@@ -73,7 +73,7 @@ export class DataLayer {
       }
       this.parentPane = this.parent.pane
     }
-    this.pane = this._leafletMap.createPane(`pane-${this.cssId}`, this.parentPane)
+    this.pane = this._leafletMap.createPane(`pane-${this.id}`, this.parentPane)
     // FIXME: should be on layer
     this.renderer = new SVG({ pane: this.pane })
     this.pane.dataset.id = this.id
@@ -136,10 +136,6 @@ export class DataLayer {
 
   get isDeleted() {
     return this._isDeleted
-  }
-
-  get cssId() {
-    return `datalayer-${this.id}`
   }
 
   get rank() {
@@ -216,11 +212,9 @@ export class DataLayer {
   propagate(fields = []) {
     const impacts = {
       'properties.name': () => {
-        Utils.eachElement('.datalayer-name', (el) => {
-          if (el.dataset.id === this.id) {
-            el.textContent = this.getName()
-            el.title = this.getName()
-          }
+        Utils.eachElement(`[data-id="${this.id}"][data-onrename]`, (el) => {
+          el.textContent = this.getName()
+          el.title = this.getName()
         })
       },
     }
@@ -324,7 +318,6 @@ export class DataLayer {
       this.showFeature(feature)
     })
     if (visible) this.show()
-    this.propagateRemote()
   }
 
   async fetchData() {
@@ -1442,7 +1435,7 @@ export class DataLayer {
 
   renderLegend() {
     for (const container of document.querySelectorAll(
-      `.${this.cssId} .datalayer-legend`
+      `[data-id="${this.id}"] .datalayer-legend`
     )) {
       container.innerHTML = ''
       if (this.layer.renderLegend) return this.layer.renderLegend(container)
@@ -1496,30 +1489,22 @@ export class DataLayer {
     }
     DomEvent.on(toggle, 'click', () => this.toggle())
     DomEvent.on(zoomTo, 'click', this.zoomTo, this)
-    container.classList.add(this.cssId)
     this.propagateVisibility({ element: container.closest('details') })
   }
 
   getHidableElements({ element = document } = {}) {
-    return element.querySelectorAll(`.${this.cssId}`)
+    return element.querySelectorAll(`[data-id="${this.id}"]`)
   }
 
   propagateDelete() {
-    const els = this.getHidableElements()
+    const els = document.querySelectorAll(`[data-id="${this.id}"][data-ondelete]`)
     for (const el of els) {
       el.remove()
     }
   }
 
-  propagateRemote() {
-    const els = this.getHidableElements()
-    for (const el of els) {
-      el.classList.toggle('remotelayer', this.isRemoteLayer())
-    }
-  }
-
   propagateVisibility({ element = document, force } = {}) {
-    const els = this.getHidableElements({ element })
+    const els = element.querySelectorAll(`[data-id="${this.id}"][data-ontoggle]`)
     force = force ?? this.isVisible()
     for (const el of els) {
       el.classList.toggle('off', !force)
