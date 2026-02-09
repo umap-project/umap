@@ -98,7 +98,7 @@ export default class Caption extends Utils.WithTemplate {
 
     const template = `
     <details open class="caption-item datalayer" data-ondelete data-id="${datalayer.id}">
-      <summary>
+      <summary data-ontoggle data-id="${datalayer.id}">
         <span class="datalayer-legend"></span>
         <span data-ref="toolbox"></span>
       </summary>
