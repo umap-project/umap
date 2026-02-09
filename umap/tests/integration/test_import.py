@@ -68,7 +68,7 @@ def test_umap_import_from_file(live_server, tilelayer, page):
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
     expect(layers).to_have_count(2)
-    nonloaded = page.locator(".umap-browser .datalayer.off")
+    nonloaded = page.locator(".umap-browser .datalayer summary.off")
     expect(nonloaded).to_have_count(1)
 
 
@@ -834,7 +834,7 @@ def test_create_remote_data(page, live_server, tilelayer):
     page.goto(f"{live_server.url}/map/new/")
     expect(page.locator(".leaflet-marker-icon")).to_be_hidden()
     page.get_by_role("button", name="Import data").click()
-    page.get_by_placeholder("Provide an URL here").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
     page.get_by_placeholder("Provide an URL here").fill("https://remote.org/data.json")
     page.locator("[name=format]").select_option("geojson")
     page.get_by_role("radio", name="Link to the layer as remote data").click()

@@ -352,10 +352,6 @@ html[dir="rtl"] .icon {
     background-position: calc(var(--tile) * 3) 0px;
 }
 
-.remotelayer .icon-table {
-    display: none !important;
-}
-
 .icon-template {
     background-position: calc(var(--tile) * 5) calc(var(--tile) * 7);
 }
