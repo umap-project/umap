@@ -413,6 +413,7 @@ export class DataLayer {
     }
     return await this.getUrl(url, remoteUrl).then((raw) => {
       this.clear(false)
+      this.dataChanged()
       return this._umap.formatter
         .parse(raw, this.properties.remoteData.format)
         .then((geojson) => this.fromGeoJSON(geojson, false))
@@ -743,7 +744,7 @@ export class DataLayer {
     if (root) this.sync.commitBatch()
     this.hide()
     this.parentPane.removeChild(this.pane)
-    if (root) this._umap.onDataLayersChanged()
+    if (root) this.dataChanged()
     this.layer.onDelete(this._leafletMap)
     this.propagateDelete()
     this._leaflet_events_bk = this._leaflet_events
@@ -754,13 +755,13 @@ export class DataLayer {
     this.sync.startBatch()
     this.clear()
     this.sync.commitBatch()
+    this.dataChanged()
   }
 
   clear(sync = true) {
     this._batch = true
     this.features.forEach((feature) => feature.del(sync))
     this._batch = false
-    this.dataChanged()
   }
 
   clone() {
