@@ -31,9 +31,9 @@ def new_page(context):
         page = _context.new_page()
         page.on(
             "console",
-            lambda msg: print(f"{prefix}: {msg.text}")
-            if msg.type != "warning"
-            else None,
+            lambda msg: (
+                print(f"{prefix}: {msg.text}") if msg.type != "warning" else None
+            ),
         )
         page.on("pageerror", lambda exc: print(f"{prefix} uncaught exception: {exc}"))
         if not bool(os.environ.get("PWDEBUG", os.environ.get("FORCE_TILES", False))):
