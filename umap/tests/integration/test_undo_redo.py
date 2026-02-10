@@ -207,7 +207,7 @@ def test_can_undo_redo_polygon_geometry_change(live_server, page, tilelayer):
 def test_can_undo_redo_marker_create(live_server, page, tilelayer):
     page.goto(f"{live_server.url}/en/map/new")
 
-    page.get_by_title("Open Browser").click()
+    page.get_by_title("Open browser").click()
     marker = page.locator(".leaflet-marker-icon")
     map = page.locator("#map")
 
