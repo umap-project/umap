@@ -338,7 +338,7 @@ export class DataLayer {
   }
 
   dataChanged() {
-    if (!this.isLoaded() || this._batch || this.sync.hasBatch()) return
+    if (!this.isLoaded() || this._batch) return
     this._umap.onDataLayersChanged()
     this.layer.dataChanged()
   }
@@ -726,8 +726,8 @@ export class DataLayer {
     })
   }
 
-  del(sync = true, batch = true) {
-    if (batch) this.sync.startBatch()
+  del(sync = true, root = true) {
+    if (root) this.sync.startBatch()
     const oldValue = Utils.CopyJSON(this.umapGeoJSON())
     // TODO merge datalayer del and features del in same
     // batch
@@ -740,10 +740,10 @@ export class DataLayer {
     for (const child of this.children || []) {
       child.del(sync, false)
     }
-    if (batch) this.sync.commitBatch()
+    if (root) this.sync.commitBatch()
     this.hide()
     this.parentPane.removeChild(this.pane)
-    if (!this.sync.hasBatch()) this._umap.onDataLayersChanged()
+    if (root) this._umap.onDataLayersChanged()
     this.layer.onDelete(this._leafletMap)
     this.propagateDelete()
     this._leaflet_events_bk = this._leaflet_events

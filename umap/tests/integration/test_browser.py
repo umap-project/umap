@@ -585,21 +585,21 @@ def test_can_toggle_visibility_from_parent(live_server, map, page):
         },
     )
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    expect(page.locator(f"summary.datalayer-{root1.pk}")).not_to_contain_class("off")
-    expect(page.locator(f"summary.datalayer-{root2.pk}")).not_to_contain_class("off")
-    expect(page.locator(f"summary.datalayer-{p1_child2.pk}")).not_to_contain_class(
+    expect(page.locator(f"summary[data-id='{root1.pk}']")).not_to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{root2.pk}']")).not_to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_child2.pk}']")).not_to_contain_class(
         "off"
     )
-    expect(page.locator(f"summary.datalayer-{p1_child1.pk}")).to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_child1.pk}']")).to_contain_class("off")
     # Should inherit its parent status
-    expect(page.locator(f"summary.datalayer-{p1_grandchild1.pk}")).to_contain_class(
+    expect(page.locator(f"summary[data-id='{p1_grandchild1.pk}']")).to_contain_class(
         "off"
     )
     expect(page.get_by_text("grandchild feature")).to_be_hidden()
     expect(page.get_by_text("child2 feature")).to_be_visible()
     expect(page.get_by_text("root2 feature")).to_be_visible()
     # Clicking on root 1 loop should also hide child2
-    page.locator(f"summary.datalayer-{root1.pk} .icon-eye").click()
+    page.locator(f"summary[data-id='{root1.pk}'] .icon-eye").click()
     expect(page.locator(f"summary[data-id='{root1.pk}']")).to_contain_class("off")
     expect(page.locator(f"summary[data-id='{p1_child2.pk}']")).to_contain_class("off")
     expect(page.locator(f"summary[data-id='{p1_child1.pk}']")).to_contain_class("off")
