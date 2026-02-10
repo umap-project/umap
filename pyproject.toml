@@ -44,7 +44,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-  "Django==5.2.9",
+  "Django==5.2.11",
   "hatch==1.16.3",
   "ruff==0.14.14",
   "djlint==1.36.4",
@@ -67,7 +67,7 @@ test = [
   "moto[s3]==5.1.21"
 ]
 deploy = [
-  "Django==5.2.10",
+  "Django==5.2.11",
 ]
 yunohost = [
   "uvicorn==0.40.0",
