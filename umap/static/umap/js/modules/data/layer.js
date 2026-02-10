@@ -1517,5 +1517,10 @@ export class DataLayer {
     for (const el of els) {
       el.classList.toggle('off', !force)
     }
+    // When element !== document, we are building the data browser, so parent
+    // visibility has already been computed.
+    if (this.parent && element === document) {
+      this.parent.propagateVisibility()
+    }
   }
 }
