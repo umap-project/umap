@@ -246,7 +246,11 @@ export default class Importer extends Utils.WithTemplate {
     const layerSelect = this.qs('[name="layer-id"]')
     layerSelect.innerHTML = ''
     this._umap.datalayers.reverse().map((datalayer) => {
-      if (datalayer.isLoaded() && !datalayer.isRemoteLayer()) {
+      if (
+        datalayer.isLoaded() &&
+        !datalayer.isRemoteLayer() &&
+        !datalayer.hasChildren()
+      ) {
         layerSelect.appendChild(
           DOMUtils.loadTemplate(
             `<option value="${datalayer.id}">${datalayer.getName()}</option>`
