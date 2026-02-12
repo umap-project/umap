@@ -237,7 +237,7 @@ export class BottomBar extends WithTemplate {
     this.elements.layers.addEventListener('change', () => {
       const select = this.elements.layers
       const selected = select.options[select.selectedIndex].value
-      for (const datalayer of this._umap.datalayers.active()) {
+      for (const datalayer of this._umap.layers.active()) {
         if (datalayer.properties.inCaption !== false) {
           if (!selected) {
             datalayer.autoVisibility = true
@@ -266,7 +266,9 @@ export class BottomBar extends WithTemplate {
 
   buildDataLayerSwitcher() {
     this.elements.layers.innerHTML = ''
-    const datalayers = this._umap.datalayers.filter((d) => d.properties.inCaption)
+    const datalayers = this._umap.layers.collection.filter(
+      (d) => d.properties.inCaption
+    )
     if (datalayers.length < 2) {
       this.elements.layers.hidden = true
     } else {
@@ -355,7 +357,7 @@ export class EditBar extends WithTemplate {
     this.elements.caption.hidden = this._umap.properties.editMode !== 'advanced'
     this.elements.import.hidden = this._umap.properties.editMode !== 'advanced'
     this.elements.templates.hidden =
-      this._umap.properties.editMode !== 'advanced' && !this._umap.datalayers.count()
+      this._umap.properties.editMode !== 'advanced' && !this._umap.layers.count()
     this.elements.layers.hidden = this._umap.properties.editMode !== 'advanced'
     this.elements.tilelayers.hidden = this._umap.properties.editMode !== 'advanced'
     this.elements.center.hidden = this._umap.properties.editMode !== 'advanced'

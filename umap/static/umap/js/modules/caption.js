@@ -69,8 +69,7 @@ export default class Caption extends Utils.WithTemplate {
       this.elements.description.hidden = true
     }
     this.elements.datalayersContainer.innerHTML = ''
-    const root = Utils.tree(this._umap.datalayers.reverse())
-    for (const layer of root) {
+    for (const layer of this._umap.layers.collection.reverse().root()) {
       this.addDataLayer(layer, this.elements.datalayersContainer)
     }
     this.addCredits()
@@ -87,7 +86,9 @@ export default class Caption extends Utils.WithTemplate {
     }
     this._umap.panel.open({ content: this.element }).then(() => {
       // Create the legend when the panel is actually on the DOM
-      this._umap.datalayers.reverse().map((datalayer) => datalayer.renderLegend())
+      this._umap.layers.collection
+        .reverse()
+        .map((datalayer) => datalayer.renderLegend())
       this._umap.propagate()
     })
   }
@@ -102,14 +103,14 @@ export default class Caption extends Utils.WithTemplate {
         <span data-ref="toolbox"></span>
       </summary>
       <p class="text" data-ref="description"></p>
-      <div data-ref="children"></div>
+      <div data-ref="childrenContainer"></div>
     </details>
     `
-    const [element, { toolbox, description, children }] =
+    const [element, { toolbox, description, childrenContainer }] =
       Utils.loadTemplateWithRefs(template)
     if (datalayer.properties.description) {
       description.innerHTML = Utils.toHTML(datalayer.properties.description)
-    } else if (!datalayer.hasChildren()) {
+    } else if (!datalayer.layers.count()) {
       element.open = false
     }
     datalayer.renderToolbox(toolbox)
@@ -117,8 +118,8 @@ export default class Caption extends Utils.WithTemplate {
     // Use textContent for security
     const name = Utils.loadTemplate('<h4></h4>')
     name.textContent = datalayer.getName()
-    for (const child of datalayer.children) {
-      this.addDataLayer(child, children)
+    for (const child of datalayer.layers.collection.reverse().root()) {
+      this.addDataLayer(child, childrenContainer)
     }
     toolbox.appendChild(name)
   }

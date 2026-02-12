@@ -266,7 +266,7 @@ export class Filters {
     `
     const body = Utils.loadTemplate(template)
     this._listFilters(this._umap.filters, body, translate('Map (all layers)'))
-    this._umap.datalayers.active().forEach((datalayer) => {
+    this._umap.layers.active().map((datalayer) => {
       this._listFilters(
         datalayer.filters,
         body,
@@ -681,7 +681,7 @@ Fields.FilterTargetSelect = class extends Fields.Select {
         `${this.builder.properties.umap.properties.name} (${translate('all layers')})`,
       ])
     }
-    this.builder.properties.umap.datalayers.reverse().map((datalayer) => {
+    this.builder.properties.umap.layers.collection.reverse().map((datalayer) => {
       if (datalayer.isBrowsable() && datalayer.fields.size) {
         if (!this.obj.target) {
           this.obj.target = datalayer
@@ -710,7 +710,7 @@ Fields.FilterTargetSelect = class extends Fields.Select {
     if (type === 'map') {
       return this.builder.properties.umap
     }
-    return this.builder.properties.umap.datalayers[id]
+    return this.builder.properties.umap.layers.get(id)
   }
 }
 

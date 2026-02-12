@@ -29,7 +29,7 @@ import Tooltip from './ui/tooltip.js'
 import URLs from './urls.js'
 import * as Utils from './utils.js'
 import * as DOMUtils from './domutils.js'
-import { DataLayerManager } from './managers.js'
+import { LayerManager } from './managers.js'
 import { Importer as OpenRouteService } from './importers/openrouteservice.js'
 import Loader from './ui/loader.js'
 import Hash from './ui/hash.js'
@@ -167,7 +167,8 @@ export default class Umap {
     }
 
     // Global storage for retrieving datalayers and features.
-    this.datalayers = new DataLayerManager()
+    this.layers = new LayerManager()
+    this.datalayers = this.layers
     this.featuresIndex = {}
 
     this.formatter = new Formatter(this)
@@ -382,13 +383,15 @@ export default class Umap {
   }
 
   hasFilters() {
-    return this.filters.size || this.datalayers.active().some((d) => d.filters.size)
+    return (
+      this.filters.size || this.layers.collection.active().some((d) => d.filters.size)
+    )
   }
 
   hasActiveFilters() {
     return (
       this.filters.isActive() ||
-      this.datalayers.active().some((d) => d.filters.isActive())
+      this.layers.collection.active().some((d) => d.filters.isActive())
     )
   }
 
@@ -626,12 +629,12 @@ export default class Umap {
     datalayers = datalayers || this.properties.datalayers
     for (const options of datalayers) {
       // `false` to not propagate syncing elements served from uMap
-      this.createDataLayer(options, false)
+      const datalayer = this.createDataLayer(options, false)
     }
     this.datalayersLoaded = true
     this.fire('datalayersloaded')
     const toLoad = []
-    for (const datalayer of this.datalayers.active()) {
+    for (const datalayer of this.layers.collection.active()) {
       if (datalayer.showAtLoad()) toLoad.push(() => datalayer.show())
     }
     while (toLoad.length) {
@@ -645,7 +648,7 @@ export default class Umap {
 
   createDataLayer(properties = {}, sync = true) {
     properties.name =
-      properties.name || `${translate('Layer')} ${this.datalayers.count() + 1}`
+      properties.name || `${translate('Layer')} ${this.layers.count() + 1}`
     const datalayer = new DataLayer(this, this._leafletMap, properties)
 
     if (sync !== false) {
@@ -669,10 +672,11 @@ export default class Umap {
   }
 
   reindexDataLayers() {
-    this.datalayers.active().map((datalayer) => datalayer.reindex())
+    this.layers.collection.active().map((datalayer) => datalayer.reindex())
     this.onDataLayersChanged()
   }
 
+  // TODO rebuild following the tree
   reorderDataLayers() {
     const parent = this._leafletMap.getPane('overlayPane')
     const datalayers = Object.values(this.datalayers)
@@ -750,18 +754,18 @@ export default class Umap {
   }
 
   hasData() {
-    for (const datalayer of this.datalayers.active()) {
+    for (const datalayer of this.layers.collection.active()) {
       if (datalayer.hasData()) return true
     }
   }
 
   hasLayers() {
-    return Boolean(this.datalayers.count())
+    return Boolean(this.layers.collection.root().count())
   }
 
   sortedValues(property) {
     return []
-      .concat(...this.datalayers.active().map((dl) => dl.sortedValues(property)))
+      .concat(...this.layers.collection.active().map((dl) => dl.sortedValues(property)))
       .filter((val, idx, arr) => arr.indexOf(val) === idx)
       .sort(Utils.naturalSort)
   }
@@ -1305,13 +1309,13 @@ export default class Umap {
   }
 
   renameField(oldName, newName) {
-    for (const datalayer of this.datalayers.active()) {
+    for (const datalayer of this.layers.active()) {
       datalayer.renameFeaturesField(oldName, newName)
     }
   }
 
   deleteField(name) {
-    for (const datalayer of this.datalayers.active()) {
+    for (const datalayer of this.layers.active()) {
       datalayer.deleteFeaturesField(name)
     }
   }
@@ -1362,7 +1366,7 @@ export default class Umap {
       // Force user to save
       this.sync.update('properties.name', this.properties.name, this.properties.name)
     }
-    for (const datalayer of this.datalayers.active()) {
+    for (const datalayer of this.layers.active()) {
       if (!datalayer.isReadOnly() && datalayer._migrated) {
         datalayer._migrated = false
         // Force user to resave those datalayers
@@ -1442,7 +1446,7 @@ export default class Umap {
           if (fields.includes('properties.rules')) {
             this.rules.load()
           }
-          this.datalayers.visible().map((datalayer) => {
+          this.layers.collection.visible().map((datalayer) => {
             datalayer.redraw()
           })
           break
@@ -1533,9 +1537,7 @@ export default class Umap {
   // (edit and viewing)
   // cf https://github.com/umap-project/umap/issues/585
   defaultEditDataLayer() {
-    let datalayer
-    let fallback
-    datalayer = this.lastUsedDataLayer
+    let datalayer = this.lastUsedDataLayer
     if (
       datalayer &&
       !datalayer.isDataReadOnly() &&
@@ -1544,35 +1546,38 @@ export default class Umap {
     ) {
       return datalayer
     }
-    datalayer = this.datalayers.find((datalayer) => {
-      if (!datalayer.isDataReadOnly() && datalayer.isBrowsable()) {
-        fallback = datalayer
-        if (datalayer.isVisible()) return true
-      }
-    })
+    datalayer = this.layers.collection
+      .browsable()
+      .visible()
+      .filter((datalayer) => !datalayer.isDataReadOnly())
+      .first()
     if (datalayer) return datalayer
-    if (fallback) {
+    datalayer = this.layers.collection
+      .browsable()
+      .filter((datalayer) => !datalayer.isDataReadOnly())
+      .first()
+    if (datalayer) {
       // No datalayer visible, let's force one
-      fallback.show()
-      return fallback
+      datalayer.show()
+      return datalayer
     }
     return this.createDirtyDataLayer()
   }
 
   eachFeature(callback) {
-    this.datalayers.browsable().map((datalayer) => {
+    this.layers.collection.browsable().map((datalayer) => {
       if (datalayer.isVisible()) datalayer.features.forEach(callback)
     })
   }
 
   removeDataLayers() {
-    this.datalayers.active().map((datalayer) => {
+    this.layers.active().map((datalayer) => {
       datalayer.del()
     })
   }
 
   emptyDataLayers() {
-    this.datalayers.active().map((datalayer) => {
+    this.layers.active().map((datalayer) => {
       datalayer.empty()
     })
   }
@@ -1580,30 +1585,32 @@ export default class Umap {
   async editDatalayers() {
     if (!this.editEnabled) return
     const onReorder = async (moved, target, dragMode) => {
-      const movedLayer = this.datalayers[moved.dataset.id]
-      const targetLayer = this.datalayers[target.dataset.id]
+      const movedLayer = this.layers.get(moved.dataset.id)
+      const targetLayer = this.layers.get(target.dataset.id)
       this.sync.startBatch()
       if (dragMode === 'above') {
         movedLayer.insertAfter(targetLayer)
       } else if (dragMode === 'below') {
         movedLayer.insertBefore(targetLayer)
       } else if (dragMode === 'middle') {
-        movedLayer.changeParent(targetLayer)
+        movedLayer.appendToParent(targetLayer)
       }
       const els = Array.from(moved.parentNode.children)
       if (moved.parentNode !== target.parentNode) {
         els.push(...target.parentNode.children)
       }
       for (const el of els) {
-        const datalayer = this.datalayers[el.dataset.id]
+        const datalayer = this.layers.get(el.dataset.id)
         const rank = datalayer.getDOMOrder()
         // TODO: deal with parent changed but not rank
+        // TODO: refactor with reorderDataLayers
         if (rank !== datalayer.rank) {
           if (!datalayer.isLoaded()) await datalayer.fetchData()
           const oldRank = datalayer.rank
           datalayer.rank = rank
           datalayer.sync.update('options.rank', rank, oldRank)
           datalayer.redraw()
+          // if (datalayer.parent) datalayer.parent.reorderChildren()
         }
       }
       this.sync.commitBatch()
@@ -1617,7 +1624,7 @@ export default class Umap {
       </div>
     `
     const [container, { ul }] = Utils.loadTemplateWithRefs(template)
-    const showLayer = (layer, children, container) => {
+    const showLayer = (layer, container) => {
       const nochildren =
         !layer.isLoaded() || layer.features.count() || layer.isRemoteLayer()
           ? ' no-children'
@@ -1645,13 +1652,13 @@ export default class Umap {
       formbox.appendChild(form)
       li.dataset.id = layer.id
       container.appendChild(li)
-      for (const child of children) {
-        showLayer(child, child.layers, body)
+      for (const child of layer.layers.collection.root().browsable().reverse()) {
+        showLayer(child, body)
       }
     }
-    const layers = Utils.tree(this.datalayers.browsable())
+    const layers = this.layers.collection.root().browsable().reverse()
     for (const layer of layers) {
-      showLayer(layer, layer.layers, ul)
+      showLayer(layer, ul)
     }
     new Orderable(ul, onReorder, { allowTree: true })
 
@@ -1664,12 +1671,6 @@ export default class Umap {
     container.appendChild(bar)
 
     this.editPanel.open({ content: container, highlight: 'layers' })
-  }
-
-  getDataLayerByUmapId(id) {
-    const datalayer = this.datalayers[id]
-    if (!datalayer) throw new Error(`Can't find datalayer with id ${id}`)
-    return datalayer
   }
 
   openBrowser(mode) {
@@ -1830,7 +1831,7 @@ export default class Umap {
   }
 
   fitDataBounds() {
-    const layers = this.datalayers
+    const layers = this.layers.collection
       .browsable()
       .filter((d) => d.isVisible())
       .map((d) => d.layer)

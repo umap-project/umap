@@ -1,58 +1,174 @@
 import * as Utils from './utils.js'
 
-export class DataLayerManager extends Object {
-  add(datalayer) {
-    this[datalayer.id] = datalayer
+class Collection {
+  constructor(
+    items,
+    {
+      root = false, // Do not iter over children
+      filter = (i) => i, // Noop
+      sort = (a, b) => a.rank - b.rank,
+    } = {}
+  ) {
+    this._items = Array.from(items)
+    this._root = root
+    this._filter = filter
+    this._sort = sort
   }
-  active() {
-    return Object.values(this)
-      .filter((datalayer) => !datalayer.isDeleted)
-      .sort((a, b) => a.rank - b.rank)
+
+  from(other) {
+    this._root = other._root
+    this._filter = other._filter
+    this._sort = other._sort
+    return this
   }
-  reverse() {
-    return this.active().reverse()
-  }
-  count() {
-    return this.active().length
-  }
-  some(func) {
-    return this.active().some(func)
-  }
-  find(func) {
-    for (const datalayer of this.reverse()) {
-      if (func.call(datalayer, datalayer)) {
-        return datalayer
-      }
-    }
-  }
+
   filter(func) {
-    return this.active().filter(func)
+    const previous = this._filter
+    this._filter = (item) => previous(item) && func(item)
+    return this
   }
+
+  sort(func) {
+    this._sort = func
+    return this
+  }
+
+  root() {
+    this._root = true
+    return this
+  }
+
+  // TODO make default
+  active() {
+    return this.filter((layer) => !layer.isDeleted)
+  }
+
   visible() {
     return this.filter((datalayer) => datalayer.isVisible())
   }
+
   browsable() {
-    return this.reverse().filter((datalayer) => datalayer.allowBrowse())
+    return this.filter((datalayer) => datalayer.allowBrowse())
   }
+
+  // TODO make default
+  reverse() {
+    return this.sort((a, b) => b.rank - a.rank)
+  }
+
+  some(func) {
+    return Array.from(this).some(func)
+  }
+
+  find(func) {
+    return Array.from(this).find(func)
+  }
+
+  reduce(acc, func) {
+    return Array.from(this).reduce(acc, func)
+  }
+
+  map(func) {
+    return Array.from(this).map(func)
+  }
+
+  first() {
+    return Array.from(this)[0]
+  }
+
+  count() {
+    return Array.from(this).length
+  }
+
+  get length() {
+    return Array.from(this).length
+  }
+
+  *[Symbol.iterator]() {
+    const values = this._items.filter(this._filter).toSorted(this._sort)
+    for (const dl of values) {
+      yield dl
+      if (!this._root) {
+        yield* dl.layers.collection.from(this)
+      }
+    }
+  }
+}
+
+export class LayerManager {
+  constructor(node) {
+    this.node = node
+    this._items = new Map()
+  }
+
+  get collection() {
+    return new Collection(this._items.values())
+  }
+
+  *[Symbol.iterator]() {
+    yield* this.collection.root()
+  }
+
+  get(id) {
+    if (this._items.has(id)) return this._items.get(id)
+    for (const item of this._items.values()) {
+      if (item.layers.has(id)) return item.layers.get(id)
+    }
+  }
+
+  has(id) {
+    if (this._items.has(id)) return true
+    for (const item of this._items.values()) {
+      if (item.layers.has(id)) return true
+    }
+  }
+
+  add(layer) {
+    this._items.set(layer.id, layer)
+  }
+
+  delete(layer_or_layer_id) {
+    const id = layer_or_layer_id.id || layer_or_layer_id
+    if (this._items.has(id)) {
+      this._items.delete(id)
+      return
+    }
+    for (const item of this._items.values()) {
+      if (item.layers.has(id)) return item.layers.get(id)
+    }
+  }
+
+  count() {
+    return this.collection.active().length
+  }
+
+  active() {
+    return this.collection.active()
+  }
+
   prev(datalayer) {
-    const browsable = this.browsable()
+    // TODO rework to include children
+    const browsable = Array.from(this.collection.browsable())
     const current = browsable.indexOf(datalayer)
     const prev = browsable[current - 1] || browsable[browsable.length - 1]
     if (!prev.canBrowse()) return this.prev(prev)
     return prev
   }
+
   next(datalayer) {
-    const browsable = this.browsable()
+    const browsable = Array.from(this.collection.browsable())
     const current = browsable.indexOf(datalayer)
     const next = browsable[current + 1] || browsable[0]
     if (!next.canBrowse()) return this.next(next)
     return next
   }
+
   first() {
-    return this.active()[0]
+    return this.collection.active().first()
   }
+
   last() {
-    const layers = this.active()
+    const layers = Array.from(this.collection.active())
     return layers[layers.length - 1]
   }
 }

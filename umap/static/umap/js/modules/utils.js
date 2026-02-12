@@ -695,17 +695,14 @@ export const LatLngIsValid = (latlng) => {
 }
 
 export const toggleLayers = (layers, force) => {
-  // If at least one layer is shown, hide it
+  // If at least one layer is shown, hide all
   // otherwise show all
   let allHidden = force
   if (force === undefined) {
-    allHidden = true
-    layers.map((datalayer) => {
-      if (datalayer.hasVisibleChild()) allHidden = false
-    })
+    allHidden = !layers.collection.find((layer) => layer.isVisible())
   }
-  layers.map((datalayer) => {
-    datalayer.toggle(allHidden)
+  layers.collection.map((layer) => {
+    layer.toggle(allHidden)
   })
   return allHidden
 }
@@ -713,8 +710,8 @@ export const toggleLayers = (layers, force) => {
 export const asciiTree = (layers) => {
   for (const layer of layers) {
     console.group(layer.rank, layer.getName())
-    for (const child of layer.children) {
-      asciiTree(child.children || [])
+    for (const child of layer.layers) {
+      asciiTree(child.layers)
     }
     console.groupEnd()
   }
