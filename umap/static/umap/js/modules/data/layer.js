@@ -22,7 +22,7 @@ import * as Utils from '../utils.js'
 import * as DOMUtils from '../domutils.js'
 import { LineString, Point, Polygon } from './features.js'
 import Rules from '../rules.js'
-import { FeatureManager } from '../managers.js'
+import { FeatureManager, LayerManager } from '../managers.js'
 import { Filters } from '../filters.js'
 import { Fields, getDefaultFields } from './fields.js'
 
@@ -46,6 +46,7 @@ export class DataLayer {
     this.sync = umap.syncEngine.proxy(this)
     this.features = new FeatureManager()
     this._propertiesIndex = []
+    this.layers = new LayerManager()
 
     this._leafletMap = leafletMap
     this.defaultProperties = {
@@ -72,15 +73,13 @@ export class DataLayer {
         )
       }
       this.parentPane = this.parent.pane
+    } else {
+      this._umap.layers.add(this)
     }
     this.pane = this._leafletMap.createPane(`pane-${this.id}`, this.parentPane)
     // FIXME: should be on layer
     this.renderer = new SVG({ pane: this.pane })
     this.pane.dataset.id = this.id
-    if (this.properties.rank === undefined) {
-      this.properties.rank = this._umap.datalayers.count()
-    }
-    this._umap.datalayers.add(this)
 
     if (!Utils.isObject(this.properties.remoteData)) {
       this.properties.remoteData = {}
@@ -118,16 +117,6 @@ export class DataLayer {
 
   get createdOnServer() {
     return Boolean(this._referenceVersion)
-  }
-
-  onDirty(status) {
-    if (status) {
-      // A layer can be made dirty by indirect action (like dragging layers)
-      // we need to have it loaded before saving it.
-      if (!this.isLoaded()) this.fetchData()
-    } else {
-      this.isDeleted = false
-    }
   }
 
   set isDeleted(status) {
@@ -259,12 +248,12 @@ export class DataLayer {
     this._autoVisibility = value
   }
 
-  changeParent(parent) {
+  appendToParent(parent, sync = true) {
     if (this.parent === parent) return
     const oldParentId = this.parent?.id
     this.parent = parent
     this.parentPane = parent?.pane || this.rootPane
-    this.sync.update('parentId', parent?.id, oldParentId)
+    if (sync) this.sync.update('parentId', parent?.id, oldParentId)
     this.parentPane.appendChild(this.pane)
   }
 
@@ -272,7 +261,7 @@ export class DataLayer {
     if (!other) return
     const oldParentId = this.parent?.id
     this.parent = other.parent
-    this.parentPane = this.parent?.pane || this.rootPane
+    this.parentPane = other.parent?.pane || this.rootPane
     this.sync.update('parentId', this.parent?.id, oldParentId)
     other.parentPane.insertBefore(this.pane, other.pane)
   }
@@ -281,7 +270,7 @@ export class DataLayer {
     if (!other) return
     const oldParentId = this.parent?.id
     this.parent = other.parent
-    this.parentPane = this.parent?.pane || this.rootPane
+    this.parentPane = other.parent?.pane || this.rootPane
     this.sync.update('parentId', this.parent?.id, oldParentId)
     if (other.pane.nextSibling) {
       other.parentPane.insertBefore(this.pane, other.pane.nextSibling)
@@ -733,12 +722,12 @@ export class DataLayer {
     // TODO merge datalayer del and features del in same
     // batch
     this.parent = undefined
-    this.clear()
     if (sync) {
       this.isDeleted = true
       this.sync.delete(oldValue)
     }
-    for (const child of this.children || []) {
+    this.clear()
+    for (const child of this.layers) {
       child.del(sync, false)
     }
     if (root) this.sync.commitBatch()
@@ -775,8 +764,8 @@ export class DataLayer {
   }
 
   redraw() {
-    if (this.hasChildren()) {
-      this.children.forEach((datalayer) => datalayer.redraw())
+    if (this.layers.count()) {
+      this.layers.collection.active().map((datalayer) => datalayer.redraw())
       return
     }
     if (!this.isVisible()) return
@@ -795,12 +784,13 @@ export class DataLayer {
   }
 
   set parent(other) {
+    if (other === this._parent) return
+    const parent = this.parent || this._umap
+    parent.layers.delete(this)
     if (other) {
-      delete other._children
+      other.layers.add(this)
     }
-    if (this._parent) {
-      delete this._parent._children
-    }
+    // this.appendToParent(other, false)
     this._parent = other
   }
 
@@ -809,29 +799,18 @@ export class DataLayer {
   }
 
   set parentId(uuid) {
-    this.parent = this._umap.datalayers[uuid]
-  }
-
-  get children() {
-    if (!this._children) {
-      this._children = this._umap.datalayers.filter((d) => d.parent?.id === this.id)
-    }
-    return this._children
-  }
-
-  hasChildren() {
-    return Boolean(this.children?.length)
+    this.parent = this._umap.layers.get(uuid)
   }
 
   _editMetadata(container) {
     const metadataFields = ['properties.name', 'properties.description']
-    if (!this.hasChildren()) {
+    if (!this.layers.count()) {
       metadataFields.unshift([
         'parentId',
         { handler: 'ParentSwitcher', label: translate('Parent') },
       ])
     }
-    if (!this.hasChildren()) {
+    if (!this.layers.count()) {
       metadataFields.push([
         'properties.type',
         { handler: 'LayerTypeChooser', label: translate('Type of layer') },
@@ -841,7 +820,7 @@ export class DataLayer {
       'properties.displayOnLoad',
       { label: translate('Display on load'), handler: 'Switch' },
     ])
-    if (!this.hasChildren()) {
+    if (!this.layers.count()) {
       metadataFields.push(
         [
           'properties.browsable',
@@ -1083,7 +1062,7 @@ export class DataLayer {
     this._editAdvancedProperties(container)
     this._editInteractionProperties(container)
     this._editTextPathProperties(container)
-    if (!this.hasChildren()) {
+    if (!this.layers.count()) {
       this._editRemoteDataProperties(container)
     }
     this.fields.edit(container)
@@ -1093,7 +1072,7 @@ export class DataLayer {
       this.buildVersionsFieldset(container)
     }
 
-    if (!this.hasChildren()) {
+    if (!this.layers.count()) {
       this._buildAdvancedActions(container)
     }
 
@@ -1211,8 +1190,8 @@ export class DataLayer {
   }
 
   toggle(force) {
-    if (this.hasChildren()) {
-      force = Utils.toggleLayers(this.children, force)
+    if (this.layers.count()) {
+      force = Utils.toggleLayers(this.layers, force)
     }
     // From now on, do not try to how/hide
     // automatically this layer, as user
@@ -1231,17 +1210,17 @@ export class DataLayer {
   }
 
   isVisible() {
-    if (this.hasChildren()) {
-      return this.children.some((child) => child.isVisible())
+    if (this.layers.count()) {
+      return this.layers.collection.some((child) => child.isVisible())
     }
     return Boolean(this.layer && this._leafletMap.hasLayer(this.layer))
   }
 
   hasVisibleChild() {
-    if (!this.hasChildren()) {
+    if (!this.layers.count()) {
       return this.isVisible()
     }
-    return this.children.some((child) => child.isVisible())
+    return this.layers.collection.some((child) => child.isVisible())
   }
 
   zoomTo() {
@@ -1292,11 +1271,11 @@ export class DataLayer {
   }
 
   getPreviousBrowsable() {
-    return this._umap.datalayers.prev(this)
+    return this._umap.layers.prev(this)
   }
 
   getNextBrowsable() {
-    return this._umap.datalayers.next(this)
+    return this._umap.layers.next(this)
   }
 
   umapGeoJSON() {
@@ -1334,6 +1313,7 @@ export class DataLayer {
     const properties = Utils.CopyJSON(this.properties)
     delete properties.parent
     delete properties.permissions
+    delete properties.layers
     return JSON.stringify(properties)
   }
 
@@ -1413,7 +1393,9 @@ export class DataLayer {
   }
 
   commitDelete() {
-    delete this._umap.datalayers[this.id]
+    const parent = this.parent || this._umap
+    console.trace()
+    parent.layers.delete(this.id)
   }
 
   getName() {

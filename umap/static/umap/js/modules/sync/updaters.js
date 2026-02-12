@@ -11,7 +11,9 @@ class BaseUpdater {
   }
 
   getDataLayerFromID(layerId) {
-    return this._umap.getDataLayerByUmapId(layerId)
+    const datalayer = this._umap.layers.get(layerId)
+    if (!datalayer) throw new Error(`Can't find datalayer with id ${layerId}`)
+    return datalayer
   }
 
   applyMessage(payload) {

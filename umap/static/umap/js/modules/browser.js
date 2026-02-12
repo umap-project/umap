@@ -51,9 +51,9 @@ export default class Browser {
     parent.appendChild(row)
   }
 
-  addDataLayer(datalayer, children, parentContainer) {
+  addDataLayer(datalayer, parentContainer) {
     let open = ''
-    if (this.mode !== 'layers' || children.some((child) => child.hasVisibleChild())) {
+    if (this.mode !== 'layers' || datalayer.hasVisibleChild()) {
       open = ' open'
     }
 
@@ -78,8 +78,8 @@ export default class Browser {
     })
     datalayer.renderToolbox(toolbox)
     parentContainer.appendChild(container)
-    for (const child of children) {
-      this.addDataLayer(child, child.layers, childrenContainer)
+    for (const child of datalayer.layers.collection.root().reverse().browsable()) {
+      this.addDataLayer(child, childrenContainer)
     }
     this.updateFeaturesList(datalayer)
   }
@@ -117,7 +117,7 @@ export default class Browser {
   }
 
   onFormChange() {
-    this._umap.datalayers.browsable().map((datalayer) => {
+    this._umap.layers.collection.browsable().map((datalayer) => {
       datalayer.resetLayer(true)
       this.updateFeaturesList(datalayer)
       if (this._umap.fullPanel?.isOpen()) datalayer.tableEdit()
@@ -139,7 +139,7 @@ export default class Browser {
 
   onMoveEnd() {
     if (!this.isOpen()) return
-    this._umap.datalayers.browsable().map((datalayer) => {
+    this._umap.layers.collection.browsable().map((datalayer) => {
       if (!this.options.inBbox && !datalayer.hasDynamicData()) return
       this.updateFeaturesList(datalayer)
     })
@@ -148,9 +148,9 @@ export default class Browser {
   update() {
     if (!this.isOpen()) return
     this.dataContainer.innerHTML = ''
-    const layers = Utils.tree(this._umap.datalayers.reverse())
+    const layers = this._umap.layers.collection.reverse().root().browsable()
     for (const layer of layers) {
-      this.addDataLayer(layer, layer.layers, this.dataContainer)
+      this.addDataLayer(layer, this.dataContainer)
     }
   }
 
@@ -198,9 +198,7 @@ export default class Browser {
     // https://github.com/Leaflet/Leaflet/pull/9052
     DomEvent.disableClickPropagation(container)
     details.open = this.mode === 'filters'
-    toggle.addEventListener('click', () =>
-      Utils.toggleLayers(this._umap.datalayers.browsable())
-    )
+    toggle.addEventListener('click', () => Utils.toggleLayers(this._umap.layers))
     fitBounds.addEventListener('click', () => this._umap.fitDataBounds())
     download.addEventListener('click', () => this.downloadVisible(download))
     download.hidden = this._umap.getProperty('embedControl') === false
@@ -250,7 +248,7 @@ export default class Browser {
       const filtersForm = this._umap.filters.buildForm(this.formContainer)
       listenFormChanges(filtersForm)
     }
-    for (const datalayer of this._umap.datalayers.active()) {
+    for (const datalayer of this._umap.layers.active()) {
       if (datalayer.filters.size) {
         const filtersForm = datalayer.filters.buildForm(this.formContainer)
         listenFormChanges(filtersForm)
