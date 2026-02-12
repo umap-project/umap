@@ -172,19 +172,18 @@ export class MapPermissions {
         `<fieldset class="separator"><legend>${translate('Datalayers')}</legend></fieldset>`
       )
       container.appendChild(fieldset)
-      const appendLayer = (layer, children, parentContainer) => {
+      const appendLayer = (layer, parentContainer) => {
         const [details, { body }] = Utils.loadTemplateWithRefs(
           `<details open><summary>${translate('Permissions of {layerName}', { layerName: layer.getName() })}</summary><div data-ref=body></div></details>`
         )
         parentContainer.appendChild(details)
         layer.permissions.edit(body)
-        for (const child of children) {
-          appendLayer(child, child.layers, body)
+        for (const child of layer.layers.active().reverse().root()) {
+          appendLayer(child, body)
         }
       }
-      const layers = Utils.tree(this._umap.datalayers.reverse())
-      for (const layer of layers) {
-        appendLayer(layer, layer.layers, fieldset)
+      for (const layer of this._umap.layers.collection.active().reverse().root()) {
+        appendLayer(layer, fieldset)
       }
     }
   }
