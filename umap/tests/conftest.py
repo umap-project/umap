@@ -1,3 +1,4 @@
+import multiprocessing
 import shutil
 import tempfile
 
@@ -20,6 +21,9 @@ TMP_ROOT = tempfile.mkdtemp()
 
 
 def pytest_configure(config):
+    # Ugly but make asgi_live_server work, otherwise Daphne will use a spawn process
+    # (since python 3.14) and thus start a fresh Django without default settings
+    multiprocessing.set_start_method("fork", force=True)
     from django.conf import settings
 
     settings.MEDIA_ROOT = TMP_ROOT
