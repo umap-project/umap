@@ -35,7 +35,8 @@ def test_websocket_connection_can_sync_markers(
 
     # Create two tabs
     peerA = new_page("Page A")
-    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    response = peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    assert response.status == 200
     wait_for_loaded(peerA)
     peerB = new_page("Page B")
     peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
