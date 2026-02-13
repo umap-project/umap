@@ -620,7 +620,7 @@ Fields.SlideshowDelay = class extends Fields.IntSelect {
 const BaseDataLayerSwitcher = class extends Fields.Select {
   getOptions() {
     const options = []
-    this.builder._umap.layers.collection
+    this.builder._umap.layers.tree
       .browsable()
       .filter((d) => d.isLoaded() && !d.isDataReadOnly())
       .map((datalayer) => {

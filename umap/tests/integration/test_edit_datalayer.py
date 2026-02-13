@@ -255,9 +255,7 @@ def test_parent_layer_should_always_be_saved_before_children(
     page.get_by_role("button", name="Edit").nth(3).click()
     page.locator('select[name="parentId"]').select_option("parent")
     # Retrieve the layers ids, so to be able to wait for the create response explicitely
-    [child_id, parent_id] = page.evaluate(
-        "() => U.MAP.layers.collection.map((d) => d.id)"
-    )
+    [child_id, parent_id] = page.evaluate("() => U.MAP.layers.tree.map((d) => d.id)")
 
     # Wait for the two layers to be saved
     with page.expect_response(re.compile(f".*/datalayer/create/{child_id}/")):

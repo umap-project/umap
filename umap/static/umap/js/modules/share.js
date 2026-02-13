@@ -110,7 +110,7 @@ export default class Share {
 
   async format(mode) {
     const type = EXPORT_FORMATS[mode]
-    const features = this._umap.layers.collection
+    const features = this._umap.layers.tree
       .visible()
       .reduce((acc, dl) => acc.concat(dl.features.visible()), [])
     const content = await this._umap.formatter.stringify(features, mode)
@@ -179,7 +179,7 @@ class IframeExporter {
       delete this.queryString.feature
     }
     if (this.options.keepCurrentDatalayers) {
-      this._umap.layers.collection
+      this._umap.layers.tree
         .visible()
         .filter((d) => d.createdOnServer)
         .map((datalayer) => {
