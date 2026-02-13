@@ -78,7 +78,7 @@ export default class Browser {
     })
     datalayer.renderToolbox(toolbox)
     parentContainer.appendChild(container)
-    for (const child of datalayer.layers.collection.root().reverse().browsable()) {
+    for (const child of datalayer.layers.collection.root().browsable()) {
       this.addDataLayer(child, childrenContainer)
     }
     this.updateFeaturesList(datalayer)
@@ -148,7 +148,7 @@ export default class Browser {
   update() {
     if (!this.isOpen()) return
     this.dataContainer.innerHTML = ''
-    const layers = this._umap.layers.collection.active().reverse().root().browsable()
+    const layers = this._umap.layers.collection.active().root().browsable()
     for (const layer of layers) {
       this.addDataLayer(layer, this.dataContainer)
     }

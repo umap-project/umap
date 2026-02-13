@@ -681,7 +681,7 @@ Fields.FilterTargetSelect = class extends Fields.Select {
         `${this.builder.properties.umap.properties.name} (${translate('all layers')})`,
       ])
     }
-    this.builder.properties.umap.layers.collection.reverse().map((datalayer) => {
+    this.builder.properties.umap.layers.collection.map((datalayer) => {
       if (datalayer.isBrowsable() && datalayer.fields.size) {
         if (!this.obj.target) {
           this.obj.target = datalayer

@@ -6,7 +6,7 @@ class Collection {
     {
       root = false, // Do not iter over children
       filter = (i) => i, // Noop
-      sort = (a, b) => a.rank - b.rank,
+      sort = (a, b) => b.rank - a.rank,
     } = {}
   ) {
     this._items = Array.from(items)
@@ -49,11 +49,6 @@ class Collection {
 
   browsable() {
     return this.filter((datalayer) => datalayer.allowBrowse())
-  }
-
-  // TODO make default
-  reverse() {
-    return this.sort((a, b) => b.rank - a.rank)
   }
 
   some(func) {

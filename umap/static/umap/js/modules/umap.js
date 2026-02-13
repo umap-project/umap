@@ -1549,13 +1549,11 @@ export default class Umap {
     datalayer = this.layers.collection
       .browsable()
       .visible()
-      .reverse()
       .filter((datalayer) => !datalayer.isDataReadOnly())
       .first()
     if (datalayer) return datalayer
     datalayer = this.layers.collection
       .browsable()
-      .reverse()
       .filter((datalayer) => !datalayer.isDataReadOnly())
       .first()
     if (datalayer) {
@@ -1654,11 +1652,11 @@ export default class Umap {
       formbox.appendChild(form)
       li.dataset.id = layer.id
       container.appendChild(li)
-      for (const child of layer.layers.collection.root().browsable().reverse()) {
+      for (const child of layer.layers.collection.root().browsable()) {
         showLayer(child, body)
       }
     }
-    const layers = this.layers.collection.root().browsable().reverse()
+    const layers = this.layers.collection.root().browsable()
     for (const layer of layers) {
       showLayer(layer, ul)
     }
@@ -1835,7 +1833,7 @@ export default class Umap {
   fitDataBounds() {
     const layers = this.layers.collection
       .browsable()
-      .filter((d) => d.isVisible())
+      .visible()
       .map((d) => d.layer)
     const bounds = this._leafletMap.getLayersBounds(layers)
     if (!this.hasData() || !bounds.isValid()) return false

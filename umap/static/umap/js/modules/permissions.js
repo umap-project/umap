@@ -178,11 +178,11 @@ export class MapPermissions {
         )
         parentContainer.appendChild(details)
         layer.permissions.edit(body)
-        for (const child of layer.layers.active().reverse().root()) {
+        for (const child of layer.layers.active().root()) {
           appendLayer(child, body)
         }
       }
-      for (const layer of this._umap.layers.collection.active().reverse().root()) {
+      for (const layer of this._umap.layers.collection.active().root()) {
         appendLayer(layer, fieldset)
       }
     }
