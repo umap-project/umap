@@ -120,17 +120,14 @@ export class DataLayer {
   }
 
   get rank() {
-    // Make sure we always have a valid rank. Undefined rank may happen
-    // after importing an old umap backup, and not touching the layers
-    // after that.
-    if (this.properties.rank === undefined) {
-      this.properties.rank = this.getDOMOrder()
-    }
     return this.properties.rank
   }
 
   set rank(value) {
+    if (value === this.rank) return
+    const oldRank = this.rank
     this.properties.rank = value
+    this.sync.update('rank', value, oldRank, { undo: false })
   }
 
   get sortKey() {
@@ -268,6 +265,12 @@ export class DataLayer {
       other.parentPane.insertBefore(this.pane, other.pane.nextSibling)
     } else {
       other.parentPane.appendChild(this.pane)
+    }
+  }
+
+  reorderDOM() {
+    for (const layer of this.layers.root.reverse()) {
+      this.parentPane.appendChild(layer.pane)
     }
   }
 
@@ -782,7 +785,6 @@ export class DataLayer {
     if (other) {
       other.layers.add(this)
     }
-    // this.appendToParent(other, false)
     this._parent = other
   }
 

@@ -670,18 +670,6 @@ export default class Umap {
     this.onDataLayersChanged()
   }
 
-  // TODO rebuild following the tree
-  reorderDataLayers() {
-    const parent = this._leafletMap.getPane('overlayPane')
-    const datalayers = Object.values(this.datalayers)
-      .filter((datalayer) => !datalayer._isDeleted)
-      .sort((datalayer1, datalayer2) => datalayer1.rank - datalayer2.rank)
-    for (const datalayer of datalayers) {
-      const child = parent.querySelector(`[data-id="${datalayer.id}"]`)
-      parent.appendChild(child)
-    }
-  }
-
   onceDatalayersLoaded(callback, context) {
     // Once datalayers **metadata** have been loaded
     if (this.datalayersLoaded) {
@@ -1583,31 +1571,17 @@ export default class Umap {
       const targetLayer = this.layers.get(target.dataset.id)
       this.sync.startBatch()
       if (dragMode === 'above') {
-        movedLayer.insertAfter(targetLayer)
+        const parent = targetLayer.parent || this
+        parent.layers.addAfter(movedLayer, targetLayer)
       } else if (dragMode === 'below') {
-        movedLayer.insertBefore(targetLayer)
+        const parent = targetLayer.parent || this
+        parent.layers.addBefore(movedLayer, targetLayer)
       } else if (dragMode === 'middle') {
-        movedLayer.appendToParent(targetLayer)
-      }
-      const els = Array.from(moved.parentNode.children)
-      if (moved.parentNode !== target.parentNode) {
-        els.push(...target.parentNode.children)
-      }
-      for (const el of els) {
-        const datalayer = this.layers.get(el.dataset.id)
-        const rank = datalayer.getDOMOrder()
-        // TODO: deal with parent changed but not rank
-        // TODO: refactor with reorderDataLayers
-        if (rank !== datalayer.rank) {
-          if (!datalayer.isLoaded()) await datalayer.fetchData()
-          const oldRank = datalayer.rank
-          datalayer.rank = rank
-          datalayer.sync.update('options.rank', rank, oldRank)
-          datalayer.redraw()
-          // if (datalayer.parent) datalayer.parent.reorderChildren()
-        }
+        const parent = targetLayer
+        parent.layers.add(movedLayer)
       }
       this.sync.commitBatch()
+      this.reorderDOM()
       this.onDataLayersChanged()
     }
 
@@ -1665,6 +1639,18 @@ export default class Umap {
     container.appendChild(bar)
 
     this.editPanel.open({ content: container, highlight: 'layers' })
+  }
+
+  reorderDOM() {
+    const parentPane = this._leafletMap.getPane('overlayPane')
+    for (const layer of this.layers.root.reverse()) {
+      parentPane.appendChild(layer.pane)
+    }
+    for (const layer of this.layers.tree) {
+      if (layer.layers.count()) {
+        layer.reorderDOM()
+      }
+    }
   }
 
   openBrowser(mode) {
