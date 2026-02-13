@@ -266,7 +266,7 @@ export class Filters {
     `
     const body = Utils.loadTemplate(template)
     this._listFilters(this._umap.filters, body, translate('Map (all layers)'))
-    this._umap.layers.active().map((datalayer) => {
+    this._umap.layers.collection.map((datalayer) => {
       this._listFilters(
         datalayer.filters,
         body,

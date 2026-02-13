@@ -237,7 +237,7 @@ export class BottomBar extends WithTemplate {
     this.elements.layers.addEventListener('change', () => {
       const select = this.elements.layers
       const selected = select.options[select.selectedIndex].value
-      for (const datalayer of this._umap.layers.active()) {
+      for (const datalayer of this._umap.layers.collection) {
         if (datalayer.properties.inCaption !== false) {
           if (!selected) {
             datalayer.autoVisibility = true

@@ -621,7 +621,6 @@ const BaseDataLayerSwitcher = class extends Fields.Select {
   getOptions() {
     const options = []
     this.builder._umap.layers.collection
-      .active()
       .browsable()
       .filter((d) => d.isLoaded() && !d.isDataReadOnly())
       .map((datalayer) => {

@@ -148,7 +148,7 @@ export default class Browser {
   update() {
     if (!this.isOpen()) return
     this.dataContainer.innerHTML = ''
-    const layers = this._umap.layers.collection.active().root().browsable()
+    const layers = this._umap.layers.collection.root().browsable()
     for (const layer of layers) {
       this.addDataLayer(layer, this.dataContainer)
     }
@@ -248,7 +248,7 @@ export default class Browser {
       const filtersForm = this._umap.filters.buildForm(this.formContainer)
       listenFormChanges(filtersForm)
     }
-    for (const datalayer of this._umap.layers.active()) {
+    for (const datalayer of this._umap.layers.collection) {
       if (datalayer.filters.size) {
         const filtersForm = datalayer.filters.buildForm(this.formContainer)
         listenFormChanges(filtersForm)

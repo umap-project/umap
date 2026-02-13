@@ -13,12 +13,14 @@ class Collection {
     this._root = root
     this._filter = filter
     this._sort = sort
+    this._all = false
   }
 
   from(other) {
     this._root = other._root
     this._filter = other._filter
     this._sort = other._sort
+    this._all = other._all
     return this
   }
 
@@ -38,9 +40,9 @@ class Collection {
     return this
   }
 
-  // TODO make default
-  active() {
-    return this.filter((layer) => !layer.isDeleted)
+  all() {
+    this._all = true
+    return this
   }
 
   visible() {
@@ -80,6 +82,9 @@ class Collection {
   }
 
   *[Symbol.iterator]() {
+    if (!this._all) {
+      this.filter((layer) => !layer.isDeleted)
+    }
     const values = this._items.filter(this._filter).toSorted(this._sort)
     for (const dl of values) {
       yield dl
@@ -134,11 +139,7 @@ export class LayerManager {
   }
 
   count() {
-    return this.collection.active().length
-  }
-
-  active() {
-    return this.collection.active()
+    return this.collection.length
   }
 
   prev(datalayer) {
@@ -159,11 +160,11 @@ export class LayerManager {
   }
 
   first() {
-    return this.collection.active().first()
+    return this.collection.first()
   }
 
   last() {
-    const layers = Array.from(this.collection.active())
+    const layers = Array.from(this.collection)
     return layers[layers.length - 1]
   }
 }

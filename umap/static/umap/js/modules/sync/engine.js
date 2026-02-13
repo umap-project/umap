@@ -234,7 +234,7 @@ export class SyncEngine {
     return dirty
   }
 
-  async saveOne(obj, needSave, saved) {
+  async saveOne(obj, needSave, saved = []) {
     if (saved.includes(obj)) return true
     if (obj.parent && needSave.has(obj.parent)) {
       if (!(await this.saveOne(obj.parent, needSave, saved))) {
@@ -253,9 +253,8 @@ export class SyncEngine {
 
   async save() {
     const needSave = this._getDirtyObjects()
-    const saved = []
     for (const obj of needSave.keys()) {
-      if (!(await this.saveOne(obj, needSave, saved))) {
+      if (!(await this.saveOne(obj, needSave))) {
         return false
       }
     }

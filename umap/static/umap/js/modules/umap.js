@@ -383,15 +383,13 @@ export default class Umap {
   }
 
   hasFilters() {
-    return (
-      this.filters.size || this.layers.collection.active().some((d) => d.filters.size)
-    )
+    return this.filters.size || this.layers.collection.some((d) => d.filters.size)
   }
 
   hasActiveFilters() {
     return (
       this.filters.isActive() ||
-      this.layers.collection.active().some((d) => d.filters.isActive())
+      this.layers.collection.some((d) => d.filters.isActive())
     )
   }
 
@@ -634,7 +632,7 @@ export default class Umap {
     this.datalayersLoaded = true
     this.fire('datalayersloaded')
     const toLoad = []
-    for (const datalayer of this.layers.collection.active()) {
+    for (const datalayer of this.layers.collection) {
       if (datalayer.showAtLoad()) toLoad.push(() => datalayer.show())
     }
     while (toLoad.length) {
@@ -672,7 +670,7 @@ export default class Umap {
   }
 
   reindexDataLayers() {
-    this.layers.collection.active().map((datalayer) => datalayer.reindex())
+    this.layers.collection.map((datalayer) => datalayer.reindex())
     this.onDataLayersChanged()
   }
 
@@ -754,7 +752,7 @@ export default class Umap {
   }
 
   hasData() {
-    for (const datalayer of this.layers.collection.active()) {
+    for (const datalayer of this.layers.collection) {
       if (datalayer.hasData()) return true
     }
   }
@@ -765,7 +763,7 @@ export default class Umap {
 
   sortedValues(property) {
     return []
-      .concat(...this.layers.collection.active().map((dl) => dl.sortedValues(property)))
+      .concat(...this.layers.collection.map((dl) => dl.sortedValues(property)))
       .filter((val, idx, arr) => arr.indexOf(val) === idx)
       .sort(Utils.naturalSort)
   }
@@ -1309,13 +1307,13 @@ export default class Umap {
   }
 
   renameField(oldName, newName) {
-    for (const datalayer of this.layers.active()) {
+    for (const datalayer of this.layers.collection) {
       datalayer.renameFeaturesField(oldName, newName)
     }
   }
 
   deleteField(name) {
-    for (const datalayer of this.layers.active()) {
+    for (const datalayer of this.layers.collection) {
       datalayer.deleteFeaturesField(name)
     }
   }
@@ -1366,7 +1364,7 @@ export default class Umap {
       // Force user to save
       this.sync.update('properties.name', this.properties.name, this.properties.name)
     }
-    for (const datalayer of this.layers.active()) {
+    for (const datalayer of this.layers.collection) {
       if (!datalayer.isReadOnly() && datalayer._migrated) {
         datalayer._migrated = false
         // Force user to resave those datalayers
@@ -1571,13 +1569,13 @@ export default class Umap {
   }
 
   removeDataLayers() {
-    this.layers.active().map((datalayer) => {
+    this.layers.collection.map((datalayer) => {
       datalayer.del()
     })
   }
 
   emptyDataLayers() {
-    this.layers.active().map((datalayer) => {
+    this.layers.collection.map((datalayer) => {
       datalayer.empty()
     })
   }
