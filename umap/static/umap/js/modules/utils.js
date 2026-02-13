@@ -716,23 +716,3 @@ export const asciiTree = (layers) => {
     console.groupEnd()
   }
 }
-
-export const tree = (layers) => {
-  const root = layers.reduce((acc, layer) => {
-    layer.layers = []
-    acc[layer.id] = layer
-    return acc
-  }, {})
-  for (const branch of Object.values(root)) {
-    const parentId = branch.parent?.id || branch.parent
-    if (parentId) {
-      root[parentId].layers.push(branch)
-    }
-  }
-  for (const [id, branch] of Object.entries({ ...root })) {
-    if (branch.parent) {
-      delete root[id]
-    }
-  }
-  return Object.values(root)
-}
