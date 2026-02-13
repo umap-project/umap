@@ -6,7 +6,7 @@ class LayerCollection {
     {
       root = false, // Do not iter over children
       filter = (i) => i, // Noop
-      sort = (a, b) => b.rank - a.rank,
+      sort = (a, b) => b.rank - a.rank, // Higher ranks before
     } = {}
   ) {
     this._items = Array.from(items)
@@ -32,6 +32,12 @@ class LayerCollection {
 
   sort(func) {
     this._sort = func
+    return this
+  }
+
+  reverse(func) {
+    // Lower ranks before
+    this.sort((a, b) => a.rank - b.rank)
     return this
   }
 
@@ -96,8 +102,7 @@ class LayerCollection {
 }
 
 export class LayerManager {
-  constructor(node) {
-    this.node = node
+  constructor() {
     this._items = new Map()
   }
 
@@ -128,17 +133,39 @@ export class LayerManager {
   }
 
   add(layer) {
+    layer.rank ??= this._items.size
     this._items.set(layer.id, layer)
   }
 
-  delete(layer_or_layer_id) {
-    const id = layer_or_layer_id.id || layer_or_layer_id
-    if (this._items.has(id)) {
-      this._items.delete(id)
-      return
+  insert(layer, position, other) {
+    const current = Array.from(this.root.reverse().filter((el) => el !== layer))
+    const targetIdx = current.indexOf(other)
+    // After = greater index, before = same index
+    const shift = position === 'after' ? 1 : 0
+    current.splice(targetIdx + shift, 0, layer)
+    // We cannot insert on a Map, so let's clear and again in the final order
+    this._items.clear()
+    let rank = 0
+    for (const item of current) {
+      console.log('settings rank', rank, 'to', item.getName(), position)
+      item.rank = rank++
+      this.add(item)
     }
-    for (const item of this._items.values()) {
-      if (item.layers.has(id)) return item.layers.get(id)
+  }
+
+  addAfter(layer, other) {
+    this.insert(layer, 'after', other)
+  }
+
+  addBefore(layer, other) {
+    this.insert(layer, 'before', other)
+  }
+
+  delete(layer) {
+    this._items.delete(layer.id)
+    let rank = 0
+    for (const item of this.root.reverse()) {
+      item.rank = rank++
     }
   }
 
