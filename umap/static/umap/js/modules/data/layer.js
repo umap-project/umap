@@ -56,7 +56,7 @@ export class DataLayer {
       editMode: 'advanced',
     }
 
-    this._isDeleted = false
+    this.isDeleted = false
     this._referenceVersion = data._referenceVersion
     // Do not save it later.
     delete data._referenceVersion
@@ -117,14 +117,6 @@ export class DataLayer {
 
   get createdOnServer() {
     return Boolean(this._referenceVersion)
-  }
-
-  set isDeleted(status) {
-    this._isDeleted = status
-  }
-
-  get isDeleted() {
-    return this._isDeleted
   }
 
   get rank() {
@@ -765,7 +757,7 @@ export class DataLayer {
 
   redraw() {
     if (this.layers.count()) {
-      this.layers.collection.active().map((datalayer) => datalayer.redraw())
+      this.layers.collection.map((datalayer) => datalayer.redraw())
       return
     }
     if (!this.isVisible()) return
