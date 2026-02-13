@@ -699,9 +699,9 @@ export const toggleLayers = (layers, force) => {
   // otherwise show all
   let allHidden = force
   if (force === undefined) {
-    allHidden = !layers.collection.find((layer) => layer.isVisible())
+    allHidden = !layers.tree.find((layer) => layer.isVisible())
   }
-  layers.collection.map((layer) => {
+  layers.tree.map((layer) => {
     layer.toggle(allHidden)
   })
   return allHidden

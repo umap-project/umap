@@ -266,7 +266,7 @@ export class Filters {
     `
     const body = Utils.loadTemplate(template)
     this._listFilters(this._umap.filters, body, translate('Map (all layers)'))
-    this._umap.layers.collection.map((datalayer) => {
+    this._umap.layers.tree.map((datalayer) => {
       this._listFilters(
         datalayer.filters,
         body,
@@ -681,7 +681,7 @@ Fields.FilterTargetSelect = class extends Fields.Select {
         `${this.builder.properties.umap.properties.name} (${translate('all layers')})`,
       ])
     }
-    this.builder.properties.umap.layers.collection.map((datalayer) => {
+    this.builder.properties.umap.layers.tree.map((datalayer) => {
       if (datalayer.isBrowsable() && datalayer.fields.size) {
         if (!this.obj.target) {
           this.obj.target = datalayer

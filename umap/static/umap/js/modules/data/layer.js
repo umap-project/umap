@@ -715,7 +715,7 @@ export class DataLayer {
     // batch
     this.parent = undefined
     this.clear()
-    for (const child of this.layers) {
+    for (const child of this.layers.root) {
       child.del(sync, false)
     }
     if (sync) {
@@ -757,7 +757,7 @@ export class DataLayer {
 
   redraw() {
     if (this.layers.count()) {
-      this.layers.collection.map((datalayer) => datalayer.redraw())
+      this.layers.tree.map((datalayer) => datalayer.redraw())
       return
     }
     if (!this.isVisible()) return
@@ -1203,7 +1203,7 @@ export class DataLayer {
 
   isVisible() {
     if (this.layers.count()) {
-      return this.layers.collection.some((child) => child.isVisible())
+      return this.layers.tree.some((child) => child.isVisible())
     }
     return Boolean(this.layer && this._leafletMap.hasLayer(this.layer))
   }
@@ -1212,7 +1212,7 @@ export class DataLayer {
     if (!this.layers.count()) {
       return this.isVisible()
     }
-    return this.layers.collection.some((child) => child.isVisible())
+    return this.layers.tree.some((child) => child.isVisible())
   }
 
   zoomTo() {

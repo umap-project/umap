@@ -182,7 +182,7 @@ export class MapPermissions {
           appendLayer(child, body)
         }
       }
-      for (const layer of this._umap.layers) {
+      for (const layer of this._umap.layers.root) {
         appendLayer(layer, fieldset)
       }
     }

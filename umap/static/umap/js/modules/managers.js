@@ -1,6 +1,6 @@
 import * as Utils from './utils.js'
 
-class Collection {
+class LayerCollection {
   constructor(
     items,
     {
@@ -89,7 +89,7 @@ class Collection {
     for (const dl of values) {
       yield dl
       if (!this._root) {
-        yield* dl.layers.collection.from(this)
+        yield* dl.layers.tree.from(this)
       }
     }
   }
@@ -101,12 +101,16 @@ export class LayerManager {
     this._items = new Map()
   }
 
-  get collection() {
-    return new Collection(this._items.values())
+  get tree() {
+    return new LayerCollection(this._items.values())
+  }
+
+  get root() {
+    return new LayerCollection(this._items.values()).root()
   }
 
   *[Symbol.iterator]() {
-    yield* this.collection.root()
+    yield* this.root
   }
 
   get(id) {
@@ -139,12 +143,12 @@ export class LayerManager {
   }
 
   count() {
-    return this.collection.length
+    return this.tree.length
   }
 
   prev(datalayer) {
     // TODO rework to include children
-    const browsable = Array.from(this.collection.browsable())
+    const browsable = Array.from(this.tree.browsable())
     const current = browsable.indexOf(datalayer)
     const prev = browsable[current - 1] || browsable[browsable.length - 1]
     if (!prev.canBrowse()) return this.prev(prev)
@@ -152,7 +156,7 @@ export class LayerManager {
   }
 
   next(datalayer) {
-    const browsable = Array.from(this.collection.browsable())
+    const browsable = Array.from(this.tree.browsable())
     const current = browsable.indexOf(datalayer)
     const next = browsable[current + 1] || browsable[0]
     if (!next.canBrowse()) return this.next(next)
@@ -160,11 +164,11 @@ export class LayerManager {
   }
 
   first() {
-    return this.collection.first()
+    return this.tree.first()
   }
 
   last() {
-    const layers = Array.from(this.collection)
+    const layers = Array.from(this.tree)
     return layers[layers.length - 1]
   }
 }
