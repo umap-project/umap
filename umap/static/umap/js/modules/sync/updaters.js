@@ -68,11 +68,14 @@ export class DataLayerUpdater extends BaseUpdater {
   }
 
   delete({ metadata }) {
-    const datalayer = this.getDataLayerFromID(metadata.id)
-    if (datalayer) {
-      datalayer.del(false, false)
-      datalayer.commitDelete()
+    let datalayer
+    try {
+      datalayer = this.getDataLayerFromID(metadata.id)
+    } catch (error) {
+      console.debug(`Cannot find datalayer to delete: ${error}`)
     }
+    datalayer.del(false, false)
+    datalayer.commitDelete()
   }
 
   getStoredObject(metadata) {

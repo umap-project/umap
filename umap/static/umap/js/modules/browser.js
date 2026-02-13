@@ -148,7 +148,7 @@ export default class Browser {
   update() {
     if (!this.isOpen()) return
     this.dataContainer.innerHTML = ''
-    const layers = this._umap.layers.collection.reverse().root().browsable()
+    const layers = this._umap.layers.collection.active().reverse().root().browsable()
     for (const layer of layers) {
       this.addDataLayer(layer, this.dataContainer)
     }
