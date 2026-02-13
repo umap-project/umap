@@ -247,7 +247,6 @@ export default class Importer extends Utils.WithTemplate {
     layerSelect.innerHTML = ''
     this._umap.layers.collection
       .active()
-      .reverse()
       .filter(
         (datalayer) =>
           datalayer.isLoaded() &&
