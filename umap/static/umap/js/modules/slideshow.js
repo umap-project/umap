@@ -66,7 +66,7 @@ export default class Slideshow extends WithTemplate {
   }
 
   defaultDatalayer() {
-    return this._umap.layers.collection.find((d) => d.canBrowse())
+    return this._umap.layers.tree.find((d) => d.canBrowse())
   }
 
   startSpinner() {

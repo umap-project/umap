@@ -78,7 +78,7 @@ export default class Browser {
     })
     datalayer.renderToolbox(toolbox)
     parentContainer.appendChild(container)
-    for (const child of datalayer.layers.collection.root().browsable()) {
+    for (const child of datalayer.layers.root.browsable()) {
       this.addDataLayer(child, childrenContainer)
     }
     this.updateFeaturesList(datalayer)
@@ -117,7 +117,7 @@ export default class Browser {
   }
 
   onFormChange() {
-    this._umap.layers.collection.browsable().map((datalayer) => {
+    this._umap.layers.tree.browsable().map((datalayer) => {
       datalayer.resetLayer(true)
       this.updateFeaturesList(datalayer)
       if (this._umap.fullPanel?.isOpen()) datalayer.tableEdit()
@@ -139,7 +139,7 @@ export default class Browser {
 
   onMoveEnd() {
     if (!this.isOpen()) return
-    this._umap.layers.collection.browsable().map((datalayer) => {
+    this._umap.layers.tree.browsable().map((datalayer) => {
       if (!this.options.inBbox && !datalayer.hasDynamicData()) return
       this.updateFeaturesList(datalayer)
     })
@@ -148,7 +148,7 @@ export default class Browser {
   update() {
     if (!this.isOpen()) return
     this.dataContainer.innerHTML = ''
-    const layers = this._umap.layers.collection.root().browsable()
+    const layers = this._umap.layers.root.browsable()
     for (const layer of layers) {
       this.addDataLayer(layer, this.dataContainer)
     }
@@ -248,7 +248,7 @@ export default class Browser {
       const filtersForm = this._umap.filters.buildForm(this.formContainer)
       listenFormChanges(filtersForm)
     }
-    for (const datalayer of this._umap.layers.collection) {
+    for (const datalayer of this._umap.layers.tree) {
       if (datalayer.filters.size) {
         const filtersForm = datalayer.filters.buildForm(this.formContainer)
         listenFormChanges(filtersForm)
