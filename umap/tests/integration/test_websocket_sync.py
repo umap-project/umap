@@ -420,7 +420,6 @@ def test_should_sync_datalayers(new_page, asgi_live_server, tilelayer, wait_for_
 
     # Make sure this new marker is in Layer 2 for peerB
     # Show features for this layer in the browser.
-    peerB.locator("summary").filter(has_text="Layer 2").click()
     expect(peerB.locator("li").filter(has_text="Layer 2")).to_be_visible()
     peerB.locator(".panel.left").get_by_role("button", name="Show/hide layer").nth(
         1
@@ -490,8 +489,8 @@ def test_should_sync_datalayers_delete(
             "name": "datalayer 2",
         },
     }
-    DataLayerFactory(map=map, data=data1)
-    DataLayerFactory(map=map, data=data2)
+    layer1 = DataLayerFactory(map=map, data=data1)
+    layer2 = DataLayerFactory(map=map, data=data2)
 
     # Create two tabs
     peerA = new_page("Page A")
@@ -509,6 +508,7 @@ def test_should_sync_datalayers_delete(
     expect(peerB.locator(".panel").get_by_text("datalayer 2")).to_be_visible()
 
     # Delete "datalayer 2" in peerA
+    peerA.locator(f'summary[data-id="{layer2.pk}"] .icon-delete').click()
     peerA.locator(".datalayer").get_by_role("button", name="Delete layer").first.click()
     expect(peerA.locator(".panel").get_by_text("datalayer 2")).to_be_hidden()
     expect(peerB.locator(".panel").get_by_text("datalayer 2")).to_be_hidden()

@@ -722,13 +722,13 @@ export class DataLayer {
     // TODO merge datalayer del and features del in same
     // batch
     this.parent = undefined
-    if (sync) {
-      this.isDeleted = true
-      this.sync.delete(oldValue)
-    }
     this.clear()
     for (const child of this.layers) {
       child.del(sync, false)
+    }
+    if (sync) {
+      this.isDeleted = true
+      this.sync.delete(oldValue)
     }
     if (root) this.sync.commitBatch()
     this.hide()
@@ -1394,7 +1394,6 @@ export class DataLayer {
 
   commitDelete() {
     const parent = this.parent || this._umap
-    console.trace()
     parent.layers.delete(this.id)
   }
 

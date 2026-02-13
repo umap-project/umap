@@ -62,7 +62,8 @@ export class UndoManager {
     if (!stage) return
     stage.operation.dirty = !stage.operation.dirty
     if (stage.operation.verb === 'batch') {
-      for (const st of stage.stages) {
+      const stages = redo ? stage.stages : stage.stages.toReversed()
+      for (const st of stages) {
         this.applyOperation(this.copyOperation(st, redo))
       }
     } else {
