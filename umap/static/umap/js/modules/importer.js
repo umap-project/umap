@@ -246,7 +246,6 @@ export default class Importer extends Utils.WithTemplate {
     const layerSelect = this.qs('[name="layer-id"]')
     layerSelect.innerHTML = ''
     this._umap.layers.collection
-      .active()
       .filter(
         (datalayer) =>
           datalayer.isLoaded() &&
