@@ -1549,11 +1549,13 @@ export default class Umap {
     datalayer = this.layers.collection
       .browsable()
       .visible()
+      .reverse()
       .filter((datalayer) => !datalayer.isDataReadOnly())
       .first()
     if (datalayer) return datalayer
     datalayer = this.layers.collection
       .browsable()
+      .reverse()
       .filter((datalayer) => !datalayer.isDataReadOnly())
       .first()
     if (datalayer) {
