@@ -1,18 +1,17 @@
 import * as Utils from './utils.js'
 
+// About rank:
+// - map level (DOM) : layers with lower rank should appear below others, so
+//  added to the DOM in the order of "rank"
+// - data browser: layers with lower rank should appear visually below, so
+//   added to the DOM in reverse order
+
 class LayerCollection {
-  constructor(
-    items,
-    {
-      root = false, // Do not iter over children
-      filter = (i) => i, // Noop
-      sort = (a, b) => b.rank - a.rank, // Higher ranks before
-    } = {}
-  ) {
+  constructor(items) {
     this._items = Array.from(items)
-    this._root = root
-    this._filter = filter
-    this._sort = sort
+    this._root = false // Do not iter over children
+    this._filter = (i) => i // No op
+    this._sort = (a, b) => b.rank - a.rank // Higher ranks before
     this._all = false
   }
 
@@ -24,9 +23,15 @@ class LayerCollection {
     return this
   }
 
+  copy() {
+    return new LayerCollection(this._items).from(this)
+  }
+
   filter(func) {
     const previous = this._filter
-    this._filter = (item) => previous(item) && func(item)
+    this._filter = (item) => {
+      return previous(item) && func(item)
+    }
     return this
   }
 
@@ -35,7 +40,7 @@ class LayerCollection {
     return this
   }
 
-  reverse(func) {
+  reverse() {
     // Lower ranks before
     this.sort((a, b) => a.rank - b.rank)
     return this
@@ -61,6 +66,10 @@ class LayerCollection {
 
   some(func) {
     return Array.from(this).some(func)
+  }
+
+  every(func) {
+    return Array.from(this).every(func)
   }
 
   find(func) {
@@ -92,10 +101,10 @@ class LayerCollection {
       this.filter((layer) => !layer.isDeleted)
     }
     const values = this._items.filter(this._filter).toSorted(this._sort)
-    for (const dl of values) {
-      yield dl
+    for (const layer of values) {
+      yield layer
       if (!this._root) {
-        yield* dl.layers.tree.from(this)
+        yield* layer.layers.tree.from(this)
       }
     }
   }
@@ -103,15 +112,15 @@ class LayerCollection {
 
 export class LayerManager {
   constructor() {
-    this._items = new Map()
+    this._children = new Map()
   }
 
   get tree() {
-    return new LayerCollection(this._items.values())
+    return new LayerCollection(this._children.values())
   }
 
   get root() {
-    return new LayerCollection(this._items.values()).root()
+    return this.tree.root()
   }
 
   *[Symbol.iterator]() {
@@ -119,22 +128,22 @@ export class LayerManager {
   }
 
   get(id) {
-    if (this._items.has(id)) return this._items.get(id)
-    for (const item of this._items.values()) {
-      if (item.layers.has(id)) return item.layers.get(id)
+    if (this._children.has(id)) return this._children.get(id)
+    for (const child of this._children.values()) {
+      if (child.layers.has(id)) return child.layers.get(id)
     }
   }
 
   has(id) {
-    if (this._items.has(id)) return true
-    for (const item of this._items.values()) {
-      if (item.layers.has(id)) return true
+    if (this._children.has(id)) return true
+    for (const child of this._children.values()) {
+      if (child.layers.has(id)) return true
     }
   }
 
   add(layer) {
-    layer.rank ??= this._items.size
-    this._items.set(layer.id, layer)
+    layer.rank ??= this._children.size
+    this._children.set(layer.id, layer)
   }
 
   insert(layer, position, other) {
@@ -144,7 +153,7 @@ export class LayerManager {
     const shift = position === 'after' ? 1 : 0
     current.splice(targetIdx + shift, 0, layer)
     // We cannot insert on a Map, so let's clear and again in the final order
-    this._items.clear()
+    this._children.clear()
     let rank = 0
     for (const item of current) {
       item.rank = rank++
@@ -161,7 +170,7 @@ export class LayerManager {
   }
 
   delete(layer) {
-    this._items.delete(layer.id)
+    this._children.delete(layer.id)
     let rank = 0
     for (const item of this.root.reverse()) {
       item.rank = rank++
@@ -169,7 +178,7 @@ export class LayerManager {
   }
 
   count() {
-    return this.tree.length
+    return this._children.size
   }
 
   prev(datalayer) {
