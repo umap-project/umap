@@ -123,7 +123,7 @@ def test_anonymous_can_add_marker_on_editable_layer(
     expect(panel).to_be_visible()
     datalayer_select = page.locator("select[name='datalayer']")
     expect(datalayer_select).to_be_visible()
-    options = page.locator("select[name='datalayer'] option")
+    options = page.locator("select[name='datalayer'] option:not([disabled])")
     expect(options).to_have_count(1)  # Only Editable layer should be listed
     option = page.locator("select[name='datalayer'] option:checked")
     expect(option).to_have_text(other.name)
