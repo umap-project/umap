@@ -774,6 +774,10 @@ export class DataLayer {
     }
   }
 
+  get depth() {
+    return this.parent ? this.parent.depth + 1 : 0
+  }
+
   get parent() {
     return this._parent
   }
@@ -1391,8 +1395,12 @@ export class DataLayer {
     parent.layers.delete(this.id)
   }
 
-  getName() {
-    return this.properties.name || translate('Untitled layer')
+  getName(padded = false) {
+    let name = this.properties.name || translate('Untitled layer')
+    if (padded) {
+      name = `${''.padStart(this.depth * 2, ' ')}${name}`
+    }
+    return name
   }
 
   getPermalink() {
