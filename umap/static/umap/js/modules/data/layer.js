@@ -774,6 +774,14 @@ export class DataLayer {
     }
   }
 
+  hasChild() {
+    return Boolean(this.layers.count())
+  }
+
+  hasParent(id) {
+    return this.parent?.id === id || this.parent?.hasParent(id)
+  }
+
   get depth() {
     return this.parent ? this.parent.depth + 1 : 0
   }
@@ -1205,6 +1213,13 @@ export class DataLayer {
       this.hide()
     }
     this._umap.bottomBar.redraw()
+  }
+
+  isFullVisible() {
+    if (!this.layers.count()) {
+      return this.isVisible()
+    }
+    return this.layers.tree.every((child) => child.isVisible())
   }
 
   isVisible() {
