@@ -41,7 +41,11 @@ export class DataLayerUpdater extends BaseUpdater {
   upsert({ value }) {
     // Upsert only happens when a new datalayer is created.
     try {
-      this.getDataLayerFromID(value.id)
+      const datalayer = this.getDataLayerFromID(value.id)
+      // We must be in a "redo"
+      datalayer.isDeleted = false
+      datalayer.show()
+      datalayer.dataChanged()
     } catch {
       const datalayer = this._umap.createDataLayer(value._umap_options || value, false)
       if (value.features) {

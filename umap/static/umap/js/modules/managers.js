@@ -147,7 +147,6 @@ export class LayerManager {
     this._items.clear()
     let rank = 0
     for (const item of current) {
-      console.log('settings rank', rank, 'to', item.getName(), position)
       item.rank = rank++
       this.add(item)
     }

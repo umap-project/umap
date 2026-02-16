@@ -721,8 +721,8 @@ export class DataLayer {
     for (const child of this.layers.root) {
       child.del(sync, false)
     }
+    this.isDeleted = true
     if (sync) {
-      this.isDeleted = true
       this.sync.delete(oldValue)
     }
     if (root) this.sync.commitBatch()
