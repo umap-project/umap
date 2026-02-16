@@ -415,17 +415,20 @@ Fields.Select = class extends Fields.Base {
   buildOptions() {
     this.select.innerHTML = ''
     for (const option of this.getOptions()) {
-      if (typeof option === 'string') this.buildOption(option, option)
-      else this.buildOption(option[0], option[1])
+      if (typeof option === 'string') this.buildOption(option)
+      else this.buildOption(...option)
     }
   }
 
-  buildOption(value, label) {
+  buildOption(value, label, disabled) {
     this.validValues.push(value)
     const option = Utils.loadTemplate('<option></option>')
     this.select.appendChild(option)
     option.value = value
-    option.textContent = label
+    option.textContent = label ?? value
+    if (disabled) {
+      option.disabled = true
+    }
     if (this.toHTML() === value) {
       option.selected = 'selected'
     }
@@ -619,14 +622,11 @@ Fields.SlideshowDelay = class extends Fields.IntSelect {
 
 const BaseDataLayerSwitcher = class extends Fields.Select {
   getOptions() {
-    const options = []
-    this.builder._umap.layers.tree
-      .browsable()
-      .filter((d) => d.isLoaded() && !d.isDataReadOnly())
-      .map((datalayer) => {
-        options.push([datalayer.id, datalayer.getName()])
-      })
-    return options
+    return this.builder._umap.layers.tree.browsable().reduce((acc, layer) => {
+      const disabled = !layer.isLoaded() || layer.isDataReadOnly() || layer.hasChild()
+      acc.push([layer.id, layer.getName(true), disabled])
+      return acc
+    }, [])
   }
 
   toHTML() {
