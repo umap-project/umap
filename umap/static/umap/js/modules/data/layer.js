@@ -426,8 +426,8 @@ export class DataLayer {
   }
 
   addFeature(feature, sync = false) {
-    if (!this.allowFeatures()) {
-      console.error('Adding feature to invalid layer', feature, this.datalayer)
+    if (this.hasChild()) {
+      console.error('Adding feature to a parent layer', feature, this.datalayer)
       return
     }
     feature.connectToDataLayer(this)
