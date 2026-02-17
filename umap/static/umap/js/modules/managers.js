@@ -10,9 +10,10 @@ class LayerCollection {
   constructor(items) {
     this._items = Array.from(items)
     this._root = false // Do not iter over children
-    this._filter = (i) => i // No op
+    this._filter = (i) => true // No op
     this._sort = (a, b) => b.rank - a.rank // Higher ranks before
     this._all = false
+    this._cut = false // Should ignore the children if parent is filtered out
   }
 
   from(other) {
@@ -53,6 +54,11 @@ class LayerCollection {
 
   all() {
     this._all = true
+    return this
+  }
+
+  cut() {
+    this._cut = true
     return this
   }
 
@@ -100,9 +106,13 @@ class LayerCollection {
     if (!this._all) {
       this.filter((layer) => !layer.isDeleted)
     }
-    const values = this._items.filter(this._filter).toSorted(this._sort)
+    const values = this._items.toSorted(this._sort)
     for (const layer of values) {
-      yield layer
+      if (this._filter(layer)) {
+        yield layer
+      } else if (this._cut) {
+        continue
+      }
       if (!this._root) {
         yield* layer.layers.tree.from(this)
       }
