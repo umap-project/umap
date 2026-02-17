@@ -31,7 +31,7 @@ dependencies = [
   # Yunohost needs to be pinned at 5.1.X to keep psql==13 compat.
   "Django>=5.1,<6.0",
   "django-agnocomplete==2.2.0",
-  "django-environ==0.12.0",
+  "django-environ==0.12.1",
   "django-probes==1.8.0",
   "Pillow==12.1.1",
   "psycopg==3.3.2",
