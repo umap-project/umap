@@ -60,7 +60,7 @@ test = [
   "factory-boy==3.3.3",
   "playwright>=1.39",
   "pytest==9.0.2",
-  "pytest-django==4.11.1",
+  "pytest-django==4.12.0",
   "pytest-playwright==0.7.2",
   "pytest-rerunfailures==16.1",
   "pytest-xdist>=3.5.0,<4",
