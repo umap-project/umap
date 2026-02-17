@@ -507,7 +507,7 @@ export class DataLayer {
     const ancestorHasField = this.ancestors.some((ancestor) =>
       ancestor.fields.has(name)
     )
-    if (!ancestorHasField && !this.fields.has(name)) {
+    if (!ancestorHasField && !this.fields.has(name) && !this._umap.fields.has(name)) {
       this.features.forEach((feature) => {
         feature.deleteField(name)
       })
