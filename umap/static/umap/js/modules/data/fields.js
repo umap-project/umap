@@ -425,12 +425,11 @@ export class Fields extends Map {
 
   async confirmDelete(name) {
     return this.dialog
-      .confirm(translate('Are you sure you want to delete this field on all the data?'))
+      .confirm(translate('Are you sure you want to delete this field?'))
       .then(() => {
         this.parent.sync.startBatch()
         const oldFields = Utils.CopyJSON(this.parent.properties.fields)
         this.delete(name)
-        this.push()
         if (this.parent.filters.has(name)) {
           this.parent.filters.remove(name)
         }

@@ -1519,29 +1519,20 @@ export default class Umap {
   // (edit and viewing)
   // cf https://github.com/umap-project/umap/issues/585
   defaultEditDataLayer() {
-    let datalayer = this.lastUsedDataLayer
-    if (
-      datalayer &&
-      !datalayer.isDataReadOnly() &&
-      datalayer.isBrowsable() &&
-      datalayer.isVisible()
-    ) {
-      return datalayer
+    let layer = this.lastUsedDataLayer
+    if (layer && layer.allowFeatures() && layer.isVisible()) {
+      return layer
     }
-    datalayer = this.layers.tree
-      .browsable()
+    layer = this.layers.tree
       .visible()
-      .filter((datalayer) => !datalayer.isDataReadOnly())
+      .filter((layer) => layer.allowFeatures())
       .first()
-    if (datalayer) return datalayer
-    datalayer = this.layers.tree
-      .browsable()
-      .filter((datalayer) => !datalayer.isDataReadOnly())
-      .first()
-    if (datalayer) {
-      // No datalayer visible, let's force one
-      datalayer.show()
-      return datalayer
+    if (layer) return layer
+    layer = this.layers.tree.filter((layer) => layer.allowFeatures()).first()
+    if (layer) {
+      // No layer visible, let's force one
+      layer.show()
+      return layer
     }
     return this.createDirtyDataLayer()
   }

@@ -426,6 +426,10 @@ export class DataLayer {
   }
 
   addFeature(feature, sync = false) {
+    if (!this.allowFeatures()) {
+      console.error('Adding feature to invalid layer', feature, this.datalayer)
+      return
+    }
     feature.connectToDataLayer(this)
     this.features.add(feature)
     this._umap.featuresIndex[feature.getSlug()] = feature
@@ -500,7 +504,10 @@ export class DataLayer {
   }
 
   deleteFeaturesField(name) {
-    if (!this._umap.fields.has(name) && !this.fields.has(name)) {
+    const ancestorHasField = this.ancestors.some((ancestor) =>
+      ancestor.fields.has(name)
+    )
+    if (!ancestorHasField && !this.fields.has(name)) {
       this.features.forEach((feature) => {
         feature.deleteField(name)
       })
@@ -743,6 +750,10 @@ export class DataLayer {
     }
   }
 
+  allowFeatures() {
+    return !this.isDataReadOnly() && this.isBrowsable() && !this.hasChild()
+  }
+
   hasChild() {
     return Boolean(this.layers.count())
   }
@@ -751,8 +762,25 @@ export class DataLayer {
     return this.parent?.id === id || this.parent?.hasParent(id)
   }
 
+  get inheritedFields() {
+    const fields = new Map(this.fields.entries())
+    const parent = this.parent || this._umap
+    const inheritedFields = parent.inheritedFields || parent.fields
+    for (const [key, field] of inheritedFields.entries()) {
+      if (!fields.has(key)) {
+        fields.set(key, field)
+      }
+    }
+    return fields
+  }
+
   get depth() {
     return this.parent ? this.parent.depth + 1 : 0
+  }
+
+  get ancestors() {
+    if (!this.parent) return []
+    return [this.parent, ...this.parent.ancestors]
   }
 
   get parent() {
@@ -1085,10 +1113,8 @@ export class DataLayer {
     if (this.layer?.defaults?.[key]) {
       return this.layer.defaults[key]
     }
-    if (this.parent) {
-      return this.parent.getProperty(key, feature)
-    }
-    return this._umap.getProperty(key, feature)
+    const parent = this.parent || this._umap
+    return parent.getProperty(key, feature)
   }
 
   getOption(key, feature) {
