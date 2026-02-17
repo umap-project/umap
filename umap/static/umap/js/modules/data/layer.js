@@ -237,37 +237,6 @@ export class DataLayer {
     this._autoVisibility = value
   }
 
-  appendToParent(parent, sync = true) {
-    if (this.parent === parent) return
-    const oldParentId = this.parent?.id
-    this.parent = parent
-    this.parentPane = parent?.pane || this.rootPane
-    if (sync) this.sync.update('parentId', parent?.id, oldParentId)
-    this.parentPane.appendChild(this.pane)
-  }
-
-  insertBefore(other) {
-    if (!other) return
-    const oldParentId = this.parent?.id
-    this.parent = other.parent
-    this.parentPane = other.parent?.pane || this.rootPane
-    this.sync.update('parentId', this.parent?.id, oldParentId)
-    other.parentPane.insertBefore(this.pane, other.pane)
-  }
-
-  insertAfter(other) {
-    if (!other) return
-    const oldParentId = this.parent?.id
-    this.parent = other.parent
-    this.parentPane = other.parent?.pane || this.rootPane
-    this.sync.update('parentId', this.parent?.id, oldParentId)
-    if (other.pane.nextSibling) {
-      other.parentPane.insertBefore(this.pane, other.pane.nextSibling)
-    } else {
-      other.parentPane.appendChild(this.pane)
-    }
-  }
-
   reorderDOM() {
     for (const layer of this.layers.root.reverse()) {
       this.parentPane.appendChild(layer.pane)
