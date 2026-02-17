@@ -621,9 +621,13 @@ Fields.SlideshowDelay = class extends Fields.IntSelect {
 }
 
 const BaseDataLayerSwitcher = class extends Fields.Select {
+  isOptionDisabled(layer) {
+    return !layer.isLoaded() || layer.isDataReadOnly()
+  }
+
   getOptions() {
     return this.builder._umap.layers.tree.browsable().reduce((acc, layer) => {
-      const disabled = !layer.isLoaded() || layer.isDataReadOnly() || layer.hasChild()
+      const disabled = this.isOptionDisabled(layer)
       acc.push([layer.id, layer.getName(true), disabled])
       return acc
     }, [])
@@ -638,8 +642,13 @@ const BaseDataLayerSwitcher = class extends Fields.Select {
   }
 
   set() {
-    this.builder._umap.lastUsedDataLayer = this.toJS()
-    this.builder.setter(this, this.toJS())
+    const layerId = this.toJS()
+    this.builder.setter(this, layerId)
+    this.onSet(layerId)
+  }
+
+  onSet(layerId) {
+    this.builder._umap.lastUsedDataLayer = this.builder._umap.layers.get(layerId)
   }
 }
 
@@ -652,6 +661,10 @@ Fields.NullableDataLayerSwitcher = class extends BaseDataLayerSwitcher {
 }
 
 Fields.ParentSwitcher = class extends BaseDataLayerSwitcher {
+  isOptionDisabled(layer) {
+    return super.isOptionDisabled(layer) || layer === this.obj
+  }
+
   getOptions() {
     const options = super.getOptions()
     options.unshift([null, translate('Choose a parent layer')])
@@ -668,9 +681,16 @@ Fields.ParentSwitcher = class extends BaseDataLayerSwitcher {
     // the value to other peers (we cannot sync object instances).
     return this.value()
   }
+
+  // Do not set lastUsedDataLayer when setting a parent layer.
+  onSet(layer) {}
 }
 
-Fields.EditableDataLayerSwitcher = class extends BaseDataLayerSwitcher {
+Fields.FeatureDataLayerSwitcher = class extends BaseDataLayerSwitcher {
+  isOptionDisabled(layer) {
+    return super.isOptionDisabled(layer) || layer.hasChild()
+  }
+
   getTemplate() {
     return `
       <div class="select-with-actions">
