@@ -348,6 +348,7 @@ html[dir="rtl"] .icon {
 }
 
 .readonly .icon-table,
+.icon-table.off,
 .off .icon-table {
     background-position: calc(var(--tile) * 3) 0px;
 }

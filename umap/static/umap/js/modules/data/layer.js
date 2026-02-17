@@ -1457,11 +1457,15 @@ export class DataLayer {
       container.classList.add('readonly')
     } else {
       edit.addEventListener('click', () => this.edit())
-      table.addEventListener('click', () => this.tableEdit())
       remove.addEventListener('click', () => {
         if (!this.isVisible()) return
         this.del()
       })
+      if (this.hasChild()) {
+        table.classList.add('off')
+      } else {
+        table.addEventListener('click', () => this.tableEdit())
+      }
     }
     DomEvent.on(toggle, 'click', () => this.toggle())
     DomEvent.on(zoomTo, 'click', this.zoomTo, this)
