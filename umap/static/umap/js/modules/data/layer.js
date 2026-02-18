@@ -476,11 +476,12 @@ export class DataLayer {
   }
 
   inferFields(feature) {
-    for (const key in feature.properties) {
+    main: for (const key in feature.properties) {
       if (key && typeof feature.properties[key] !== 'object') {
         if (key.indexOf('_') === 0) continue
-        if (this.fields.has(key)) continue
-        if (this._umap.fields.has(key)) continue
+        for (const ancestor of this.ancestry) {
+          if (ancestor.fields.has(key)) continue main
+        }
         let type = 'String'
         if (key === 'description') type = 'Text'
         this.fields.add({ key, type })
@@ -776,6 +777,10 @@ export class DataLayer {
 
   get depth() {
     return this.parent ? this.parent.depth + 1 : 0
+  }
+
+  get ancestry() {
+    return [this, ...this.ancestors, this._umap]
   }
 
   get ancestors() {
