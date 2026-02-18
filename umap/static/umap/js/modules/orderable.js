@@ -26,7 +26,10 @@ export default class Orderable {
 
   findTarget(node) {
     while (node) {
-      if (node.classList.contains('orderable')) return node
+      if (node.classList.contains('orderable')) {
+        if (!this.parent.contains(node)) return null
+        return node
+      }
       node = node.parentNode
     }
   }
@@ -50,6 +53,7 @@ export default class Orderable {
     if (!this.moved) return
     this.initialIndex = this.nodeIndex(this.moved)
     this.moved.classList.add('ordering')
+    this.dropped = false
   }
 
   onDragOver(event) {
@@ -57,7 +61,14 @@ export default class Orderable {
     event.preventDefault() // Necessary. Allows us to drop.
     event.dataTransfer.dropEffect = 'move'
     const target = this.findTarget(event.target)
-    if (!target || target === this.moved || this.moved.contains(target)) return false
+    if (
+      !target ||
+      !this.moved ||
+      target === this.moved ||
+      this.moved.contains(target)
+    ) {
+      return false
+    }
     this.pointerY = event.clientY
     this.target = target
     const top = target.getBoundingClientRect().top
@@ -81,8 +92,10 @@ export default class Orderable {
     if (this.dragMode === 'not-allowed') return
     this.moved.classList.remove('drageffect')
 
-    window.setTimeout(() => {
+    this.timeout = window.setTimeout(() => {
       if (this.pointerY !== event.clientY) return
+      this.timeout = null
+      if (this.dropped) return
       this.moved.classList.add('drageffect')
       const parentNode = target.parentNode
       if (this.dragMode === 'above') {
@@ -99,7 +112,7 @@ export default class Orderable {
           container.appendChild(this.moved)
         }
       }
-    }, 500)
+    }, 200)
     return false
   }
 
@@ -119,7 +132,11 @@ export default class Orderable {
     if (event.stopPropagation) event.stopPropagation() // Stops the browser from redirecting.
     if (!this.target) return
     this.resetCSS(this.target)
-    this.onCommit(this.moved, this.target, this.dragMode)
+    // User dropped before DOM feedback, so we think they do not want the move to proceed.
+    this.dropped = true
+    if (!this.timeout) {
+      this.onCommit(this.moved, this.target, this.dragMode)
+    }
     return false
   }
 
