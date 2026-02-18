@@ -282,10 +282,10 @@ export class Filters {
       <details>
         <summary>${title}</summary>
         <ul data-ref=ul></ul>
-        <div data-ref=childrenContainer></div>
         <div>
           <button type="button" data-ref=add>${translate('Add filter')}</button>
         </div>
+        <div data-ref=childrenContainer></div>
       </details>
     `
     const [body, { ul, add, childrenContainer }] = Utils.loadTemplateWithRefs(template)
@@ -329,7 +329,7 @@ export class Filters {
         this._listFilters(child, childrenContainer, child.getName())
       }
     }
-    const onReorder = (src, dst, initialIndex, finalIndex) => {
+    const onReorder = (src, dst) => {
       const orderedKeys = Array.from(ul.querySelectorAll('li')).map(
         (el) => el.dataset.fieldkey
       )
