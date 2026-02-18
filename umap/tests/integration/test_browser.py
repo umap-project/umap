@@ -499,24 +499,24 @@ def test_main_toolbox_toggle_all_layers(live_server, map, page):
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_have_count(2)
     # Only one is off
-    expect(page.locator(".datalayer.off")).to_have_count(1)
+    expect(page.locator(".datalayer summary.off")).to_have_count(1)
 
     # Click on button
     page.locator(".umap-browser").get_by_title("Show/hide all layers").click()
     # Should have hidden the two other layers
-    expect(page.locator(".datalayer.off")).to_have_count(3)
+    expect(page.locator(".datalayer summary.off")).to_have_count(3)
     expect(markers).to_have_count(0)
 
     # Click again
     page.locator(".umap-browser").get_by_title("Show/hide all layers").click()
     # Should shown all layers
-    expect(page.locator(".datalayer.off")).to_have_count(0)
+    expect(page.locator(".datalayer summary.off")).to_have_count(0)
     expect(markers).to_have_count(3)
 
     # Click again
     page.locator(".umap-browser").get_by_title("Show/hide all layers").click()
     # Should hidden again all layers
-    expect(page.locator(".datalayer.off")).to_have_count(3)
+    expect(page.locator(".datalayer summary.off")).to_have_count(3)
     expect(markers).to_have_count(0)
 
 
@@ -526,3 +526,113 @@ def test_honour_the_label_fields_settings(live_server, map, page, bootstrap, set
     expect(page.locator(".panel").get_by_text("this is label one")).to_be_visible()
     expect(page.locator(".panel").get_by_text("this is label two")).to_be_visible()
     expect(page.locator(".panel").get_by_text("this is label three")).to_be_visible()
+
+
+def test_can_toggle_visibility_from_parent(live_server, map, page):
+    map.settings["properties"]["onLoadPanel"] = "databrowser"
+    map.save()
+    root1 = DataLayerFactory(name="root 1", rank=0, map=map, data={})
+    root2 = DataLayerFactory(
+        name="root 2",
+        rank=1,
+        map=map,
+        data={
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": {"type": "Point", "coordinates": [4, 49]},
+                    "properties": {"name": "root2 feature"},
+                }
+            ]
+        },
+    )
+    p1_child2 = DataLayerFactory(
+        name="p1 child 2",
+        rank=1,
+        parent=root1,
+        map=map,
+        data={
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": {"type": "Point", "coordinates": [5, 48]},
+                    "properties": {"name": "child2 feature"},
+                }
+            ]
+        },
+    )
+    p1_child1 = DataLayerFactory(
+        name="p1 child 1",
+        rank=0,
+        parent=root1,
+        map=map,
+        data={},
+        display_on_load=False,
+    )
+    p1_grandchild1 = DataLayerFactory(
+        name="p1 grandchild 1",
+        rank=0,
+        parent=p1_child1,
+        map=map,
+        data={
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": {"type": "Point", "coordinates": [4, 48]},
+                    "properties": {"name": "grandchild feature"},
+                }
+            ]
+        },
+    )
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page.locator(f"summary[data-id='{root1.pk}']")).not_to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{root2.pk}']")).not_to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_child2.pk}']")).not_to_contain_class(
+        "off"
+    )
+    expect(page.locator(f"summary[data-id='{p1_child1.pk}']")).to_contain_class("off")
+    # Should inherit its parent status
+    expect(page.locator(f"summary[data-id='{p1_grandchild1.pk}']")).to_contain_class(
+        "off"
+    )
+    expect(page.get_by_text("grandchild feature")).to_be_hidden()
+    expect(page.get_by_text("child2 feature")).to_be_visible()
+    expect(page.get_by_text("root2 feature")).to_be_visible()
+
+    # Clicking on root 1 should also hide child2
+    page.locator(f"summary[data-id='{root1.pk}'] .icon-eye").click()
+    expect(page.locator(f"summary[data-id='{root1.pk}']")).to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_child2.pk}']")).to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_child1.pk}']")).to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_grandchild1.pk}']")).to_contain_class(
+        "off"
+    )
+    expect(page.get_by_text("grandchild feature")).to_be_hidden()
+    expect(page.get_by_text("child2 feature")).to_be_hidden()
+    expect(page.get_by_text("root2 feature")).to_be_visible()
+
+    # Clicking on child 1 should also show grandchild
+    page.locator(f"summary[data-id='{p1_child1.pk}'] .icon-eye").click()
+    expect(page.locator(f"summary[data-id='{root1.pk}']")).not_to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_child2.pk}']")).to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_child1.pk}']")).not_to_contain_class(
+        "off"
+    )
+    expect(
+        page.locator(f"summary[data-id='{p1_grandchild1.pk}']")
+    ).not_to_contain_class("off")
+    expect(page.get_by_text("grandchild feature")).to_be_visible()
+    expect(page.get_by_text("child2 feature")).to_be_hidden()
+    expect(page.get_by_text("root2 feature")).to_be_visible()
+
+    # Hiding again child 1 should also hide root1
+    page.locator(f"summary[data-id='{p1_child1.pk}'] .icon-eye").click()
+    expect(page.locator(f"summary[data-id='{root1.pk}']")).to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_child2.pk}']")).to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_child1.pk}']")).to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_grandchild1.pk}']")).to_contain_class(
+        "off"
+    )
+    expect(page.get_by_text("grandchild feature")).to_be_hidden()
+    expect(page.get_by_text("child2 feature")).to_be_hidden()
+    expect(page.get_by_text("root2 feature")).to_be_visible()

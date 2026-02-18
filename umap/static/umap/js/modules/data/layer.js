@@ -22,7 +22,7 @@ import * as Utils from '../utils.js'
 import * as DOMUtils from '../domutils.js'
 import { LineString, Point, Polygon } from './features.js'
 import Rules from '../rules.js'
-import { FeatureManager } from '../managers.js'
+import { FeatureManager, LayerManager } from '../managers.js'
 import { Filters } from '../filters.js'
 import { Fields, getDefaultFields } from './fields.js'
 
@@ -46,12 +46,9 @@ export class DataLayer {
     this.sync = umap.syncEngine.proxy(this)
     this.features = new FeatureManager()
     this._propertiesIndex = []
+    this.layers = new LayerManager()
 
     this._leafletMap = leafletMap
-    this.parentPane = this._leafletMap.getPane('overlayPane')
-    this.pane = this._leafletMap.createPane(`datalayer${stamp(this)}`, this.parentPane)
-    // FIXME: should be on layer
-    this.renderer = new SVG({ pane: this.pane })
     this.defaultProperties = {
       displayOnLoad: true,
       inCaption: true,
@@ -59,18 +56,30 @@ export class DataLayer {
       editMode: 'advanced',
     }
 
-    this._isDeleted = false
+    this.isDeleted = false
     this._referenceVersion = data._referenceVersion
     // Do not save it later.
     delete data._referenceVersion
     data.id = data.id || crypto.randomUUID()
 
     this.setProperties(data)
-    this.pane.dataset.id = this.id
-    if (this.properties.rank === undefined) {
-      this.properties.rank = this._umap.datalayers.count()
+    this.rootPane = this._leafletMap.getPane('overlayPane')
+    this.parentPane = this.rootPane
+    if (this.properties.parent) {
+      this.parentId = this.properties.parent
+      if (!this.parent) {
+        console.error(
+          `Parent defined but not found: ${this.properties.parent} (self: ${this.id})`
+        )
+      }
+      this.parentPane = this.parent.pane
+    } else {
+      this._umap.layers.add(this)
     }
-    this._umap.datalayers.add(this)
+    this.pane = this._leafletMap.createPane(`pane-${this.id}`, this.parentPane)
+    // FIXME: should be on layer
+    this.renderer = new SVG({ pane: this.pane })
+    this.pane.dataset.id = this.id
 
     if (!Utils.isObject(this.properties.remoteData)) {
       this.properties.remoteData = {}
@@ -99,7 +108,7 @@ export class DataLayer {
     // Only layers that are displayed on load must be hidden/shown
     // Automatically, others will be shown manually, and thus will
     // be in the "forced visibility" mode
-    if (this.isVisible()) this.propagateShow()
+    this.propagateVisibility()
   }
 
   get id() {
@@ -110,40 +119,15 @@ export class DataLayer {
     return Boolean(this._referenceVersion)
   }
 
-  onDirty(status) {
-    if (status) {
-      // A layer can be made dirty by indirect action (like dragging layers)
-      // we need to have it loaded before saving it.
-      if (!this.isLoaded()) this.fetchData()
-    } else {
-      this.isDeleted = false
-    }
-  }
-
-  set isDeleted(status) {
-    this._isDeleted = status
-  }
-
-  get isDeleted() {
-    return this._isDeleted
-  }
-
-  get cssId() {
-    return `datalayer-${this.id}`
-  }
-
   get rank() {
-    // Make sure we always have a valid rank. Undefined rank may happen
-    // after importing an old umap backup, and not touching the layers
-    // after that.
-    if (this.properties.rank === undefined) {
-      this.properties.rank = this.getDOMOrder()
-    }
     return this.properties.rank
   }
 
   set rank(value) {
+    if (value === this.rank) return
+    const oldRank = this.rank
     this.properties.rank = value
+    this.sync.update('rank', value, oldRank, { undo: false })
   }
 
   get sortKey() {
@@ -206,11 +190,9 @@ export class DataLayer {
   propagate(fields = []) {
     const impacts = {
       'properties.name': () => {
-        Utils.eachElement('.datalayer-name', (el) => {
-          if (el.dataset.id === this.id) {
-            el.textContent = this.getName()
-            el.title = this.getName()
-          }
+        Utils.eachElement(`[data-id="${this.id}"][data-onrename]`, (el) => {
+          el.textContent = this.getName()
+          el.title = this.getName()
         })
       },
     }
@@ -239,6 +221,13 @@ export class DataLayer {
         }
       } else {
         this._autoVisibility = this.properties.displayOnLoad
+        // Use parent visibility for displayOnLoad default value (true)
+        // TODO should we have an undefined default value, so be more
+        // explicit here ? Eg. not possible to override a parent with
+        // displayOnLoad=false
+        if (this._autoVisibility && this.parent) {
+          this._autoVisibility = this.parent.autoVisibility
+        }
       }
     }
     return this._autoVisibility
@@ -248,14 +237,10 @@ export class DataLayer {
     this._autoVisibility = value
   }
 
-  insertBefore(other) {
-    if (!other) return
-    this.parentPane.insertBefore(this.pane, other.pane)
-  }
-
-  insertAfter(other) {
-    if (!other) return
-    this.parentPane.insertBefore(this.pane, other.pane.nextSibling)
+  reorderDOM() {
+    for (const layer of this.layers.root.reverse()) {
+      this.parentPane.appendChild(layer.pane)
+    }
   }
 
   bringToTop() {
@@ -287,7 +272,6 @@ export class DataLayer {
       this.showFeature(feature)
     })
     if (visible) this.show()
-    this.propagateRemote()
   }
 
   async fetchData() {
@@ -382,6 +366,7 @@ export class DataLayer {
     }
     return await this.getUrl(url, remoteUrl).then((raw) => {
       this.clear(false)
+      this.dataChanged()
       return this._umap.formatter
         .parse(raw, this.properties.remoteData.format)
         .then((geojson) => this.fromGeoJSON(geojson, false))
@@ -441,6 +426,10 @@ export class DataLayer {
   }
 
   addFeature(feature, sync = false) {
+    if (this.hasChild()) {
+      console.error('Adding feature to a parent layer', feature, this.datalayer)
+      return
+    }
     feature.connectToDataLayer(this)
     this.features.add(feature)
     this._umap.featuresIndex[feature.getSlug()] = feature
@@ -487,11 +476,12 @@ export class DataLayer {
   }
 
   inferFields(feature) {
-    for (const key in feature.properties) {
+    main: for (const key in feature.properties) {
       if (key && typeof feature.properties[key] !== 'object') {
         if (key.indexOf('_') === 0) continue
-        if (this.fields.has(key)) continue
-        if (this._umap.fields.has(key)) continue
+        for (const ancestor of this.ancestry) {
+          if (ancestor.fields.has(key)) continue main
+        }
         let type = 'String'
         if (key === 'description') type = 'Text'
         this.fields.add({ key, type })
@@ -515,7 +505,10 @@ export class DataLayer {
   }
 
   deleteFeaturesField(name) {
-    if (!this._umap.fields.has(name) && !this.fields.has(name)) {
+    const ancestorHasField = this.ancestors.some((ancestor) =>
+      ancestor.fields.has(name)
+    )
+    if (!ancestorHasField && !this.fields.has(name) && !this._umap.fields.has(name)) {
       this.features.forEach((feature) => {
         feature.deleteField(name)
       })
@@ -695,18 +688,24 @@ export class DataLayer {
     })
   }
 
-  del(sync = true) {
+  del(sync = true, root = true) {
+    if (root) this.sync.startBatch()
     const oldValue = Utils.CopyJSON(this.umapGeoJSON())
     // TODO merge datalayer del and features del in same
     // batch
+    this.parent = undefined
     this.clear()
+    for (const child of this.layers.root) {
+      child.del(sync, false)
+    }
+    this.isDeleted = true
     if (sync) {
-      this.isDeleted = true
       this.sync.delete(oldValue)
     }
+    if (root) this.sync.commitBatch()
     this.hide()
     this.parentPane.removeChild(this.pane)
-    this._umap.onDataLayersChanged()
+    if (root) this.dataChanged()
     this.layer.onDelete(this._leafletMap)
     this.propagateDelete()
     this._leaflet_events_bk = this._leaflet_events
@@ -717,13 +716,13 @@ export class DataLayer {
     this.sync.startBatch()
     this.clear()
     this.sync.commitBatch()
+    this.dataChanged()
   }
 
   clear(sync = true) {
     this._batch = true
     this.features.forEach((feature) => feature.del(sync))
     this._batch = false
-    this.dataChanged()
   }
 
   clone() {
@@ -737,6 +736,10 @@ export class DataLayer {
   }
 
   redraw() {
+    if (this.layers.count()) {
+      this.layers.tree.map((datalayer) => datalayer.redraw())
+      return
+    }
     if (!this.isVisible()) return
     this.features.forEach((feature) => feature.redraw())
   }
@@ -748,35 +751,102 @@ export class DataLayer {
     }
   }
 
+  allowFeatures() {
+    return !this.isDataReadOnly() && this.isBrowsable() && !this.hasChild()
+  }
+
+  hasChild() {
+    return Boolean(this.layers.count())
+  }
+
+  hasParent(id) {
+    return this.parent?.id === id || this.parent?.hasParent(id)
+  }
+
+  get inheritedFields() {
+    const fields = new Map(this.fields.entries())
+    const parent = this.parent || this._umap
+    const inheritedFields = parent.inheritedFields || parent.fields
+    for (const [key, field] of inheritedFields.entries()) {
+      if (!fields.has(key)) {
+        fields.set(key, field)
+      }
+    }
+    return fields
+  }
+
+  get depth() {
+    return this.parent ? this.parent.depth + 1 : 0
+  }
+
+  get ancestry() {
+    return [this, ...this.ancestors, this._umap]
+  }
+
+  get ancestors() {
+    if (!this.parent) return []
+    return [this.parent, ...this.parent.ancestors]
+  }
+
+  get parent() {
+    return this._parent
+  }
+
+  set parent(other) {
+    if (other === this._parent) return
+    const parent = this.parent || this._umap
+    parent.layers.delete(this)
+    if (other) {
+      other.layers.add(this)
+    }
+    this._parent = other
+  }
+
+  get parentId() {
+    return this.parent?.id
+  }
+
+  set parentId(uuid) {
+    this.parent = this._umap.layers.get(uuid)
+  }
+
   _editMetadata(container) {
-    const metadataFields = [
-      'properties.name',
-      'properties.description',
-      [
+    const metadataFields = ['properties.name', 'properties.description']
+    if (!this.layers.count()) {
+      metadataFields.unshift([
+        'parentId',
+        { handler: 'ParentSwitcher', label: translate('Parent') },
+      ])
+    }
+    if (!this.layers.count()) {
+      metadataFields.push([
         'properties.type',
         { handler: 'LayerTypeChooser', label: translate('Type of layer') },
-      ],
-      'properties.labelKey',
-      [
-        'properties.displayOnLoad',
-        { label: translate('Display on load'), handler: 'Switch' },
-      ],
-      [
-        'properties.browsable',
-        {
-          label: translate('Data is browsable'),
-          handler: 'Switch',
-          helpEntries: ['browsable'],
-        },
-      ],
-      [
-        'properties.inCaption',
-        {
-          label: translate('Show this layer in the caption'),
-          handler: 'Switch',
-        },
-      ],
-    ]
+      ])
+    }
+    metadataFields.push('properties.labelKey', [
+      'properties.displayOnLoad',
+      { label: translate('Display on load'), handler: 'Switch' },
+    ])
+    if (!this.layers.count()) {
+      metadataFields.push(
+        [
+          'properties.browsable',
+          {
+            label: translate('Data is browsable'),
+            handler: 'Switch',
+            helpEntries: ['browsable'],
+          },
+        ],
+        [
+          'properties.inCaption',
+          {
+            label: translate('Show this layer in the caption'),
+            handler: 'Switch',
+          },
+        ]
+      )
+    }
     container.appendChild(
       DOMUtils.loadTemplate(`
       <h3><i class="icon icon-16 icon-layers"></i>${translate('Layer properties')}</h3>
@@ -1000,7 +1070,9 @@ export class DataLayer {
     this._editAdvancedProperties(container)
     this._editInteractionProperties(container)
     this._editTextPathProperties(container)
-    this._editRemoteDataProperties(container)
+    if (!this.layers.count()) {
+      this._editRemoteDataProperties(container)
+    }
     this.fields.edit(container)
     this.rules.edit(container)
 
@@ -1008,7 +1080,9 @@ export class DataLayer {
       this.buildVersionsFieldset(container)
     }
 
-    this._buildAdvancedActions(container)
+    if (!this.layers.count()) {
+      this._buildAdvancedActions(container)
+    }
 
     const backButton = DOMUtils.loadTemplate(`
       <button class="icon icon-16 icon-back" type="button" title="${translate('Back to layers')}"></button>
@@ -1044,7 +1118,8 @@ export class DataLayer {
     if (this.layer?.defaults?.[key]) {
       return this.layer.defaults[key]
     }
-    return this._umap.getProperty(key, feature)
+    const parent = this.parent || this._umap
+    return parent.getProperty(key, feature)
   }
 
   getOption(key, feature) {
@@ -1112,27 +1187,53 @@ export class DataLayer {
   async show() {
     this._leafletMap.addLayer(this.layer)
     if (!this.isLoaded()) await this.fetchData()
-    this.propagateShow()
+    this.propagateVisibility({ force: true })
   }
 
   hide() {
     this._leafletMap.removeLayer(this.layer)
-    this.propagateHide()
+    this.propagateVisibility({ force: false })
   }
 
   toggle(force) {
+    if (this.layers.count()) {
+      force = Utils.toggleLayers(this.layers, force)
+    }
     // From now on, do not try to how/hide
     // automatically this layer, as user
     // has taken control on this.
     this.autoVisibility = false
     let display = force
     if (force === undefined) {
-      if (!this.isVisible()) display = true
-      else display = false
+      display = !this.hasVisibleChild()
     }
-    if (display) this.show()
-    else this.hide()
+    if (display) {
+      this.show()
+    } else {
+      this.hide()
+    }
     this._umap.bottomBar.redraw()
+  }
+
+  isFullVisible() {
+    if (!this.layers.count()) {
+      return this.isVisible()
+    }
+    return this.layers.tree.every((child) => child.isVisible())
+  }
+
+  isVisible() {
+    if (this.layers.count()) {
+      return this.layers.tree.some((child) => child.isVisible())
+    }
+    return Boolean(this.layer && this._leafletMap.hasLayer(this.layer))
+  }
+
+  hasVisibleChild() {
+    if (!this.layers.count()) {
+      return this.isVisible()
+    }
+    return this.layers.tree.some((child) => child.isVisible())
   }
 
   zoomTo() {
@@ -1174,10 +1275,6 @@ export class DataLayer {
     return !!this.count()
   }
 
-  isVisible() {
-    return Boolean(this.layer && this._leafletMap.hasLayer(this.layer))
-  }
-
   getNextFeature(feature) {
     return this.features.next(feature) || this.getNextBrowsable().features.first()
   }
@@ -1187,17 +1284,18 @@ export class DataLayer {
   }
 
   getPreviousBrowsable() {
-    return this._umap.datalayers.prev(this)
+    return this._umap.layers.prev(this)
   }
 
   getNextBrowsable() {
-    return this._umap.datalayers.next(this)
+    return this._umap.layers.next(this)
   }
 
   umapGeoJSON() {
     const features = this.isRemoteLayer() ? [] : this.features.all()
     const geojson = this._umap.formatter.toFeatureCollection(features)
     geojson._umap_options = this.properties
+    delete geojson._umap_options.layers
     return geojson
   }
 
@@ -1226,7 +1324,9 @@ export class DataLayer {
 
   prepareProperties() {
     const properties = Utils.CopyJSON(this.properties)
+    delete properties.parent
     delete properties.permissions
+    delete properties.layers
     return JSON.stringify(properties)
   }
 
@@ -1235,6 +1335,7 @@ export class DataLayer {
     if (!this.isRemoteLayer() && !this.isLoaded()) return
     const formData = new FormData()
     formData.append('name', this.properties.name)
+    formData.append('parent', this.parent?.id || '')
     formData.append('display_on_load', !!this.properties.displayOnLoad)
     formData.append('rank', this.rank)
     formData.append('settings', this.prepareProperties())
@@ -1305,11 +1406,16 @@ export class DataLayer {
   }
 
   commitDelete() {
-    delete this._umap.datalayers[this.id]
+    const parent = this.parent || this._umap
+    parent.layers.delete(this.id)
   }
 
-  getName() {
-    return this.properties.name || translate('Untitled layer')
+  getName(padded = false) {
+    let name = this.properties.name || translate('Untitled layer')
+    if (padded) {
+      name = `${''.padStart(this.depth * 2, ' ')}${name}`
+    }
+    return name
   }
 
   getPermalink() {
@@ -1336,7 +1442,7 @@ export class DataLayer {
 
   renderLegend() {
     for (const container of document.querySelectorAll(
-      `.${this.cssId} .datalayer-legend`
+      `[data-id="${this.id}"] .datalayer-legend`
     )) {
       container.innerHTML = ''
       if (this.layer.renderLegend) return this.layer.renderLegend(container)
@@ -1382,47 +1488,42 @@ export class DataLayer {
       container.classList.add('readonly')
     } else {
       edit.addEventListener('click', () => this.edit())
-      table.addEventListener('click', () => this.tableEdit())
       remove.addEventListener('click', () => {
         if (!this.isVisible()) return
         this.del()
       })
+      if (this.hasChild()) {
+        table.classList.add('off')
+      } else {
+        table.addEventListener('click', () => this.tableEdit())
+      }
     }
     DomEvent.on(toggle, 'click', () => this.toggle())
     DomEvent.on(zoomTo, 'click', this.zoomTo, this)
-    container.classList.add(this.cssId)
-    container.classList.toggle('off', !this.isVisible())
+    this.propagateVisibility({ element: container.closest('details') })
   }
 
-  getHidableElements() {
-    return document.querySelectorAll(`.${this.cssId}`)
+  getHidableElements({ element = document } = {}) {
+    return element.querySelectorAll(`[data-id="${this.id}"]`)
   }
 
   propagateDelete() {
-    const els = this.getHidableElements()
+    const els = document.querySelectorAll(`[data-id="${this.id}"][data-ondelete]`)
     for (const el of els) {
       el.remove()
     }
   }
 
-  propagateRemote() {
-    const els = this.getHidableElements()
+  propagateVisibility({ element = document, force } = {}) {
+    const els = element.querySelectorAll(`[data-id="${this.id}"][data-ontoggle]`)
+    force = force ?? this.isVisible()
     for (const el of els) {
-      el.classList.toggle('remotelayer', this.isRemoteLayer())
+      el.classList.toggle('off', !force)
     }
-  }
-
-  propagateHide() {
-    const els = this.getHidableElements()
-    for (const el of els) {
-      el.classList.add('off')
-    }
-  }
-
-  propagateShow() {
-    const els = this.getHidableElements()
-    for (const el of els) {
-      el.classList.remove('off')
+    // When element !== document, we are building the data browser, so parent
+    // visibility has already been computed.
+    if (this.parent && element === document) {
+      this.parent.propagateVisibility()
     }
   }
 }

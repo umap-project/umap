@@ -136,7 +136,8 @@ html[dir="rtl"] .icon {
     visibility: hidden;
 }
 
-.orderable:hover .icon-drag {
+.orderable.with-toolbox:hover .icon-drag,
+.orderable .with-toolbox:hover .icon-drag {
     visibility: visible;
 }
 
@@ -347,12 +348,9 @@ html[dir="rtl"] .icon {
 }
 
 .readonly .icon-table,
+.icon-table.off,
 .off .icon-table {
     background-position: calc(var(--tile) * 3) 0px;
-}
-
-.remotelayer .icon-table {
-    display: none !important;
 }
 
 .icon-template {

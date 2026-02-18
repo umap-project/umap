@@ -73,9 +73,13 @@ def login(new_page, settings, live_server):
     return do_login
 
 
+def asig_application():
+    return ASGIStaticFilesHandler(application)
+
+
 @pytest.fixture(scope="function")
-def asgi_live_server(request, live_server):
-    server = DaphneProcess("localhost", lambda: ASGIStaticFilesHandler(application))
+def asgi_live_server(request, live_server, settings, db):
+    server = DaphneProcess("localhost", asig_application)
     server.start()
     server.ready.wait()
     port = server.port.value

@@ -147,6 +147,10 @@ class DataLayerFactory(factory.django.DjangoModelFactory):
                 **DataLayerFactory.settings._defaults,
                 **kwargs["settings"],
             }
+        if kwargs["display_on_load"] is False:
+            # No the default, so override also in settings and data
+            kwargs["settings"]["displayOnLoad"] = kwargs["display_on_load"]
+            data["_umap_options"]["displayOnLoad"] = kwargs["display_on_load"]
         kwargs["settings"]["name"] = kwargs["name"]
         data["_umap_options"]["name"] = kwargs["name"]
         data.setdefault("type", "FeatureCollection")

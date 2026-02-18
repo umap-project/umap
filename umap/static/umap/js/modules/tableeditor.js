@@ -30,16 +30,14 @@ export default class TableEditor extends WithTemplate {
     this.elements.body.addEventListener('keydown', (event) => this.onKeyDown(event))
     this.elements.header.addEventListener('click', (event) => {
       const property = event.target.dataset.property
-      const parentType = event.target.dataset.fieldParent
-      if (property)
-        this.openHeaderMenu(
-          property,
-          parentType === 'map' ? this._umap : this.datalayer
-        )
+      if (property) this.openHeaderMenu(property)
     })
   }
 
-  openHeaderMenu(name, parent) {
+  openHeaderMenu(name) {
+    const parent = [this.datalayer, ...this.datalayer.ancestors, this._umap].find(
+      (parent) => parent.fields.has(name)
+    )
     let actionLabel
     if (parent.filters.has(name)) {
       actionLabel = translate('Edit filter for this field')
@@ -73,30 +71,15 @@ export default class TableEditor extends WithTemplate {
     this.contextmenu.open(event, actions)
   }
 
-  get fields() {
-    return [
-      ...this.datalayer.fields.all().map((field) => {
-        const copy = { ...field }
-        copy.parent = 'datalayer'
-        return copy
-      }),
-      ...this._umap.fields.all().map((field) => {
-        const copy = { ...field }
-        copy.parent = 'map'
-        return copy
-      }),
-    ]
-  }
-
   renderHeaders() {
     this.elements.header.innerHTML = ''
     const th = loadTemplate('<th><input type="checkbox" /></th>')
     const checkbox = th.firstChild
     this.elements.header.appendChild(th)
-    for (const field of this.fields) {
+    for (const field of this.datalayer.inheritedFields.values()) {
       this.elements.header.appendChild(
         loadTemplate(
-          `<th>${field.key}<button data-property="${field.key}" data-field-parent="${field.parent}" class="flat" aria-label="${translate('Advanced actions')}">…</button></th>`
+          `<th>${field.key}<button data-property="${field.key}" class="flat" aria-label="${translate('Advanced actions')}">…</button></th>`
         )
       )
     }
@@ -113,7 +96,7 @@ export default class TableEditor extends WithTemplate {
     this.datalayer.features.forEach((feature) => {
       if (feature.isFiltered()) return
       if (inBbox && !feature.isOnScreen(bounds)) return
-      const tds = this.fields.map(
+      const tds = Array.from(this.datalayer.inheritedFields.values()).map(
         (field) =>
           `<td tabindex="0" data-property="${field.key}">${feature.properties[field.key] ?? ''}</td>`
       )

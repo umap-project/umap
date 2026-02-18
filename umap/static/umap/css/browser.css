@@ -39,11 +39,10 @@
     padding-inline-start: 5px;
     height: 30px;
     background-color: var(--color-veryLightGray);
-    font-weight: bold;
 }
 
-.umap-browser .off summary {
-    color: #b3b3b3;
+summary.off h4 {
+    opacity: 0.4;
 }
 
 .umap-browser .datalayer li:nth-child(even) {
@@ -118,7 +117,7 @@
 
 .umap-caption [type="button"],
 .umap-caption button {
-    background-color: var(--background-color);
+    background-color: transparent;
     color: var(--text-color);
 }
 

@@ -11,7 +11,9 @@ class BaseUpdater {
   }
 
   getDataLayerFromID(layerId) {
-    return this._umap.getDataLayerByUmapId(layerId)
+    const datalayer = this._umap.layers.get(layerId)
+    if (!datalayer) throw new Error(`Can't find datalayer with id ${layerId}`)
+    return datalayer
   }
 
   applyMessage(payload) {
@@ -39,7 +41,11 @@ export class DataLayerUpdater extends BaseUpdater {
   upsert({ value }) {
     // Upsert only happens when a new datalayer is created.
     try {
-      this.getDataLayerFromID(value.id)
+      const datalayer = this.getDataLayerFromID(value.id)
+      // We must be in a "redo"
+      datalayer.isDeleted = false
+      datalayer.show()
+      datalayer.dataChanged()
     } catch {
       const datalayer = this._umap.createDataLayer(value._umap_options || value, false)
       if (value.features) {
@@ -66,11 +72,14 @@ export class DataLayerUpdater extends BaseUpdater {
   }
 
   delete({ metadata }) {
-    const datalayer = this.getDataLayerFromID(metadata.id)
-    if (datalayer) {
-      datalayer.del(false)
-      datalayer.commitDelete()
+    let datalayer
+    try {
+      datalayer = this.getDataLayerFromID(metadata.id)
+    } catch (error) {
+      console.debug(`Cannot find datalayer to delete: ${error}`)
     }
+    datalayer.del(false, false)
+    datalayer.commitDelete()
   }
 
   getStoredObject(metadata) {

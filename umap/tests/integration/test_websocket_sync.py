@@ -35,7 +35,8 @@ def test_websocket_connection_can_sync_markers(
 
     # Create two tabs
     peerA = new_page("Page A")
-    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    response = peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    assert response.status == 200
     wait_for_loaded(peerA)
     peerB = new_page("Page B")
     peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
@@ -236,7 +237,7 @@ def test_websocket_connection_can_sync_datalayer_properties(
     peerA.get_by_role("button", name="Add a layer").click()
     peerA.locator('input[name="name"]').click()
     peerA.locator('input[name="name"]').fill("synced layer!")
-    peerA.get_by_role("combobox").select_option("Choropleth")
+    peerA.locator('select[name="type"]').select_option("Choropleth")
     peerA.locator("body").press("Escape")
 
     peerB.get_by_role("button", name="Manage layers").click()
@@ -244,7 +245,7 @@ def test_websocket_connection_can_sync_datalayer_properties(
         "button", name="Edit", exact=True
     ).first.click()
     expect(peerB.locator('input[name="name"]')).to_have_value("synced layer!")
-    expect(peerB.get_by_role("combobox")).to_have_value("Choropleth")
+    expect(peerB.locator('select[name="type"]')).to_have_value("Choropleth")
 
 
 @pytest.mark.xdist_group(name="websockets")
@@ -419,7 +420,6 @@ def test_should_sync_datalayers(new_page, asgi_live_server, tilelayer, wait_for_
 
     # Make sure this new marker is in Layer 2 for peerB
     # Show features for this layer in the browser.
-    peerB.locator("summary").filter(has_text="Layer 2").click()
     expect(peerB.locator("li").filter(has_text="Layer 2")).to_be_visible()
     peerB.locator(".panel.left").get_by_role("button", name="Show/hide layer").nth(
         1
@@ -489,8 +489,8 @@ def test_should_sync_datalayers_delete(
             "name": "datalayer 2",
         },
     }
-    DataLayerFactory(map=map, data=data1)
-    DataLayerFactory(map=map, data=data2)
+    layer1 = DataLayerFactory(map=map, data=data1)
+    layer2 = DataLayerFactory(map=map, data=data2)
 
     # Create two tabs
     peerA = new_page("Page A")
@@ -508,6 +508,7 @@ def test_should_sync_datalayers_delete(
     expect(peerB.locator(".panel").get_by_text("datalayer 2")).to_be_visible()
 
     # Delete "datalayer 2" in peerA
+    peerA.locator(f'summary[data-id="{layer2.pk}"] .icon-delete').click()
     peerA.locator(".datalayer").get_by_role("button", name="Delete layer").first.click()
     expect(peerA.locator(".panel").get_by_text("datalayer 2")).to_be_hidden()
     expect(peerB.locator(".panel").get_by_text("datalayer 2")).to_be_hidden()

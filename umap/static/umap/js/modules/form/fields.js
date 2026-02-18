@@ -415,17 +415,20 @@ Fields.Select = class extends Fields.Base {
   buildOptions() {
     this.select.innerHTML = ''
     for (const option of this.getOptions()) {
-      if (typeof option === 'string') this.buildOption(option, option)
-      else this.buildOption(option[0], option[1])
+      if (typeof option === 'string') this.buildOption(option)
+      else this.buildOption(...option)
     }
   }
 
-  buildOption(value, label) {
+  buildOption(value, label, disabled) {
     this.validValues.push(value)
     const option = Utils.loadTemplate('<option></option>')
     this.select.appendChild(option)
     option.value = value
-    option.textContent = label
+    option.textContent = label ?? value
+    if (disabled) {
+      option.disabled = true
+    }
     if (this.toHTML() === value) {
       option.selected = 'selected'
     }
@@ -618,18 +621,16 @@ Fields.SlideshowDelay = class extends Fields.IntSelect {
 }
 
 const BaseDataLayerSwitcher = class extends Fields.Select {
+  isOptionDisabled(layer) {
+    return !layer.isLoaded() || layer.isDataReadOnly()
+  }
+
   getOptions() {
-    const options = []
-    this.builder._umap.datalayers.reverse().map((datalayer) => {
-      if (
-        datalayer.isLoaded() &&
-        !datalayer.isDataReadOnly() &&
-        datalayer.isBrowsable()
-      ) {
-        options.push([datalayer.id, datalayer.getName()])
-      }
-    })
-    return options
+    return this.builder._umap.layers.tree.browsable().reduce((acc, layer) => {
+      const disabled = this.isOptionDisabled(layer)
+      acc.push([layer.id, layer.getName(true), disabled])
+      return acc
+    }, [])
   }
 
   toHTML() {
@@ -637,12 +638,17 @@ const BaseDataLayerSwitcher = class extends Fields.Select {
   }
 
   toJS() {
-    return this.builder._umap.datalayers[this.value()]
+    return this.builder._umap.layers.get(this.value())
   }
 
   set() {
-    this.builder._umap.lastUsedDataLayer = this.toJS()
-    this.builder.setter(this, this.toJS())
+    const layerId = this.toJS()
+    this.builder.setter(this, layerId)
+    this.onSet(layerId)
+  }
+
+  onSet(layerId) {
+    this.builder._umap.lastUsedDataLayer = this.builder._umap.layers.get(layerId)
   }
 }
 
@@ -654,7 +660,37 @@ Fields.NullableDataLayerSwitcher = class extends BaseDataLayerSwitcher {
   }
 }
 
-Fields.EditableDataLayerSwitcher = class extends BaseDataLayerSwitcher {
+Fields.ParentSwitcher = class extends BaseDataLayerSwitcher {
+  isOptionDisabled(layer) {
+    return super.isOptionDisabled(layer) || layer === this.obj
+  }
+
+  getOptions() {
+    const options = super.getOptions()
+    options.unshift([null, translate('Choose a parent layer')])
+    return options
+  }
+
+  toHTML() {
+    return this.builder.getter(this)
+  }
+
+  toJS() {
+    // Only return the UUID, as the DataLayer.parent setter will
+    // convert it to a DataLayer instance, and this allows to sync
+    // the value to other peers (we cannot sync object instances).
+    return this.value()
+  }
+
+  // Do not set lastUsedDataLayer when setting a parent layer.
+  onSet(layer) {}
+}
+
+Fields.FeatureDataLayerSwitcher = class extends BaseDataLayerSwitcher {
+  isOptionDisabled(layer) {
+    return super.isOptionDisabled(layer) || layer.hasChild()
+  }
+
   getTemplate() {
     return `
       <div class="select-with-actions">

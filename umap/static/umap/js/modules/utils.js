@@ -525,10 +525,12 @@ export function setObjectValue(obj, key, value) {
   if (objectToSet === undefined) return
 
   // Set the value (or delete it)
+  objectToSet[lastKey] = value
+  // This will not work for setter (eg. DataLayer.parentId)
+  // but the line above (setting the property as undefined)
+  // will do the job.
   if (typeof value === 'undefined') {
     delete objectToSet[lastKey]
-  } else {
-    objectToSet[lastKey] = value
   }
 }
 
@@ -690,4 +692,27 @@ export const LatLngIsValid = (latlng) => {
     Number.isFinite(lng) &&
     Math.abs(lng) <= 180
   )
+}
+
+export const toggleLayers = (layers, force) => {
+  // If at least one layer is shown, hide all
+  // otherwise show all
+  let allHidden = force
+  if (force === undefined) {
+    allHidden = !layers.tree.find((layer) => layer.isVisible())
+  }
+  layers.tree.map((layer) => {
+    layer.toggle(allHidden)
+  })
+  return allHidden
+}
+
+export const asciiTree = (layers) => {
+  for (const layer of layers) {
+    console.group(layer.rank, layer.getName())
+    for (const child of layer.layers) {
+      asciiTree(child.layers)
+    }
+    console.groupEnd()
+  }
 }

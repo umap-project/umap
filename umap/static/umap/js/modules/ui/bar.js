@@ -237,15 +237,16 @@ export class BottomBar extends WithTemplate {
     this.elements.layers.addEventListener('change', () => {
       const select = this.elements.layers
       const selected = select.options[select.selectedIndex].value
-      for (const datalayer of this._umap.datalayers.active()) {
-        if (datalayer.properties.inCaption !== false) {
+      for (const layer of this._umap.layers.tree) {
+        if (layer.properties.inCaption !== false) {
           if (!selected) {
-            datalayer.autoVisibility = true
-            if (datalayer.showAtZoom() && !datalayer.isVisible()) {
-              datalayer.show()
+            layer.autoVisibility = true
+            if (layer.showAtZoom() && !layer.isVisible()) {
+              layer.show()
             }
           } else {
-            datalayer.toggle(datalayer.id === selected)
+            const force = layer.id === selected || layer.hasParent(selected)
+            layer.toggle(force)
           }
         }
       }
@@ -266,20 +267,38 @@ export class BottomBar extends WithTemplate {
 
   buildDataLayerSwitcher() {
     this.elements.layers.innerHTML = ''
-    const datalayers = this._umap.datalayers.filter((d) => d.properties.inCaption)
-    if (datalayers.length < 2) {
+    const layers = this._umap.layers.tree.filter((d) => d.properties.inCaption)
+    if (layers.length < 2) {
       this.elements.layers.hidden = true
     } else {
       this.elements.layers.appendChild(
         Utils.loadTemplate(`<option value="">${translate('All layers')}</option>`)
       )
       this.elements.layers.hidden = !this._umap.getProperty('layerSwitcher')
-      const visible = datalayers.filter((datalayer) => datalayer.isVisible())
-      for (const datalayer of datalayers) {
-        const selected = visible.length === 1 && datalayer.isVisible() ? 'selected' : ''
+      const visible = []
+      // The select should reflect the map state:
+      // - if only on layer is visible, this layer should be selected
+      // - if more than one layer are visible and they do not share the same parent,
+      //   "All layers" should be selected
+      // - if all descendants of a layer are visible and no other layer is visible,
+      //  this parent should be selected.
+      const collectVisible = (layer) => {
+        if (layer.isFullVisible()) {
+          visible.push(layer)
+        } else {
+          for (const child of layer.layers.root) {
+            collectVisible(child)
+          }
+        }
+      }
+      for (const rootLayer of layers.copy().root()) {
+        collectVisible(rootLayer)
+      }
+      for (const layer of layers) {
+        const selected = visible.length === 1 && layer === visible[0] ? 'selected' : ''
         this.elements.layers.appendChild(
           Utils.loadTemplate(
-            `<option value="${datalayer.id}" ${selected}>${datalayer.getName()}</option>`
+            `<option value="${layer.id}" ${selected}>${layer.getName(true)}</option>`
           )
         )
       }
@@ -355,7 +374,7 @@ export class EditBar extends WithTemplate {
     this.elements.caption.hidden = this._umap.properties.editMode !== 'advanced'
     this.elements.import.hidden = this._umap.properties.editMode !== 'advanced'
     this.elements.templates.hidden =
-      this._umap.properties.editMode !== 'advanced' && !this._umap.datalayers.count()
+      this._umap.properties.editMode !== 'advanced' && !this._umap.layers.count()
     this.elements.layers.hidden = this._umap.properties.editMode !== 'advanced'
     this.elements.tilelayers.hidden = this._umap.properties.editMode !== 'advanced'
     this.elements.center.hidden = this._umap.properties.editMode !== 'advanced'

@@ -339,8 +339,7 @@ export const LeafletMap = BaseMap.extend({
     } else if (this.options.defaultView === 'latest') {
       this._umap.onceDataLoaded(() => {
         if (!this._umap.hasData()) return
-        const datalayer = this._umap.datalayers.visible()[0]
-        let feature
+        const datalayer = this._umap.layers.tree.visible().first()
         if (datalayer) {
           const feature = datalayer.features.last()
           if (feature) {
