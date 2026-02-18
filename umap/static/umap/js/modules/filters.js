@@ -266,19 +266,12 @@ export class Filters {
     `
     const body = Utils.loadTemplate(template)
     this._listFilters(this._umap, body, translate('Map (all layers)'))
-    this._umap.layers.root.map((datalayer) => {
-      this._listFilters(
-        datalayer,
-        body,
-        `${datalayer.getName()} (${translate('single layer')})`
-      )
-    })
     this._umap.dialog.open({ template: body })
   }
 
   _listFilters(layer, container, title) {
     const template = `
-      <details>
+      <details open>
         <summary>${title}</summary>
         <ul data-ref=ul></ul>
         <div>
@@ -288,15 +281,13 @@ export class Filters {
       </details>
     `
     const [body, { ul, add, childrenContainer }] = Utils.loadTemplateWithRefs(template)
-    if (!layer.filters._parent.fields.size) {
+    if (!layer.fields.size) {
       add.disabled = true
       ul.appendChild(
         Utils.loadTemplate(
           `<li>${translate('Add a field prior to create a filter.')}</li>`
         )
       )
-    } else if (!layer.filters._parent.fields.isDefault()) {
-      body.open = true
     }
     layer.filters.available.forEach((filter, fieldKey) => {
       const [li, { edit, remove }] = Utils.loadTemplateWithRefs(
@@ -323,10 +314,8 @@ export class Filters {
       })
     })
     add.addEventListener('click', () => layer.filters.createFilterForm())
-    if (layer.hasChild?.()) {
-      for (const child of layer.layers.root) {
-        this._listFilters(child, childrenContainer, child.getName())
-      }
+    for (const child of layer.layers.root) {
+      this._listFilters(child, childrenContainer, child.getName())
     }
     const onReorder = (src, dst) => {
       const orderedKeys = Array.from(ul.querySelectorAll('li')).map(
