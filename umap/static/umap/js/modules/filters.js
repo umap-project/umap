@@ -265,10 +265,10 @@ export class Filters {
       </div>
     `
     const body = Utils.loadTemplate(template)
-    this._listFilters(this._umap.filters, body, translate('Map (all layers)'))
-    this._umap.layers.tree.map((datalayer) => {
+    this._listFilters(this._umap, body, translate('Map (all layers)'))
+    this._umap.layers.root.map((datalayer) => {
       this._listFilters(
-        datalayer.filters,
+        datalayer,
         body,
         `${datalayer.getName()} (${translate('single layer')})`
       )
@@ -276,28 +276,29 @@ export class Filters {
     this._umap.dialog.open({ template: body })
   }
 
-  _listFilters(filters, container, title) {
+  _listFilters(layer, container, title) {
     const template = `
       <details>
         <summary>${title}</summary>
         <ul data-ref=ul></ul>
+        <div data-ref=childrenContainer></div>
         <div>
           <button type="button" data-ref=add>${translate('Add filter')}</button>
         </div>
       </details>
     `
-    const [body, { ul, add }] = Utils.loadTemplateWithRefs(template)
-    if (!filters._parent.fields.size) {
+    const [body, { ul, add, childrenContainer }] = Utils.loadTemplateWithRefs(template)
+    if (!layer.filters._parent.fields.size) {
       add.disabled = true
       ul.appendChild(
         Utils.loadTemplate(
           `<li>${translate('Add a field prior to create a filter.')}</li>`
         )
       )
-    } else if (!filters._parent.fields.isDefault()) {
+    } else if (!layer.filters._parent.fields.isDefault()) {
       body.open = true
     }
-    filters.available.forEach((filter, fieldKey) => {
+    layer.filters.available.forEach((filter, fieldKey) => {
       const [li, { edit, remove }] = Utils.loadTemplateWithRefs(
         `<li class="orderable with-toolbox" data-fieldkey="${fieldKey}">
           <span>
@@ -312,33 +313,38 @@ export class Filters {
       )
       ul.appendChild(li)
       remove.addEventListener('click', () => {
-        filters.remove(fieldKey)
-        filters._parent
+        layer.filters.remove(fieldKey)
+        layer.filters._parent
           .edit()
           .then((panel) => panel.scrollTo('details#fields-management'))
       })
       edit.addEventListener('click', () => {
-        filters.createFilterForm(fieldKey)
+        layer.filters.createFilterForm(fieldKey)
       })
     })
-    add.addEventListener('click', () => filters.createFilterForm())
+    add.addEventListener('click', () => layer.filters.createFilterForm())
+    if (layer.hasChild?.()) {
+      for (const child of layer.layers.root) {
+        this._listFilters(child, childrenContainer, child.getName())
+      }
+    }
     const onReorder = (src, dst, initialIndex, finalIndex) => {
       const orderedKeys = Array.from(ul.querySelectorAll('li')).map(
         (el) => el.dataset.fieldkey
       )
-      const oldValue = Utils.CopyJSON(filters._parent.properties.filters)
-      const copy = filters.available.entries().reduce((acc, [key, filter]) => {
+      const oldValue = Utils.CopyJSON(layer.filters._parent.properties.filters)
+      const copy = layer.filters.available.entries().reduce((acc, [key, filter]) => {
         acc[key] = filter.dumps()
         return acc
       }, {})
 
-      filters.available.clear()
+      layer.filters.available.clear()
       for (const fieldKey of orderedKeys) {
-        filters.add({ ...copy[fieldKey] })
+        layer.filters.add({ ...copy[fieldKey] })
       }
-      filters._parent.sync.update(
+      layer.filters._parent.sync.update(
         'properties.filters',
-        filters._parent.properties.filters,
+        layer.filters._parent.properties.filters,
         oldValue
       )
     }
@@ -688,7 +694,7 @@ Fields.FilterTargetSelect = class extends Fields.Select {
         }
         options.push([
           `layer:${datalayer.id}`,
-          `${datalayer.getName()}  (${translate('single layer')})`,
+          `${datalayer.getName(true)} (${translate('single layer')})`,
         ])
       }
     })
