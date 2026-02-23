@@ -35,7 +35,7 @@ DATALAYER_DATA1 = {
             "geometry": {"type": "Point", "coordinates": [3.55957, 49.767074]},
         },
     ],
-    "_umap_options": {
+    "properties": {
         "name": "Calque 1",
     },
 }
@@ -65,7 +65,7 @@ DATALAYER_DATA2 = {
             "geometry": {"type": "Point", "coordinates": [4.372559, 47.945786]},
         },
     ],
-    "_umap_options": {
+    "properties": {
         "name": "Calque 2",
     },
 }
@@ -91,7 +91,7 @@ DATALAYER_DATA3 = {
             },
         },
     ],
-    "_umap_options": {"name": "Calque 2", "browsable": False},
+    "properties": {"name": "Calque 2", "browsable": False},
 }
 
 
@@ -612,7 +612,7 @@ def test_filter_with_enum(live_server, openmap, page):
                 "geometry": {"type": "Point", "coordinates": [0.856934, 45.290347]},
             },
         ],
-        "_umap_options": {
+        "properties": {
             "name": "Calque 1",
             "fields": [{"key": "products", "type": "Enum"}],
         },
@@ -622,7 +622,7 @@ def test_filter_with_enum(live_server, openmap, page):
         f"{live_server.url}{openmap.get_absolute_url()}?edit&onLoadPanel=datafilters#6/48.948/1.670"
     )
     page.get_by_role("button", name="Manage filters").click()
-    page.get_by_role("button", name="Add filter").click()
+    page.get_by_role("button", name="Add filter").nth(1).click()
     page.get_by_label("Filter on").select_option("products")
     page.get_by_role("button", name="OK").click()
     expect(

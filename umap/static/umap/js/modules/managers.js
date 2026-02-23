@@ -98,6 +98,12 @@ class LayerCollection {
     return Array.from(this).length
   }
 
+  get(id) {
+    for (const item of this) {
+      if (item.id === id) return item
+    }
+  }
+
   get length() {
     return Array.from(this).length
   }
@@ -137,22 +143,9 @@ export class LayerManager {
     yield* this.root
   }
 
-  get(id) {
-    if (this._children.has(id)) return this._children.get(id)
-    for (const child of this._children.values()) {
-      if (child.layers.has(id)) return child.layers.get(id)
-    }
-  }
-
-  has(id) {
-    if (this._children.has(id)) return true
-    for (const child of this._children.values()) {
-      if (child.layers.has(id)) return true
-    }
-  }
-
   add(layer) {
     layer.rank ??= this._children.size
+    const parent = layer.parent || layer._umap
     this._children.set(layer.id, layer)
   }
 
@@ -180,10 +173,12 @@ export class LayerManager {
   }
 
   delete(layer) {
-    this._children.delete(layer.id)
-    let rank = 0
-    for (const item of this.root.reverse()) {
-      item.rank = rank++
+    if (this._children.has(layer.id)) {
+      this._children.delete(layer.id)
+      let rank = 0
+      for (const item of this.root.reverse()) {
+        item.rank = rank++
+      }
     }
   }
 

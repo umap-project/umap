@@ -220,6 +220,10 @@ export default class Umap {
     window.onbeforeunload = () => (this.editEnabled && this.isDirty) || null
   }
 
+  get name() {
+    return this.properties.name
+  }
+
   get isDirty() {
     return this.sync._undoManager.isDirty()
   }
@@ -369,14 +373,14 @@ export default class Umap {
         dataUrl = decodeURIComponent(dataUrl)
         dataUrl = this.renderUrl(dataUrl)
         dataUrl = this.proxyUrl(dataUrl)
-        const datalayer = this.createDirtyDataLayer()
+        const datalayer = this.createDataLayer()
         await datalayer
           .importFromUrl(dataUrl, dataFormat)
           .then(() => datalayer.zoomTo())
       }
     } else if (data) {
       data = decodeURIComponent(data)
-      const datalayer = this.createDirtyDataLayer()
+      const datalayer = this.createDataLayer()
       await datalayer.importRaw(data, dataFormat).then(() => datalayer.zoomTo())
     }
   }
@@ -621,9 +625,9 @@ export default class Umap {
 
   async initDataLayers(datalayers) {
     datalayers = datalayers || this.properties.datalayers
-    for (const options of datalayers) {
+    for (const spec of datalayers) {
       // `false` to not propagate syncing elements served from uMap
-      const datalayer = this.createDataLayer(options, false)
+      const datalayer = this.createDataLayer(spec, false)
     }
     this.datalayersLoaded = true
     this.fire('datalayersloaded')
@@ -640,28 +644,39 @@ export default class Umap {
     this.fire('dataloaded')
   }
 
-  createDataLayer(properties = {}, sync = true) {
-    properties.name =
-      properties.name || `${translate('Layer')} ${this.layers.tree.count() + 1}`
-    const datalayer = new DataLayer(this, this._leafletMap, properties)
+  createDataLayer(spec = {}, sync = true) {
+    if (!spec.properties && spec._umap_options) {
+      spec.properties = spec._umap_options
+    }
+    if (!spec.properties && spec._storage) {
+      spec.properties = spec._storage
+    }
+    delete spec._storage
+    delete spec._umap_options
+
+    const datalayer = new DataLayer(this, this._leafletMap, spec)
+    if (spec.features) {
+      datalayer.fromUmapGeoJSON(spec)
+    }
 
     if (sync !== false) {
-      datalayer.sync.upsert(datalayer.properties)
+      datalayer.sync.upsert({
+        id: datalayer.id,
+        rank: datalayer.rank,
+        parent: datalayer.parentId,
+        properties: datalayer.properties,
+      })
     }
-    for (const childProps of properties.layers || []) {
-      childProps.parent = datalayer.id
-      this.createDataLayer(childProps, sync)
+    for (const childSpec of spec.layers || []) {
+      childSpec.parent = datalayer.id
+      this.createDataLayer(childSpec, sync)
     }
+
     return datalayer
   }
 
-  // TODO: remove me in favor of createDataLayer
-  createDirtyDataLayer(properties) {
-    return this.createDataLayer(properties, true)
-  }
-
   newDataLayer() {
-    const datalayer = this.createDirtyDataLayer({})
+    const datalayer = this.createDataLayer()
     datalayer.edit()
   }
 
@@ -1534,7 +1549,7 @@ export default class Umap {
       layer.show()
       return layer
     }
-    return this.createDirtyDataLayer()
+    return this.createDataLayer()
   }
 
   eachFeature(callback) {
@@ -1558,8 +1573,9 @@ export default class Umap {
   async editDatalayers() {
     if (!this.editEnabled) return
     const onReorder = async (moved, target, dragMode) => {
-      const movedLayer = this.layers.get(moved.dataset.id)
-      const targetLayer = this.layers.get(target.dataset.id)
+      // TODO: ask target parent to do the reorder
+      const movedLayer = this.layers.tree.get(moved.dataset.id)
+      const targetLayer = this.layers.tree.get(target.dataset.id)
       this.sync.startBatch()
       if (dragMode === 'above') {
         const parent = targetLayer.parent || this
@@ -1694,7 +1710,10 @@ export default class Umap {
     if (type === 'umap') {
       this.importUmapFile(file, 'umap')
     } else {
-      if (!layer) layer = this.createDirtyDataLayer({ name: file.name })
+      if (!layer) {
+        const properties = { name: file.name }
+        layer = this.createDataLayer({ properties })
+      }
       layer.importFromFile(file, type)
     }
   }
@@ -1723,24 +1742,14 @@ export default class Umap {
     if (importedData.geometry) {
       this.properties.center = this._leafletMap.latLng(importedData.geometry)
     }
-    const importLayer = (geojson) => {
-      if (!geojson._umap_options && geojson._storage) {
-        geojson._umap_options = geojson._storage
+    for (const spec of importedData.layers) {
+      // Never trust an id at this stage
+      delete spec?.id
+      delete spec.properties?.id
+      if (spec.properties?.iconUrl?.startsWith('/')) {
+        spec.properties.iconUrl = remoteOrigin + spec.properties.iconUrl
       }
-      delete geojson._storage
-      delete geojson._umap_options?.id // Never trust an id at this stage
-      if (geojson._umap_options?.iconUrl?.startsWith('/')) {
-        geojson._umap_options.iconUrl = remoteOrigin + geojson._umap_options.iconUrl
-      }
-      const datalayer = this.createDirtyDataLayer(geojson._umap_options)
-      datalayer.fromUmapGeoJSON(geojson)
-      for (const childProps of geojson.layers || []) {
-        childProps.parent = datalayer.id
-        importLayer(childProps)
-      }
-    }
-    for (const geojson of importedData.layers) {
-      importLayer(geojson)
+      const datalayer = this.createDataLayer(spec)
     }
 
     // For now render->propagate expect a `properties.` prefix.

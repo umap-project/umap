@@ -41,11 +41,10 @@ const LAYER_MAP = LAYER_TYPES.reduce((acc, klass) => {
 }, {})
 
 export class DataLayer {
-  constructor(umap, leafletMap, data = {}) {
+  constructor(umap, leafletMap, spec = {}) {
     this._umap = umap
     this.sync = umap.syncEngine.proxy(this)
     this.features = new FeatureManager()
-    this._propertiesIndex = []
     this.layers = new LayerManager()
 
     this._leafletMap = leafletMap
@@ -53,24 +52,29 @@ export class DataLayer {
       displayOnLoad: true,
       inCaption: true,
       browsable: true,
-      editMode: 'advanced',
     }
+    this.editMode = spec.editMode || 'advanced'
 
     this.isDeleted = false
-    this._referenceVersion = data._referenceVersion
+    this.referenceVersion = spec.referenceVersion
     // Do not save it later.
-    delete data._referenceVersion
-    data.id = data.id || crypto.randomUUID()
+    delete spec.referenceVersion
+    this._id = spec.id || crypto.randomUUID()
+    this._rank = spec.rank
+    this.old_id = spec.old_id
 
-    this.setProperties(data)
+    delete spec.properties?.rank
+    delete spec.properties?.id
+    delete spec.properties?.editMode
+    this.setProperties(spec.properties)
+    this.properties.name = this.properties.name || this.defaultName()
+
     this.rootPane = this._leafletMap.getPane('overlayPane')
     this.parentPane = this.rootPane
-    if (this.properties.parent) {
-      this.parentId = this.properties.parent
+    if (spec.parent) {
+      this.parentId = spec.parent
       if (!this.parent) {
-        console.error(
-          `Parent defined but not found: ${this.properties.parent} (self: ${this.id})`
-        )
+        console.error(`Parent defined but not found: ${spec.parent} (self: ${this.id})`)
       }
       this.parentPane = this.parent.pane
     } else {
@@ -93,7 +97,7 @@ export class DataLayer {
       this.properties.toZoom = this.properties.remoteData.to
       delete this.properties.remoteData.to
     }
-    this.permissions = new DataLayerPermissions(this._umap, this)
+    this.permissions = new DataLayerPermissions(this._umap, this, spec.permissions)
 
     this._needsFetch = this.createdOnServer || this.isRemoteLayer()
     this.fields = new Fields(this, this._umap.dialog)
@@ -112,21 +116,21 @@ export class DataLayer {
   }
 
   get id() {
-    return this.properties.id
+    return this._id
   }
 
   get createdOnServer() {
-    return Boolean(this._referenceVersion)
+    return Boolean(this.referenceVersion)
   }
 
   get rank() {
-    return this.properties.rank
+    return this._rank
   }
 
   set rank(value) {
     if (value === this.rank) return
     const oldRank = this.rank
-    this.properties.rank = value
+    this._rank = value
     this.sync.update('rank', value, oldRank, { undo: false })
   }
 
@@ -139,6 +143,10 @@ export class DataLayer {
       subject: 'datalayer',
       metadata: { id: this.id },
     }
+  }
+
+  defaultName() {
+    return `${translate('Layer')} ${this._umap.layers.tree.count() + 1}`
   }
 
   render(fields, builder) {
@@ -214,10 +222,9 @@ export class DataLayer {
       if (this._umap.datalayersFromQueryString) {
         const datalayerIds = this._umap.datalayersFromQueryString
         this._autoVisibility = datalayerIds.includes(this.id.toString())
-        if (this.properties.old_id) {
+        if (this.old_id) {
           this._autoVisibility =
-            this._autoVisibility ||
-            datalayerIds.includes(this.properties.old_id.toString())
+            this._autoVisibility || datalayerIds.includes(this.old_id.toString())
         }
       } else {
         this._autoVisibility = this.properties.displayOnLoad
@@ -309,12 +316,6 @@ export class DataLayer {
   }
 
   async fromUmapGeoJSON(geojson) {
-    if (geojson._storage) {
-      // Retrocompat
-      geojson._umap_options = geojson._storage
-      delete geojson._storage
-    }
-    if (geojson._umap_options) this.setProperties(geojson._umap_options)
     if (this.isRemoteLayer()) {
       await this.fetchRemoteData()
     } else {
@@ -386,7 +387,7 @@ export class DataLayer {
     return !this._needsFetch
   }
 
-  setProperties(properties) {
+  setProperties(properties = {}) {
     delete properties.geojson
     this.properties = Utils.CopyJSON(this.defaultProperties) // Start from fresh.
     this.updateProperties(properties)
@@ -693,7 +694,6 @@ export class DataLayer {
     const oldValue = Utils.CopyJSON(this.umapGeoJSON())
     // TODO merge datalayer del and features del in same
     // batch
-    this.parent = undefined
     this.clear()
     for (const child of this.layers.root) {
       child.del(sync, false)
@@ -730,7 +730,7 @@ export class DataLayer {
     properties.name = translate('Clone of {name}', { name: this.properties.name })
     delete properties.id
     const geojson = Utils.CopyJSON(this.umapGeoJSON())
-    const datalayer = this._umap.createDirtyDataLayer(properties)
+    const datalayer = this._umap.createDataLayer({ properties })
     datalayer.fromGeoJSON(geojson)
     return datalayer
   }
@@ -793,6 +793,8 @@ export class DataLayer {
   }
 
   set parent(other) {
+    // TODO what if we remove the parent ?
+    // IT should be added to uMap layers, but is it ?
     if (other === this._parent) return
     const parent = this.parent || this._umap
     parent.layers.delete(this)
@@ -807,7 +809,7 @@ export class DataLayer {
   }
 
   set parentId(uuid) {
-    this.parent = this._umap.layers.get(uuid)
+    this.parent = this._umap.layers.tree.get(uuid)
   }
 
   _editMetadata(container) {
@@ -1164,12 +1166,17 @@ export class DataLayer {
         if (!error) {
           if (geojson._storage) {
             // Retrocompat.
-            geojson._umap_options = geojson._storage
+            geojson.properties = geojson._storage
             delete geojson._storage
           }
           if (geojson._umap_options) {
+            // Retrocompat.
+            geojson.properties = geojson._umap_options
+            delete geojson._umap_options
+          }
+          if (geojson.properties) {
             const oldProperties = Utils.CopyJSON(this.properties)
-            this.setProperties(geojson._umap_options)
+            this.setProperties(geojson.properties)
             this.sync.update('properties', this.properties, oldProperties)
           }
           this.empty()
@@ -1294,8 +1301,10 @@ export class DataLayer {
   umapGeoJSON() {
     const features = this.isRemoteLayer() ? [] : this.features.all()
     const geojson = this._umap.formatter.toFeatureCollection(features)
-    geojson._umap_options = this.properties
-    delete geojson._umap_options.layers
+    geojson.properties = this.properties
+    geojson.id = this.id
+    geojson.rank = this.rank
+    geojson.parent = this.parentId
     return geojson
   }
 
@@ -1305,7 +1314,7 @@ export class DataLayer {
 
   isReadOnly() {
     // isReadOnly must return true if unset
-    return this.properties.editMode === 'disabled'
+    return this.editMode === 'disabled'
   }
 
   isDataReadOnly() {
@@ -1314,9 +1323,9 @@ export class DataLayer {
   }
 
   setReferenceVersion({ response, sync }) {
-    this._referenceVersion = response.headers.get('X-Datalayer-Version')
+    this.referenceVersion = response.headers.get('X-Datalayer-Version')
     if (sync) {
-      this.sync.update('_referenceVersion', this._referenceVersion, null, {
+      this.sync.update('referenceVersion', this.referenceVersion, null, {
         undo: false,
       })
     }
@@ -1324,9 +1333,6 @@ export class DataLayer {
 
   prepareProperties() {
     const properties = Utils.CopyJSON(this.properties)
-    delete properties.parent
-    delete properties.permissions
-    delete properties.layers
     return JSON.stringify(properties)
   }
 
@@ -1348,8 +1354,8 @@ export class DataLayer {
       pk: this.id,
       created: this.createdOnServer,
     })
-    const headers = this._referenceVersion
-      ? { 'X-Datalayer-Reference': this._referenceVersion }
+    const headers = this.referenceVersion
+      ? { 'X-Datalayer-Reference': this.referenceVersion }
       : {}
     const status = await this._trySave(saveURL, headers, formData)
     return status
@@ -1386,8 +1392,8 @@ export class DataLayer {
         delete data.geojson
       }
       delete data.id
-      delete data._referenceVersion
-      this.updateProperties(data)
+      delete data.referenceVersion
+      this.updateProperties(data.properties)
 
       this.setReferenceVersion({ response, sync: true })
 
@@ -1408,6 +1414,10 @@ export class DataLayer {
   commitDelete() {
     const parent = this.parent || this._umap
     parent.layers.delete(this.id)
+  }
+
+  get name() {
+    return this.getName()
   }
 
   getName(padded = false) {

@@ -62,7 +62,7 @@ def test_should_use_custom_label_key_in_popup_default_template(live_server, map,
     data["features"][0]["properties"] = {
         "libellé": "my custom label",
     }
-    data["_umap_options"] = {"labelKey": "libellé"}
+    data["properties"] = {"labelKey": "libellé"}
     DataLayerFactory(map=map, data=data)
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     page.locator(".leaflet-marker-icon").click()

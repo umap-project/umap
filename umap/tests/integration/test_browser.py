@@ -62,7 +62,7 @@ DATALAYER_DATA = {
             },
         },
     ],
-    "_umap_options": {
+    "properties": {
         "displayOnLoad": True,
         "browsable": True,
         "name": "Calque 1",
@@ -159,7 +159,7 @@ def test_filter_works_with_variable_in_labelKey(live_server, page, map):
     map.settings["properties"]["onLoadPanel"] = "databrowser"
     map.save()
     data = deepcopy(DATALAYER_DATA)
-    data["_umap_options"]["labelKey"] = "{name} ({bar})"
+    data["properties"]["labelKey"] = "{name} ({bar})"
     DataLayerFactory(map=map, data=data)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#2/19/-2")
     expect(page.get_by_title("Features in this layer: 3")).to_be_visible()
@@ -492,7 +492,7 @@ def test_main_toolbox_toggle_all_layers(live_server, map, page):
                 "geometry": {"type": "Point", "coordinates": [3.35, 46.95]},
             },
         ],
-        "_umap_options": {"displayOnLoad": False},
+        "properties": {"displayOnLoad": False},
     }
     DataLayerFactory(map=map, data=data, settings={"displayOnLoad": False})
     page.goto(f"{live_server.url}{map.get_absolute_url()}#10/46.93/3.33")

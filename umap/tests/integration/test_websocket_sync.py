@@ -235,7 +235,6 @@ def test_websocket_connection_can_sync_datalayer_properties(
     # Layer addition, name and type are synced
     peerA.get_by_role("button", name="Manage layers").click()
     peerA.get_by_role("button", name="Add a layer").click()
-    peerA.locator('input[name="name"]').click()
     peerA.locator('input[name="name"]').fill("synced layer!")
     peerA.locator('select[name="type"]').select_option("Choropleth")
     peerA.locator("body").press("Escape")
@@ -470,7 +469,7 @@ def test_should_sync_datalayers_delete(
                 "geometry": {"type": "Point", "coordinates": [0.065918, 48.385442]},
             },
         ],
-        "_umap_options": {
+        "properties": {
             "name": "datalayer 1",
         },
     }
@@ -485,7 +484,7 @@ def test_should_sync_datalayers_delete(
                 "geometry": {"type": "Point", "coordinates": [3.55957, 49.767074]},
             },
         ],
-        "_umap_options": {
+        "properties": {
             "name": "datalayer 2",
         },
     }

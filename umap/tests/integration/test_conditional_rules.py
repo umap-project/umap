@@ -38,7 +38,7 @@ DATALAYER_DATA1 = {
             "geometry": {"type": "Point", "coordinates": [3.55957, 49.767074]},
         },
     ],
-    "_umap_options": {
+    "properties": {
         "name": "Calque 1",
     },
 }
@@ -82,7 +82,7 @@ DATALAYER_DATA2 = {
             "geometry": {"type": "Point", "coordinates": [4.1, 47.3]},
         },
     ],
-    "_umap_options": {
+    "properties": {
         "name": "Calque 2",
     },
 }
@@ -414,7 +414,7 @@ def test_rules_from_datalayer(live_server, page, map):
     ]
     map.save()
     data = deepcopy(DATALAYER_DATA1)
-    data["_umap_options"]["rules"] = [
+    data["properties"]["rules"] = [
         {"condition": "mytype=odd", "properties": {"color": "aliceblue"}}
     ]
     DataLayerFactory(map=map, data=data)
@@ -448,7 +448,7 @@ def test_rules_in_caption(live_server, page, map):
     map.settings["properties"]["onLoadPanel"] = "caption"
     map.save()
     data = deepcopy(DATALAYER_DATA1)
-    data["_umap_options"]["rules"] = [
+    data["properties"]["rules"] = [
         {
             "condition": "myboolean=true",
             "name": "Rule shown also once",

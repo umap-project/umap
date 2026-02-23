@@ -311,7 +311,7 @@ class Map(NamedModel):
                 datalayer.settings.pop("parent", None)
                 layer["id"] = datalayer.pk
                 layer["parent"] = datalayer.parent.pk if datalayer.parent else None
-                layer["_umap_options"] = datalayer.settings
+                layer["properties"] = datalayer.settings
             datalayers.append(layer)
         umapjson["layers"] = layers_tree(datalayers, keep_ids=False)
         return umapjson
@@ -545,26 +545,31 @@ class DataLayer(NamedModel):
         self.geojson.storage.onDatalayerDelete(self)
         return super().delete(**kwargs)
 
+    def _fallback_properties_from_file(self):
+        # For datalayers created before settings were saved in DB
+        try:
+            data = json.loads(self.geojson.read().decode())
+        except FileNotFoundError:
+            data = {}
+        metadata = data.get("_umap_options")
+        if not metadata:
+            metadata = {
+                "name": self.name,
+                "displayOnLoad": self.display_on_load,
+            }
+        # Save it to prevent file reading at each map load.
+        self.settings = metadata
+        # Do not update the modified_at.
+        self.save(update_fields=["settings"])
+        return metadata
+
     def metadata(self, request=None):
         # Retrocompat: minimal settings for maps not saved after settings property
         # has been introduced
-        metadata = self.settings
-        if not metadata:
-            # Fallback to file for old datalayers.
-            try:
-                data = json.loads(self.geojson.read().decode())
-            except FileNotFoundError:
-                data = {}
-            metadata = data.get("_umap_options")
-            if not metadata:
-                metadata = {
-                    "name": self.name,
-                    "displayOnLoad": self.display_on_load,
-                }
-            # Save it to prevent file reading at each map load.
-            self.settings = metadata
-            # Do not update the modified_at.
-            self.save(update_fields=["settings"])
+        properties = self.settings
+        if not properties:
+            properties = self._fallback_properties_from_file()
+        metadata = {"properties": properties}
         if self.old_id:
             metadata["old_id"] = self.old_id
         metadata["id"] = self.pk
@@ -572,7 +577,7 @@ class DataLayer(NamedModel):
         metadata["parent"] = self.parent.pk if self.parent else None
         metadata["permissions"] = {"edit_status": self.edit_status}
         metadata["editMode"] = "advanced" if self.can_edit(request) else "disabled"
-        metadata["_referenceVersion"] = self.reference_version
+        metadata["referenceVersion"] = self.reference_version
         return metadata
 
     def clone(self, map_inst=None):
