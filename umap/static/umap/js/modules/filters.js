@@ -707,7 +707,7 @@ Fields.FilterTargetSelect = class extends Fields.Select {
     if (type === 'map') {
       return this.builder.properties.umap
     }
-    return this.builder.properties.umap.layers.get(id)
+    return this.builder.properties.umap.layers.tree.get(id)
   }
 }
 

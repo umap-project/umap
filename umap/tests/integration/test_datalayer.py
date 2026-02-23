@@ -100,7 +100,7 @@ def test_should_honour_color_variable(live_server, map, page):
                 },
             },
         ],
-        "_umap_options": {
+        "properties": {
             "name": "Calque 2",
             "color": "{mycolor}",
             "fillColor": "{mycolor}",

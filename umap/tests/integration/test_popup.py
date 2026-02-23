@@ -24,7 +24,7 @@ OSM_DATA = {
             "id": "AzMjk",
         },
     ],
-    "_umap_options": {
+    "properties": {
         "popupTemplate": "OSM",
     },
 }
@@ -58,7 +58,7 @@ def test_table_popup(live_server, map, page):
                 "id": "AzMjk",
             },
         ],
-        "_umap_options": {
+        "properties": {
             "popupTemplate": "Table",
             "fields": [
                 {"key": "url", "type": "String"},

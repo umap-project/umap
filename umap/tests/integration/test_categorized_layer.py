@@ -33,7 +33,7 @@ def test_basic_categorized_map_with_custom_brewer(openmap, live_server, page):
     data = json.loads(path.read_text())
 
     # Change brewer at load
-    data["_umap_options"]["categorized"]["brewer"] = "Spectral"
+    data["properties"]["categorized"]["brewer"] = "Spectral"
     DataLayerFactory(data=data, map=openmap)
 
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}#13/48.4378/3.3043")
@@ -76,10 +76,10 @@ def test_basic_categorized_map_with_custom_categories(openmap, live_server, page
     data = json.loads(path.read_text())
 
     # Change categories at load
-    data["_umap_options"]["categorized"]["categories"] = (
+    data["properties"]["categorized"]["categories"] = (
         "unclassified,track,service,residential,tertiary,secondary"
     )
-    data["_umap_options"]["categorized"]["mode"] = "manual"
+    data["properties"]["categorized"]["mode"] = "manual"
     DataLayerFactory(data=data, map=openmap)
 
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}#13/48.4378/3.3043")

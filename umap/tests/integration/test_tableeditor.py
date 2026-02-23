@@ -59,7 +59,7 @@ DATALAYER_DATA = {
             "id": "poin3",
         },
     ],
-    "_umap_options": {
+    "properties": {
         "name": "Calque 2",
     },
 }

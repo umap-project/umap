@@ -171,10 +171,11 @@ export default class Importer extends Utils.WithTemplate {
   }
 
   get layer() {
+    const properties = { name: this.layerName }
     return (
       this._layer ||
-      this._umap.layers.get(this.layerId) ||
-      this._umap.createDirtyDataLayer({ name: this.layerName })
+      this._umap.layers.tree.get(this.layerId) ||
+      this._umap.createDataLayer({ properties })
     )
   }
 

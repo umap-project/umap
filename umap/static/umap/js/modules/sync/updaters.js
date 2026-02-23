@@ -11,7 +11,7 @@ class BaseUpdater {
   }
 
   getDataLayerFromID(layerId) {
-    const datalayer = this._umap.layers.get(layerId)
+    const datalayer = this._umap.layers.tree.all().get(layerId)
     if (!datalayer) throw new Error(`Can't find datalayer with id ${layerId}`)
     return datalayer
   }
@@ -42,12 +42,13 @@ export class DataLayerUpdater extends BaseUpdater {
     // Upsert only happens when a new datalayer is created.
     try {
       const datalayer = this.getDataLayerFromID(value.id)
-      // We must be in a "redo"
+      // We must be in a redo of a create
+      // or undo of a delete
       datalayer.isDeleted = false
       datalayer.show()
       datalayer.dataChanged()
     } catch {
-      const datalayer = this._umap.createDataLayer(value._umap_options || value, false)
+      const datalayer = this._umap.createDataLayer(value, false)
       if (value.features) {
         // FIXME: this will create new stages in the undoStack, thus this will empty
         // the redoStack

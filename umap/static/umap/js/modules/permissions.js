@@ -280,13 +280,13 @@ export class MapPermissions {
 }
 
 export class DataLayerPermissions {
-  constructor(umap, datalayer) {
+  constructor(umap, datalayer, permissions) {
     this._umap = umap
     this.properties = Object.assign(
       {
         edit_status: null,
       },
-      datalayer.properties.permissions
+      permissions
     )
 
     this.datalayer = datalayer
@@ -335,17 +335,6 @@ export class DataLayerPermissions {
       {},
       formData
     )
-    if (!error) {
-      this.commit()
-      return true
-    }
-  }
-
-  commit() {
-    this.datalayer.properties.permissions = Object.assign(
-      {},
-      this.datalayer.properties.permissions,
-      this.properties
-    )
+    return !error
   }
 }

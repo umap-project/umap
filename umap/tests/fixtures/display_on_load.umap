@@ -47,7 +47,7 @@
           }
         }
       ],
-      "_umap_options": {
+      "properties": {
         "displayOnLoad": true,
         "inCaption": true,
         "browsable": true,
@@ -71,7 +71,7 @@
           }
         }
       ],
-      "_umap_options": {
+      "properties": {
         "displayOnLoad": false,
         "inCaption": true,
         "browsable": true,

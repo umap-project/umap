@@ -24,7 +24,7 @@ DATALAYER_DATA = {
             "properties": {"_umap_options": {"color": "DarkCyan"}, "name": "Here"},
         }
     ],
-    "_umap_options": {"displayOnLoad": True, "name": "FooBarFoo"},
+    "properties": {"displayOnLoad": True, "name": "FooBarFoo"},
 }
 FIXTURES = Path(__file__).parent.parent / "fixtures"
 

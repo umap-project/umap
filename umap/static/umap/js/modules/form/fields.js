@@ -638,7 +638,7 @@ const BaseDataLayerSwitcher = class extends Fields.Select {
   }
 
   toJS() {
-    return this.builder._umap.layers.get(this.value())
+    return this.builder._umap.layers.tree.get(this.value())
   }
 
   set() {
@@ -648,7 +648,7 @@ const BaseDataLayerSwitcher = class extends Fields.Select {
   }
 
   onSet(layerId) {
-    this.builder._umap.lastUsedDataLayer = this.builder._umap.layers.get(layerId)
+    this.builder._umap.lastUsedDataLayer = this.builder._umap.layers.tree.get(layerId)
   }
 }
 

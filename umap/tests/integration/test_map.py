@@ -224,7 +224,7 @@ def test_feature_in_query_string_has_precedence_over_onloadpanel(
                 },
             }
         ],
-        "_umap_options": {"popupShape": "Panel"},
+        "properties": {"popupShape": "Panel"},
     }
     DataLayerFactory(map=map, data=data)
     page.goto(f"{live_server.url}{map.get_absolute_url()}?feature=FooBar")

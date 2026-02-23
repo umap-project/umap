@@ -41,7 +41,7 @@ def test_get_with_public_mode(client, settings, datalayer, map):
     assert response["Cache-Control"] is not None
     assert "Content-Encoding" not in response
     j = json.loads(response.content.decode())
-    assert "_umap_options" in j
+    assert "properties" in j
     assert "features" in j
     assert j["type"] == "FeatureCollection"
 
@@ -139,7 +139,7 @@ def test_update(client, datalayer, map, post_data):
     j = json.loads(response.content.decode())
     assert "id" in j
     assert str(datalayer.pk) == j["id"]
-    assert j["browsable"] is True
+    assert j["properties"]["browsable"] is True
     assert Path(modified_datalayer.geojson.path).exists()
 
 
@@ -524,7 +524,7 @@ def reference_data():
                 "properties": {"_umap_options": {}, "name": "marker"},
             },
         ],
-        "_umap_options": {
+        "properties": {
             "displayOnLoad": True,
             "name": "new name",
             "id": 1668,

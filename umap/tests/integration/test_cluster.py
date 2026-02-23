@@ -8,7 +8,7 @@ pytestmark = pytest.mark.django_db
 
 DATALAYER_DATA = {
     "type": "FeatureCollection",
-    "_umap_options": {
+    "properties": {
         "name": "Calque 1",
         "type": "Cluster",
         "cluster": {},
