@@ -34,7 +34,7 @@
             {% endfor %}
           </ul>
         {% endif %}
-        <form id="login_form" action="{% url "login" %}" method="post">
+        <form id="login_form" action="{{ LOGIN_URL }}" method="post">
           {% csrf_token %}
           {{ form.username.errors }}
           <input type="text"

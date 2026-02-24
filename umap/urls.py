@@ -232,3 +232,12 @@ urlpatterns += (
 if settings.DEBUG and settings.MEDIA_ROOT:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += staticfiles_urlpatterns()
+
+try:
+    from django_yunohost_integration.yunohost_utils import SSOwatLoginRedirectView
+except ImportError:
+    pass
+else:
+    urlpatterns.append(
+        path("sso-login/", SSOwatLoginRedirectView.as_view(), name="ssowat-login"),
+    )
