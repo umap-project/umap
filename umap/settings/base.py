@@ -160,6 +160,7 @@ WSGI_APPLICATION = "umap.wsgi.application"
 
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "login_popup_end"
+LOGOUT_REDIRECT_URL = "/"
 
 STATIC_URL = "/static/"
 MEDIA_URL = "/uploads/"
