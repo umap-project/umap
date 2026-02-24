@@ -158,8 +158,7 @@ PROJECT_DIR = os.path.dirname(os.path.realpath(project_module.__file__))
 ROOT_URLCONF = "umap.urls"
 WSGI_APPLICATION = "umap.wsgi.application"
 
-LOGIN_URL = "/login/"
-LOGOUT_URL = "/logout/"
+LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "login_popup_end"
 
 STATIC_URL = "/static/"
@@ -347,7 +346,6 @@ UMAP_PICTOGRAMS_COLLECTIONS = {}
 # =============================================================================
 # Third party app settings
 # =============================================================================
-LOGIN_URL = "login"
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/login/popup/end/"
 
 AUTHENTICATION_BACKENDS = ()
