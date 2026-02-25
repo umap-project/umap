@@ -6,7 +6,7 @@ from pathlib import Path
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.termcolors import colorize
 
-from .base import *  # NOQA, default values
+from .base import *  # NOQA:F403, default values
 
 # Allow to override setting from any file, may be out of the PYTHONPATH,
 # to make it easier for non python people.

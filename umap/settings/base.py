@@ -158,9 +158,9 @@ PROJECT_DIR = os.path.dirname(os.path.realpath(project_module.__file__))
 ROOT_URLCONF = "umap.urls"
 WSGI_APPLICATION = "umap.wsgi.application"
 
-LOGIN_URL = "/login/"
-LOGOUT_URL = "/logout/"
+LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "login_popup_end"
+LOGOUT_REDIRECT_URL = "/"
 
 STATIC_URL = "/static/"
 MEDIA_URL = "/uploads/"
@@ -342,12 +342,12 @@ LEAFLET_LONGITUDE = env.float("LEAFLET_LONGITUDE", default=2)
 LEAFLET_LATITUDE = env.float("LEAFLET_LATITUDE", default=51)
 LEAFLET_ZOOM = env.int("LEAFLET_ZOOM", default=6)
 UMAP_PICTOGRAMS_COLLECTIONS = {}
+EXTRA_URL_PATTERNS = []
 
 
 # =============================================================================
 # Third party app settings
 # =============================================================================
-LOGIN_URL = "login"
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/login/popup/end/"
 
 AUTHENTICATION_BACKENDS = ()

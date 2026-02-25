@@ -28,6 +28,10 @@ Can be set through env var too: `ALLOWED_HOSTS=umap.mydomain.org,u.mydomain.org`
 
 Set it to `True` for easier debugging in case of error.
 
+#### DEFAULT_FROM_EMAIL
+
+See `EMAIL_BACKEND`.
+
 #### DEPRECATED_AUTHENTICATION_BACKENDS
 
 List of auth backends to deprecate. Defining this will display a message to
@@ -68,9 +72,20 @@ Can be set through env var: `ENABLE_ACCOUNT_LOGIN=1`
 User accounts can be managed via the Django admin page (`{SITE_URL}/admin`).
 The required superuser must be created on the command line with this command: `umap createsuperuser`.
 
-#### DEFAULT_FROM_EMAIL
+#### EXTRA_URL_PATTERNS
 
-See `EMAIL_BACKEND`.
+List of (path, view_look, name) to add to the uMap urlpatterns.
+This can be useful for example to add a custom login URL.
+
+```python title="local_settings.py"
+EXTRA_URL_PATTERNS = [
+    (
+        "sso-login/",
+        "django_yunohost_integration.yunohost_utils.SSOwatLoginRedirectView",
+        "ssowat-login",
+    ),
+]
+```
 
 #### LANGUAGE_CODE
 

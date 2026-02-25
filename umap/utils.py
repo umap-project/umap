@@ -44,6 +44,7 @@ def _urls_for_js():
                 [get_uri_template(url, prefix=prefix, module=module) for url in names],
             )
         )
+    urls["login"] = get_login_url()
     urls.update(getattr(settings, "UMAP_EXTRA_URLS", {}))
     return urls
 
@@ -235,3 +236,9 @@ def collect_pictograms():
 def normalize_string(s):
     n = unicodedata.normalize("NFKD", str(s))
     return "".join([c for c in n if not unicodedata.combining(c)]).lower()
+
+
+def get_login_url():
+    if "/" in settings.LOGIN_URL:
+        return settings.LOGIN_URL
+    return reverse(settings.LOGIN_URL)

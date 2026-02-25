@@ -15,7 +15,7 @@
         </li>
       {% else %}
         <li>
-          <a href="{% url "login" %}" class="login">{% trans "Log in" %} / {% trans "Sign in" %}</a>
+          <a href="{{ LOGIN_URL }}" class="login">{% trans "Log in" %} / {% trans "Sign in" %}</a>
         </li>
       {% endif %}
       <li>

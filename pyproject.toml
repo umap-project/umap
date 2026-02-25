@@ -69,11 +69,6 @@ test = [
 deploy = [
   "Django==5.2.11",
 ]
-yunohost = [
-  "uvicorn==0.40.0",
-  "Django==5.1.15",
-  "django_yunohost_integration==0.10.9",
-]
 s3 = [
   "django-storages[s3]==1.14.6",
 ]
