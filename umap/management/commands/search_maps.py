@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.postgres.search import SearchQuery, SearchVector
 from django.core.management.base import BaseCommand
 
-from umap.models import Map
+from umap.models import Map, User
 
 vector = SearchVector("name", config=settings.UMAP_SEARCH_CONFIGURATION)
 
@@ -15,7 +15,7 @@ class Command(BaseCommand):
     help = "Search maps in bulk, and delete, block or restore them."
 
     def add_arguments(self, parser):
-        parser.add_argument("search", help="Actual search.")
+        parser.add_argument("search", help="Text to search in map title.", nargs="?")
         parser.add_argument(
             "--dry-run",
             help="Do not make actions, just display",
@@ -47,7 +47,20 @@ class Command(BaseCommand):
             action="store_true",
         )
         parser.add_argument(
+            "--user",
+            help="Search maps of this user",
+            action="store",
+        )
+        parser.add_argument(
+            "--id",
+            help="Act on this specific map",
+            action="store",
+        )
+        parser.add_argument(
             "--no-input", action="store_true", help="Do not ask for confirm."
+        )
+        parser.add_argument(
+            "--limit", action="store", type=int, help="Limit results.", default=100
         )
 
     def confirm(self, message):
@@ -64,15 +77,23 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.dry_run = options["dry_run"]
         self.no_input = options["no_input"]
-        query = SearchQuery(
-            options["search"],
-            config=settings.UMAP_SEARCH_CONFIGURATION,
-            search_type="websearch",
-        )
         qs = Map.public.all() if options["public"] else Map.objects.all()
         if options["deleted"]:
             qs = qs.filter(share_status=Map.DELETED)
-        qs = qs.annotate(search=vector).filter(search=query)
+        if options["user"]:
+            user = User.objects.get(username=options["user"])
+            qs = qs.filter(owner=user)
+        if options["search"]:
+            query = SearchQuery(
+                options["search"],
+                config=settings.UMAP_SEARCH_CONFIGURATION,
+                search_type="websearch",
+            )
+            qs = qs.annotate(search=vector).filter(search=query)
+        if options["id"]:
+            qs = qs.filter(pk__in=[options["id"]])
+        if options["limit"]:
+            qs = qs[: options["limit"]]
         for mm in qs:
             row = [
                 mm.pk,
