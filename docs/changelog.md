@@ -1,5 +1,19 @@
 # Changelog
 
+## 3.6.2 - 2026-02-25
+
+* fix limitBounds not honoured at load by @yohanboniface in #3221
+* fixed the environment block and added docker.io for podman support by @DiabeticTurtle in #3187
+* update logout redirect URL to use settings by @fabriziopicconi in #3071
+* enhance admin for managing maps by @yohanboniface in #3223
+* make login/logout redirect work in yunohost integration and more by @yohanboniface in #3220
+* allow to search maps by user/id/deleted status in cli by @yohanboniface in #3222
+
+### New Contributors
+* @DiabeticTurtle made their first contribution in #3187
+* @fabriziopicconi made their first contribution in #3071
+
+
 ## 3.6.1 - 2026-02-02
 
 * do not assign Field method to Rule by @yohanboniface in #3181
