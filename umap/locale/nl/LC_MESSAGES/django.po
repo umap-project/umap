@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-14 15:28+0000\n"
+"POT-Creation-Date: 2026-02-25 18:08+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Joost Schouppe <joost.schouppe@gmail.com>, 2025\n"
+"Last-Translator: Gideon van Melle <translations@gvmelle.com>, 2025\n"
 "Language-Team: Dutch (http://app.transifex.com/openstreetmap/umap/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: admin.py:16
+#: admin.py:21
 msgid "CSV Export"
 msgstr "CSV Export"
 
@@ -46,7 +46,7 @@ msgstr "Het gebruik van \"%(name)s\" om te verifiëren is afgeschaft en zal binn
 msgid "name"
 msgstr "naam"
 
-#: models.py:63 models.py:503
+#: models.py:63 models.py:507
 msgid "description"
 msgstr "omschrijving"
 
@@ -66,23 +66,23 @@ msgstr "URL-sjabloon met OSM tegel-formaat"
 msgid "Order of the tilelayers in the edit box"
 msgstr "Volgorde van de tegel-lagen in het bewerkingsvak."
 
-#: models.py:176 models.py:497
+#: models.py:176 models.py:501
 msgid "Only editable with secret edit link"
 msgstr "Alleen te bewerken met een geheime link"
 
-#: models.py:177 models.py:498
+#: models.py:177 models.py:502
 msgid "Everyone can edit"
 msgstr "Iedereen kan wijzigingen maken"
 
-#: models.py:180 models.py:491
+#: models.py:180 models.py:495
 msgid "Everyone"
 msgstr "Iedereen"
 
-#: models.py:181 models.py:190 models.py:492
+#: models.py:181 models.py:190 models.py:496
 msgid "Editors and team only"
 msgstr "Alleen redacteuren en team"
 
-#: models.py:182 models.py:493
+#: models.py:182 models.py:497
 msgid "Owner only"
 msgstr "Alleen eigenaar"
 
@@ -102,7 +102,7 @@ msgstr "Iedereen met een link"
 msgid "Blocked"
 msgstr "geblokkeerd"
 
-#: models.py:192 models.py:487
+#: models.py:192 models.py:491
 msgid "Deleted"
 msgstr "Verwijderd"
 
@@ -142,15 +142,15 @@ msgstr "editors"
 msgid "team"
 msgstr "team"
 
-#: models.py:230 models.py:519
+#: models.py:230 models.py:523
 msgid "edit status"
 msgstr "wijzig status"
 
-#: models.py:235 models.py:524
+#: models.py:235 models.py:528
 msgid "share status"
 msgstr "deel status"
 
-#: models.py:238 models.py:514
+#: models.py:238 models.py:518
 msgid "settings"
 msgstr "instellingen"
 
@@ -166,15 +166,15 @@ msgstr "Deze kaart is een sjabloon."
 msgid "Clone of"
 msgstr "Kopie van"
 
-#: models.py:486 models.py:490 models.py:496
+#: models.py:490 models.py:494 models.py:500
 msgid "Inherit"
 msgstr "overerven"
 
-#: models.py:509
+#: models.py:513
 msgid "display on load"
 msgstr "toon tijdens laden"
 
-#: models.py:510
+#: models.py:514
 msgid "Display this layer on load."
 msgstr "Toon deze laag tijdens laden."
 
@@ -413,54 +413,54 @@ msgid "Play with the demo"
 msgstr "Speel met de demo"
 
 #: templates/umap/components/alerts/alert.html:17
-#: templates/umap/components/alerts/alert.html:69
-#: templates/umap/components/alerts/alert.html:97
+#: templates/umap/components/alerts/alert.html:68
+#: templates/umap/components/alerts/alert.html:96
 msgid "Close"
 msgstr "Afsluiten"
 
-#: templates/umap/components/alerts/alert.html:32
+#: templates/umap/components/alerts/alert.html:31
 #, python-format
 msgid ""
-"Oops, I didn't mean it, I want to <a href=\"%(login_url)s\" "
-"class=\"login\">create an account</a> or <a href=\"%(login_url)s\" "
+"Oops, I didn't mean it, I want to <a href=\"%(LOGIN_URL)s\" "
+"class=\"login\">create an account</a> or <a href=\"%(LOGIN_URL)s\" "
 "class=\"login\">log in</a> (no worry, we'll attach the map to your account)."
 msgstr ""
 
-#: templates/umap/components/alerts/alert.html:35
+#: templates/umap/components/alerts/alert.html:34
 msgid ""
 "Yes, I want to continue editing anonymously, I will save the secret edit "
 "link to be able to edit this map later or on another device"
-msgstr ""
+msgstr "Ja, ik wil anoniem blijven bewerken, ik sla de geheime bewerkingslink op om deze kaart later of op een ander apparaat te kunnen bewerken"
 
-#: templates/umap/components/alerts/alert.html:39
+#: templates/umap/components/alerts/alert.html:38
 msgid "Here is your secret link to edit the map, please keep it safe:"
 msgstr "Hier is je geheime link om de kaart te bewerken, houd deze alsjeblieft veilig:"
 
-#: templates/umap/components/alerts/alert.html:43
+#: templates/umap/components/alerts/alert.html:42
 msgid "Copy link"
 msgstr "Kopieer link"
 
-#: templates/umap/components/alerts/alert.html:50
+#: templates/umap/components/alerts/alert.html:49
 msgid "Enter your email address to receive the secret link:"
 msgstr "Voer je e-mailadres in om de geheime link te ontvangen:"
 
-#: templates/umap/components/alerts/alert.html:56
+#: templates/umap/components/alerts/alert.html:55
 msgid "Email"
 msgstr "E-mail"
 
-#: templates/umap/components/alerts/alert.html:59
+#: templates/umap/components/alerts/alert.html:58
 msgid "Send me the link"
 msgstr "Stuur mij de link"
 
-#: templates/umap/components/alerts/alert.html:84
+#: templates/umap/components/alerts/alert.html:83
 msgid "See their edits in another tab"
 msgstr "Bekijk hun bewerkingen in een ander tabblad"
 
-#: templates/umap/components/alerts/alert.html:87
+#: templates/umap/components/alerts/alert.html:86
 msgid "Keep your changes and loose theirs"
 msgstr "Bewaar uw wijzigingen en verlies die van hen"
 
-#: templates/umap/components/alerts/alert.html:90
+#: templates/umap/components/alerts/alert.html:89
 msgid "Keep their changes and loose yours"
 msgstr "Behoud hun wijzigingen en verlies de jouwe"
 
@@ -498,6 +498,10 @@ msgstr "Contact"
 #: templates/umap/content_footer.html:9 templates/umap/navigation.html:25
 msgid "Help"
 msgstr "Hulp"
+
+#: templates/umap/content_footer.html:10
+msgid "Terms of Service"
+msgstr ""
 
 #: templates/umap/dashboard_menu.html:6
 #, python-format
@@ -834,61 +838,61 @@ msgstr "Team “%(name)s” is verwijderd"
 msgid "View the map"
 msgstr "Bekijk de kaart"
 
-#: views.py:872
+#: views.py:873
 msgid "See full screen"
 msgstr "Volledig scherm weergeven"
 
-#: views.py:1015
+#: views.py:1016
 msgid "Map editors updated with success!"
 msgstr "Kaarteditors met succes bijgewerkt!"
 
-#: views.py:1051
+#: views.py:1052
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "De uMap-bewerkingslink voor uw kaart: %(map_name)s"
 
-#: views.py:1054
+#: views.py:1055
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Hier is je geheime bewerkingslink: %(link)s"
 
-#: views.py:1061
+#: views.py:1062
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "Kan geen e-mail verzenden naar %(email)s"
 
-#: views.py:1064
+#: views.py:1065
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "E-mail verzonden naar %(email)s"
 
-#: views.py:1075
+#: views.py:1076
 msgid "Only its owner can delete the map."
 msgstr "Kaart kan alleen door eigenaar worden verwijderd."
 
-#: views.py:1081
+#: views.py:1082
 msgid "Map successfully deleted."
 msgstr "Kaart succesvol verwijderd."
 
-#: views.py:1107
+#: views.py:1108
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Uw kaart is gekopieerd! Als u deze kaart wilt wijzigen vanaf een andere computer, gebruik dan deze link: %(anonymous_url)s"
 
-#: views.py:1112
+#: views.py:1113
 msgid "Congratulations, your map has been cloned!"
 msgstr "Gefeliciteerd, uw kaart is gekopieerd!"
 
-#: views.py:1366
+#: views.py:1379
 msgid "Layer successfully deleted."
 msgstr "Laag is verwijderd."
 
-#: views.py:1388
+#: views.py:1401
 msgid "Permissions updated with success!"
 msgstr "Machtigingen met succes bijgewerkt!"
 
-#: views.py:1405
+#: views.py:1418
 msgid "Generic"
 msgstr "Generiek"

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-24 14:49+0000\n"
+"POT-Creation-Date: 2026-02-25 18:08+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: ERYpTION, 2025\n"
 "Language-Team: Danish (http://app.transifex.com/openstreetmap/umap/language/da/)\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Language: da\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: admin.py:16
+#: admin.py:21
 msgid "CSV Export"
 msgstr "CSV-eksport"
 
@@ -413,54 +413,54 @@ msgid "Play with the demo"
 msgstr "Leg med demoen"
 
 #: templates/umap/components/alerts/alert.html:17
-#: templates/umap/components/alerts/alert.html:69
-#: templates/umap/components/alerts/alert.html:97
+#: templates/umap/components/alerts/alert.html:68
+#: templates/umap/components/alerts/alert.html:96
 msgid "Close"
 msgstr "Luk"
 
-#: templates/umap/components/alerts/alert.html:32
+#: templates/umap/components/alerts/alert.html:31
 #, python-format
 msgid ""
-"Oops, I didn't mean it, I want to <a href=\"%(login_url)s\" "
-"class=\"login\">create an account</a> or <a href=\"%(login_url)s\" "
+"Oops, I didn't mean it, I want to <a href=\"%(LOGIN_URL)s\" "
+"class=\"login\">create an account</a> or <a href=\"%(LOGIN_URL)s\" "
 "class=\"login\">log in</a> (no worry, we'll attach the map to your account)."
-msgstr "Ups, det var ikke meningen, jeg vil gerne <a href=\"%(login_url)s\" class=\"login\">oprette en konto</a> eller <a href=\"%(login_url)s\" class=\"login\">logge ind</a> (bare rolig, vi knytter kortet til din konto)."
+msgstr ""
 
-#: templates/umap/components/alerts/alert.html:35
+#: templates/umap/components/alerts/alert.html:34
 msgid ""
 "Yes, I want to continue editing anonymously, I will save the secret edit "
 "link to be able to edit this map later or on another device"
 msgstr "Ja, jeg vil fortsætte med at redigere anonymt. Jeg gemmer det hemmelige redigeringslink, så jeg kan redigere dette kort senere eller på en anden enhed."
 
-#: templates/umap/components/alerts/alert.html:39
+#: templates/umap/components/alerts/alert.html:38
 msgid "Here is your secret link to edit the map, please keep it safe:"
 msgstr "Her er dit hemmelige link til at redigere kortet, pas godt på det:"
 
-#: templates/umap/components/alerts/alert.html:43
+#: templates/umap/components/alerts/alert.html:42
 msgid "Copy link"
 msgstr "Kopier link"
 
-#: templates/umap/components/alerts/alert.html:50
+#: templates/umap/components/alerts/alert.html:49
 msgid "Enter your email address to receive the secret link:"
 msgstr "Indtast din e-mailadresse for at modtage det hemmelige link:"
 
-#: templates/umap/components/alerts/alert.html:56
+#: templates/umap/components/alerts/alert.html:55
 msgid "Email"
 msgstr "E-mail"
 
-#: templates/umap/components/alerts/alert.html:59
+#: templates/umap/components/alerts/alert.html:58
 msgid "Send me the link"
 msgstr "Send mig linket"
 
-#: templates/umap/components/alerts/alert.html:84
+#: templates/umap/components/alerts/alert.html:83
 msgid "See their edits in another tab"
 msgstr "Se deres redigeringer i en anden fane"
 
-#: templates/umap/components/alerts/alert.html:87
+#: templates/umap/components/alerts/alert.html:86
 msgid "Keep your changes and loose theirs"
 msgstr "Behold dine ændringer og mist deres"
 
-#: templates/umap/components/alerts/alert.html:90
+#: templates/umap/components/alerts/alert.html:89
 msgid "Keep their changes and loose yours"
 msgstr "Behold deres ændringer og mist dine"
 
@@ -838,61 +838,61 @@ msgstr "Teamet “%(name)s” er blevet slettet"
 msgid "View the map"
 msgstr "Vis kortet"
 
-#: views.py:872
+#: views.py:873
 msgid "See full screen"
 msgstr "Se i fuldskærm"
 
-#: views.py:1015
+#: views.py:1016
 msgid "Map editors updated with success!"
 msgstr "Kortredaktører blev opdateret!"
 
-#: views.py:1051
+#: views.py:1052
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "uMap-redigeringslinket for dit kort: %(map_name)s"
 
-#: views.py:1054
+#: views.py:1055
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Her er dit hemmelige redigeringslink: %(link)s"
 
-#: views.py:1061
+#: views.py:1062
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "Kan ikke sende e-mail til %(email)s"
 
-#: views.py:1064
+#: views.py:1065
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "E-mail sendt til %(email)s"
 
-#: views.py:1075
+#: views.py:1076
 msgid "Only its owner can delete the map."
 msgstr "Kun ejeren kan slette kortet."
 
-#: views.py:1081
+#: views.py:1082
 msgid "Map successfully deleted."
 msgstr "Kort slettet."
 
-#: views.py:1107
+#: views.py:1108
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Dit kort er blevet klonet! Hvis du ønsker at redigere kortet fra en anden computer, så brug følgende link: %(anonymous_url)s"
 
-#: views.py:1112
+#: views.py:1113
 msgid "Congratulations, your map has been cloned!"
 msgstr "Tillykke, dit kort er blevet klonet!"
 
-#: views.py:1366
+#: views.py:1379
 msgid "Layer successfully deleted."
 msgstr "Lag blev slettet."
 
-#: views.py:1388
+#: views.py:1401
 msgid "Permissions updated with success!"
 msgstr "Tilladelser opdateret!"
 
-#: views.py:1405
+#: views.py:1418
 msgid "Generic"
 msgstr "Generisk"
