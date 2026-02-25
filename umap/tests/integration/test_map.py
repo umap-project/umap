@@ -233,3 +233,32 @@ def test_feature_in_query_string_has_precedence_over_onloadpanel(
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     expect(page.get_by_role("heading", name="FooBar")).to_be_hidden()
     expect(page.get_by_role("heading", name="This is my map")).to_be_visible()
+
+
+def test_limitbounds(map, live_server, new_page, tilelayer):
+    map.settings["properties"]["limitBounds"] = {
+        "east": 2.848,
+        "west": 0.650,
+        "north": 43.116,
+        "south": 42.391,
+    }
+    map.settings["properties"]["zoom"] = 6
+    map.settings["geometry"] = {
+        "type": "Point",
+        "coordinates": [5, 12],
+    }
+    map.save()
+
+    # Load the map default view
+    page = new_page()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+
+    # We should be in the limitBounds center
+    expect(page).to_have_url(re.compile(r".*#9/42\..+/1\..+"))
+
+    # Force a hash (on a new page, to workaround playwright hallucinations)
+    page = new_page()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/51.0/2.0")
+
+    # We should still be in the limitBounds center
+    expect(page).to_have_url(re.compile(r".*#9/42\..+/1\..+"))

@@ -383,7 +383,9 @@ export const LeafletMap = BaseMap.extend({
   setMaxBounds: function (bounds) {
     // Hack. Remove me when fix is released:
     // https://github.com/Leaflet/Leaflet/pull/4494
-    bounds = new LatLngBounds(bounds)
+    if (!(bounds instanceof LatLngBounds)) {
+      bounds = new LatLngBounds(bounds)
+    }
 
     if (!bounds.isValid()) {
       this.options.maxBounds = null
