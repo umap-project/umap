@@ -1,13 +1,18 @@
 import csv
 from datetime import datetime
 
+from django.contrib import admin as djadmin
 from django.contrib.auth.admin import UserAdmin as UserAdminBase
 from django.contrib.auth.models import User
 from django.contrib.gis import admin
 from django.http import HttpResponse
+from django.urls import reverse
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 from .models import DataLayer, Licence, Map, Pictogram, Team, TileLayer
+
+admin.site.disable_action("delete_selected")
 
 
 class CSVExportMixin:
@@ -43,9 +48,15 @@ class TileLayerAdmin(admin.ModelAdmin):
 
 
 class MapAdmin(CSVExportMixin, admin.GISModelAdmin):
-    search_fields = ("name",)
+    search_fields = ("name", "id")
     autocomplete_fields = ("owner", "editors")
-    list_filter = ("share_status",)
+    list_filter = (
+        "share_status",
+        "is_template",
+        ("owner", djadmin.EmptyFieldListFilter),
+    )
+    list_display = ["id", "name", "share_status", "edit_status", "edit_link"]
+    actions = ["trash_maps", "block_maps", "restore_maps"]
     csv_fields = (
         "pk",
         "name",
@@ -58,6 +69,29 @@ class MapAdmin(CSVExportMixin, admin.GISModelAdmin):
         "owner_id",
         "team_id",
     )
+    empty_value_display = "&lt;anonymous>"
+
+    @admin.action(description="Move selected maps to trash")
+    def trash_maps(modeladmin, request, queryset):
+        queryset.update(share_status=Map.DELETED)
+
+    @admin.action(description="Block selected maps")
+    def block_maps(modeladmin, request, queryset):
+        queryset.update(share_status=Map.BLOCK)
+
+    @admin.action(description="Restore selected maps")
+    def restore_maps(modeladmin, request, queryset):
+        queryset.update(share_status=Map.DRAFT)
+
+    def edit_link(self, obj):
+        if not obj.owner:
+            return format_html(
+                '<a href="{}">Secret edit link</a>',
+                obj.get_anonymous_edit_url(),
+            )
+        return obj.owner
+
+    edit_link.allow_tags = True
 
 
 class PictogramAdmin(admin.ModelAdmin):
@@ -94,7 +128,24 @@ class UserAdmin(CSVExportMixin, UserAdminBase):
         "maps_count",
         "user_teams",
     ]
-    list_display = list(UserAdminBase.list_display) + ["maps_count", "user_teams"]
+    list_display = list(UserAdminBase.list_display) + [
+        "maps_count",
+        "user_teams",
+        "last_maps",
+    ]
+
+    def last_maps(self, obj):
+        maps = obj.owned_maps.order_by("-modified_at")[:10]
+        output = []
+        for map in maps:
+            url = reverse("admin:umap_map_change", args=(map.pk,))
+            output.append(f'<a href="{url}">{map.name}</a>')
+        output = ", ".join(output)
+        if len(maps) == 10:
+            output += "…"
+        return format_html(output)
+
+    last_maps.allow_tags = True
 
     def maps_count(self, obj):
         # owner maps + maps as editor
