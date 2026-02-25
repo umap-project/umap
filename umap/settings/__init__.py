@@ -1,17 +1,12 @@
 import os
 import sys
 import types
-from importlib.util import find_spec
 from pathlib import Path
 
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.termcolors import colorize
 
-if find_spec("django_yunohost_integration"):
-    print("Loading YUNOHOST core settings")
-    from .yunohost import *  # NOQA:F403, Yunohost related settings
-else:
-    from .base import *  # NOQA:F403, default values
+from .base import *  # NOQA:F403, default values
 
 # Allow to override setting from any file, may be out of the PYTHONPATH,
 # to make it easier for non python people.

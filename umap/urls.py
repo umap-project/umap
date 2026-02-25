@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path, re_path
+from django.urls.utils import get_callable
 from django.views.decorators.cache import cache_control, cache_page, never_cache
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic.base import RedirectView
@@ -232,12 +233,8 @@ urlpatterns += (
 if settings.DEBUG and settings.MEDIA_ROOT:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += staticfiles_urlpatterns()
-
-try:
-    from django_yunohost_integration.yunohost_utils import SSOwatLoginRedirectView
-except ImportError:
-    pass
-else:
-    urlpatterns.append(
-        path("sso-login/", SSOwatLoginRedirectView.as_view(), name="ssowat-login"),
-    )
+for urlpath, lookup_view, name in settings.EXTRA_URL_PATTERNS:
+    view = get_callable(lookup_view)
+    if hasattr(view, "as_view"):
+        view = view.as_view()
+    urlpatterns += (path(urlpath, view, name=name),)

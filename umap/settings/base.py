@@ -342,6 +342,7 @@ LEAFLET_LONGITUDE = env.float("LEAFLET_LONGITUDE", default=2)
 LEAFLET_LATITUDE = env.float("LEAFLET_LATITUDE", default=51)
 LEAFLET_ZOOM = env.int("LEAFLET_ZOOM", default=6)
 UMAP_PICTOGRAMS_COLLECTIONS = {}
+EXTRA_URL_PATTERNS = []
 
 
 # =============================================================================
