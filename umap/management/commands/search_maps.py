@@ -42,6 +42,11 @@ class Command(BaseCommand):
             action="store_true",
         )
         parser.add_argument(
+            "--deleted",
+            help="Search only deleted maps",
+            action="store_true",
+        )
+        parser.add_argument(
             "--no-input", action="store_true", help="Do not ask for confirm."
         )
 
@@ -65,6 +70,8 @@ class Command(BaseCommand):
             search_type="websearch",
         )
         qs = Map.public.all() if options["public"] else Map.objects.all()
+        if options["deleted"]:
+            qs = qs.filter(share_status=Map.DELETED)
         qs = qs.annotate(search=vector).filter(search=query)
         for mm in qs:
             row = [
