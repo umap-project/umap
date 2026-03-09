@@ -14,8 +14,11 @@ from django.views.generic.base import RedirectView
 
 from . import views
 from .decorators import (
+    can_edit_datalayer,
     can_edit_map,
     can_view_map,
+    datalayer_belong_to_map,
+    is_anonymous_owner,
     login_required_if_not_anonymous_allowed,
     team_members_only,
 )
@@ -135,11 +138,6 @@ map_urls = [
         name="map_update_permissions",
     ),
     path(
-        "map/<int:map_id>/update/owner/",
-        views.AttachAnonymousMap.as_view(),
-        name="map_attach_owner",
-    ),
-    path(
         "map/<int:map_id>/update/delete/", views.MapDelete.as_view(), name="map_delete"
     ),
     path("map/<int:map_id>/update/clone/", views.MapClone.as_view(), name="map_clone"),
@@ -149,23 +147,20 @@ map_urls = [
         name="datalayer_create",
     ),
     path(
-        "map/<int:map_id>/datalayer/delete/<uuid:pk>/",
-        views.DataLayerDelete.as_view(),
-        name="datalayer_delete",
-    ),
-    path(
-        "map/<int:map_id>/datalayer/permissions/<uuid:pk>/",
-        views.UpdateDataLayerPermissions.as_view(),
-        name="datalayer_permissions",
-    ),
-    path(
         "map/<int:map_id>/ws-token/",
         views.get_websocket_auth_token,
         name="map_websocket_auth_token",
     ),
 ]
+anonymous_owner_urls = [
+    path(
+        "map/<int:map_id>/update/owner/",
+        views.AttachAnonymousMap.as_view(),
+        name="map_attach_owner",
+    ),
+]
 if settings.DEFAULT_FROM_EMAIL:
-    map_urls.append(
+    anonymous_owner_urls.append(
         path(
             "map/<int:map_id>/send-edit-link/",
             views.SendEditLink.as_view(),
@@ -179,7 +174,28 @@ datalayer_urls = [
         name="datalayer_update",
     ),
 ]
+restricted_datalayer_urls = [
+    path(
+        "map/<int:map_id>/datalayer/delete/<uuid:pk>/",
+        views.DataLayerDelete.as_view(),
+        name="datalayer_delete",
+    ),
+    path(
+        "map/<int:map_id>/datalayer/permissions/<uuid:pk>/",
+        views.UpdateDataLayerPermissions.as_view(),
+        name="datalayer_permissions",
+    ),
+]
 i18n_urls += decorated_patterns([can_edit_map, never_cache], *map_urls)
+i18n_urls += decorated_patterns(
+    [can_edit_map, datalayer_belong_to_map, never_cache], *restricted_datalayer_urls
+)
+i18n_urls += decorated_patterns(
+    [can_edit_datalayer, datalayer_belong_to_map, never_cache], *datalayer_urls
+)
+i18n_urls += decorated_patterns(
+    [is_anonymous_owner, never_cache], *anonymous_owner_urls
+)
 i18n_urls += decorated_patterns([never_cache], *datalayer_urls)
 urlpatterns += i18n_patterns(
     path("", views.home, name="home"),

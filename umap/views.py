@@ -1019,12 +1019,7 @@ class UpdateMapPermissions(FormLessEditMixin, UpdateView):
 class AttachAnonymousMap(View):
     def post(self, *args, **kwargs):
         self.object = kwargs["map_inst"]
-        if (
-            self.object.owner
-            or not self.object.is_anonymous_owner(self.request)
-            or not self.object.can_edit(self.request)
-            or not self.request.user.is_authenticated
-        ):
+        if not self.request.user.is_authenticated:
             return HttpResponseForbidden()
         self.object.owner = self.request.user
         self.object.save()
@@ -1036,12 +1031,6 @@ class SendEditLink(FormLessEditMixin, FormView):
 
     def post(self, form, **kwargs):
         self.object = kwargs["map_inst"]
-        if (
-            self.object.owner
-            or not self.object.is_anonymous_owner(self.request)
-            or not self.object.can_edit(self.request)
-        ):
-            return HttpResponseForbidden()
         form = self.get_form()
         if form.is_valid():
             email = form.cleaned_data["email"]
@@ -1169,9 +1158,9 @@ class MapAnonymousEditUrl(RedirectView):
         return response
 
 
-# ############## #
+# ############## #
 #    DataLayer   #
-# ############## #
+# ############## #
 
 
 class DataLayerView(BaseDetailView):
@@ -1322,12 +1311,7 @@ class DataLayerUpdate(FormLessEditMixin, UpdateView):
             return None
 
     def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        if self.object.map.pk != int(self.kwargs["map_id"]):
-            return HttpResponseForbidden()
-
-        if not self.object.can_edit(request=self.request):
-            return HttpResponseForbidden()
+        self.object = kwargs["datalayer_inst"]
 
         reference_version = self.request.headers.get("X-Datalayer-Reference")
         if self.has_changes_since(reference_version):
@@ -1372,9 +1356,7 @@ class DataLayerDelete(DeleteView):
     model = DataLayer
 
     def form_valid(self, form):
-        self.object = self.get_object()
-        if self.object.map != self.kwargs["map_inst"]:
-            return HttpResponseForbidden()
+        self.object = self.kwargs["datalayer_inst"]
         self.object.move_to_trash()
         return simple_json_response(info=_("Layer successfully deleted."))
 
@@ -1401,9 +1383,9 @@ class UpdateDataLayerPermissions(FormLessEditMixin, UpdateView):
         return simple_json_response(info=_("Permissions updated with success!"))
 
 
-# ############## #
+# ############## #
 #     Picto      #
-# ############## #
+# ############## #
 
 
 class PictogramJSONList(ListView):
