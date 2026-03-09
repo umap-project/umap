@@ -8,7 +8,7 @@
 # Eric Armijo, 2023
 # Gonzalo Gabriel Perez <zalitoar@gmail.com>, 2019
 # Ignacio L'Episcopo, 2024
-# Ignacio L'Episcopo, 2024-2025
+# Ignacio L'Episcopo, 2024-2026
 # Igor Támara <igor@tamarapatino.org>, 2013
 # 3c4f354c26c2c190ba28f9c2666d7fdb_003e9d1 <b28923423b98dace80389ae64c99bf93_129697>, 2014
 # 3c4f354c26c2c190ba28f9c2666d7fdb_003e9d1 <b28923423b98dace80389ae64c99bf93_129697>, 2014,2016-2017,2020
@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-25 18:08+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Ignacio L'Episcopo, 2024-2025\n"
+"Last-Translator: Ignacio L'Episcopo, 2024-2026\n"
 "Language-Team: Spanish (http://app.transifex.com/openstreetmap/umap/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -429,7 +429,7 @@ msgid ""
 "Oops, I didn't mean it, I want to <a href=\"%(LOGIN_URL)s\" "
 "class=\"login\">create an account</a> or <a href=\"%(LOGIN_URL)s\" "
 "class=\"login\">log in</a> (no worry, we'll attach the map to your account)."
-msgstr ""
+msgstr "Ups, no era mi intención, quiero <a href=\"%(LOGIN_URL)s\" class=\"login\">crear una cuenta</a> o <a href=\"%(LOGIN_URL)s\" class=\"login\">iniciar sesión</a> (no te preocupes, vincularemos el mapa a tu cuenta)."
 
 #: templates/umap/components/alerts/alert.html:34
 msgid ""

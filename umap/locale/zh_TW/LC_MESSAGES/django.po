@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Supaplex <bejokeup@gmail.com>, 2019,2023-2025
+# Supaplex <bejokeup@gmail.com>, 2019,2023-2026
 # Chia-liang Kao <clkao@clkao.org>, 2014
 # coop.shen <coop.shen@gmail.com>, 2014
 # coop.shen <coop.shen@gmail.com>, 2014
@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-25 18:08+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Supaplex <bejokeup@gmail.com>, 2019,2023-2025\n"
+"Last-Translator: Supaplex <bejokeup@gmail.com>, 2019,2023-2026\n"
 "Language-Team: Chinese (Taiwan) (http://app.transifex.com/openstreetmap/umap/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -427,7 +427,7 @@ msgid ""
 "Oops, I didn't mean it, I want to <a href=\"%(LOGIN_URL)s\" "
 "class=\"login\">create an account</a> or <a href=\"%(LOGIN_URL)s\" "
 "class=\"login\">log in</a> (no worry, we'll attach the map to your account)."
-msgstr ""
+msgstr "糟了！我意思並非如此，我想要<a href=\"%(LOGIN_URL)s\" class=\"login\">新建帳號</a>，或是<a href=\"%(LOGIN_URL)s\" class=\"login\">登入</a>(不用擔心，我們會將地圖歸屬於您的帳號)。"
 
 #: templates/umap/components/alerts/alert.html:34
 msgid ""
