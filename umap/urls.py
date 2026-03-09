@@ -58,9 +58,6 @@ i18n_urls = [
     path("login/popup/end/", views.LoginPopupEnd.as_view(), name="login_popup_end"),
     path("logout/", views.logout, name="logout"),
     path(
-        "map/<int:map_id>/geojson/", views.MapViewGeoJSON.as_view(), name="map_geojson"
-    ),
-    path(
         "map/anonymous-edit/<signature>",
         views.MapAnonymousEditUrl.as_view(),
         name="map_anonymous_edit_url",
@@ -72,6 +69,9 @@ i18n_urls = [
 ]
 i18n_urls += decorated_patterns(
     [can_view_map, cache_control(must_revalidate=True)],
+    path(
+        "map/<int:map_id>/geojson/", views.MapViewGeoJSON.as_view(), name="map_geojson"
+    ),
     path(
         "datalayer/<int:map_id>/<uuid:pk>/",
         views.DataLayerView.as_view(),

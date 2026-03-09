@@ -325,6 +325,14 @@ def test_map_geojson_view(client, map):
     assert "type" in j
 
 
+def test_cannot_access_map_geojson_without_read_perm(client, map):
+    map.share_status = Map.PRIVATE
+    map.save()
+    url = reverse("map_geojson", args=(map.pk,))
+    response = client.get(url)
+    assert response.status_code == 403
+
+
 def test_only_owner_can_delete(client, map, user):
     map.editors.add(user)
     url = reverse("map_delete", kwargs={"map_id": map.pk})
