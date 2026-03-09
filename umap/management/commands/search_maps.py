@@ -53,8 +53,8 @@ class Command(BaseCommand):
         )
         parser.add_argument(
             "--id",
-            help="Act on this specific map",
-            action="store",
+            help="Act on this specific maps",
+            action="append",
         )
         parser.add_argument(
             "--no-input", action="store_true", help="Do not ask for confirm."
@@ -91,7 +91,7 @@ class Command(BaseCommand):
             )
             qs = qs.annotate(search=vector).filter(search=query)
         if options["id"]:
-            qs = qs.filter(pk__in=[options["id"]])
+            qs = qs.filter(pk__in=options["id"])
         if options["limit"]:
             qs = qs[: options["limit"]]
         for mm in qs:
@@ -102,7 +102,7 @@ class Command(BaseCommand):
                 mm.get_share_status_display(),
                 settings.SITE_URL + mm.get_absolute_url(),
             ]
-            print("{:1} | {:<50} | {:<10} | {:<20} | {}".format(*row))
+            print("{:<10} | {:<50} | {:<10} | {:<20} | {}".format(*row))
         if options["delete"] and self.confirm(f"Delete {qs.count()} maps?"):
             for mm in qs:
                 mm.move_to_trash()
