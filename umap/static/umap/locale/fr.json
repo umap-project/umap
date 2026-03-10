@@ -382,7 +382,7 @@
     "Back to browser": "Retour au navigateur",
     "Toggle size": "Basculer la hauteur",
     "Display the caption control": "Afficher le bouton d'ouverture de la légende",
-    "<empty value>": "<vide>",
+    "[empty value]": "[vide]",
     "Min": "Min",
     "Max": "Max",
     "From": "De",

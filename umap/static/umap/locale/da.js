@@ -382,7 +382,7 @@ const locale = {
     "Back to browser": "Tilbage til browser",
     "Toggle size": "Skift størrelse",
     "Display the caption control": "Vis korttekstkontrollen",
-    "<empty value>": "<empty value>",
+    "[empty value]": "[empty value]",
     "Min": "Min",
     "Max": "Maks",
     "From": "Fra",

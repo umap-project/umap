@@ -382,7 +382,7 @@ const locale = {
     "Back to browser": "Distreiñ d'ar merdeer",
     "Toggle size": "Toggle size",
     "Display the caption control": "Display the caption control",
-    "<empty value>": "<empty value>",
+    "[empty value]": "[empty value]",
     "Min": "Bihanañ",
     "Max": "Brasañ",
     "From": "Adalek",

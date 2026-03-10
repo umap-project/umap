@@ -382,7 +382,7 @@ const locale = {
     "Back to browser": "Volver al navegador",
     "Toggle size": "Cambiar tamaño",
     "Display the caption control": "Mostrar el control de leyenda",
-    "<empty value>": "<valor vacío>",
+    "[empty value]": "[valor vacío]",
     "Min": "Mín.",
     "Max": "Máx.",
     "From": "Desde",

@@ -4,7 +4,7 @@ import * as Utils from './utils.js'
 import Orderable from './orderable.js'
 import { Fields } from './form/fields.js'
 
-const EMPTY_VALUE = translate('<empty value>')
+const EMPTY_VALUE = translate('[empty value]')
 
 const Widgets = {}
 

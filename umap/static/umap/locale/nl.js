@@ -382,7 +382,7 @@ const locale = {
     "Back to browser": "Terug naar browser",
     "Toggle size": "Grootte wisselen",
     "Display the caption control": "Toon de knop voor het weergeven van het bijschrift",
-    "<empty value>": "<empty value>",
+    "[empty value]": "[empty value]",
     "Min": "Min",
     "Max": "Max",
     "From": "Van",
