@@ -382,7 +382,7 @@ const locale = {
     "Back to browser": "Itzuli nabigatzailera",
     "Toggle size": "Aldatu tamaina",
     "Display the caption control": "Erakutsi azpitituluaren kontrola",
-    "<empty value>": "<empty value>",
+    "[empty value]": "[empty value]",
     "Min": "Min",
     "Max": "Max",
     "From": "Nondik",

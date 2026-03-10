@@ -382,7 +382,7 @@ const locale = {
     "Back to browser": "Back to browser",
     "Toggle size": "Canvia la mida",
     "Display the caption control": "Mostra el control de la llegenda",
-    "<empty value>": "<empty value>",
+    "[empty value]": "[empty value]",
     "Min": "Min",
     "Max": "Max",
     "From": "From",

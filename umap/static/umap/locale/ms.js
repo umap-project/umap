@@ -382,7 +382,7 @@ const locale = {
     "Back to browser": "Kembali ke pelayar",
     "Toggle size": "Togol saiz",
     "Display the caption control": "Paparkan kawalan keterangan",
-    "<empty value>": "<nilai kosong>",
+    "[empty value]": "[nilai kosong]",
     "Min": "Minimum",
     "Max": "Maksimum",
     "From": "Mulai",
