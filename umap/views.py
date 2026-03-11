@@ -442,7 +442,7 @@ def validate_url(request):
     url = request.GET.get("url")
     assert url, "Missing URL"
     try:
-        URLValidator(url)
+        URLValidator()(url)
     except ValidationError as err:
         raise AssertionError(err)
     assert "HTTP_REFERER" in request.META, "Missing HTTP_REFERER"
