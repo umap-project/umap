@@ -155,7 +155,7 @@ export class BaseAutocomplete {
   }
 
   createResult(item) {
-    const li = DOMUtils.loadTemplate(`<li>${item.label}</li>`)
+    const li = DOMUtils.loadTemplate(Utils.sanitizeVars`<li>${item.label}</li>`)
     this.container.appendChild(li)
     const result = {
       item: item,
@@ -274,7 +274,7 @@ export const SingleMixin = (Base) =>
     }
 
     displaySelected(result) {
-      const [root, { close }] = DOMUtils.loadTemplateWithRefs(`
+      const [root, { close }] = DOMUtils.loadTemplateWithRefs(Utils.sanitizeVars`
         <div class="with-toolbox">
           ${result.item.label}
           <button type="button" class="icon icon-16 icon-close" title="${translate('Close')}" data-ref="close"></button>
@@ -300,7 +300,7 @@ export const MultipleMixin = (Base) =>
     }
 
     displaySelected(result) {
-      const [li, { close }] = DOMUtils.loadTemplateWithRefs(`
+      const [li, { close }] = DOMUtils.loadTemplateWithRefs(Utils.sanitizeVars`
         <li class="with-toolbox">${result.item.label} <button class="icon icon-16 icon-close" type="button" data-ref="close"></button></li>
       `)
       this.selectedContainer.appendChild(li)

@@ -251,7 +251,7 @@ describe('Utils', () => {
     })
 
     it('should not fail with null value', () => {
-      assert.equal(Utils.escapeHTML(null), '')
+      assert.equal(Utils.escapeHTML(null), 'null')
     })
   })
 

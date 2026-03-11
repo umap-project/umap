@@ -107,7 +107,9 @@ export const TitleMixin = (Base) =>
     renderTitle(feature) {
       const title = feature.getDisplayName()
       if (title) {
-        return Utils.loadTemplate(`<h3 class="popup-title">${title}</h3>`)
+        return Utils.loadTemplate(
+          Utils.sanitizeVars`<h3 class="popup-title">${title}</h3>`
+        )
       }
     }
   }
@@ -115,7 +117,7 @@ export const TitleMixin = (Base) =>
 class Table extends TitleMixin(PopupTemplate) {
   makeRow(feature, field) {
     return Utils.loadTemplate(
-      `<tr><th>${field.key}</th><td>${field.render(feature.properties[field.key])}</td></tr>`
+      Utils.sanitizeVars`<tr><th>${field.key}</th><td>${field.render(feature.properties[field.key])}</td></tr>`
     )
   }
 
@@ -135,14 +137,14 @@ class Table extends TitleMixin(PopupTemplate) {
 class GeoRSSImage extends TitleMixin(PopupTemplate) {
   async renderBody(feature) {
     const body = DOMUtils.loadTemplate(
-      `<a href="${feature.properties.link}" target="_blank"></a>`
+      Utils.sanitizeVars`<a href="${feature.properties.link}" target="_blank"></a>`
     )
     if (feature.properties.img) {
       // Sadly, we are unable to override this from JS the clean way
       // See https://github.com/Leaflet/Leaflet/commit/61d746818b99d362108545c151a27f09d60960ee#commitcomment-6061847
       body.appendChild(
         DOMUtils.loadTemplate(
-          `<img src=${feature.properties.img} style="max-width: 500px; max-height: 500px;">`
+          Utils.sanitizeVars`<img src=${feature.properties.img} style="max-width: 500px; max-height: 500px;">`
         )
       )
     }
@@ -154,7 +156,7 @@ class GeoRSSLink extends PopupTemplate {
   async renderBody(feature) {
     if (feature.properties.link) {
       return Utils.loadTemplate(
-        `<a href="${feature.properties.link}" target="_blank"><h3>${feature.getDisplayName()}</h3></a>`
+        Utils.sanitizeVars`<a href="${feature.properties.link}" target="_blank"><h3>${feature.getDisplayName()}</h3></a>`
       )
     }
   }
@@ -163,7 +165,7 @@ class GeoRSSLink extends PopupTemplate {
 class OSM extends PopupTemplate {
   renderTitle(feature) {
     const color = feature.getPreviewColor()
-    const [title, { iconContainer }] = DOMUtils.loadTemplateWithRefs(`
+    const [title, { iconContainer }] = DOMUtils.loadTemplateWithRefs(Utils.sanitizeVars`
     <h3 class="popup-title" style="background-color: ${color};">
       <span data-ref="iconContainer"></span> ${this.getName(feature)}
     </h3>`)
@@ -196,49 +198,59 @@ class OSM extends PopupTemplate {
       } else {
         content = street
       }
-      const row = DOMUtils.loadTemplate(`<address class="address">${content}</address>`)
+      const row = DOMUtils.loadTemplate(
+        Utils.sanitizeVars`<address class="address">${content}</address>`
+      )
       body.appendChild(row)
     }
     if (props.website) {
       body.appendChild(
-        Utils.loadTemplate(`<div><a href="${props.website}">${props.website}</a></div>`)
+        Utils.loadTemplate(
+          Utils.sanitizeVars`<div><a href="${props.website}">${props.website}</a></div>`
+        )
       )
     }
     const phone = props.phone || props['contact:phone']
     if (phone) {
       body.appendChild(
-        Utils.loadTemplate(`<div><a href="tel:${phone}">${phone}</a></div>`)
+        Utils.loadTemplate(
+          Utils.sanitizeVars`<div><a href="tel:${phone}">${phone}</a></div>`
+        )
       )
     }
     if (props.mobile) {
       body.appendChild(
         Utils.loadTemplate(
-          `<div><a href="tel:${props.mobile}">${props.mobile}</a></div>`
+          Utils.sanitizeVars`<div><a href="tel:${props.mobile}">${props.mobile}</a></div>`
         )
       )
     }
     const email = props.email || props['contact:email']
     if (email) {
       body.appendChild(
-        Utils.loadTemplate(`<div><a href="mailto:${email}">${email}</a></div>`)
+        Utils.loadTemplate(
+          Utils.sanitizeVars`<div><a href="mailto:${email}">${email}</a></div>`
+        )
       )
     }
     if (props.panoramax) {
       body.appendChild(
         Utils.loadTemplate(
-          `<div><img src="https://api.panoramax.xyz/api/pictures/${props.panoramax}/sd.jpg" /></div>`
+          Utils.sanitizeVars`<div><img src="https://api.panoramax.xyz/api/pictures/${props.panoramax}/sd.jpg" /></div>`
         )
       )
     }
     if (props.image) {
       body.appendChild(
-        Utils.loadTemplate(`<div><img src="${props.image}" alt="" /></div>`)
+        Utils.loadTemplate(
+          Utils.sanitizeVars`<div><img src="${props.image}" alt="" /></div>`
+        )
       )
     }
     if (props.mapillary) {
       body.appendChild(
         Utils.loadTemplate(
-          `<div><a href="https://www.mapillary.com/app/?focus=photo&pKey=${props.mapillary}" target="_blank">${translate('Mapillary')}<i class="icon icon-16 icon-external-link"></i></a></div>`
+          Utils.sanitizeVars`<div><a href="https://www.mapillary.com/app/?focus=photo&pKey=${props.mapillary}" target="_blank">${translate('Mapillary')}<i class="icon icon-16 icon-external-link"></i></a></div>`
         )
       )
     }
@@ -246,7 +258,7 @@ class OSM extends PopupTemplate {
     if (wikipedia) {
       body.appendChild(
         Utils.loadTemplate(
-          `<div><a href="https://wikipedia.org/wiki/${wikipedia}" target="_blank">${translate('Wikipedia')}<i class="icon icon-16 icon-external-link"></i></a></div>`
+          Utils.sanitizeVars`<div><a href="https://wikipedia.org/wiki/${wikipedia}" target="_blank">${translate('Wikipedia')}<i class="icon icon-16 icon-external-link"></i></a></div>`
         )
       )
     }
@@ -254,7 +266,7 @@ class OSM extends PopupTemplate {
     if (wikidata) {
       body.appendChild(
         Utils.loadTemplate(
-          `<div><a href="https://www.wikidata.org/wiki/${wikidata}" target="_blank">${translate('Wikidata')}<i class="icon icon-16 icon-external-link"></i></a></div>`
+          Utils.sanitizeVars`<div><a href="https://www.wikidata.org/wiki/${wikidata}" target="_blank">${translate('Wikidata')}<i class="icon icon-16 icon-external-link"></i></a></div>`
         )
       )
     }
@@ -262,7 +274,7 @@ class OSM extends PopupTemplate {
     if (id) {
       body.appendChild(
         Utils.loadTemplate(
-          `<div class="osm-link"><a href="https://www.openstreetmap.org/${id}">${translate('See on OpenStreetMap')}<i class="icon icon-16 icon-external-link"></i></a></div>`
+          Utils.sanitizeVars`<div class="osm-link"><a href="https://www.openstreetmap.org/${id}">${translate('See on OpenStreetMap')}<i class="icon icon-16 icon-external-link"></i></a></div>`
         )
       )
     }

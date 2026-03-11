@@ -82,7 +82,7 @@ export default class Caption extends Utils.WithTemplate {
       const modified_at = translate('modified at {date}', {
         date: this._umap.modifiedAt.toLocaleDateString(),
       })
-      this.elements.dates.innerHTML = `${created_at} - ${modified_at}`
+      this.elements.dates.textContent = `${created_at} - ${modified_at}`
     } else {
       this.elements.dates.hidden = true
     }
@@ -134,8 +134,9 @@ export default class Caption extends Utils.WithTemplate {
       this.elements.licence.hidden = true
     }
     this.elements.bgName.textContent = this._leafletMap.selectedTilelayer.options.name
-    this.elements.bgAttribution.innerHTML =
+    this.elements.bgAttribution.innerHTML = Utils.escapeHTML(
       this._leafletMap.selectedTilelayer.getAttribution()
+    )
     const urls = {
       leaflet: 'http://leafletjs.com',
       django: 'https://www.djangoproject.com',

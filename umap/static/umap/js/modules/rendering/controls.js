@@ -291,7 +291,7 @@ export const AttributionControl = Control.Attribution.extend({
     // Use our own container, so we can hide/show on small screens
     const originalCredits = this._container.innerHTML
     this._container.innerHTML = ''
-    const template = `
+    const template = Utils.sanitizeVars`
       <div class="attribution-container">
         ${originalCredits}
         <span data-ref="short"> — ${Utils.toHTML(shortCredit)}</span>
@@ -347,7 +347,7 @@ export const TileLayerChooser = BaseButton.extend({
       tilelayer.options.url_template,
       this._umap._leafletMap.options.demoTileInfos
     )
-    const template = `
+    const template = Utils.sanitizeVars`
       <li>
         <img src="${src}" loading="lazy" />
         <div>${tilelayer.options.name}</div>

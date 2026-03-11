@@ -325,6 +325,14 @@ def test_map_geojson_view(client, map):
     assert "type" in j
 
 
+def test_cannot_access_map_geojson_without_read_perm(client, map):
+    map.share_status = Map.PRIVATE
+    map.save()
+    url = reverse("map_geojson", args=(map.pk,))
+    response = client.get(url)
+    assert response.status_code == 403
+
+
 def test_only_owner_can_delete(client, map, user):
     map.editors.add(user)
     url = reverse("map_delete", kwargs={"map_id": map.pk})
@@ -552,29 +560,6 @@ def test_map_attach_owner_with_already_an_owner(cookieclient, map, user):
     assert response.status_code == 403
 
 
-def test_map_attach_owner_anonymous_not_allowed(cookieclient, anonymap, user):
-    url = reverse("map_attach_owner", kwargs={"map_id": anonymap.pk})
-    cookieclient.login(username=user.username, password="123123")
-    assert anonymap.owner is None
-    response = cookieclient.post(url)
-    assert response.status_code == 403
-
-    # # GET anonymous
-    # response = client.get(url)
-    # assert login_required(response)
-    # # POST anonymous
-    # response = client.post(url, {})
-    # assert login_required(response)
-    # # GET with wrong permissions
-    # client.login(username=user.username, password="123123")
-    # response = client.get(url)
-    # assert response.status_code == 403
-    # # POST with wrong permissions
-    # client.login(username=user.username, password="123123")
-    # response = client.post(url, {})
-    # assert response.status_code == 403
-
-
 def test_create_readonly(client, user, post_data, settings):
     settings.UMAP_READONLY = True
     url = reverse("map_create")
@@ -623,11 +608,11 @@ def test_stars_link(client, map, user):
 
 @pytest.mark.usefixtures("allow_anonymous")
 def test_cannot_send_link_on_owned_map(client, map):
+    assert map.owner
     assert len(mail.outbox) == 0
     url = reverse("map_send_edit_link", args=(map.pk,))
     resp = client.post(url, {"email": "foo@bar.org"})
-    assert resp.status_code == 200
-    assert json.loads(resp.content.decode()) == {"login_required": "/en/login/"}
+    assert resp.status_code == 403
     assert len(mail.outbox) == 0
 
 

@@ -1,5 +1,6 @@
 import { translate } from '../i18n.js'
 import * as DOMUtils from '../domutils.js'
+import * as Utils from '../utils.js'
 
 export class Importer {
   constructor(map, options) {
@@ -20,7 +21,7 @@ export class Importer {
 
     for (const dataset of this.choices) {
       const option = DOMUtils.loadTemplate(
-        `<option value="${dataset.url}" data-format="${dataset.format || 'geojson'}">${dataset.label}</option>`
+        Utils.sanitizeVars`<option value="${dataset.url}" data-format="${dataset.format || 'geojson'}">${dataset.label}</option>`
       )
       select.appendChild(option)
     }

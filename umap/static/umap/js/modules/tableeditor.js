@@ -1,7 +1,7 @@
 import { MutatingForm } from './form/builder.js'
 import { translate } from './i18n.js'
 import ContextMenu from './ui/contextmenu.js'
-import { WithTemplate, loadTemplate } from './utils.js'
+import * as Utils from './utils.js'
 
 const TEMPLATE = `
   <table>
@@ -13,7 +13,7 @@ const TEMPLATE = `
   </table>
 `
 
-export default class TableEditor extends WithTemplate {
+export default class TableEditor extends Utils.WithTemplate {
   constructor(umap, datalayer, leafletMap) {
     super()
     this.datalayer = datalayer
@@ -90,12 +90,12 @@ export default class TableEditor extends WithTemplate {
 
   renderHeaders() {
     this.elements.header.innerHTML = ''
-    const th = loadTemplate('<th><input type="checkbox" /></th>')
+    const th = Utils.loadTemplate('<th><input type="checkbox" /></th>')
     const checkbox = th.firstChild
     this.elements.header.appendChild(th)
     for (const field of this.fields) {
       this.elements.header.appendChild(
-        loadTemplate(
+        Utils.loadTemplate(
           `<th>${field.key}<button data-property="${field.key}" data-field-parent="${field.parent}" class="flat" aria-label="${translate('Advanced actions')}">…</button></th>`
         )
       )
@@ -109,17 +109,20 @@ export default class TableEditor extends WithTemplate {
   renderBody() {
     const bounds = this._leafletMap.getBounds()
     const inBbox = this._umap.browser.options.inBbox
-    let html = ''
+    this.elements.body.innerHTML = ''
     this.datalayer.features.forEach((feature) => {
       if (feature.isFiltered()) return
       if (inBbox && !feature.isOnScreen(bounds)) return
       const tds = this.fields.map(
         (field) =>
-          `<td tabindex="0" data-property="${field.key}">${feature.properties[field.key] ?? ''}</td>`
+          Utils.sanitizeVars`<td tabindex="0" data-property="${field.key}">${feature.properties[field.key] ?? ''}</td>`
       )
-      html += `<tr data-feature="${feature.id}"><th><input type="checkbox" /></th>${tds.join('')}</tr>`
+      this.elements.body.appendChild(
+        Utils.loadTemplate(
+          `<tr data-feature="${feature.id}"><th><input type="checkbox" /></th>${tds.join('')}</tr>`
+        )
+      )
     })
-    this.elements.body.innerHTML = html
   }
 
   addField() {
@@ -134,14 +137,14 @@ export default class TableEditor extends WithTemplate {
 
     const actions = []
     if (!this.datalayer.isRemoteLayer()) {
-      const addButton = loadTemplate(`
+      const addButton = Utils.loadTemplate(`
         <button class="flat" type="button" data-ref="add">
           <i class="icon icon-16 icon-add"></i>${translate('Add a new field')}
         </button>`)
       addButton.addEventListener('click', () => this.addField())
       actions.push(addButton)
 
-      const deleteButton = loadTemplate(`
+      const deleteButton = Utils.loadTemplate(`
         <button class="flat" type="button" data-ref="delete">
           <i class="icon icon-16 icon-delete"></i>${translate('Delete selected rows')}
         </button>`)
@@ -149,7 +152,7 @@ export default class TableEditor extends WithTemplate {
       actions.push(deleteButton)
     }
 
-    const filterButton = loadTemplate(`
+    const filterButton = Utils.loadTemplate(`
       <button class="flat" type="button" data-ref="filters">
         <i class="icon icon-16 icon-filters"></i>${translate('Filter data')}
       </button>`)

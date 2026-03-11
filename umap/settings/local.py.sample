@@ -61,9 +61,7 @@ SOCIAL_AUTH_BACKEND_ERROR_URL = "/"
 
 # If you want to add a playground map, add its primary key
 # UMAP_DEMO_PK = 204
-# If you want to add a showcase map on the home page, add its primary key
-# UMAP_SHOWCASE_PK = 1156
-# Add a baner to warn people this instance is not production ready.
+# Add a banner to warn people this instance is not production ready.
 UMAP_DEMO_SITE = True
 
 # Whether to allow non authenticated people to create maps.

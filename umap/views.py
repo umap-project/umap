@@ -1,4 +1,5 @@
 import io
+import ipaddress
 import json
 import mimetypes
 import re
@@ -40,7 +41,6 @@ from django.middleware.gzip import re_accepts_gzip
 from django.shortcuts import get_object_or_404
 from django.urls import resolve, reverse, reverse_lazy
 from django.utils import translation
-from django.utils.encoding import smart_bytes
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _
 from django.views.decorators.cache import cache_control
@@ -165,17 +165,9 @@ class Home(PaginatorMixin, TemplateView, PublicMapsMixin):
             except Map.DoesNotExist:
                 pass
 
-        showcase_map = None
-        if hasattr(settings, "UMAP_SHOWCASE_PK"):
-            try:
-                showcase_map = Map.public.get(pk=settings.UMAP_SHOWCASE_PK)
-            except Map.DoesNotExist:
-                pass
-
         return {
             "maps": maps,
             "demo_map": demo_map,
-            "showcase_map": showcase_map,
         }
 
 
@@ -446,43 +438,12 @@ class UserDownload(DetailView, SearchMixin):
 user_download = UserDownload.as_view()
 
 
-class MapsShowCase(View):
-    def get(self, *args, **kwargs):
-        maps = Map.public.filter(center__distance_gt=(DEFAULT_CENTER, D(km=1)))
-        maps = maps.order_by("-modified_at")[:2500]
-
-        def make(m):
-            description = m.description or ""
-            if m.owner:
-                description = "{description}\n{by} [[{url}|{name}]]".format(
-                    description=description,
-                    by=_("by"),
-                    url=m.owner.get_url(),
-                    name=m.owner,
-                )
-            description = "{}\n[[{}|{}]]".format(
-                description, m.get_absolute_url(), _("View the map")
-            )
-            geometry = m.settings.get("geometry", json.loads(m.center.geojson))
-            return {
-                "type": "Feature",
-                "geometry": geometry,
-                "properties": {"name": m.name, "description": description},
-            }
-
-        geojson = {"type": "FeatureCollection", "features": [make(m) for m in maps]}
-        return HttpResponse(smart_bytes(json_dumps(geojson)))
-
-
-showcase = MapsShowCase.as_view()
-
-
 def validate_url(request):
     assert request.method == "GET", "Wrong HTTP method"
     url = request.GET.get("url")
     assert url, "Missing URL"
     try:
-        URLValidator(url)
+        URLValidator()(url)
     except ValidationError as err:
         raise AssertionError(err)
     assert "HTTP_REFERER" in request.META, "Missing HTTP_REFERER"
@@ -494,11 +455,13 @@ def validate_url(request):
     assert toproxy.hostname != "localhost", "Invalid localhost target"
     assert toproxy.netloc != local.netloc, "Invalid netloc"
     try:
-        # clean this when in python 3.4
-        ipaddress = socket.gethostbyname(toproxy.hostname)
-    except Exception as err:
+        results = socket.getaddrinfo(toproxy.hostname, None)
+        all_ips = list(set(r[4][0] for r in results))
+    except socket.gaierror as err:
         raise AssertionError(err)
-    assert not PRIVATE_IP.match(ipaddress), "Private IP"
+    else:
+        for ip in all_ips:
+            assert not ipaddress.ip_address(ip).is_private, "Private IP"
     return url
 
 
@@ -1019,12 +982,7 @@ class UpdateMapPermissions(FormLessEditMixin, UpdateView):
 class AttachAnonymousMap(View):
     def post(self, *args, **kwargs):
         self.object = kwargs["map_inst"]
-        if (
-            self.object.owner
-            or not self.object.is_anonymous_owner(self.request)
-            or not self.object.can_edit(self.request)
-            or not self.request.user.is_authenticated
-        ):
+        if not self.request.user.is_authenticated:
             return HttpResponseForbidden()
         self.object.owner = self.request.user
         self.object.save()
@@ -1036,12 +994,6 @@ class SendEditLink(FormLessEditMixin, FormView):
 
     def post(self, form, **kwargs):
         self.object = kwargs["map_inst"]
-        if (
-            self.object.owner
-            or not self.object.is_anonymous_owner(self.request)
-            or not self.object.can_edit(self.request)
-        ):
-            return HttpResponseForbidden()
         form = self.get_form()
         if form.is_valid():
             email = form.cleaned_data["email"]
@@ -1083,7 +1035,7 @@ class MapDelete(DeleteView):
         if is_ajax(self.request):
             return simple_json_response(redirect=redirect_url)
         else:
-            return HttpResponseRedirect(form.data.get("next") or redirect_url)
+            return HttpResponseRedirect(redirect_url)
 
 
 class MapClone(PermissionsMixin, View):
@@ -1169,9 +1121,9 @@ class MapAnonymousEditUrl(RedirectView):
         return response
 
 
-# ############## #
+# ############## #
 #    DataLayer   #
-# ############## #
+# ############## #
 
 
 class DataLayerView(BaseDetailView):
@@ -1322,12 +1274,7 @@ class DataLayerUpdate(FormLessEditMixin, UpdateView):
             return None
 
     def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        if self.object.map.pk != int(self.kwargs["map_id"]):
-            return HttpResponseForbidden()
-
-        if not self.object.can_edit(request=self.request):
-            return HttpResponseForbidden()
+        self.object = kwargs["datalayer_inst"]
 
         reference_version = self.request.headers.get("X-Datalayer-Reference")
         if self.has_changes_since(reference_version):
@@ -1372,9 +1319,7 @@ class DataLayerDelete(DeleteView):
     model = DataLayer
 
     def form_valid(self, form):
-        self.object = self.get_object()
-        if self.object.map != self.kwargs["map_inst"]:
-            return HttpResponseForbidden()
+        self.object = self.kwargs["datalayer_inst"]
         self.object.move_to_trash()
         return simple_json_response(info=_("Layer successfully deleted."))
 
@@ -1401,9 +1346,9 @@ class UpdateDataLayerPermissions(FormLessEditMixin, UpdateView):
         return simple_json_response(info=_("Permissions updated with success!"))
 
 
-# ############## #
+# ############## #
 #     Picto      #
-# ############## #
+# ############## #
 
 
 class PictogramJSONList(ListView):

@@ -797,7 +797,7 @@ export class DataLayer {
 
     if (layerFields.length) {
       const builder = new MutatingForm(this, layerFields)
-      const template = `
+      const template = Utils.sanitizeVars`
         <details id="layer-properties">
           <summary><h4>${this.layer.getName()}: ${translate('settings')}</h4></summary>
           <fieldset data-ref=fieldset></fieldset>

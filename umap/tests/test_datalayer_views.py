@@ -640,3 +640,47 @@ def test_saving_datalayer_should_change_map_last_modified(
     response = client.post(url, post_data, follow=True)
     assert response.status_code == 200
     assert Map.objects.get(pk=map.pk).modified_at.date() != old_modified_at
+
+
+def test_can_edit_datalayer_permissions(client, datalayer, map):
+    datalayer.edit_status = DataLayer.INHERIT
+    datalayer.save()
+    url = reverse("datalayer_permissions", args=(map.pk, datalayer.pk))
+    client.login(username=map.owner.username, password="123123")
+    response = client.post(url, {"edit_status": DataLayer.ANONYMOUS}, follow=True)
+    assert response.status_code == 200
+    assert DataLayer.objects.get(pk=datalayer.pk).edit_status == DataLayer.ANONYMOUS
+
+
+def test_cannot_edit_datalayer_permissions_without_map_perms(
+    client, datalayer, map, user
+):
+    datalayer.edit_status = DataLayer.COLLABORATORS
+    datalayer.save()
+    map.edit_status = Map.OWNER
+    map.editors.add(user)
+    map.save()
+    # User is a collaborator, and thus has rights on the datalayer, but not on the map
+    url = reverse("datalayer_permissions", args=(map.pk, datalayer.pk))
+    client.login(username=user.username, password="123123")
+    response = client.post(url, {"edit_status": DataLayer.ANONYMOUS}, follow=True)
+    assert response.status_code == 403
+    assert DataLayer.objects.get(pk=datalayer.pk).edit_status == DataLayer.COLLABORATORS
+
+
+def test_cannot_edit_datalayer_permissions_with_wrong_map_id(
+    client, datalayer, map, user
+):
+    user_map = MapFactory(owner=user)
+    datalayer.edit_status = DataLayer.COLLABORATORS
+    datalayer.save()
+    map.edit_status = Map.OWNER
+    map.editors.add(user)
+    map.save()
+    # Try to cheat and use a map the user has rights on, but the datalayer does not
+    # belong to
+    url = reverse("datalayer_permissions", args=(user_map.pk, datalayer.pk))
+    client.login(username=user.username, password="123123")
+    response = client.post(url, {"edit_status": DataLayer.ANONYMOUS}, follow=True)
+    assert response.status_code == 403
+    assert DataLayer.objects.get(pk=datalayer.pk).edit_status == DataLayer.COLLABORATORS

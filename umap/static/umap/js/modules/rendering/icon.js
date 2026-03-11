@@ -268,9 +268,9 @@ export function isImg(src) {
 export function makeElement(src, parent) {
   let icon
   if (isImg(src)) {
-    icon = Utils.loadTemplate(`<img loading="lazy" src="${src}">`)
+    icon = Utils.loadTemplate(Utils.sanitizeVars`<img loading="lazy" src="${src}">`)
   } else {
-    icon = Utils.loadTemplate(`<span>${src}</span>`)
+    icon = Utils.loadTemplate(Utils.sanitizeVars`<span>${src}</span>`)
   }
   parent.appendChild(icon)
   return icon

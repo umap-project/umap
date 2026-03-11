@@ -4,7 +4,7 @@ import * as Utils from './utils.js'
 import Orderable from './orderable.js'
 import { Fields } from './form/fields.js'
 
-const EMPTY_VALUE = translate('<empty value>')
+const EMPTY_VALUE = translate('[empty value]')
 
 const Widgets = {}
 
@@ -278,7 +278,7 @@ export class Filters {
   }
 
   _listFilters(filters, container, title) {
-    const template = `
+    const template = Utils.sanitizeVars`
       <details>
         <summary>${title}</summary>
         <ul data-ref=ul></ul>
@@ -300,7 +300,7 @@ export class Filters {
     }
     filters.available.forEach((filter, fieldKey) => {
       const [li, { edit, remove }] = Utils.loadTemplateWithRefs(
-        `<li class="orderable with-toolbox" data-fieldkey="${fieldKey}">
+        Utils.sanitizeVars`<li class="orderable with-toolbox" data-fieldkey="${fieldKey}">
           <span>
             ${filter.label || fieldKey}
           </span>
@@ -407,7 +407,8 @@ export class Filters {
       label = translate('Add filter')
     }
 
-    const [container, { body, editField }] = Utils.loadTemplateWithRefs(`
+    const [container, { body, editField }] =
+      Utils.loadTemplateWithRefs(Utils.sanitizeVars`
       <div>
         <h3>${label}</h3>
         <div data-ref=body></div>
@@ -506,7 +507,7 @@ const FilterByChoices = class extends FilterBase {
 
   buildLi(value) {
     const name = `${this.type}_${this.name}`
-    const [li, { input, label }] = Utils.loadTemplateWithRefs(`
+    const [li, { input, label }] = Utils.loadTemplateWithRefs(Utils.sanitizeVars`
       <li>
         <label>
           <input type="${this.type}" name="${name}" data-ref=input />

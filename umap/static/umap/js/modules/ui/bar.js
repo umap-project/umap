@@ -132,7 +132,10 @@ export class TopBar extends WithTemplate {
       const ul = Utils.loadTemplate(
         `<ul>${Object.entries(connectedPeers)
           .sort((el) => el !== this._umap.user?.name)
-          .map(([id, name]) => `<li>${name || translate('Anonymous')}</li>`)
+          .map(
+            ([id, name]) =>
+              Utils.sanitizeVars`<li>${name || translate('Anonymous')}</li>`
+          )
           .join('')}</ul>`
       )
       this._umap.tooltip.open({
@@ -279,7 +282,7 @@ export class BottomBar extends WithTemplate {
         const selected = visible.length === 1 && datalayer.isVisible() ? 'selected' : ''
         this.elements.layers.appendChild(
           Utils.loadTemplate(
-            `<option value="${datalayer.id}" ${selected}>${datalayer.getName()}</option>`
+            Utils.sanitizeVars`<option value="${datalayer.id}" ${selected}>${datalayer.getName()}</option>`
           )
         )
       }
