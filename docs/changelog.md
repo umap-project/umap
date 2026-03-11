@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.6.3 - 2026-03-11
+
+* make sure map geojson view honour share_status
+* move all views permissions to decorators
+* escape strings coming from translators
+* sanitize vars in templates when source is untrusted
+* always redirect to user_dashboard after map delete
+* set CSRF_COOKIE_SECURE and SESSION_COOKIE_SECURE to True by default
+* use ipaddress to validate private IPs
+* proper way to call URLValidator
+* remove showcase map/view
+
 ## 3.6.2 - 2026-02-25
 
 * fix limitBounds not honoured at load by @yohanboniface in #3221
