@@ -118,15 +118,6 @@ body.login header {
     padding-top: 20px;
 }
 
-.showcase-map {
-    background-color: #fff;
-    padding-bottom: 28px;
-}
-
-.showcase-map .row {
-    margin-top: 28px;
-}
-
 h2.section {
     text-transform: uppercase;
     color: #666;
@@ -164,10 +155,6 @@ h2.tabs a:hover {
     text-decoration-thickness: 3px;
     text-decoration-skip-ink: none;
     text-underline-offset: 7px;
-}
-
-.showcase-map .map_fragment {
-    height: 400px;
 }
 
 .highlights {
