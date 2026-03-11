@@ -199,7 +199,6 @@ i18n_urls += decorated_patterns(
 i18n_urls += decorated_patterns([never_cache], *datalayer_urls)
 urlpatterns += i18n_patterns(
     path("", views.home, name="home"),
-    path("showcase/", cache_page(24 * 60 * 60)(views.showcase), name="maps_showcase"),
     path("search/", views.search, name="search"),
     path("about/", views.about, name="about"),
     path("user/<identifier>/stars/", views.user_stars, name="user_stars"),

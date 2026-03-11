@@ -40,7 +40,6 @@ from django.middleware.gzip import re_accepts_gzip
 from django.shortcuts import get_object_or_404
 from django.urls import resolve, reverse, reverse_lazy
 from django.utils import translation
-from django.utils.encoding import smart_bytes
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _
 from django.views.decorators.cache import cache_control
@@ -165,17 +164,9 @@ class Home(PaginatorMixin, TemplateView, PublicMapsMixin):
             except Map.DoesNotExist:
                 pass
 
-        showcase_map = None
-        if hasattr(settings, "UMAP_SHOWCASE_PK"):
-            try:
-                showcase_map = Map.public.get(pk=settings.UMAP_SHOWCASE_PK)
-            except Map.DoesNotExist:
-                pass
-
         return {
             "maps": maps,
             "demo_map": demo_map,
-            "showcase_map": showcase_map,
         }
 
 
@@ -444,37 +435,6 @@ class UserDownload(DetailView, SearchMixin):
 
 
 user_download = UserDownload.as_view()
-
-
-class MapsShowCase(View):
-    def get(self, *args, **kwargs):
-        maps = Map.public.filter(center__distance_gt=(DEFAULT_CENTER, D(km=1)))
-        maps = maps.order_by("-modified_at")[:2500]
-
-        def make(m):
-            description = m.description or ""
-            if m.owner:
-                description = "{description}\n{by} [[{url}|{name}]]".format(
-                    description=description,
-                    by=_("by"),
-                    url=m.owner.get_url(),
-                    name=m.owner,
-                )
-            description = "{}\n[[{}|{}]]".format(
-                description, m.get_absolute_url(), _("View the map")
-            )
-            geometry = m.settings.get("geometry", json.loads(m.center.geojson))
-            return {
-                "type": "Feature",
-                "geometry": geometry,
-                "properties": {"name": m.name, "description": description},
-            }
-
-        geojson = {"type": "FeatureCollection", "features": [make(m) for m in maps]}
-        return HttpResponse(smart_bytes(json_dumps(geojson)))
-
-
-showcase = MapsShowCase.as_view()
 
 
 def validate_url(request):
