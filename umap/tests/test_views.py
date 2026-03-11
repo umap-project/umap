@@ -79,6 +79,12 @@ def test_unknown_domain_raises():
         validate_url(request)
 
 
+def test_invalid_url_raises():
+    request = get("http:/foobar.com")
+    with pytest.raises(AssertionError):
+        validate_url(request)
+
+
 def test_valid_proxy_request(client):
     url = reverse("ajax-proxy")
     params = {"url": "http://example.org"}
