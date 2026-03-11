@@ -138,7 +138,7 @@ class Rule {
         }
       }
     })
-    const backButton = Utils.loadTemplate(`
+    const backButton = Utils.loadTemplate(Utils.sanitizeVars`
       <button class="flat" type="button" data-ref="add">
         <i class="icon icon-16 icon-back" title="${translate('Back to list')}"></i>
       </button>`)
@@ -156,7 +156,7 @@ class Rule {
   }
 
   renderToolbox(ul) {
-    const template = `
+    const template = Utils.sanitizeVars`
       <li data-id="${stamp(this)}" class="orderable">
         <button class="icon icon-16 icon-eye" title="${translate('Toggle rule')}" data-ref=toggle></button>
         <button class="icon icon-16 icon-edit show-on-edit" title="${translate('Edit')}" data-ref=edit></button>
@@ -198,7 +198,7 @@ class Rule {
 
   renderLegend(ul) {
     const [li, { colorBox }] = Utils.loadTemplateWithRefs(
-      `<li><span class="color-box" data-ref=colorBox></span>${this.label}</li>`
+      Utils.sanitizeVars`<li><span class="color-box" data-ref=colorBox></span>${this.label}</li>`
     )
     const bgcolor =
       this.properties.fillColor || this.properties.color || this.parent.getColor()
@@ -257,7 +257,7 @@ export default class Rules {
   }
 
   edit(container) {
-    const template = `
+    const template = Utils.sanitizeVars`
       <details id="rules">
         <summary><h4>${translate('Conditional style rules')}</h4></summary>
         <fieldset>

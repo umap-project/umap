@@ -221,7 +221,7 @@ export class Importer {
         this.resetSelect(datasets)
         for (const result of results) {
           const el = Utils.loadTemplate(
-            `<option value="${result.url}" data-url="${result.url}" data-bbox_url="${result.bbox_url || ''}">${result.label}</option>`
+            Utils.sanitizeVars`<option value="${result.url}" data-url="${result.url}" data-bbox_url="${result.bbox_url || ''}">${result.label}</option>`
           )
           datasets.appendChild(el)
         }
@@ -230,7 +230,7 @@ export class Importer {
     })
     for (const instance of this.portals) {
       const el = Utils.loadTemplate(
-        `<option value="${instance.url}" data-platform="${instance.platform}">${instance.name}</option>`
+        Utils.sanitizeVars`<option value="${instance.url}" data-platform="${instance.platform}">${instance.name}</option>`
       )
       portals.appendChild(el)
     }

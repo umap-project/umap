@@ -6,6 +6,7 @@ import {
 import Browser from '../browser.js'
 import loadTemplate from './template.js'
 import * as DOMUtils from '../domutils.js'
+import * as Utils from '../utils.js'
 
 export default function loadPopup(name) {
   switch (name) {
@@ -36,7 +37,9 @@ const Popup = BasePopup.extend({
     if (!elements.length && container.textContent.replace('\n', '') === '') {
       container.innerHTML = ''
       container.appendChild(
-        DOMUtils.loadTemplate(`<h3>${this.feature.getDisplayName()}</h3>`)
+        DOMUtils.loadTemplate(
+          Utils.sanitizeVars`<h3>${this.feature.getDisplayName()}</h3>`
+        )
       )
     }
     this.setContent(container)

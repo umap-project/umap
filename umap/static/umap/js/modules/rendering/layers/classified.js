@@ -83,7 +83,7 @@ const ClassifiedMixin = {
       const rgbColor = DOMUtils.colorToRGB(color)
       const opacity = this.datalayer.getOption('fillOpacity')
       const bgColor = `rgba(${rgbColor.join(',')}, ${opacity})`
-      const li = Utils.loadTemplate(`
+      const li = Utils.loadTemplate(Utils.sanitizeVars`
         <li>
           <span class="datalayer-color" style="background-color: ${bgColor};"></span>
           <span>${label}</span>
@@ -362,7 +362,7 @@ export const Circles = FeatureGroup.extend({
     ]
     for (const [size, label] of items) {
       parent.appendChild(
-        DOMUtils.loadTemplate(`
+        DOMUtils.loadTemplate(Utils.sanitizeVars`
         <li>
           <span class="circle"
                 style="background-color: ${color};

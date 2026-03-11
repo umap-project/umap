@@ -139,7 +139,7 @@ Fields.Base = class {
 
 Fields.Textarea = class extends Fields.Base {
   getTemplate() {
-    return `<textarea placeholder="${this.properties.placeholder || ''}" name="${this.name}" data-ref=textarea></textarea>`
+    return Utils.sanitizeVars`<textarea placeholder="${this.properties.placeholder || ''}" name="${this.name}" data-ref=textarea></textarea>`
   }
 
   build() {
@@ -176,7 +176,7 @@ Fields.Textarea = class extends Fields.Base {
 
 Fields.Input = class extends Fields.Base {
   getTemplate() {
-    return `<input type="${this.type()}" name="${this.name}" placeholder="${this.properties.placeholder || ''}" data-ref=input />`
+    return Utils.sanitizeVars`<input type="${this.type()}" name="${this.name}" placeholder="${this.properties.placeholder || ''}" data-ref=input />`
   }
 
   build() {
@@ -333,7 +333,7 @@ Fields.DateTimeInput = class extends DateTimeMixin(Fields.Input) {}
 
 Fields.CheckBox = class extends Fields.Base {
   getTemplate() {
-    return `<input type=checkbox name="${this.name}" data-ref=input />`
+    return Utils.sanitizeVars`<input type=checkbox name="${this.name}" data-ref=input />`
   }
 
   build() {
@@ -364,7 +364,7 @@ Fields.CheckBox = class extends Fields.Base {
 
 Fields.CheckBoxes = class extends Fields.Base {
   getInputTemplate(value, label) {
-    return `<label><input type=checkbox value="${value}" name="${this.name}" data-ref=input />${label}</label>`
+    return Utils.sanitizeVars`<label><input type=checkbox value="${value}" name="${this.name}" data-ref=input />${label}</label>`
   }
 
   build() {
@@ -387,7 +387,7 @@ Fields.CheckBoxes = class extends Fields.Base {
 
 Fields.Select = class extends Fields.Base {
   getTemplate() {
-    return `<select name="${this.name}" data-ref=select></select>`
+    return Utils.sanitizeVars`<select name="${this.name}" data-ref=select></select>`
   }
 
   build() {
@@ -1114,11 +1114,11 @@ Fields.MultiChoice = class extends Fields.Base {
   addChoice(value, label, counter) {
     const id = `id.${Date.now()}.${this.name}.${counter}`
     const input = Utils.loadTemplate(
-      `<input type="radio" name="${this.name}" id="${id}" value="${value}" />`
+      Utils.sanitizeVars`<input type="radio" name="${this.name}" id="${id}" value="${value}" />`
     )
     this.elements.wrapper.appendChild(input)
     this.elements.wrapper.appendChild(
-      Utils.loadTemplate(`<label for="${id}">${label}</label>`)
+      Utils.loadTemplate(Utils.sanitizeVars`<label for="${id}">${label}</label>`)
     )
     input.addEventListener('change', () => this.sync())
   }

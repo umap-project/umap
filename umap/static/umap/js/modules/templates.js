@@ -65,7 +65,7 @@ export default class TemplateImporter {
         body.appendChild(ul)
         for (const template of data.templates) {
           const item = Utils.loadTemplate(
-            `<li>
+            Utils.sanitizeVars`<li>
                 <label>
                   <input type="radio" value="${template.id}" name="template" />${template.name}
                   <a href="${template.url}" target="_blank"><nobr>${translate('Explore')}<i class="icon icon-16 icon-external-link"></i></nobr></a>

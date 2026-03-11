@@ -1657,7 +1657,7 @@ export default class Umap {
     const author = this.properties.author
     if (author?.name) {
       const el = Utils.loadTemplate(
-        `<span class="umap-map-author"> ${translate('by')} <a href="${author.url}">${author.name}</a></span>`
+        Utils.sanitizeVars`<span class="umap-map-author"> ${translate('by')} <a href="${author.url}">${author.name}</a></span>`
       )
       container.appendChild(el)
     }
