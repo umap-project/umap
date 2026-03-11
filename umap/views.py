@@ -1035,7 +1035,7 @@ class MapDelete(DeleteView):
         if is_ajax(self.request):
             return simple_json_response(redirect=redirect_url)
         else:
-            return HttpResponseRedirect(form.data.get("next") or redirect_url)
+            return HttpResponseRedirect(redirect_url)
 
 
 class MapClone(PermissionsMixin, View):

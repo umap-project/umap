@@ -97,7 +97,6 @@
                       method="post"
                       class="map-delete">
                   {% csrf_token %}
-                  <input type="hidden" name="next" value="{% url 'user_dashboard' %}">
                   <button class="map-icon" type="submit" title="{% translate "Delete" %}">
                     <span class="icon-dashboard icon-delete"></span>
                     <span class="sr-only">{% translate "Delete" %}</span>
