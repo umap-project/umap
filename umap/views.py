@@ -1,4 +1,5 @@
 import io
+import ipaddress
 import json
 import mimetypes
 import re
@@ -454,11 +455,13 @@ def validate_url(request):
     assert toproxy.hostname != "localhost", "Invalid localhost target"
     assert toproxy.netloc != local.netloc, "Invalid netloc"
     try:
-        # clean this when in python 3.4
-        ipaddress = socket.gethostbyname(toproxy.hostname)
-    except Exception as err:
+        results = socket.getaddrinfo(toproxy.hostname, None)
+        all_ips = list(set(r[4][0] for r in results))
+    except socket.gaierror as err:
         raise AssertionError(err)
-    assert not PRIVATE_IP.match(ipaddress), "Private IP"
+    else:
+        for ip in all_ips:
+            assert not ipaddress.ip_address(ip).is_private, "Private IP"
     return url
 
 
