@@ -249,7 +249,7 @@ export default class Importer extends Utils.WithTemplate {
       if (datalayer.isLoaded() && !datalayer.isRemoteLayer()) {
         layerSelect.appendChild(
           DOMUtils.loadTemplate(
-            `<option value="${datalayer.id}">${datalayer.getName()}</option>`
+            Utils.sanitizeVars`<option value="${datalayer.id}">${datalayer.getName()}</option>`
           )
         )
       }

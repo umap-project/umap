@@ -8,7 +8,8 @@ export default class Printer {
   }
 
   build() {
-    const [container, { format, mode, scale }] = Utils.loadTemplateWithRefs(`
+    const [container, { format, mode, scale }] =
+      Utils.loadTemplateWithRefs(Utils.sanitizeVars`
       <div>
         <h3>${translate('Print map')}</h3>
         <div class="formbox">

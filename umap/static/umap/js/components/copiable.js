@@ -17,7 +17,8 @@ class CopiableTextarea extends HTMLElement {
   constructor() {
     super()
     const id = `copiable-${Utils.generateId()}`
-    this.innerHTML = `
+    this.appendChild(
+      DOMUtils.loadTemplate(Utils.sanitizeVars`
     <div class="copiable-textarea">
       <label for="${id}">${this.dataset.label}</label>
       <div>
@@ -25,7 +26,8 @@ class CopiableTextarea extends HTMLElement {
         <button type="button" class="icon icon-24 icon-copy" title="${translate('copy')}" data-ref=button></button>
       </div>
     </div>
-  `
+  `)
+    )
     this.textarea = this.querySelector('textarea')
     this.button = this.querySelector('button')
     this.button.addEventListener('click', () =>

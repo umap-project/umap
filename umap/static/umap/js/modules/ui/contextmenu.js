@@ -1,4 +1,4 @@
-import { loadTemplate, loadTemplateWithRefs } from '../utils.js'
+import * as Utils from '../utils.js'
 import { Positioned } from './base.js'
 
 export default class ContextMenu extends Positioned {
@@ -34,14 +34,14 @@ export default class ContextMenu extends Positioned {
       if (item === '-') {
         container.appendChild(document.createElement('hr'))
       } else if (item.items) {
-        const [li, { bar }] = loadTemplateWithRefs(
+        const [li, { bar }] = Utils.loadTemplateWithRefs(
           `<li class="dark"><ul data-ref=bar class="icon-bar"></ul></li>`
         )
         this.addItems(item.items, bar)
         container.appendChild(li)
       } else if (typeof item.action === 'string') {
-        const li = loadTemplate(
-          `<li class="${item.className || ''}"><a tabindex="0" href="${item.action}">${item.label}</a></li>`
+        const li = Utils.loadTemplate(
+          Utils.sanitizeVars`<li class="${item.className || ''}"><a tabindex="0" href="${item.action}">${item.label}</a></li>`
         )
         container.appendChild(li)
       } else {
@@ -49,8 +49,8 @@ export default class ContextMenu extends Positioned {
         if (item.icon) {
           content = `<i class="icon icon-16 ${item.icon}"></i>${content}`
         }
-        const li = loadTemplate(
-          `<li class="${item.className || ''}"><button tabindex="0" class="flat" title="${item.title || ''}">${content}</button></li>`
+        const li = Utils.loadTemplate(
+          Utils.sanitizeVars`<li class="${item.className || ''}"><button tabindex="0" class="flat" title="${item.title || ''}">${content}</button></li>`
         )
         li.firstChild.addEventListener('click', () => {
           this.close()
