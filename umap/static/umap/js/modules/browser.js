@@ -57,12 +57,13 @@ export default class Browser {
       open = ' open'
     }
 
-    const [container, { details, toolbox, label, ul, childrenContainer }] =
+    const [container, { details, toolbox, ul, childrenContainer, parentIcon }] =
       Utils.loadTemplateWithRefs(`
       <details data-ref=details class="datalayer" data-ondelete data-id="${datalayer.id}"${open}>
         <summary class="with-toolbox" data-ontoggle data-id="${datalayer.id}">
           <span>
-            <h4 class="datalayer-name truncate" data-onrename data-id="${datalayer.id}" data-ref=label></h4>
+            <i class="icon icon-16 icon-folder" data-ref="parentIcon"></i>
+            <h4 class="datalayer-name truncate" data-onrename data-id="${datalayer.id}"></h4>
             <span class="datalayer-counter"></span>
           </span>
           <span data-ref=toolbox></span>
@@ -78,6 +79,7 @@ export default class Browser {
     })
     datalayer.renderToolbox(toolbox)
     parentContainer.appendChild(container)
+    parentIcon.hidden = !datalayer.hasChild()
     for (const child of datalayer.layers.root.browsable()) {
       this.addDataLayer(child, childrenContainer)
     }
@@ -173,9 +175,12 @@ export default class Browser {
           </fieldset>
         </details>
         <div class="main-toolbox">
-          <i class="icon icon-16 icon-eye" title="${translate('show/hide all layers')}" data-ref="toggle"></i>
-          <i class="icon icon-16 icon-zoom" title="${translate('zoom to data extent')}" data-ref="fitBounds"></i>
-          <i class="icon icon-16 icon-download" title="${translate('download visible data')}" data-ref="download"></i>
+          <h3>${translate('Layers')}</h3>
+          <span>
+            <i class="icon icon-16 icon-download" title="${translate('download visible data')}" data-ref="download"></i>
+            <i class="icon icon-16 icon-eye" title="${translate('show/hide all layers')}" data-ref="toggle"></i>
+            <i class="icon icon-16 icon-zoom" title="${translate('zoom to data extent')}" data-ref="fitBounds"></i>
+          </span>
         </div>
         <div data-ref=dataContainer></div>
       </div>

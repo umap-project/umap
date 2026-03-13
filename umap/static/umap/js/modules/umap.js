@@ -1604,11 +1604,14 @@ export default class Umap {
         !layer.isLoaded() || layer.features.count() || layer.isRemoteLayer()
           ? ' no-children'
           : ''
-      const [li, { body, toolbox, formbox }] = Utils.loadTemplateWithRefs(`
+      const [li, { body, toolbox, formbox, icon }] = Utils.loadTemplateWithRefs(`
           <li class="orderable${nochildren}">
             <details open data-ondelete data-id="${layer.id}">
               <summary class="with-toolbox" data-ontoggle data-id="${layer.id}">
-                <span data-ref=formbox class="datalayer-editable-title truncate"></span>
+                <span>
+                  <i class="icon icon-16" data-ref="icon"></i>
+                  <span data-ref=formbox class="datalayer-editable-title truncate"></span>
+                </span>
                 <span data-ref=toolbox>
                   <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
                 </span>
@@ -1617,6 +1620,13 @@ export default class Umap {
             </details>
           </li>
         `)
+      if (layer.hasChild()) {
+        icon.classList.add('icon-folder')
+      } else if (layer.isRemoteLayer()){
+        icon.classList.add('icon-remote')
+      } else {
+        icon.classList.add('icon-layers')
+      }
       layer.renderToolbox(toolbox)
       const builder = new MutatingForm(
         layer,
