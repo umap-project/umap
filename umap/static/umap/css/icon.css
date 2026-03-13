@@ -25,11 +25,6 @@ button.icon-24,
     width: 36px;
 }
 
-.icon+span {
-    margin-inline-start: 5px;
-    margin-inline-end: 5px;
-}
-
 html[dir="rtl"] .icon {
     transform: scaleX(-1);
 }
@@ -205,6 +200,10 @@ html[dir="rtl"] .icon {
     background-position: calc(var(--tile) * 8) calc(var(--tile) * 8);
 }
 
+.icon-folder {
+    background-position: calc(var(--tile) * 8) calc(var(--tile) * 5);
+}
+
 .icon-forward {
     background-position: calc(var(--tile) * 6) calc(var(--tile) * 6);
 }
@@ -291,6 +290,10 @@ html[dir="rtl"] .icon {
 
 .icon-redo {
     background-position: calc(var(--tile) * 3) calc(var(--tile) * 7);
+}
+
+.icon-remote {
+    background-position: calc(var(--tile) * 8) calc(var(--tile) * 2);
 }
 
 .icon-resize {

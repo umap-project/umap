@@ -6,6 +6,7 @@
 .umap-browser .feature-title {
     cursor: pointer;
     max-width: 25ch;
+    font-weight: normal;
 }
 
 .umap-browser .feature-title {
@@ -122,16 +123,19 @@ summary.off h4 {
 }
 
 .umap-browser .main-toolbox {
-    padding-left: 1.3rem;
-    /* Align with toolbox below  */
     border-top: 1px solid var(--color-mediumGray);
     margin-top: var(--box-margin);
     padding-top: 3px;
     padding-bottom: 3px;
+    display: flex;
+    justify-content: space-between;
 }
 
 .umap-browser .main-toolbox i {
     cursor: pointer;
+}
+.umap-browser .main-toolbox h3 {
+    margin-bottom: 0;
 }
 
 .umap-browser details {
