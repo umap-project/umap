@@ -382,7 +382,7 @@ const locale = {
     "Back to browser": "回到瀏覽器",
     "Toggle size": "縮放大小",
     "Display the caption control": "顯示標題控制",
-    "<empty value>": "<empty value>",
+    "[empty value]": "[empty value]",
     "Min": "最小",
     "Max": "最大",
     "From": "從",

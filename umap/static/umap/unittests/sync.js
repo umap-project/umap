@@ -49,7 +49,6 @@ describe('#dispatch', () => {
   })
 })
 
-
 describe('Operations', () => {
   describe('haveSameContext', () => {
     const createOperation = (overrides = {}) => ({

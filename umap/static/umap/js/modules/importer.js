@@ -171,10 +171,11 @@ export default class Importer extends Utils.WithTemplate {
   }
 
   get layer() {
+    const properties = { name: this.layerName }
     return (
       this._layer ||
-      this._umap.datalayers[this.layerId] ||
-      this._umap.createDirtyDataLayer({ name: this.layerName })
+      this._umap.layers.tree.get(this.layerId) ||
+      this._umap.createDataLayer({ properties })
     )
   }
 
@@ -245,15 +246,20 @@ export default class Importer extends Utils.WithTemplate {
     this.raw = null
     const layerSelect = this.qs('[name="layer-id"]')
     layerSelect.innerHTML = ''
-    this._umap.datalayers.reverse().map((datalayer) => {
-      if (datalayer.isLoaded() && !datalayer.isRemoteLayer()) {
+    this._umap.layers.tree
+      .filter(
+        (datalayer) =>
+          datalayer.isLoaded() &&
+          !datalayer.isRemoteLayer() &&
+          !datalayer.layers.count()
+      )
+      .map((datalayer) => {
         layerSelect.appendChild(
           DOMUtils.loadTemplate(
-            `<option value="${datalayer.id}">${datalayer.getName()}</option>`
+            Utils.sanitizeVars`<option value="${datalayer.id}">${datalayer.getName()}</option>`
           )
         )
-      }
-    })
+      })
     layerSelect.appendChild(
       DOMUtils.loadTemplate(
         `<option value="" selected>${translate('Import in a new layer')}</option>`

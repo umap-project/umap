@@ -234,13 +234,28 @@ export class SyncEngine {
     return dirty
   }
 
+  async saveOne(obj, needSave, saved = []) {
+    if (saved.includes(obj)) return true
+    if (obj.parent && needSave.has(obj.parent)) {
+      if (!(await this.saveOne(obj.parent, needSave, saved))) {
+        return false
+      }
+    }
+    const ok = await obj.save()
+    if (!ok) return false
+    saved.push(obj)
+    const operations = needSave.get(obj)
+    for (const operation of operations) {
+      operation.dirty = false
+    }
+    return true
+  }
+
   async save() {
     const needSave = this._getDirtyObjects()
-    for (const [obj, operations] of needSave.entries()) {
-      const ok = await obj.save()
-      if (!ok) return false
-      for (const operation of operations) {
-        operation.dirty = false
+    for (const obj of needSave.keys()) {
+      if (!(await this.saveOne(obj, needSave))) {
+        return false
       }
     }
     this.saved()

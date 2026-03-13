@@ -395,6 +395,10 @@ export const SCHEMA = {
   owner: {
     type: Object,
   },
+  parentId: {
+    type: String,
+    impacts: ['data'],
+  },
   permanentCredit: {
     type: 'Text',
     impacts: ['ui'],
@@ -454,6 +458,10 @@ export const SCHEMA = {
   rank: {
     type: Number,
     impacts: ['datalayer-rank'],
+  },
+  referenceVersion: {
+    type: Number,
+    impacts: ['data'],
   },
   remoteData: {
     type: Object,
@@ -676,10 +684,6 @@ export const SCHEMA = {
   // FIXME This is an internal Leaflet property, we might want to do this differently.
   _latlng: {
     type: Object,
-    impacts: ['data'],
-  },
-  _referenceVersion: {
-    type: Number,
     impacts: ['data'],
   },
 }

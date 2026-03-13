@@ -283,7 +283,7 @@ export class Fields extends Map {
     manageFilters.addEventListener('click', () => this.parent.filters.edit())
     for (const field of this.all()) {
       const [row, { edit, del, addFilter, editFilter }] = Utils.loadTemplateWithRefs(
-        `<li class="orderable with-toolbox" data-key="${field.key}">
+        Utils.sanitizeVars`<li class="orderable with-toolbox" data-key="${field.key}">
           <span>
             <i class="icon icon-16 icon-field-${field.TYPE}" title="${field.LABEL}"></i>
             ${field.key}
@@ -435,12 +435,11 @@ export class Fields extends Map {
 
   async confirmDelete(name) {
     return this.dialog
-      .confirm(translate('Are you sure you want to delete this field on all the data?'))
+      .confirm(translate('Are you sure you want to delete this field?'))
       .then(() => {
         this.parent.sync.startBatch()
         const oldFields = Utils.CopyJSON(this.parent.properties.fields)
         this.delete(name)
-        this.push()
         if (this.parent.filters.has(name)) {
           this.parent.filters.remove(name)
         }

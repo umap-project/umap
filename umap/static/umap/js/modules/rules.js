@@ -138,7 +138,7 @@ class Rule {
         }
       }
     })
-    const backButton = Utils.loadTemplate(`
+    const backButton = Utils.loadTemplate(Utils.sanitizeVars`
       <button class="flat" type="button" data-ref="add">
         <i class="icon icon-16 icon-back" title="${translate('Back to list')}"></i>
       </button>`)
@@ -156,13 +156,15 @@ class Rule {
   }
 
   renderToolbox(ul) {
-    const template = `
-      <li data-id="${stamp(this)}" class="orderable">
-        <button class="icon icon-16 icon-eye" title="${translate('Toggle rule')}" data-ref=toggle></button>
-        <button class="icon icon-16 icon-edit show-on-edit" title="${translate('Edit')}" data-ref=edit></button>
-        <button class="icon icon-16 icon-delete show-on-edit" title="${translate('Delete rule')}" data-ref=remove></button>
+    const template = Utils.sanitizeVars`
+      <li data-id="${stamp(this)}" class="orderable with-toolbox">
         <span>${this.label || translate('empty rule')}</span>
-        <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
+        <span>
+          <button class="icon icon-16 icon-eye" title="${translate('Toggle rule')}" data-ref=toggle></button>
+          <button class="icon icon-16 icon-edit show-on-edit" title="${translate('Edit')}" data-ref=edit></button>
+          <button class="icon icon-16 icon-delete show-on-edit" title="${translate('Delete rule')}" data-ref=remove></button>
+          <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
+        </span>
       </li>
     `
     const [li, { toggle, edit, remove }] = Utils.loadTemplateWithRefs(template)
@@ -198,7 +200,7 @@ class Rule {
 
   renderLegend(ul) {
     const [li, { colorBox }] = Utils.loadTemplateWithRefs(
-      `<li><span class="color-box" data-ref=colorBox></span>${this.label}</li>`
+      Utils.sanitizeVars`<li><span class="color-box" data-ref=colorBox></span>${this.label}</li>`
     )
     const bgcolor =
       this.properties.fillColor || this.properties.color || this.parent.getColor()
@@ -236,20 +238,19 @@ export default class Rules {
     }
   }
 
-  onReorder(src, dst, initialIndex, finalIndex) {
+  onReorder(src, target, dragMode) {
     const oldRules = Utils.CopyJSON(this.parent.properties.rules || {})
     const moved = this.rules.find((rule) => stamp(rule) === +src.dataset.id)
-    const reference = this.rules.find((rule) => stamp(rule) === +dst.dataset.id)
+    const reference = this.rules.find((rule) => stamp(rule) === +target.dataset.id)
     const movedIdx = this.rules.indexOf(moved)
-    let referenceIdx = this.rules.indexOf(reference)
-    const minIndex = Math.min(movedIdx, referenceIdx)
-    const maxIndex = Math.max(movedIdx, referenceIdx)
+    const referenceIdx = this.rules.indexOf(reference)
     moved._delete() // Remove from array
-    referenceIdx = this.rules.indexOf(reference)
     let newIdx
-    if (finalIndex === 0) newIdx = 0
-    else if (finalIndex > initialIndex) newIdx = referenceIdx
-    else newIdx = referenceIdx + 1
+    if (dragMode === 'above') {
+      newIdx = referenceIdx
+    } else if (dragMode === 'below') {
+      newIdx = referenceIdx + 1
+    }
     this.rules.splice(newIdx, 0, moved)
     this.parent.render(['rules'])
     this.commit()
@@ -257,7 +258,7 @@ export default class Rules {
   }
 
   edit(container) {
-    const template = `
+    const template = Utils.sanitizeVars`
       <details id="rules">
         <summary><h4>${translate('Conditional style rules')}</h4></summary>
         <fieldset>

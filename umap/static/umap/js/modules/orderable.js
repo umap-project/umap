@@ -1,23 +1,23 @@
-import { DomEvent } from '../../vendors/leaflet/leaflet-src.esm.js'
-
 export default class Orderable {
-  constructor(parent, onDrop, selector = '.orderable') {
+  constructor(parent, onDrop, properties) {
+    this.properties = Object.assign({}, properties)
     this.parent = parent
     this.onCommit = onDrop
-    this.src = null
-    this.dst = null
-    this.els = this.parent.querySelectorAll(selector)
-    for (let i = 0; i < this.els.length; i++) this.makeDraggable(this.els[i])
+    this.moved = null
+    this.target = null
+    for (const node of this.parent.querySelectorAll('.orderable')) {
+      this.makeDraggable(node)
+    }
   }
 
   makeDraggable(node) {
     node.draggable = true
-    DomEvent.on(node, 'dragstart', this.onDragStart, this)
-    DomEvent.on(node, 'dragenter', this.onDragEnter, this)
-    DomEvent.on(node, 'dragover', this.onDragOver, this)
-    DomEvent.on(node, 'dragleave', this.onDragLeave, this)
-    DomEvent.on(node, 'drop', this.onDrop, this)
-    DomEvent.on(node, 'dragend', this.onDragEnd, this)
+    node.addEventListener('dragstart', (event) => this.onDragStart(event))
+    node.addEventListener('dragenter', (event) => this.onDragEnter(event))
+    node.addEventListener('dragover', (event) => this.onDragOver(event))
+    node.addEventListener('dragleave', (event) => this.onDragLeave(event))
+    node.addEventListener('drop', (event) => this.onDrop(event))
+    node.addEventListener('dragend', (event) => this.onDragEnd(event))
   }
 
   nodeIndex(node) {
@@ -26,59 +26,122 @@ export default class Orderable {
 
   findTarget(node) {
     while (node) {
-      if (this.nodeIndex(node) !== -1) return node
+      if (node.classList.contains('orderable')) {
+        if (!this.parent.contains(node)) return null
+        return node
+      }
       node = node.parentNode
     }
   }
 
-  onDragStart(e) {
-    // e.target is the source node.
-    const realSrc = document.elementFromPoint(e.clientX, e.clientY)
+  resetCSS(el) {
+    el.classList.remove('target-above')
+    el.classList.remove('target-middle')
+    el.classList.remove('target-below')
+    el.classList.remove('target-not-allowed')
+  }
+
+  onDragStart(event) {
+    // event.target is the source nodevent.
+    const handle = document.elementFromPoint(event.clientX, event.clientY)
     // Only allow drag from the handle
-    if (!realSrc.classList.contains('icon-drag')) {
-      e.preventDefault()
+    if (!handle.classList.contains('icon-drag')) {
+      event.preventDefault()
       return
     }
-    this.src = e.target
-    this.initialIndex = this.nodeIndex(this.src)
-    this.src.classList.add('ordering')
-    e.dataTransfer.effectAllowed = 'move'
-    e.dataTransfer.setData('text/html', this.src.innerHTML)
+    this.moved = event.target
+    if (!this.moved) return
+    this.initialIndex = this.nodeIndex(this.moved)
+    this.moved.classList.add('ordering')
+    this.dropped = false
   }
 
-  onDragOver(e) {
-    DomEvent.stop(e)
-    if (e.preventDefault) e.preventDefault() // Necessary. Allows us to drop.
-    e.dataTransfer.dropEffect = 'move'
+  onDragOver(event) {
+    event.stopPropagation()
+    event.preventDefault() // Necessary. Allows us to drop.
+    event.dataTransfer.dropEffect = 'move'
+    const target = this.findTarget(event.target)
+    if (
+      !target ||
+      !this.moved ||
+      target === this.moved ||
+      this.moved.contains(target)
+    ) {
+      return false
+    }
+    this.pointerY = event.clientY
+    this.target = target
+    const top = target.getBoundingClientRect().top
+    const bottom = target.getBoundingClientRect().bottom
+    const height = bottom - top
+    const third = height / 3
+    this.dragMode = undefined
+    if (this.pointerY < top + third) {
+      this.dragMode = 'above'
+    } else if (this.pointerY > bottom - third) {
+      this.dragMode = 'below'
+    } else if (!this.target.classList.contains('no-children')) {
+      if (this.properties.allowTree) {
+        this.dragMode = 'middle'
+      }
+    } else {
+      this.dragMode = 'not-allowed'
+    }
+    this.resetCSS(target)
+    target.classList.add(`target-${this.dragMode}`)
+    if (this.dragMode === 'not-allowed') return
+    this.moved.classList.remove('drageffect')
+
+    this.timeout = window.setTimeout(() => {
+      if (this.pointerY !== event.clientY) return
+      this.timeout = null
+      if (this.dropped) return
+      this.moved.classList.add('drageffect')
+      const parentNode = target.parentNode
+      if (this.dragMode === 'above') {
+        parentNode.insertBefore(this.moved, this.target)
+      } else if (this.dragMode === 'below') {
+        if (this.target.nextSibling) {
+          parentNode.insertBefore(this.moved, this.target.nextSibling)
+        } else {
+          parentNode.appendChild(this.moved)
+        }
+      } else if (this.dragMode === 'middle') {
+        const container = this.target.querySelector('.orderable-container')
+        if (container) {
+          container.appendChild(this.moved)
+        }
+      }
+    }, 200)
     return false
   }
 
-  onDragEnter(e) {
-    DomEvent.stop(e)
-    // e.target is the current hover target.
-    const dst = this.findTarget(e.target)
-    if (!dst || dst === this.src) return
-    this.dst = dst
-    const targetIndex = this.nodeIndex(this.dst)
-    const srcIndex = this.nodeIndex(this.src)
-    if (targetIndex > srcIndex) this.parent.insertBefore(this.dst, this.src)
-    else this.parent.insertBefore(this.src, this.dst)
+  onDragEnter(event) {
+    event.stopPropagation()
+    event.preventDefault()
   }
 
-  onDragLeave(e) {
-    // e.target is previous target element.
+  onDragLeave(event) {
+    // event.target is previous target element.
+    const target = this.findTarget(event.target)
+    if (target) this.resetCSS(target)
   }
 
-  onDrop(e) {
-    // e.target is current target element.
-    if (e.stopPropagation) e.stopPropagation() // Stops the browser from redirecting.
-    if (!this.dst) return
-    this.onCommit(this.src, this.dst, this.initialIndex, this.nodeIndex(this.src))
+  onDrop(event) {
+    // event.target is current target element.
+    if (event.stopPropagation) event.stopPropagation() // Stops the browser from redirecting.
+    if (!this.target) return
+    this.resetCSS(this.target)
+    // User dropped before DOM feedback, so we think they do not want the move to proceed.
+    this.dropped = true
+    if (!this.timeout) {
+      this.onCommit(this.moved, this.target, this.dragMode)
+    }
     return false
   }
 
-  onDragEnd(e) {
-    // e.target is the source node.
-    this.src.classList.remove('ordering')
+  onDragEnd(event) {
+    // event.target is the source node.
+    this.moved.classList.remove('ordering')
   }
 }

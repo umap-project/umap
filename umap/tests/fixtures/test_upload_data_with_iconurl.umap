@@ -105,7 +105,7 @@
           }
         }
       ],
-      "_umap_options": {
+      "properties": {
         "displayOnLoad": true,
         "browsable": false,
         "editMode": "disabled",
@@ -114,7 +114,6 @@
         "color": "SpringGreen",
         "iconUrl": "/uploads/pictogram/car-24.png",
         "labelKey": "com_lieu",
-        "id": 73,
         "name": "Liste des aires de covoiturage"
       }
     }

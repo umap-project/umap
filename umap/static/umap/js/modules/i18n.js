@@ -1,5 +1,4 @@
-// Comes from https://github.com/Leaflet/Leaflet/pull/9281
-import { Util } from '../../vendors/leaflet/leaflet-src.esm.js'
+import * as Utils from './utils.js'
 
 export const locales = {}
 
@@ -10,7 +9,7 @@ export let locale = null
 // @function registerLocale(code: String, locale?: Object): String
 // Define localized strings for a given locale, defined by `code`.
 export function registerLocale(code, locale) {
-  locales[code] = Util.extend({}, locales[code], locale)
+  locales[code] = Object.assign({}, locales[code], locale)
 }
 // @function setLocale(code: String): undefined
 // Define or change the locale code to be used when translating strings.
@@ -24,6 +23,15 @@ export function getLocale() {
   return locale
 }
 
+function interpolate(str, ctx) {
+  return Utils.escapeHTML(
+    str
+      .split(/\{|\}/)
+      .map((t, i) => (!(i % 2) ? t : ctx[t]))
+      .join('')
+  )
+}
+
 // @function translate(string: String, data?: Object): String
 // Actually try to translate the `string`, with optional variable passed in `data`.
 export function translate(string, data = {}) {
@@ -33,7 +41,7 @@ export function translate(string, data = {}) {
   try {
     // Do not fail if some data is missing
     // a bad translation should not break the app
-    string = Util.template(string, data)
+    string = interpolate(string, data)
   } catch (err) {
     console.error(err)
   }

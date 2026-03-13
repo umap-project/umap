@@ -110,5 +110,6 @@
    <rect id="rect2" x="78.048" y="70.255" width="5.8208" height="2.1167" style="paint-order:fill markers stroke"/>
    <rect id="rect4" x="79.635" y="71.727" width="2.6458" height="2.1167" stroke="#fff" stroke-width=".26458" style="paint-order:fill markers stroke"/>
   </g>
+  <path id="path4" d="m77.787 54.771v-4.7526c0-0.12594 0.13106-0.27693 0.257-0.27693h2.1242l0.52917 0.79375h3.1746c0.1244 0 0.26502 0.13834 0.26502 0.26274v3.968c0 0.12684-0.14415 0.26715-0.27099 0.26715h-5.8151c-0.124 0-0.26395-0.13814-0.26395-0.26214z" fill="#4d4d4d" fill-rule="evenodd"/>
  </g>
 </svg>

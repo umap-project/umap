@@ -107,10 +107,9 @@ def test_create_remote_data_layer(page, live_server, tilelayer, settings):
     datalayer = DataLayer.objects.last()
     data = json.loads(Path(datalayer.geojson.path).read_text())
     assert data == {
-        "_umap_options": {
+        "properties": {
             "browsable": True,
             "displayOnLoad": True,
-            "editMode": "advanced",
             "fields": [
                 {
                     "key": "name",
@@ -121,15 +120,15 @@ def test_create_remote_data_layer(page, live_server, tilelayer, settings):
                     "type": "String",
                 },
             ],
-            "id": str(datalayer.pk),
             "inCaption": True,
             "name": "Layer 1",
-            "rank": 0,
             "remoteData": {
                 "format": "geojson",
                 "url": "https://remote.org/data.json",
             },
         },
+        "rank": 0,
+        "id": str(datalayer.pk),
         "features": [],
         "type": "FeatureCollection",
     }

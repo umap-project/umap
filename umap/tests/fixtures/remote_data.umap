@@ -35,7 +35,7 @@
     {
       "type": "FeatureCollection",
       "features": [],
-      "_umap_options": {
+      "properties": {
         "name": "Itinéraire D",
         "color": "#d34e8d",
         "editMode": "advanced",

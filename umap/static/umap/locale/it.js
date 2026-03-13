@@ -382,7 +382,7 @@ const locale = {
     "Back to browser": "Torna all'elenco",
     "Toggle size": "Commuta dimensioni",
     "Display the caption control": "Visualizza il controllo delle didascalie",
-    "<empty value>": "<empty value>",
+    "[empty value]": "[empty value]",
     "Min": "Min",
     "Max": "Max",
     "From": "Da",

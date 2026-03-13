@@ -13,7 +13,7 @@ from django.utils.functional import classproperty
 from django.utils.translation import gettext_lazy as _
 
 from .managers import PrivateManager, PublicManager
-from .utils import _urls_for_js, normalize_string
+from .utils import _urls_for_js, layers_tree, normalize_string
 
 
 # Did not find a clean way to do this in Django
@@ -261,15 +261,14 @@ class Map(NamedModel):
 
     @property
     def preview_settings(self):
-        layers = self.datalayers
-        datalayer_data = [c.metadata() for c in layers]
         map_settings = self.settings
         if "properties" not in map_settings:
             map_settings["properties"] = {}
+        layers = [l.metadata() for l in self.datalayers]
         map_settings["properties"].update(
             {
                 "tilelayers": [TileLayer.get_default().json],
-                "datalayers": datalayer_data,
+                "datalayers": layers_tree(layers),
                 "urls": _urls_for_js(),
                 "STATIC_URL": settings.STATIC_URL,
                 "editMode": "disabled",
@@ -309,9 +308,12 @@ class Map(NamedModel):
                     layer = json.loads(f.read())
             if datalayer.settings:
                 datalayer.settings.pop("id", None)
-                layer["_umap_options"] = datalayer.settings
+                datalayer.settings.pop("parent", None)
+                layer["id"] = datalayer.pk
+                layer["parent"] = datalayer.parent.pk if datalayer.parent else None
+                layer["properties"] = datalayer.settings
             datalayers.append(layer)
-        umapjson["layers"] = datalayers
+        umapjson["layers"] = layers_tree(datalayers, keep_ids=False)
         return umapjson
 
     def get_absolute_url(self):
@@ -504,6 +506,7 @@ class DataLayer(NamedModel):
     uuid = models.UUIDField(unique=True, primary_key=True, editable=False)
     old_id = models.IntegerField(null=True, blank=True)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
+    parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True)
     description = models.TextField(blank=True, null=True, verbose_name=_("description"))
     geojson = models.FileField(
         upload_to=upload_to, blank=True, null=True, storage=set_storage
@@ -542,33 +545,39 @@ class DataLayer(NamedModel):
         self.geojson.storage.onDatalayerDelete(self)
         return super().delete(**kwargs)
 
+    def _fallback_properties_from_file(self):
+        # For datalayers created before settings were saved in DB
+        try:
+            data = json.loads(self.geojson.read().decode())
+        except FileNotFoundError:
+            data = {}
+        metadata = data.get("_umap_options")
+        if not metadata:
+            metadata = {
+                "name": self.name,
+                "displayOnLoad": self.display_on_load,
+            }
+        # Save it to prevent file reading at each map load.
+        self.settings = metadata
+        # Do not update the modified_at.
+        self.save(update_fields=["settings"])
+        return metadata
+
     def metadata(self, request=None):
         # Retrocompat: minimal settings for maps not saved after settings property
         # has been introduced
-        metadata = self.settings
-        if not metadata:
-            # Fallback to file for old datalayers.
-            try:
-                data = json.loads(self.geojson.read().decode())
-            except FileNotFoundError:
-                data = {}
-            metadata = data.get("_umap_options")
-            if not metadata:
-                metadata = {
-                    "name": self.name,
-                    "displayOnLoad": self.display_on_load,
-                }
-            # Save it to prevent file reading at each map load.
-            self.settings = metadata
-            # Do not update the modified_at.
-            self.save(update_fields=["settings"])
+        properties = self.settings
+        if not properties:
+            properties = self._fallback_properties_from_file()
+        metadata = {"properties": properties}
         if self.old_id:
             metadata["old_id"] = self.old_id
         metadata["id"] = self.pk
         metadata["rank"] = self.rank
+        metadata["parent"] = self.parent.pk if self.parent else None
         metadata["permissions"] = {"edit_status": self.edit_status}
         metadata["editMode"] = "advanced" if self.can_edit(request) else "disabled"
-        metadata["_referenceVersion"] = self.reference_version
+        metadata["referenceVersion"] = self.reference_version
         return metadata
 
     def clone(self, map_inst=None):
@@ -603,6 +612,8 @@ class DataLayer(NamedModel):
         or the request.
         """
         if self.edit_status == self.INHERIT:
+            if self.parent:
+                return self.parent.can_edit(request)
             return self.map.can_edit(request)
         can = False
         if not request:

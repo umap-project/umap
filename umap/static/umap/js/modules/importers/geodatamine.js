@@ -58,7 +58,7 @@ export class Importer {
       themes.sort((a, b) => Utils.naturalSort(a['name:fr'], b['name:fr']))
       for (const theme of themes) {
         const option = DOMUtils.loadTemplate(
-          `<option value="${theme.id}">${theme['name:fr']}</option>`
+          Utils.sanitizeVars`<option value="${theme.id}">${theme['name:fr']}</option>`
         )
         select.appendChild(option)
       }

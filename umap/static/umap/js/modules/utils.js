@@ -92,9 +92,12 @@ export default function getPurify() {
   return DOMPurifyInitializer(window)
 }
 
-export function escapeHTML(s) {
-  s = s ? s.toString() : ''
-  s = getPurify().sanitize(s, {
+export function escapeHTML(s = '') {
+  if (s?.toString) {
+    s = s.toString()
+  }
+  const DOMPurify = getPurify()
+  s = DOMPurify.sanitize(`${s}`, {
     ADD_TAGS: ['iframe'],
     ALLOWED_TAGS: [
       'h3',
@@ -137,7 +140,24 @@ export function escapeHTML(s) {
     ALLOWED_URI_REGEXP:
       /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp|geo):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
   })
+  if (
+    DOMPurify.removed?.length > 1 ||
+    (DOMPurify.removed.length && DOMPurify.removed[0].element.tagName !== 'BODY')
+  ) {
+    console.debug('Removed by DOMPurify!')
+    console.debug(DOMPurify.removed)
+    console.trace()
+  }
   return s
+}
+
+export function sanitizeVars(strings, ...values) {
+  let result = ''
+  strings.forEach((str, i) => {
+    result += str
+    result += escapeHTML(values[i])
+  })
+  return result
 }
 
 export function toHTML(r, options) {
@@ -436,21 +456,24 @@ export function toggleBadge(element, value) {
   else delete element.dataset.badge
 }
 
-export function loadTemplate(html) {
+function buildTemplate(html) {
   const template = document.createElement('template')
   template.innerHTML = html
-  return template.content.firstElementChild
+  return [template, template.content.firstElementChild]
+}
+
+export function loadTemplate(html) {
+  const [template, root] = buildTemplate(html)
+  return root
 }
 
 export function loadTemplateWithRefs(html) {
-  const template = document.createElement('template')
-  template.innerHTML = html
-  const element = template.content.firstElementChild
+  const [template, root] = buildTemplate(html)
   const elements = {}
   for (const node of template.content.querySelectorAll('[data-ref]')) {
     elements[node.dataset.ref] = node
   }
-  return [element, elements]
+  return [root, elements]
 }
 
 export class WithTemplate {
@@ -525,10 +548,12 @@ export function setObjectValue(obj, key, value) {
   if (objectToSet === undefined) return
 
   // Set the value (or delete it)
+  objectToSet[lastKey] = value
+  // This will not work for setter (eg. DataLayer.parentId)
+  // but the line above (setting the property as undefined)
+  // will do the job.
   if (typeof value === 'undefined') {
     delete objectToSet[lastKey]
-  } else {
-    objectToSet[lastKey] = value
   }
 }
 
@@ -690,4 +715,27 @@ export const LatLngIsValid = (latlng) => {
     Number.isFinite(lng) &&
     Math.abs(lng) <= 180
   )
+}
+
+export const toggleLayers = (layers, force) => {
+  // If at least one layer is shown, hide all
+  // otherwise show all
+  let allHidden = force
+  if (force === undefined) {
+    allHidden = !layers.tree.find((layer) => layer.isVisible())
+  }
+  layers.tree.map((layer) => {
+    layer.toggle(allHidden)
+  })
+  return allHidden
+}
+
+export const asciiTree = (layers) => {
+  for (const layer of layers) {
+    console.group(layer.rank, layer.getName())
+    for (const child of layer.layers) {
+      asciiTree(child.layers)
+    }
+    console.groupEnd()
+  }
 }

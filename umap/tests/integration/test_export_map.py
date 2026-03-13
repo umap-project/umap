@@ -100,7 +100,7 @@ def test_umap_export(map, live_server, bootstrap, page):
         },
         "layers": [
             {
-                "_umap_options": {
+                "properties": {
                     "browsable": True,
                     "displayOnLoad": True,
                     "name": "test datalayer",

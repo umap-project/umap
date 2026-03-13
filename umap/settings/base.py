@@ -253,6 +253,8 @@ USER_DISPLAY_NAME = "{username}"
 # See https://django-agnocomplete.readthedocs.io/en/latest/autocomplete-definition.html#agnocompletemode
 USER_AUTOCOMPLETE_FIELDS = ["^username"]
 USER_URL_FIELD = "username"
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 # =============================================================================
 # Miscellaneous project settings

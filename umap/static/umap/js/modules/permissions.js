@@ -172,9 +172,19 @@ export class MapPermissions {
         `<fieldset class="separator"><legend>${translate('Datalayers')}</legend></fieldset>`
       )
       container.appendChild(fieldset)
-      this._umap.datalayers.active().map((datalayer) => {
-        datalayer.permissions.edit(fieldset)
-      })
+      const appendLayer = (layer, parentContainer) => {
+        const [details, { body }] = Utils.loadTemplateWithRefs(
+          `<details open><summary>${translate('Permissions of {layerName}', { layerName: layer.getName() })}</summary><div data-ref=body></div></details>`
+        )
+        parentContainer.appendChild(details)
+        layer.permissions.edit(body)
+        for (const child of layer.layers) {
+          appendLayer(child, body)
+        }
+      }
+      for (const layer of this._umap.layers.root) {
+        appendLayer(layer, fieldset)
+      }
     }
   }
 
@@ -270,13 +280,13 @@ export class MapPermissions {
 }
 
 export class DataLayerPermissions {
-  constructor(umap, datalayer) {
+  constructor(umap, datalayer, permissions) {
     this._umap = umap
     this.properties = Object.assign(
       {
         edit_status: null,
       },
-      datalayer.properties.permissions
+      permissions
     )
 
     this.datalayer = datalayer
@@ -325,17 +335,6 @@ export class DataLayerPermissions {
       {},
       formData
     )
-    if (!error) {
-      this.commit()
-      return true
-    }
-  }
-
-  commit() {
-    this.datalayer.properties.permissions = Object.assign(
-      {},
-      this.datalayer.properties.permissions,
-      this.properties
-    )
+    return !error
   }
 }

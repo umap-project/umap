@@ -37,7 +37,7 @@ DATALAYER_DATA1 = {
             "geometry": {"type": "Point", "coordinates": [3.55957, 49.767074]},
         },
     ],
-    "_umap_options": {
+    "properties": {
         "name": "Calque 1",
     },
 }
@@ -67,7 +67,7 @@ DATALAYER_DATA2 = {
             "geometry": {"type": "Point", "coordinates": [4.372559, 47.945786]},
         },
     ],
-    "_umap_options": {
+    "properties": {
         "name": "Calque 2",
     },
 }
@@ -426,7 +426,7 @@ def test_delete_field_from_datalayer_also_in_map(live_server, page, openmap):
     # deleting the field in the datalayer should not delete the data, as the field
     # is also defined on the map
     data = deepcopy(DATALAYER_DATA1)
-    data["_umap_options"]["fields"] = [
+    data["properties"]["fields"] = [
         {"key": "mytype", "type": "String"},
         {"key": "mynumber", "type": "Number"},
         {"key": "name", "type": "String"},
