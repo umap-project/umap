@@ -12,6 +12,9 @@
 * proper way to call URLValidator
 * remove showcase map/view
 
+Thanks Stefan Vink from Radically Open Security for finding those issues.
+Thanks NLnet for funding this security audit work.
+
 ## 3.6.2 - 2026-02-25
 
 * fix limitBounds not honoured at load by @yohanboniface in #3221
