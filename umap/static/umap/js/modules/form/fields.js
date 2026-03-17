@@ -123,7 +123,7 @@ Fields.Base = class {
   getLabelTemplate() {
     const label = this.properties.label
     const help = this.properties.helpEntries?.join() || ''
-    return label ? `<label data-ref=label data-help="${help}">${label}</label>` : ''
+    return label ? `<label data-ref=label for="${this.id}" data-help="${help}">${label}</label>` : ''
   }
 
   fetch() {}
@@ -139,7 +139,7 @@ Fields.Base = class {
 
 Fields.Textarea = class extends Fields.Base {
   getTemplate() {
-    return Utils.sanitizeVars`<textarea placeholder="${this.properties.placeholder || ''}" name="${this.name}" data-ref=textarea></textarea>`
+    return Utils.sanitizeVars`<textarea placeholder="${this.properties.placeholder || ''}" name="${this.name}" id="${this.id}" data-ref=textarea></textarea>`
   }
 
   build() {
@@ -176,7 +176,7 @@ Fields.Textarea = class extends Fields.Base {
 
 Fields.Input = class extends Fields.Base {
   getTemplate() {
-    return Utils.sanitizeVars`<input type="${this.type()}" name="${this.name}" placeholder="${this.properties.placeholder || ''}" data-ref=input />`
+    return Utils.sanitizeVars`<input type="${this.type()}" name="${this.name}" placeholder="${this.properties.placeholder || ''}" data-ref=input id="${this.id}" />`
   }
 
   build() {
@@ -387,7 +387,7 @@ Fields.CheckBoxes = class extends Fields.Base {
 
 Fields.Select = class extends Fields.Base {
   getTemplate() {
-    return Utils.sanitizeVars`<select name="${this.name}" data-ref=select></select>`
+    return Utils.sanitizeVars`<select name="${this.name}" data-ref=select id="${this.id}"></select>`
   }
 
   build() {
