@@ -173,9 +173,14 @@ export class MapPermissions {
       )
       container.appendChild(fieldset)
       const appendLayer = (layer, parentContainer) => {
-        const [details, { body }] = Utils.loadTemplateWithRefs(
-          `<details open><summary>${translate('Permissions of {layerName}', { layerName: layer.getName() })}</summary><div data-ref=body></div></details>`
+        const [details, { body, icon }] = Utils.loadTemplateWithRefs(
+          `<details open class="layer-group">
+            <summary><i class="icon icon-16" data-ref="icon"></i>${layer.getName()}</summary>
+            <div data-ref="body"></div>
+          </details>`
         )
+        const iconClass = layer.hasChild() ? 'icon-folder' : 'icon-layer'
+        icon.classList.add(iconClass)
         parentContainer.appendChild(details)
         layer.permissions.edit(body)
         for (const child of layer.layers) {
@@ -301,14 +306,13 @@ export class DataLayerPermissions {
   }
 
   edit(container) {
+    const label = this.datalayer.hasChild() ? translate('Parent’s permissions') : translate('Layer’s permissions')
     const fields = [
       [
         'properties.edit_status',
         {
           handler: 'IntSelect',
-          label: translate('Who can edit "{layer}"', {
-            layer: this.datalayer.getName(),
-          }),
+          label: label,
           selectOptions: this._umap.properties.datalayer_edit_statuses,
         },
       ],

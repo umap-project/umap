@@ -220,6 +220,10 @@ html[dir="rtl"] .icon {
     background-position: calc(var(--tile) * 6) calc(var(--tile) * 5);
 }
 
+.icon-layer {
+    background-position: calc(var(--tile) * 8) calc(var(--tile) * 3);
+}
+
 .icon-layers {
     background-position: calc(var(--tile) * 4) calc(var(--tile) * 5);
 }

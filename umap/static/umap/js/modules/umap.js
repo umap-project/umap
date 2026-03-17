@@ -1625,7 +1625,7 @@ export default class Umap {
       } else if (layer.isRemoteLayer()){
         icon.classList.add('icon-remote')
       } else {
-        icon.classList.add('icon-layers')
+        icon.classList.add('icon-layer')
       }
       layer.renderToolbox(toolbox)
       const builder = new MutatingForm(

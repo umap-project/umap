@@ -72,6 +72,16 @@
     max-width: 35ch;
 }
 
+.panel.dark details[open].layer-group {
+    border: none;
+}
+
+.layer-group>div {
+    padding-left: var(--gutter);
+    margin-left: var(--gutter);
+    border-left: 1px solid var(--text-color);
+}
+
 @media all and (orientation:landscape) {
     .panel {
         top: var(--current-header-height);
