@@ -44,7 +44,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-  "Django==5.2.11",
+  "Django==5.2.12",
   "hatch==1.16.3",
   "ruff==0.15.6",
   "djlint==1.36.4",
@@ -67,7 +67,7 @@ test = [
   "moto[s3]==5.1.21"
 ]
 deploy = [
-  "Django==5.2.11",
+  "Django==5.2.12",
 ]
 s3 = [
   "django-storages[s3]==1.14.6",
