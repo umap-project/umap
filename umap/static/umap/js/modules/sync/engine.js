@@ -137,6 +137,7 @@ export class SyncEngine {
   }
 
   commitBatch(subject, metadata) {
+    // TODO: if batch length is 1, send simple operation instead?
     if (!this._batch.length) {
       this._batch = null
       return

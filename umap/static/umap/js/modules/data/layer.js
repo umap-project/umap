@@ -186,7 +186,7 @@ export class DataLayer {
           this.fetchRemoteData()
           break
         case 'datalayer-rank':
-          this._umap.reorderDataLayers()
+          this._umap.reorderDOM()
           break
       }
     }
@@ -793,14 +793,8 @@ export class DataLayer {
   }
 
   set parent(other) {
-    // TODO what if we remove the parent ?
-    // IT should be added to uMap layers, but is it ?
     if (other === this._parent) return
-    const parent = this.parent || this._umap
-    parent.layers.delete(this)
-    if (other) {
-      other.layers.add(this)
-    }
+    ;(other || this._umap).layers.add(this)
     this._parent = other
   }
 

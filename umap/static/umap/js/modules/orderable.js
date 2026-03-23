@@ -42,6 +42,7 @@ export default class Orderable {
   }
 
   onDragStart(event) {
+    this.dragMode = null
     // event.target is the source nodevent.
     const handle = document.elementFromPoint(event.clientX, event.clientY)
     // Only allow drag from the handle
@@ -53,7 +54,6 @@ export default class Orderable {
     if (!this.moved) return
     this.initialIndex = this.nodeIndex(this.moved)
     this.moved.classList.add('ordering')
-    this.dropped = false
   }
 
   onDragOver(event) {
@@ -61,21 +61,19 @@ export default class Orderable {
     event.preventDefault() // Necessary. Allows us to drop.
     event.dataTransfer.dropEffect = 'move'
     const target = this.findTarget(event.target)
-    if (
-      !target ||
-      !this.moved ||
-      target === this.moved ||
-      this.moved.contains(target)
-    ) {
+    if (!target || !this.moved || target === this.moved || this.moved.contains(target))
       return false
-    }
+
     this.pointerY = event.clientY
+    if (this.target && target !== this.target) {
+      this.dragMode = null
+      this.resetCSS(this.target)
+    }
     this.target = target
     const top = target.getBoundingClientRect().top
     const bottom = target.getBoundingClientRect().bottom
     const height = bottom - top
     const third = height / 3
-    this.dragMode = undefined
     if (this.pointerY < top + third) {
       this.dragMode = 'above'
     } else if (this.pointerY > bottom - third) {
@@ -91,29 +89,25 @@ export default class Orderable {
     target.classList.add(`target-${this.dragMode}`)
     if (this.dragMode === 'not-allowed') return
     this.moved.classList.remove('drageffect')
-
-    this.timeout = window.setTimeout(() => {
-      if (this.pointerY !== event.clientY) return
-      this.timeout = null
-      if (this.dropped) return
-      this.moved.classList.add('drageffect')
-      const parentNode = target.parentNode
-      if (this.dragMode === 'above') {
-        parentNode.insertBefore(this.moved, this.target)
-      } else if (this.dragMode === 'below') {
-        if (this.target.nextSibling) {
-          parentNode.insertBefore(this.moved, this.target.nextSibling)
-        } else {
-          parentNode.appendChild(this.moved)
-        }
-      } else if (this.dragMode === 'middle') {
-        const container = this.target.querySelector('.orderable-container')
-        if (container) {
-          container.appendChild(this.moved)
-        }
-      }
-    }, 200)
     return false
+  }
+
+  DOMpreview(target, dragMode) {
+    const parentNode = target.parentNode
+    if (this.dragMode === 'above') {
+      parentNode.insertBefore(this.moved, target)
+    } else if (this.dragMode === 'below') {
+      if (target.nextSibling) {
+        parentNode.insertBefore(this.moved, target.nextSibling)
+      } else {
+        parentNode.appendChild(this.moved)
+      }
+    } else if (this.dragMode === 'middle') {
+      const container = target.querySelector('.orderable-container')
+      if (container) {
+        container.appendChild(this.moved)
+      }
+    }
   }
 
   onDragEnter(event) {
@@ -124,7 +118,10 @@ export default class Orderable {
   onDragLeave(event) {
     // event.target is previous target element.
     const target = this.findTarget(event.target)
-    if (target) this.resetCSS(target)
+    if (event.target === target) {
+      this.dragMode = null
+      this.resetCSS(target)
+    }
   }
 
   onDrop(event) {
@@ -133,10 +130,8 @@ export default class Orderable {
     if (!this.target) return
     this.resetCSS(this.target)
     // User dropped before DOM feedback, so we think they do not want the move to proceed.
-    this.dropped = true
-    if (!this.timeout) {
-      this.onCommit(this.moved, this.target, this.dragMode)
-    }
+    this.DOMpreview(this.target, this.dragMode)
+    this.onCommit(this.moved, this.target, this.dragMode)
     return false
   }
 

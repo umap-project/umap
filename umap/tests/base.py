@@ -127,7 +127,7 @@ class DataLayerFactory(factory.django.DjangoModelFactory):
     @classmethod
     def _adjust_kwargs(cls, **kwargs):
         if "data" in kwargs:
-            data = copy.deepcopy(kwargs.pop("data"))
+            data = copy.deepcopy(kwargs.pop("data") or {})
             data.setdefault(
                 "properties",
                 {

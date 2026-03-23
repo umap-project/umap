@@ -2,7 +2,9 @@ import * as Utils from './utils.js'
 
 // About rank:
 // - map level (DOM) : layers with lower rank should appear below others, so
-//  added to the DOM in the order of "rank"
+//  added to the DOM in the order of "rank"; layer with higher rank will be
+//  printed above other layer (so their feature may mask features from layers
+//  with lower ranks).
 // - data browser: layers with lower rank should appear visually below, so
 //   added to the DOM in reverse order
 
@@ -144,8 +146,9 @@ export class LayerManager {
   }
 
   add(layer) {
-    layer.rank ??= this._children.size
-    const parent = layer.parent || layer._umap
+    const previousParent = layer.parent || layer._umap
+    previousParent.layers.delete(layer)
+    layer.rank = this._children.size
     this._children.set(layer.id, layer)
   }
 
@@ -155,11 +158,9 @@ export class LayerManager {
     // After = greater index, before = same index
     const shift = position === 'after' ? 1 : 0
     current.splice(targetIdx + shift, 0, layer)
-    // We cannot insert on a Map, so let's clear and again in the final order
+    // We cannot insert on a Map, so let's clear and add again in the final order
     this._children.clear()
-    let rank = 0
     for (const item of current) {
-      item.rank = rank++
       this.add(item)
     }
   }

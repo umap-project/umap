@@ -510,6 +510,10 @@ export default class Umap {
     return this.getProperty('color')
   }
 
+  getName() {
+    return this.properties.name
+  }
+
   getOption(key, feature) {
     // TODO: remove when field.js does not call blindly obj.getOption anymore
     return this.getProperty(key, feature)
@@ -1455,7 +1459,7 @@ export default class Umap {
           // this get called once per datalayers.
           // (and same for undo/redo of the action)
           // TODO: call only once
-          this.reorderDataLayers()
+          this.reorderDOM()
           break
         case 'background':
           this._leafletMap.initTileLayers()
@@ -1577,15 +1581,27 @@ export default class Umap {
       const movedLayer = this.layers.tree.get(moved.dataset.id)
       const targetLayer = this.layers.tree.get(target.dataset.id)
       this.sync.startBatch()
+      const oldParentId = movedLayer.parent?.id
+      // Set the parent before adding child, so the rank will be
+      // computed correctly
+      // We do not call parent setter, as it will issue a layers.add
+      // which we want to control here (before/after/middle).
+      const setParent = (parent) => {
+        movedLayer._parent = parent
+        movedLayer.sync.update('parentId', parent.id, oldParentId)
+      }
       if (dragMode === 'above') {
         const parent = targetLayer.parent || this
         parent.layers.addAfter(movedLayer, targetLayer)
+        setParent(targetLayer.parent)
       } else if (dragMode === 'below') {
         const parent = targetLayer.parent || this
         parent.layers.addBefore(movedLayer, targetLayer)
+        setParent(targetLayer.parent)
       } else if (dragMode === 'middle') {
         const parent = targetLayer
         parent.layers.add(movedLayer)
+        setParent(targetLayer)
       }
       this.sync.commitBatch()
       this.reorderDOM()
@@ -1622,7 +1638,7 @@ export default class Umap {
         `)
       if (layer.hasChild()) {
         icon.classList.add('icon-folder')
-      } else if (layer.isRemoteLayer()){
+      } else if (layer.isRemoteLayer()) {
         icon.classList.add('icon-remote')
       } else {
         icon.classList.add('icon-layer')
