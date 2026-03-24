@@ -179,7 +179,7 @@ export class MapPermissions {
             <div data-ref="body"></div>
           </details>`
         )
-        const iconClass = layer.hasChild() ? 'icon-folder' : 'icon-layer'
+        const iconClass = layer.group ? 'icon-folder' : 'icon-layer'
         icon.classList.add(iconClass)
         parentContainer.appendChild(details)
         layer.permissions.edit(body)
@@ -306,7 +306,9 @@ export class DataLayerPermissions {
   }
 
   edit(container) {
-    const label = this.datalayer.hasChild() ? translate('Parent’s permissions') : translate('Layer’s permissions')
+    const label = this.datalayer.hasChild()
+      ? translate('Group’s permissions')
+      : translate('Layer’s permissions')
     const fields = [
       [
         'properties.edit_status',

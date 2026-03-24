@@ -471,6 +471,11 @@ input.switch:checked~label:after {
     margin-inline-start: 3em;
 }
 
+input.switch[disabled]~label {
+    opacity: 0.5;
+}
+
+
 .button-bar,
 .umap-multiplechoice {
     margin-top: 5px;
@@ -511,6 +516,7 @@ input.switch:checked~label:after {
 .button-bar [type="button"] {
     display: inline-block;
     width: 100%;
+    text-align: center;
 }
 
 .umap-multiplechoice input[type='radio'] {

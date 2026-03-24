@@ -190,6 +190,13 @@ export const SCHEMA = {
     type: Object,
     impacts: ['data'],
   },
+  group: {
+    type: Boolean,
+    impacts: ['ui'],
+    label: translate('This layer is a group'),
+    helpText: translate('Groups can have children layers, but cannot have data.'),
+    default: false,
+  },
   heat: {
     type: Object,
     impacts: ['data'],

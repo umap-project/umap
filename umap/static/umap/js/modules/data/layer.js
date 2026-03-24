@@ -134,6 +134,10 @@ export class DataLayer {
     this.sync.update('rank', value, oldRank, { undo: false })
   }
 
+  get group() {
+    return Boolean(this.properties.group)
+  }
+
   get sortKey() {
     return this.getProperty('sortKey') || U.DEFAULT_LABEL_KEY
   }
@@ -146,6 +150,9 @@ export class DataLayer {
   }
 
   defaultName() {
+    if (this.group) {
+      return `${translate('Group')} ${this._umap.layers.tree.filter((l) => l.group).count() + 1}`
+    }
     return `${translate('Layer')} ${this._umap.layers.tree.count() + 1}`
   }
 
@@ -428,7 +435,7 @@ export class DataLayer {
 
   addFeature(feature, sync = false) {
     if (this.hasChild()) {
-      console.error('Adding feature to a parent layer', feature, this.datalayer)
+      console.error('Adding feature to a group', feature, this.datalayer)
       return
     }
     feature.connectToDataLayer(this)
@@ -810,19 +817,28 @@ export class DataLayer {
   }
 
   _editMetadata(container) {
-    const metadataFields = ['properties.name', 'properties.description']
-    if (!this.layers.count()) {
-      metadataFields.unshift([
+    const metadataFields = [
+      [
         'parentId',
-        { handler: 'ParentSwitcher', label: translate('Parent') },
-      ])
-    }
-    if (!this.layers.count()) {
+        {
+          handler: 'ParentSwitcher',
+          label: this.group ? translate('Parent group') : translate('Group'),
+        },
+      ],
+      'properties.name',
+      'properties.description',
+    ]
+    if (!this.group) {
       metadataFields.push([
         'properties.type',
         { handler: 'LayerTypeChooser', label: translate('Type of layer') },
       ])
     }
+    const groupOptions = {}
+    if (this.layers.count() || this.isRemoteLayer() || this.hasData()) {
+      groupOptions.disabled = true
+    }
+    metadataFields.push(['properties.group', groupOptions])
     metadataFields.push('properties.labelKey', [
       'properties.displayOnLoad',
       { label: translate('Display on load'), handler: 'Switch' },
@@ -846,11 +862,19 @@ export class DataLayer {
         ]
       )
     }
-    container.appendChild(
-      DOMUtils.loadTemplate(`
-      <h3><i class="icon icon-16 icon-layers"></i>${translate('Layer properties')}</h3>
+    if (this.group) {
+      container.appendChild(
+        DOMUtils.loadTemplate(`
+      <h3><i class="icon icon-16 icon-folder"></i>${translate('Group properties')}</h3>
     `)
-    )
+      )
+    } else {
+      container.appendChild(
+        DOMUtils.loadTemplate(`
+      <h3><i class="icon icon-16 icon-layer"></i>${translate('Layer properties')}</h3>
+    `)
+      )
+    }
     const builder = new MutatingForm(this, metadataFields)
     builder.on('set', ({ detail }) => {
       this._umap.onDataLayersChanged()

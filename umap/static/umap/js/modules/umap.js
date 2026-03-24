@@ -684,6 +684,11 @@ export default class Umap {
     datalayer.edit()
   }
 
+  newGroup() {
+    const group = this.createDataLayer({ properties: { group: true } })
+    group.edit()
+  }
+
   reindexDataLayers() {
     this.layers.tree.map((datalayer) => datalayer.reindex())
     this.onDataLayersChanged()
@@ -1588,7 +1593,7 @@ export default class Umap {
       // which we want to control here (before/after/middle).
       const setParent = (parent) => {
         movedLayer._parent = parent
-        movedLayer.sync.update('parentId', parent.id, oldParentId)
+        movedLayer.sync.update('parentId', parent?.id, oldParentId)
       }
       if (dragMode === 'above') {
         const parent = targetLayer.parent || this
@@ -1636,7 +1641,7 @@ export default class Umap {
             </details>
           </li>
         `)
-      if (layer.hasChild()) {
+      if (layer.group) {
         icon.classList.add('icon-folder')
       } else if (layer.isRemoteLayer()) {
         icon.classList.add('icon-remote')
@@ -1663,12 +1668,14 @@ export default class Umap {
     }
     new Orderable(ul, onReorder, { allowTree: true })
 
-    const [bar, { button }] = DOMUtils.loadTemplateWithRefs(`
-      <div class="button-bar">
-        <button type="button" class="show-on-edit block add-datalayer" data-ref="button">${translate('Add a layer')}</button>
+    const [bar, { addLayer, addGroup }] = DOMUtils.loadTemplateWithRefs(`
+      <div class="button-bar half">
+        <button type="button" class="block add-datalayer" data-ref="addLayer">${translate('Add a layer')}</button>
+        <button type="button" class="block add-group flat" data-ref="addGroup">${translate('Add a group')}</button>
       </div>
     `)
-    button.addEventListener('click', () => this.newDataLayer())
+    addLayer.addEventListener('click', () => this.newDataLayer())
+    addGroup.addEventListener('click', () => this.newGroup())
     container.appendChild(bar)
 
     this.editPanel.open({ content: container, highlight: 'layers' })

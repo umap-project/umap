@@ -79,7 +79,7 @@ export default class Browser {
     })
     datalayer.renderToolbox(toolbox)
     parentContainer.appendChild(container)
-    parentIcon.hidden = !datalayer.hasChild()
+    parentIcon.hidden = !datalayer.group
     for (const child of datalayer.layers.root.browsable()) {
       this.addDataLayer(child, childrenContainer)
     }

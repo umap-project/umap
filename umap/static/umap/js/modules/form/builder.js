@@ -44,13 +44,13 @@ export class Form extends Utils.WithEvents {
   makeField(field) {
     // field can be either a string like "option.name" or a full definition array,
     // like ['properties.tilelayer.tms', {handler: 'CheckBox', helpText: 'TMS format'}]
-    let properties
+    let contextProperties = {}
     if (Array.isArray(field)) {
-      properties = field[1] || {}
+      contextProperties = field[1]
       field = field[0]
-    } else {
-      properties = this.defaultProperties[this.getName(field)] || {}
     }
+    const defaultProperties = this.defaultProperties[this.getName(field)] || {}
+    const properties = Object.assign({}, defaultProperties, contextProperties)
     const class_ = getClass(properties.handler || 'Input')
     this.helpers[field] = new class_(this, field, properties)
     return this.helpers[field]

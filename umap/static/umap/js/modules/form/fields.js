@@ -123,7 +123,9 @@ Fields.Base = class {
   getLabelTemplate() {
     const label = this.properties.label
     const help = this.properties.helpEntries?.join() || ''
-    return label ? `<label data-ref=label for="${this.id}" data-help="${help}">${label}</label>` : ''
+    return label
+      ? `<label data-ref=label for="${this.id}" data-help="${help}">${label}</label>`
+      : ''
   }
 
   fetch() {}
@@ -338,6 +340,9 @@ Fields.CheckBox = class extends Fields.Base {
 
   build() {
     this.input = this.elements.input
+    if (this.properties.disabled) {
+      this.input.disabled = true
+    }
     this.input._helper = this
     this.fetch()
     this.input.addEventListener('change', () => this.sync())
@@ -662,12 +667,17 @@ Fields.NullableDataLayerSwitcher = class extends BaseDataLayerSwitcher {
 
 Fields.ParentSwitcher = class extends BaseDataLayerSwitcher {
   isOptionDisabled(layer) {
-    return super.isOptionDisabled(layer) || layer === this.obj
+    return (
+      super.isOptionDisabled(layer) ||
+      layer === this.obj ||
+      !layer.group ||
+      layer.ancestors.includes(this.obj)
+    )
   }
 
   getOptions() {
     const options = super.getOptions()
-    options.unshift([null, translate('Choose a parent layer')])
+    options.unshift([null, translate('Choose a group')])
     return options
   }
 
