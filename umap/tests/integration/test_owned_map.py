@@ -72,7 +72,9 @@ def test_owner_permissions_form(map, datalayer, live_server, login):
     expect(owner_field).to_be_visible()
     editors_field = page.locator(".umap-field-editors input")
     expect(editors_field).to_be_visible()
-    datalayer_label = page.get_by_text('Who can edit "test datalayer"')
+    datalayer_label = page.locator(".umap-edit-permissions").get_by_text(
+        "test datalayer"
+    )
     expect(datalayer_label).to_be_visible()
     options = page.locator(".datalayer-permissions select[name='edit_status'] option")
     expect(options).to_have_count(4)
@@ -123,7 +125,9 @@ def test_permissions_form_with_editor(map, datalayer, live_server, login, user):
     expect(owner_field).to_be_hidden()
     editors_field = page.locator(".umap-field-editors input")
     expect(editors_field).to_be_visible()
-    datalayer_label = page.get_by_text('Who can edit "test datalayer"')
+    datalayer_label = page.locator(".umap-edit-permissions").get_by_text(
+        "test datalayer"
+    )
     expect(datalayer_label).to_be_visible()
 
 
@@ -200,7 +204,9 @@ def test_can_change_perms_after_create(tilelayer, live_server, login, user):
     )
     expect(page.locator(".umap-field-owner")).to_be_visible()
     expect(page.locator(".umap-field-editors input")).to_be_visible()
-    expect(page.get_by_text('Who can edit "Layer 1"')).to_be_visible()
+    expect(
+        page.locator(".umap-edit-permissions").get_by_text("Layer 1")
+    ).to_be_visible()
     options = page.locator(".datalayer-permissions select[name='edit_status'] option")
     expect(options).to_have_count(4)
     option = page.locator(

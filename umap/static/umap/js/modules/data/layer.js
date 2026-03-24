@@ -486,6 +486,9 @@ export class DataLayer {
         let type = 'String'
         if (key === 'description') type = 'Text'
         this.fields.add({ key, type })
+        if (!this.isRemoteLayer()) {
+          this._migrated = true
+        }
       }
     }
     this.fields.push()

@@ -191,7 +191,7 @@ def test_edit_and_rename_field_from_datalayer(live_server, page, openmap):
 
 def test_edit_and_rename_field_from_map(live_server, page, openmap):
     dl1 = DataLayerFactory(map=openmap, data=DATALAYER_DATA1)
-    DataLayerFactory(map=openmap, data=DATALAYER_DATA2)
+    dl2 = DataLayerFactory(map=openmap, data=DATALAYER_DATA2)
     openmap.settings["properties"]["fields"] = [
         {"key": "mytype", "type": "String"},
         {"key": "mynumber", "type": "Number"},
@@ -204,8 +204,10 @@ def test_edit_and_rename_field_from_map(live_server, page, openmap):
     page.get_by_role("textbox", name="Field Name ✔").fill("mytypenew")
     page.get_by_label("Field Type").select_option("Text")
     page.get_by_role("button", name="OK").click()
-    with page.expect_response(re.compile(r".*/datalayer/update/")):
-        page.get_by_role("button", name="Save").click()
+    with page.expect_response(re.compile(r"./update/settings/.*")):
+        with page.expect_response(re.compile(rf".*/datalayer/update/{dl1.pk}/")):
+            with page.expect_response(re.compile(rf".*/datalayer/update/{dl2.pk}/")):
+                page.get_by_role("button", name="Save").click()
     saved = Map.objects.get(pk=openmap.pk)
     assert saved.settings["properties"]["fields"] == [
         {"key": "mytypenew", "type": "Text"},
@@ -272,7 +274,14 @@ def test_edit_and_rename_field_from_map(live_server, page, openmap):
 
 
 def test_delete_field_from_datalayer(live_server, page, openmap):
-    DataLayerFactory(map=openmap, data=DATALAYER_DATA1)
+    data = deepcopy(DATALAYER_DATA1)
+    data["properties"]["fields"] = [
+        {"key": "mytype", "type": "String"},
+        {"key": "name", "type": "String"},
+        {"key": "mydate", "type": "Date"},
+        {"key": "mynumber", "type": "Number"},
+    ]
+    DataLayerFactory(map=openmap, data=data)
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.get_by_role("button", name="Manage layers").click()
     page.get_by_role("button", name="Edit", exact=True).click()
@@ -288,12 +297,12 @@ def test_delete_field_from_datalayer(live_server, page, openmap):
             "type": "String",
         },
         {
-            "key": "mynumber",
-            "type": "String",
+            "key": "mydate",
+            "type": "Date",
         },
         {
-            "key": "mydate",
-            "type": "String",
+            "key": "mynumber",
+            "type": "Number",
         },
     ]
     data = json.loads(Path(saved.geojson.path).read_text())
@@ -321,12 +330,12 @@ def test_delete_field_from_datalayer(live_server, page, openmap):
             "type": "String",
         },
         {
-            "key": "mynumber",
-            "type": "String",
+            "key": "mydate",
+            "type": "Date",
         },
         {
-            "key": "mydate",
-            "type": "String",
+            "key": "mynumber",
+            "type": "Number",
         },
     ]
     data = json.loads(Path(saved.geojson.path).read_text())
@@ -344,9 +353,47 @@ def test_delete_field_from_datalayer(live_server, page, openmap):
     }
 
 
-def test_delete_field_from_map(live_server, page, openmap):
+def test_infer_fields_from_features(live_server, page, openmap):
+    # Features here contain four fields: mytype,name,mynumber,mydate
+    # We'll declare mytype and mynumber to the Map's fields, so we expect
+    # name and mydate to be added to the layer at load, and be saved later on.
     dl1 = DataLayerFactory(map=openmap, data=DATALAYER_DATA1)
-    DataLayerFactory(map=openmap, data=DATALAYER_DATA2)
+    dl2 = DataLayerFactory(map=openmap, data=DATALAYER_DATA2)
+    openmap.settings["properties"]["fields"] = [
+        {"key": "mytype", "type": "String"},
+        {"key": "mynumber", "type": "Number"},
+    ]
+    openmap.save()
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    # Datalayer has been changed in the background, it must in the save list.
+    with page.expect_response(re.compile(rf".*/datalayer/update/{dl1.pk}/")):
+        with page.expect_response(re.compile(rf".*/datalayer/update/{dl2.pk}/")):
+            page.get_by_role("button", name="Save").click()
+    saved = DataLayer.objects.get(pk=dl1.pk)
+    # Inferred from data, and not defined in the map itself.
+    assert saved.settings["fields"] == [
+        {
+            "key": "name",
+            "type": "String",
+        },
+        {
+            "key": "mydate",
+            "type": "String",
+        },
+    ]
+
+
+def test_delete_field_from_map(live_server, page, openmap):
+    data1 = deepcopy(DATALAYER_DATA1)
+    data2 = deepcopy(DATALAYER_DATA2)
+    fields = [
+        {"key": "name", "type": "String"},
+        {"key": "mydate", "type": "Date"},
+    ]
+    data1["properties"]["fields"] = fields
+    data2["properties"]["fields"] = fields
+    dl1 = DataLayerFactory(map=openmap, data=data1)
+    dl2 = DataLayerFactory(map=openmap, data=data2)
     openmap.settings["properties"]["fields"] = [
         {"key": "mytype", "type": "String"},
         {"key": "mynumber", "type": "Number"},
@@ -358,13 +405,16 @@ def test_delete_field_from_map(live_server, page, openmap):
     # Delete field mytype
     page.get_by_role("button", name="Delete this field").first.click()
     page.get_by_role("button", name="OK").click()
-    with page.expect_response(re.compile(r".*/datalayer/update/")):
-        page.get_by_role("button", name="Save").click()
+    with page.expect_response(re.compile(r"./update/settings/.*")):
+        with page.expect_response(re.compile(rf".*/datalayer/update/{dl1.pk}/")):
+            with page.expect_response(re.compile(rf".*/datalayer/update/{dl2.pk}/")):
+                page.get_by_role("button", name="Save").click()
     saved = Map.objects.get(pk=openmap.pk)
     assert saved.settings["properties"]["fields"] == [
         {"key": "mynumber", "type": "Number"},
     ]
     saved = DataLayer.objects.get(pk=dl1.pk)
+    # Inferred from data, and not defined in the map itself.
     assert saved.settings["fields"] == [
         {
             "key": "name",
@@ -372,7 +422,7 @@ def test_delete_field_from_map(live_server, page, openmap):
         },
         {
             "key": "mydate",
-            "type": "String",
+            "type": "Date",
         },
     ]
     data = json.loads(Path(saved.geojson.path).read_text())
@@ -403,7 +453,7 @@ def test_delete_field_from_map(live_server, page, openmap):
         },
         {
             "key": "mydate",
-            "type": "String",
+            "type": "Date",
         },
     ]
     data = json.loads(Path(saved.geojson.path).read_text())

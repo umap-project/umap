@@ -37,9 +37,7 @@ def test_can_edit_on_shift_click(live_server, openmap, page, datalayer):
     page.locator(".leaflet-marker-icon").click(modifiers=["Shift"])
     expect(page.get_by_text("Feature properties")).to_be_visible()
     # Help button for text
-    page.locator(".umap-field-description").get_by_role(
-        "button", name="description"
-    ).click()
+    page.locator(".umap-field-description").get_by_role("button", name="Help").click()
     expect(page.locator("dialog").get_by_role("heading", name="Help")).to_be_visible()
 
 
