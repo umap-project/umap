@@ -777,3 +777,120 @@ def test_should_save_remote_dirty_datalayers(
         peerA.get_by_role("button", name="Save").click()
 
     assert DataLayer.objects.count() == 2
+
+
+def test_can_sync_new_parent_from_edit_panel(
+    asgi_live_server, tilelayer, new_page, wait_for_loaded
+):
+    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
+    map.settings["properties"]["syncEnabled"] = True
+    map.save()
+    DataLayerFactory(name="Parent Layer", map=map, data=None)
+    DataLayerFactory(name="Child Layer", map=map, data=None)
+    # Create two tabs
+    peerA = new_page("Page A")
+    response = peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    assert response.status == 200
+    wait_for_loaded(peerA)
+    peerB = new_page("Page B")
+    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    wait_for_loaded(peerB)
+
+    peerA.get_by_role("button", name="Manage layers").click()
+    peerA.get_by_role("button", name="Edit", exact=True).first.click()
+    peerA.get_by_label("Parent", exact=True).select_option("Parent Layer")
+
+    peerA.get_by_role("button", name="Manage layers").click()
+    # Layer 1 should be under Layer 2
+    parent = peerA.locator(".panel.right details").first
+    expect(parent.locator("summary").first).to_have_text("Parent Layer")
+    child = parent.locator("details").first
+    expect(child.locator("summary").first).to_have_text("Child Layer")
+
+    peerB.get_by_role("button", name="Manage layers").click()
+    # Layer 1 should be under Layer 2
+    parent = peerB.locator(".panel.right details").first
+    expect(parent.locator("summary").first).to_have_text("Parent Layer")
+    child = parent.locator("details").first
+    expect(child.locator("summary").first).to_have_text("Child Layer")
+
+
+def test_can_sync_remove_parent_from_edit_panel(
+    page, asgi_live_server, tilelayer, new_page, wait_for_loaded
+):
+    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
+    map.settings["properties"]["syncEnabled"] = True
+    map.save()
+    parent = DataLayerFactory(name="Parent Layer", map=map, data=None)
+    DataLayerFactory(name="Child Layer", map=map, parent=parent)
+    # Create two tabs
+    peerA = new_page("Page A")
+    response = peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    assert response.status == 200
+    wait_for_loaded(peerA)
+    peerB = new_page("Page B")
+    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    wait_for_loaded(peerB)
+
+    peerA.get_by_role("button", name="Manage layers").click()
+    peerA.get_by_role("button", name="Edit", exact=True).nth(1).click()
+    peerA.get_by_label("Parent", exact=True).select_option("null")
+    peerA.get_by_role("button", name="Manage layers").click()
+    parentEl = peerA.locator(".panel.right details").last
+    expect(parentEl.locator("summary").first).to_have_text("Parent Layer")
+    # No child
+    expect(parentEl.locator("details")).to_be_hidden()
+    childEl = peerA.locator(".panel.right details").first
+    expect(childEl.locator("summary").first).to_have_text("Child Layer")
+
+    peerB.get_by_role("button", name="Manage layers").click()
+    parentEl = peerB.locator(".panel.right details").last
+    expect(parentEl.locator("summary").first).to_have_text("Parent Layer")
+    # No child
+    expect(parentEl.locator("details")).to_be_hidden()
+    childEl = peerB.locator(".panel.right details").first
+    expect(childEl.locator("summary").first).to_have_text("Child Layer")
+
+
+def test_can_sync_change_parent_from_edit_panel(
+    page, asgi_live_server, tilelayer, new_page, wait_for_loaded
+):
+    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
+    map.settings["properties"]["syncEnabled"] = True
+    map.save()
+    parent = DataLayerFactory(name="Parent Layer", map=map, data=None)
+    child = DataLayerFactory(name="Child Layer", map=map, parent=parent)
+    other = DataLayerFactory(name="Other Layer", map=map, data=None)
+    # Create two tabs
+    peerA = new_page("Page A")
+    response = peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    assert response.status == 200
+    wait_for_loaded(peerA)
+    peerB = new_page("Page B")
+    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    wait_for_loaded(peerB)
+
+    peerA.get_by_role("button", name="Manage layers").click()
+    peerA.locator(f"summary[data-id='{child.pk}']").get_by_role(
+        "button", name="Edit", exact=True
+    ).click()
+    peerA.get_by_label("Parent", exact=True).select_option("Other Layer")
+    peerA.get_by_role("button", name="Manage layers").click()
+    parentEl = peerA.locator(f".panel.right details[data-id='{parent.pk}']")
+    expect(parentEl.locator("summary").first).to_have_text("Parent Layer")
+    # No child
+    expect(parentEl.locator("details")).to_be_hidden()
+    otherEl = peerA.locator(f".panel.right details[data-id='{other.pk}']")
+    expect(otherEl.locator("summary").first).to_have_text("Other Layer")
+    childEl = otherEl.locator(f"details[data-id='{child.pk}']")
+    expect(childEl.locator("summary").first).to_have_text("Child Layer")
+
+    peerB.get_by_role("button", name="Manage layers").click()
+    parentEl = peerA.locator(f".panel.right details[data-id='{parent.pk}']")
+    expect(parentEl.locator("summary").first).to_have_text("Parent Layer")
+    # No child
+    expect(parentEl.locator("details")).to_be_hidden()
+    otherEl = peerA.locator(f".panel.right details[data-id='{other.pk}']")
+    expect(otherEl.locator("summary").first).to_have_text("Other Layer")
+    childEl = otherEl.locator(f"details[data-id='{child.pk}']")
+    expect(childEl.locator("summary").first).to_have_text("Child Layer")
