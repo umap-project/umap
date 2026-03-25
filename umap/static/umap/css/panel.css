@@ -14,10 +14,12 @@
     bottom: calc(var(--current-footer-height) + var(--panel-bottom));
     box-sizing: border-box;
     counter-reset: step;
+    opacity: 0.9;
 }
 
 .panel.dark {
     border: 1px solid #222;
+    opacity: 0.95;
 }
 
 .panel.full {
