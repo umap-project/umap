@@ -493,9 +493,11 @@ export class DataLayer {
         let type = 'String'
         if (key === 'description') type = 'Text'
         this.fields.add({ key, type })
-        if (!this.isRemoteLayer()) {
-          this._migrated = true
-        }
+        // TODO add this flag back and fix all the tests that cannot
+        // click anymore on the map due to the alert.
+        // if (!this.isRemoteLayer()) {
+        //   this._migrated = true
+        // }
       }
     }
     this.fields.push()
