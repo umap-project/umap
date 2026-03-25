@@ -434,7 +434,7 @@ export class DataLayer {
   }
 
   addFeature(feature, sync = false) {
-    if (this.hasChild()) {
+    if (this.group) {
       console.error('Adding feature to a group', feature, this.datalayer)
       return
     }
@@ -762,7 +762,7 @@ export class DataLayer {
   }
 
   allowFeatures() {
-    return !this.isDataReadOnly() && this.isBrowsable() && !this.hasChild()
+    return !this.isDataReadOnly() && this.isBrowsable() && !this.group
   }
 
   hasChild() {
@@ -1523,7 +1523,7 @@ export class DataLayer {
         if (!this.isVisible()) return
         this.del()
       })
-      if (this.hasChild()) {
+      if (this.group) {
         table.classList.add('off')
       } else {
         table.addEventListener('click', () => this.tableEdit())

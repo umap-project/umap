@@ -1069,7 +1069,7 @@ export default class Umap {
     const [boundsButtons, { current, empty }] = DOMUtils.loadTemplateWithRefs(`
       <div class="button-bar half">
         <button type="button" data-ref="current">${translate('Use current bounds')}</button>
-        <button type="button" data-ref="empty">${translate('Empty')}</button>
+        <button type="button" class="flat" data-ref="empty">${translate('Empty')}</button>
       </div>
     `)
     limitBounds.appendChild(boundsButtons)
@@ -1629,13 +1629,11 @@ export default class Umap {
           <li class="orderable${nochildren}">
             <details open data-ondelete data-id="${layer.id}">
               <summary class="with-toolbox" data-ontoggle data-id="${layer.id}">
-                <span>
+                <span class="truncate">
                   <i class="icon icon-16" data-ref="icon"></i>
                   <span data-ref=formbox class="datalayer-editable-title truncate"></span>
                 </span>
-                <span data-ref=toolbox>
-                  <i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>
-                </span>
+                <span data-ref=toolbox class="toolbox"></span>
               </summary>
               <ul data-ref="body" class="orderable-container"></ul>
             </details>
@@ -1649,6 +1647,11 @@ export default class Umap {
         icon.classList.add('icon-layer')
       }
       layer.renderToolbox(toolbox)
+      toolbox.appendChild(
+        Utils.loadTemplate(
+          `<i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>`
+        )
+      )
       const builder = new MutatingForm(
         layer,
         [['properties.name', { handler: 'EditableText' }]],

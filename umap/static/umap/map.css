@@ -61,6 +61,16 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     padding: 0;
 }
 
+.with-toolbox .toolbox {
+    white-space: nowrap;
+    padding-left: var(--text-margin);
+}
+
+.with-button {
+    display: flex;
+    justify-content: space-between;
+}
+
 /* *********** */
 /* Map details */
 /* *********** */

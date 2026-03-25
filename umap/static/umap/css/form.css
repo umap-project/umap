@@ -123,9 +123,10 @@ input[type="submit"] {
 }
 
 .dark .button,
-.dark [type="button"] {
+.dark [type="button"]:not(.icon) {
     background-color: var(--color-darkerGray);
     color: var(--text-color);
+    border: 1px solid var(--color-lightGray);
 }
 
 .dark menu .button,
@@ -478,7 +479,7 @@ input.switch[disabled]~label {
 
 .button-bar,
 .umap-multiplechoice {
-    margin-top: 5px;
+    margin-top: var(--box-margin);
     text-align: center;
     display: grid;
     width: 100%;

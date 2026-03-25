@@ -169,7 +169,7 @@ export class MapPermissions {
   _editDatalayers(container) {
     if (this._umap.hasLayers()) {
       const fieldset = Utils.loadTemplate(
-        `<fieldset class="separator"><legend>${translate('Datalayers')}</legend></fieldset>`
+        `<fieldset class="separator"><legend>${translate('Datalayers’ permissions')}</legend></fieldset>`
       )
       container.appendChild(fieldset)
       const appendLayer = (layer, parentContainer) => {
@@ -179,8 +179,11 @@ export class MapPermissions {
             <div data-ref="body"></div>
           </details>`
         )
-        const iconClass = layer.group ? 'icon-folder' : 'icon-layer'
-        icon.classList.add(iconClass)
+        if (layer.group) {
+          icon.classList.add('icon-folder')
+        } else {
+          icon.hidden = true
+        }
         parentContainer.appendChild(details)
         layer.permissions.edit(body)
         for (const child of layer.layers) {
@@ -306,7 +309,7 @@ export class DataLayerPermissions {
   }
 
   edit(container) {
-    const label = this.datalayer.hasChild()
+    const label = this.datalayer.group
       ? translate('Group’s permissions')
       : translate('Layer’s permissions')
     const fields = [
@@ -315,6 +318,7 @@ export class DataLayerPermissions {
         {
           handler: 'IntSelect',
           label: label,
+          labelClassName: 'sr-only',
           selectOptions: this._umap.properties.datalayer_edit_statuses,
         },
       ],

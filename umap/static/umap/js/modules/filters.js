@@ -273,15 +273,16 @@ export class Filters {
   _listFilters(layer, container, title) {
     const template = Utils.sanitizeVars`
       <details open>
-        <summary>${title}</summary>
+        <summary class="with-button">
+          <span><i class="icon icon-16 icon-toggle"></i><i class="icon icon-16" data-ref=icon></i>${title}</span>
+          <button class="flat" type="button" data-ref=add><i class="icon icon-16 icon-add"></i>${translate('Add filter')}</button>
+        </summary>
         <ul data-ref=ul></ul>
-        <div>
-          <button type="button" data-ref=add>${translate('Add filter')}</button>
-        </div>
         <div data-ref=childrenContainer></div>
       </details>
     `
-    const [body, { ul, add, childrenContainer }] = Utils.loadTemplateWithRefs(template)
+    const [body, { ul, add, childrenContainer, icon }] =
+      Utils.loadTemplateWithRefs(template)
     if (!layer.fields.size) {
       add.disabled = true
       ul.appendChild(
@@ -289,6 +290,11 @@ export class Filters {
           `<li>${translate('Add a field prior to create a filter.')}</li>`
         )
       )
+    }
+    if (layer.group) {
+      icon.classList.add('icon-folder')
+    } else {
+      icon.hidden = true
     }
     layer.filters.available.forEach((filter, fieldKey) => {
       const [li, { edit, remove }] = Utils.loadTemplateWithRefs(

@@ -123,8 +123,11 @@ Fields.Base = class {
   getLabelTemplate() {
     const label = this.properties.label
     const help = this.properties.helpEntries?.join() || ''
+    const className = this.properties.labelClassName
+      ? `class="${this.properties.labelClassName}"`
+      : ''
     return label
-      ? `<label data-ref=label for="${this.id}" data-help="${help}">${label}</label>`
+      ? `<label data-ref=label for="${this.id}" data-help="${help}"${className}>${label}</label>`
       : ''
   }
 
@@ -235,7 +238,7 @@ Fields.BlurInput = class extends Fields.Input {
   }
 
   getTemplate() {
-    return `<div class="blur-container">${super.getTemplate()}<button type="button">✔</button></div>`
+    return `<div class="blur-container">${super.getTemplate()}<button type="button" class="icon">✔</button></div>`
   }
 
   build() {
@@ -698,7 +701,7 @@ Fields.ParentSwitcher = class extends BaseDataLayerSwitcher {
 
 Fields.FeatureDataLayerSwitcher = class extends BaseDataLayerSwitcher {
   isOptionDisabled(layer) {
-    return super.isOptionDisabled(layer) || layer.hasChild()
+    return super.isOptionDisabled(layer) || layer.group
   }
 
   getTemplate() {

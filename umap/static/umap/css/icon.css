@@ -6,6 +6,7 @@
     /* Reset default style, in case we apply this class on a button element  */
     border: none;
     background-color: initial;
+    color: var(--text-color);
 }
 
 [type=button].icon-16,
@@ -127,7 +128,6 @@ html[dir="rtl"] .icon {
 .icon-drag {
     background-position: calc(var(--tile) * 3) calc(var(--tile) * 3);
     cursor: grab;
-    float: inline-end;
     visibility: hidden;
 }
 
@@ -353,6 +353,15 @@ html[dir="rtl"] .icon {
 .icon-table {
     background-position: calc(var(--tile) * 2) 0px;
 }
+
+details[open] .icon-toggle {
+    background-position: calc(var(--tile) * 6) calc(var(--tile) * 2);
+}
+
+details:not([open]) .icon-toggle {
+    background-position: calc(var(--tile) * 6) calc(var(--tile) * 3);
+}
+
 
 .readonly .icon-table,
 .icon-table.off,

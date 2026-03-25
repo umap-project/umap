@@ -462,7 +462,7 @@ def test_anonymous_user_can_edit_if_inherit_and_map_in_public_mode(
     assert modified_datalayer.name == name
 
 
-def test_datalayer_inherit_from_parent(datalayer, client, map, post_data):
+def test_datalayer_inherit_edit_status_from_parent(datalayer, client, map, post_data):
     map.edit_status = Map.OWNER
     map.save()
     datalayer.edit_status = DataLayer.ANONYMOUS
@@ -477,7 +477,9 @@ def test_datalayer_inherit_from_parent(datalayer, client, map, post_data):
     assert modified_datalayer.name == name
 
 
-def test_datalayer_should_override_parent(datalayer, client, map, post_data, user):
+def test_datalayer_can_override_parent_edit_status(
+    datalayer, client, map, post_data, user
+):
     map.edit_status = Map.COLLABORATORS
     map.editors.add(user)
     map.save()
