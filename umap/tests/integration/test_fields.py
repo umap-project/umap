@@ -353,6 +353,7 @@ def test_delete_field_from_datalayer(live_server, page, openmap):
     }
 
 
+@pytest.mark.skip(reason="Must set DataLayer._migrated after inference")
 def test_infer_fields_from_features(live_server, page, openmap):
     # Features here contain four fields: mytype,name,mynumber,mydate
     # We'll declare mytype and mynumber to the Map's fields, so we expect

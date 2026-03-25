@@ -247,7 +247,7 @@ def test_parent_layer_should_always_be_saved_before_children(
     page.get_by_role("button", name="Manage layers").click()
 
     # Create a second layer
-    page.get_by_role("button", name="Add a layer").click()
+    page.get_by_role("button", name="Add a group").click()
     page.locator('input[name="name"]').fill("parent")
 
     # Now make the second the parent of the first

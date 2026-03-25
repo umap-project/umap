@@ -126,6 +126,7 @@ class DataLayerFactory(factory.django.DjangoModelFactory):
 
     @classmethod
     def _adjust_kwargs(cls, **kwargs):
+        group = kwargs.pop("group", False)
         if "data" in kwargs:
             data = copy.deepcopy(kwargs.pop("data") or {})
             data.setdefault(
@@ -153,6 +154,9 @@ class DataLayerFactory(factory.django.DjangoModelFactory):
             data["properties"]["displayOnLoad"] = kwargs["display_on_load"]
         kwargs["settings"]["name"] = kwargs["name"]
         data["properties"]["name"] = kwargs["name"]
+        if group:
+            kwargs["settings"]["group"] = True
+            data["properties"]["group"] = True
         data.setdefault("type", "FeatureCollection")
         data.setdefault("features", [])
         kwargs["geojson"] = ContentFile(json.dumps(data), "foo.json")

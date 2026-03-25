@@ -38,14 +38,14 @@ def test_can_add_parent_from_edit_panel(page, live_server, tilelayer, settings):
     settings.UMAP_ALLOW_ANONYMOUS = True
     page.goto(f"{live_server.url}/en/map/new/")
     page.get_by_role("button", name="Manage layers").click()
-    page.get_by_role("button", name="Add a layer").click()
+    page.get_by_role("button", name="Add a group").click()
     page.get_by_role("button", name="Manage layers").click()
     page.get_by_role("button", name="Add a layer").click()
-    page.get_by_label("Parent", exact=True).select_option("Layer 1")
+    page.get_by_label("Group", exact=True).select_option("Group 1")
     page.get_by_role("button", name="Manage layers").click()
     # Layer 1 should be under Layer 2
     parent = page.locator(".panel.right details").first
-    expect(parent.locator("summary").first).to_have_text("Layer 1")
+    expect(parent.locator("summary").first).to_have_text("Group 1")
     child = parent.locator("details").first
     expect(child.locator("summary").first).to_have_text("Layer 2")
     with page.expect_response(re.compile(".*/datalayer/create/.*")):
@@ -57,12 +57,12 @@ def test_can_add_parent_from_edit_panel(page, live_server, tilelayer, settings):
 
 
 def test_can_remove_parent_from_edit_panel(page, live_server, tilelayer, openmap):
-    parent = DataLayerFactory(name="Parent Layer", map=openmap, data=None)
+    parent = DataLayerFactory(name="Parent Layer", map=openmap, data=None, group=True)
     child = DataLayerFactory(name="Child Layer", map=openmap, parent=parent)
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.get_by_role("button", name="Manage layers").click()
     page.get_by_role("button", name="Edit", exact=True).nth(1).click()
-    page.get_by_label("Parent", exact=True).select_option("null")
+    page.get_by_label("Group", exact=True).select_option("null")
     page.get_by_role("button", name="Manage layers").click()
     parentEl = page.locator(".panel.right details").last
     expect(parentEl.locator("summary").first).to_have_text("Parent Layer")
@@ -80,15 +80,15 @@ def test_can_remove_parent_from_edit_panel(page, live_server, tilelayer, openmap
 
 
 def test_can_change_parent_from_edit_panel(page, live_server, tilelayer, openmap):
-    parent = DataLayerFactory(name="Parent Layer", map=openmap, data=None)
-    other = DataLayerFactory(name="Other Layer", map=openmap, data=None)
+    parent = DataLayerFactory(name="Parent Layer", map=openmap, data=None, group=True)
+    other = DataLayerFactory(name="Other Layer", map=openmap, data=None, group=True)
     child = DataLayerFactory(name="Child Layer", map=openmap, parent=parent)
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.get_by_role("button", name="Manage layers").click()
     page.locator(f"summary[data-id='{child.pk}']").get_by_role(
         "button", name="Edit", exact=True
     ).click()
-    page.get_by_label("Parent", exact=True).select_option("Other Layer")
+    page.get_by_label("Group", exact=True).select_option("Other Layer")
     page.get_by_role("button", name="Manage layers").click()
     parentEl = page.locator(f".panel.right details[data-id='{parent.pk}']")
     expect(parentEl.locator("summary").first).to_have_text("Parent Layer")
@@ -136,7 +136,7 @@ def test_can_drag_layer_above_other(page, live_server, tilelayer, settings):
     settings.UMAP_ALLOW_ANONYMOUS = True
     page.goto(f"{live_server.url}/en/map/new/")
     page.get_by_role("button", name="Manage layers").click()
-    page.get_by_role("button", name="Add a layer").click()
+    page.get_by_role("button", name="Add a group").click()
     page.get_by_role("button", name="Manage layers").click()
     page.get_by_role("button", name="Add a layer").click()
     page.get_by_role("button", name="Manage layers").click()
@@ -144,7 +144,7 @@ def test_can_drag_layer_above_other(page, live_server, tilelayer, settings):
     source = page.locator(".panel.right li.orderable").last
     dragTo(page, source, target, "above")
     parent = page.locator(".panel.right details").first
-    expect(parent.locator("summary").first).to_have_text("Layer 1")
+    expect(parent.locator("summary").first).to_have_text("Group 1")
     expect(parent.locator("details")).to_be_hidden()
     child = page.locator(".panel.right details").last
     expect(child.locator("summary").first).to_have_text("Layer 2")
@@ -159,7 +159,7 @@ def test_can_drag_layer_below_other(page, live_server, tilelayer, settings):
     settings.UMAP_ALLOW_ANONYMOUS = True
     page.goto(f"{live_server.url}/en/map/new/")
     page.get_by_role("button", name="Manage layers").click()
-    page.get_by_role("button", name="Add a layer").click()
+    page.get_by_role("button", name="Add a group").click()
     page.get_by_role("button", name="Manage layers").click()
     page.get_by_role("button", name="Add a layer").click()
     page.get_by_role("button", name="Manage layers").click()
@@ -167,7 +167,7 @@ def test_can_drag_layer_below_other(page, live_server, tilelayer, settings):
     source = page.locator(".panel.right li.orderable").first
     dragTo(page, source, target, "below")
     parent = page.locator(".panel.right details").first
-    expect(parent.locator("summary").first).to_have_text("Layer 1")
+    expect(parent.locator("summary").first).to_have_text("Group 1")
     expect(parent.locator("details")).to_be_hidden()
     child = page.locator(".panel.right details").last
     expect(child.locator("summary").first).to_have_text("Layer 2")
@@ -180,8 +180,8 @@ def test_can_drag_layer_below_other(page, live_server, tilelayer, settings):
 
 def test_can_drag_parent_with_children(page, live_server, tilelayer, openmap):
     dl1 = DataLayerFactory(name="DL 1", data=None, map=openmap, rank=3)
-    dl2 = DataLayerFactory(name="DL 2", data=None, map=openmap, rank=2)
-    dl3 = DataLayerFactory(name="DL 3", data=None, map=openmap, rank=1)
+    dl2 = DataLayerFactory(name="DL 2", data=None, map=openmap, rank=2, group=True)
+    dl3 = DataLayerFactory(name="DL 3", data=None, map=openmap, rank=1, group=True)
     dl4 = DataLayerFactory(name="DL 4", data=None, map=openmap, rank=0)
     dl5 = DataLayerFactory(name="DL 5", data=None, map=openmap, rank=0)
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
