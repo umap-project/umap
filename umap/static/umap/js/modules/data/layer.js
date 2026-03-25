@@ -1264,14 +1264,26 @@ export class DataLayer {
     return this.layers.tree.some((child) => child.isVisible())
   }
 
+  get bounds() {
+    if (!this.group) return this.layer.getBounds()
+    let bounds
+    for (const child of this.layers.root) {
+      if (!bounds) {
+        bounds = child.bounds
+      } else {
+        bounds.extend(child.bounds)
+      }
+    }
+    return bounds
+  }
+
   zoomTo() {
     if (!this.isVisible()) return
-    const bounds = this.layer.getBounds()
-    this.zoomToBounds(bounds)
+    this.zoomToBounds(this.bounds)
   }
 
   zoomToBounds(bounds) {
-    if (bounds.isValid()) {
+    if (bounds?.isValid()) {
       const options = { maxZoom: this.getProperty('zoomTo') }
       this._leafletMap.fitBounds(bounds, options)
     }
