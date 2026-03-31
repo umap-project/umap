@@ -14,12 +14,11 @@
     bottom: calc(var(--current-footer-height) + var(--panel-bottom));
     box-sizing: border-box;
     counter-reset: step;
-    opacity: 0.9;
+    opacity: 0.95;
 }
 
 .panel.dark {
     border: 1px solid #222;
-    opacity: 0.95;
 }
 
 .panel.full {
@@ -71,7 +70,16 @@
 }
 
 .panel.dark .datalayer-editable-title {
-    max-width: 35ch;
+    max-width: 20ch;
+}
+.panel.dark details details .datalayer-editable-title {
+    max-width: 18ch;
+}
+.panel.dark details details details .datalayer-editable-title {
+    max-width: 16ch;
+}
+.panel.dark details details details details .datalayer-editable-title {
+    max-width: 14ch;
 }
 
 .panel.dark details[open].layer-group {

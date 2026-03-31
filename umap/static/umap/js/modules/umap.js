@@ -1629,7 +1629,7 @@ export default class Umap {
           <li class="orderable${nochildren}">
             <details open data-ondelete data-id="${layer.id}">
               <summary class="with-toolbox" data-ontoggle data-id="${layer.id}">
-                <span class="truncate">
+                <span>
                   <i class="icon icon-16" data-ref="icon"></i>
                   <span data-ref=formbox class="datalayer-editable-title truncate"></span>
                 </span>

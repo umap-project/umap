@@ -5,8 +5,23 @@
 .umap-browser .datalayer-name,
 .umap-browser .feature-title {
     cursor: pointer;
-    max-width: 25ch;
+    max-width: 32ch;
     font-weight: normal;
+}
+.umap-browser .datalayer .datalayer .datalayer-name {
+    max-width: 30ch;
+}
+.umap-browser .datalayer .datalayer .datalayer .datalayer-name {
+    max-width: 28ch;
+}
+.umap-edit-enabled .umap-browser .datalayer .datalayer-name {
+    max-width: 25ch;
+}
+.umap-edit-enabled .umap-browser .datalayer .datalayer .datalayer-name {
+    max-width: 23ch;
+}
+.umap-edit-enabled .umap-browser .datalayer .datalayer .datalayer .datalayer-name {
+    max-width: 21ch;
 }
 
 .umap-browser .feature-title {
