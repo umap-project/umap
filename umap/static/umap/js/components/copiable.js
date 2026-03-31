@@ -4,7 +4,8 @@ import * as Utils from '../modules/utils.js'
 import { translate } from '../modules/i18n.js'
 
 class CopiableInput extends HTMLElement {
-  connectedCallback() {
+  constructor() {
+    super()
     DOMUtils.copiableInput(this, this.dataset.label, this.dataset.value || '')
   }
 }
