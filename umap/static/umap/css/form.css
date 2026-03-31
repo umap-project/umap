@@ -123,7 +123,7 @@ input[type="submit"] {
 }
 
 .dark .button,
-.dark [type="button"]:not(.icon) {
+.dark :where([type="button"]):not(.icon) {
     background-color: var(--color-darkerGray);
     color: var(--text-color);
     border: 1px solid var(--color-lightGray);
