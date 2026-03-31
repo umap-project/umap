@@ -1,12 +1,16 @@
 import gzip
+import ipaddress
 import json
 import os
+import socket
 import unicodedata
 from pathlib import Path
+from urllib.parse import urlparse
 
 from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.core.serializers.json import DjangoJSONEncoder
+from django.core.validators import URLValidator, ValidationError
 from django.urls import URLPattern, URLResolver, get_resolver, reverse
 
 
@@ -242,3 +246,38 @@ def get_login_url():
     if "/" in settings.LOGIN_URL:
         return settings.LOGIN_URL
     return reverse(settings.LOGIN_URL)
+
+
+def validate_url(request):
+    if not request.method == "GET":
+        raise ValueError("Wrong HTTP method")
+    url = request.GET.get("url")
+    if not url:
+        raise ValueError("Missing URL")
+    try:
+        URLValidator()(url)
+    except ValidationError as err:
+        raise ValueError(err)
+    if not (http_referer := request.META.get("HTTP_REFERER")):
+        raise ValueError("Missing HTTP_REFERER")
+    referer = urlparse(http_referer)
+    target = urlparse(url)
+    site_url = urlparse(settings.SITE_URL)
+    if not target.hostname:
+        raise ValueError("No hostname")
+    if referer.hostname != site_url.hostname:
+        raise ValueError(f"{referer.hostname} != {site_url.hostname}")
+    if target.hostname == "localhost":
+        raise ValueError("Invalid localhost target")
+    if target.netloc == site_url.netloc:
+        raise ValueError("Invalid netloc")
+    try:
+        results = socket.getaddrinfo(target.hostname, None)
+    except socket.gaierror as err:
+        raise ValueError(err)
+    else:
+        all_ips = list(set(r[4][0] for r in results))
+        for ip in all_ips:
+            if ipaddress.ip_address(ip).is_private:
+                raise ValueError("Private IP")
+    return url
