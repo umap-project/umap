@@ -1,9 +1,7 @@
 import io
-import ipaddress
 import json
 import mimetypes
 import re
-import socket
 import zipfile
 from datetime import datetime, timedelta
 from http.client import InvalidURL
@@ -26,7 +24,6 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.mail import send_mail
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.signing import BadSignature, Signer, TimestampSigner
-from django.core.validators import URLValidator, ValidationError
 from django.db.models import QuerySet
 from django.http import (
     Http404,
@@ -76,6 +73,7 @@ from .utils import (
     is_ajax,
     json_dumps,
     merge_features,
+    validate_url,
 )
 
 User = get_user_model()
@@ -438,38 +436,11 @@ class UserDownload(DetailView, SearchMixin):
 user_download = UserDownload.as_view()
 
 
-def validate_url(request):
-    assert request.method == "GET", "Wrong HTTP method"
-    url = request.GET.get("url")
-    assert url, "Missing URL"
-    try:
-        URLValidator()(url)
-    except ValidationError as err:
-        raise AssertionError(err)
-    assert "HTTP_REFERER" in request.META, "Missing HTTP_REFERER"
-    referer = urlparse(request.META.get("HTTP_REFERER"))
-    toproxy = urlparse(url)
-    local = urlparse(settings.SITE_URL)
-    assert toproxy.hostname, "No hostname"
-    assert referer.hostname == local.hostname, f"{referer.hostname} != {local.hostname}"
-    assert toproxy.hostname != "localhost", "Invalid localhost target"
-    assert toproxy.netloc != local.netloc, "Invalid netloc"
-    try:
-        results = socket.getaddrinfo(toproxy.hostname, None)
-        all_ips = list(set(r[4][0] for r in results))
-    except socket.gaierror as err:
-        raise AssertionError(err)
-    else:
-        for ip in all_ips:
-            assert not ipaddress.ip_address(ip).is_private, "Private IP"
-    return url
-
-
 class AjaxProxy(View):
     def get(self, *args, **kwargs):
         try:
             url = validate_url(self.request)
-        except AssertionError as err:
+        except ValueError as err:
             print(f"AjaxProxy: {err}")
             return HttpResponseBadRequest()
         try:
@@ -1222,7 +1193,8 @@ class DataLayerCreate(FormLessEditMixin, CreateView):
 
         form.instance.uuid = uuid
         self.object = form.save()
-        assert uuid == self.object.uuid
+        if uuid != self.object.uuid:
+            raise HttpResponseBadRequest("UUID is not matching")
 
         # Simple response with only metadata
         data = self.object.metadata(self.request)
