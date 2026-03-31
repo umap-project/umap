@@ -1661,11 +1661,11 @@ export default class Umap {
       formbox.appendChild(form)
       li.dataset.id = layer.id
       container.appendChild(li)
-      for (const child of layer.layers.tree.root().browsable()) {
+      for (const child of layer.layers.tree.root()) {
         showLayer(child, body)
       }
     }
-    const layers = this.layers.tree.root().browsable()
+    const layers = this.layers.tree.root()
     for (const layer of layers) {
       showLayer(layer, ul)
     }
