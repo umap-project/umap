@@ -241,7 +241,7 @@ export class BottomBar extends WithTemplate {
       const select = this.elements.layers
       const selected = select.options[select.selectedIndex].value
       for (const layer of this._umap.layers.tree) {
-        if (layer.properties.inCaption !== false) {
+        if (layer.inCaption !== false) {
           if (!selected) {
             layer.autoVisibility = true
             if (layer.showAtZoom() && !layer.isVisible()) {
@@ -270,7 +270,7 @@ export class BottomBar extends WithTemplate {
 
   buildDataLayerSwitcher() {
     this.elements.layers.innerHTML = ''
-    const layers = this._umap.layers.tree.filter((d) => d.properties.inCaption)
+    const layers = this._umap.layers.tree.filter((d) => d.inCaption)
     if (layers.length < 2) {
       this.elements.layers.hidden = true
     } else {
