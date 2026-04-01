@@ -11,7 +11,8 @@ automatically according to the marker background color.
 
 Example of icons libraries you may want to use:
 
-- [Maki Icons](https://labs.mapbox.com/maki-icons/) (icon set made for map designers)
+- [Pinhead](https://pinhead.ink/)
+- [Maki Icons](https://labs.mapbox.com/maki-icons/)
 - [Osmic Icons](https://gitlab.com/gmgeo/osmic)
 - [SJJB Icons](http://www.sjjb.co.uk/mapicons/contactsheet)
 - [Remix](https://remixicon.com/)
