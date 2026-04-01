@@ -70,6 +70,7 @@ export class Importer {
 
     const Isochrones = new ORS.Isochrones({
       api_key: this.umap.properties.ORSAPIKey,
+      host: this.umap.properties.ORSHost,
     })
     this.umap.dialog.open({ template: form.build() }).then(async () => {
       try {
@@ -103,6 +104,7 @@ export class Importer {
 
     const Elevation = new ORS.Elevation({
       api_key: this.umap.properties.ORSAPIKey,
+      host: this.umap.properties.ORSHost,
     })
 
     try {
@@ -124,7 +126,10 @@ export class Importer {
       return
     }
     const ORS = await this.loadORS()
-    const Directions = new ORS.Directions({ api_key: this.umap.properties.ORSAPIKey })
+    const Directions = new ORS.Directions({
+      api_key: this.umap.properties.ORSAPIKey,
+      host: this.umap.properties.ORSHost,
+    })
     try {
       const featuresCollection = await Directions.calculate({
         coordinates: properties.coordinates,

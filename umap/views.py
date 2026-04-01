@@ -579,6 +579,8 @@ class MapDetailMixin(SessionMixin):
         }
         if settings.OPENROUTESERVICE_APIKEY:
             properties["ORSAPIKey"] = settings.OPENROUTESERVICE_APIKEY
+        if settings.OPENROUTESERVICE_HOST:
+            properties["ORSHost"] = settings.OPENROUTESERVICE_HOST
         created = bool(getattr(self, "object", None))
         if created:
             properties.update(
