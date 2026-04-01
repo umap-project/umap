@@ -818,6 +818,11 @@ export class DataLayer {
     this.parent = this._umap.layers.tree.get(uuid)
   }
 
+  get inCaption() {
+    if (this.parent) return this.parent.inCaption
+    return this.properties.inCaption
+  }
+
   _editMetadata(container) {
     const metadataFields = [
       [
@@ -841,28 +846,29 @@ export class DataLayer {
       groupOptions.disabled = true
     }
     metadataFields.push(['properties.group', groupOptions])
-    metadataFields.push('properties.labelKey', [
-      'properties.displayOnLoad',
-      { label: translate('Display on load'), handler: 'Switch' },
-    ])
+    metadataFields.push(
+      'properties.labelKey',
+      [
+        'properties.displayOnLoad',
+        { label: translate('Display on load'), handler: 'Switch' },
+      ],
+      [
+        'properties.inCaption',
+        {
+          label: translate('Show this layer in the caption'),
+          handler: 'Switch',
+        },
+      ]
+    )
     if (!this.layers.count()) {
-      metadataFields.push(
-        [
-          'properties.browsable',
-          {
-            label: translate('Data is browsable'),
-            handler: 'Switch',
-            helpEntries: ['browsable'],
-          },
-        ],
-        [
-          'properties.inCaption',
-          {
-            label: translate('Show this layer in the caption'),
-            handler: 'Switch',
-          },
-        ]
-      )
+      metadataFields.push([
+        'properties.browsable',
+        {
+          label: translate('Data is browsable'),
+          handler: 'Switch',
+          helpEntries: ['browsable'],
+        },
+      ])
     }
     if (this.group) {
       container.appendChild(

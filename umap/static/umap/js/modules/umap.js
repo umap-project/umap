@@ -717,6 +717,7 @@ export default class Umap {
   onDataLayersChanged() {
     if (this.browser) this.browser.update()
     this.caption.refresh()
+    this.bottomBar.redraw()
   }
 
   async saveAll() {

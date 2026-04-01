@@ -92,7 +92,7 @@ export default class Caption extends Utils.WithTemplate {
   }
 
   addDataLayer(datalayer, container) {
-    if (!datalayer.properties.inCaption) return
+    if (!datalayer.inCaption) return
 
     const template = `
     <details open class="caption-item datalayer" data-ondelete data-id="${datalayer.id}">

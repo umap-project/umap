@@ -228,7 +228,6 @@ export class BottomBar extends WithTemplate {
   }
 
   setup() {
-    this.parent.appendChild(this.element)
     DomEvent.disableClickPropagation(this.element)
     this._umap.addAuthorLink(this.elements.author)
     this.elements.caption.addEventListener('click', () => this._umap.openCaption())
@@ -241,7 +240,7 @@ export class BottomBar extends WithTemplate {
       const select = this.elements.layers
       const selected = select.options[select.selectedIndex].value
       for (const layer of this._umap.layers.tree) {
-        if (layer.properties.inCaption !== false) {
+        if (layer.inCaption !== false) {
           if (!selected) {
             layer.autoVisibility = true
             if (layer.showAtZoom() && !layer.isVisible()) {
@@ -261,16 +260,18 @@ export class BottomBar extends WithTemplate {
     const barEnabled = this._umap.properties.captionBar || hasSlideshow
     document.body.classList.toggle('umap-caption-bar-enabled', barEnabled)
     document.body.classList.toggle('umap-slideshow-enabled', hasSlideshow)
+    if (!barEnabled) return
     const showMenus = this._umap.getProperty('captionMenus')
     this.elements.caption.hidden = !showMenus
     this.elements.browse.hidden = !showMenus
     this.elements.filter.hidden = !showMenus || !this._umap.hasFilters()
     this.buildDataLayerSwitcher()
+    this.parent.appendChild(this.element)
   }
 
   buildDataLayerSwitcher() {
     this.elements.layers.innerHTML = ''
-    const layers = this._umap.layers.tree.filter((d) => d.properties.inCaption)
+    const layers = this._umap.layers.tree.filter((d) => d.inCaption)
     if (layers.length < 2) {
       this.elements.layers.hidden = true
     } else {
