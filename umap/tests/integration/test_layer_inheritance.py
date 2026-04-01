@@ -11,10 +11,13 @@ from ..base import DataLayerFactory
 
 def dragTo(page, source, target, mode):
     targetBox = target.bounding_box()
-    source.hover(position={"x": 30, "y": 10})
+    # Insist on hover, otherwise the event his sometimes not fired by Playwright agent.
+    source.locator(".with-toolbox").first.hover(position={"x": 30, "y": 10})
+    source.locator(".with-toolbox").first.hover(position={"x": 50, "y": 12})
+    source.locator(".with-toolbox").first.hover(position={"x": 100, "y": 15})
     drag = source.locator(".icon-drag").first
     dragBox = drag.bounding_box()
-    drag.hover(position={"x": 3, "y": 3})
+    drag.hover(position={"x": 5, "y": 5})
     page.mouse.down()
     page.mouse.move(
         x=dragBox["x"] + dragBox["width"] / 2,
@@ -179,10 +182,10 @@ def test_can_drag_layer_below_other(page, live_server, tilelayer, settings):
 
 
 def test_can_drag_parent_with_children(page, live_server, tilelayer, openmap):
-    dl1 = DataLayerFactory(name="DL 1", data=None, map=openmap, rank=3)
-    dl2 = DataLayerFactory(name="DL 2", data=None, map=openmap, rank=2, group=True)
-    dl3 = DataLayerFactory(name="DL 3", data=None, map=openmap, rank=1, group=True)
-    dl4 = DataLayerFactory(name="DL 4", data=None, map=openmap, rank=0)
+    dl1 = DataLayerFactory(name="DL 1", data=None, map=openmap, rank=4)
+    dl2 = DataLayerFactory(name="DL 2", data=None, map=openmap, rank=3, group=True)
+    dl3 = DataLayerFactory(name="DL 3", data=None, map=openmap, rank=2, group=True)
+    dl4 = DataLayerFactory(name="DL 4", data=None, map=openmap, rank=1)
     dl5 = DataLayerFactory(name="DL 5", data=None, map=openmap, rank=0)
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.get_by_role("button", name="Open browser").click()
@@ -226,8 +229,9 @@ def test_can_drag_parent_with_children(page, live_server, tilelayer, openmap):
     expect(dl1El.locator("details details")).to_be_hidden()
     with page.expect_response(re.compile(".*/datalayer/update/.*")):
         page.get_by_role("button", name="Save").click()
-    time.sleep(1)
+    time.sleep(2)
     assert DataLayer.objects.count() == 5
+    # DL 1 and DL 2
     assert DataLayer.objects.filter(parent=None).count() == 2
     dl1.refresh_from_db()
     dl2.refresh_from_db()
