@@ -95,6 +95,29 @@ DATALAYER_DATA3 = {
 }
 
 
+DATALAYER_DATA_NATURAL_SORT = {
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {"name": "Point 1", "mychoice": "10"},
+            "geometry": {"type": "Point", "coordinates": [0, 48]},
+        },
+        {
+            "type": "Feature",
+            "properties": {"name": "Point 2", "mychoice": "2"},
+            "geometry": {"type": "Point", "coordinates": [1, 48]},
+        },
+        {
+            "type": "Feature",
+            "properties": {"name": "Point 3", "mychoice": "1"},
+            "geometry": {"type": "Point", "coordinates": [2, 48]},
+        },
+    ],
+    "properties": {"name": "Calque 1"},
+}
+
+
 def test_simple_facet_search(live_server, page, map):
     map.settings["properties"]["onLoadPanel"] = "datafilters"
     map.settings["properties"]["filters"] = [
@@ -241,6 +264,27 @@ def test_choice_with_numbers(live_server, page, map):
     page.get_by_text("14", exact=True).click()  # Unselect this filter.
     page.get_by_text("[empty value]", exact=True).click()
     expect(markers).to_have_count(2)
+
+
+def test_natural_sort_facet_search(live_server, page, map):
+    map.settings["properties"]["onLoadPanel"] = "datafilters"
+    map.settings["properties"]["filters"] = [
+        {"fieldKey": "mychoice", "label": "My choice", "widget": "Checkbox"},
+    ]
+    map.settings["properties"]["fields"] = [
+        {"key": "mychoice", "type": "String"},
+    ]
+    map.save()
+    DataLayerFactory(map=map, data=DATALAYER_DATA_NATURAL_SORT)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+
+    # Check that choices are sorted naturally: 1, 2, 10
+    # They should appear in this order in the list.
+    choices = page.locator(".umap-filter li")
+    expect(choices).to_have_count(3)
+    expect(choices.nth(0)).to_have_text("1")
+    expect(choices.nth(1)).to_have_text("2")
+    expect(choices.nth(2)).to_have_text("10")
 
 
 def test_number_with_zero_value(live_server, page, map):
