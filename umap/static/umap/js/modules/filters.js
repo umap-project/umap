@@ -80,6 +80,9 @@ class Choices extends BaseWidget {
   match(value) {
     if (!this.userData.selected?.length) return false
     if (Array.isArray(value)) {
+      // Deduplicate, as we compare by length at the end (Set intersection method is not in
+      // our baseline yet).
+      value = Array.from(new Set(value))
       const intersection = value.filter((item) => this.userData.selected.includes(item))
       if (intersection.length !== this.userData.selected.length) return true
     } else {
