@@ -501,7 +501,7 @@ const FilterByChoices = class extends FilterBase {
     this.type = this.getType()
 
     const choices = Array.from(this.properties.initialData.choices || [])
-    choices.sort()
+    choices.sort(Utils.naturalSort)
     choices.forEach((value) => this.buildLi(value))
     super.build()
   }
