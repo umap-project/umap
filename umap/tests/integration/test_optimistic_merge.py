@@ -53,10 +53,7 @@ def test_created_markers_are_merged(
         "browsable": True,
         "displayOnLoad": True,
         "name": "test datalayer",
-        "editMode": "advanced",
         "inCaption": True,
-        "id": str(datalayer.pk),
-        "rank": 0,
         "remoteData": {},
         "fields": [
             {
@@ -103,9 +100,6 @@ def test_created_markers_are_merged(
         "displayOnLoad": True,
         "name": "test datalayer",
         "inCaption": True,
-        "editMode": "advanced",
-        "id": str(datalayer.pk),
-        "rank": 0,
         "remoteData": {},
         "fields": [
             {
@@ -133,9 +127,6 @@ def test_created_markers_are_merged(
         "displayOnLoad": True,
         "name": "test datalayer",
         "inCaption": True,
-        "editMode": "advanced",
-        "id": str(datalayer.pk),
-        "rank": 0,
         "remoteData": {},
         "fields": [
             {
@@ -163,9 +154,6 @@ def test_created_markers_are_merged(
         "displayOnLoad": True,
         "name": "test datalayer",
         "inCaption": True,
-        "editMode": "advanced",
-        "id": str(datalayer.pk),
-        "rank": 0,
         "remoteData": {},
         "fields": [
             {
@@ -195,9 +183,6 @@ def test_created_markers_are_merged(
         "displayOnLoad": True,
         "name": "test datalayer",
         "inCaption": True,
-        "editMode": "advanced",
-        "id": str(datalayer.pk),
-        "rank": 0,
         "remoteData": {},
         "fields": [
             {
@@ -332,9 +317,6 @@ def test_same_second_edit_doesnt_conflict(new_page, live_server, tilelayer):
         "displayOnLoad": True,
         "name": "test datalayer",
         "inCaption": True,
-        "editMode": "advanced",
-        "id": str(datalayer.pk),
-        "rank": 0,
         "remoteData": {},
         "fields": [
             {

@@ -14,6 +14,7 @@
     bottom: calc(var(--current-footer-height) + var(--panel-bottom));
     box-sizing: border-box;
     counter-reset: step;
+    opacity: 0.95;
 }
 
 .panel.dark {
@@ -68,12 +69,21 @@
     border-left: 2px solid var(--color-accent);
 }
 
-.panel.dark details[open] summary {
-    background-color: var(--color-veryDarkGray);
+.panel.dark .datalayer-editable-title {
+    max-width: 20ch;
+}
+.panel.dark details details .datalayer-editable-title {
+    max-width: 18ch;
+}
+.panel.dark details details details .datalayer-editable-title {
+    max-width: 16ch;
+}
+.panel.dark details details details details .datalayer-editable-title {
+    max-width: 14ch;
 }
 
-.panel.dark .datalayer-editable-title {
-    max-width: 35ch;
+.panel.dark details[open].layer-group {
+    border: none;
 }
 
 @media all and (orientation:landscape) {

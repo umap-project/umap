@@ -123,9 +123,10 @@ input[type="submit"] {
 }
 
 .dark .button,
-.dark [type="button"] {
+.dark :where([type="button"]):not(.icon) {
     background-color: var(--color-darkerGray);
     color: var(--text-color);
+    border: 1px solid var(--color-lightGray);
 }
 
 .dark menu .button,
@@ -353,6 +354,7 @@ details summary {
 
 summary h4 {
     display: inline;
+    margin-bottom: 0;
 }
 
 fieldset legend {
@@ -470,9 +472,14 @@ input.switch:checked~label:after {
     margin-inline-start: 3em;
 }
 
+input.switch[disabled]~label {
+    opacity: 0.5;
+}
+
+
 .button-bar,
 .umap-multiplechoice {
-    margin-top: 5px;
+    margin-top: var(--box-margin);
     text-align: center;
     display: grid;
     width: 100%;
@@ -510,6 +517,7 @@ input.switch:checked~label:after {
 .button-bar [type="button"] {
     display: inline-block;
     width: 100%;
+    text-align: center;
 }
 
 .umap-multiplechoice input[type='radio'] {

@@ -89,7 +89,7 @@ def test_get_version(map, datalayer):
     older = datalayer.versions[1]["ref"]
     version = datalayer.get_version(older)
     assert json.loads(version) == {
-        "_umap_options": {
+        "properties": {
             "browsable": True,
             "displayOnLoad": True,
             "name": "test datalayer",

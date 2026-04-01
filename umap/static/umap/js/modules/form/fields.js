@@ -123,7 +123,12 @@ Fields.Base = class {
   getLabelTemplate() {
     const label = this.properties.label
     const help = this.properties.helpEntries?.join() || ''
-    return label ? `<label data-ref=label data-help="${help}">${label}</label>` : ''
+    const className = this.properties.labelClassName
+      ? `class="${this.properties.labelClassName}"`
+      : ''
+    return label
+      ? `<label data-ref=label for="${this.id}" data-help="${help}"${className}>${label}</label>`
+      : ''
   }
 
   fetch() {}
@@ -139,7 +144,7 @@ Fields.Base = class {
 
 Fields.Textarea = class extends Fields.Base {
   getTemplate() {
-    return Utils.sanitizeVars`<textarea placeholder="${this.properties.placeholder || ''}" name="${this.name}" data-ref=textarea></textarea>`
+    return Utils.sanitizeVars`<textarea placeholder="${this.properties.placeholder || ''}" name="${this.name}" id="${this.id}" data-ref=textarea></textarea>`
   }
 
   build() {
@@ -176,7 +181,7 @@ Fields.Textarea = class extends Fields.Base {
 
 Fields.Input = class extends Fields.Base {
   getTemplate() {
-    return Utils.sanitizeVars`<input type="${this.type()}" name="${this.name}" placeholder="${this.properties.placeholder || ''}" data-ref=input />`
+    return Utils.sanitizeVars`<input type="${this.type()}" name="${this.name}" placeholder="${this.properties.placeholder || ''}" data-ref=input id="${this.id}" />`
   }
 
   build() {
@@ -233,7 +238,7 @@ Fields.BlurInput = class extends Fields.Input {
   }
 
   getTemplate() {
-    return `<div class="blur-container">${super.getTemplate()}<button type="button">✔</button></div>`
+    return `<div class="blur-container">${super.getTemplate()}<button type="button" class="icon">✔</button></div>`
   }
 
   build() {
@@ -338,6 +343,9 @@ Fields.CheckBox = class extends Fields.Base {
 
   build() {
     this.input = this.elements.input
+    if (this.properties.disabled) {
+      this.input.disabled = true
+    }
     this.input._helper = this
     this.fetch()
     this.input.addEventListener('change', () => this.sync())
@@ -387,7 +395,7 @@ Fields.CheckBoxes = class extends Fields.Base {
 
 Fields.Select = class extends Fields.Base {
   getTemplate() {
-    return Utils.sanitizeVars`<select name="${this.name}" data-ref=select></select>`
+    return Utils.sanitizeVars`<select name="${this.name}" data-ref=select id="${this.id}"></select>`
   }
 
   build() {
@@ -415,17 +423,20 @@ Fields.Select = class extends Fields.Base {
   buildOptions() {
     this.select.innerHTML = ''
     for (const option of this.getOptions()) {
-      if (typeof option === 'string') this.buildOption(option, option)
-      else this.buildOption(option[0], option[1])
+      if (typeof option === 'string') this.buildOption(option)
+      else this.buildOption(...option)
     }
   }
 
-  buildOption(value, label) {
+  buildOption(value, label, disabled) {
     this.validValues.push(value)
     const option = Utils.loadTemplate('<option></option>')
     this.select.appendChild(option)
     option.value = value
-    option.textContent = label
+    option.textContent = label ?? value
+    if (disabled) {
+      option.disabled = true
+    }
     if (this.toHTML() === value) {
       option.selected = 'selected'
     }
@@ -618,18 +629,16 @@ Fields.SlideshowDelay = class extends Fields.IntSelect {
 }
 
 const BaseDataLayerSwitcher = class extends Fields.Select {
+  isOptionDisabled(layer) {
+    return !layer.isLoaded() || layer.isDataReadOnly()
+  }
+
   getOptions() {
-    const options = []
-    this.builder._umap.datalayers.reverse().map((datalayer) => {
-      if (
-        datalayer.isLoaded() &&
-        !datalayer.isDataReadOnly() &&
-        datalayer.isBrowsable()
-      ) {
-        options.push([datalayer.id, datalayer.getName()])
-      }
-    })
-    return options
+    return this.builder._umap.layers.tree.browsable().reduce((acc, layer) => {
+      const disabled = this.isOptionDisabled(layer)
+      acc.push([layer.id, layer.getName(true), disabled])
+      return acc
+    }, [])
   }
 
   toHTML() {
@@ -637,12 +646,17 @@ const BaseDataLayerSwitcher = class extends Fields.Select {
   }
 
   toJS() {
-    return this.builder._umap.datalayers[this.value()]
+    return this.builder._umap.layers.tree.get(this.value())
   }
 
   set() {
-    this.builder._umap.lastUsedDataLayer = this.toJS()
-    this.builder.setter(this, this.toJS())
+    const layerId = this.toJS()
+    this.builder.setter(this, layerId)
+    this.onSet(layerId)
+  }
+
+  onSet(layerId) {
+    this.builder._umap.lastUsedDataLayer = this.builder._umap.layers.tree.get(layerId)
   }
 }
 
@@ -654,7 +668,42 @@ Fields.NullableDataLayerSwitcher = class extends BaseDataLayerSwitcher {
   }
 }
 
-Fields.EditableDataLayerSwitcher = class extends BaseDataLayerSwitcher {
+Fields.ParentSwitcher = class extends BaseDataLayerSwitcher {
+  isOptionDisabled(layer) {
+    return (
+      super.isOptionDisabled(layer) ||
+      layer === this.obj ||
+      !layer.group ||
+      layer.ancestors.includes(this.obj)
+    )
+  }
+
+  getOptions() {
+    const options = super.getOptions()
+    options.unshift([null, translate('Choose a group')])
+    return options
+  }
+
+  toHTML() {
+    return this.builder.getter(this)
+  }
+
+  toJS() {
+    // Only return the UUID, as the DataLayer.parent setter will
+    // convert it to a DataLayer instance, and this allows to sync
+    // the value to other peers (we cannot sync object instances).
+    return this.value()
+  }
+
+  // Do not set lastUsedDataLayer when setting a parent layer.
+  onSet(layer) {}
+}
+
+Fields.FeatureDataLayerSwitcher = class extends BaseDataLayerSwitcher {
+  isOptionDisabled(layer) {
+    return super.isOptionDisabled(layer) || layer.group
+  }
+
   getTemplate() {
     return `
       <div class="select-with-actions">

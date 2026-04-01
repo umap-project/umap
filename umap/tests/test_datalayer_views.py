@@ -12,7 +12,7 @@ from django.urls import reverse
 
 from umap.models import DataLayer, Map
 
-from .base import MapFactory
+from .base import DataLayerFactory, MapFactory
 
 pytestmark = pytest.mark.django_db
 
@@ -41,7 +41,7 @@ def test_get_with_public_mode(client, settings, datalayer, map):
     assert response["Cache-Control"] is not None
     assert "Content-Encoding" not in response
     j = json.loads(response.content.decode())
-    assert "_umap_options" in j
+    assert "properties" in j
     assert "features" in j
     assert j["type"] == "FeatureCollection"
 
@@ -139,7 +139,7 @@ def test_update(client, datalayer, map, post_data):
     j = json.loads(response.content.decode())
     assert "id" in j
     assert str(datalayer.pk) == j["id"]
-    assert j["browsable"] is True
+    assert j["properties"]["browsable"] is True
     assert Path(modified_datalayer.geojson.path).exists()
 
 
@@ -462,6 +462,49 @@ def test_anonymous_user_can_edit_if_inherit_and_map_in_public_mode(
     assert modified_datalayer.name == name
 
 
+def test_datalayer_inherit_edit_status_from_parent(datalayer, client, map, post_data):
+    map.edit_status = Map.OWNER
+    map.save()
+    datalayer.edit_status = DataLayer.ANONYMOUS
+    datalayer.save()
+    child = DataLayerFactory(map=map, parent=datalayer, edit_status=DataLayer.INHERIT)
+    url = reverse("datalayer_update", args=(map.pk, child.pk))
+    name = "new name"
+    post_data["name"] = name
+    response = client.post(url, post_data, follow=True)
+    assert response.status_code == 200
+    modified_datalayer = DataLayer.objects.get(pk=child.pk)
+    assert modified_datalayer.name == name
+
+
+def test_datalayer_can_override_parent_edit_status(
+    datalayer, client, map, post_data, user
+):
+    map.edit_status = Map.COLLABORATORS
+    map.editors.add(user)
+    map.save()
+    datalayer.edit_status = DataLayer.ANONYMOUS
+    datalayer.save()
+    child = DataLayerFactory(map=map, parent=datalayer, edit_status=DataLayer.OWNER)
+    url = reverse("datalayer_update", args=(map.pk, child.pk))
+    name = "new name"
+    post_data["name"] = name
+    client.login(username=user, password="123123")
+    response = client.post(url, post_data, follow=True)
+    # User is only editor, and layer is in OWNER mode
+    assert response.status_code == 403
+    client.logout()
+
+    # Now test with map owner
+    client.login(username=map.owner, password="123123")
+    # Reset file in post_data, consumed in previous call
+    post_data["geojson"].seek(0)
+    response = client.post(url, post_data, follow=True)
+    assert response.status_code == 200
+    modified_datalayer = DataLayer.objects.get(pk=child.pk)
+    assert modified_datalayer.name == name
+
+
 @pytest.fixture
 def reference_data():
     return {
@@ -483,7 +526,7 @@ def reference_data():
                 "properties": {"_umap_options": {}, "name": "marker"},
             },
         ],
-        "_umap_options": {
+        "properties": {
             "displayOnLoad": True,
             "name": "new name",
             "id": 1668,

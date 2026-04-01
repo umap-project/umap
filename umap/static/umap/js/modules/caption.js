@@ -69,11 +69,9 @@ export default class Caption extends Utils.WithTemplate {
       this.elements.description.hidden = true
     }
     this.elements.datalayersContainer.innerHTML = ''
-    this._umap.datalayers
-      .reverse()
-      .map((datalayer) =>
-        this.addDataLayer(datalayer, this.elements.datalayersContainer)
-      )
+    for (const layer of this._umap.layers.root) {
+      this.addDataLayer(layer, this.elements.datalayersContainer)
+    }
     this.addCredits()
     if (this._umap.properties.created_at) {
       const created_at = translate('created at {date}', {
@@ -88,33 +86,39 @@ export default class Caption extends Utils.WithTemplate {
     }
     this._umap.panel.open({ content: this.element }).then(() => {
       // Create the legend when the panel is actually on the DOM
-      this._umap.datalayers.reverse().map((datalayer) => datalayer.renderLegend())
+      this._umap.layers.tree.map((datalayer) => datalayer.renderLegend())
       this._umap.propagate()
     })
   }
 
-  addDataLayer(datalayer, parent) {
+  addDataLayer(datalayer, container) {
     if (!datalayer.properties.inCaption) return
+
     const template = `
-    <div class="caption-item ${datalayer.cssId}">
-      <p>
+    <details open class="caption-item datalayer" data-ondelete data-id="${datalayer.id}">
+      <summary data-ontoggle data-id="${datalayer.id}">
         <span class="datalayer-legend"></span>
-        <strong data-ref="toolbox"></strong>
-      </p>
+        <span data-ref="toolbox"></span>
+      </summary>
       <p class="text" data-ref="description"></p>
-    </div>
+      <div data-ref="childrenContainer"></div>
+    </details>
     `
-    const [element, { toolbox, description }] = Utils.loadTemplateWithRefs(template)
+    const [element, { toolbox, description, childrenContainer }] =
+      Utils.loadTemplateWithRefs(template)
     if (datalayer.properties.description) {
       description.innerHTML = Utils.toHTML(datalayer.properties.description)
-    } else {
-      description.hidden = true
+    } else if (!datalayer.layers.count()) {
+      element.open = false
     }
     datalayer.renderToolbox(toolbox)
-    parent.appendChild(element)
+    container.appendChild(element)
     // Use textContent for security
-    const name = Utils.loadTemplate('<span></span>')
+    const name = Utils.loadTemplate('<h4></h4>')
     name.textContent = datalayer.getName()
+    for (const child of datalayer.layers.root) {
+      this.addDataLayer(child, childrenContainer)
+    }
     toolbox.appendChild(name)
   }
 

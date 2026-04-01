@@ -30,7 +30,7 @@ DATALAYER_DATA = {
             },
         }
     ],
-    "_umap_options": {"displayOnLoad": True, "name": "Donau", "id": 926},
+    "properties": {"displayOnLoad": True, "name": "Donau"},
 }
 
 
@@ -126,10 +126,11 @@ class DataLayerFactory(factory.django.DjangoModelFactory):
 
     @classmethod
     def _adjust_kwargs(cls, **kwargs):
+        group = kwargs.pop("group", False)
         if "data" in kwargs:
-            data = copy.deepcopy(kwargs.pop("data"))
+            data = copy.deepcopy(kwargs.pop("data") or {})
             data.setdefault(
-                "_umap_options",
+                "properties",
                 {
                     "fields": [
                         {"key": "name", "type": "String"},
@@ -137,18 +138,25 @@ class DataLayerFactory(factory.django.DjangoModelFactory):
                     ]
                 },
             )
-            if "name" in data["_umap_options"] and kwargs["name"] == cls.name:
-                kwargs["name"] = data["_umap_options"]["name"]
+            if "name" in data["properties"] and kwargs["name"] == cls.name:
+                kwargs["name"] = data["properties"]["name"]
             kwargs.setdefault("settings", {})
-            kwargs["settings"].update(data.get("_umap_options", {}))
+            kwargs["settings"].update(data.get("properties", {}))
         else:
             data = DATALAYER_DATA.copy()
-            data["_umap_options"] = {
+            data["properties"] = {
                 **DataLayerFactory.settings._defaults,
                 **kwargs["settings"],
             }
+        if kwargs["display_on_load"] is False:
+            # No the default, so override also in settings and data
+            kwargs["settings"]["displayOnLoad"] = kwargs["display_on_load"]
+            data["properties"]["displayOnLoad"] = kwargs["display_on_load"]
         kwargs["settings"]["name"] = kwargs["name"]
-        data["_umap_options"]["name"] = kwargs["name"]
+        data["properties"]["name"] = kwargs["name"]
+        if group:
+            kwargs["settings"]["group"] = True
+            data["properties"]["group"] = True
         data.setdefault("type", "FeatureCollection")
         data.setdefault("features", [])
         kwargs["geojson"] = ContentFile(json.dumps(data), "foo.json")

@@ -883,45 +883,45 @@ describe('Utils', () => {
 
   describe('setObjectValue', () => {
     it('should be able to set object properties', () => {
-      let obj = {}
+      const obj = {}
       Utils.setObjectValue(obj, 'foo', 'foo')
       expect(obj).deep.equal({ foo: 'foo' })
     })
 
     it('should be able to set object properties recursively on existing objects', () => {
-      let obj = { foo: {} }
+      const obj = { foo: {} }
       Utils.setObjectValue(obj, 'foo.bar', 'foo')
       expect(obj).deep.equal({ foo: { bar: 'foo' } })
     })
 
     it('should be able to set object properties recursively on deep objects', () => {
-      let obj = { foo: { bar: { baz: {} } } }
+      const obj = { foo: { bar: { baz: {} } } }
       Utils.setObjectValue(obj, 'foo.bar.baz.test', 'value')
       expect(obj).deep.equal({ foo: { bar: { baz: { test: 'value' } } } })
     })
 
     it('should be able to replace object properties recursively on deep objects', () => {
-      let obj = { foo: { bar: { baz: { test: 'test' } } } }
+      const obj = { foo: { bar: { baz: { test: 'test' } } } }
       Utils.setObjectValue(obj, 'foo.bar.baz.test', 'value')
       expect(obj).deep.equal({ foo: { bar: { baz: { test: 'value' } } } })
     })
 
     it('should not set object properties recursively on non-existing objects', () => {
-      let obj = { foo: {} }
+      const obj = { foo: {} }
       Utils.setObjectValue(obj, 'bar.bar', 'value')
 
       expect(obj).deep.equal({ foo: {} })
     })
 
     it('should delete keys for undefined values', () => {
-      let obj = { foo: 'foo' }
+      const obj = { foo: 'foo' }
       Utils.setObjectValue(obj, 'foo', undefined)
 
       expect(obj).deep.equal({})
     })
 
     it('should delete keys for undefined values, recursively', () => {
-      let obj = { foo: { bar: 'bar' } }
+      const obj = { foo: { bar: 'bar' } }
       Utils.setObjectValue(obj, 'foo.bar', undefined)
 
       expect(obj).deep.equal({ foo: {} })

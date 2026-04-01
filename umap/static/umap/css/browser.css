@@ -5,7 +5,23 @@
 .umap-browser .datalayer-name,
 .umap-browser .feature-title {
     cursor: pointer;
+    max-width: 32ch;
+    font-weight: normal;
+}
+.umap-browser .datalayer .datalayer .datalayer-name {
+    max-width: 30ch;
+}
+.umap-browser .datalayer .datalayer .datalayer .datalayer-name {
+    max-width: 28ch;
+}
+.umap-edit-enabled .umap-browser .datalayer .datalayer-name {
     max-width: 25ch;
+}
+.umap-edit-enabled .umap-browser .datalayer .datalayer .datalayer-name {
+    max-width: 23ch;
+}
+.umap-edit-enabled .umap-browser .datalayer .datalayer .datalayer .datalayer-name {
+    max-width: 21ch;
 }
 
 .umap-browser .feature-title {
@@ -39,11 +55,10 @@
     padding-inline-start: 5px;
     height: 30px;
     background-color: var(--color-veryLightGray);
-    font-weight: bold;
 }
 
-.umap-browser .off summary {
-    color: #b3b3b3;
+summary.off h4 {
+    opacity: 0.4;
 }
 
 .umap-browser .datalayer li:nth-child(even) {
@@ -118,21 +133,24 @@
 
 .umap-caption [type="button"],
 .umap-caption button {
-    background-color: var(--background-color);
+    background-color: transparent;
     color: var(--text-color);
 }
 
 .umap-browser .main-toolbox {
-    padding-left: 1.3rem;
-    /* Align with toolbox below  */
     border-top: 1px solid var(--color-mediumGray);
     margin-top: var(--box-margin);
     padding-top: 3px;
     padding-bottom: 3px;
+    display: flex;
+    justify-content: space-between;
 }
 
 .umap-browser .main-toolbox i {
     cursor: pointer;
+}
+.umap-browser .main-toolbox h3 {
+    margin-bottom: 0;
 }
 
 .umap-browser details {

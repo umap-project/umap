@@ -169,12 +169,30 @@ export class MapPermissions {
   _editDatalayers(container) {
     if (this._umap.hasLayers()) {
       const fieldset = Utils.loadTemplate(
-        `<fieldset class="separator"><legend>${translate('Datalayers')}</legend></fieldset>`
+        `<fieldset class="separator"><legend>${translate('Datalayers’ permissions')}</legend></fieldset>`
       )
       container.appendChild(fieldset)
-      this._umap.datalayers.active().map((datalayer) => {
-        datalayer.permissions.edit(fieldset)
-      })
+      const appendLayer = (layer, parentContainer) => {
+        const [details, { body, icon }] = Utils.loadTemplateWithRefs(
+          `<details open class="layer-group">
+            <summary><i class="icon icon-16" data-ref="icon"></i>${layer.getName()}</summary>
+            <div data-ref="body"></div>
+          </details>`
+        )
+        if (layer.group) {
+          icon.classList.add('icon-folder')
+        } else {
+          icon.hidden = true
+        }
+        parentContainer.appendChild(details)
+        layer.permissions.edit(body)
+        for (const child of layer.layers) {
+          appendLayer(child, body)
+        }
+      }
+      for (const layer of this._umap.layers.root) {
+        appendLayer(layer, fieldset)
+      }
     }
   }
 
@@ -270,13 +288,13 @@ export class MapPermissions {
 }
 
 export class DataLayerPermissions {
-  constructor(umap, datalayer) {
+  constructor(umap, datalayer, permissions) {
     this._umap = umap
     this.properties = Object.assign(
       {
         edit_status: null,
       },
-      datalayer.properties.permissions
+      permissions
     )
 
     this.datalayer = datalayer
@@ -291,14 +309,16 @@ export class DataLayerPermissions {
   }
 
   edit(container) {
+    const label = this.datalayer.group
+      ? translate('Group’s permissions')
+      : translate('Layer’s permissions')
     const fields = [
       [
         'properties.edit_status',
         {
           handler: 'IntSelect',
-          label: translate('Who can edit "{layer}"', {
-            layer: this.datalayer.getName(),
-          }),
+          label: label,
+          labelClassName: 'sr-only',
           selectOptions: this._umap.properties.datalayer_edit_statuses,
         },
       ],
@@ -325,17 +345,6 @@ export class DataLayerPermissions {
       {},
       formData
     )
-    if (!error) {
-      this.commit()
-      return true
-    }
-  }
-
-  commit() {
-    this.datalayer.properties.permissions = Object.assign(
-      {},
-      this.datalayer.properties.permissions,
-      this.properties
-    )
+    return !error
   }
 }

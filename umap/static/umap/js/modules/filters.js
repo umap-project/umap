@@ -266,39 +266,37 @@ export class Filters {
       </div>
     `
     const body = Utils.loadTemplate(template)
-    this._listFilters(this._umap.filters, body, translate('Map (all layers)'))
-    this._umap.datalayers.active().forEach((datalayer) => {
-      this._listFilters(
-        datalayer.filters,
-        body,
-        `${datalayer.getName()} (${translate('single layer')})`
-      )
-    })
+    this._listFilters(this._umap, body, translate('Map (all layers)'))
     this._umap.dialog.open({ template: body })
   }
 
-  _listFilters(filters, container, title) {
+  _listFilters(layer, container, title) {
     const template = Utils.sanitizeVars`
-      <details>
-        <summary>${title}</summary>
+      <details open>
+        <summary class="with-button">
+          <span><i class="icon icon-16 icon-toggle"></i><i class="icon icon-16" data-ref=icon></i>${title}</span>
+          <button class="flat" type="button" data-ref=add><i class="icon icon-16 icon-add"></i>${translate('Add filter')}</button>
+        </summary>
         <ul data-ref=ul></ul>
-        <div>
-          <button type="button" data-ref=add>${translate('Add filter')}</button>
-        </div>
+        <div data-ref=childrenContainer></div>
       </details>
     `
-    const [body, { ul, add }] = Utils.loadTemplateWithRefs(template)
-    if (!filters._parent.fields.size) {
+    const [body, { ul, add, childrenContainer, icon }] =
+      Utils.loadTemplateWithRefs(template)
+    if (!layer.fields.size) {
       add.disabled = true
       ul.appendChild(
         Utils.loadTemplate(
           `<li>${translate('Add a field prior to create a filter.')}</li>`
         )
       )
-    } else if (!filters._parent.fields.isDefault()) {
-      body.open = true
     }
-    filters.available.forEach((filter, fieldKey) => {
+    if (layer.group) {
+      icon.classList.add('icon-folder')
+    } else {
+      icon.hidden = true
+    }
+    layer.filters.available.forEach((filter, fieldKey) => {
       const [li, { edit, remove }] = Utils.loadTemplateWithRefs(
         Utils.sanitizeVars`<li class="orderable with-toolbox" data-fieldkey="${fieldKey}">
           <span>
@@ -313,33 +311,36 @@ export class Filters {
       )
       ul.appendChild(li)
       remove.addEventListener('click', () => {
-        filters.remove(fieldKey)
-        filters._parent
+        layer.filters.remove(fieldKey)
+        layer.filters._parent
           .edit()
           .then((panel) => panel.scrollTo('details#fields-management'))
       })
       edit.addEventListener('click', () => {
-        filters.createFilterForm(fieldKey)
+        layer.filters.createFilterForm(fieldKey)
       })
     })
-    add.addEventListener('click', () => filters.createFilterForm())
-    const onReorder = (src, dst, initialIndex, finalIndex) => {
+    add.addEventListener('click', () => layer.filters.createFilterForm())
+    for (const child of layer.layers.root) {
+      this._listFilters(child, childrenContainer, child.getName())
+    }
+    const onReorder = (src, dst) => {
       const orderedKeys = Array.from(ul.querySelectorAll('li')).map(
         (el) => el.dataset.fieldkey
       )
-      const oldValue = Utils.CopyJSON(filters._parent.properties.filters)
-      const copy = filters.available.entries().reduce((acc, [key, filter]) => {
+      const oldValue = Utils.CopyJSON(layer.filters._parent.properties.filters)
+      const copy = layer.filters.available.entries().reduce((acc, [key, filter]) => {
         acc[key] = filter.dumps()
         return acc
       }, {})
 
-      filters.available.clear()
+      layer.filters.available.clear()
       for (const fieldKey of orderedKeys) {
-        filters.add({ ...copy[fieldKey] })
+        layer.filters.add({ ...copy[fieldKey] })
       }
-      filters._parent.sync.update(
+      layer.filters._parent.sync.update(
         'properties.filters',
-        filters._parent.properties.filters,
+        layer.filters._parent.properties.filters,
         oldValue
       )
     }
@@ -683,14 +684,14 @@ Fields.FilterTargetSelect = class extends Fields.Select {
         `${this.builder.properties.umap.properties.name} (${translate('all layers')})`,
       ])
     }
-    this.builder.properties.umap.datalayers.reverse().map((datalayer) => {
+    this.builder.properties.umap.layers.tree.map((datalayer) => {
       if (datalayer.isBrowsable() && datalayer.fields.size) {
         if (!this.obj.target) {
           this.obj.target = datalayer
         }
         options.push([
           `layer:${datalayer.id}`,
-          `${datalayer.getName()}  (${translate('single layer')})`,
+          `${datalayer.getName(true)} (${translate('single layer')})`,
         ])
       }
     })
@@ -712,7 +713,7 @@ Fields.FilterTargetSelect = class extends Fields.Select {
     if (type === 'map') {
       return this.builder.properties.umap
     }
-    return this.builder.properties.umap.datalayers[id]
+    return this.builder.properties.umap.layers.tree.get(id)
   }
 }
 

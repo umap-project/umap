@@ -668,7 +668,7 @@ def test_download(client, map, datalayer):
     }
     assert j["layers"] == [
         {
-            "_umap_options": {
+            "properties": {
                 "browsable": True,
                 "displayOnLoad": True,
                 "name": "test datalayer",

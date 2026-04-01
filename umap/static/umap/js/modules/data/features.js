@@ -87,8 +87,7 @@ class Feature {
   }
 
   get fields() {
-    // Fields are user defined properties
-    return [...this._umap.fields.all(), ...this.datalayer.fields.all()]
+    return this.datalayer.inheritedFields.values()
   }
 
   setter(key, value) {
@@ -247,7 +246,7 @@ class Feature {
     // No need to sync the datalayer key, given we already do a delete/upsert when
     // it changes.
     let builder = new MutatingForm(this, [
-      ['datalayer', { handler: 'EditableDataLayerSwitcher', sync: false }],
+      ['datalayer', { handler: 'FeatureDataLayerSwitcher', sync: false }],
     ])
     // removeLayer step will close the edit panel, let's reopen it
     builder.on('set', () => this.edit(event))
@@ -548,8 +547,9 @@ class Feature {
     const filterKeys = this.datalayer.getFilterKeys()
     const filter = this._umap.browser.options.filter
     if (filter && !this.matchFullTextFilter(filter, filterKeys)) return true
-    if (this._umap.filters.matchFeature(this)) return true
-    if (this.datalayer.filters.matchFeature(this)) return true
+    for (const ancestor of this.datalayer.ancestry) {
+      if (ancestor.filters.matchFeature(this)) return true
+    }
     return false
   }
 

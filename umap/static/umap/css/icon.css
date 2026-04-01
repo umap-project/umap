@@ -6,6 +6,7 @@
     /* Reset default style, in case we apply this class on a button element  */
     border: none;
     background-color: initial;
+    color: var(--text-color);
 }
 
 [type=button].icon-16,
@@ -23,11 +24,6 @@ button.icon-24,
     --tile: -36px;
     height: 36px;
     width: 36px;
-}
-
-.icon+span {
-    margin-inline-start: 5px;
-    margin-inline-end: 5px;
 }
 
 html[dir="rtl"] .icon {
@@ -132,11 +128,11 @@ html[dir="rtl"] .icon {
 .icon-drag {
     background-position: calc(var(--tile) * 3) calc(var(--tile) * 3);
     cursor: grab;
-    float: inline-end;
     visibility: hidden;
 }
 
-.orderable:hover .icon-drag {
+.orderable.with-toolbox:hover .icon-drag,
+.orderable .with-toolbox:hover .icon-drag {
     visibility: visible;
 }
 
@@ -204,6 +200,10 @@ html[dir="rtl"] .icon {
     background-position: calc(var(--tile) * 8) calc(var(--tile) * 8);
 }
 
+.icon-folder {
+    background-position: calc(var(--tile) * 8) calc(var(--tile) * 5);
+}
+
 .icon-forward {
     background-position: calc(var(--tile) * 6) calc(var(--tile) * 6);
 }
@@ -218,6 +218,10 @@ html[dir="rtl"] .icon {
 
 .icon-key {
     background-position: calc(var(--tile) * 6) calc(var(--tile) * 5);
+}
+
+.icon-layer {
+    background-position: calc(var(--tile) * 8) calc(var(--tile) * 3);
 }
 
 .icon-layers {
@@ -292,6 +296,10 @@ html[dir="rtl"] .icon {
     background-position: calc(var(--tile) * 3) calc(var(--tile) * 7);
 }
 
+.icon-remote {
+    background-position: calc(var(--tile) * 8) calc(var(--tile) * 2);
+}
+
 .icon-resize {
     background-position: calc(var(--tile) * 3) calc(var(--tile) * 6);
 }
@@ -346,13 +354,19 @@ html[dir="rtl"] .icon {
     background-position: calc(var(--tile) * 2) 0px;
 }
 
-.readonly .icon-table,
-.off .icon-table {
-    background-position: calc(var(--tile) * 3) 0px;
+details[open] .icon-toggle {
+    background-position: calc(var(--tile) * 6) calc(var(--tile) * 2);
 }
 
-.remotelayer .icon-table {
-    display: none !important;
+details:not([open]) .icon-toggle {
+    background-position: calc(var(--tile) * 6) calc(var(--tile) * 3);
+}
+
+
+.readonly .icon-table,
+.icon-table.off,
+.off .icon-table {
+    background-position: calc(var(--tile) * 3) 0px;
 }
 
 .icon-template {

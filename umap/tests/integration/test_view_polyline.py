@@ -1,5 +1,3 @@
-from pathlib import Path
-
 import pytest
 from playwright.sync_api import expect
 
@@ -296,7 +294,7 @@ def test_can_use_gain_and_loss(live_server, map, page):
                 "id": "MzMTI",
             }
         ],
-        "_umap_options": {"popupContentTemplate": "{name}\n⭧ {gain} m\n⭨ {loss} m"},
+        "properties": {"popupContentTemplate": "{name}\n⭧ {gain} m\n⭨ {loss} m"},
     }
     DataLayerFactory(map=map, data=data)
     page.goto(
