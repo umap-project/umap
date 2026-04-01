@@ -471,6 +471,10 @@ export default class Umap {
         action: () => this.editInOSM(event),
       })
     }
+    items.push({
+      label: translate('Open in OpenStreetMap'),
+      action: () => this.openInOSM(event),
+    })
     if (items.length) items.unshift('-')
     return items
   }
@@ -1884,6 +1888,12 @@ export default class Umap {
       zoom: Math.max(this._leafletMap.getZoom(), 16),
     })
     if (url) window.open(url)
+  }
+
+  openInOSM(event) {
+    window.open(
+      `https://www.openstreetmap.org/query?lat=${event.latlng.lat}&lon=${event.latlng.lng}`
+    )
   }
 
   async askForIsochrone(event) {
