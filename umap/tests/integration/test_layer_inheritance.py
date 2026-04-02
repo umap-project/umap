@@ -9,7 +9,7 @@ from umap.models import DataLayer
 from ..base import DataLayerFactory
 
 
-def dragTo(page, source, target, mode):
+def dragTo(page, source, target, mode, needsExtraMove=False):
     targetBox = target.bounding_box()
     # Insist on hover, otherwise the event his sometimes not fired by Playwright agent.
     source.locator(".with-toolbox").first.hover(position={"x": 30, "y": 10})
@@ -34,6 +34,15 @@ def dragTo(page, source, target, mode):
     page.mouse.move(x=targetBox["x"] + x, y=targetBox["y"] + y)
     # Target the middle of the target element, so to add the moved element as child
     target.hover(position={"x": x, "y": y})
+    # Mouse move again, so the mouse up will be at the right position, as PW will
+    # also issue a mouseover.
+    if needsExtraMove:
+        # test_drag_not_loaded_layer will not pass without this extra hover, but
+        # test_can_drag_parent_with_children and test_can_drag_in_and_out will not
+        # pass with it, other tests do not care. No idea why and I'm a too tired man
+        # to spend more time on this. So let's add that ugly kwarg and go to walk
+        # in the sun.
+        page.mouse.move(x=targetBox["x"] + x, y=targetBox["y"] + y)
     page.mouse.up()
 
 
@@ -265,17 +274,55 @@ def test_can_drag_in_and_out(page, live_server, tilelayer, openmap):
     dl2El = page.locator(f".panel.right li.orderable[data-id='{dl2.pk}']")
     dl3El = page.locator(f".panel.right li.orderable[data-id='{dl3.pk}']")
 
-    print("##### Moving D3 inside D2")
     dragTo(page, dl3El, dl2El, "middle")
     expect(datalayers).to_have_count(3)
     expect(dl2El).to_contain_text("DL 3")
 
-    print("##### Moving D3 before D1")
     dragTo(page, dl3El, dl1El, "above")
     expect(datalayers).to_have_count(3)
     expect(dl2El).not_to_contain_text("DL 3")
 
-    print("##### Moving D3 inside D2")
     dragTo(page, dl3El, dl1El, "middle")
     expect(datalayers).to_have_count(3)
     expect(dl1El).to_contain_text("DL 3")
+
+
+def test_drag_not_loaded_layer(page, live_server, tilelayer, openmap):
+    parent = DataLayerFactory(name="parent", data=None, map=openmap, rank=0, group=True)
+    child = DataLayerFactory(
+        name="child", data=None, map=openmap, rank=0, parent=parent
+    )
+    other = DataLayerFactory(
+        name="other", data=None, map=openmap, rank=1, display_on_load=False
+    )
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    page.get_by_role("button", name="Open browser").click()
+    browser = page.locator(".panel.left .umap-browser")
+    datalayers = browser.locator("details.datalayer")
+    expect(datalayers).to_have_count(3)
+
+    page.get_by_role("button", name="Manage layers").click()
+    parentEl = page.locator(f".panel.right li.orderable[data-id='{parent.pk}']")
+    childEl = page.locator(f".panel.right li.orderable[data-id='{child.pk}']")
+    otherEl = page.locator(f".panel.right li.orderable[data-id='{other.pk}']")
+
+    print("##### Moving other above child")
+    dragTo(page, otherEl, childEl, "above", needsExtraMove=True)
+    expect(datalayers).to_have_count(3)
+    expect(parentEl).to_contain_text("other")
+
+    with page.expect_response(re.compile(f".*/datalayer/update/{other.pk}")):
+        page.get_by_role("button", name="Save").click()
+    time.sleep(2)
+    assert DataLayer.objects.count() == 3
+    # DL 1 and DL 2
+    assert DataLayer.objects.filter(parent=None).count() == 1
+    parent.refresh_from_db()
+    child.refresh_from_db()
+    other.refresh_from_db()
+
+    assert parent.parent is None
+    assert child.parent == parent
+    assert other.parent == parent
+
+    expect(page.get_by_text("Save", exact=True)).to_be_disabled()
