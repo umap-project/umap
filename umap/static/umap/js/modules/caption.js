@@ -96,30 +96,30 @@ export default class Caption extends Utils.WithTemplate {
 
     const template = `
     <details open class="caption-item datalayer" data-ondelete data-id="${datalayer.id}">
-      <summary data-ontoggle data-id="${datalayer.id}">
-        <span class="datalayer-legend"></span>
+      <summary data-ontoggle data-id="${datalayer.id}" class="with-toolbox">
+          <span>
+            <i class="icon icon-16 icon-folder" data-ref="parentIcon"></i>
+            <h4 data-ref="name" data-onrename class="datalayer-name truncate"></h4>
+          </span>
         <span data-ref="toolbox"></span>
       </summary>
+      <span class="datalayer-legend"></span>
       <p class="text" data-ref="description"></p>
       <div data-ref="childrenContainer"></div>
     </details>
     `
-    const [element, { toolbox, description, childrenContainer }] =
+    const [element, { toolbox, description, childrenContainer, name }] =
       Utils.loadTemplateWithRefs(template)
     if (datalayer.properties.description) {
       description.innerHTML = Utils.toHTML(datalayer.properties.description)
-    } else if (!datalayer.layers.count()) {
-      element.open = false
     }
     datalayer.renderToolbox(toolbox)
     container.appendChild(element)
     // Use textContent for security
-    const name = Utils.loadTemplate('<h4></h4>')
-    name.textContent = datalayer.getName()
+    name.textContent = datalayer.name
     for (const child of datalayer.layers.root) {
       this.addDataLayer(child, childrenContainer)
     }
-    toolbox.appendChild(name)
   }
 
   addCredits() {
