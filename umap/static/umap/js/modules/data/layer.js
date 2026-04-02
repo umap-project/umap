@@ -1232,7 +1232,7 @@ export class DataLayer {
   }
 
   toggle(force) {
-    if (this.layers.count()) {
+    if (this.group) {
       force = Utils.toggleLayers(this.layers, force)
     }
     // From now on, do not try to how/hide

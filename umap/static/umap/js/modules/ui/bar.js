@@ -241,13 +241,16 @@ export class BottomBar extends WithTemplate {
       const selected = select.options[select.selectedIndex].value
       for (const layer of this._umap.layers.tree) {
         if (layer.inCaption !== false) {
+          // No layer selected, back to default visibility.
           if (!selected) {
             layer.autoVisibility = true
             if (layer.showAtZoom() && !layer.isVisible()) {
               layer.show()
             }
           } else {
-            const force = layer.id === selected || layer.hasParent(selected)
+            // Only deal with group or selected layer
+            if (layer.id !== selected && layer.parent) continue
+            const force = layer.id === selected
             layer.toggle(force)
           }
         }

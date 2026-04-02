@@ -510,10 +510,6 @@ export default class Umap {
     return this.getProperty('color')
   }
 
-  getName() {
-    return this.properties.name
-  }
-
   getOption(key, feature) {
     // TODO: remove when field.js does not call blindly obj.getOption anymore
     return this.getProperty(key, feature)
