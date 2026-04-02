@@ -108,7 +108,7 @@ export default class Caption extends Utils.WithTemplate {
       <div data-ref="childrenContainer"></div>
     </details>
     `
-    const [element, { toolbox, description, childrenContainer, name }] =
+    const [element, { toolbox, description, childrenContainer, name, parentIcon }] =
       Utils.loadTemplateWithRefs(template)
     if (datalayer.properties.description) {
       description.innerHTML = Utils.toHTML(datalayer.properties.description)
@@ -117,6 +117,9 @@ export default class Caption extends Utils.WithTemplate {
     container.appendChild(element)
     // Use textContent for security
     name.textContent = datalayer.name
+    if (!datalayer.group) {
+      parentIcon.hidden = true
+    }
     for (const child of datalayer.layers.root) {
       this.addDataLayer(child, childrenContainer)
     }
