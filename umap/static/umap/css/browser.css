@@ -2,24 +2,30 @@
     --background-color: var(--color-lighterGray);
 }
 
+.umap-caption .datalayer-name,
 .umap-browser .datalayer-name,
 .umap-browser .feature-title {
     cursor: pointer;
     max-width: 32ch;
     font-weight: normal;
 }
+.umap-caption .datalayer .datalayer .datalayer-name,
 .umap-browser .datalayer .datalayer .datalayer-name {
     max-width: 30ch;
 }
+.umap-caption .datalayer .datalayer .datalayer .datalayer-name,
 .umap-browser .datalayer .datalayer .datalayer .datalayer-name {
     max-width: 28ch;
 }
+.umap-edit-enabled .umap-caption .datalayer .datalayer-name,
 .umap-edit-enabled .umap-browser .datalayer .datalayer-name {
     max-width: 25ch;
 }
+.umap-edit-enabled .umap-caption .datalayer .datalayer .datalayer-name,
 .umap-edit-enabled .umap-browser .datalayer .datalayer .datalayer-name {
     max-width: 23ch;
 }
+.umap-edit-enabled .umap-caption .datalayer .datalayer .datalayer .datalayer-name,
 .umap-edit-enabled .umap-browser .datalayer .datalayer .datalayer .datalayer-name {
     max-width: 21ch;
 }
@@ -49,12 +55,9 @@
     border: 1px solid #232729;
 }
 
+.umap-caption .datalayer summary,
 .umap-browser .datalayer summary {
-    margin-bottom: 0;
-    overflow: hidden;
-    padding-inline-start: 5px;
-    height: 30px;
-    background-color: var(--color-veryLightGray);
+    padding: calc(var(--text-margin) / 2);
 }
 
 summary.off h4 {
