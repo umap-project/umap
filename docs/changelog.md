@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.7.1 - 2026-04-02
+
+* Small fixes in caption rendering by @yohanboniface in #3266
+* fix: check debounce property on the right object by @yohanboniface in #3268
+* fix: fix saving a not yet loaded layer dragged by @yohanboniface in #3269
+
 ## 3.7.0 - 2026-04-02
 
 ### New features
