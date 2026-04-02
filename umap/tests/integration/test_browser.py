@@ -531,7 +531,7 @@ def test_honour_the_label_fields_settings(live_server, map, page, bootstrap, set
 def test_can_toggle_visibility_from_parent(live_server, map, page):
     map.settings["properties"]["onLoadPanel"] = "databrowser"
     map.save()
-    root1 = DataLayerFactory(name="root 1", rank=0, map=map, data={})
+    root1 = DataLayerFactory(name="root 1", rank=0, map=map, data={}, group=True)
     root2 = DataLayerFactory(
         name="root 2",
         rank=1,
@@ -568,6 +568,7 @@ def test_can_toggle_visibility_from_parent(live_server, map, page):
         map=map,
         data={},
         display_on_load=False,
+        group=True,
     )
     p1_grandchild1 = DataLayerFactory(
         name="p1 grandchild 1",
