@@ -110,7 +110,7 @@ Fields.Base = class {
 
   listenForSync(element) {
     let callback = () => this.sync()
-    if (this.builder.form.debounce) {
+    if (this.builder.debounce) {
       callback = Utils.debounce(callback, 300)
     }
     element.addEventListener('input', callback)
