@@ -21,6 +21,19 @@ def test_can_edit_name(page, live_server, tilelayer):
     )
 
 
+def test_changing_name_is_debounced(live_server, openmap, page):
+    openmap.name = "previous"
+    openmap.save()
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    page.get_by_role("button", name="Edit map name and caption").click()
+    page.get_by_role("textbox", name="name").click()
+    page.get_by_role("textbox", name="name").press_sequentially("changed")
+    page.locator(".edit-undo").click()
+
+    page.get_by_role("button", name="Edit map name and caption").click()
+    expect(page.get_by_role("textbox", name="name")).to_have_value("previous")
+
+
 def test_can_display_help(page, live_server, tilelayer):
     page.goto(f"{live_server.url}/en/map/new/")
 
