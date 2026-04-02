@@ -680,6 +680,15 @@ ul.photon-autocomplete {
     vertical-align: middle;
 }
 
+.datalayer-legend {
+    margin-top: var(--text-margin);
+    display: inline-block;
+}
+
+.datalayer-legend  li + li {
+    margin-top: 2px;
+}
+
 /* ************* */
 /* Marker's Icon */
 /* ************* */
