@@ -82,7 +82,6 @@ const locale = {
     "Custom overlay": "Vlastní překryv",
     "dash array": "styl přerušované čáry",
     "Data is browsable": "Data se dají procházet",
-    "Datalayers": "Datové vrstvy",
     "Default interaction options": "Výchozí možnosti interakce",
     "Default properties": "Výchozí vlastnosti",
     "Default shape properties": "Výchozí nastavení tvaru",
@@ -349,7 +348,6 @@ const locale = {
     "Where do we go from here?": "Co všechno teď můžete udělat?",
     "Whether to display or not polygons paths.": "Zda se mají či nemají zobrazovat cesty polygonů.",
     "Whether to fill polygons with color.": "Zda vyplnit polygony barvou.",
-    "Who can edit \"{layer}\"": "Kdo může upravovat \"{layer}\"",
     "Who can edit": "Kdo může upravit",
     "Who can view": "Kdo může zobrazit",
     "width": "šířka",
@@ -619,7 +617,6 @@ const locale = {
     "Manage field": "Manage field",
     "Add filter for this field": "Add filter for this field",
     "Name cannot be empty.": "Name cannot be empty.",
-    "Are you sure you want to delete this field on all the data?": "Are you sure you want to delete this field on all the data?",
     "Anonymous map": "Anonymous map",
     "Edit filter for this field": "Edit filter for this field",
     "Hey, you created a map without an account!": "Hey, you created a map without an account!",
@@ -649,7 +646,20 @@ const locale = {
     "Share": "Share",
     "Customized link": "Customized link",
     "Iframe": "Iframe",
-    "№": "№"
+    "№": "№",
+    "Layers": "Layers",
+    "Datalayers’ permissions": "Datalayers’ permissions",
+    "Group’s permissions": "Group’s permissions",
+    "Layer’s permissions": "Layer’s permissions",
+    "This layer is a group": "This layer is a group",
+    "Groups can have children layers, but cannot have data.": "Groups can have children layers, but cannot have data.",
+    "Open in OpenStreetMap": "Open in OpenStreetMap",
+    "Add a group": "Add a group",
+    "Are you sure you want to delete this field?": "Are you sure you want to delete this field?",
+    "Group": "Group",
+    "Parent group": "Parent group",
+    "Group properties": "Group properties",
+    "Choose a group": "Choose a group"
 }
 L.registerLocale("cs_CZ", locale)
 L.setLocale("cs_CZ")

@@ -82,7 +82,6 @@ const locale = {
     "Custom overlay": "Tilpasset overlejring",
     "dash array": "stiplet række",
     "Data is browsable": "Data kan gennemses",
-    "Datalayers": "Datalag",
     "Default interaction options": "Standardindstillinger for interaktion",
     "Default properties": "Standardegenskaber",
     "Default shape properties": "Standardegenskaber for figur",
@@ -349,7 +348,6 @@ const locale = {
     "Where do we go from here?": "Hvad gør vi nu?",
     "Whether to display or not polygons paths.": "Hvorvidt der vises eller ikke vises polygonstier.",
     "Whether to fill polygons with color.": "Hvorvidt polygoner udfyldes med farve.",
-    "Who can edit \"{layer}\"": "Hvem kan redigere \"{layer}\"",
     "Who can edit": "Hvem kan redigere",
     "Who can view": "Hvem kan se",
     "width": "bredde",
@@ -619,7 +617,6 @@ const locale = {
     "Manage field": "Administrer felt",
     "Add filter for this field": "Tilføj filter til dette felt",
     "Name cannot be empty.": "Navn må ikke være tomt.",
-    "Are you sure you want to delete this field on all the data?": "Er du sikker på, at du vil slette dette felt i alle dataene?",
     "Anonymous map": "Anonymt kort",
     "Edit filter for this field": "Rediger filter for dette felt",
     "Hey, you created a map without an account!": "Hej, du har oprettet et kort uden en konto!",
@@ -649,7 +646,20 @@ const locale = {
     "Share": "Del",
     "Customized link": "Tilpasset link",
     "Iframe": "Iframe",
-    "№": "nr."
+    "№": "nr.",
+    "Layers": "Layers",
+    "Datalayers’ permissions": "Datalayers’ permissions",
+    "Group’s permissions": "Group’s permissions",
+    "Layer’s permissions": "Layer’s permissions",
+    "This layer is a group": "This layer is a group",
+    "Groups can have children layers, but cannot have data.": "Groups can have children layers, but cannot have data.",
+    "Open in OpenStreetMap": "Open in OpenStreetMap",
+    "Add a group": "Add a group",
+    "Are you sure you want to delete this field?": "Are you sure you want to delete this field?",
+    "Group": "Group",
+    "Parent group": "Parent group",
+    "Group properties": "Group properties",
+    "Choose a group": "Choose a group"
 }
 L.registerLocale("da", locale)
 L.setLocale("da")

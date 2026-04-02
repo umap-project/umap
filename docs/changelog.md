@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.7.0 - 2026-04-02
+
+### New features
+* wip: allow to group layers by @yohanboniface in #3151
+* feat: allow to use a custom host for OpenRouteService by @yohanboniface in #3262
+* feat: add a link to open location in osm.org by @yohanboniface in #3263
+
+### Bug fixes
+* fix: fix copiable-input duplicated at each share panel redraw by @yohanboniface in #3257
+* fix: use natural sort for choices filters by @yohanboniface in #3260
+* fix: duplicate value in enum should not break the filters by @yohanboniface in #3259
+
+
 ## 3.6.3 - 2026-03-11
 
 * make sure map geojson view honour share_status

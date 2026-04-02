@@ -82,7 +82,6 @@ const locale = {
     "Custom overlay": "Eigen overlay",
     "dash array": "soort stippellijn",
     "Data is browsable": "Data kan verkend worden",
-    "Datalayers": "Datalagen",
     "Default interaction options": "Standaard interactie-opties",
     "Default properties": "Standaardeigenschappen",
     "Default shape properties": "Standaard vorm eigenschappen",
@@ -349,7 +348,6 @@ const locale = {
     "Where do we go from here?": "Wat gaan we doen?",
     "Whether to display or not polygons paths.": "Schakelaar toon polygoon omlijning",
     "Whether to fill polygons with color.": "Schakelaar vul polygonen met een kleur",
-    "Who can edit \"{layer}\"": "Wie kan \"{layer}\" bewerken?",
     "Who can edit": "Wie kan bewerken",
     "Who can view": "Wie kan bekijken",
     "width": "breedte",
@@ -619,7 +617,6 @@ const locale = {
     "Manage field": "Manage field",
     "Add filter for this field": "Add filter for this field",
     "Name cannot be empty.": "Name cannot be empty.",
-    "Are you sure you want to delete this field on all the data?": "Are you sure you want to delete this field on all the data?",
     "Anonymous map": "Anonymous map",
     "Edit filter for this field": "Edit filter for this field",
     "Hey, you created a map without an account!": "Hey, you created a map without an account!",
@@ -649,7 +646,20 @@ const locale = {
     "Share": "Share",
     "Customized link": "Customized link",
     "Iframe": "Iframe",
-    "№": "№"
+    "№": "№",
+    "Layers": "Layers",
+    "Datalayers’ permissions": "Datalayers’ permissions",
+    "Group’s permissions": "Group’s permissions",
+    "Layer’s permissions": "Layer’s permissions",
+    "This layer is a group": "This layer is a group",
+    "Groups can have children layers, but cannot have data.": "Groups can have children layers, but cannot have data.",
+    "Open in OpenStreetMap": "Open in OpenStreetMap",
+    "Add a group": "Add a group",
+    "Are you sure you want to delete this field?": "Are you sure you want to delete this field?",
+    "Group": "Group",
+    "Parent group": "Parent group",
+    "Group properties": "Group properties",
+    "Choose a group": "Choose a group"
 }
 L.registerLocale("nl", locale)
 L.setLocale("nl")

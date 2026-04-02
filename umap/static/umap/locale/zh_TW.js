@@ -82,7 +82,6 @@ const locale = {
     "Custom overlay": "客制套疊",
     "dash array": "虛線排列",
     "Data is browsable": "資料是可檢視的",
-    "Datalayers": "資料圖層",
     "Default interaction options": "預設互動選項",
     "Default properties": "預設屬性",
     "Default shape properties": "預設形狀屬性",
@@ -349,7 +348,6 @@ const locale = {
     "Where do we go from here?": "我們要去哪裡？",
     "Whether to display or not polygons paths.": "是否顯示多邊形的路徑。",
     "Whether to fill polygons with color.": "是否將多邊形填入色彩。",
-    "Who can edit \"{layer}\"": "誰有權限編輯 \"{layer}\"",
     "Who can edit": "誰可以編輯",
     "Who can view": "誰可以檢視",
     "width": "寬度",
@@ -619,7 +617,6 @@ const locale = {
     "Manage field": "管理欄位",
     "Add filter for this field": "新增篩選到這一欄位",
     "Name cannot be empty.": "名稱無法是空白的。",
-    "Are you sure you want to delete this field on all the data?": "你確定要刪除所有資料當中的這個欄位？",
     "Anonymous map": "暱名地圖",
     "Edit filter for this field": "為這個欄位編輯篩選",
     "Hey, you created a map without an account!": "嗨，你在沒有帳號狀態下創建地圖！",
@@ -649,7 +646,20 @@ const locale = {
     "Share": "分享",
     "Customized link": "自訂連結",
     "Iframe": "內崁頁面",
-    "№": "№"
+    "№": "№",
+    "Layers": "Layers",
+    "Datalayers’ permissions": "Datalayers’ permissions",
+    "Group’s permissions": "Group’s permissions",
+    "Layer’s permissions": "Layer’s permissions",
+    "This layer is a group": "This layer is a group",
+    "Groups can have children layers, but cannot have data.": "Groups can have children layers, but cannot have data.",
+    "Open in OpenStreetMap": "Open in OpenStreetMap",
+    "Add a group": "Add a group",
+    "Are you sure you want to delete this field?": "Are you sure you want to delete this field?",
+    "Group": "Group",
+    "Parent group": "Parent group",
+    "Group properties": "Group properties",
+    "Choose a group": "Choose a group"
 }
 L.registerLocale("zh_TW", locale)
 L.setLocale("zh_TW")
