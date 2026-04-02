@@ -1379,7 +1379,9 @@ export class DataLayer {
 
   async save() {
     if (this.isDeleted) return await this.saveDelete()
-    if (!this.isRemoteLayer() && !this.isLoaded()) return
+    if (!this.isRemoteLayer() && !this.isLoaded()) {
+      await this.fetchData()
+    }
     const formData = new FormData()
     formData.append('name', this.properties.name)
     formData.append('parent', this.parent?.id || '')
