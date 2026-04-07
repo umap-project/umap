@@ -1,6 +1,7 @@
 import gzip
 import ipaddress
 import json
+import logging
 import os
 import socket
 import unicodedata
@@ -12,6 +13,8 @@ from django.contrib.staticfiles import finders
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core.validators import URLValidator, ValidationError
 from django.urls import URLPattern, URLResolver, get_resolver, reverse
+
+logger = logging.getLogger(__name__)
 
 
 def _get_url_names(module):
@@ -287,7 +290,15 @@ def layers_tree(layers, keep_ids=True):
     root = {str(layer["id"]): {"layers": [], **layer} for layer in layers}
     for branch in root.values():
         if branch["parent"]:
-            root[str(branch["parent"])]["layers"].append(branch)
+            parent_id = str(branch["parent"])
+            if parent_id not in root:
+                logger.error(
+                    "layers_tree: layer %s references missing parent %s",
+                    branch["id"],
+                    branch["parent"],
+                )
+                continue
+            root[parent_id]["layers"].append(branch)
     for [id, branch] in root.copy().items():
         if not keep_ids:
             del branch["id"]
