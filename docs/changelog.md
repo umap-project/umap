@@ -1,10 +1,16 @@
 # Changelog
 
+## 3.7.2 - 2026-04-07
+
+* do not show bottom bar when in noControl mode by @yohanboniface in #3267
+* do not crash if parent is missing in layers_tree by @yohanboniface in #3277
+* do not open layers by default in browser by @yohanboniface in #3278
+
 ## 3.7.1 - 2026-04-02
 
 * Small fixes in caption rendering by @yohanboniface in #3266
-* fix: check debounce property on the right object by @yohanboniface in #3268
-* fix: fix saving a not yet loaded layer dragged by @yohanboniface in #3269
+* check debounce property on the right object by @yohanboniface in #3268
+* fix saving a not yet loaded layer dragged by @yohanboniface in #3269
 
 ## 3.7.0 - 2026-04-02
 
