@@ -225,6 +225,7 @@ export class BottomBar extends WithTemplate {
     this._slideshow = slideshow
     this.loadTemplate(BOTTOM_BAR_TEMPLATE)
     this.parent = parent
+    this.ready = false
   }
 
   setup() {
@@ -256,9 +257,11 @@ export class BottomBar extends WithTemplate {
         }
       }
     })
+    this.ready = true
   }
 
   redraw() {
+    if (!this.ready) return
     const hasSlideshow = this._slideshow.isEnabled()
     const barEnabled = this._umap.properties.captionBar || hasSlideshow
     document.body.classList.toggle('umap-caption-bar-enabled', barEnabled)
