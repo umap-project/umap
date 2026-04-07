@@ -1241,7 +1241,11 @@ export class DataLayer {
     this.autoVisibility = false
     let display = force
     if (force === undefined) {
-      display = !this.hasVisibleChild()
+      if (this.group) {
+        display = !this.hasVisibleChild()
+      } else {
+        display = !this.isVisible()
+      }
     }
     if (display) {
       this.show()
@@ -1266,10 +1270,7 @@ export class DataLayer {
   }
 
   hasVisibleChild() {
-    if (!this.layers.count()) {
-      return this.isVisible()
-    }
-    return this.layers.tree.some((child) => child.isVisible())
+    return this.group && this.layers.tree.some((child) => child.isVisible())
   }
 
   get bounds() {

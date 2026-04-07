@@ -637,3 +637,24 @@ def test_can_toggle_visibility_from_parent(live_server, map, page):
     expect(page.get_by_text("grandchild feature")).to_be_hidden()
     expect(page.get_by_text("child2 feature")).to_be_hidden()
     expect(page.get_by_text("root2 feature")).to_be_visible()
+
+
+def test_layers_should_be_closed_by_default(live_server, page, map):
+    DataLayerFactory(map=map, data=DATALAYER_DATA)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    panel = page.locator(".panel.left.on")
+
+    # In default mode
+    page.get_by_title("Open browser").click()
+    expect(panel.locator(".umap-browser")).to_be_visible()
+    expect(page.get_by_text("one point in france")).to_be_hidden()
+    expect(page.get_by_text("one line in new zeland")).to_be_hidden()
+    expect(page.get_by_text("one polygon in greenland")).to_be_hidden()
+
+    # In browse data mode
+    page.locator("#map").click(button="right")
+    page.get_by_text("Browse data").click()
+    expect(panel.locator(".umap-browser")).to_be_visible()
+    expect(page.get_by_text("one point in france")).to_be_visible()
+    expect(page.get_by_text("one line in new zeland")).to_be_visible()
+    expect(page.get_by_text("one polygon in greenland")).to_be_visible()
