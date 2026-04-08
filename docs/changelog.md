@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.7.3 - 2026-04-08
+
+* cloning a map should adapt layer parents by @yohanboniface in #3282
+* add missing semicolon so that nginx is running out of the box with docker by @tpummer in #3280
+
+### New Contributors
+* @tpummer made their first contribution in #3280
+
 ## 3.7.2 - 2026-04-07
 
 * do not show bottom bar when in noControl mode by @yohanboniface in #3267
