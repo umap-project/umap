@@ -135,7 +135,8 @@ TWITTER_CONSUMER_KEY = "xxx"
 TWITTER_CONSUMER_SECRET = "yyy"
 ```
 
-Example of callback URL to use for setting up OAuth apps
+Example of callback URL to use for setting up OAuth apps (where
+`umap.foo.bar` should be replaced with your site URL):
 
 http://umap.foo.bar/complete/github/
 
