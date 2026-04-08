@@ -1,10 +1,5 @@
 // FIXME: this module should not depend on Leaflet
-import {
-  DomEvent,
-  GeoJSON,
-  stamp,
-  SVG,
-} from '../../../vendors/leaflet/leaflet-src.esm.js'
+import { DomEvent, SVG } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import {
   uMapAlert as Alert,
   uMapAlertConflict as AlertConflict,
@@ -1552,8 +1547,8 @@ export class DataLayer {
         table.addEventListener('click', () => this.tableEdit())
       }
     }
-    DomEvent.on(toggle, 'click', () => this.toggle())
-    DomEvent.on(zoomTo, 'click', this.zoomTo, this)
+    toggle.addEventListener('click', () => this.toggle())
+    zoomTo.addEventListener('click', (event) => this.zoomTo(event))
     this.propagateVisibility({ element: container.closest('details') })
   }
 

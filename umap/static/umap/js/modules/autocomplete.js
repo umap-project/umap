@@ -1,4 +1,3 @@
-import { DomEvent, Util, setOptions } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
 import { Request, ServerRequest } from './request.js'
 import { escapeHTML, generateId } from './utils.js'
@@ -19,7 +18,7 @@ export class BaseAutocomplete {
     this.cache = ''
     this.results = []
     this._current = null
-    setOptions(this, options)
+    this.options = Object.assign({}, options)
     this.createInput()
     this.createContainer()
     this.selectedContainer = this.initSelectedContainer()
@@ -60,18 +59,21 @@ export class BaseAutocomplete {
     this.container.style.width = `${width}px`
   }
 
-  onKeyDown(e) {
-    switch (e.key) {
+  onKeyDown(event) {
+    switch (event.key) {
       case 'Tab':
         if (this.current !== null) this.setChoice()
-        DomEvent.stop(e)
+        event.preventDefault()
+        event.stopPropagation()
         break
       case 'Enter':
-        DomEvent.stop(e)
+        event.preventDefault()
+        event.stopPropagation()
         this.setChoice()
         break
       case 'Escape':
-        DomEvent.stop(e)
+        event.preventDefault()
+        event.stopPropagation()
         this.hide()
         break
       case 'ArrowDown':
@@ -88,7 +90,8 @@ export class BaseAutocomplete {
         break
       case 'ArrowUp':
         if (this.current !== null) {
-          DomEvent.stop(e)
+          event.preventDefault()
+          event.stopPropagation()
         }
         if (this.results.length > 0) {
           if (this.current > 0) {
@@ -103,7 +106,7 @@ export class BaseAutocomplete {
     }
   }
 
-  onKeyUp(e) {
+  onKeyUp(event) {
     const special = [
       'Tab',
       'Enter',
@@ -116,7 +119,7 @@ export class BaseAutocomplete {
       'Alt',
       'Control',
     ]
-    if (!special.includes(e.key)) {
+    if (!special.includes(event.key)) {
       if (this._typing) window.clearTimeout(this._typing)
       this._typing = window.setTimeout(() => {
         this.search()
@@ -231,7 +234,7 @@ export class BaseAjax extends BaseAutocomplete {
   }
 
   buildUrl(value) {
-    return Util.template(this.url, { q: encodeURIComponent(value) })
+    return Utils.template(this.url, { q: encodeURIComponent(value) })
   }
 
   async search() {

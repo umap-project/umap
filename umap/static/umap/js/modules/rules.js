@@ -1,4 +1,3 @@
-import { stamp } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { AutocompleteDatalist } from './autocomplete.js'
 import { MutatingForm } from './form/builder.js'
 import { translate } from './i18n.js'
@@ -25,6 +24,7 @@ class Rule {
   }
 
   constructor(umap, parent, condition = '', name = '', properties = {}) {
+    this.id = `rule-${Utils.generateId()}`
     // TODO make this public properties when browser coverage is ok
     // cf https://caniuse.com/?search=public%20class%20field
     this._condition = null
@@ -157,7 +157,7 @@ class Rule {
 
   renderToolbox(ul) {
     const template = Utils.sanitizeVars`
-      <li data-id="${stamp(this)}" class="orderable with-toolbox">
+      <li data-id="${this.id}" class="orderable with-toolbox">
         <span>${this.label || translate('empty rule')}</span>
         <span>
           <button class="icon icon-16 icon-eye" title="${translate('Toggle rule')}" data-ref=toggle></button>
@@ -240,8 +240,8 @@ export default class Rules {
 
   onReorder(src, target, dragMode) {
     const oldRules = Utils.CopyJSON(this.parent.properties.rules || {})
-    const moved = this.rules.find((rule) => stamp(rule) === +src.dataset.id)
-    const reference = this.rules.find((rule) => stamp(rule) === +target.dataset.id)
+    const moved = this.rules.find((rule) => rule.id === +src.dataset.id)
+    const reference = this.rules.find((rule) => rule.id === +target.dataset.id)
     const movedIdx = this.rules.indexOf(moved)
     const referenceIdx = this.rules.indexOf(reference)
     moved._delete() // Remove from array
