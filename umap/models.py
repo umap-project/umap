@@ -426,8 +426,19 @@ class Map(NamedModel):
         new.save()
         for editor in self.editors.all():
             new.editors.add(editor)
-        for datalayer in self.datalayers:
-            datalayer.clone(map_inst=new)
+        saved = {}
+        layers = {dl.pk: dl for dl in self.datalayers}
+
+        def clone_layer(layer):
+            if layer.pk in saved:
+                return
+            if layer.parent_id and layer.parent_id not in saved:
+                clone_layer(layers[layer.parent_id])
+            new_dl = layer.clone(map_inst=new, parent_id=saved.get(layer.parent_id))
+            saved[layer.pk] = new_dl.pk
+
+        for layer in layers.values():
+            clone_layer(layer)
         return new
 
     def get_tags_display(self):
@@ -580,10 +591,12 @@ class DataLayer(NamedModel):
         metadata["referenceVersion"] = self.reference_version
         return metadata
 
-    def clone(self, map_inst=None):
+    def clone(self, map_inst=None, parent_id=None):
         new = self.__class__.objects.get(pk=self.pk)
         new._state.adding = True
         new.pk = uuid.uuid4()
+        if parent_id:
+            new.parent_id = parent_id
         if map_inst:
             new.map = map_inst
         new.geojson = File(new.geojson.file.file, name="tmpname")
