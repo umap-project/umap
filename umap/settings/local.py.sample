@@ -37,9 +37,9 @@ ENABLE_ACCOUNT_LOGIN = True
 
 AUTHENTICATION_BACKENDS = (
     "social_core.backends.github.GithubOAuth2",
-    "social_core.backends.bitbucket.BitbucketOAuth",
+    "social_core.backends.bitbucket.BitbucketOAuth2",
     "social_core.backends.twitter.TwitterOAuth",
-    "social_core.backends.openstreetmap.OpenStreetMapOAuth",
+    "social_core.backends.openstreetmap_oauth2.OpenStreetMapOAuth2",
     "django.contrib.auth.backends.ModelBackend",
 )
 SOCIAL_AUTH_GITHUB_KEY = "xxx"
