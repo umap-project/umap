@@ -154,6 +154,14 @@ The final URL of you instance, including the protocol:
 `SITE_URL=http://umap.org`
 
 
+#### CSRF_TRUSTED_ORIGINS
+
+List of HTTP origins (scheme and host, for example `http://umap.org`)
+to trust for POST requests.  This is necessary if you wish to allow
+local (non-OAuth) logins, in which case you should add the values of
+`SITE_URL` and `SHORT_SITE_URL`.
+
+
 #### SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_KEY, SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_SECRET
 
 If you use OpenStreetMap as OAuth 2 provider, you can use those settings.

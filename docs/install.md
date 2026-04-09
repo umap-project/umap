@@ -46,6 +46,17 @@ createdb umap -O umap -U postgres
 psql umap -c "CREATE EXTENSION postgis" -Upostgres
 ```
 
+On Debian, you will need run these commands explicitly as the `postgres` user, for example:
+
+```bash
+sudo -u postgres createuser umap
+sudo -u postgres createdb umap -O umap
+sudo -u postgres psql umap -c "CREATE EXTENSION postgis"
+```
+
+Also, since PostgreSQL uses Unix user accounts for authentication, you
+must create a system user called `umap` which will run uMap.
+
 ## Getting started
 
 Create a geo aware database. See the [GeoDjango docs](https://docs.djangoproject.com/en/dev/ref/contrib/gis/install/) for backend installation.
@@ -135,7 +146,8 @@ TWITTER_CONSUMER_KEY = "xxx"
 TWITTER_CONSUMER_SECRET = "yyy"
 ```
 
-Example of callback URL to use for setting up OAuth apps
+Example of callback URL to use for setting up OAuth apps (where
+`umap.foo.bar` should be replaced with your site URL):
 
 http://umap.foo.bar/complete/github/
 

@@ -12,7 +12,7 @@ your code repository.
 from umap.settings.base import *  # pylint: disable=W0614,W0401
 
 SECRET_KEY = "!!change me!!"
-INTERNAL_IPS = ("127.0.0.1",)
+INTERNAL_IPS = ["127.0.0.1"]
 ALLOWED_HOSTS = [
     "*",
 ]
@@ -80,6 +80,8 @@ UMAP_MAPS_PER_PAGE_OWNER = 10
 
 SITE_URL = "http://localhost:8019"
 SHORT_SITE_URL = "http://s.hort"
+# Add SITE_URL and SHORT_SITE_URL to this list to allow local (non-OAuth) logins
+CSRF_TRUSTED_ORIGINS = []
 
 # CACHES = {
 #     'default': {
