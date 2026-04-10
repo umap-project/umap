@@ -66,7 +66,7 @@ def tilelayers():
     TileLayerFactory(
         rank=11,
         name="OSM OpenTopoMap",
-        url_template="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+        url_template="https://{switch:a,b,c}.tile.opentopomap.org/{zoom}/{x}/{y}.png",
     )
 
 

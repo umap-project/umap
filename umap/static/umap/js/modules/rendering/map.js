@@ -158,7 +158,10 @@ const ManageTilelayerMixin = {
     if (this._controls) this._controls.tilelayers.setLayers()
   },
 
-  createTileLayer: (tilelayer) => new TileLayer(tilelayer.url_template, tilelayer),
+  createTileLayer: function (tilelayer) {
+    const url = Utils.convertJOSM(tilelayer);
+    return new TileLayer(url, tilelayer);
+  },
 
   selectTileLayer: function (tilelayer) {
     if (tilelayer === this.selectedTilelayer) {

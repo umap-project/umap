@@ -739,3 +739,44 @@ export const asciiTree = (layers) => {
     console.groupEnd()
   }
 }
+
+/**
+ * Handle some JOSM conventions in the URL template.
+ *
+ * This modifies `tilelayer` in place to update the properties
+ * `url_template`, `tms`, `subdomains`, `zoomReverse`, `maxZoom` and
+ * `zoomOffset` according to possible JOSM template parameters as
+ * described in
+ * https://josm.openstreetmap.de/wiki/Maps#TileMapServicesTMS
+ *
+ * @param {tilelayer} Tile layer parameters.
+ * @returns Updated URL
+ */
+export function convertJOSM(tilelayer) {
+  let url = tilelayer.url_template;
+  // Handle {switch:1,2,3}
+  url = url.replace(/\{switch:([^}]+)\}/, (_match, p1) => {
+    if (p1)
+      tilelayer.subdomains = p1.split(",");
+    return "{s}";
+  });
+  // Handle {-y} for inverted Y-axis
+  url = url.replace(/\{-y\}/, () => {
+    tilelayer.tms = true;
+    return "{y}";
+  });
+  // Handle zoom offsets and reversed zooms
+  url = url.replace(/\{(?:(\d+)-)?zoom([+-]\d+)?\}/, (_match, p1, p2) => {
+    if (p1 !== undefined) {
+      tilelayer.zoomReverse = true;
+      tilelayer.maxZoom = parseInt(m[1]);
+    }
+    if (p2 !== undefined) {
+      tilelayer.zoomOffset = parseInt(m[2]);
+    }
+    return "{z}";
+  });
+  // Not supported: {!z}, {quad}, {apikey} (that's probably okay)
+  tilelayer.url_template = url;
+  return url;
+}
