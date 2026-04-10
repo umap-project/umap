@@ -110,3 +110,7 @@ line_break_after_multiline_tag=true
 [lint]
 # Disable autoremove of unused import.
 unfixable = ["F401"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "umap.settings.local"
+addopts = "--pdbcls=IPython.terminal.debugger:Pdb --no-migrations --numprocesses auto --reuse-db"
