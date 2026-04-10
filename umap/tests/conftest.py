@@ -33,7 +33,8 @@ def pytest_runtest_teardown():
     shutil.rmtree(TMP_ROOT, ignore_errors=True)
     cache.clear()
 
-@pytest.fixture(scope='session')
+
+@pytest.fixture(scope="session")
 def django_db_modify_db_settings():
     # Force xdist to reuse the same database to avoid requiring superuser
     pass
