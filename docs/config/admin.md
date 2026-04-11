@@ -1,7 +1,7 @@
 # Administration
 
 uMap uses the built-in [Django administration
-site](https://docs.djangoproject.com/en/6.0/ref/contrib/admin/) to
+site](https://docs.djangoproject.com/en/stable/ref/contrib/admin/) to
 manage data and local users, as well as some aspects of configuration
 such as [tile layers](#tile-layers).
 
