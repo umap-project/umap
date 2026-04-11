@@ -3,7 +3,10 @@
 uMap runs with Django, so any Django setting should work, if you know what you
 are doing.
 
-The Django settings reference is here: https://docs.djangoproject.com/en/4.2/ref/settings/
+The Django settings reference is here: https://docs.djangoproject.com/en/6.0/ref/settings/
+
+Some configuration ([tile layers](./admin.md#tile-layers) for instance) is managed through the
+[administration page](./admin.md).
 
 Here are a few relevant settings for uMap.
 
