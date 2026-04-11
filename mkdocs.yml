@@ -13,6 +13,7 @@ nav:
       - Frontend: dev/frontend.md
       - Dependencies: dev/dependencies.md
   - Configuration:
+      - Administration: config/admin.md
       - Settings: config/settings.md
       - Customize: config/customize.md
       - Storage: config/storage.md

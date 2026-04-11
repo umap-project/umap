@@ -3,7 +3,10 @@
 uMap runs with Django, so any Django setting should work, if you know what you
 are doing.
 
-The Django settings reference is here: https://docs.djangoproject.com/en/4.2/ref/settings/
+The Django settings reference is here: https://docs.djangoproject.com/en/stable/ref/settings/
+
+Some configuration ([tile layers](./admin.md#tile-layers) for instance) is managed through the
+[administration page](./admin.md).
 
 Here are a few relevant settings for uMap.
 
@@ -45,7 +48,7 @@ their account.
 Must be configured if you want uMap to send emails to anonymous users.
 
 UMap can send the anonymous edit link by email. For this to work, you need to
-add email specific settings. See [Django](https://docs.djangoproject.com/en/4.2/topics/email/#smtp-backend)
+add email specific settings. See [Django](https://docs.djangoproject.com/en/stable/topics/email/#smtp-backend)
 documentation.
 
 In general, you'll need to add something like this in your local settings:
@@ -101,7 +104,7 @@ Default longitude, latitude and zoom for the map
 Where uMap should store your datalayers and icons, must be consistent with your
 Nginx configuration.
 
-See [Django documentation for MEDIA_ROOT](https://docs.djangoproject.com/en/4.2/ref/settings/#media-root)
+See [Django documentation for MEDIA_ROOT](https://docs.djangoproject.com/en/stable/ref/settings/#media-root)
 
 #### OPENROUTESERVICE_APIKEY
 
@@ -127,7 +130,7 @@ Must be defined to something unique and secret.
 
 Running uMap / Django with a known SECRET_KEY defeats many of Django’s security protections, and can lead to privilege escalation and remote code execution vulnerabilities.
 
-See [Django documentation for SECRET_KEY](https://docs.djangoproject.com/en/4.2/ref/settings/#secret-key)
+See [Django documentation for SECRET_KEY](https://docs.djangoproject.com/en/stable/ref/settings/#secret-key)
 
 
 #### SHORT_SITE_URL
@@ -174,7 +177,7 @@ Otherwise, use any valid [python-social-auth configuration](https://python-socia
 Where uMap should store static files (CSS, JS…), must be consistent with your
 Nginx configuration.
 
-See [Django documentation for STATIC_ROOT](https://docs.djangoproject.com/en/4.2/ref/settings/#static-root)
+See [Django documentation for STATIC_ROOT](https://docs.djangoproject.com/en/stable/ref/settings/#static-root)
 
 
 #### STORAGES

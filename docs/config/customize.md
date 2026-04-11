@@ -110,5 +110,5 @@ for analytics (footer) or bug reporting like Sentry (header).
 
 By default, these files are empty.
 You must define you own paths for extra templates following
-[Django’s documentation for this particular setting](https://docs.djangoproject.com/en/4.2/ref/settings/#templates).
+[Django’s documentation for this particular setting](https://docs.djangoproject.com/en/stable/ref/settings/#templates).
 
