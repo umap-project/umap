@@ -69,6 +69,10 @@ sudo -u postgres createdb test_umap -O $USER
 sudo -u postgres psql test_umap -c "CREATE EXTENSION postgis"
 ```
 
+You will also need to run the tests with `pytest -n 0` to prevent
+`pytest` from running multiple processes, each of which requires its
+own database.
+
 The Django configuration for testing is **not** in
 `umap/settings/local.py` but in `umap/tests/settings.py`.  If you need
 to configure a specific remote PostgreSQL server for testing, you can

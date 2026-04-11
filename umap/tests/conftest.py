@@ -34,12 +34,6 @@ def pytest_runtest_teardown():
     cache.clear()
 
 
-@pytest.fixture(scope="session")
-def django_db_modify_db_settings():
-    # Force xdist to reuse the same database to avoid requiring superuser
-    pass
-
-
 @pytest.fixture
 def team():
     return TeamFactory()
