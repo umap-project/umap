@@ -111,6 +111,13 @@ See [Django documentation for MEDIA_ROOT](https://docs.djangoproject.com/en/stab
 API key for [OpenRouteService](https://openrouteservice.org/). When defined, it will activate
 elevation, routing and isochrone features on the map.
 
+#### OPENROUTESERVICE_HOST
+
+URL for a self hosted [OpenRouteService](https://openrouteservice.org/) instance. When defined, all API calls
+will be redirected to this specific instance. The variable expects an URL without a trailing slash.
+
+For example: `OPENROUTESERVICE_HOST="https://openrouteservice.foobar.example/ors"
+
 #### REALTIME_ENABLED
 
 Setting `REALTIME_ENABLED` to `True` will allow users to enable real-time collaboration.
