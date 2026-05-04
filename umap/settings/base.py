@@ -264,7 +264,7 @@ UMAP_ALLOW_EDIT_PROFILE = env.bool("UMAP_ALLOW_EDIT_PROFILE", default=True)
 
 UMAP_EXTRA_URLS = {
     "routing": "http://www.openstreetmap.org/directions?engine=osrm_car&route={lat},{lng}&locale={locale}#map={zoom}/{lat}/{lng}",  # noqa
-    "ajax_proxy": "/ajax-proxy/?url={url}&ttl={ttl}",
+    "ajax_proxy": "/ajax-proxy/{ttl}/?url={url}",
     "search": "https://photon.komoot.io/api/?",
     "edit_in_osm": "https://www.openstreetmap.org/edit#map={zoom}/{lat}/{lng}",
 }
@@ -345,6 +345,7 @@ LEAFLET_LATITUDE = env.float("LEAFLET_LATITUDE", default=51)
 LEAFLET_ZOOM = env.int("LEAFLET_ZOOM", default=6)
 UMAP_PICTOGRAMS_COLLECTIONS = {}
 EXTRA_URL_PATTERNS = []
+AJAX_PROXY_CACHE_DIR = "/tmp"
 
 
 # =============================================================================

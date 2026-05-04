@@ -14,6 +14,16 @@ LOGIN_URL = getattr(settings, "LOGIN_URL", "login")
 LOGIN_URL = reverse_lazy(LOGIN_URL) if not LOGIN_URL.startswith("/") else LOGIN_URL
 
 
+def ensure_ttl(view_func):
+    @wraps(view_func)
+    def wrapper(request, ttl, *args, **kwargs):
+        if ttl not in (300, 3600, 84600):
+            ttl = 300
+        return view_func(request, ttl, *args, **kwargs)
+
+    return wrapper
+
+
 def login_required_if_not_anonymous_allowed(view_func):
     @wraps(view_func)
     def wrapper(request, *args, **kwargs):

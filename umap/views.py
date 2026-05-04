@@ -1,7 +1,9 @@
+import asyncio
+import base64
 import io
 import json
-import mimetypes
 import re
+import time
 import zipfile
 from datetime import datetime, timedelta
 from http.client import InvalidURL
@@ -9,7 +11,7 @@ from pathlib import Path
 from smtplib import SMTPException
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlparse
-from urllib.request import Request, build_opener
+from urllib.request import build_opener, install_opener, urlretrieve
 
 from django.conf import settings
 from django.contrib import messages
@@ -26,6 +28,7 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.signing import BadSignature, Signer, TimestampSigner
 from django.db.models import QuerySet
 from django.http import (
+    FileResponse,
     Http404,
     HttpResponse,
     HttpResponseBadRequest,
@@ -438,52 +441,61 @@ user_download = UserDownload.as_view()
 
 
 class AjaxProxy(View):
-    def get(self, *args, **kwargs):
+    async def get(self, request, ttl, *args, **kwargs):
         try:
-            url = validate_url(self.request)
+            url = validate_url(request)
         except ValueError as err:
             print(f"AjaxProxy: {err}")
             return HttpResponseBadRequest()
-        try:
-            ttl = int(self.request.GET.get("ttl"))
-        except (TypeError, ValueError):
-            ttl = None
-        if getattr(settings, "UMAP_XSENDFILE_HEADER", None):
-            response = HttpResponse()
-            response[settings.UMAP_XSENDFILE_HEADER] = f"/proxy/{quote_plus(url)}"
-            if ttl:
-                response["X-Accel-Expires"] = ttl
-            return response
 
-        # You should not use this in production (use Nginx or so)
-        headers = {"User-Agent": "uMapProxy +http://wiki.openstreetmap.org/wiki/UMap"}
-        url = url.replace(" ", "+")
-        request = Request(url, headers=headers)
-        opener = build_opener()
+        # derive basename from URL
+        basename = f"umap_{base64.urlsafe_b64encode(url.encode()).decode()}"
+        dest = Path(settings.AJAX_PROXY_CACHE_DIR) / f"{basename}.data"
+        info = Path(settings.AJAX_PROXY_CACHE_DIR) / f"{basename}.info"
+        semafore = Path(settings.AJAX_PROXY_CACHE_DIR) / f"{basename}.tmp"
+        count = 0
+        while semafore.exists():
+            count += 1
+            if count >= 10:
+                return HttpResponseServerError()
+            await asyncio.sleep(1)
         try:
-            proxied_request = opener.open(request, timeout=10)
-        except HTTPError as e:
-            return HttpResponse(e.msg, status=e.code, content_type="text/plain")
-        except URLError:
-            return HttpResponseBadRequest("URL error")
-        except InvalidURL:
-            return HttpResponseBadRequest("Invalid URL")
-        except TimeoutError:
-            return HttpResponseBadRequest("Timeout")
-        else:
-            status_code = proxied_request.code
-            content_type = proxied_request.headers.get("Content-Type")
-            if not content_type:
-                content_type, encoding = mimetypes.guess_type(url)
-            content = proxied_request.read()
-            # Quick hack to prevent Django from adding a Vary: Cookie header
-            self.request.session.accessed = False
-            response = HttpResponse(
-                content, status=status_code, content_type=content_type
-            )
-            if ttl:
-                response["X-Accel-Expires"] = ttl
-            return response
+            age = time.time() - info.stat().st_mtime
+        except IOError:
+            age = None
+        status = "HIT"
+        if age is None or age > ttl:
+            status = "MISS"
+            # Set a semafore, so two parallel calls will not request twice the URL
+            semafore.touch()
+            opener = build_opener()
+            opener.addheaders = [("User-agent", "uMapProxy +https://umap-project.org")]
+            install_opener(opener)
+            try:
+                filename, headers = urlretrieve(url)
+            except HTTPError as err:
+                return HttpResponse(err.msg, status=err.code, content_type="text/plain")
+            except URLError:
+                return HttpResponseBadRequest("URL error")
+            except InvalidURL:
+                return HttpResponseBadRequest("Invalid URL")
+            except TimeoutError:
+                return HttpResponseBadRequest("Timeout")
+            else:
+                content_type = headers["Content-Type"]
+                Path(filename).move(dest)
+                info.write_text(content_type)
+            finally:
+                semafore.unlink()
+        try:
+            content_type = info.read_text()
+        except IOError as err:
+            return HttpResponseBadRequest(err)
+        # TODO FileReponse is async, should we add aiofiles and go full async ?
+        response = FileResponse(open(dest, "rb"), content_type=content_type)
+        response.headers["X-CACHE"] = status
+        response["X-Accel-Expires"] = ttl
+        return response
 
 
 ajax_proxy = AjaxProxy.as_view()

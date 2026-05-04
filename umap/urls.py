@@ -18,6 +18,7 @@ from .decorators import (
     can_edit_map,
     can_view_map,
     datalayer_belong_to_map,
+    ensure_ttl,
     is_anonymous_owner,
     login_required_if_not_anonymous_allowed,
     team_members_only,
@@ -34,7 +35,7 @@ urlpatterns = [
         include(("agnocomplete.urls", "agnocomplete"), namespace="agnocomplete"),
     ),
     path("m/<int:pk>/", views.MapShortUrl.as_view(), name="map_short_url"),
-    path("ajax-proxy/", cache_page(180)(views.ajax_proxy), name="ajax-proxy"),
+    path("ajax-proxy/<int:ttl>/", ensure_ttl(views.ajax_proxy), name="ajax-proxy"),
     path(
         "change-password/",
         auth_views.PasswordChangeView.as_view(),
