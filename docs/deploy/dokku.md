@@ -68,9 +68,6 @@ Some changes need to be added to the `http` section of the nginx conf.
 Create a file at `/etc/nginx/conf.d/umap-http.conf` with this content:
 
 ```nginx title="/etc/nginx/conf.d/umap-http.conf"
-proxy_cache_path /tmp/nginx_ajax_proxy_cache levels=1:2 keys_zone=ajax_proxy:10m inactive=60m;
-proxy_cache_key "$uri$is_args$args";
-
 map $http_upgrade $connection_upgrade {
     default upgrade;
     ''      close;

@@ -647,13 +647,6 @@ export const SCHEMA = {
   ttl: {
     type: Number,
     label: translate('Cache proxied request'),
-    choices: [
-      ['', translate('No cache')],
-      ['300', translate('5 min')],
-      ['3600', translate('1 hour')],
-      ['86400', translate('1 day')],
-    ],
-    default: '300',
   },
   type: {
     type: String,

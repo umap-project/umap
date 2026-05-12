@@ -257,6 +257,9 @@ def validate_url(request):
     url = request.GET.get("url")
     if not url:
         raise ValueError("Missing URL")
+    # Tolerate raw spaces (typically Overpass queries) — URLValidator would
+    # otherwise reject them.
+    url = url.replace(" ", "+")
     try:
         URLValidator()(url)
     except ValidationError as err:

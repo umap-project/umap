@@ -20,6 +20,24 @@ Those settings should either:
 - be declared as env vars directly, for simple ones (string/boolean/list)
 
 
+#### AJAX_PROXY_CACHE_DIR
+
+Path to a writable directory where the ajax proxy will store cached upstream
+responses (used to bypass CORS for user-loaded remote data). Required.
+
+Each cache entry is a single file `umap_<urlhash>.cache`; entries grow with
+proxied URL diversity, so prefer a dedicated directory you can rotate or
+purge if needed.
+
+Set as an env var: `AJAX_PROXY_CACHE_DIR=/var/cache/umap-proxy`
+
+uMap refuses to start if the directory is missing or not writable.
+
+There is no automatic eviction: schedule the management command
+`umap clear_proxy_cache` (e.g. via cron) to drop entries older than a
+configurable threshold (`--max-age <seconds>`, default 86400).
+
+
 #### ALLOWED_HOSTS
 
 The hosts that uMap expects.
@@ -247,7 +265,7 @@ By default:
 ```python title="local_settings.py"
 UMAP_EXTRA_URLS = {
     'routing': 'http://www.openstreetmap.org/directions?engine=osrm_car&route={lat},{lng}&locale={locale}#map={zoom}/{lat}/{lng}',
-    'ajax_proxy': '/ajax-proxy/?url={url}&ttl={ttl}',
+    'ajax_proxy': '/ajax-proxy/{ttl}/?url={url}',
     'search': 'https://photon.komoot.io/api/?',
 }
 ```

@@ -345,7 +345,7 @@ LEAFLET_LATITUDE = env.float("LEAFLET_LATITUDE", default=51)
 LEAFLET_ZOOM = env.int("LEAFLET_ZOOM", default=6)
 UMAP_PICTOGRAMS_COLLECTIONS = {}
 EXTRA_URL_PATTERNS = []
-AJAX_PROXY_CACHE_DIR = "/tmp"
+AJAX_PROXY_CACHE_DIR = env("AJAX_PROXY_CACHE_DIR", default=None)
 
 
 # =============================================================================

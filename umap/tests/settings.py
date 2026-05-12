@@ -1,7 +1,9 @@
 import os
+import tempfile
 
 from umap.settings.base import *  # pylint: disable=W0614,W0401
 
+AJAX_PROXY_CACHE_DIR = tempfile.gettempdir()
 SECRET_KEY = "justfortests"
 DEFAULT_FROM_EMAIL = "test@test.org"
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
