@@ -213,13 +213,13 @@ panel at the bottom of the map, if the map's creator has enabled it.
 
 The data browser shows all the elements of the map, organized by
 layers. Clicking on a layer expands or collapses the list of items
-contained by it.  You may also filter the visible items by clicking on
-the "Filters" icon and entering a search string in the text box.
+contained in it.  In the list of items, clicking on the magnifying
+glass to the right of an item will center the map on it and open the
+popup with its description.
 
-The magnifying glass to the left of each element allows to
-display on the map the popup describing this element. The text of
-input above the list allows you to search for an item, by showing that
-those whose name contains the text entered.
+You may also search for an item by clicking on the "Filters" icon and
+entering a search string in the text box.  This will show only the
+items whose name contains the text entered.
 
 
 ## Recap

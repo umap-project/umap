@@ -212,7 +212,7 @@ ou le lien **Visualiser les données** dans la barre de légende, si le créateu
 de la carte a choisi de l'activer.
 
 Le panneau alors visible à gauche montre l’ensemble des éléments de la
-carte, organisés par calques. La loupe à gauche de chaque élément permet
+carte, organisés par calques. La loupe à droite de chaque élément permet
 d’afficher sur la carte la popup décrivant cet élément. Le texte de
 saisie au-dessus de la liste permet de rechercher un élément, en ne
 montrant que ceux dont le nom contient le texte saisi.
