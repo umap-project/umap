@@ -224,9 +224,8 @@ items whose name contains the text entered.
 
 ## Recap
 
-This first tutorial allowed us to discover the main ones
-features of a uMap. Next, we will
-[learn how to create a uMap](2-first-map.md).
+This first tutorial allowed us to discover the main features of
+uMap. Next, we will [learn how to create a uMap](2-first-map.md).
 
 
 ??? info "License"
