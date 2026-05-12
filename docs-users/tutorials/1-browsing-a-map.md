@@ -10,8 +10,8 @@
 ### 1. Browse the Map
 
 You have received a link to a uMap by email. Here are the
-main elements of the map, and the operations available for the
-manipulate. The uMap shown below is available online
+main elements of the map, and the operations available for
+navigating within it. The uMap shown below is available online
 [here](http://umap.openstreetmap.fr/en/map/festival-des-3-continents_26381).
 
 ![Description of the different elements of a uMap](../static/tutoriels/1-je-consulte-une-carte-umap/umap_anatomy_2026.jpg)
