@@ -106,6 +106,10 @@ export default class Umap {
     this.slideshow = new Slideshow(this, this._leafletMap)
 
     if (geojson.properties.schema) this.overrideSchema(geojson.properties.schema)
+    if (geojson.properties.ttl) {
+      SCHEMA.ttl.choices = Array.from(Object.entries(geojson.properties.ttl))
+      SCHEMA.ttl.default = geojson.properties.default_ttl
+    }
 
     // Do not display in an iframe.
     if (this.isEmbed) {

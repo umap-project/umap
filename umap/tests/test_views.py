@@ -1,6 +1,10 @@
+import base64
 import json
+import os
+import time
 from datetime import datetime, timedelta
 
+import httpx
 import pytest
 from django.conf import settings
 from django.contrib.auth import get_user, get_user_model
@@ -16,75 +20,258 @@ from .base import MapFactory, UserFactory
 User = get_user_model()
 
 
-def test_valid_proxy_request(client):
-    url = reverse("ajax-proxy")
-    params = {"url": "http://example.org"}
-    headers = {
-        "HTTP_X_REQUESTED_WITH": "XMLHttpRequest",
-        "HTTP_REFERER": settings.SITE_URL,
+@pytest.fixture
+def proxy_cache_dir(settings, tmp_path):
+    settings.AJAX_PROXY_CACHE_DIR = str(tmp_path)
+    return tmp_path
+
+
+@pytest.fixture
+def proxy_headers():
+    return {
+        "X-Requested-With": "XMLHttpRequest",
+        "Referer": settings.SITE_URL,
     }
-    response = client.get(url, params, **headers)
+
+
+@pytest.fixture
+def httpx_handler(monkeypatch):
+    """Route AjaxProxy's httpx calls through a MockTransport.
+
+    Reassign `transport.handler` from a test to control the upstream response.
+    """
+
+    def default_handler(request):
+        return httpx.Response(
+            200, content=b"OK", headers={"content-type": "text/plain"}
+        )
+
+    transport = httpx.MockTransport(default_handler)
+    real_async_client = httpx.AsyncClient
+
+    def fake_async_client(*args, **kwargs):
+        kwargs["transport"] = transport
+        return real_async_client(*args, **kwargs)
+
+    monkeypatch.setattr("umap.views.httpx.AsyncClient", fake_async_client)
+    return transport
+
+
+def proxy_url(ttl=300):
+    return reverse("ajax-proxy", kwargs={"ttl": ttl})
+
+
+def _cache_basename(url):
+    return f"umap_{base64.urlsafe_b64encode(url.encode()).decode()}"
+
+
+async def test_valid_proxy_request(async_client, proxy_cache_dir, proxy_headers):
+    response = await async_client.get(
+        proxy_url(), {"url": "http://example.org"}, headers=proxy_headers
+    )
     assert response.status_code == 200
-    assert "Example Domain" in response.content.decode()
-    assert "Cookie" not in response["Vary"]
+    assert b"Example Domain" in b"".join(response.streaming_content)
+    assert "Cookie" not in response.get("Vary", "")
 
 
-def test_valid_proxy_request_with_ttl(client):
-    url = reverse("ajax-proxy")
-    params = {"url": "http://example.org", "ttl": 3600}
-    headers = {
-        "HTTP_X_REQUESTED_WITH": "XMLHttpRequest",
-        "HTTP_REFERER": settings.SITE_URL,
-    }
-    response = client.get(url, params, **headers)
+async def test_valid_proxy_request_with_ttl(
+    async_client, proxy_cache_dir, proxy_headers
+):
+    response = await async_client.get(
+        proxy_url(3600), {"url": "http://example.org"}, headers=proxy_headers
+    )
     assert response.status_code == 200
-    assert "Example Domain" in response.content.decode()
-    assert "Cookie" not in response["Vary"]
-    assert response["X-Accel-Expires"] == "3600"
+    assert b"Example Domain" in b"".join(response.streaming_content)
 
 
-def test_valid_proxy_request_with_invalid_ttl(client):
-    url = reverse("ajax-proxy")
-    params = {"url": "http://example.org", "ttl": "invalid"}
-    headers = {
-        "HTTP_X_REQUESTED_WITH": "XMLHttpRequest",
-        "HTTP_REFERER": settings.SITE_URL,
-    }
-    response = client.get(url, params, **headers)
+async def test_invalid_ttl_is_coerced_to_default(
+    async_client, proxy_cache_dir, proxy_headers, httpx_handler
+):
+    # ensure_ttl coerces any int outside the allowed set to the default 300.
+    response = await async_client.get(
+        proxy_url(999), {"url": "http://example.org"}, headers=proxy_headers
+    )
     assert response.status_code == 200
-    assert "Example Domain" in response.content.decode()
-    assert "Cookie" not in response["Vary"]
-    assert "X-Accel-Expires" not in response
 
 
-def test_invalid_proxy_url_should_return_400(client):
-    url = reverse("ajax-proxy")
-    params = {"url": "http://example.org/a\ncarriage\r\nreturn is invalid"}
-    headers = {
-        "HTTP_X_REQUESTED_WITH": "XMLHttpRequest",
-        "HTTP_REFERER": settings.SITE_URL,
-    }
-    response = client.get(url, params, **headers)
+async def test_invalid_proxy_url_should_return_400(
+    async_client, proxy_cache_dir, proxy_headers
+):
+    response = await async_client.get(
+        proxy_url(),
+        {"url": "http://example.org/a\ncarriage\r\nreturn is invalid"},
+        headers=proxy_headers,
+    )
     assert response.status_code == 400
 
 
-def test_valid_proxy_request_with_x_accel_redirect(client, settings):
-    settings.UMAP_XSENDFILE_HEADER = "X-Accel-Redirect"
-    url = reverse("ajax-proxy")
-    params = {"url": "http://example.org?foo=bar&bar=foo", "ttl": 300}
-    headers = {
-        "HTTP_X_REQUESTED_WITH": "XMLHttpRequest",
-        "HTTP_REFERER": settings.SITE_URL,
-    }
-    response = client.get(url, params, **headers)
-    assert response.status_code == 200
-    assert "X-Accel-Redirect" in response.headers
-    assert (
-        response["X-Accel-Redirect"]
-        == "/proxy/http%3A%2F%2Fexample.org%3Ffoo%3Dbar%26bar%3Dfoo"
+async def test_proxy_caches_response(
+    async_client, proxy_cache_dir, proxy_headers, httpx_handler
+):
+    calls = []
+
+    def handler(request):
+        calls.append(str(request.url))
+        return httpx.Response(
+            200, content=b"hello", headers={"content-type": "text/plain"}
+        )
+
+    httpx_handler.handler = handler
+
+    r1 = await async_client.get(
+        proxy_url(), {"url": "http://example.org"}, headers=proxy_headers
     )
-    assert "X-Accel-Expires" in response.headers
-    assert response["X-Accel-Expires"] == "300"
+    assert r1.status_code == 200
+    assert r1["X-CACHE"] == "MISS"
+    assert b"hello" in b"".join(r1.streaming_content)
+
+    r2 = await async_client.get(
+        proxy_url(), {"url": "http://example.org"}, headers=proxy_headers
+    )
+    assert r2.status_code == 200
+    assert r2["X-CACHE"] == "HIT"
+    assert b"hello" in b"".join(r2.streaming_content)
+
+    assert len(calls) == 1
+
+
+async def test_proxy_returns_400_on_upstream_error(
+    async_client, proxy_cache_dir, proxy_headers, httpx_handler
+):
+    httpx_handler.handler = lambda request: httpx.Response(500)
+    response = await async_client.get(
+        proxy_url(), {"url": "http://example.org"}, headers=proxy_headers
+    )
+    assert response.status_code == 400
+
+
+async def test_proxy_returns_400_on_timeout(
+    async_client, proxy_cache_dir, proxy_headers, httpx_handler
+):
+    def handler(request):
+        raise httpx.ReadTimeout("simulated timeout")
+
+    httpx_handler.handler = handler
+    response = await async_client.get(
+        proxy_url(), {"url": "http://example.org"}, headers=proxy_headers
+    )
+    assert response.status_code == 400
+
+
+async def test_proxy_falls_back_when_no_content_type(
+    async_client, proxy_cache_dir, proxy_headers, httpx_handler
+):
+    httpx_handler.handler = lambda request: httpx.Response(200, content=b"data")
+    response = await async_client.get(
+        proxy_url(), {"url": "http://example.org"}, headers=proxy_headers
+    )
+    assert response.status_code == 200
+    assert response["Content-Type"] == "application/octet-stream"
+
+
+async def test_proxy_tolerates_raw_spaces_in_url(
+    async_client, proxy_cache_dir, proxy_headers, httpx_handler
+):
+    # Historical regression (cf. changelog: "ajax proxy broken when using
+    # overpass URL that includes spaces"): raw spaces in the proxied URL must
+    # be encoded server-side instead of triggering URLValidator's rejection.
+    seen = []
+
+    def handler(request):
+        seen.append(str(request.url))
+        return httpx.Response(
+            200, content=b"{}", headers={"content-type": "application/json"}
+        )
+
+    httpx_handler.handler = handler
+    response = await async_client.get(
+        proxy_url(),
+        {"url": "http://overpass-api.de/api?data=foo bar"},
+        headers=proxy_headers,
+    )
+    assert response.status_code == 200
+    assert seen == ["http://overpass-api.de/api?data=foo+bar"]
+
+
+async def test_proxy_clears_stale_semaphore(
+    async_client, proxy_cache_dir, proxy_headers, httpx_handler
+):
+    # Simulate a worker that crashed mid-fetch and left the semaphore behind:
+    # the next request should consider it stale, clear it, and proceed.
+    target = "http://example.org"
+    semaphore = proxy_cache_dir / f"{_cache_basename(target)}.tmp"
+    semaphore.touch()
+    stale_mtime = time.time() - 3600  # 1h ago, well past SEMAPHORE_TIMEOUT
+    os.utime(semaphore, (stale_mtime, stale_mtime))
+
+    response = await async_client.get(
+        proxy_url(), {"url": target}, headers=proxy_headers
+    )
+    assert response.status_code == 200
+    assert not semaphore.exists()
+
+
+async def test_proxy_fast_path_ignores_held_semaphore(
+    async_client, proxy_cache_dir, proxy_headers, httpx_handler
+):
+    # When the cache is fresh, a fresh-but-held semaphore (left by a concurrent
+    # fetcher on a different URL, or an unrelated stuck request) must not block
+    # the fast path.
+    target = "http://example.org"
+    calls = []
+
+    def handler(request):
+        calls.append(str(request.url))
+        return httpx.Response(
+            200, content=b"hello", headers={"content-type": "text/plain"}
+        )
+
+    httpx_handler.handler = handler
+
+    # Populate the cache.
+    r1 = await async_client.get(proxy_url(), {"url": target}, headers=proxy_headers)
+    assert r1.status_code == 200
+    assert r1["X-CACHE"] == "MISS"
+    assert len(calls) == 1
+
+    # Hold the semaphore (fresh mtime).
+    semaphore = proxy_cache_dir / f"{_cache_basename(target)}.tmp"
+    semaphore.touch()
+
+    # Second request must HIT cache without waiting nor refetching.
+    r2 = await async_client.get(proxy_url(), {"url": target}, headers=proxy_headers)
+    assert r2.status_code == 200
+    assert r2["X-CACHE"] == "HIT"
+    assert len(calls) == 1  # no new fetch
+
+
+async def test_proxy_does_not_cache_upstream_error(
+    async_client, proxy_cache_dir, proxy_headers, httpx_handler
+):
+    # First call: upstream fails. Second call: upstream recovers. We must not
+    # have cached the failure response.
+    state = {"fail": True}
+
+    def handler(request):
+        if state["fail"]:
+            return httpx.Response(500)
+        return httpx.Response(
+            200, content=b"recovered", headers={"content-type": "text/plain"}
+        )
+
+    httpx_handler.handler = handler
+
+    r1 = await async_client.get(
+        proxy_url(), {"url": "http://example.org"}, headers=proxy_headers
+    )
+    assert r1.status_code == 400
+
+    state["fail"] = False
+    r2 = await async_client.get(
+        proxy_url(), {"url": "http://example.org"}, headers=proxy_headers
+    )
+    assert r2.status_code == 200
+    assert b"recovered" in b"".join(r2.streaming_content)
 
 
 @pytest.mark.django_db

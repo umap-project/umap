@@ -33,6 +33,7 @@ dependencies = [
   "django-agnocomplete==2.2.0",
   "django-environ==0.13.0",
   "django-probes==1.8.0",
+  "httpx==0.28.1",
   "Pillow==12.2.0",
   "psycopg==3.3.3",
   "requests==2.33.1",
@@ -60,6 +61,7 @@ test = [
   "factory-boy==3.3.3",
   "playwright>=1.39",
   "pytest==9.0.3",
+  "pytest-asyncio==1.3.0",
   "pytest-django==4.12.0",
   "pytest-playwright==0.7.2",
   "pytest-rerunfailures==16.1",
@@ -107,10 +109,11 @@ format_css=true
 blank_line_after_tag="load,extends"
 line_break_after_multiline_tag=true
 
-[lint]
+[tool.ruff.lint]
 # Disable autoremove of unused import.
 unfixable = ["F401"]
 
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "umap.settings.local"
+DJANGO_SETTINGS_MODULE = "umap.tests.settings"
 addopts = "--pdbcls=IPython.terminal.debugger:Pdb --no-migrations --numprocesses auto --reuse-db"
+asyncio_mode = "auto"

@@ -1,16 +1,17 @@
+import asyncio
+import base64
 import io
 import json
-import mimetypes
 import re
+import tempfile
+import time
 import zipfile
 from datetime import datetime, timedelta
-from http.client import InvalidURL
 from pathlib import Path
 from smtplib import SMTPException
-from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlparse
-from urllib.request import Request, build_opener
 
+import httpx
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import BACKEND_SESSION_KEY, get_user_model
@@ -26,6 +27,7 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.signing import BadSignature, Signer, TimestampSigner
 from django.db.models import QuerySet
 from django.http import (
+    FileResponse,
     Http404,
     HttpResponse,
     HttpResponseBadRequest,
@@ -88,6 +90,12 @@ PRIVATE_IP = re.compile(
     r"|(^192\.168\.))"
 )
 ANONYMOUS_COOKIE_MAX_AGE = 60 * 60 * 24 * 30  # One month
+DEFAULT_TTL = 300
+TTL = {
+    DEFAULT_TTL: _("5 min"),
+    3600: _("1 hour"),
+    86400: _("1 day"),
+}
 
 
 class PaginatorMixin:
@@ -438,52 +446,125 @@ user_download = UserDownload.as_view()
 
 
 class AjaxProxy(View):
-    def get(self, *args, **kwargs):
+    HTTP_TIMEOUT = 10.0
+    SEMAPHORE_TIMEOUT = 30  # Generous buffer over HTTP_TIMEOUT.
+    USER_AGENT = "uMapProxy +https://umap-project.org"
+
+    async def get(self, request, ttl, *args, **kwargs):
         try:
-            url = validate_url(self.request)
+            url = validate_url(request)
         except ValueError as err:
             print(f"AjaxProxy: {err}")
             return HttpResponseBadRequest()
-        try:
-            ttl = int(self.request.GET.get("ttl"))
-        except (TypeError, ValueError):
-            ttl = None
-        if getattr(settings, "UMAP_XSENDFILE_HEADER", None):
-            response = HttpResponse()
-            response[settings.UMAP_XSENDFILE_HEADER] = f"/proxy/{quote_plus(url)}"
-            if ttl:
-                response["X-Accel-Expires"] = ttl
-            return response
 
-        # You should not use this in production (use Nginx or so)
-        headers = {"User-Agent": "uMapProxy +http://wiki.openstreetmap.org/wiki/UMap"}
-        url = url.replace(" ", "+")
-        request = Request(url, headers=headers)
-        opener = build_opener()
+        cache_dir = Path(settings.AJAX_PROXY_CACHE_DIR)
+        basename = f"umap_{base64.urlsafe_b64encode(url.encode()).decode()}"
+        cache_file = cache_dir / f"{basename}.cache"
+        semaphore = cache_dir / f"{basename}.tmp"
+
+        # Fast path: serve directly if cache is fresh, no lock needed.
         try:
-            proxied_request = opener.open(request, timeout=10)
-        except HTTPError as e:
-            return HttpResponse(e.msg, status=e.code, content_type="text/plain")
-        except URLError:
-            return HttpResponseBadRequest("URL error")
-        except InvalidURL:
-            return HttpResponseBadRequest("Invalid URL")
-        except TimeoutError:
-            return HttpResponseBadRequest("Timeout")
-        else:
-            status_code = proxied_request.code
-            content_type = proxied_request.headers.get("Content-Type")
-            if not content_type:
-                content_type, encoding = mimetypes.guess_type(url)
-            content = proxied_request.read()
-            # Quick hack to prevent Django from adding a Vary: Cookie header
-            self.request.session.accessed = False
-            response = HttpResponse(
-                content, status=status_code, content_type=content_type
-            )
-            if ttl:
-                response["X-Accel-Expires"] = ttl
-            return response
+            age = time.time() - cache_file.stat().st_mtime
+            fresh = age <= ttl
+        except FileNotFoundError:
+            fresh = False
+        status = "HIT"
+
+        if not fresh:
+            # Acquire the semaphore atomically (O_CREAT|O_EXCL). If another worker
+            # holds it, wait — but treat a long-held semaphore as stale (crashed
+            # worker) to avoid getting wedged forever.
+            for _ in range(10):
+                try:
+                    semaphore.touch(exist_ok=False)
+                    break
+                except FileExistsError:
+                    try:
+                        held_age = time.time() - semaphore.stat().st_mtime
+                    except FileNotFoundError:
+                        continue
+                    if held_age > self.SEMAPHORE_TIMEOUT:
+                        semaphore.unlink(missing_ok=True)
+                        continue
+                    await asyncio.sleep(1)
+            else:
+                return HttpResponseServerError()
+
+            try:
+                # Re-check freshness under lock: another worker may have just
+                # refreshed the cache while we were waiting.
+                try:
+                    age = time.time() - cache_file.stat().st_mtime
+                    fresh = age <= ttl
+                except FileNotFoundError:
+                    fresh = False
+                if not fresh:
+                    status = "MISS"
+                    try:
+                        await self._fetch(url, cache_file, cache_dir)
+                    except ValueError as err:
+                        return HttpResponseBadRequest(str(err))
+            finally:
+                semaphore.unlink(missing_ok=True)
+
+        try:
+            fileobj = cache_file.open("rb")
+            content_type = fileobj.readline().decode("ascii", errors="replace").strip()
+        except OSError as err:
+            return HttpResponseBadRequest(str(err))
+        # Prevent SessionMiddleware from adding Vary: Cookie, which would defeat
+        # any HTTP cache (CDN, reverse proxy) sitting in front of uMap.
+        if hasattr(request, "session"):
+            request.session.accessed = False
+        response = FileResponse(fileobj, content_type=content_type)
+        response.headers["X-CACHE"] = status
+        return response
+
+    async def _fetch(self, url, cache_file, cache_dir):
+        # Cache file layout: first line is the content-type (ASCII, terminated
+        # by \n), the rest is the raw response body. This keeps everything in
+        # a single file while preserving the full content-type (with charset).
+        tmp_path = None
+        try:
+            try:
+                async with httpx.AsyncClient(
+                    timeout=self.HTTP_TIMEOUT,
+                    follow_redirects=True,
+                    headers={"User-Agent": self.USER_AGENT},
+                ) as client:
+                    async with client.stream("GET", url) as resp:
+                        if resp.status_code >= 400:
+                            raise ValueError(f"Upstream {resp.status_code}")
+                        content_type = (
+                            resp.headers.get("content-type")
+                            or "application/octet-stream"
+                        )
+                        # HTTP forbids CR/LF in headers, but a malformed
+                        # upstream could still send them — strip defensively
+                        # so the header line stays a single line.
+                        content_type = (
+                            content_type.replace("\n", " ").replace("\r", " ").strip()
+                        )
+                        with tempfile.NamedTemporaryFile(
+                            delete=False, dir=cache_dir, prefix=f"{cache_file.name}."
+                        ) as tmp:
+                            tmp_path = Path(tmp.name)
+                            tmp.write(
+                                f"{content_type}\n".encode("ascii", errors="replace")
+                            )
+                            async for chunk in resp.aiter_bytes():
+                                tmp.write(chunk)
+            except httpx.TimeoutException:
+                raise ValueError("Timeout")
+            except httpx.InvalidURL:
+                raise ValueError("Invalid URL")
+            except httpx.RequestError:
+                raise ValueError("URL error")
+            tmp_path.replace(cache_file)
+            tmp_path = None
+        finally:
+            if tmp_path is not None:
+                tmp_path.unlink(missing_ok=True)
 
 
 ajax_proxy = AjaxProxy.as_view()
@@ -576,6 +657,8 @@ class MapDetailMixin(SessionMixin):
             "importers": settings.UMAP_IMPORTERS,
             "defaultLabelKeys": settings.UMAP_LABEL_KEYS,
             "help_links": settings.UMAP_HELP_LINKS,
+            "ttl": TTL,
+            "default_ttl": DEFAULT_TTL,
         }
         if settings.OPENROUTESERVICE_APIKEY:
             properties["ORSAPIKey"] = settings.OPENROUTESERVICE_APIKEY

@@ -365,7 +365,10 @@ export class DataLayer {
     const remoteUrl = this._umap.renderUrl(this.properties.remoteData.url)
     let url = remoteUrl
     if (this.properties.remoteData.proxy) {
-      url = this._umap.proxyUrl(url, this.properties.remoteData.ttl)
+      url = this._umap.proxyUrl(
+        url,
+        this.properties.remoteData.ttl || SCHEMA.ttl.default
+      )
     }
     return await this.getUrl(url, remoteUrl).then((raw) => {
       this.clear(false)

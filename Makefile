@@ -69,13 +69,13 @@ publish: ## Publish the Python package to Pypi
 	@hatch publish
 	make clean
 
-test: testpy testjs
+test: test-unit test-integration testjs
 
-testpy:
-	pytest -vv umap/tests/ --dist=loadgroup --reruns 1 --maxfail 10
+test-unit:
+	pytest -vv umap/tests/ --ignore=umap/tests/integration
 
 test-integration:
-	pytest -xv umap/tests/integration/ --dist=loadgroup
+	pytest -vv umap/tests/integration/ --dist=loadgroup --reruns 1 --maxfail 10
 
 clean:
 	rm -f dist/*

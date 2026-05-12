@@ -8,10 +8,20 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
 
 from .models import DataLayer, Map, Team
-from .views import simple_json_response
+from .views import DEFAULT_TTL, TTL, simple_json_response
 
 LOGIN_URL = getattr(settings, "LOGIN_URL", "login")
 LOGIN_URL = reverse_lazy(LOGIN_URL) if not LOGIN_URL.startswith("/") else LOGIN_URL
+
+
+def ensure_ttl(view_func):
+    @wraps(view_func)
+    def wrapper(request, ttl, *args, **kwargs):
+        if ttl not in TTL.keys():
+            ttl = DEFAULT_TTL
+        return view_func(request, ttl, *args, **kwargs)
+
+    return wrapper
 
 
 def login_required_if_not_anonymous_allowed(view_func):
