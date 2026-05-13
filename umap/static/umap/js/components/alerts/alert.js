@@ -1,6 +1,6 @@
 import { translate } from '../../modules/i18n.js'
 import { uMapElement } from '../base.js'
-import { copyToClipboard } from '../../modules/domutils.js'
+import * as Clipboard from '../../modules/clipboard.js'
 
 class uMapAlert extends uMapElement {
   static get observedAttributes() {
@@ -118,7 +118,7 @@ class uMapAlertCreation extends uMapAlert {
     const button = this.linkWrapper.querySelector('input[type="button"]')
     button.addEventListener('click', (event) => {
       event.preventDefault()
-      copyToClipboard(editLink)
+      Clipboard.copy(editLink)
     })
     for (const link of this.loginLinks) {
       link.addEventListener('click', (event) => {

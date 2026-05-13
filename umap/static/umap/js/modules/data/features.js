@@ -17,6 +17,7 @@ import {
 } from '../rendering/ui.js'
 import { SCHEMA } from '../schema.js'
 import * as Utils from '../utils.js'
+import * as Clipboard from '../clipboard.js'
 import * as DOMUtils from '../domutils.js'
 import * as Icon from '../rendering/icon.js'
 
@@ -651,7 +652,7 @@ class Feature {
     items.push({
       label: translate('Copy as GeoJSON'),
       action: () => {
-        DOMUtils.copyToClipboard(JSON.stringify(this.toGeoJSON()))
+        Clipboard.copy(JSON.stringify(this.toGeoJSON()))
       },
     })
     return items

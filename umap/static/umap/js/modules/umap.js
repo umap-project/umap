@@ -28,6 +28,7 @@ import { EditPanel, FullPanel, Panel } from './ui/panel.js'
 import Tooltip from './ui/tooltip.js'
 import URLs from './urls.js'
 import * as Utils from './utils.js'
+import * as Clipboard from './clipboard.js'
 import * as DOMUtils from './domutils.js'
 import { LayerManager } from './managers.js'
 import { Importer as OpenRouteService } from './importers/openrouteservice.js'
@@ -454,7 +455,7 @@ export default class Umap {
     const items = [
       {
         label: latlng,
-        action: () => DOMUtils.copyToClipboard(latlng),
+        action: () => Clipboard.copy(latlng),
       },
     ]
     if (this.properties.urls.routing) {

@@ -1,4 +1,5 @@
 import Umap from '../modules/umap.js'
+import * as Clipboard from '../modules/clipboard.js'
 import * as DOMUtils from '../modules/domutils.js'
 import * as Utils from '../modules/utils.js'
 import { translate } from '../modules/i18n.js'
@@ -6,7 +7,7 @@ import { translate } from '../modules/i18n.js'
 class CopiableInput extends HTMLElement {
   constructor() {
     super()
-    DOMUtils.copiableInput(this, this.dataset.label, this.dataset.value || '')
+    Clipboard.copiableInput(this, this.dataset.label, this.dataset.value || '')
   }
 }
 
@@ -32,7 +33,7 @@ class CopiableTextarea extends HTMLElement {
     this.textarea = this.querySelector('textarea')
     this.button = this.querySelector('button')
     this.button.addEventListener('click', () =>
-      DOMUtils.copyToClipboard(this.textarea.textContent)
+      Clipboard.copy(this.textarea.textContent)
     )
   }
   attributeChangedCallback(name, oldValue, newValue) {
