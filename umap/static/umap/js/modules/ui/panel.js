@@ -20,6 +20,11 @@ export class Panel {
   }
 
   setDefaultMode(mode) {
+    // In portrait mode (usually mobile), never force the mode,
+    // and let the default CSS apply, and the user decide to force
+    // if wanted (eg. we don't want the databrowser to be opened
+    // fullscreen in a phone).
+    if (window.matchMedia('(orientation: portrait)').matches) return
     if (!this.mode) this.mode = mode
   }
 
