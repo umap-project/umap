@@ -3,6 +3,16 @@ import * as Utils from './utils.js'
 import { translate } from './i18n.js'
 import Tooltip from './ui/tooltip.js'
 
+// Mirrors L.DomEvent.disableClickPropagation: prevents clicks on `el` from
+// reaching the Leaflet map below. The `_leaflet_disable_click` flag is still
+// expected by Leaflet's internals as long as it remains the map engine.
+export const disableClickPropagation = (el) => {
+  for (const type of ['mousedown', 'touchstart', 'dblclick', 'contextmenu']) {
+    el.addEventListener(type, (event) => event.stopPropagation())
+  }
+  el._leaflet_disable_click = true
+}
+
 export const copyToClipboard = (textToCopy) => {
   const tooltip = new Tooltip()
   // https://stackoverflow.com/a/65996386

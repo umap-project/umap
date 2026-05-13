@@ -1,4 +1,4 @@
-import { DomEvent } from '../../vendors/leaflet/leaflet-src.esm.js'
+import * as DOMUtils from './domutils.js'
 import { Form } from './form/builder.js'
 import { EXPORT_FORMATS } from './formatter.js'
 import { translate } from './i18n.js'
@@ -47,7 +47,7 @@ export default class Browser {
     remove.addEventListener('click', () => feature.del())
     // HOTFIX. Remove when this is released:
     // https://github.com/Leaflet/Leaflet/pull/9052
-    DomEvent.disableClickPropagation(row)
+    DOMUtils.disableClickPropagation(row)
     parent.appendChild(row)
   }
 
@@ -201,7 +201,7 @@ export default class Browser {
     ] = Utils.loadTemplateWithRefs(template)
     // HOTFIX. Remove when this is released:
     // https://github.com/Leaflet/Leaflet/pull/9052
-    DomEvent.disableClickPropagation(container)
+    DOMUtils.disableClickPropagation(container)
     details.open = this.mode === 'filters'
     toggle.addEventListener('click', () => Utils.toggleLayers(this._umap.layers))
     fitBounds.addEventListener('click', () => this._umap.fitDataBounds())
@@ -285,7 +285,7 @@ export default class Browser {
     )
     // Fixme: remove me when this is merged and released
     // https://github.com/Leaflet/Leaflet/pull/9052
-    DomEvent.disableClickPropagation(button)
+    DOMUtils.disableClickPropagation(button)
     button.addEventListener('click', () => umap.openBrowser())
     return button
   }
