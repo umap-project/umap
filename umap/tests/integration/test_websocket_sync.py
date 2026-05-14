@@ -58,7 +58,7 @@ def test_websocket_connection_can_sync_markers(
     expect(a_marker_pane).to_have_count(1)
     expect(b_marker_pane).to_have_count(1)
     # Peer B should not be in state dirty
-    expect(peerB.get_by_role("button", name="View")).to_be_visible()
+    expect(peerB.get_by_role("button", name="View", exact=True)).to_be_visible()
     expect(peerB.get_by_role("button", name="Cancel edits")).to_be_hidden()
     peerA.locator("body").type("Synced name")
     peerA.locator("body").press("Escape")
@@ -212,7 +212,7 @@ def test_websocket_connection_can_sync_map_properties(
     expect(switch).to_be_visible()
     switch.get_by_text("Never").click()
 
-    expect(peerA.locator(".leaflet-control-zoom")).to_be_hidden()
+    expect(peerA.locator(".umap-control-zoom")).to_be_hidden()
 
 
 @pytest.mark.xdist_group(name="websockets")
@@ -543,7 +543,7 @@ def test_create_and_sync_map(
         peerA.get_by_role("button", name="Save").click()
     expect(peerA.get_by_role("button", name="Cancel edits")).to_be_hidden()
     # Quit edit mode
-    peerA.get_by_role("button", name="View").click()
+    peerA.get_by_role("button", name="View", exact=True).click()
 
     # Open map and go to edit mode with peer B
     peerB = new_page("Page B")
@@ -574,7 +574,7 @@ def test_create_and_sync_map(
     # Save and quit edit mode again
     with peerA.expect_response(re.compile("./datalayer/create/.*")):
         peerA.get_by_role("button", name="Save").click()
-    peerA.get_by_role("button", name="View").click()
+    peerA.get_by_role("button", name="View", exact=True).click()
     expect(markersA).to_have_count(1)
     expect(markersB).to_have_count(1)
     peerA.wait_for_timeout(500)
@@ -582,7 +582,7 @@ def test_create_and_sync_map(
     expect(markersB).to_have_count(1)
 
     # Peer B should not be in state dirty
-    expect(peerB.get_by_role("button", name="View")).to_be_visible()
+    expect(peerB.get_by_role("button", name="View", exact=True)).to_be_visible()
     expect(peerB.get_by_role("button", name="Cancel edits")).to_be_hidden()
 
     # Add a marker from peer B

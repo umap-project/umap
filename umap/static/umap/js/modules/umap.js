@@ -22,6 +22,7 @@ import Share from './share.js'
 import Slideshow from './slideshow.js'
 import { SyncEngine } from './sync/engine.js'
 import { BottomBar, EditBar, TopBar } from './ui/bar.js'
+import { ControlManager } from './ui/controls.js'
 import ContextMenu from './ui/contextmenu.js'
 import Dialog from './ui/dialog.js'
 import { EditPanel, FullPanel, Panel } from './ui/panel.js'
@@ -34,6 +35,7 @@ import { LayerManager } from './managers.js'
 import { Importer as OpenRouteService } from './importers/openrouteservice.js'
 import Loader from './ui/loader.js'
 import Hash from './ui/hash.js'
+import DropControl from './drop.js'
 
 export default class Umap {
   constructor(element, geojson) {
@@ -87,6 +89,8 @@ export default class Umap {
     this.properties.fullscreenControl = false
 
     this._leafletMap = new LeafletMap(this, element)
+    this.controlManager = new ControlManager(this, this._leafletMap._container)
+    this.drop = new DropControl(this, this._leafletMap, this._leafletMap._container)
 
     this.properties.zoomControl = zoomControl !== undefined ? zoomControl : true
     this.properties.fullscreenControl =
@@ -121,7 +125,10 @@ export default class Umap {
     if (this.properties.hash) {
       this.hash = new Hash()
     }
+    // initCenter (in setup) needs the locate control to exist.
+    this.controlManager.init()
     this._leafletMap.setup()
+    this.controlManager.update()
 
     this.panel = new Panel(this, this._leafletMap)
     this.dialog = new Dialog({ className: 'dark' })
@@ -272,43 +279,48 @@ export default class Umap {
   }
 
   setPropertiesFromQueryString() {
-    const asBoolean = (key) => {
-      const value = this.searchParams.get(key)
+    const asBoolean = (key, value) => {
       if (value !== undefined && value !== null) {
         this.properties[key] = value === '1' || value === 'true'
       }
     }
-    const asNullableBoolean = (key) => {
+    const asNullableBoolean = (key, value) => {
       if (this.searchParams.has(key)) {
-        let value = this.searchParams.get(key)
         if (value === 'null') value = null
         else if (value === '0' || value === 'false') value = false
         else value = true
         this.properties[key] = value
       }
     }
-    const asNumber = (key) => {
-      const value = +this.searchParams.get(key)
+    const asNumber = (key, value) => {
+      value = +value
       if (!Number.isNaN(value)) this.properties[name] = value
     }
     // FIXME retrocompat
     asBoolean('displayDataBrowserOnLoad')
     asBoolean('displayCaptionOnLoad')
-    for (const [key, schema] of Object.entries(SCHEMA)) {
+    const setKey = (schema, key, value) => {
       switch (schema.type) {
         case Boolean:
-          if (schema.nullable) asNullableBoolean(key)
-          else asBoolean(key)
+          if (schema.nullable) asNullableBoolean(key, value)
+          else asBoolean(key, value)
           break
         case Number:
-          asNumber(key)
+          asNumber(key, value)
           break
         case String: {
           if (this.searchParams.has(key)) {
-            const value = this.searchParams.get(key)
             if (value !== undefined) this.properties[key] = value
             break
           }
+        }
+      }
+    }
+    for (const [key, schema] of Object.entries(SCHEMA)) {
+      setKey(schema, key, this.searchParams.get(key))
+      if (schema.legacy) {
+        for (const oldKey of schema.legacy) {
+          setKey(schema, key, this.searchParams.get(oldKey))
         }
       }
     }
@@ -498,7 +510,7 @@ export default class Umap {
   }
 
   search() {
-    if (this._leafletMap._controls.search) this._leafletMap._controls.search.onClick()
+    this.controlManager.controls.search?.onClick()
   }
 
   hasEditMode() {
@@ -748,6 +760,11 @@ export default class Umap {
   }
 
   migrateLegacyProperties(properties) {
+    if (properties.miniMap) {
+      properties.miniMapControl = properties.miniMap
+      delete properties.miniMap
+      this._migrated = true
+    }
     if (migrateLegacyFilters(properties)) {
       this._migrated = true
     }
@@ -864,13 +881,13 @@ export default class Umap {
 
   _editControls(container) {
     let UIFields = []
-    for (const name of this._leafletMap.HIDDABLE_CONTROLS) {
+    for (const name of ControlManager.MOREABLE_CONTROLS) {
       UIFields.push(`properties.${name}Control`)
     }
     UIFields = UIFields.concat([
       'properties.moreControl',
       'properties.scrollWheelZoom',
-      'properties.miniMap',
+      'properties.miniMapControl',
       'properties.scaleControl',
       'properties.onLoadPanel',
       'properties.displayPopupFooter',
@@ -1450,6 +1467,7 @@ export default class Umap {
       switch (impact) {
         case 'ui':
           this._leafletMap.renderUI()
+          this.controlManager.update()
           this.browser.redraw()
           this.topBar.redraw()
           this.bottomBar.redraw()

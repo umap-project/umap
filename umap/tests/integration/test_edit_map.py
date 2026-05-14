@@ -142,7 +142,7 @@ def test_limitbounds_impacts_ui(live_server, page, tilelayer):
     # But not to zoom out of the window
     zoom_out.click()  # back to normal
     page.wait_for_timeout(500)
-    assert "leaflet-disabled" in zoom_out.get_attribute("class")
+    assert "disabled" in zoom_out.get_attribute("class")
 
 
 def test_sortkey_impacts_datalayerindex(map, live_server, page):

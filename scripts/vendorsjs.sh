@@ -24,7 +24,6 @@ mkdir -p umap/static/umap/vendors/dompurify/ && cp -r node_modules/dompurify/dis
 mkdir -p umap/static/umap/vendors/dompurify/ && cp -r node_modules/dompurify/dist/purify.es.mjs.map umap/static/umap/vendors/dompurify/purify.es.mjs.map
 mkdir -p umap/static/umap/vendors/colorbrewer/ && cp node_modules/colorbrewer/index.es.js umap/static/umap/vendors/colorbrewer/colorbrewer.js
 mkdir -p umap/static/umap/vendors/simple-statistics/ && cp node_modules/simple-statistics/dist/simple-statistics.min.* umap/static/umap/vendors/simple-statistics/
-mkdir -p umap/static/umap/vendors/iconlayers/ && cp node_modules/leaflet-iconlayers/dist/* umap/static/umap/vendors/iconlayers/
 mkdir -p umap/static/umap/vendors/geojson-to-gpx/ && cp node_modules/@dwayneparton/geojson-to-gpx/dist/index.js umap/static/umap/vendors/geojson-to-gpx/
 mkdir -p umap/static/umap/vendors/textpath/ && cp node_modules/leaflet-textpath/leaflet.textpath.js umap/static/umap/vendors/textpath/
 mkdir -p umap/static/umap/vendors/betterknown/ && cp node_modules/betterknown/dist/betterknown.mjs umap/static/umap/vendors/betterknown/

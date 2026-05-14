@@ -366,7 +366,9 @@ export class EditBar extends WithTemplate {
     this._onClick('import', () => this._umap.importer.open())
     this._onClick('templates', () => this.templateIimporter.open())
     this._onClick('layers', () => this._umap.editDatalayers())
-    this._onClick('tilelayers', () => this._leafletMap.editTileLayers())
+    this._onClick('tilelayers', () =>
+      this._umap.controlManager.controls.tilelayers.openSwitcher({ edit: true })
+    )
     this._onClick('center', () => this._umap.editCenter())
     this._onClick('permissions', () => this._umap.permissions.edit())
     this._onClick('settings', () => this._umap.edit())

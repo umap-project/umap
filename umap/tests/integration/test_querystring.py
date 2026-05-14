@@ -54,7 +54,7 @@ def test_can_deactivate_wheel_from_query_string(map, live_server, page):
 
 
 def test_zoom_control(map, live_server, datalayer, page):
-    control = page.locator(".leaflet-control-zoom")
+    control = page.locator(".umap-control-zoom")
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     expect(control).to_be_visible()
     page.goto(f"{live_server.url}{map.get_absolute_url()}?zoomControl=false")
