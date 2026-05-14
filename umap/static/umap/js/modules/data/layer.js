@@ -1,5 +1,5 @@
 // FIXME: this module should not depend on Leaflet
-import { DomEvent, SVG } from '../../../vendors/leaflet/leaflet-src.esm.js'
+import { SVG } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import {
   uMapAlert as Alert,
   uMapAlertConflict as AlertConflict,
@@ -1118,7 +1118,7 @@ export class DataLayer {
     `)
     // Fixme: remove me when this is merged and released
     // https://github.com/Leaflet/Leaflet/pull/9052
-    DomEvent.disableClickPropagation(backButton)
+    DOMUtils.disableClickPropagation(backButton)
     backButton.addEventListener('click', () => this._umap.editDatalayers())
 
     return this._umap.editPanel.open({

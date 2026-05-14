@@ -1,4 +1,3 @@
-import { DomEvent } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from '../i18n.js'
 import * as DOMUtils from '../domutils.js'
 
@@ -13,10 +12,9 @@ export class Panel {
     // or by using panels as popups
     this.mode = null
     this.className = 'left'
-    DomEvent.disableClickPropagation(this.container)
-    DomEvent.on(this.container, 'contextmenu', DomEvent.stopPropagation) // Do not activate our custom context menu.
-    DomEvent.on(this.container, 'wheel', DomEvent.stopPropagation)
-    DomEvent.on(this.container, 'MozMousePixelScroll', DomEvent.stopPropagation)
+    // disableClickPropagation already stops contextmenu (used by our custom context menu).
+    DOMUtils.disableClickPropagation(this.container)
+    this.container.addEventListener('wheel', (event) => event.stopPropagation())
   }
 
   setDefaultMode(mode) {

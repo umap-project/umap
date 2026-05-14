@@ -1,4 +1,4 @@
-import { DomEvent } from '../../../vendors/leaflet/leaflet-src.esm.js'
+import * as DOMUtils from '../domutils.js'
 import { LineString, Point, Polygon } from '../data/features.js'
 import { translate } from '../i18n.js'
 import { WithTemplate } from '../utils.js'
@@ -229,7 +229,7 @@ export class BottomBar extends WithTemplate {
   }
 
   setup() {
-    DomEvent.disableClickPropagation(this.element)
+    DOMUtils.disableClickPropagation(this.element)
     this._umap.addAuthorLink(this.elements.author)
     this.elements.caption.addEventListener('click', () => this._umap.openCaption())
     this.elements.browse.addEventListener('click', () => this._umap.openBrowser('data'))
@@ -355,7 +355,7 @@ export class EditBar extends WithTemplate {
 
   setup() {
     this.parent.appendChild(this.element)
-    DomEvent.disableClickPropagation(this.element)
+    DOMUtils.disableClickPropagation(this.element)
     this._onDrawing('marker', () => this._leafletMap.editTools.startMarker())
     this._onDrawing('polyline', () => this._leafletMap.editTools.startPolyline())
     this._onDrawing('multiline', () => this._umap.editedFeature.ui.editor.newShape())

@@ -1,4 +1,5 @@
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
+import * as Clipboard from './clipboard.js'
 import { MutatingForm } from './form/builder.js'
 import { translate } from './i18n.js'
 import * as Utils from './utils.js'
@@ -67,7 +68,7 @@ export class MapPermissions {
       const [root, { button, copiableInput, p }] = Utils.loadTemplateWithRefs(template)
       container.appendChild(root)
       if (this.properties.anonymous_edit_url) {
-        DOMUtils.copiableInput(
+        Clipboard.copiableInput(
           copiableInput,
           translate('Secret edit link:'),
           this.properties.anonymous_edit_url
