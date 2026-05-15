@@ -14,19 +14,20 @@ principaux éléments de la carte, et les opérations disponibles pour la
 manipuler. La carte uMap représentée ci-dessous est disponible
 [ici](http://umap.openstreetmap.fr/fr/map/festival-des-3-continents_26381).
 
-![Description des différents éléments d’une carte](../../static/tutoriels/1-je-consulte-une-carte-umap/anatomie_carte_umap_2021.jpg)
+![Description des différents éléments d’une carte](../../static/tutoriels/1-je-consulte-une-carte-umap/anatomie_carte_umap_2026.jpg)
 
 
-À droite de la carte et selon le choix de son auteur peut être affiché
+À gauche de la carte et selon le choix de son auteur peut être affiché
 un des deux panneaux suivants :
 
--   **À propos** : le titre de la carte, une description éventuelle, et
+-   **Légende** : le titre de la carte, une description éventuelle, et
     la liste des calques
 -   **Visualiser les données** : l’ensemble des éléments de la carte,
     répartis par calques (voir plus bas)
 
-Le panneau À propos peut être affiché en cliquant sur le mot "À propos",
-toujours visible en bas à droite de la carte.
+Le panneau **À propos** peut être affiché en cliquant sur le bouton « À
+propos » (lettre « i » dans un cercle) toujours visible en bas à gauche
+de la carte.
 
 Comme pour la plupart des cartes interactives vous pouvez :
 
@@ -62,20 +63,20 @@ d’afficher ou cacher chaque calque individuellement.
     data-padding="5"
     >Icône du sélecteur de calque(s).</shot-scraper>
 
-Le sélecteur de calques est
-l’icône visible en haut à gauche de la carte sous les boutons de zoom.
-Lorsque vous positionnez la souris sur ce bouton, la liste des calques
-apparaît, vous pouvez alors afficher ou cacher chaque calque, ou encore
-centrer la carte sur le contenu d’un calque.
+Le sélecteur de calques est l’icône visible en haut à gauche de la
+carte en haut du bouton « À propos ».  Lorsque vous positionnez la
+souris sur ce bouton, la liste des calques apparaît, vous pouvez alors
+afficher ou cacher chaque calque, ou encore centrer la carte sur le
+contenu d’un calque.
 
-![Une description des différentes parties d’un sélecteur de calques](../../static/tutoriels/1-je-consulte-une-carte-umap/umap_sélecteur_calques.png)
+![Une description des différentes parties d’un sélecteur de calques](../../static/tutoriels/1-je-consulte-une-carte-umap/umap_calques.jpg)
 
 Dans cet exemple le calque « Stations Bicloo » est caché :
 cliquer sur l’oeil de ce calque permet de l’afficher.
 La liste des calques, avec éventuellement un descriptif de chaque
 calque, est aussi visible dans la légende de la carte.
 
-### 3. Le bouton Plus
+### 3. Le bouton Plus d'outils
 
 <shot-scraper
     data-output="static/tutoriels/control-more.png"
@@ -203,14 +204,15 @@ dépend de la manière dont vous souhaitez partager la carte :
 
 ### 4. Visualiser les données
 
-![umap_donnees.jpg](../../static/tutoriels/1-je-consulte-une-carte-umap/umap_donnees.jpg)
+![umap_donnees.jpg](../../static/tutoriels/1-je-consulte-une-carte-umap/umap_explorateur.jpg)
 
 La liste des éléments de la carte peut être affichée avec un clic sur
-**Visualiser les données**, accessible depuis le sélecteur de calques,
-la barre de légende, ou encore en haut du panneau Légende.
+**Explorateur**, accessible depuis le sélecteur de calques,
+ou le lien **Visualiser les données** dans la barre de légende, si le créateur
+de la carte a choisi de l'activer.
 
-Le panneau alors visible à droite montre l’ensemble des éléments de la
-carte, organisés par calques. La loupe à gauche de chaque élément permet
+Le panneau alors visible à gauche montre l’ensemble des éléments de la
+carte, organisés par calques. La loupe à droite de chaque élément permet
 d’afficher sur la carte la popup décrivant cet élément. Le texte de
 saisie au-dessus de la liste permet de rechercher un élément, en ne
 montrant que ceux dont le nom contient le texte saisi.
