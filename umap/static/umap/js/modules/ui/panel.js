@@ -3,7 +3,7 @@ import * as DOMUtils from '../domutils.js'
 
 export class Panel {
   constructor(umap, leafletMap) {
-    this.parent = leafletMap._controlContainer
+    this.parent = umap.uiContainer
     this._umap = umap
     this._leafletMap = leafletMap
     this.container = document.createElement('div')

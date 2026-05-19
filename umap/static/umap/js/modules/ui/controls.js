@@ -738,7 +738,7 @@ export class ControlManager {
     ScaleControl,
   ]
 
-  constructor(umap, container) {
+  constructor(umap) {
     this._umap = umap
     this.controls = {}
     this.corners = {}
@@ -746,7 +746,7 @@ export class ControlManager {
       const corner = Utils.loadTemplate(
         `<div class="umap-controls umap-controls-${position}"></div>`
       )
-      container.appendChild(corner)
+      umap.uiContainer.appendChild(corner)
       this.corners[position] = corner
     }
   }
