@@ -49,6 +49,10 @@ export default class Umap {
     return this.properties.id
   }
 
+  get mapElement() {
+    return this._leafletMap._container
+  }
+
   async init(element, geojson) {
     this.migrateLegacyProperties(geojson.properties)
     this.properties = Object.assign(
@@ -89,8 +93,10 @@ export default class Umap {
     this.properties.fullscreenControl = false
 
     this._leafletMap = new LeafletMap(this, element)
-    this.controlManager = new ControlManager(this, this._leafletMap._container)
-    this.drop = new DropControl(this, this._leafletMap, this._leafletMap._container)
+    this.uiContainer = Utils.loadTemplate('<div class="umap-ui-container"></div>')
+    this.mapElement.appendChild(this.uiContainer)
+    this.controlManager = new ControlManager(this)
+    this.drop = new DropControl(this, this._leafletMap, this.mapElement)
 
     this.properties.zoomControl = zoomControl !== undefined ? zoomControl : true
     this.properties.fullscreenControl =
@@ -121,7 +127,7 @@ export default class Umap {
       this.properties.homeControl = false
     }
 
-    this.loader = new Loader(this._leafletMap._container)
+    this.loader = new Loader(this.uiContainer)
     if (this.properties.hash) {
       this.hash = new Hash()
     }
@@ -132,18 +138,10 @@ export default class Umap {
 
     this.panel = new Panel(this, this._leafletMap)
     this.dialog = new Dialog({ className: 'dark' })
-    this.topBar = new TopBar(this, this._leafletMap._controlContainer)
-    this.bottomBar = new BottomBar(
-      this,
-      this.slideshow,
-      this._leafletMap._controlContainer
-    )
-    this.editBar = new EditBar(
-      this,
-      this._leafletMap,
-      this._leafletMap._controlContainer
-    )
-    this.tooltip = new Tooltip(this._leafletMap._controlContainer)
+    this.topBar = new TopBar(this, this.uiContainer)
+    this.bottomBar = new BottomBar(this, this.slideshow, this.uiContainer)
+    this.editBar = new EditBar(this, this._leafletMap, this.uiContainer)
+    this.tooltip = new Tooltip()
     this.contextmenu = new ContextMenu()
     this.server = new ServerRequest()
     this.request = new Request()

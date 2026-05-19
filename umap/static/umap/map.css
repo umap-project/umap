@@ -1161,7 +1161,8 @@ details details {
 
 @media print {
 
-    .leaflet-control-container {
+    .leaflet-control-container,
+    .umap-ui-container {
         display: none;
     }
 }
