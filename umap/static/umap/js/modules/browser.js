@@ -10,7 +10,7 @@ export default class Browser {
   constructor(umap, leafletMap) {
     this._umap = umap
     this._leafletMap = leafletMap
-    this._leafletMap.on('moveend', this.onMoveEnd, this)
+    this._umap.on('map:moveend', () => this.onMoveEnd())
     this.options = {
       filter: '',
       inBbox: false,

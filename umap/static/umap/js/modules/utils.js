@@ -504,9 +504,13 @@ export class WithEvents {
     this._target = new EventTarget()
   }
 
-  on(eventType, callback) {
+  on(eventType, callback, options) {
     if (typeof callback !== 'function') return
-    this._target.addEventListener(eventType, callback)
+    this._target.addEventListener(eventType, callback, options)
+  }
+
+  once(eventType, callback) {
+    this.on(eventType, callback, { once: true })
   }
 
   fire(eventType, detail) {
