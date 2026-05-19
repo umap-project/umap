@@ -3,7 +3,7 @@ import { getLocale, translate } from '../i18n.js'
 import { Request } from '../request.js'
 import * as Utils from '../utils.js'
 import * as DOMUtils from '../domutils.js'
-import * as Icon from './icon.js'
+import * as Icon from '../icon.js'
 
 export default async function loadTemplate(name, feature, container) {
   let klass = PopupTemplate

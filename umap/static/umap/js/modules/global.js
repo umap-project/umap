@@ -7,7 +7,7 @@ import {
 import { LineString, Point, Polygon } from './data/features.js'
 import { LAYER_TYPES } from './data/layer.js'
 import Help from './help.js'
-import * as Icon from './rendering/icon.js'
+import * as Icon from './icon.js'
 import { LeafletMarker, LeafletPolygon, LeafletPolyline } from './rendering/ui.js'
 import { ServerRequest } from './request.js'
 import { SCHEMA } from './schema.js'

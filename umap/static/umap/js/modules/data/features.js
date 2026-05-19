@@ -19,7 +19,7 @@ import { SCHEMA } from '../schema.js'
 import * as Utils from '../utils.js'
 import * as Clipboard from '../clipboard.js'
 import * as DOMUtils from '../domutils.js'
-import * as Icon from '../rendering/icon.js'
+import * as Icon from '../icon.js'
 
 class Feature {
   constructor(umap, datalayer, geojson = {}, id = null) {
@@ -714,7 +714,7 @@ class Feature {
 
   makePreview(element) {
     element.innerHTML = ''
-    const symbol = this._getIconUrl ? Icon.formatUrl(this._getIconUrl(), this) : null
+    const symbol = Icon.formatUrl(this.iconUrl, this)
     const bgcolor = this.getPreviewColor()
     element.style.backgroundColor = bgcolor
     if (symbol && symbol !== SCHEMA.iconUrl.default) {
@@ -759,8 +759,8 @@ export class Point extends Feature {
     return Boolean(this.coordinates)
   }
 
-  _getIconUrl(name = 'icon') {
-    return this.getOption(`${name}Url`)
+  get iconUrl() {
+    return this.getOption('iconUrl')
   }
 
   getShapeOptions() {
