@@ -1,7 +1,6 @@
 // Goes here all code related to Leaflet, DOM and user interactions.
 import {
   CircleMarker as BaseCircleMarker,
-  DomEvent,
   GeoJSON,
   LatLng,
   LatLngBounds,
@@ -77,7 +76,7 @@ const FeatureMixin = {
     } else if (!this._map.editTools?.drawing()) {
       this.feature.view(event)
     }
-    DomEvent.stop(event)
+    event.originalEvent.stopPropagation()
   },
 
   resetTooltip: function () {
@@ -100,7 +99,7 @@ const FeatureMixin = {
   },
 
   onContextMenu: function (event) {
-    DomEvent.stop(event)
+    event.originalEvent.stopPropagation()
     const items = this.feature
       .getContextMenu(event)
       .concat(this._map._umap.getSharedContextMenu(event))

@@ -1,4 +1,4 @@
-import { DomEvent, CircleMarker } from '../../../vendors/leaflet/leaflet-src.esm.js'
+import { CircleMarker } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { getLocale, translate } from '../i18n.js'
 import { Request } from '../request.js'
 import * as Utils from '../utils.js'
@@ -67,12 +67,12 @@ class PopupTemplate {
       const previousFeature = feature.getPrevious()
       // Fixme: remove me when this is merged and released
       // https://github.com/Leaflet/Leaflet/pull/9052
-      DomEvent.disableClickPropagation(footer)
+      DOMUtils.disableClickPropagation(footer)
       if (nextFeature) {
         next.title = translate('Go to «{feature}»', {
           feature: nextFeature.properties.name || translate('next'),
         })
-        DomEvent.on(next, 'click', () => {
+        next.addEventListener('click', () => {
           nextFeature.zoomTo({ callback: (event) => nextFeature.view(event) })
         })
       }
@@ -80,11 +80,11 @@ class PopupTemplate {
         previous.title = translate('Go to «{feature}»', {
           feature: previousFeature.properties.name || translate('previous'),
         })
-        DomEvent.on(previous, 'click', () => {
+        previous.addEventListener('click', () => {
           previousFeature.zoomTo({ callback: (event) => previousFeature.view(event) })
         })
       }
-      DomEvent.on(zoom, 'click', () => feature.zoomTo())
+      zoom.addEventListener('click', () => feature.zoomTo())
       return footer
     }
   }
