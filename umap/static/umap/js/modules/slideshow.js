@@ -23,13 +23,9 @@ export default class Slideshow extends WithTemplate {
     this._current = null
 
     if (this.properties.autoplay) {
-      this._umap.onceDataLoaded(function () {
-        this.play()
-      }, this)
+      this._umap.onceDataLoaded(() => this.play())
     }
-    leafletMap.on('edit:enabled', () => {
-      this.stop()
-    })
+    umap.on('edit:enabled', () => this.stop())
   }
 
   set current(feature) {

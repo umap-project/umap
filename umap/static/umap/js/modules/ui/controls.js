@@ -520,10 +520,10 @@ export class LocateControl extends SimpleButton {
   icon = 'icon-locate'
 
   onMount() {
-    this._umap._leafletMap.on('locateactivate', () => {
+    this._umap.on('map:locateactivate', () => {
       this.container.classList.add('active')
     })
-    this._umap._leafletMap.on('locatedeactivate', () => {
+    this._umap.on('map:locatedeactivate', () => {
       this.container.classList.remove('active')
     })
   }

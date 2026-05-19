@@ -214,7 +214,7 @@ export const LeafletMap = BaseMap.extend({
     } else if (this.options.defaultView === 'locate' && !this.options.noControl) {
       await this._umap.controlManager.controls.locate.start()
     } else if (this.options.defaultView === 'data') {
-      this._umap.onceDataLoaded(this._umap.fitDataBounds)
+      this._umap.onceDataLoaded(() => this._umap.fitDataBounds())
     } else if (this.options.defaultView === 'latest') {
       this._umap.onceDataLoaded(() => {
         if (!this._umap.hasData()) return

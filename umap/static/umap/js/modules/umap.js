@@ -37,8 +37,9 @@ import Loader from './ui/loader.js'
 import Hash from './ui/hash.js'
 import DropControl from './drop.js'
 
-export default class Umap {
+export default class Umap extends Utils.WithEvents {
   constructor(element, geojson) {
+    super()
     // We need to call async function in the init process,
     // the init itself does not need to be awaited, but some calls
     // in the process must be blocker
@@ -131,6 +132,7 @@ export default class Umap {
     if (this.properties.hash) {
       this.hash = new Hash()
     }
+    this.proxyMapEvents()
     // initCenter (in setup) needs the locate control to exist.
     this.controlManager.init()
     this._leafletMap.setup()
@@ -221,8 +223,8 @@ export default class Umap {
 
     if (!this.properties.noControl) {
       this.initShortcuts()
-      this._leafletMap.on('contextmenu', (event) => this.onContextMenu(event))
-      this.onceDataLoaded(this.setViewFromQueryString)
+      this.on('map:contextmenu', (event) => this.onContextMenu(event))
+      this.onceDataLoaded(() => this.setViewFromQueryString())
       this.bottomBar.setup()
       this.propagate()
     }
@@ -274,6 +276,15 @@ export default class Umap {
 
   get isEmbed() {
     return window.self !== window.top
+  }
+
+  proxyMapEvents() {
+    this._leafletMap.on(
+      'locateactivate locatedeactivate moveend contextmenu',
+      (event) => {
+        this.fire(`map:${event.type}`, { event: event })
+      }
+    )
   }
 
   setPropertiesFromQueryString() {
@@ -494,9 +505,12 @@ export default class Umap {
     return items
   }
 
-  onContextMenu(event) {
-    const items = this.getOwnContextMenu(event).concat(this.getSharedContextMenu(event))
-    this.contextmenu.open(event.originalEvent, items)
+  onContextMenu(umapEvent) {
+    const mapEvent = umapEvent.detail.event
+    const items = this.getOwnContextMenu(mapEvent).concat(
+      this.getSharedContextMenu(mapEvent)
+    )
+    this.contextmenu.open(mapEvent.originalEvent, items)
   }
 
   // Merge the given schema with the default one
@@ -709,22 +723,22 @@ export default class Umap {
     this.onDataLayersChanged()
   }
 
-  onceDatalayersLoaded(callback, context) {
+  onceDatalayersLoaded(callback) {
     // Once datalayers **metadata** have been loaded
     if (this.datalayersLoaded) {
-      callback.call(context || this, this)
+      callback()
     } else {
-      this._leafletMap.once('datalayersloaded', callback, context)
+      this.once('datalayersloaded', callback)
     }
     return this
   }
 
-  onceDataLoaded(callback, context) {
+  onceDataLoaded(callback) {
     // Once datalayers **data** have been loaded
     if (this.dataloaded) {
-      callback.call(context || this, this)
+      callback()
     } else {
-      this._leafletMap.once('dataloaded', callback, context || this)
+      this.once('dataloaded', callback)
     }
     return this
   }
@@ -744,12 +758,10 @@ export default class Umap {
     // have changed, we'll be more subtil when we'll remove the
     // save action
     this.render(['name', 'user', 'permissions'])
-    if (!this._leafletMap.listens('saved')) {
-      // When we save only layers, we don't have the map feedback message
-      this._leafletMap.on('saved', () => {
-        Alert.success(translate('Map has been saved!'))
-      })
-    }
+    // When we save only layers, we don't have the map feedback message
+    this.onMapSaved(() => {
+      Alert.success(translate('Map has been saved!'))
+    })
     this.fire('saved')
   }
 
@@ -1248,6 +1260,23 @@ export default class Umap {
     )
   }
 
+  onMapSaved(callback) {
+    // The saved message is different according to some situations:
+    // - is the user logged in or not ?
+    // - is it a new map or an existing map ?
+    // This is usually managed on the uMap.save method.
+    // But when updating a map while uMap itself is not dirty
+    // there is a fallback message (in saveAll), but at this stage
+    // we are not able to know if the map has been saved before and
+    // thus if there is yet a "saved message" ready to be displayed.
+    if (this._saveMessageSemaphore) return
+    this._saveMessageSemaphore = true
+    this.once('saved', () => {
+      callback()
+      this._saveMessageSemaphore = undefined
+    })
+  }
+
   async save() {
     const geojson = {
       type: 'Feature',
@@ -1280,16 +1309,16 @@ export default class Umap {
       this.permissions.commit()
       const anonymousEditUrl = data.permissions?.anonymous_edit_url
       if (anonymousEditUrl) {
-        this._leafletMap.once('saved', () => this.onAnonymousSave(anonymousEditUrl))
+        this.onMapSaved(() => this.onAnonymousSave(anonymousEditUrl))
       } else {
-        this._leafletMap.once('saved', () => {
+        this.onMapSaved(() => {
           Alert.success(translate('Congratulations, your map has been created!'))
         })
       }
     } else {
       this.permissions.setProperties(data.permissions)
       this.permissions.commit()
-      this._leafletMap.once('saved', () => {
+      this.onMapSaved(() => {
         Alert.success(data.info || translate('Map has been saved!'))
       })
     }
@@ -1422,10 +1451,6 @@ export default class Umap {
     this.editPanel.close()
     this.fullPanel.close()
     this.sync.stop()
-  }
-
-  fire(name) {
-    this._leafletMap.fire(name)
   }
 
   async initSyncEngine() {

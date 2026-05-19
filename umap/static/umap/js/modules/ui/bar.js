@@ -376,7 +376,7 @@ export class EditBar extends WithTemplate {
     this._addTitle('marker', 'DRAW_MARKER')
     this._addTitle('polyline', 'DRAW_LINE')
     this._addTitle('polygon', 'DRAW_POLYGON')
-    this._leafletMap.on('seteditedfeature', () => this.redraw())
+    this._umap.on('seteditedfeature', () => this.redraw())
   }
 
   redraw() {
