@@ -3,7 +3,7 @@ import { MutatingForm } from './form/builder.js'
 import { translate } from './i18n.js'
 import Orderable from './orderable.js'
 import * as Utils from './utils.js'
-import * as Icon from './rendering/icon.js'
+import * as Icon from './icon.js'
 import { SCHEMA } from './schema.js'
 import { Registry as Fields } from './data/fields.js'
 

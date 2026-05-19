@@ -1,6 +1,7 @@
 // Goes here all code related to Leaflet, DOM and user interactions.
 import {
   CircleMarker as BaseCircleMarker,
+  DivIcon,
   DomEvent,
   GeoJSON,
   LatLng,
@@ -13,8 +14,8 @@ import {
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import { translate } from '../i18n.js'
+import * as Icon from '../icon.js'
 import * as Utils from '../utils.js'
-import * as Icon from './icon.js'
 
 const FeatureMixin = {
   initialize: function (feature, latlngs) {
@@ -115,6 +116,25 @@ const FeatureMixin = {
     return Boolean(this._map?.hasLayer(this))
   },
 }
+
+export const LeafletIcon = DivIcon.extend({
+  initialize: function (umapIcon) {
+    this.umapIcon = umapIcon
+    DivIcon.prototype.initialize.call(this, {
+      iconSize: umapIcon.size,
+      iconAnchor: umapIcon.anchor,
+      popupAnchor: umapIcon.popupAnchor,
+      tooltipAnchor: umapIcon.tooltipAnchor,
+      className: umapIcon.className,
+    })
+  },
+  createIcon: function () {
+    const el = this.umapIcon.render()
+    this._setIconStyles(el, 'icon')
+    return el
+  },
+  createShadow: () => null,
+})
 
 const PointMixin = {
   isOnScreen: function (bounds) {
@@ -223,8 +243,6 @@ export const LeafletMarker = Marker.extend({
     }
     this.options.icon = this.getIcon()
     Marker.prototype._initIcon.call(this)
-    // Allow to run code when icon is actually part of the DOM
-    this.options.icon.onAdd()
     this.resetTooltip()
   },
 
@@ -234,21 +252,16 @@ export const LeafletMarker = Marker.extend({
 
   getIcon: function () {
     const Class = Icon.getClass(this.getIconClass())
-    return new Class({ feature: this.feature })
+    return new LeafletIcon(new Class({ feature: this.feature }))
   },
 
   _getTooltipAnchor: function () {
-    const anchor = this.options.icon.options.tooltipAnchor.clone()
+    const [x, y] = this.options.icon.options.tooltipAnchor
     const direction = this.feature.getOption('labelDirection')
-    if (direction === 'left') {
-      anchor.x *= -1
-    } else if (direction === 'bottom') {
-      anchor.x = 0
-      anchor.y = 0
-    } else if (direction === 'top') {
-      anchor.x = 0
-    }
-    return anchor
+    if (direction === 'left') return [-x, y]
+    if (direction === 'bottom') return [0, 0]
+    if (direction === 'top') return [0, y]
+    return [x, y]
   },
 
   _redraw: function () {

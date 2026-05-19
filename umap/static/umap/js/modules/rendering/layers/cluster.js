@@ -1,36 +1,26 @@
 import {
   FeatureGroup,
   LayerGroup,
-  Point,
   Marker,
-  Rectangle,
+  Point,
   Polyline,
+  Rectangle,
   latLngBounds,
 } from '../../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from '../../i18n.js'
+import { Cluster as ClusterIcon } from '../../icon.js'
 import * as Utils from '../../utils.js'
-import * as DOMUtils from '../../domutils.js'
-import { Cluster as ClusterIcon } from '../icon.js'
+import { LeafletIcon } from '../ui.js'
 import { LayerMixin } from './base.js'
 
 const MarkerCluster = Marker.extend({
-  _initIcon: function () {
-    Marker.prototype._initIcon.call(this)
-    const counter = this._icon.querySelector('span')
-    // Compute text color only when icon is added to the DOM.
-    const bgColor = this.options.icon.options.color
-    const textColor = this.options.icon.options.textColor
-    counter.style.color =
-      textColor || DOMUtils.textColorFromBackgroundColor(counter, bgColor)
-  },
-
   computeCoverage() {
     if (this._layers.length < 2) return
     if (!this._coverage) {
       const latlngs = this._layers.map((layer) => layer._latlng)
       const bounds = latLngBounds(latlngs)
       this._coverage = new Rectangle(latlngs, {
-        color: this.options.icon.options.color,
+        color: this.options.icon.umapIcon.properties.color,
         stroke: false,
       })
       this._latlng = bounds.getCenter()
@@ -159,12 +149,12 @@ export const Cluster = FeatureGroup.extend({
         }
       }
       if (!cluster) {
-        const icon = new ClusterIcon({
+        const umapIcon = new ClusterIcon({
           color: this.datalayer.getColor(),
           textColor: this.datalayer.properties.cluster?.textColor,
           getCounter: () => cluster._layers.length,
         })
-        cluster = new MarkerCluster(layer._latlng, { icon })
+        cluster = new MarkerCluster(layer._latlng, { icon: new LeafletIcon(umapIcon) })
         cluster.addEventParent(this)
         cluster._xy ??= layer._xy
         cluster._layers = []
