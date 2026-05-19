@@ -149,6 +149,9 @@ export const LeafletMap = BaseMap.extend({
   },
 
   setup: function () {
+    if (!this.measureTools) {
+      new L.Measurable(this)
+    }
     this.initCenter()
 
     // Wait for URL to have been parsed before modifying the hash

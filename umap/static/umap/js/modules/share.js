@@ -76,7 +76,7 @@ export default class Share {
       ],
       'queryString.moreControl',
       'queryString.scrollWheelZoom',
-      'queryString.miniMap',
+      'queryString.miniMapControl',
       'queryString.scaleControl',
       'queryString.onLoadPanel',
       'queryString.captionBar',

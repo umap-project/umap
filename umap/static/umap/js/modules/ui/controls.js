@@ -27,7 +27,6 @@ export class Control {
   }
 
   render() {}
-
   onMount() {}
 
   show() {
@@ -56,6 +55,7 @@ export class Control {
 
   update() {
     if (!this.container) {
+      if (!this.visible) return
       this.mount()
     }
     if (this.visible) {
@@ -73,6 +73,7 @@ export class Control {
 class MoreableControl extends Control {
   update() {
     if (!this.container) {
+      if (this.status === false) return
       this.mount()
     }
     const status = this.status
@@ -133,15 +134,6 @@ export class ZoomControl extends MoreableControl {
 
 export class MeasureControl extends MoreableControl {
   static position = 'topleft'
-
-  mount() {
-    // The Leaflet plugin owns the handler; install it before render() reads
-    // measureTools.options.defaultUnit.
-    if (!this._umap._leafletMap.measureTools) {
-      new L.Measurable(this._umap._leafletMap)
-    }
-    super.mount()
-  }
 
   render() {
     const defaultUnit = this._umap._leafletMap.measureTools.options.defaultUnit
