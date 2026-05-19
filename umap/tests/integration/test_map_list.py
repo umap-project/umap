@@ -14,8 +14,8 @@ def test_should_not_render_any_control(live_server, tilelayer, page, map):
     expect(page.locator(".leaflet-control-minimap")).to_be_visible()
     expect(page.locator(".umap-browser")).to_be_visible()
     expect(page.locator(".umap-caption-bar")).to_be_visible()
-    expect(page.locator(".leaflet-control-zoom")).to_be_visible()
-    expect(page.locator(".leaflet-control-attribution")).to_be_visible()
+    expect(page.locator(".umap-control-zoom")).to_be_visible()
+    expect(page.locator(".umap-control-attribution")).to_be_visible()
 
     # Now load home page to have the list view
     page.goto(live_server.url)
@@ -24,5 +24,5 @@ def test_should_not_render_any_control(live_server, tilelayer, page, map):
     expect(map_el.locator(".leaflet-control-minimap")).to_be_hidden()
     expect(map_el.locator(".umap-browser")).to_be_hidden()
     expect(map_el.locator(".umap-caption-bar")).to_be_hidden()
-    expect(map_el.locator(".leaflet-control-zoom")).to_be_hidden()
-    expect(map_el.locator(".leaflet-control-attribution")).to_be_hidden()
+    expect(map_el.locator(".umap-control-zoom")).to_be_hidden()
+    expect(map_el.locator(".umap-control-attribution")).to_be_hidden()

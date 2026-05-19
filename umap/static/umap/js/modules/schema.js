@@ -335,11 +335,12 @@ export const SCHEMA = {
     impacts: ['data'],
     label: translate('Display the polygon inverted'),
   },
-  miniMap: {
+  miniMapControl: {
     type: Boolean,
     impacts: ['ui'],
     label: translate('Do you want to display a minimap?'),
     default: false,
+    legacy: ['miniMap'],
   },
   moreControl: {
     type: Boolean,

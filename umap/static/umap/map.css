@@ -130,12 +130,51 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     bottom: var(--current-footer-height);
 }
 
+.umap-controls {
+    position: absolute;
+    z-index: var(--zindex-controls);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--panel-gutter);
+    padding: var(--panel-gutter);
+    pointer-events: none;
+}
+
+.umap-controls-topright,
+.umap-controls-bottomright {
+    align-items: flex-end;
+}
+
+.umap-controls > * {
+    pointer-events: auto;
+}
+
+.umap-controls-topleft {
+    top: var(--current-header-height);
+    left: 0;
+}
+
+.umap-controls-topright {
+    top: var(--current-header-height);
+    right: 0;
+}
+
+.umap-controls-bottomleft {
+    bottom: var(--current-footer-height);
+    left: 0;
+}
+
+.umap-controls-bottomright {
+    bottom: var(--current-footer-height);
+    right: 0;
+}
+
 
 /* *********** */
 /* Controls    */
 /* *********** */
 
-.leaflet-control-zoom,
 .umap-control {
     background: none no-repeat scroll center center #fff;
     border-radius: 4px;
@@ -146,25 +185,45 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     background-color: #f4f4f4;
 }
 
-.leaflet-control-fullscreen a:hover,
-.leaflet-control-fullscreen a {
-    height: var(--control-size);
-    width: var(--control-size);
+.umap-control-zoom a:not(:last-child) {
+    border-bottom: 1px solid #bbb;
+}
+
+.umap-control-zoom-in,
+.umap-control-zoom-out {
+    font: bold 18px 'Lucida Console', Monaco, monospace;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+    text-indent: 1px;
+}
+
+.umap-control a.disabled,
+.umap-control a[aria-disabled="true"] {
+    cursor: default;
+    color: #bbb;
+}
+
+.umap-control-fullscreen a {
+    background: #fff url('./vendors/fullscreen/fullscreen.png') no-repeat 0 0;
     background-size: 36px 68px;
-}
-
-.leaflet-touch .leaflet-control-fullscreen a {
     height: var(--control-size);
     width: var(--control-size);
-    background-position: 0px 0px;
 }
 
-.leaflet-touch.leaflet-fullscreen-on .leaflet-control-fullscreen a,
-.leaflet-fullscreen-on .leaflet-control-fullscreen a {
+.umap-control-fullscreen .exit {
     background-position: 0 -32px;
+    display: none;
 }
 
-.leaflet-measure-control a,
+.leaflet-fullscreen-on .umap-control-fullscreen .enter {
+    display: none;
+}
+
+.leaflet-fullscreen-on .umap-control-fullscreen .exit {
+    display: block;
+}
+
 .umap-control a,
 .umap-control [type="button"] {
     display: block;
@@ -177,13 +236,40 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     padding: 0;
 }
 
-.leaflet-measure-control a {
-    background-position: 50% 50%;
+.umap-control-measure {
+    display: flex;
+    align-items: center;
+}
+
+.umap-control-measure a {
+    background-position: 0 -72px;
     background-repeat: no-repeat;
     background-image: url('./img/24.svg');
 }
 
-.leaflet-control.display-on-more {
+.umap-control-measure input[type=radio] {
+    display: none;
+}
+
+.umap-control-measure label {
+    display: none;
+    line-height: var(--control-size);
+    height: var(--control-size);
+    width: var(--control-size);
+    text-align: center;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.measure-enabled .umap-control-measure label {
+    display: inline-block;
+}
+
+.umap-control-measure input:checked + label::before {
+    content: '✓ ';
+}
+
+.umap-controls > .display-on-more {
     display: none;
 }
 
@@ -198,27 +284,19 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
 }
 
 .umap-more-controls .display-on-more {
-    display: block;
+    display: flex;
 }
 
-.leaflet-control-embed [type="button"] {
+.umap-control-embed [type="button"] {
     background-position: 0 -180px;
 }
 
-.leaflet-control-tilelayers [type="button"] {
-    background-position: -72px 0;
-}
-
-.leaflet-control-home [type="button"] {
-    background-position: -122px -82px;
-}
-
-.leaflet-control-search [type="button"] {
+.umap-control-search [type="button"] {
     background-position: -36px -108px;
     display: block;
 }
 
-.leaflet-control-search [type="button"].loading {
+.umap-control-search [type="button"].loading {
     background-image: url('./img/search.gif');
 }
 
@@ -321,6 +399,7 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
 }
 
 .home-button {
+    display: block;
     cursor: pointer;
     line-height: 0;
     border: 1px solid var(--color-darkBlue);
@@ -464,34 +543,6 @@ ul.photon-autocomplete {
 .leaflet-vertex-icon {
     border-radius: 50%;
 }
-
-/* ********************************* */
-/*   Third party plugin override     */
-/* ********************************* */
-
-.leaflet-control-edit-in-osm .leaflet-control-edit-in-osm-toggle {
-    background-image: url('img/24.svg');
-    background-position: -108px -108px;
-}
-
-.leaflet-measure-control,
-.leaflet-control-edit-in-osm {
-    border: 1px solid #bbb;
-    border-radius: 4px;
-    box-shadow: none;
-    background-color: white;
-}
-
-.leaflet-measure-control a {
-    background-position: 0 -72px;
-}
-
-.leaflet-control .leaflet-measure-toggle {
-    display: inline-block;
-    vertical-align: middle;
-}
-
-
 
 /* ********************************* */
 /*     Help Lightbox                 */
@@ -942,22 +993,6 @@ ul.photon-autocomplete {
 /* Overriding leaflet defaults */
 /* *************************** */
 
-.leaflet-control-zoom a,
-.leaflet-control-zoom a:hover {
-    height: var(--control-size);
-    width: var(--control-size);
-    line-height: var(--control-size);
-}
-
-.leaflet-left .leaflet-control {
-    margin-left: var(--panel-gutter);
-    margin-top: var(--panel-gutter);
-}
-
-.leaflet-container .leaflet-control-zoom {
-    margin-inline-start: var(--panel-gutter);
-}
-
 .leaflet-top,
 .leaflet-bottom {
     z-index: var(--zindex-controls);
@@ -976,24 +1011,13 @@ ul.photon-autocomplete {
     background-color: #353c3e !important;
 }
 
-.leaflet-touch .leaflet-control-layers,
-.leaflet-touch .leaflet-bar {
-    border-width: 1px;
-}
-
-.leaflet-touch .leaflet-bar a {
-    width: var(--control-size);
-    height: var(--control-size);
-    line-height: var(--control-size);
-}
-
 /* Links are dark cyan by default  */
 .leaflet-container a {
     color: var(--color-veryDarkCyan);
 }
 
 /* But not in controls  */
-.leaflet-bar a {
+.umap-control a {
     color: black;
 }
 
@@ -1118,13 +1142,13 @@ details details {
         display: none;
     }
 
-    .leaflet-control-attribution:active .attribution-container,
-    .leaflet-control-attribution:hover .attribution-container {
+    .umap-control-attribution:active .attribution-container,
+    .umap-control-attribution:hover .attribution-container {
         display: inline;
         background-color: #fff;
     }
 
-    .leaflet-control-attribution:hover .attribution-toggle {
+    .umap-control-attribution:hover .attribution-toggle {
         display: none;
     }
 

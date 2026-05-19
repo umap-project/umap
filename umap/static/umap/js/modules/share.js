@@ -1,6 +1,7 @@
 import { MutatingForm } from './form/builder.js'
 import { EXPORT_FORMATS } from './formatter.js'
 import { translate } from './i18n.js'
+import { ControlManager } from './ui/controls.js'
 import * as Utils from './utils.js'
 import * as DOMUtils from './domutils.js'
 
@@ -75,14 +76,13 @@ export default class Share {
       ],
       'queryString.moreControl',
       'queryString.scrollWheelZoom',
-      'queryString.miniMap',
+      'queryString.miniMapControl',
       'queryString.scaleControl',
       'queryString.onLoadPanel',
       'queryString.captionBar',
       'queryString.captionMenus',
     ]
-    // TODO: move HIDDABLE_CONTROLS to SCHEMA ?
-    for (const name of this._umap._leafletMap.HIDDABLE_CONTROLS) {
+    for (const name of ControlManager.MOREABLE_CONTROLS) {
       UIFields.push(`queryString.${name}Control`)
     }
     const iframeExporter = new IframeExporter(this._umap)
@@ -149,7 +149,7 @@ class IframeExporter {
 
     this.queryString = {
       scaleControl: false,
-      miniMap: false,
+      miniMapControl: false,
       scrollWheelZoom: false,
       zoomControl: true,
       editMode: 'disabled',

@@ -458,7 +458,7 @@ def test_can_draw_a_polygon_and_invert_it(live_server, page, tilelayer, settings
         ],
     ]
 
-    page.get_by_role("button", name="View").click()
+    page.get_by_role("button", name="View", exact=True).click()
     popup = page.locator(".leaflet-popup")
     expect(popup).to_be_hidden()
     # Now click on the middle of the polygon, it should not show the popup

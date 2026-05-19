@@ -2,35 +2,16 @@
 import {
   Map as BaseMap,
   Browser,
-  Control,
-  DomEvent,
-  latLng,
   LatLng,
   LatLngBounds,
-  stamp,
+  latLng,
   setOptions,
+  stamp,
   TileLayer,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
-import DropControl from '../drop.js'
 import { translate } from '../i18n.js'
-import {
-  AttributionControl,
-  CaptionControl,
-  DataLayersControl,
-  EmbedControl,
-  EditControl,
-  HomeControl,
-  LocateControl,
-  MoreControl,
-  PermanentCreditsControl,
-  TileLayerChooser,
-  LoadTemplateControl,
-  PrintControl,
-  SearchControl,
-} from './controls.js'
 import * as Utils from '../utils.js'
-import * as Icon from './icon.js'
 
 // Those options are not saved on the server, so they can live here
 // instead of in umap.properties
@@ -38,101 +19,6 @@ BaseMap.mergeOptions({
   demoTileInfos: { s: 'a', z: 9, x: 265, y: 181, '-y': 181, r: '' },
   attributionControl: false,
 })
-
-const ControlsMixin = {
-  HIDDABLE_CONTROLS: [
-    'home',
-    'zoom',
-    'search',
-    'fullscreen',
-    'embed',
-    'datalayers',
-    'caption',
-    'locate',
-    'measure',
-    'print',
-    'tilelayers',
-  ],
-
-  initControls: function () {
-    this._controls = {}
-
-    if (this._umap.properties.is_template && !this.options.noControl) {
-      new LoadTemplateControl(this).addTo(this)
-    }
-
-    if (this._umap.hasEditMode() && !this.options.noControl) {
-      new EditControl(this).addTo(this)
-    }
-    this._controls.home = new HomeControl(this._umap)
-    this._controls.zoom = new Control.Zoom({
-      zoomInTitle: translate('Zoom in'),
-      zoomOutTitle: translate('Zoom out'),
-    })
-    this._controls.datalayers = new DataLayersControl(this._umap)
-    this._controls.caption = new CaptionControl(this._umap)
-    this._controls.locate = new LocateControl(this._umap)
-    this._controls.fullscreen = new Control.Fullscreen({
-      title: {
-        false: translate('View Fullscreen'),
-        true: translate('Exit Fullscreen'),
-      },
-    })
-    this._controls.search = new SearchControl(this._umap)
-    this._controls.embed = new EmbedControl(this._umap)
-    this._controls.print = new PrintControl(this._umap)
-    this._controls.tilelayersChooser = new TileLayerChooser(this._umap)
-    this._controls.measure = new L.MeasureControl().initHandler(this)
-    this._controls.more = new MoreControl()
-    this._controls.scale = new Control.Scale()
-    this._controls.permanentCredit = new PermanentCreditsControl(this)
-    this._umap.drop = new DropControl(this._umap, this, this._container)
-    this._controls.tilelayers = new U.TileLayerControl(this)
-  },
-
-  renderControls: function () {
-    for (const control of Object.values(this._controls)) {
-      this.removeControl(control)
-    }
-    if (this.options.noControl) return
-
-    this._controls.attribution = new AttributionControl().addTo(this)
-    if (this.options.miniMap) {
-      this.whenReady(function () {
-        if (this.selectedTilelayer) {
-          this._controls.miniMap = new Control.MiniMap(this.selectedTilelayer, {
-            aimingRectOptions: {
-              color: this._umap.getProperty('color'),
-              fillColor: this._umap.getProperty('fillColor'),
-              stroke: this._umap.getProperty('stroke'),
-              fill: this._umap.getProperty('fill'),
-              weight: this._umap.getProperty('weight'),
-              opacity: this._umap.getProperty('opacity'),
-              fillOpacity: this._umap.getProperty('fillOpacity'),
-            },
-          }).addTo(this)
-          this._controls.miniMap._miniMap.invalidateSize()
-        }
-      })
-    }
-    for (const name of this.HIDDABLE_CONTROLS) {
-      const status = this._umap.getProperty(`${name}Control`)
-      if (status === false) continue
-      const control = this._controls[name]
-      if (!control) continue
-      control.addTo(this)
-      control._container.classList.toggle(
-        'display-on-more',
-        status === undefined || status === null
-      )
-    }
-    if (this._umap.getProperty('permanentCredit'))
-      this._controls.permanentCredit.addTo(this)
-    if (this._umap.getProperty('moreControl')) this._controls.more.addTo(this)
-    if (this._umap.getProperty('scaleControl')) this._controls.scale.addTo(this)
-    this._controls.tilelayers.setLayers()
-  },
-}
 
 const ManageTilelayerMixin = {
   initTileLayers: function () {
@@ -155,7 +41,6 @@ const ManageTilelayerMixin = {
     } else {
       this.selectTileLayer(this.tilelayers[0])
     }
-    if (this._controls) this._controls.tilelayers.setLayers()
   },
 
   createTileLayer: (tilelayer) => new TileLayer(tilelayer.url_template, tilelayer),
@@ -233,16 +118,10 @@ const ManageTilelayerMixin = {
       Alert.error(`${translate('Error in the overlay URL')}: ${overlay._url}`)
     }
   },
-
-  editTileLayers: function () {
-    if (this._controls.tilelayersChooser) {
-      this._controls.tilelayersChooser.openSwitcher({ edit: true })
-    }
-  },
 }
 
 export const LeafletMap = BaseMap.extend({
-  includes: [ControlsMixin, ManageTilelayerMixin],
+  includes: [ManageTilelayerMixin],
 
   // The initialize and the setup method might seem similar, but they
   // serve two different purposes:
@@ -253,7 +132,12 @@ export const LeafletMap = BaseMap.extend({
     this._umap = umap
     const options = this._umap.properties
 
-    BaseMap.prototype.initialize.call(this, element, options)
+    // Our control property name clashes with the default one, so let's force it to false
+    // miniMap plugin does not add itself to the map, out of our control.
+    BaseMap.prototype.initialize.call(this, element, {
+      ...options,
+      miniMapControl: false,
+    })
 
     document.body.addEventListener('mapview:update', (event) => {
       let { zoom, latlng } = event.detail
@@ -262,15 +146,12 @@ export const LeafletMap = BaseMap.extend({
       zoom = Math.max(zoom, this.getMinZoom())
       this.setView(latlng, zoom)
     })
-
-    this.on('baselayerchange', (e) => {
-      if (this._controls.miniMap) this._controls.miniMap.onMainMapBaseLayerChange(e)
-    })
   },
 
   setup: function () {
-    this.initControls()
-    // Needs locate control and hash to exist
+    if (!this.measureTools) {
+      new L.Measurable(this)
+    }
     this.initCenter()
 
     // Wait for URL to have been parsed before modifying the hash
@@ -308,8 +189,6 @@ export const LeafletMap = BaseMap.extend({
       // try like this for now.
       if (Browser.mobile) this.dragging.disable()
     }
-    // Needs tilelayer to exist for minimap
-    this.renderControls()
     this.handleLimitBounds()
   },
 
@@ -333,7 +212,7 @@ export const LeafletMap = BaseMap.extend({
       // FIXME An invalid hash will cause the load to fail
       this._umap.hash.parse()
     } else if (this.options.defaultView === 'locate' && !this.options.noControl) {
-      await this._controls.locate.start()
+      await this._umap.controlManager.controls.locate.start()
     } else if (this.options.defaultView === 'data') {
       this._umap.onceDataLoaded(this._umap.fitDataBounds)
     } else if (this.options.defaultView === 'latest') {

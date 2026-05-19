@@ -199,11 +199,11 @@ def test_minimap_on_load(map, live_server, datalayer, page):
 
 def test_zoom_control_on_load(map, live_server, page):
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    expect(page.locator(".leaflet-control-zoom")).to_be_visible()
+    expect(page.locator(".umap-control-zoom")).to_be_visible()
     map.settings["properties"]["zoomControl"] = False
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    expect(page.locator(".leaflet-control-zoom")).to_be_hidden()
+    expect(page.locator(".umap-control-zoom")).to_be_hidden()
 
 
 def test_feature_in_query_string_has_precedence_over_onloadpanel(
