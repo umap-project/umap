@@ -1,4 +1,3 @@
-import { DomEvent, CircleMarker } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { getLocale, translate } from '../i18n.js'
 import { Request } from '../request.js'
 import * as Utils from '../utils.js'
@@ -67,12 +66,12 @@ class PopupTemplate {
       const previousFeature = feature.getPrevious()
       // Fixme: remove me when this is merged and released
       // https://github.com/Leaflet/Leaflet/pull/9052
-      DomEvent.disableClickPropagation(footer)
+      DOMUtils.disableClickPropagation(footer)
       if (nextFeature) {
         next.title = translate('Go to «{feature}»', {
           feature: nextFeature.properties.name || translate('next'),
         })
-        DomEvent.on(next, 'click', () => {
+        next.addEventListener('click', () => {
           nextFeature.zoomTo({ callback: (event) => nextFeature.view(event) })
         })
       }
@@ -80,11 +79,11 @@ class PopupTemplate {
         previous.title = translate('Go to «{feature}»', {
           feature: previousFeature.properties.name || translate('previous'),
         })
-        DomEvent.on(previous, 'click', () => {
+        previous.addEventListener('click', () => {
           previousFeature.zoomTo({ callback: (event) => previousFeature.view(event) })
         })
       }
-      DomEvent.on(zoom, 'click', () => feature.zoomTo())
+      zoom.addEventListener('click', () => feature.zoomTo())
       return footer
     }
   }
@@ -370,28 +369,28 @@ class Route extends TitleMixin(PopupTemplate) {
           type="image/svg+xml">
       </div>
     `)
-    let marker
-    function removeMarker() {
-      if (marker) {
-        marker.remove()
+    const id = 'route-icon'
+    let icon
+    const removeIcon = () => {
+      if (icon) {
+        feature._umap.fire('map:hide:point', { id })
       }
     }
-    chart.addEventListener('mouseout', removeMarker)
-    map.on('popupclose', removeMarker)
+    chart.addEventListener('mouseout', removeIcon)
+    map.on('popupclose', removeIcon)
     chart.addEventListener('chart:over', (event) => {
       const dataset = event.detail.element.dataset
       if (dataset.ele) {
         altitude.textContent = dataset.ele
       }
-      removeMarker()
+      icon = new Icon.RouteIcon()
       const latlng = latlngs[dataset.index]
       if (!latlng) return
-      marker = new CircleMarker(latlng, {
-        radius: 8,
-        fillColor: 'white',
-        fillOpacity: 1,
-        color: 'orange',
-      }).addTo(map)
+      feature._umap.fire('map:show:point', {
+        id,
+        latlng,
+        icon,
+      })
     })
     if (feature.properties.description) {
       const content = this.toHTML(feature, feature.properties.description)

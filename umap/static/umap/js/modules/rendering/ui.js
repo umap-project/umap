@@ -133,7 +133,7 @@ export const LeafletIcon = DivIcon.extend({
     this._setIconStyles(el, 'icon')
     return el
   },
-  createShadow: () => null,
+  createShadow: () => {},
 })
 
 const PointMixin = {
@@ -252,7 +252,7 @@ export const LeafletMarker = Marker.extend({
 
   getIcon: function () {
     const Class = Icon.getClass(this.getIconClass())
-    return new LeafletIcon(new Class({ feature: this.feature }))
+    return new LeafletIcon(new Class(this.feature))
   },
 
   _getTooltipAnchor: function () {

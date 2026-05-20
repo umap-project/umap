@@ -8,10 +8,12 @@ import {
   setOptions,
   stamp,
   TileLayer,
+  Marker,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
+import { LeafletIcon } from './ui.js'
 
 // Those options are not saved on the server, so they can live here
 // instead of in umap.properties
@@ -282,5 +284,20 @@ export const LeafletMap = BaseMap.extend({
 
   initEditTools: function () {
     this.editTools = new U.Editable(this._umap)
+  },
+
+  showPoint({ id, latlng, icon }) {
+    this._markers = this._markers || {}
+    if (!this._markers[id]) {
+      this._markers[id] = new Marker(latlng, {
+        icon: new LeafletIcon(icon),
+      })
+    }
+    this._markers[id].addTo(this)
+    this._markers[id].setLatLng(latlng)
+  },
+
+  hidePoint(id) {
+    this._markers?.[id]?.remove()
   },
 })

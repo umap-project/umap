@@ -36,6 +36,7 @@ import { Importer as OpenRouteService } from './importers/openrouteservice.js'
 import Loader from './ui/loader.js'
 import Hash from './ui/hash.js'
 import DropControl from './drop.js'
+import * as Icon from './icon.js'
 
 export default class Umap extends Utils.WithEvents {
   constructor(element, geojson) {
@@ -285,6 +286,12 @@ export default class Umap extends Utils.WithEvents {
         this.fire(`map:${event.type}`, { event: event })
       }
     )
+    this.on('map:show:point', (event) => {
+      this._leafletMap.showPoint({ ...event.detail })
+    })
+    this.on('map:hide:point', (event) => {
+      this._leafletMap.hidePoint(event.detail.id)
+    })
   }
 
   setPropertiesFromQueryString() {
