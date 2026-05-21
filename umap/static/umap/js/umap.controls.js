@@ -78,14 +78,19 @@ U.Editable = L.Editable.extend({
 
   stopSnapping: function () {
     this._snapGuides = null
+    this.hideSnapIndicator()
   },
 
   // While a feature is being drawn, rewrite the pointer latlng to the closest
   // guide within `snapDistance`. Both the live rubber-band and the placed
   // vertex/marker derive their position from this event, so they snap onto
-  // existing features.
+  // existing features. A visual indicator follows the snapped point so the
+  // user gets feedback even for the very first vertex (which has no
+  // rubber-band yet).
   snapDrawingEvent: function (event) {
-    if (!this.drawing() || !this._snapGuides?.length || !L.GeometryUtil) return
+    if (!this.drawing() || !this._snapGuides?.length || !L.GeometryUtil) {
+      return this.hideSnapIndicator()
+    }
     const closest = L.GeometryUtil.closestLayerSnap(
       this.map,
       this._snapGuides,
@@ -93,11 +98,35 @@ U.Editable = L.Editable.extend({
       this.getSnapDistance(),
       true
     )
+    if (!closest) return this.hideSnapIndicator()
     // Copy into a fresh LatLng from lat/lng only: `closest.latlng` may *be* a
     // guide's own latlng object (and carries extra props from the snap math).
     // Reusing it would share one latlng across features — Leaflet later stamps
     // `__vertex` on it, creating a circular reference that breaks serialization.
-    if (closest) event.latlng = L.latLng(closest.latlng.lat, closest.latlng.lng)
+    event.latlng = L.latLng(closest.latlng.lat, closest.latlng.lng)
+    this.showSnapIndicator(event.latlng)
+  },
+
+  showSnapIndicator: function (latlng) {
+    if (!this._snapIndicator) {
+      this._snapIndicator = L.circleMarker(latlng, {
+        radius: 7,
+        weight: 3,
+        color: '#e8a800',
+        opacity: 1,
+        fill: false,
+        interactive: false,
+        className: 'umap-snap-indicator',
+      })
+    }
+    this._snapIndicator.setLatLng(latlng)
+    if (!this.map.hasLayer(this._snapIndicator)) this._snapIndicator.addTo(this.map)
+  },
+
+  hideSnapIndicator: function () {
+    if (this._snapIndicator && this.map.hasLayer(this._snapIndicator)) {
+      this.map.removeLayer(this._snapIndicator)
+    }
   },
 
   // Every visible feature the given marker may snap to, minus the feature it

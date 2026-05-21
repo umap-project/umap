@@ -55,6 +55,26 @@ def test_line_vertex_snaps_to_existing_feature_while_drawing(
     assert features["LineString"][1] != features["Point"]
 
 
+def test_snap_indicator_shows_before_first_vertex(
+    page, live_server, tilelayer, settings
+):
+    settings.UMAP_ALLOW_ANONYMOUS = True
+    page.goto(f"{live_server.url}/en/map/new/?snapDistance=30")
+    indicator = page.locator(".umap-snap-indicator")
+
+    draw_marker(page, 200, 200)
+    page.locator(".umap-edit-bar ").get_by_title("Draw a polyline").click()
+    map = page.locator("#map")
+
+    # No vertex placed yet: hovering near the marker should already show the
+    # snap indicator, so the first point gets the same feedback as later ones.
+    map.hover(position={"x": 205, "y": 205})
+    expect(indicator).to_be_visible()
+    # Moving away from any feature hides it.
+    map.hover(position={"x": 360, "y": 360})
+    expect(indicator).to_be_hidden()
+
+
 def test_marker_does_not_snap_when_disabled(page, live_server, tilelayer, settings):
     settings.UMAP_ALLOW_ANONYMOUS = True
     page.goto(f"{live_server.url}/en/map/new/?snapDistance=0")
