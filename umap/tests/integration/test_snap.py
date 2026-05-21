@@ -32,6 +32,29 @@ def test_marker_snaps_to_existing_feature(page, live_server, tilelayer, settings
     assert coordinates[0] == coordinates[1]
 
 
+def test_line_vertex_snaps_to_existing_feature_while_drawing(
+    page, live_server, tilelayer, settings
+):
+    settings.UMAP_ALLOW_ANONYMOUS = True
+    # Moderate distance: a vertex clicked close to the marker snaps onto it,
+    # while one clicked far away keeps its position.
+    page.goto(f"{live_server.url}/en/map/new/?snapDistance=30")
+
+    draw_marker(page, 200, 200)
+    page.locator(".umap-edit-bar ").get_by_title("Draw a polyline").click()
+    map = page.locator("#map")
+    map.click(position={"x": 205, "y": 205})  # within 30px of the marker -> snaps
+    map.click(position={"x": 100, "y": 100})  # far away -> not snapped
+    map.click(position={"x": 100, "y": 100})  # click last point again to finish
+
+    data = save_and_get_json(page)
+    features = {
+        f["geometry"]["type"]: f["geometry"]["coordinates"] for f in data["features"]
+    }
+    assert features["LineString"][0] == features["Point"]
+    assert features["LineString"][1] != features["Point"]
+
+
 def test_marker_does_not_snap_when_disabled(page, live_server, tilelayer, settings):
     settings.UMAP_ALLOW_ANONYMOUS = True
     page.goto(f"{live_server.url}/en/map/new/?snapDistance=0")

@@ -31,23 +31,34 @@ U.Editable = L.Editable.extend({
     })
     this.on('editable:vertex:rawclick', this.onVertexRawClick)
 
-    // Snapping: attach a Leaflet.Snap MarkerSnap handler to any marker that
-    // Leaflet.Editable lets the user move (a vertex being dragged, a whole
-    // point feature being moved, or a marker being placed), so it sticks to
-    // nearby existing features.
+    // Snapping. Two complementary mechanisms:
+    //  - While *drawing* (line, polygon, marker), the next point and the
+    //    rubber-band follow `event.latlng`, so we rewrite it to the closest
+    //    existing feature. This is the reliable, Google-My-Maps-like path.
+    //  - While *editing* an existing marker/vertex by dragging, the position
+    //    comes from the marker icon (not the event), so we attach a
+    //    Leaflet.Snap MarkerSnap handler to it instead.
+    this.on('editable:drawing:start', this.startSnapping)
+    this.on('editable:drawing:end', this.stopSnapping)
+    // Snap the raw map pointer events. Leaflet hands the same event object to
+    // every listener of a fire and runs them in registration order, so this
+    // handler (registered now, at setup) runs before the mousemove/mouseup
+    // handlers Leaflet.Editable registers when drawing starts — letting us
+    // rewrite `latlng` to a snapped position that the editor then consumes.
+    this.map.on('mousemove mouseup', this.snapDrawingEvent, this)
     this.on('editable:vertex:dragstart', (event) => {
       this.snapMarker(event.vertex, event.layer?.feature)
     })
     this.on('editable:vertex:dragend', (event) => {
       this.unsnapMarker(event.vertex)
     })
-    this.on('editable:dragstart editable:drawing:start', (event) => {
+    this.on('editable:dragstart', (event) => {
       // Only markers expose a watchable `move`; whole-shape drags don't.
       if (event.layer instanceof L.Marker) {
         this.snapMarker(event.layer, event.layer.feature)
       }
     })
-    this.on('editable:dragend editable:drawing:end', (event) => {
+    this.on('editable:dragend', (event) => {
       if (event.layer instanceof L.Marker) this.unsnapMarker(event.layer)
     })
   },
@@ -55,6 +66,38 @@ U.Editable = L.Editable.extend({
   getSnapDistance: function () {
     // In pixels; 0 (or unset) disables snapping. Overridable via querystring.
     return this._umap.getProperty('snapDistance')
+  },
+
+  startSnapping: function (event) {
+    // Cache the guide layers for the whole drawing session — rebuilding the
+    // list on every mousemove would be wasteful.
+    this._snapGuides = this.getSnapDistance()
+      ? this.snapGuides(event.layer?.feature)
+      : null
+  },
+
+  stopSnapping: function () {
+    this._snapGuides = null
+  },
+
+  // While a feature is being drawn, rewrite the pointer latlng to the closest
+  // guide within `snapDistance`. Both the live rubber-band and the placed
+  // vertex/marker derive their position from this event, so they snap onto
+  // existing features.
+  snapDrawingEvent: function (event) {
+    if (!this.drawing() || !this._snapGuides?.length || !L.GeometryUtil) return
+    const closest = L.GeometryUtil.closestLayerSnap(
+      this.map,
+      this._snapGuides,
+      event.latlng,
+      this.getSnapDistance(),
+      true
+    )
+    // Copy into a fresh LatLng from lat/lng only: `closest.latlng` may *be* a
+    // guide's own latlng object (and carries extra props from the snap math).
+    // Reusing it would share one latlng across features — Leaflet later stamps
+    // `__vertex` on it, creating a circular reference that breaks serialization.
+    if (closest) event.latlng = L.latLng(closest.latlng.lat, closest.latlng.lng)
   },
 
   // Every visible feature the given marker may snap to, minus the feature it
@@ -65,7 +108,13 @@ U.Editable = L.Editable.extend({
     this._umap.eachFeature((feature) => {
       if (feature === exclude) return
       const ui = feature.ui
-      if (ui && this.map.hasLayer(ui)) guides.push(ui)
+      if (!ui || !this.map.hasLayer(ui)) return
+      // Skip a path that is currently being edited: Leaflet.Editable stamps a
+      // circular `__vertex` back-reference on its latlngs, and the snap
+      // library's closest() JSON-serializes the geometry, which would throw.
+      // (Markers use getLatLng() and are unaffected.)
+      if (ui.getLatLngs && ui.editEnabled?.()) return
+      guides.push(ui)
     })
     return guides
   },
