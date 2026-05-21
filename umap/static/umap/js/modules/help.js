@@ -70,6 +70,9 @@ const ENTRIES = {
   smoothFactor: translate(
     'How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)'
   ),
+  snapDistance: translate(
+    'Maximum distance in pixels for snapping a vertex to an existing feature while drawing or editing (0 to disable)'
+  ),
   dashArray: translate(
     'A comma separated list of numbers that defines the stroke dash pattern. Ex.: "5, 10, 15".'
   ),

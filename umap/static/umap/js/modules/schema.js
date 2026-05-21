@@ -545,6 +545,16 @@ export const SCHEMA = {
     inheritable: true,
     default: 1.0,
   },
+  snapDistance: {
+    type: Number,
+    impacts: [],
+    min: 0,
+    max: 50,
+    step: 1,
+    label: translate('Snapping distance'),
+    helpEntries: ['snapDistance'],
+    default: 15,
+  },
   sortKey: {
     type: String,
     impacts: ['datalayer-index', 'data'],

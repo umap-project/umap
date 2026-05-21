@@ -30,6 +30,88 @@ U.Editable = L.Editable.extend({
       if (event.vertex.editor.vertexCanBeDeleted(event.vertex)) event.vertex.delete()
     })
     this.on('editable:vertex:rawclick', this.onVertexRawClick)
+
+    // Snapping: attach a Leaflet.Snap MarkerSnap handler to any marker that
+    // Leaflet.Editable lets the user move (a vertex being dragged, a whole
+    // point feature being moved, or a marker being placed), so it sticks to
+    // nearby existing features.
+    this.on('editable:vertex:dragstart', (event) => {
+      this.snapMarker(event.vertex, event.layer?.feature)
+    })
+    this.on('editable:vertex:dragend', (event) => {
+      this.unsnapMarker(event.vertex)
+    })
+    this.on('editable:dragstart editable:drawing:start', (event) => {
+      // Only markers expose a watchable `move`; whole-shape drags don't.
+      if (event.layer instanceof L.Marker) {
+        this.snapMarker(event.layer, event.layer.feature)
+      }
+    })
+    this.on('editable:dragend editable:drawing:end', (event) => {
+      if (event.layer instanceof L.Marker) this.unsnapMarker(event.layer)
+    })
+  },
+
+  getSnapDistance: function () {
+    // In pixels; 0 (or unset) disables snapping. Overridable via querystring.
+    return this._umap.getProperty('snapDistance')
+  },
+
+  // Every visible feature the given marker may snap to, minus the feature it
+  // belongs to (Leaflet.Snap's own self-exclusion relies on Leaflet.Draw
+  // internals that Leaflet.Editable does not provide).
+  snapGuides: function (exclude) {
+    const guides = []
+    this._umap.eachFeature((feature) => {
+      if (feature === exclude) return
+      const ui = feature.ui
+      if (ui && this.map.hasLayer(ui)) guides.push(ui)
+    })
+    return guides
+  },
+
+  snapMarker: function (marker, feature) {
+    const distance = this.getSnapDistance()
+    if (!distance || !L.Handler.MarkerSnap || marker._snap) return
+    // Construct without the marker: the marker-aware constructor path tries to
+    // instantiate `L.Handler.MarkerDrag`, which Leaflet 1.x no longer exposes.
+    // Leaflet.Editable's markers are already draggable, so we just watch them.
+    const snap = new L.Handler.MarkerSnap(this.map, {
+      snapDistance: distance,
+    })
+    for (const guide of this.snapGuides(feature)) snap.addGuideLayer(guide)
+    // Remember the snapped position: when *placing* a new marker, Leaflet.Editable
+    // overwrites the marker latlng with the raw click on commit, so we reapply it
+    // on teardown (which runs after the commit).
+    marker.on('snap', this._onSnap, this)
+    marker.on('unsnap', this._onUnsnap, this)
+    snap.watchMarker(marker)
+    snap.enable()
+    marker._snap = snap
+  },
+
+  unsnapMarker: function (marker) {
+    if (!marker?._snap) return
+    if (marker._snapLatLng) {
+      marker.setLatLng(marker._snapLatLng)
+      // setLatLng only moves the rendered marker; resync the feature geometry
+      // so the snapped position is the one that gets saved.
+      marker.feature?.pullGeometry()
+    }
+    marker.off('snap', this._onSnap, this)
+    marker.off('unsnap', this._onUnsnap, this)
+    marker._snap.unwatchMarker(marker)
+    marker._snap.disable()
+    delete marker._snap
+    delete marker._snapLatLng
+  },
+
+  _onSnap: function (event) {
+    event.target._snapLatLng = event.latlng
+  },
+
+  _onUnsnap: function (event) {
+    delete event.target._snapLatLng
   },
 
   resetButtons: () => {
