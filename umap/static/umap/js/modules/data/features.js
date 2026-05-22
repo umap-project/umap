@@ -298,7 +298,7 @@ class Feature {
       builder.form.querySelector('input')?.focus()
     })
     this._umap.editedFeature = this
-    if (!this.ui.isOnScreen(this._umap._leafletMap.getBounds())) this.zoomTo(event)
+    if (!this.isOnScreen()) this.zoomTo(event)
     return onPanelLoaded
   }
 
@@ -412,7 +412,6 @@ class Feature {
   }
 
   del(sync) {
-    this._umap._leafletMap.closePopup()
     if (this.datalayer) {
       this.datalayer.removeFeature(this, sync)
     }
@@ -487,16 +486,12 @@ class Feature {
 
   zoomTo({ easing, latlng, callback } = {}) {
     if (easing === undefined) easing = this._umap.getProperty('easing')
-    if (callback) this._umap._leafletMap.once('moveend', callback.bind(this))
-    if (easing) {
-      this._umap._leafletMap.flyTo(this.center, this.getBestZoom())
-    } else {
-      latlng = latlng || this.center
-      this._umap._leafletMap.setView(
-        latlng,
-        this.getBestZoom() || this._umap._leafletMap.getZoom()
-      )
-    }
+    if (callback) this._umap.once('map:moveend', (event) => callback.call(this, event))
+    this._umap.fire('map:view:set', {
+      center: latlng || this.center,
+      zoom: this.getBestZoom(),
+      easing,
+    })
   }
 
   getBestZoom() {
@@ -859,8 +854,7 @@ class Path extends Feature {
 
   getBestZoom() {
     return (
-      this.getOption('zoomTo') ||
-      this._umap._leafletMap.getBoundsZoom(this.bounds, true)
+      this.getOption('zoomTo') || this._umap.mapProxy.getBoundsZoom(this.bounds, true)
     )
   }
 
@@ -887,14 +881,8 @@ class Path extends Feature {
   zoomTo({ easing, callback }) {
     // Use bounds instead of centroid for paths.
     easing = easing || this._umap.getProperty('easing')
-    if (easing) {
-      this._umap._leafletMap.flyToBounds(this.bounds, this.getBestZoom())
-    } else {
-      this._umap._leafletMap.fitBounds(
-        this.bounds,
-        this.getBestZoom() || this._umap._leafletMap.getZoom()
-      )
-    }
+    const zoom = this.getBestZoom()
+    this._umap.fire('map:view:fit-bounds', { bounds: this.bounds, zoom, easing })
     if (callback) callback.call(this)
   }
 
@@ -1136,8 +1124,9 @@ export class LineString extends Path {
     }
     const a = toMerge[0]
     const b = toMerge[1]
-    const p1 = this._umap._leafletMap.latLngToContainerPoint(a[a.length - 1])
-    const p2 = this._umap._leafletMap.latLngToContainerPoint(b[0])
+    // TODO use turf for computation
+    const p1 = this._umap.mapProxy.map.latLngToContainerPoint(a[a.length - 1])
+    const p2 = this._umap.mapProxy.map.latLngToContainerPoint(b[0])
     const tolerance = 5 // px on screen
     if (Math.abs(p1.x - p2.x) <= tolerance && Math.abs(p1.y - p2.y) <= tolerance) {
       a.pop()

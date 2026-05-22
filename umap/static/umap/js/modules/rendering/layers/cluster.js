@@ -99,7 +99,6 @@ export const Cluster = FeatureGroup.extend({
       this.datalayer.properties.cluster = {}
     }
     FeatureGroup.prototype.initialize.call(this)
-    LayerMixin.onInit.call(this, this.datalayer._leafletMap)
   },
 
   dataChanged: function () {
@@ -132,15 +131,15 @@ export const Cluster = FeatureGroup.extend({
   },
 
   compute() {
+    if (!this._map) return
     const radius = this.datalayer.properties.cluster?.radius || 80
     this._clusters = []
-    const map = this.datalayer._umap._leafletMap
-    this._bounds = map.getBounds().pad(0.1)
-    const CRS = map.options.crs
+    this._bounds = this._map.getBounds().pad(0.1)
+    const CRS = this._map.options.crs
     for (const layer of this._bucket) {
       if (layer._cluster) continue
       if (!this._bounds.contains(layer._latlng)) continue
-      layer._xy = CRS.latLngToPoint(layer._latlng, map.getZoom())
+      layer._xy = CRS.latLngToPoint(layer._latlng, this._map.getZoom())
       let cluster = null
       for (const candidate of this._clusters) {
         if (candidate._xy.distanceTo(layer._xy) <= radius) {
@@ -182,25 +181,25 @@ export const Cluster = FeatureGroup.extend({
     return this
   },
 
-  onAdd: function (leafletMap) {
+  onAdd: function (map) {
     this.on('click', this.onClick)
     this.on('mouseover', this.onMouseOver)
     this.on('mouseout', this.onMouseOut)
     this.compute()
-    LayerMixin.onAdd.call(this, leafletMap)
+    LayerMixin.onAdd.call(this, map)
     this.addClusters()
-    leafletMap.addLayer(this._group)
-    return FeatureGroup.prototype.onAdd.call(this, leafletMap)
+    map.addLayer(this._group)
+    return FeatureGroup.prototype.onAdd.call(this, map)
   },
 
-  onRemove: function (leafletMap) {
+  onRemove: function (map) {
     this.off('click', this.onClick)
     this.off('mouseover', this.onMouseOver)
     this.off('mouseout', this.onMouseOut)
-    LayerMixin.onRemove.call(this, leafletMap)
+    LayerMixin.onRemove.call(this, map)
     this.removeClusters()
-    leafletMap.removeLayer(this._group)
-    return FeatureGroup.prototype.onRemove.call(this, leafletMap)
+    map.removeLayer(this._group)
+    return FeatureGroup.prototype.onRemove.call(this, map)
   },
 
   onZoomEnd: function () {

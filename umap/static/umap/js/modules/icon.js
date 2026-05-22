@@ -33,7 +33,6 @@ export class Icon {
 
   constructor(properties = {}) {
     this.properties = { ...this.constructor.defaults, ...properties }
-    this.feature = properties.feature
   }
 
   get size() {
@@ -49,10 +48,7 @@ export class Icon {
     return this.properties.tooltipAnchor
   }
   get className() {
-    let className = this.properties.className
-    if (this.feature?.isReadOnly()) className += ' readonly'
-    if (this.feature?.isActive()) className += ' umap-icon-active'
-    return className
+    return this.properties.className
   }
 
   _setRecent(url) {
@@ -61,25 +57,11 @@ export class Icon {
     if (RECENT.indexOf(url) === -1) RECENT.push(url)
   }
 
-  get iconUrl() {
-    let url
-    if (this.feature?.iconUrl) {
-      url = this.feature.iconUrl
-      this._setRecent(url)
-    } else {
-      url = this.properties.iconUrl
-    }
-    return formatUrl(url, this.feature)
-  }
-
   get color() {
-    if (this.feature) return this.feature.getDynamicOption('color')
-    if (this.properties.color) return this.properties.color
-    return SCHEMA.color.default
+    return this.properties?.color || SCHEMA.color.default
   }
 
   get opacity() {
-    if (this.feature) return this.feature.getOption('iconOpacity')
     return SCHEMA.iconOpacity.default
   }
 
@@ -91,7 +73,6 @@ export class Icon {
     const [root, elements] = Utils.loadTemplateWithRefs(this.template)
     this.root = root
     this.elements = elements
-    this.root.dataset.feature = this.feature?.id
     if (this.elements.container) {
       const src = this.iconUrl
       if (src) {
@@ -103,7 +84,46 @@ export class Icon {
   }
 }
 
-export class DefaultIcon extends Icon {
+class FeatureIcon extends Icon {
+  constructor(feature) {
+    super()
+    this.feature = feature
+  }
+
+  get color() {
+    return this.feature.getDynamicOption('color')
+  }
+
+  get opacity() {
+    return this.feature.getOption('iconOpacity')
+  }
+
+  get iconUrl() {
+    let url
+    if (this.feature.iconUrl) {
+      url = this.feature.iconUrl
+      this._setRecent(url)
+    } else {
+      url = this.properties.iconUrl
+    }
+    return formatUrl(url, this.feature)
+  }
+
+  get className() {
+    let className = super.className
+    if (this.feature.isReadOnly()) className += ' readonly'
+    if (this.feature.isActive()) className += ' umap-icon-active'
+    return className
+  }
+
+  render() {
+    super.render()
+    this.root.dataset.feature = this.feature?.id
+    return this.root
+  }
+}
+
+export class DefaultIcon extends FeatureIcon {
   static defaults = {
     ...Icon.defaults,
     iconSize: [32, 40],
@@ -131,7 +151,7 @@ export class DefaultIcon extends Icon {
   }
 }
 
-export class Circle extends Icon {
+export class Circle extends FeatureIcon {
   static defaults = {
     ...Icon.defaults,
     iconSize: [12, 12],
@@ -148,7 +168,7 @@ export class Circle extends Icon {
   }
 }
 
-export class LargeCircle extends Icon {
+export class LargeCircle extends FeatureIcon {
   static defaults = {
     ...Icon.defaults,
     className: 'umap-large-circle-icon',
@@ -252,8 +272,37 @@ export class Cluster extends Icon {
     this.elements.counter.textContent = this.properties.getCounter()
     this.elements.counter.style.color =
       this.properties.textColor ||
-      DOMUtils.textColorFromBackgroundColor(this.elements.counter, this.properties.color)
+      DOMUtils.textColorFromBackgroundColor(
+        this.elements.counter,
+        this.properties.color
+      )
   }
+}
+
+class SimpleCircle extends Icon {
+  static defaults = {
+    ...Icon.defaults,
+    iconSize: [16, 16],
+    className: 'umap-circle-icon',
+  }
+
+  template = '<div>&nbsp;</div>'
+  fillColor = 'white'
+  opacity = 1
+
+  update() {
+    this.root.style.backgroundColor = this.fillColor
+    this.root.style.borderColor = this.borderColor
+    this.root.style.opacity = this.opacity
+  }
+}
+
+export class RouteIcon extends SimpleCircle {
+  borderColor = 'orange'
+}
+
+export class LocationIcon extends SimpleCircle {
+  borderColor = 'blue'
 }
 
 export function isImg(src) {

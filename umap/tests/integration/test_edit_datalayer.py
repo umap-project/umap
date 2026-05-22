@@ -150,6 +150,7 @@ def test_can_create_new_datalayer(live_server, openmap, page, datalayer):
     page.locator('input[name="name"]').click()
     page.locator('input[name="name"]').fill("Layer A")
     expect(page.get_by_text("Layer A")).to_be_visible()
+    page.wait_for_timeout(300)  # Wait for the input debounce.
     with page.expect_response(re.compile(".*/datalayer/create/.*")):
         page.get_by_role("button", name="Save").click()
     assert DataLayer.objects.count() == 2

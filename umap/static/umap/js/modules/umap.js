@@ -4,17 +4,23 @@ import {
 } from '../components/alerts/alert.js'
 import Browser from './browser.js'
 import Caption from './caption.js'
-import { DataLayer } from './data/layer.js'
+import * as Clipboard from './clipboard.js'
 import { Fields } from './data/fields.js'
+import { DataLayer } from './data/layer.js'
+import * as DOMUtils from './domutils.js'
+import DropControl from './drop.js'
 import { Filters, migrateLegacyFilters } from './filters.js'
 import { MutatingForm } from './form/builder.js'
 import { Formatter } from './formatter.js'
 import Help from './help.js'
 import { getLocale, setLocale, translate } from './i18n.js'
+import * as Icon from './icon.js'
 import Importer from './importer.js'
+import { Importer as OpenRouteService } from './importers/openrouteservice.js'
+import { LayerManager } from './managers.js'
 import Orderable from './orderable.js'
 import { MapPermissions } from './permissions.js'
-import { LeafletMap } from './rendering/map.js'
+import { LeafletProxy } from './rendering/map.js'
 import { Request, ServerRequest } from './request.js'
 import Rules from './rules.js'
 import { SCHEMA } from './schema.js'
@@ -22,20 +28,15 @@ import Share from './share.js'
 import Slideshow from './slideshow.js'
 import { SyncEngine } from './sync/engine.js'
 import { BottomBar, EditBar, TopBar } from './ui/bar.js'
-import { ControlManager } from './ui/controls.js'
 import ContextMenu from './ui/contextmenu.js'
+import { ControlManager } from './ui/controls.js'
 import Dialog from './ui/dialog.js'
+import Hash from './ui/hash.js'
+import Loader from './ui/loader.js'
 import { EditPanel, FullPanel, Panel } from './ui/panel.js'
 import Tooltip from './ui/tooltip.js'
 import URLs from './urls.js'
 import * as Utils from './utils.js'
-import * as Clipboard from './clipboard.js'
-import * as DOMUtils from './domutils.js'
-import { LayerManager } from './managers.js'
-import { Importer as OpenRouteService } from './importers/openrouteservice.js'
-import Loader from './ui/loader.js'
-import Hash from './ui/hash.js'
-import DropControl from './drop.js'
 
 export default class Umap extends Utils.WithEvents {
   constructor(element, geojson) {
@@ -48,10 +49,6 @@ export default class Umap extends Utils.WithEvents {
 
   get id() {
     return this.properties.id
-  }
-
-  get mapElement() {
-    return this._leafletMap._container
   }
 
   async init(element, geojson) {
@@ -93,19 +90,18 @@ export default class Umap extends Utils.WithEvents {
     this.properties.zoomControl = false
     this.properties.fullscreenControl = false
 
-    this._leafletMap = new LeafletMap(this, element)
+    this.mapProxy = new LeafletProxy(this, element)
     this.uiContainer = Utils.loadTemplate('<div class="umap-ui-container"></div>')
-    this.mapElement.appendChild(this.uiContainer)
+    this.mapProxy.container.appendChild(this.uiContainer)
     this.controlManager = new ControlManager(this)
-    this.drop = new DropControl(this, this._leafletMap, this.mapElement)
+    this.drop = new DropControl(this, this.mapProxy.container)
 
     this.properties.zoomControl = zoomControl !== undefined ? zoomControl : true
     this.properties.fullscreenControl =
       fullscreenControl !== undefined ? fullscreenControl : true
 
     if (center) {
-      this._leafletMap.options.center = this.properties.center =
-        this._leafletMap.latLng(center)
+      this.properties.center = this.mapProxy.latLng(center)
     }
 
     // Needed for permissions
@@ -115,7 +111,7 @@ export default class Umap extends Utils.WithEvents {
     // Needed to render controls
     this.permissions = new MapPermissions(this)
     this.urls = new URLs(this.properties.urls)
-    this.slideshow = new Slideshow(this, this._leafletMap)
+    this.slideshow = new Slideshow(this)
 
     if (geojson.properties.schema) this.overrideSchema(geojson.properties.schema)
     if (geojson.properties.ttl) {
@@ -130,35 +126,34 @@ export default class Umap extends Utils.WithEvents {
 
     this.loader = new Loader(this.uiContainer)
     if (this.properties.hash) {
-      this.hash = new Hash()
+      this.hash = new Hash(this)
     }
-    this.proxyMapEvents()
     // initCenter (in setup) needs the locate control to exist.
     this.controlManager.init()
-    this._leafletMap.setup()
+    this.mapProxy.render()
     this.controlManager.update()
 
-    this.panel = new Panel(this, this._leafletMap)
+    this.panel = new Panel(this)
     this.dialog = new Dialog({ className: 'dark' })
     this.topBar = new TopBar(this, this.uiContainer)
     this.bottomBar = new BottomBar(this, this.slideshow, this.uiContainer)
-    this.editBar = new EditBar(this, this._leafletMap, this.uiContainer)
+    this.editBar = new EditBar(this, this.uiContainer)
     this.tooltip = new Tooltip()
     this.contextmenu = new ContextMenu()
     this.server = new ServerRequest()
     this.request = new Request()
     this.fields = new Fields(this, this.dialog)
     this.filters = new Filters(this, this)
-    this.browser = new Browser(this, this._leafletMap)
-    this.caption = new Caption(this, this._leafletMap)
+    this.browser = new Browser(this)
+    this.caption = new Caption(this)
     this.importer = new Importer(this)
     this.share = new Share(this)
     this.rules = new Rules(this, this)
 
     if (this.hasEditMode()) {
-      this.editPanel = new EditPanel(this, this._leafletMap)
-      this.fullPanel = new FullPanel(this, this._leafletMap)
-      this._leafletMap.initEditTools()
+      this.editPanel = new EditPanel(this)
+      this.fullPanel = new FullPanel(this)
+      this.mapProxy.initEditTools()
       this.topBar.setup()
       this.editBar.setup()
     }
@@ -185,6 +180,7 @@ export default class Umap extends Utils.WithEvents {
     this.formatter = new Formatter(this)
 
     this.initDataLayers()
+    this.on('datalayer:changed', () => this.onDataLayersChanged())
 
     if (this.properties.displayCaptionOnLoad) {
       // Retrocompat
@@ -276,15 +272,6 @@ export default class Umap extends Utils.WithEvents {
 
   get isEmbed() {
     return window.self !== window.top
-  }
-
-  proxyMapEvents() {
-    this._leafletMap.on(
-      'locateactivate locatedeactivate moveend contextmenu',
-      (event) => {
-        this.fire(`map:${event.type}`, { event: event })
-      }
-    )
   }
 
   setPropertiesFromQueryString() {
@@ -427,17 +414,17 @@ export default class Umap extends Utils.WithEvents {
           {
             title: this.help.displayLabel('DRAW_MARKER', false),
             icon: 'icon-marker',
-            action: () => this._leafletMap.editTools.startMarker(),
+            action: () => this.fire('draw:marker'),
           },
           {
             title: this.help.displayLabel('DRAW_LINE', false),
             icon: 'icon-polyline',
-            action: () => this._leafletMap.editTools.startPolyline(),
+            action: () => this.fire('draw:polyline'),
           },
           {
             title: this.help.displayLabel('DRAW_POLYGON', false),
             icon: 'icon-polygon',
-            action: () => this._leafletMap.editTools.startPolygon(),
+            action: () => this.fire('draw:polygon'),
           },
         ],
       })
@@ -549,8 +536,8 @@ export default class Umap extends Utils.WithEvents {
   }
 
   getGeoContext() {
-    const bounds = this._leafletMap.getBounds()
-    const center = this._leafletMap.getCenter()
+    const bounds = this.mapProxy.bounds
+    const center = this.mapProxy.center
     const context = {
       bbox: bounds.toBBoxString(),
       north: bounds.getNorthEast().lat,
@@ -559,7 +546,7 @@ export default class Umap extends Utils.WithEvents {
       west: bounds.getSouthWest().lng,
       lat: center.lat,
       lng: center.lng,
-      zoom: this._leafletMap.getZoom(),
+      zoom: this.mapProxy.zoom,
     }
     context.left = context.west
     context.bottom = context.south
@@ -578,10 +565,8 @@ export default class Umap extends Utils.WithEvents {
         do: () => {
           if (this.importer.dialog.visible) {
             this.importer.dialog.close()
-          } else if (this.editEnabled && this._leafletMap.editTools.drawing()) {
-            this._leafletMap.editTools.onEscape()
-          } else if (this._leafletMap.measureTools.enabled()) {
-            this._leafletMap.measureTools.stopDrawing()
+          } else if (this.mapProxy.onEscape()) {
+            // Already done by mapProxy
           } else if (this.fullPanel?.isOpen()) {
             this.fullPanel?.close()
           } else if (this.editPanel?.isOpen()) {
@@ -617,15 +602,15 @@ export default class Umap extends Utils.WithEvents {
       },
       'Ctrl+m': {
         if: () => this.editEnabled,
-        do: () => this._leafletMap.editTools.startMarker(),
+        do: () => this.fire('draw:marker'),
       },
       'Ctrl+p': {
         if: () => this.editEnabled,
-        do: () => this._leafletMap.editTools.startPolygon(),
+        do: () => this.fire('draw:polygon'),
       },
       'Ctrl+l': {
         if: () => this.editEnabled,
-        do: () => this._leafletMap.editTools.startPolyline(),
+        do: () => this.fire('draw:polyline'),
       },
       'Ctrl+i': {
         if: () => this.editEnabled,
@@ -687,7 +672,7 @@ export default class Umap extends Utils.WithEvents {
     delete spec._storage
     delete spec._umap_options
 
-    const datalayer = new DataLayer(this, this._leafletMap, spec)
+    const datalayer = new DataLayer(this, spec)
     if (spec.features) {
       datalayer.fromUmapGeoJSON(spec)
     }
@@ -720,7 +705,7 @@ export default class Umap extends Utils.WithEvents {
 
   reindexDataLayers() {
     this.layers.tree.map((datalayer) => datalayer.reindex())
-    this.onDataLayersChanged()
+    this.fire('datalayer:changed')
   }
 
   onceDatalayersLoaded(callback) {
@@ -1107,7 +1092,7 @@ export default class Umap extends Utils.WithEvents {
     `)
     limitBounds.appendChild(boundsButtons)
     current.addEventListener('click', () => {
-      const bounds = this._leafletMap.getBounds()
+      const bounds = this.mapProxy.bounds
       const oldLimitBounds = { ...this.properties.limitBounds }
       this.properties.limitBounds.south = bounds.getSouth().toFixed(6)
       this.properties.limitBounds.west = bounds.getWest().toFixed(6)
@@ -1119,7 +1104,7 @@ export default class Umap extends Utils.WithEvents {
         this.properties.limitBounds,
         oldLimitBounds
       )
-      this._leafletMap.handleLimitBounds()
+      this.mapProxy.handleLimitBounds()
     })
     empty.addEventListener('click', () => {
       const oldLimitBounds = { ...this.properties.limitBounds }
@@ -1128,7 +1113,7 @@ export default class Umap extends Utils.WithEvents {
       this.properties.limitBounds.north = null
       this.properties.limitBounds.east = null
       boundsBuilder.fetchAll()
-      this._leafletMap.handleLimitBounds()
+      this.mapProxy.handleLimitBounds()
       this.sync.update(
         'properties.limitBounds',
         this.properties.limitBounds,
@@ -1378,9 +1363,7 @@ export default class Umap extends Utils.WithEvents {
 
   geometry() {
     /* Return a GeoJSON geometry Object */
-    const latlng = this._leafletMap.latLng(
-      this.properties.center || this._leafletMap.getCenter()
-    )
+    const latlng = this.mapProxy.latLng(this.properties.center || this.mapProxy.center)
     return {
       type: 'Point',
       coordinates: [latlng.lng, latlng.lat],
@@ -1470,10 +1453,6 @@ export default class Umap extends Utils.WithEvents {
     }
   }
 
-  onPropertiesUpdated(fields = []) {
-    this._leafletMap.pullProperties()
-  }
-
   render(fields = []) {
     // Propagate will remove the fields it has already
     // processed
@@ -1489,7 +1468,6 @@ export default class Umap extends Utils.WithEvents {
     for (const impact of impacts) {
       switch (impact) {
         case 'ui':
-          this._leafletMap.renderUI()
           this.controlManager.update()
           this.browser.redraw()
           this.topBar.redraw()
@@ -1514,10 +1492,11 @@ export default class Umap extends Utils.WithEvents {
           this.reorderDOM()
           break
         case 'background':
-          this._leafletMap.initTileLayers()
+          this.mapProxy.tilelayers.init(this.properties.tilelayers)
+          this.mapProxy.tilelayers.selectDefault()
           break
         case 'bounds':
-          this._leafletMap.handleLimitBounds()
+          this.mapProxy.handleLimitBounds()
           break
         case 'sync':
           this.initSyncEngine()
@@ -1657,7 +1636,7 @@ export default class Umap extends Utils.WithEvents {
       }
       this.sync.commitBatch()
       this.reorderDOM()
-      this.onDataLayersChanged()
+      this.fire('datalayer:changed')
     }
 
     const template = `
@@ -1732,9 +1711,8 @@ export default class Umap extends Utils.WithEvents {
   }
 
   reorderDOM() {
-    const parentPane = this._leafletMap.getPane('overlayPane')
     for (const layer of this.layers.root.reverse()) {
-      parentPane.appendChild(layer.pane)
+      this.mapProxy.overlayPane.appendChild(layer.pane)
     }
     for (const layer of this.layers.tree) {
       if (layer.layers.count()) {
@@ -1823,7 +1801,7 @@ export default class Umap extends Utils.WithEvents {
     this.setProperties(importedData.properties)
 
     if (importedData.geometry) {
-      this.properties.center = this._leafletMap.latLng(importedData.geometry)
+      this.properties.center = this.mapProxy.latLng(importedData.geometry)
     }
     for (const spec of importedData.layers) {
       // Never trust an id at this stage
@@ -1843,7 +1821,7 @@ export default class Umap extends Utils.WithEvents {
     this.fields.pull()
     this.filters.load()
     this.render(fields)
-    this._leafletMap._setDefaultCenter()
+    this.mapProxy.setDefaultCenter()
   }
 
   importUmapFile(file) {
@@ -1898,9 +1876,9 @@ export default class Umap extends Utils.WithEvents {
       .browsable()
       .visible()
       .map((d) => d.layer)
-    const bounds = this._leafletMap.getLayersBounds(layers)
+    const bounds = this.mapProxy.getLayersBounds(layers)
     if (!this.hasData() || !bounds.isValid()) return false
-    this._leafletMap.fitBounds(bounds)
+    this.fire('map:view:fit-bounds', { bounds })
   }
 
   proxyUrl(url, ttl) {
@@ -1918,7 +1896,7 @@ export default class Umap extends Utils.WithEvents {
       lat: event.latlng.lat,
       lng: event.latlng.lng,
       locale: getLocale(),
-      zoom: this._leafletMap.getZoom(),
+      zoom: this.mapProxy.zoom,
     })
     if (url) window.open(url)
   }
@@ -1927,7 +1905,7 @@ export default class Umap extends Utils.WithEvents {
     const url = this.urls.get('edit_in_osm', {
       lat: event.latlng.lat,
       lng: event.latlng.lng,
-      zoom: Math.max(this._leafletMap.getZoom(), 16),
+      zoom: Math.max(this.mapProxy.zoom, 16),
     })
     if (url) window.open(url)
   }
@@ -1952,8 +1930,8 @@ export default class Umap extends Utils.WithEvents {
   _setCenterAndZoom(manual) {
     const oldCenter = { ...this.properties.center }
     const oldZoom = this.properties.zoom
-    this.properties.center = this._leafletMap.getCenter()
-    this.properties.zoom = this._leafletMap.getZoom()
+    this.properties.center = this.mapProxy.center
+    this.properties.zoom = this.mapProxy.zoom
     this._defaultExtent = false
     if (manual) {
       this.sync.startBatch()

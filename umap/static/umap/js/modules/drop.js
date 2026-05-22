@@ -1,7 +1,6 @@
 export default class DropControl {
-  constructor(umap, leafletMap, dropzone) {
+  constructor(umap, dropzone) {
     this._umap = umap
-    this._leafletMap = leafletMap
     this.dropzone = dropzone
   }
 
@@ -29,7 +28,6 @@ export default class DropControl {
     if (event.target !== this.dropzone) return false
     event.stopPropagation()
     event.preventDefault()
-    this._leafletMap.scrollWheelZoom.disable()
     this.dropzone.classList.add('umap-dragover')
   }
 
@@ -40,7 +38,6 @@ export default class DropControl {
 
   drop(event) {
     if (event.target !== this.dropzone) return false
-    this._leafletMap.scrollWheelZoom.enable()
     this.dropzone.classList.remove('umap-dragover')
     event.stopPropagation()
     event.preventDefault()
@@ -51,7 +48,6 @@ export default class DropControl {
   }
 
   dragleave() {
-    this._leafletMap.scrollWheelZoom.enable()
     this.dropzone.classList.remove('umap-dragover')
   }
 }

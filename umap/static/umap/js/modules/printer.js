@@ -36,25 +36,25 @@ export default class Printer {
   }
 
   resetSize() {
-    const map = this.umap._leafletMap
-    for (const name of Array.from(map._container.classList)) {
+    const container = this.umap.mapProxy.container
+    for (const name of Array.from(container.classList)) {
       if (name.startsWith('print-')) {
-        map._container.classList.remove(name)
+        container.classList.remove(name)
       }
     }
-    map._container.removeAttribute('style')
-    map.invalidateSize()
+    container.removeAttribute('style')
+    this.umap.fire('map:resize')
   }
 
   resizeMap() {
     const form = this.dialog.collectFormData()
     this.resetSize()
-    const map = this.umap._leafletMap
+    const container = this.umap.mapProxy.container
     if (form.format && form.mode) {
-      map._container.classList.add(`print-${form.format}`)
-      map._container.classList.add(`print-${form.mode}`)
-      map._container.style.width = `${form.scale}%`
-      map.invalidateSize()
+      container.classList.add(`print-${form.format}`)
+      container.classList.add(`print-${form.mode}`)
+      container.style.width = `${form.scale}%`
+      this.umap.fire('map:resize')
     }
   }
 

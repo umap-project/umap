@@ -7,9 +7,8 @@ import * as Utils from './utils.js'
 import { SCHEMA } from './schema.js'
 
 export default class Browser {
-  constructor(umap, leafletMap) {
+  constructor(umap) {
     this._umap = umap
-    this._leafletMap = leafletMap
     this._umap.on('map:moveend', () => this.onMoveEnd())
     this.options = {
       filter: '',
@@ -88,7 +87,7 @@ export default class Browser {
 
   updateFeaturesList(datalayer) {
     // Compute once, but use it for each feature later.
-    this.bounds = this._leafletMap.getBounds()
+    this.bounds = this._umap.mapProxy.bounds
     const details = document.querySelector(`details[data-id="${datalayer.id}"]`)
     // Browser is not open
     if (!details) return

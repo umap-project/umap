@@ -493,6 +493,7 @@ export const SCHEMA = {
     type: Boolean,
     impacts: ['ui'],
     label: translate('Allow scroll wheel zoom?'),
+    default: true,
   },
   searchControl: {
     type: Boolean,

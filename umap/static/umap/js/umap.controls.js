@@ -1,7 +1,8 @@
 U.Editable = L.Editable.extend({
   initialize: function (umap, options) {
     this._umap = umap
-    L.Editable.prototype.initialize.call(this, umap._leafletMap, options)
+    // TODO remove direct call to Leaflet map
+    L.Editable.prototype.initialize.call(this, umap.mapProxy.map, options)
     this.on('editable:drawing:click editable:drawing:move', this.drawingTooltip)
     // Layer for items added by users
     this.on('editable:drawing:cancel', (event) => {
