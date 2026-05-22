@@ -2,15 +2,15 @@ import { translate } from '../i18n.js'
 import * as DOMUtils from '../domutils.js'
 
 export class Panel {
-  constructor(umap, leafletMap) {
+  constructor(umap) {
     this.parent = umap.uiContainer
     this._umap = umap
-    this._leafletMap = leafletMap
     this.container = document.createElement('div')
     this.parent.appendChild(this.container)
     // This will be set once according to the panel configured at load
     // or by using panels as popups
     this.mode = null
+    // TODO mv as class properties
     this.className = 'left'
     // disableClickPropagation already stops contextmenu (used by our custom context menu).
     DOMUtils.disableClickPropagation(this.container)
@@ -113,7 +113,6 @@ export class Panel {
   onClose() {
     if (this.container.classList.contains('on')) {
       this.container.classList.remove('on')
-      this._leafletMap.invalidateSize({ pan: false })
     }
   }
 
@@ -127,8 +126,8 @@ export class Panel {
 }
 
 export class EditPanel extends Panel {
-  constructor(umap, leafletMap) {
-    super(umap, leafletMap)
+  constructor(umap) {
+    super(umap)
     this.className = 'right dark'
   }
 
@@ -139,8 +138,8 @@ export class EditPanel extends Panel {
 }
 
 export class FullPanel extends Panel {
-  constructor(umap, leafletMap) {
-    super(umap, leafletMap)
+  constructor(umap) {
+    super(umap)
     this.className = 'full dark'
     this.mode = 'expanded'
   }

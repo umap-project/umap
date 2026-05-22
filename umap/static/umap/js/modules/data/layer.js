@@ -36,13 +36,12 @@ const LAYER_MAP = LAYER_TYPES.reduce((acc, klass) => {
 }, {})
 
 export class DataLayer {
-  constructor(umap, leafletMap, spec = {}) {
+  constructor(umap, spec = {}) {
     this._umap = umap
     this.sync = umap.syncEngine.proxy(this)
     this.features = new FeatureManager()
     this.layers = new LayerManager()
 
-    this._leafletMap = leafletMap
     this.defaultProperties = {
       displayOnLoad: true,
       inCaption: true,
@@ -64,8 +63,7 @@ export class DataLayer {
     this.setProperties(spec.properties)
     this.properties.name = this.properties.name || this.defaultName()
 
-    this.rootPane = this._leafletMap.getPane('overlayPane')
-    this.parentPane = this.rootPane
+    this.parentPane = this._umap.mapProxy.overlayPane
     if (spec.parent) {
       this.parentId = spec.parent
       if (!this.parent) {
@@ -75,7 +73,7 @@ export class DataLayer {
     } else {
       this._umap.layers.add(this)
     }
-    this.pane = this._leafletMap.createPane(`pane-${this.id}`, this.parentPane)
+    this.pane = this._umap.mapProxy.createOverlayPane(this.id, this.parentPane)
     // FIXME: should be on layer
     this.renderer = new SVG({ pane: this.pane })
     this.pane.dataset.id = this.id
@@ -98,11 +96,15 @@ export class DataLayer {
     this.fields = new Fields(this, this._umap.dialog)
     this.filters = new Filters(this, this._umap)
     this.rules = new Rules(umap, this)
-    this._umap.onDataLayersChanged()
+    this._umap.fire('datalayer:changed')
 
     if (!this.createdOnServer) {
       if (this.showAtLoad()) this.show()
     }
+    this.eventsController = new AbortController()
+    this._umap.on('map:zoomend', () => this.onZoomEnd(), {
+      signal: this.eventsController.signal,
+    })
 
     // Only layers that are displayed on load must be hidden/shown
     // Automatically, others will be shown manually, and thus will
@@ -173,7 +175,7 @@ export class DataLayer {
     for (const impact of impacts) {
       switch (impact) {
         case 'ui':
-          this._umap.onDataLayersChanged()
+          this._umap.fire('datalayer:changed')
           break
         case 'data':
           if (fields.includes('properties.type')) {
@@ -272,7 +274,7 @@ export class DataLayer {
     const visible = this.isVisible()
     if (this.layer) this.layer.clearLayers()
     // delete this.layer?
-    if (visible) this._leafletMap.removeLayer(this.layer)
+    if (visible) this._umap.mapProxy.removeLayer(this.layer)
     const Class = LAYER_MAP[this.properties.type] || DefaultLayer
     this.layer = new Class(this)
     // Rendering layer changed, so let's force reset the feature rendering too.
@@ -301,7 +303,7 @@ export class DataLayer {
 
   dataChanged() {
     if (!this.isLoaded() || this._batch) return
-    this._umap.onDataLayersChanged()
+    this._umap.fire('datalayer:changed')
     this.layer.dataChanged()
   }
 
@@ -328,8 +330,13 @@ export class DataLayer {
   showAtZoom() {
     const from = Number.parseInt(this.properties.fromZoom, 10)
     const to = Number.parseInt(this.properties.toZoom, 10)
-    const zoom = this._leafletMap.getZoom()
+    const zoom = this._umap.mapProxy.zoom
     return !((!Number.isNaN(from) && zoom < from) || (!Number.isNaN(to) && zoom > to))
+  }
+
+  onZoomEnd() {
+    if (this.isDeleted) return
+    this.layer?.onZoomEnd()
   }
 
   hasDynamicData() {
@@ -716,9 +723,7 @@ export class DataLayer {
     this.hide()
     this.parentPane.removeChild(this.pane)
     if (root) this.dataChanged()
-    this.layer.onDelete(this._leafletMap)
     this.propagateDelete()
-    this._leaflet_events_bk = this._leaflet_events
   }
 
   empty() {
@@ -883,7 +888,7 @@ export class DataLayer {
     }
     const builder = new MutatingForm(this, metadataFields)
     builder.on('set', ({ detail }) => {
-      this._umap.onDataLayersChanged()
+      this._umap.fire('datalayer:changed')
       if (detail.helper.field === 'properties.type') {
         this.edit().then((panel) => panel.scrollTo('details#layer-properties'))
       }
@@ -1219,13 +1224,13 @@ export class DataLayer {
   }
 
   async show() {
-    this._leafletMap.addLayer(this.layer)
+    this._umap.mapProxy.addLayer(this.layer)
     if (!this.isLoaded()) await this.fetchData()
     this.propagateVisibility({ force: true })
   }
 
   hide() {
-    this._leafletMap.removeLayer(this.layer)
+    this._umap.mapProxy.removeLayer(this.layer)
     this.propagateVisibility({ force: false })
   }
 
@@ -1264,7 +1269,7 @@ export class DataLayer {
     if (this.layers.count()) {
       return this.layers.tree.some((child) => child.isVisible())
     }
-    return Boolean(this.layer && this._leafletMap.hasLayer(this.layer))
+    return Boolean(this.layer && this._umap.mapProxy.hasLayer(this.layer))
   }
 
   hasVisibleChild() {
@@ -1291,8 +1296,10 @@ export class DataLayer {
 
   zoomToBounds(bounds) {
     if (bounds?.isValid()) {
-      const options = { maxZoom: this.getProperty('zoomTo') }
-      this._leafletMap.fitBounds(bounds, options)
+      this._umap.fire('map:view:fit-bounds', {
+        bounds,
+        zoom: this.getProperty('zoomTo'),
+      })
     }
   }
 
@@ -1439,7 +1446,7 @@ export class DataLayer {
 
       this.setReferenceVersion({ response, sync: true })
 
-      this._umap.onDataLayersChanged()
+      this._umap.fire('datalayer:changed')
       this.redraw() // Needed for reordering features
       return true
     }
@@ -1456,6 +1463,7 @@ export class DataLayer {
   commitDelete() {
     const parent = this.parent || this._umap
     parent.layers.delete(this.id)
+    this.eventsController.abort()
   }
 
   get name() {
@@ -1478,7 +1486,7 @@ export class DataLayer {
 
   tableEdit() {
     if (!this.isVisible()) return
-    const editor = new TableEditor(this._umap, this, this._leafletMap)
+    const editor = new TableEditor(this._umap, this)
     editor.open()
   }
 

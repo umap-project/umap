@@ -31,9 +31,9 @@ const FeatureMixin = {
   onRemove: function (map) {
     this.removeInteractions()
     this.parentClass.prototype.onRemove.call(this, map)
-    if (map._umap.editedFeature === this.feature) {
+    if (this.feature._umap.editedFeature === this.feature) {
       this.feature.endEdit()
-      map._umap.editPanel.close()
+      this.feature._umap.editPanel.close()
     }
   },
 
@@ -47,23 +47,18 @@ const FeatureMixin = {
     this.on('contextmenu editable:vertex:contextmenu', this.onContextMenu)
     this.on('click', this.onClick)
     this.on('editable:edited', this.onCommit)
-    this.on('mouseover', this.onMouseOver)
+    // this.on('mouseover', this.onMouseOver)
   },
 
   removeInteractions: function () {
     this.off('contextmenu editable:vertex:contextmenu', this.onContextMenu)
     this.off('click', this.onClick)
     this.off('editable:edited', this.onCommit)
-    this.off('mouseover', this.onMouseOver)
+    // this.off('mouseover', this.onMouseOver)
   },
 
   onMouseOver: function () {
-    if (this._map._umap.editEnabled && !this._map._umap.editedFeature) {
-      this._map._umap.tooltip.open({
-        content: translate('Right-click to edit'),
-        anchor: this,
-      })
-    }
+    this._map.fire('feature:mouseover')
   },
 
   onClick: function (event) {
@@ -104,8 +99,8 @@ const FeatureMixin = {
     DomEvent.stop(event)
     const items = this.feature
       .getContextMenu(event)
-      .concat(this._map._umap.getSharedContextMenu(event))
-    this._map._umap.contextmenu.open(event.originalEvent, items)
+      .concat(this.feature._umap.getSharedContextMenu(event))
+    this.feature._umap.contextmenu.open(event.originalEvent, items)
   },
 
   onCommit: function () {
@@ -138,6 +133,7 @@ export const LeafletIcon = DivIcon.extend({
 
 const PointMixin = {
   isOnScreen: function (bounds) {
+    bounds = bounds || this._map.getBounds()
     return bounds.contains(this.getCenter())
   },
 
@@ -174,7 +170,7 @@ const PointMixin = {
 
   _enableDragging: function () {
     // TODO: start dragging after 1 second on mouse down
-    if (this._map._umap.editEnabled) {
+    if (this.feature._umap.editEnabled) {
       if (!this.editEnabled()) this.enableEdit()
       // Enabling dragging on the marker override the Draggable._OnDown
       // event, which, as it stopPropagation, refrain the call of
@@ -186,7 +182,7 @@ const PointMixin = {
   },
 
   _disableDragging: function () {
-    if (this._map._umap.editEnabled) {
+    if (this.feature._umap.editEnabled) {
       if (this.editor?.drawing) return // when creating a new marker, the mouse can trigger the mouseover/mouseout event
       // do not listen to them
       this.disableEdit()
@@ -301,7 +297,7 @@ const PathMixin = {
   maxVertex: 100,
   onMouseOver: function () {
     if (this._map.measureTools?.enabled()) {
-      this._map._umap.tooltip.open({ content: this.getMeasure(), anchor: this })
+      this.feature._umap.tooltip.open({ content: this.getMeasure(), anchor: this })
     } else {
       FeatureMixin.onMouseOver.call(this)
     }
@@ -317,7 +313,7 @@ const PathMixin = {
   makeGeometryEditable: function () {
     // Feature has been removed since then?
     if (!this._map) return
-    if (this._map._umap.editedFeature !== this.feature) {
+    if (this.feature._umap.editedFeature !== this.feature) {
       this.disableEdit()
       return
     }
@@ -325,7 +321,7 @@ const PathMixin = {
     if (this.shouldAllowGeometryEdit()) {
       this.enableEdit()
     } else {
-      this._map._umap.tooltip.open({
+      this.feature._umap.tooltip.open({
         content: translate('Please zoom in to edit the geometry'),
       })
       this.disableEdit()
@@ -445,6 +441,7 @@ const PathMixin = {
   ],
 
   isOnScreen: function (bounds) {
+    bounds = bounds || this._map.getBounds()
     return bounds.overlaps(this.getBounds())
   },
 

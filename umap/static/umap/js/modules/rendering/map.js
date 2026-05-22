@@ -1,242 +1,196 @@
 // Goes here all code related to Leaflet, DOM and user interactions.
 import {
-  Map as BaseMap,
   Browser,
   LatLng,
   LatLngBounds,
+  Map as LeafletMap,
+  Marker,
   latLng,
   setOptions,
   stamp,
   TileLayer,
-  Marker,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
 import { LeafletIcon } from './ui.js'
 
-// Those options are not saved on the server, so they can live here
-// instead of in umap.properties
-BaseMap.mergeOptions({
-  demoTileInfos: { s: 'a', z: 9, x: 265, y: 181, '-y': 181, r: '' },
-  attributionControl: false,
-})
-
-const ManageTilelayerMixin = {
-  initTileLayers: function () {
-    this.pullProperties()
-    this.tilelayers = []
-    for (const props of this.options.tilelayers) {
-      const layer = this.createTileLayer(props)
-      this.tilelayers.push(layer)
-      if (
-        this.options.tilelayer &&
-        this.options.tilelayer.url_template === props.url_template
-      ) {
-        // Keep control over the displayed attribution for non custom tilelayers
-        this.options.tilelayer.attribution = props.attribution
-      }
-    }
-    if (this.options.tilelayer?.url_template && this.options.tilelayer.attribution) {
-      this.customTilelayer = this.createTileLayer(this.options.tilelayer)
-      this.selectTileLayer(this.customTilelayer)
-    } else {
-      this.selectTileLayer(this.tilelayers[0])
-    }
-  },
-
-  createTileLayer: (tilelayer) => new TileLayer(tilelayer.url_template, tilelayer),
-
-  selectTileLayer: function (tilelayer) {
-    if (tilelayer === this.selectedTilelayer) {
-      return
-    }
-    const onLoading = () => {
-      this._umap.loader.start(stamp(tilelayer))
-    }
-    const onLoad = () => {
-      this._umap.loader.stop(stamp(tilelayer))
-    }
-    try {
-      tilelayer.on('loading', onLoading)
-      tilelayer.on('load', onLoad)
-      tilelayer.on('remove', () => {
-        tilelayer.off('loading', onLoading)
-        tilelayer.off('load', onLoad)
-      })
-      this.addLayer(tilelayer)
-      this.fire('baselayerchange', { layer: tilelayer })
-      if (this.selectedTilelayer) {
-        this.removeLayer(this.selectedTilelayer)
-      }
-      this.selectedTilelayer = tilelayer
-      if (
-        !Number.isNaN(this.selectedTilelayer.options.minZoom) &&
-        this.getZoom() < this.selectedTilelayer.options.minZoom
-      ) {
-        this.setZoom(this.selectedTilelayer.options.minZoom)
-      }
-      if (
-        !Number.isNaN(this.selectedTilelayer.options.maxZoom) &&
-        this.getZoom() > this.selectedTilelayer.options.maxZoom
-      ) {
-        this.setZoom(this.selectedTilelayer.options.maxZoom)
-      }
-    } catch (e) {
-      console.error(e)
-      this.removeLayer(tilelayer)
-      Alert.error(`${translate('Error in the tilelayer URL')}: ${tilelayer._url}`)
-      // Users can put tilelayer URLs by hand, and if they add wrong {variable},
-      // Leaflet throw an error, and then the map is no more editable
-    }
-    this.setOverlay()
-  },
-
-  eachTileLayer: function (callback, context) {
-    const urls = []
-    const callOne = (layer) => {
-      // Prevent adding a duplicate background,
-      // while adding selected/custom on top of the list
-      const url = layer.options.url_template
-      if (urls.indexOf(url) !== -1) return
-      callback.call(context, layer)
-      urls.push(url)
-    }
-    if (this.selectedTilelayer) callOne(this.selectedTilelayer)
-    if (this.customTilelayer) callOne(this.customTilelayer)
-    this.tilelayers.forEach(callOne)
-  },
-
-  setOverlay: function () {
-    if (!this.options.overlay || !this.options.overlay.url_template) return
-    const overlay = this.createTileLayer(this.options.overlay)
-    try {
-      this.addLayer(overlay)
-      if (this.overlay) this.removeLayer(this.overlay)
-      this.overlay = overlay
-    } catch (e) {
-      this.removeLayer(overlay)
-      console.error(e)
-      Alert.error(`${translate('Error in the overlay URL')}: ${overlay._url}`)
-    }
-  },
-}
-
-export const LeafletMap = BaseMap.extend({
-  includes: [ManageTilelayerMixin],
-
-  // The initialize and the setup method might seem similar, but they
-  // serve two different purposes:
-  // initialize is for Leaflet internal, when we do "new LeafletMap",
-  // while setup is the public API for the LeafletMap to actually
-  // render to the DOM.
-  initialize: function (umap, element) {
-    this._umap = umap
-    const options = this._umap.properties
-
-    // Our control property name clashes with the default one, so let's force it to false
-    // miniMap plugin does not add itself to the map, out of our control.
-    BaseMap.prototype.initialize.call(this, element, {
-      ...options,
+export class LeafletProxy {
+  constructor(umap, element) {
+    this.umap = umap
+    this.points = {}
+    this.map = new LeafletMap(element, {
       miniMapControl: false,
+      attributionControl: false,
+      zoomControl: false,
     })
+    this.tilelayers = new TileLayerManager(this)
+    this.proxyIncomingEvents()
+    this.proxyOutgoingEvents()
+  }
 
-    document.body.addEventListener('mapview:update', (event) => {
+  proxyIncomingEvents() {
+    this.map.on(
+      'locateactivate locatedeactivate moveend zoomend contextmenu popupclose zoomlevelschange',
+      (event) => {
+        this.umap.fire(`map:${event.type}`, { event: event })
+      }
+    )
+    this.map.on('feature:mouseover', () => {
+      if (this.umap.editEnabled && !this.umap.editedFeature) {
+        this.umap.tooltip.open({
+          content: translate('Right-click to edit'),
+        })
+      }
+    })
+  }
+
+  proxyOutgoingEvents() {
+    // For hash changes
+    this.umap.on('map:view:update', (event) => {
       let { zoom, latlng } = event.detail
       if (!Utils.LatLngIsValid(latlng)) return
-      zoom = Math.min(zoom, this.getMaxZoom())
-      zoom = Math.max(zoom, this.getMinZoom())
-      this.setView(latlng, zoom)
+      zoom = Math.min(zoom, this.map.getMaxZoom())
+      zoom = Math.max(zoom, this.map.getMinZoom())
+      this.map.setView(latlng, zoom)
     })
-  },
+    this.umap.on('map:show:point', (event) => {
+      this.showPoint({ ...event.detail })
+    })
+    this.umap.on('map:hide:point', (event) => {
+      this.hidePoint(event.detail.id)
+    })
+    this.umap.on('map:view:fit-bounds', (event) => {
+      const { bounds, zoom, easing } = event.detail
+      if (easing) {
+        this.map.flyToBounds(bounds, { maxZoom: zoom ?? this.zoom })
+      } else {
+        this.map.fitBounds(bounds, zoom ?? this.zoom)
+      }
+    })
+    this.umap.on('map:view:set', (event) => {
+      const { easing, center, zoom } = event.detail
+      if (easing) {
+        this.map.flyTo(center, { maxZoom: zoom ?? this.zoom })
+      } else {
+        this.map.setView(center, zoom ?? this.zoom)
+      }
+    })
+    this.umap.on('draw:marker', () => this.map.editTools.startMarker())
+    this.umap.on('draw:polyline', () => this.map.editTools.startPolyline())
+    this.umap.on('draw:multiline', () => this.umap.editedFeature.ui.editor.newShape())
+    this.umap.on('draw:polygon', () => this.map.editTools.startPolygon())
+    this.umap.on('draw:multipolygon', () =>
+      this.umap.editedFeature.ui.editor.newShape()
+    )
+    this.umap.on('draw:route', () => this.map.editTools.startRoute())
+    this.umap.on('map:resize', () => this.map.invalidateSize())
+  }
 
-  setup: function () {
-    if (!this.measureTools) {
-      new L.Measurable(this)
+  get container() {
+    return this.map._container
+  }
+
+  render() {
+    if (!this.map.measureTools) {
+      new L.Measurable(this.map)
     }
     this.initCenter()
 
     // Wait for URL to have been parsed before modifying the hash
     const updateHash = () => {
-      const center = this.getCenter()
-      document.body.dispatchEvent(
-        new CustomEvent('mapview:updated', {
-          detail: {
-            zoom: this.getZoom(),
-            latlng: [center.lat.toFixed(6), center.lng.toFixed(6)],
-          },
-        })
-      )
+      const center = this.map.getCenter()
+      this.umap.fire('map:view:updated', {
+        zoom: this.map.getZoom(),
+        latlng: [center.lat.toFixed(6), center.lng.toFixed(6)],
+      })
     }
-    this.on('moveend', updateHash)
+    this.map.on('moveend', updateHash)
     updateHash()
-    this.initTileLayers()
-    this.renderUI()
-  },
+    this.tilelayers.init(this.umap.properties.tilelayers)
+    this.tilelayers.selectDefault()
+    this.updateUI()
+  }
 
-  pullProperties() {
-    setOptions(this, this._umap.properties)
-  },
+  setDefaultCenter() {
+    this.umap.properties.center = this.latLng(this.umap.properties.center)
+    this.map.setView(this.umap.properties.center, this.umap.properties.zoom)
+  }
 
-  renderUI: function () {
-    this.pullProperties()
-    if (this.options.scrollWheelZoom) {
-      this.scrollWheelZoom.enable()
-      this.dragging.enable()
+  async initCenter() {
+    this.setDefaultCenter()
+
+    if (this.umap.properties.hash && window.location.hash) {
+      // FIXME An invalid hash will cause the load to fail
+      this.umap.hash.parse()
+    } else if (
+      this.umap.properties.defaultView === 'locate' &&
+      !this.umap.properties.noControl
+    ) {
+      await this.umap.controlManager.controls.locate.start()
+    } else if (this.umap.properties.defaultView === 'data') {
+      this.umap.onceDataLoaded(() => this.umap.fitDataBounds())
+    } else if (this.umap.properties.defaultView === 'latest') {
+      this.umap.onceDataLoaded(() => {
+        if (!this.umap.hasData()) return
+        // TODO: uMap.latestFeature ?
+        const datalayer = this.umap.layers.tree.visible().first()
+        if (datalayer) {
+          const feature = datalayer.features.last()
+          if (feature) {
+            feature.zoomTo({
+              callback: this.umap.properties.noControl ? null : feature.view,
+            })
+            return
+          }
+        }
+      })
+    }
+  }
+
+  updateUI() {
+    if (this.umap.getProperty('scrollWheelZoom')) {
+      this.map.scrollWheelZoom.enable()
+      this.map.dragging.enable()
     } else {
-      this.scrollWheelZoom.disable()
+      this.map.scrollWheelZoom.disable()
       // In mobile, do not let the user move the map
       // when scrolling the main page and touching the
       // map in an iframe. May be a bit dumb, but let's
       // try like this for now.
-      if (Browser.mobile) this.dragging.disable()
+      if (Browser.mobile) this.map.dragging.disable()
     }
     this.handleLimitBounds()
-  },
+  }
 
-  latLng: (a, b, c) => {
+  latLng(a, b, c) {
     // manage geojson case and call original method
     if (!(a instanceof LatLng) && a.coordinates) {
       // Guess it's a geojson
       a = [a.coordinates[1], a.coordinates[0]]
     }
     return latLng(a, b, c)
-  },
+  }
 
-  _setDefaultCenter: function () {
-    this.options.center = this.latLng(this.options.center)
-    this.setView(this.options.center, this.options.zoom)
-  },
-
-  initCenter: async function () {
-    this._setDefaultCenter()
-    if (this.options.hash && window.location.hash) {
-      // FIXME An invalid hash will cause the load to fail
-      this._umap.hash.parse()
-    } else if (this.options.defaultView === 'locate' && !this.options.noControl) {
-      await this._umap.controlManager.controls.locate.start()
-    } else if (this.options.defaultView === 'data') {
-      this._umap.onceDataLoaded(() => this._umap.fitDataBounds())
-    } else if (this.options.defaultView === 'latest') {
-      this._umap.onceDataLoaded(() => {
-        if (!this._umap.hasData()) return
-        const datalayer = this._umap.layers.tree.visible().first()
-        if (datalayer) {
-          const feature = datalayer.features.last()
-          if (feature) {
-            feature.zoomTo({ callback: this.options.noControl ? null : feature.view })
-            return
-          }
-        }
+  showPoint({ id, latlng, icon }) {
+    if (!this.points[id]) {
+      this.points[id] = new Marker(latlng, {
+        icon: new LeafletIcon(icon),
       })
     }
-  },
+    this.points[id].addTo(this.map)
+    this.points[id].setLatLng(latlng)
+  }
 
-  handleLimitBounds: function () {
-    const south = Number.parseFloat(this.options.limitBounds?.south)
-    const west = Number.parseFloat(this.options.limitBounds?.west)
-    const north = Number.parseFloat(this.options.limitBounds?.north)
-    const east = Number.parseFloat(this.options.limitBounds?.east)
+  hidePoint(id) {
+    this.points?.[id]?.remove()
+  }
+
+  handleLimitBounds() {
+    const south = Number.parseFloat(this.umap.properties.limitBounds?.south)
+    const west = Number.parseFloat(this.umap.properties.limitBounds?.west)
+    const north = Number.parseFloat(this.umap.properties.limitBounds?.north)
+    const east = Number.parseFloat(this.umap.properties.limitBounds?.east)
     if (
       !Number.isNaN(south) &&
       !Number.isNaN(west) &&
@@ -247,57 +201,188 @@ export const LeafletMap = BaseMap.extend({
         [south, west],
         [north, east],
       ])
-      this.options.minZoom = this.getBoundsZoom(bounds, false)
+      this.map.setMinZoom(this.map.getBoundsZoom(bounds, false))
       try {
-        this.setMaxBounds(bounds)
+        this.map.setMaxBounds(bounds)
       } catch (e) {
         // Unusable bounds, like -2 -2 -2 -2?
         console.error('Error limiting bounds', e)
       }
     } else {
-      this.options.minZoom = 0
-      this.setMaxBounds()
+      this.map.setMinZoom(0)
+      this.map.setMaxBounds()
     }
-  },
+  }
 
-  setMaxBounds: function (bounds) {
-    // Hack. Remove me when fix is released:
-    // https://github.com/Leaflet/Leaflet/pull/4494
-    if (!(bounds instanceof LatLngBounds)) {
-      bounds = new LatLngBounds(bounds)
-    }
-
-    if (!bounds.isValid()) {
-      this.options.maxBounds = null
-      return this.off('moveend', this._panInsideMaxBounds)
-    }
-    return BaseMap.prototype.setMaxBounds.call(this, bounds)
-  },
-
-  getLayersBounds: (layers) => {
+  getLayersBounds(layers) {
     const bounds = new LatLngBounds()
     for (const layer of layers) {
       bounds.extend(layer.getBounds())
     }
     return bounds
-  },
+  }
 
-  initEditTools: function () {
-    this.editTools = new U.Editable(this._umap)
-  },
+  get bounds() {
+    return this.map.getBounds()
+  }
 
-  showPoint({ id, latlng, icon }) {
-    this._markers = this._markers || {}
-    if (!this._markers[id]) {
-      this._markers[id] = new Marker(latlng, {
-        icon: new LeafletIcon(icon),
-      })
+  get center() {
+    // TODO return geojson, not LatLng
+    return this.map.getCenter()
+  }
+
+  set zoom(value) {
+    this.map.setZoom(value)
+  }
+
+  get zoom() {
+    return this.map.getZoom()
+  }
+
+  initEditTools() {
+    this.map.editTools = new U.Editable(this.umap)
+  }
+
+  onEscape() {
+    if (this.umap.editEnabled && this.map.editTools.drawing()) {
+      this.map.editTools.onEscape()
+      return true
     }
-    this._markers[id].addTo(this)
-    this._markers[id].setLatLng(latlng)
-  },
+    if (this.map.measureTools.enabled()) {
+      this.map.measureTools.stopDrawing()
+      return true
+    }
+  }
 
-  hidePoint(id) {
-    this._markers?.[id]?.remove()
-  },
-})
+  isDrawing() {
+    return this.map.editTools.drawing()
+  }
+
+  interruptDrawing() {
+    this.map.editTools.onEscape()
+  }
+
+  toggleFullscreen() {
+    this.map.toggleFullscreen()
+  }
+
+  getBoundsZoom(bounds, inside) {
+    return this.map.getBoundsZoom(bounds, inside)
+  }
+
+  get overlayPane() {
+    return this.map.getPane('overlayPane')
+  }
+
+  createOverlayPane(id, container) {
+    return this.map.createPane(`pane-${id}`, container || this.overlayPane)
+  }
+
+  removeLayer(layer) {
+    this.map.removeLayer(layer)
+  }
+
+  addLayer(layer) {
+    this.map.addLayer(layer)
+  }
+
+  hasLayer(layer) {
+    return this.map.hasLayer(layer)
+  }
+}
+
+class TileLayerManager {
+  constructor(proxy) {
+    this.proxy = proxy
+    this.all = new Map()
+    this.current = undefined
+    this.overlay = undefined
+  }
+
+  get umap() {
+    return this.proxy.umap
+  }
+
+  get map() {
+    return this.proxy.map
+  }
+
+  init(specs) {
+    this.all.clear()
+    for (const spec of specs) {
+      this.add(spec)
+    }
+  }
+
+  create(spec) {
+    const layer = new TileLayer(spec.url_template, spec)
+    layer.on('loading', () => this.umap.loader.start(stamp(layer)))
+    layer.on('load', () => this.umap.loader.stop(stamp(layer)))
+    return layer
+  }
+
+  add(spec) {
+    if (!spec.url_template) return
+    if (this.all.has(spec.url_template)) return this.all.get(spec.url_template)
+    const layer = this.create(spec)
+    // TODO change order so the latest is first (specifically the custom layer (i.e not in the
+    // ones from the DB) must appear first in the list)
+    this.all.set(spec.url_template, layer)
+    return layer
+  }
+
+  default() {
+    return this.all.values().next().value
+  }
+
+  // Display the configured base layer: the custom one (`properties.tilelayer`)
+  // if it is set, else the first of the registry.
+  selectDefault() {
+    const custom = this.umap.properties.tilelayer
+    if (custom?.url_template && custom.attribution) {
+      this.select(this.create(custom))
+    } else {
+      this.select(this.default())
+    }
+  }
+
+  select(tilelayer) {
+    this.map.fire('baselayerchange', { layer: tilelayer })
+    const { minZoom, maxZoom } = tilelayer.options
+    if (!Number.isNaN(minZoom) && this.proxy.zoom < minZoom) {
+      this.map.setZoom(minZoom)
+    }
+    if (!Number.isNaN(maxZoom) && this.proxy.zoom > maxZoom) {
+      this.map.setZoom(maxZoom)
+    }
+    try {
+      this.map.addLayer(tilelayer)
+      if (this.current) {
+        this.map.removeLayer(this.current)
+      }
+      this.current = tilelayer
+    } catch (e) {
+      console.error(e)
+      this.map.removeLayer(tilelayer)
+      Alert.error(`${translate('Error in the tilelayer URL')}: ${tilelayer._url}`)
+      // Users can put tilelayer URLs by hand, and if they add wrong {variable},
+      // Leaflet throw an error, and then the map is no more editable
+    }
+    this.setOverlay()
+  }
+
+  setOverlay() {
+    const spec = this.umap.properties.overlay
+    if (!spec?.url_template) return
+    const overlay = this.create(spec)
+    try {
+      this.map.addLayer(overlay)
+      if (this.overlay) this.map.removeLayer(this.overlay)
+      this.overlay = overlay
+    } catch (e) {
+      this.map.removeLayer(overlay)
+      console.error(e)
+      Alert.error(`${translate('Error in the overlay URL')}: ${overlay._url}`)
+    }
+  }
+}

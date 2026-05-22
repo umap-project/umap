@@ -279,7 +279,7 @@ export class Cluster extends Icon {
   }
 }
 
-export class RouteIcon extends Icon {
+class SimpleCircle extends Icon {
   static defaults = {
     ...Icon.defaults,
     iconSize: [16, 16],
@@ -287,7 +287,6 @@ export class RouteIcon extends Icon {
   }
 
   template = '<div>&nbsp;</div>'
-  borderColor = 'orange'
   fillColor = 'white'
   opacity = 1
 
@@ -296,6 +295,14 @@ export class RouteIcon extends Icon {
     this.root.style.borderColor = this.borderColor
     this.root.style.opacity = this.opacity
   }
+}
+
+export class RouteIcon extends SimpleCircle {
+  borderColor = 'orange'
+}
+
+export class LocationIcon extends SimpleCircle {
+  borderColor = 'blue'
 }
 
 export function isImg(src) {

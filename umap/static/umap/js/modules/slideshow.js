@@ -13,7 +13,7 @@ const TOOLBOX_TEMPLATE = `
 `
 
 export default class Slideshow extends WithTemplate {
-  constructor(umap, leafletMap, properties) {
+  constructor(umap, properties) {
     super()
     this._umap = umap
     this._id = null

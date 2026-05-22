@@ -33,10 +33,9 @@ const TEMPLATE = `
 </div>`
 
 export default class Caption extends Utils.WithTemplate {
-  constructor(umap, leafletMap) {
+  constructor(umap) {
     super()
     this._umap = umap
-    this._leafletMap = leafletMap
     this.loadTemplate(TEMPLATE)
     this.elements.star.addEventListener('click', async () => {
       if (this._umap.permissions.userIsAuth()) {
@@ -140,10 +139,13 @@ export default class Caption extends Utils.WithTemplate {
     } else {
       this.elements.licence.hidden = true
     }
-    this.elements.bgName.textContent = this._leafletMap.selectedTilelayer.options.name
-    this.elements.bgAttribution.innerHTML = Utils.escapeHTML(
-      this._leafletMap.selectedTilelayer.getAttribution()
-    )
+    const tilelayer = this._umap.mapProxy.tilelayers.current
+    if (tilelayer) {
+      this.elements.bgName.textContent = tilelayer.options.name
+      this.elements.bgAttribution.innerHTML = Utils.escapeHTML(
+        tilelayer.getAttribution()
+      )
+    }
     const urls = {
       leaflet: 'http://leafletjs.com',
       django: 'https://www.djangoproject.com',

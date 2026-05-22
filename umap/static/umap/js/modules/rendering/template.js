@@ -342,13 +342,14 @@ class Route extends TitleMixin(PopupTemplate) {
     let dist = 0
     const data = []
     const latlngs = feature.ui.getLatLngs()
-    const map = feature._umap._leafletMap
+    const map = feature._umap.mapProxy.map
     const properties = feature.extendedProperties()
     for (const latlng of latlngs) {
       if (!latlng.alt) {
         continue
       }
       if (prev) {
+        // TODO use Turf for geo computation
         dist = map.distance(latlng, prev)
       }
       data.push([latlng.alt, dist])
@@ -377,7 +378,7 @@ class Route extends TitleMixin(PopupTemplate) {
       }
     }
     chart.addEventListener('mouseout', removeIcon)
-    map.on('popupclose', removeIcon)
+    feature._umap.on('map:popupclose', removeIcon)
     chart.addEventListener('chart:over', (event) => {
       const dataset = event.detail.element.dataset
       if (dataset.ele) {
@@ -386,11 +387,7 @@ class Route extends TitleMixin(PopupTemplate) {
       icon = new Icon.RouteIcon()
       const latlng = latlngs[dataset.index]
       if (!latlng) return
-      feature._umap.fire('map:show:point', {
-        id,
-        latlng,
-        icon,
-      })
+      feature._umap.fire('map:show:point', { id, latlng, icon })
     })
     if (feature.properties.description) {
       const content = this.toHTML(feature, feature.properties.description)

@@ -14,11 +14,10 @@ const TEMPLATE = `
 `
 
 export default class TableEditor extends Utils.WithTemplate {
-  constructor(umap, datalayer, leafletMap) {
+  constructor(umap, datalayer) {
     super()
     this.datalayer = datalayer
     this._umap = umap
-    this._leafletMap = leafletMap
     this.contextmenu = new ContextMenu({ className: 'dark' })
     this.table = this.loadTemplate(TEMPLATE)
     if (!this.datalayer.isRemoteLayer()) {
@@ -90,12 +89,11 @@ export default class TableEditor extends Utils.WithTemplate {
   }
 
   renderBody() {
-    const bounds = this._leafletMap.getBounds()
     const inBbox = this._umap.browser.options.inBbox
     this.elements.body.innerHTML = ''
     this.datalayer.features.forEach((feature) => {
       if (feature.isFiltered()) return
-      if (inBbox && !feature.isOnScreen(bounds)) return
+      if (inBbox && !feature.isOnScreen()) return
       const tds = Array.from(this.datalayer.inheritedFields.values()).map(
         (field) =>
           Utils.sanitizeVars`<td tabindex="0" data-property="${field.key}">${feature.properties[field.key] ?? ''}</td>`

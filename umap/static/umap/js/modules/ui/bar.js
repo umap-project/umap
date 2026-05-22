@@ -344,11 +344,10 @@ const EDIT_BAR_TEMPLATE = `
 `
 
 export class EditBar extends WithTemplate {
-  constructor(umap, leafletMap, parent) {
+  constructor(umap, parent) {
     super()
     this.templateIimporter = new TemplateImporter(umap)
     this._umap = umap
-    this._leafletMap = leafletMap
     this.loadTemplate(EDIT_BAR_TEMPLATE)
     this.parent = parent
   }
@@ -356,26 +355,26 @@ export class EditBar extends WithTemplate {
   setup() {
     this.parent.appendChild(this.element)
     DOMUtils.disableClickPropagation(this.element)
-    this._onDrawing('marker', () => this._leafletMap.editTools.startMarker())
-    this._onDrawing('polyline', () => this._leafletMap.editTools.startPolyline())
-    this._onDrawing('multiline', () => this._umap.editedFeature.ui.editor.newShape())
-    this._onDrawing('polygon', () => this._leafletMap.editTools.startPolygon())
-    this._onDrawing('multipolygon', () => this._umap.editedFeature.ui.editor.newShape())
-    this._onDrawing('route', () => this._leafletMap.editTools.startRoute())
-    this._onClick('caption', () => this._umap.editCaption())
-    this._onClick('import', () => this._umap.importer.open())
-    this._onClick('templates', () => this.templateIimporter.open())
-    this._onClick('layers', () => this._umap.editDatalayers())
-    this._onClick('tilelayers', () =>
+    this.addDrawListener('marker')
+    this.addDrawListener('polyline')
+    this.addDrawListener('multiline')
+    this.addDrawListener('polygon')
+    this.addDrawListener('multipolygon')
+    this.addDrawListener('route')
+    this.addClickListener('caption', () => this._umap.editCaption())
+    this.addClickListener('import', () => this._umap.importer.open())
+    this.addClickListener('templates', () => this.templateIimporter.open())
+    this.addClickListener('layers', () => this._umap.editDatalayers())
+    this.addClickListener('tilelayers', () =>
       this._umap.controlManager.controls.tilelayers.openSwitcher({ edit: true })
     )
-    this._onClick('center', () => this._umap.editCenter())
-    this._onClick('permissions', () => this._umap.permissions.edit())
-    this._onClick('settings', () => this._umap.edit())
-    this._addTitle('import', 'IMPORT_PANEL')
-    this._addTitle('marker', 'DRAW_MARKER')
-    this._addTitle('polyline', 'DRAW_LINE')
-    this._addTitle('polygon', 'DRAW_POLYGON')
+    this.addClickListener('center', () => this._umap.editCenter())
+    this.addClickListener('permissions', () => this._umap.permissions.edit())
+    this.addClickListener('settings', () => this._umap.edit())
+    this.addTitle('import', 'IMPORT_PANEL')
+    this.addTitle('marker', 'DRAW_MARKER')
+    this.addTitle('polyline', 'DRAW_LINE')
+    this.addTitle('polygon', 'DRAW_POLYGON')
     this._umap.on('seteditedfeature', () => this.redraw())
   }
 
@@ -395,22 +394,22 @@ export class EditBar extends WithTemplate {
     this.elements.route.hidden = !this._umap.properties.ORSAPIKey
   }
 
-  _addTitle(ref, label) {
+  addTitle(ref, label) {
     this.elements[ref].querySelector('button').title = this._umap.help.displayLabel(
       label,
       false
     )
   }
 
-  _onDrawing(ref, realAction) {
+  addDrawListener(shape) {
     const action = (event) => {
       event.target.closest('button').classList.add('on')
-      realAction(event)
+      this._umap.fire(`draw:${shape}`)
     }
-    this._onClick(ref, action)
+    this.addClickListener(shape, action)
   }
 
-  _onClick(ref, action) {
+  addClickListener(ref, action) {
     // Put the click on the button, not on the li, but keep the data-ref on the li
     // so to hide/show it when needed.
     this.elements[ref].querySelector('button').addEventListener('click', action)

@@ -1,17 +1,17 @@
 import {
   LayerGroup,
-  latLng,
-  Icon,
-  Marker,
   Control as LeafletControl,
+  latLng,
+  TileLayer,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import {
-  PhotonSearch,
   PhotonReverse,
+  PhotonSearch,
 } from '../../../vendors/photon/leaflet.photon.esm.js'
-import * as Utils from '../utils.js'
-import { translate } from '../i18n.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
+import { translate } from '../i18n.js'
+import * as Utils from '../utils.js'
+import { LocationIcon } from '../icon.js'
 
 export class Control {
   constructor(umap) {
@@ -102,26 +102,24 @@ export class ZoomControl extends MoreableControl {
     `)
     this._zoomInButton = zoomIn
     this._zoomOutButton = zoomOut
-    zoomIn.addEventListener('click', (event) => this._onClick(event, 'zoomIn'))
-    zoomOut.addEventListener('click', (event) => this._onClick(event, 'zoomOut'))
+    zoomIn.addEventListener('click', (event) => this.zoom(event, 1))
+    zoomOut.addEventListener('click', (event) => this.zoom(event, -1))
     return container
   }
 
   onMount() {
-    const map = this._umap._leafletMap
-    map.on('zoomend zoomlevelschange', () => this._update())
-    map.whenReady(() => this._update())
+    this._umap.on('map:zoomend', () => this._update())
+    this._umap.on('map:zoomlevelschange', () => this._update())
   }
 
-  _onClick(event, direction) {
+  zoom(event, direction) {
     event.preventDefault()
     event.stopPropagation()
-    const map = this._umap._leafletMap
-    map[direction](map.options.zoomDelta * (event.shiftKey ? 3 : 1))
+    this._umap.mapProxy.zoom += direction * (event.shiftKey ? 3 : 1)
   }
 
   _update() {
-    const map = this._umap._leafletMap
+    const map = this._umap.mapProxy.map
     const zoom = map.getZoom()
     const atMax = zoom >= map.getMaxZoom()
     const atMin = zoom <= map.getMinZoom()
@@ -136,7 +134,8 @@ export class MeasureControl extends MoreableControl {
   static position = 'topleft'
 
   render() {
-    const defaultUnit = this._umap._leafletMap.measureTools.options.defaultUnit
+    // TODO remove direct call to leafletMap => turf
+    const defaultUnit = this._umap.mapProxy.map.measureTools.options.defaultUnit
     const checked = (unit) => (unit === defaultUnit ? 'checked' : '')
     const [container, { toggle }] = Utils.loadTemplateWithRefs(`
       <div class="umap-control umap-control-measure">
@@ -152,7 +151,7 @@ export class MeasureControl extends MoreableControl {
     toggle.addEventListener('click', (event) => {
       event.preventDefault()
       event.stopPropagation()
-      this._umap._leafletMap.measureTools.toggle()
+      this._umap.mapProxy.map.measureTools.toggle()
     })
     return container
   }
@@ -173,7 +172,7 @@ export class FullscreenControl extends MoreableControl {
     const toggle = (event) => {
       event.preventDefault()
       event.stopPropagation()
-      this._umap._leafletMap.toggleFullscreen()
+      this._umap.mapProxy.toggleFullscreen()
     }
     enterButton.addEventListener('click', toggle)
     exitButton.addEventListener('click', toggle)
@@ -282,7 +281,7 @@ class ScaleControl extends Control {
   static position = 'bottomleft'
   render() {
     this._scaleControl = new LeafletControl.Scale()
-    return this._scaleControl.addTo(this._umap._leafletMap)._container
+    return this._scaleControl.addTo(this._umap.mapProxy.map)._container
   }
 }
 
@@ -391,7 +390,6 @@ export class SearchControl extends SimpleButton {
   icon = 'icon-search'
 
   onMount() {
-    this.layer = new LayerGroup().addTo(this._umap._leafletMap)
     this.photonOptions = {
       limit: 10,
       noResultLabel: translate('No results'),
@@ -409,11 +407,12 @@ export class SearchControl extends SimpleButton {
         <div class="photon-autocomplete" data-ref=resultsContainer></div>
       </div>
     `)
+    // TODO remove direct call to leafletMap
     const id = Math.random()
     this.search = new Search(
-      this._umap._leafletMap,
+      this._umap,
+      this._umap.mapProxy.map,
       input,
-      this.layer,
       this.photonOptions
     )
     this._umap.panel.open({ content: container }).then(() => {
@@ -435,7 +434,7 @@ export class AttributionControl extends Control {
   render() {
     const shortCredit = this._umap.getProperty('shortCredit')
     const captionMenus = this._umap.getProperty('captionMenus')
-    const tilelayer = this._umap._leafletMap.selectedTilelayer
+    const tilelayer = this._umap.mapProxy.tilelayers.current
     const template = Utils.sanitizeVars`
       <div class="umap-control-attribution">
         <div class="attribution-container">
@@ -457,6 +456,7 @@ export class AttributionControl extends Control {
 }
 
 export class TilelayersControl extends SimpleButton {
+  static DEMO_TILES_OPTIONS = { s: 'a', z: 9, x: 265, y: 181, '-y': 181, r: '' }
   static position = 'topleft'
   className = 'umap-tilelayer-control'
   title = translate('Change map background')
@@ -473,24 +473,17 @@ export class TilelayersControl extends SimpleButton {
         <ul data-ref="tileContainer"></ul>
       </div>
     `)
-    this.buildList(tileContainer, options)
+    for (const layer of this._umap.mapProxy.tilelayers.all.values()) {
+      tileContainer.appendChild(this.addTileLayerElement(layer, options))
+    }
     const panel = options.edit ? this._umap.editPanel : this._umap.panel
     panel.open({ content: container, highlight: 'tilelayers' })
-  }
-
-  buildList(container, options) {
-    this._umap._leafletMap.eachTileLayer((tilelayer) => {
-      const browserIsHttps = window.location.protocol === 'https:'
-      const tileLayerIsHttp = tilelayer.options.url_template.indexOf('http:') === 0
-      if (browserIsHttps && tileLayerIsHttp) return
-      container.appendChild(this.addTileLayerElement(tilelayer, options))
-    })
   }
 
   addTileLayerElement(tilelayer, options) {
     const src = Utils.template(
       tilelayer.options.url_template,
-      this._umap._leafletMap.options.demoTileInfos
+      TilelayersControl.DEMO_TILES_OPTIONS
     )
     const li = Utils.loadTemplate(Utils.sanitizeVars`
       <li>
@@ -500,7 +493,7 @@ export class TilelayersControl extends SimpleButton {
     `)
     li.addEventListener('click', () => {
       const oldTileLayer = this._umap.properties.tilelayer
-      this._umap._leafletMap.selectTileLayer(tilelayer)
+      this._umap.mapProxy.tilelayers.select(tilelayer)
       if (options?.edit) {
         this._umap.properties.tilelayer = tilelayer.toJSON()
         this._umap.sync.update(
@@ -547,8 +540,9 @@ export class LocateControl extends SimpleButton {
       showPopup: false,
       onLocationError: (err) => Alert.error(err.message),
     })
-    this._locate._map = this._umap._leafletMap
-    this._locate.onAdd(this._umap._leafletMap)
+    // TODO remove direct call to leafletMap
+    this._locate._map = this._umap.mapProxy.map
+    this._locate.onAdd(this._umap.mapProxy.map)
   }
 
   async onClick() {
@@ -558,18 +552,18 @@ export class LocateControl extends SimpleButton {
 }
 
 export const Search = PhotonSearch.extend({
-  initialize: function (map, input, layer, options) {
+  initialize: function (umap, map, input, options) {
+    this._umap = umap
     this.options.placeholder = translate('Type a place name or coordinates')
     this.options.location_bias_scale = 0.5
     PhotonSearch.prototype.initialize.call(this, map, input, options)
-    this.options.url = map.options.urls.search
+    this.options.url = this._umap.properties.urls.search
     if (map.options.maxBounds) this.options.bbox = map.options.maxBounds.toBBoxString()
     this.reverse = new PhotonReverse({
       handleResults: (geojson) => {
         this.handleResultsWithReverse(geojson)
       },
     })
-    this.layer = layer
   },
 
   handleResultsWithReverse: function (geojson) {
@@ -586,7 +580,6 @@ export const Search = PhotonSearch.extend({
   },
 
   search: function () {
-    this.layer.clearLayers()
     const pattern = /^(?<lat>[-+]?\d{1,2}[.,]\d+)\s*[ ,]\s*(?<lng>[-+]?\d{1,3}[.,]\d+)$/
     if (pattern.test(this.input.value)) {
       this.hide()
@@ -621,7 +614,7 @@ export const Search = PhotonSearch.extend({
     geom.hidden = !['R', 'W'].includes(feature.properties.osm_type)
     point.addEventListener('mousedown', (event) => {
       event.stopPropagation()
-      const datalayer = this.map._umap.defaultEditDataLayer()
+      const datalayer = this._umap.defaultEditDataLayer()
       const marker = datalayer.makeFeature(feature)
       marker.edit()
     })
@@ -635,7 +628,7 @@ export const Search = PhotonSearch.extend({
       }
       const osm_type = types[feature.properties.osm_type]
       if (!osm_type || !osm_id) return
-      const importer = this.map._umap.importer
+      const importer = this._umap.importer
       importer.build()
       importer.format = 'geojson'
       importer.raw = await this.getOSMObject(osm_type, osm_id)
@@ -643,27 +636,23 @@ export const Search = PhotonSearch.extend({
     })
     el.appendChild(tools)
     this._formatResult(feature, el)
-    const path = this.map._umap.getStaticPathFor('target.svg')
-    const icon = new Icon({
-      iconUrl: path,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-    })
+    const id = 'location'
     const coords = feature.geometry.coordinates
-    const target = new Marker([coords[1], coords[0]], { icon })
+    const latlng = [coords[1], coords[0]]
+    const icon = new LocationIcon()
     el.addEventListener('mouseover', (event) => {
-      target.addTo(this.layer)
+      this._umap.fire('map:show:point', { id, latlng, icon })
     })
     el.addEventListener('mouseout', (event) => {
-      target.removeFrom(this.layer)
+      this._umap.fire('map:hide:point', id)
     })
   },
 
   async getOSMObject(osm_type, osm_id) {
     const url = `https://www.openstreetmap.org/api/0.6/${osm_type}/${osm_id}/full`
-    const response = await this.map._umap.request.get(url)
+    const response = await this._umap.request.get(url)
     if (response?.ok) {
-      const data = await this.map._umap.formatter.fromOSM(await response.text())
+      const data = await this._umap.formatter.fromOSM(await response.text())
       data.features = data.features.filter(
         (feature) => feature.properties.id === `${osm_type}/${osm_id}`
       )
@@ -687,8 +676,7 @@ export const Search = PhotonSearch.extend({
 class MiniMapControl extends Control {
   static position = 'bottomright'
   render() {
-    this._leafletMap = this._umap._leafletMap
-    const layer = this._cloneLayer(this._leafletMap.selectedTilelayer)
+    const layer = this._cloneLayer(this._umap.mapProxy.tilelayers.current)
     this._miniMap = new LeafletControl.MiniMap(layer, {
       aimingRectOptions: {
         color: this._umap.getProperty('color'),
@@ -700,11 +688,12 @@ class MiniMapControl extends Control {
         fillOpacity: this._umap.getProperty('fillOpacity'),
       },
     })
-    return this._miniMap.addTo(this._leafletMap)._container
+    // TODO remove direct call to leafletMap
+    return this._miniMap.addTo(this._umap.mapProxy.map)._container
   }
 
   _cloneLayer(layer) {
-    return new L.TileLayer(layer._url, Object.assign({}, layer.options))
+    return new TileLayer(layer._url, Object.assign({}, layer.options))
   }
 }
 
