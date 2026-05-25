@@ -36,7 +36,7 @@ dependencies = [
   "httpx==0.28.1",
   "Pillow==12.2.0",
   "psycopg==3.3.4",
-  "requests==2.33.1",
+  "requests==2.34.2",
   "rcssmin==1.2.2",
   "rjsmin==1.2.5",
   "social-auth-core==4.8.5",
