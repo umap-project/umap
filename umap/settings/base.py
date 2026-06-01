@@ -230,6 +230,7 @@ TEMPLATES = [
 # =============================================================================
 
 MIDDLEWARE = [
+    "umap.middleware.geos_thread_cleanup",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
