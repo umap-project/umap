@@ -2,6 +2,7 @@ import asyncio
 import base64
 import io
 import json
+import logging
 import re
 import tempfile
 import time
@@ -80,6 +81,8 @@ from .utils import (
 )
 
 User = get_user_model()
+
+logger = logging.getLogger(__name__)
 
 
 PRIVATE_IP = re.compile(
@@ -1215,10 +1218,18 @@ class DataLayerView(BaseDetailView):
     def render_to_response(self, context, **response_kwargs):
         response = None
         # Generate gzip if needed
-        if not self.is_s3 and self.accepts_gzip:
-            gzip_path = Path(f"{self.filepath}.gz")
-            if not gzip_path.exists():
-                gzip_file(self.filepath, gzip_path)
+        if not self.is_s3:
+            if not self.filepath.exists():
+                logger.warning(
+                    "Missing datalayer file %s for layer %s",
+                    self.filepath,
+                    self.object.pk,
+                )
+                raise Http404("Missing data for layer")
+            if self.accepts_gzip:
+                gzip_path = Path(f"{self.filepath}.gz")
+                if not gzip_path.exists():
+                    gzip_file(self.filepath, gzip_path)
 
         if getattr(settings, "UMAP_XSENDFILE_HEADER", None):
             response = HttpResponse()
