@@ -11,7 +11,8 @@ mkdir -p umap/static/umap/vendors/minimap/ && cp -r node_modules/leaflet-minimap
 mkdir -p umap/static/umap/vendors/heat/ && cp -r node_modules/leaflet.heat/dist/leaflet-heat.js umap/static/umap/vendors/heat/
 mkdir -p umap/static/umap/vendors/fullscreen/ && cp -r node_modules/leaflet-fullscreen/dist/** umap/static/umap/vendors/fullscreen/
 mkdir -p umap/static/umap/vendors/measurable/ && cp -r node_modules/leaflet-measurable/Leaflet.Measurable.* umap/static/umap/vendors/measurable/
-mkdir -p umap/static/umap/vendors/photon/ && cp -r node_modules/leaflet.photon/leaflet.photon.esm.js umap/static/umap/vendors/photon/
+# Home made ESM version, cf https://github.com/komoot/leaflet.photon/issues/28#issuecomment-3726038162
+# mkdir -p umap/static/umap/vendors/photon/ && cp -r node_modules/leaflet.photon/leaflet.photon.esm.js umap/static/umap/vendors/photon/
 mkdir -p umap/static/umap/vendors/csv2geojson/ && cp -r node_modules/csv2geojson/csv2geojson.js umap/static/umap/vendors/csv2geojson/
 mkdir -p umap/static/umap/vendors/togeojson/ && cp node_modules/@tmcw/togeojson/dist/togeojson.es.mjs umap/static/umap/vendors/togeojson/togeojson.es.js
 mkdir -p umap/static/umap/vendors/togeojson/ && cp node_modules/@tmcw/togeojson/dist/togeojson.es.mjs.map umap/static/umap/vendors/togeojson/togeojson.es.mjs.map
@@ -20,6 +21,7 @@ mkdir -p umap/static/umap/vendors/tokml/ && cp node_modules/@placemarkio/tokml/d
 mkdir -p umap/static/umap/vendors/osmtogeojson/ && cp -r node_modules/osmtogeojson/osmtogeojson.js umap/static/umap/vendors/osmtogeojson/
 mkdir -p umap/static/umap/vendors/georsstogeojson/ && cp -r node_modules/georsstogeojson/GeoRSSToGeoJSON.js umap/static/umap/vendors/georsstogeojson/
 mkdir -p umap/static/umap/vendors/locatecontrol/ && cp -r node_modules/leaflet.locatecontrol/dist/L.Control.Locate.esm.js umap/static/umap/vendors/locatecontrol/
+# We changed an import path, so do not override for now
 mkdir -p umap/static/umap/vendors/dompurify/ && cp -r node_modules/dompurify/dist/purify.es.mjs umap/static/umap/vendors/dompurify/purify.es.js
 mkdir -p umap/static/umap/vendors/dompurify/ && cp -r node_modules/dompurify/dist/purify.es.mjs.map umap/static/umap/vendors/dompurify/purify.es.mjs.map
 mkdir -p umap/static/umap/vendors/colorbrewer/ && cp node_modules/colorbrewer/index.es.js umap/static/umap/vendors/colorbrewer/colorbrewer.js
@@ -30,5 +32,9 @@ mkdir -p umap/static/umap/vendors/betterknown/ && cp node_modules/betterknown/di
 mkdir -p umap/static/umap/vendors/openrouteservice/ && cp node_modules/openrouteservice-js/dist/ors-js-client.js* umap/static/umap/vendors/openrouteservice/
 mkdir -p umap/static/umap/vendors/snapdom/ && cp node_modules/@zumer/snapdom/dist/snapdom.min.mjs umap/static/umap/vendors/snapdom/
 mkdir -p umap/static/umap/vendors/simple-elevation-chart/ && cp node_modules/simple-elevation-chart/src/elevation.* umap/static/umap/vendors/simple-elevation-chart/
+# Turf
+for mod in meta helpers flatten distance invariant clean-coords boolean-point-on-line; do
+  mkdir -p umap/static/umap/vendors/turf/$mod && cp node_modules/@turf/$mod/dist/esm/index.js* umap/static/umap/vendors/turf/$mod/
+done
 
 echo 'Done!'

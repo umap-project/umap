@@ -15,6 +15,7 @@ import * as Utils from '../utils.js'
 import * as Clipboard from '../clipboard.js'
 import * as DOMUtils from '../domutils.js'
 import * as Icon from '../icon.js'
+import * as GeoUtils from '../geoutils.js'
 
 class Feature {
   constructor(umap, datalayer, geojson = {}, id = null) {
@@ -1096,48 +1097,42 @@ export class LineString extends Path {
     }
   }
 
-  _mergeShapes(from, to) {
-    const toLeft = to[0]
-    const toRight = to[to.length - 1]
-    const fromLeft = from[0]
-    const fromRight = from[from.length - 1]
-    const l2ldistance = toLeft.distanceTo(fromLeft)
-    const l2rdistance = toLeft.distanceTo(fromRight)
-    const r2ldistance = toRight.distanceTo(fromLeft)
-    const r2rdistance = toRight.distanceTo(fromRight)
-    let toMerge
-    if (l2rdistance < Math.min(l2ldistance, r2ldistance, r2rdistance)) {
-      toMerge = [from, to]
-    } else if (r2ldistance < Math.min(l2ldistance, l2rdistance, r2rdistance)) {
-      toMerge = [to, from]
-    } else if (r2rdistance < Math.min(l2ldistance, l2rdistance, r2ldistance)) {
-      from.reverse()
-      toMerge = [to, from]
-    } else {
-      from.reverse()
-      toMerge = [from, to]
+  async _reduceMulti(previous, current) {
+    if (!previous?.length) return current
+    const previousStart = previous[0]
+    const previousEnd = previous[previous.length - 1]
+    const currentStart = current[0]
+    const currentEnd = current[current.length - 1]
+    // Compute distance between edges (start/end with all combinations)
+    const ss = await GeoUtils.distance(previousStart, currentStart)
+    const se = await GeoUtils.distance(previousStart, currentEnd)
+    const ee = await GeoUtils.distance(previousEnd, currentEnd)
+    const es = await GeoUtils.distance(previousEnd, currentStart)
+    const shortest = Math.min(ss, ee, es, se)
+    // Find the shortest distance
+    switch (shortest) {
+      case se:
+        return [...current, ...previous]
+      case es:
+        return [...previous, ...current]
+      case ee:
+        return [...previous, ...[...current].reverse()]
+      case ss:
+        return [...[...current].reverse(), ...previous]
+      default:
+        throw new Error('Cannot compute merge orientation (invalid coordinates?)')
     }
-    const a = toMerge[0]
-    const b = toMerge[1]
-    // TODO use turf for computation
-    const p1 = this._umap.mapProxy.map.latLngToContainerPoint(a[a.length - 1])
-    const p2 = this._umap.mapProxy.map.latLngToContainerPoint(b[0])
-    const tolerance = 5 // px on screen
-    if (Math.abs(p1.x - p2.x) <= tolerance && Math.abs(p1.y - p2.y) <= tolerance) {
-      a.pop()
-    }
-    return a.concat(b)
   }
 
-  mergeShapes() {
+  async mergeShapes() {
     if (!this.isMulti()) return
-    const latlngs = this.ui.getLatLngs()
-    if (!latlngs.length) return
-    while (latlngs.length > 1) {
-      latlngs.splice(0, 2, this._mergeShapes(latlngs[1], latlngs[0]))
+    const oldGeometry = Utils.CopyJSON(this._geometry)
+    let coordinates = []
+    for (const coords of this.geometry.coordinates) {
+      coordinates = await this._reduceMulti(coordinates, coords)
     }
-    this.ui.setLatLngs(latlngs[0])
-    this.pullGeometry()
+    this.geometry = await GeoUtils.cleanCoords({ type: 'LineString', coordinates })
+    this.sync.update('geometry', this.geometry, oldGeometry)
     if (!this.ui.editEnabled()) this.edit()
     this.ui.editor.reset()
   }
