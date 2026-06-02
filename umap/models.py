@@ -288,6 +288,11 @@ class Map(NamedModel):
         # let's be defensive.
         if self.settings is None:
             self.settings = {}
+        # Some maps (legacy exports re-imported?) carry
+        # `tilelayer` as a bare id instead of the expected object.
+        props = self.settings.get("properties") or {}
+        if not isinstance(props.get("tilelayer", {}), dict):
+            del props["tilelayer"]
         super().save(*args, **kwargs)
 
     def move_to_trash(self):
