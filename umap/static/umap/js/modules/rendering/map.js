@@ -172,14 +172,15 @@ export class LeafletProxy {
     return latLng(a, b, c)
   }
 
-  showPoint({ id, latlng, icon }) {
+  showPoint({ id, position, icon }) {
+    const [lng, lat] = position
     if (!this.points[id]) {
-      this.points[id] = new Marker(latlng, {
+      this.points[id] = new Marker([lat, lng], {
         icon: new LeafletIcon(icon),
       })
     }
     this.points[id].addTo(this.map)
-    this.points[id].setLatLng(latlng)
+    this.points[id].setLatLng([lat, lng])
   }
 
   hidePoint(id) {
