@@ -1,4 +1,4 @@
-import { GeoJSON, LineUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
+import { GeoJSON } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import { MutatingForm } from '../form/builder.js'
 import { translate, getLocale } from '../i18n.js'
@@ -968,7 +968,7 @@ export class LineString extends Path {
   }
 
   convertLatLngs(latlngs) {
-    let multi = !LineUtil.isFlat(latlngs)
+    let multi = !GeoUtils.isFlat(latlngs)
     let coordinates = GeoJSON.latLngsToCoords(latlngs, multi ? 1 : 0, false)
     if (coordinates.length === 1 && typeof coordinates[0][0] !== 'number') {
       coordinates = Utils.flattenCoordinates(coordinates)
@@ -1138,7 +1138,7 @@ export class LineString extends Path {
   }
 
   isMulti() {
-    return !LineUtil.isFlat(this.coordinates) && this.coordinates.length > 1
+    return !GeoUtils.isFlat(this.coordinates) && this.coordinates.length > 1
   }
 
   getVertexTools(event) {
@@ -1305,8 +1305,8 @@ export class Polygon extends Path {
   }
 
   convertLatLngs(latlngs) {
-    const holes = !LineUtil.isFlat(latlngs)
-    let multi = holes && !LineUtil.isFlat(latlngs[0])
+    const holes = !GeoUtils.isFlat(latlngs)
+    let multi = holes && !GeoUtils.isFlat(latlngs[0])
     let coordinates = GeoJSON.latLngsToCoords(latlngs, multi ? 2 : holes ? 1 : 0, true)
     if (Utils.polygonMustBeFlattened(coordinates)) {
       coordinates = coordinates[0]
@@ -1385,11 +1385,9 @@ export class Polygon extends Path {
   }
 
   isMulti() {
-    // Change me when Leaflet#3279 is merged.
-    // FIXME use TurfJS
     return (
-      !LineUtil.isFlat(this.coordinates) &&
-      !LineUtil.isFlat(this.coordinates[0]) &&
+      !GeoUtils.isFlat(this.coordinates) &&
+      !GeoUtils.isFlat(this.coordinates[0]) &&
       this.coordinates.length > 1
     )
   }
@@ -1398,7 +1396,7 @@ export class Polygon extends Path {
     const items = super.getDrawingTools(event)
     const shape = this.ui.shapeAt(event.latlng)
     // No multi and no holes.
-    if (shape && !this.isMulti() && (LineUtil.isFlat(shape) || shape.length === 1)) {
+    if (shape && !this.isMulti() && (GeoUtils.isFlat(shape) || shape.length === 1)) {
       items.push({
         title: translate('Transform to lines'),
         icon: 'icon-polyline',
