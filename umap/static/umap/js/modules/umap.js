@@ -15,8 +15,6 @@ import { Formatter } from './formatter.js'
 import Help from './help.js'
 import { getLocale, setLocale, translate } from './i18n.js'
 import * as Icon from './icon.js'
-import Importer from './importer.js'
-import { Importer as OpenRouteService } from './importers/openrouteservice.js'
 import { LayerManager } from './managers.js'
 import Orderable from './orderable.js'
 import { MapPermissions } from './permissions.js'
@@ -146,7 +144,6 @@ export default class Umap extends Utils.WithEvents {
     this.filters = new Filters(this, this)
     this.browser = new Browser(this)
     this.caption = new Caption(this)
-    this.importer = new Importer(this)
     this.share = new Share(this)
     this.rules = new Rules(this, this)
 
@@ -367,13 +364,23 @@ export default class Umap extends Utils.WithEvents {
     }
   }
 
+  async loadImporter() {
+    if (!this.importer) {
+      const Importer = (await import('./importer.js')).default
+      this.importer = new Importer(this)
+    }
+    return this.importer
+  }
+
   async loadTemplateFromQueryString() {
     const templateUrl = this.searchParams.get('templateUrl')
     if (templateUrl) {
-      this.importer.build()
-      this.importer.url = templateUrl
-      this.importer.format = 'umap'
-      this.importer.submit()
+      this.loadImporter().then((importer) => {
+        importer.build()
+        importer.url = templateUrl
+        importer.format = 'umap'
+        importer.submit()
+      })
     }
   }
 
@@ -563,7 +570,7 @@ export default class Umap extends Utils.WithEvents {
     const shortcuts = {
       Escape: {
         do: () => {
-          if (this.importer.dialog.visible) {
+          if (this.importer?.dialog.visible) {
             this.importer.dialog.close()
           } else if (this.mapProxy.onEscape()) {
             // Already done by mapProxy
@@ -614,11 +621,11 @@ export default class Umap extends Utils.WithEvents {
       },
       'Ctrl+i': {
         if: () => this.editEnabled,
-        do: () => this.importer.open(),
+        do: () => this.openImporter(),
       },
       'Ctrl+o': {
         if: () => this.editEnabled,
-        do: () => this.importer.openFiles(),
+        do: () => this.openFilesImporter(),
       },
       'Ctrl+h': {
         if: () => this.editEnabled,
@@ -639,6 +646,18 @@ export default class Umap extends Utils.WithEvents {
       }
     }
     document.addEventListener('keydown', onKeyDown)
+  }
+
+  openImporter() {
+    this.loadImporter().then((importer) => {
+      importer.open()
+    })
+  }
+
+  openFilesImporter() {
+    this.loadImporter().then((importer) => {
+      importer.openFiles()
+    })
   }
 
   async initDataLayers(datalayers) {
@@ -1918,8 +1937,9 @@ export default class Umap extends Utils.WithEvents {
 
   async askForIsochrone(event) {
     if (!this.properties.ORSAPIKey) return
-    const importer = new OpenRouteService(this)
-    importer.isochrone(event.latlng)
+    await this.loadImporter()
+    const { Importer } = await import('./importers/openrouteservice.js')
+    new Importer(this).isochrone(event.latlng)
   }
 
   setCenterAndZoom() {

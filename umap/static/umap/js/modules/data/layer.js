@@ -4,7 +4,7 @@ import {
   uMapAlert as Alert,
   uMapAlertConflict as AlertConflict,
 } from '../../components/alerts/alert.js'
-import { MutatingForm, Form } from '../form/builder.js'
+import { MutatingForm } from '../form/builder.js'
 import { translate } from '../i18n.js'
 import { DataLayerPermissions } from '../permissions.js'
 import { Default as DefaultLayer } from '../rendering/layers/base.js'

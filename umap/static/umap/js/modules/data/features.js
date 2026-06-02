@@ -2,11 +2,6 @@ import { GeoJSON, LineUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import { MutatingForm } from '../form/builder.js'
 import { translate, getLocale } from '../i18n.js'
-import {
-  PREFERENCES as ORS_PREFERENCES,
-  PROFILES as ORS_PROFILES,
-  Importer as OpenRouteService,
-} from '../importers/openrouteservice.js'
 import loadPopup from '../rendering/popup.js'
 import {
   LeafletMarker,
@@ -1032,11 +1027,11 @@ export class LineString extends Path {
     })
   }
 
-  askForRouteSettings() {
+  async askForRouteSettings() {
     const container = Utils.loadTemplate(
       `<div><h3>${translate('Route settings')}</h3></div>`
     )
-    container.appendChild(this.routeForm())
+    container.appendChild(await this.routeForm())
     return this._umap.dialog.open({ template: container })
   }
 
@@ -1193,50 +1188,58 @@ export class LineString extends Path {
     return Object.assign({ gain, loss }, super.extendedProperties())
   }
 
-  _ensureRoute() {
+  loadORS() {
+    return import('../importers/openrouteservice.js')
+  }
+
+  async _ensureRoute() {
     if (!this.properties._umap_options.route) {
       this.properties._umap_options.route = {}
     }
-    this.properties._umap_options.route.profile ??= ORS_PROFILES[0][0]
-    this.properties._umap_options.route.preference ??= ORS_PREFERENCES[0][0]
-    this.properties._umap_options.route.elevation ??= false
-    this.properties._umap_options.route.coordinates ??= []
-  }
-
-  routeForm() {
-    this._ensureRoute()
-    const metadatas = [
-      [
-        'profile',
-        {
-          handler: 'Select',
-          selectOptions: ORS_PROFILES,
-          label: translate('Profile'),
-        },
-      ],
-      [
-        'elevation',
-        {
-          handler: 'Switch',
-          label: translate('Compute elevations'),
-        },
-      ],
-      [
-        'preference',
-        {
-          handler: 'Select',
-          selectOptions: ORS_PREFERENCES,
-          label: translate('Route preference'),
-        },
-      ],
-    ]
-    const form = new MutatingForm(this.properties._umap_options.route, metadatas, {
-      umap: this._umap,
+    return this.loadORS().then(({ PROFILES, PREFERENCES }) => {
+      this.properties._umap_options.route.profile ??= PROFILES[0][0]
+      this.properties._umap_options.route.preference ??= PREFERENCES[0][0]
+      this.properties._umap_options.route.elevation ??= false
+      this.properties._umap_options.route.coordinates ??= []
+      return { PROFILES, PREFERENCES }
     })
-    return form.build()
   }
 
-  _editRoute(container) {
+  async routeForm() {
+    return this._ensureRoute().then(({ PROFILES, PREFERENCES }) => {
+      const metadatas = [
+        [
+          'profile',
+          {
+            handler: 'Select',
+            selectOptions: PROFILES,
+            label: translate('Profile'),
+          },
+        ],
+        [
+          'elevation',
+          {
+            handler: 'Switch',
+            label: translate('Compute elevations'),
+          },
+        ],
+        [
+          'preference',
+          {
+            handler: 'Select',
+            selectOptions: PREFERENCES,
+            label: translate('Route preference'),
+          },
+        ],
+      ]
+      const form = new MutatingForm(this.properties._umap_options.route, metadatas, {
+        umap: this._umap,
+      })
+      return form.build()
+    })
+  }
+
+  async _editRoute(container) {
     const template = `
         <details id="edit-route">
           <summary>${translate('Route settings')}</summary>
@@ -1245,7 +1248,7 @@ export class LineString extends Path {
       `
     const [details, { fieldset }] = Utils.loadTemplateWithRefs(template)
     container.appendChild(details)
-    fieldset.appendChild(this.routeForm())
+    fieldset.appendChild(await this.routeForm())
     const button = Utils.loadTemplate(
       `<button data-ref=button type="button">${translate('Compute route')}</button>`
     )
@@ -1255,27 +1258,33 @@ export class LineString extends Path {
 
   async computeElevation() {
     if (!this._umap.properties.ORSAPIKey) return
-    const importer = new OpenRouteService(this._umap)
-    const geometry = await importer.elevation(this.geometry)
-    if (geometry?.type) {
-      const oldGeometry = Utils.CopyJSON(this._geometry)
-      this.geometry = geometry
-      this.ui.resetTooltip()
-      this.sync.update('geometry', this.geometry, oldGeometry)
-      Alert.success(translate('Elevation has been added!'))
-    }
-  }
-
-  async computeRoute() {
-    if (!this._umap.properties.ORSAPIKey) return
-    const importer = new OpenRouteService(this._umap)
-    await importer.directions(this.properties._umap_options.route).then((geometry) => {
+    return this.loadORS().then(async ({ Importer }) => {
+      const importer = new Importer(this._umap)
+      const geometry = await importer.elevation(this.geometry)
       if (geometry?.type) {
         const oldGeometry = Utils.CopyJSON(this._geometry)
         this.geometry = geometry
         this.ui.resetTooltip()
         this.sync.update('geometry', this.geometry, oldGeometry)
+        Alert.success(translate('Elevation has been added!'))
       }
+    })
+  }
+
+  async computeRoute() {
+    if (!this._umap.properties.ORSAPIKey) return
+    return this.loadORS().then(async ({ Importer }) => {
+      const importer = new Importer(this._umap)
+      await importer
+        .directions(this.properties._umap_options.route)
+        .then((geometry) => {
+          if (geometry?.type) {
+            const oldGeometry = Utils.CopyJSON(this._geometry)
+            this.geometry = geometry
+            this.ui.resetTooltip()
+            this.sync.update('geometry', this.geometry, oldGeometry)
+          }
+        })
     })
   }
 

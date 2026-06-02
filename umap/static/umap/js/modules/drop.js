@@ -6,16 +6,16 @@ export default class DropControl {
 
   enable() {
     this.controller = new AbortController()
-    this.dropzone.addEventListener('dragenter', (e) => this.dragenter(e), {
+    this.dropzone.addEventListener('dragenter', (event) => this.dragenter(event), {
       signal: this.controller.signal,
     })
-    this.dropzone.addEventListener('dragover', (e) => this.dragover(e), {
+    this.dropzone.addEventListener('dragover', (event) => this.dragover(event), {
       signal: this.controller.signal,
     })
-    this.dropzone.addEventListener('drop', (e) => this.drop(e), {
+    this.dropzone.addEventListener('drop', (event) => this.drop(event), {
       signal: this.controller.signal,
     })
-    this.dropzone.addEventListener('dragleave', (e) => this.dragleave(e), {
+    this.dropzone.addEventListener('dragleave', (event) => this.dragleave(event), {
       signal: this.controller.signal,
     })
   }
@@ -41,10 +41,13 @@ export default class DropControl {
     this.dropzone.classList.remove('umap-dragover')
     event.stopPropagation()
     event.preventDefault()
-    const importer = this._umap.importer
-    importer.build()
-    importer.files = event.dataTransfer.files
-    importer.submit()
+    // dataTransfer must be consumed before async context
+    const files = event.dataTransfer.files
+    this._umap.loadImporter().then((importer) => {
+      importer.build()
+      importer.files = files
+      importer.submit()
+    })
   }
 
   dragleave() {
