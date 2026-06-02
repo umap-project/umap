@@ -252,7 +252,7 @@ class Map(NamedModel):
     def description(self):
         try:
             return self.settings["properties"]["description"]
-        except KeyError:
+        except (KeyError, TypeError):
             return ""
 
     @property
@@ -261,10 +261,10 @@ class Map(NamedModel):
 
     @property
     def preview_settings(self):
-        map_settings = self.settings
+        map_settings = self.settings or {}
         if "properties" not in map_settings:
             map_settings["properties"] = {}
-        layers = [l.metadata() for l in self.datalayers]
+        layers = [layer.metadata() for layer in self.datalayers]
         map_settings["properties"].update(
             {
                 "tilelayers": [TileLayer.get_default().json],
@@ -283,6 +283,18 @@ class Map(NamedModel):
         )
         return map_settings
 
+    def save(self, *args, **kwargs):
+        # settings is sometimes set to NULL in DB (through empty POST?),
+        # let's be defensive.
+        if self.settings is None:
+            self.settings = {}
+        # Some maps (legacy exports re-imported?) carry
+        # `tilelayer` as a bare id instead of the expected object.
+        props = self.settings.get("properties") or {}
+        if not isinstance(props.get("tilelayer", {}), dict):
+            del props["tilelayer"]
+        super().save(*args, **kwargs)
+
     def move_to_trash(self):
         self.share_status = Map.DELETED
         self.save()
@@ -296,9 +308,10 @@ class Map(NamedModel):
         return super().delete(**kwargs)
 
     def generate_umapjson(self, request, include_data=True):
-        umapjson = self.settings
+        umapjson = self.settings or {}
         umapjson["type"] = "umap"
-        umapjson["properties"].pop("is_template", None)
+        if "properties" in umapjson:
+            umapjson["properties"].pop("is_template", None)
         umapjson["uri"] = request.build_absolute_uri(self.get_absolute_url())
         datalayers = []
         for datalayer in self.datalayers:
