@@ -2,7 +2,6 @@ import {
   uMapAlert as Alert,
   uMapAlertCreation as AlertCreation,
 } from '../components/alerts/alert.js'
-import Caption from './caption.js'
 import * as Clipboard from './clipboard.js'
 import { Fields } from './data/fields.js'
 import { DataLayer } from './data/layer.js'
@@ -140,7 +139,6 @@ export default class Umap extends Utils.WithEvents {
     this.request = new Request()
     this.fields = new Fields(this, this.dialog)
     this.filters = new Filters(this, this)
-    this.caption = new Caption(this)
     this.rules = new Rules(this, this)
 
     if (this.hasEditMode()) {
@@ -382,6 +380,14 @@ export default class Umap extends Utils.WithEvents {
       this.browser = new Browser(this)
     }
     return this.browser
+  }
+
+  async loadCaption() {
+    if (!this.caption) {
+      const Caption = (await import('./caption.js')).default
+      this.caption = new Caption(this)
+    }
+    return this.caption
   }
 
   async loadTemplateFromQueryString() {
@@ -761,7 +767,7 @@ export default class Umap extends Utils.WithEvents {
 
   onDataLayersChanged() {
     this.browser?.update()
-    this.caption.refresh()
+    this.caption?.refresh()
     this.bottomBar.redraw()
   }
 
@@ -1761,7 +1767,9 @@ export default class Umap extends Utils.WithEvents {
   }
 
   openCaption() {
-    this.onceDatalayersLoaded(() => this.caption.open())
+    this.onceDatalayersLoaded(() =>
+      this.loadCaption().then((caption) => caption.open())
+    )
   }
 
   addAuthorLink(container) {

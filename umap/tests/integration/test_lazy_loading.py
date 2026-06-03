@@ -27,6 +27,7 @@ def test_lazy_modules_not_loaded_on_basic_view(
     lazy_modules = [
         "/static/umap/js/modules/share.js",
         "/static/umap/js/modules/browser.js",
+        "/static/umap/js/modules/caption.js",
         "/static/umap/js/modules/importer.js",
         "/static/umap/js/modules/importers/openrouteservice.js",
     ]
