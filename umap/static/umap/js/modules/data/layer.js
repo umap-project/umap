@@ -159,13 +159,13 @@ export class DataLayer {
     fields = this.propagate(fields)
     if (fields.includes('properties.fields')) {
       this.fields?.pull()
-      if (this._umap.browser.isOpen()) {
+      if (this._umap.browser?.isOpen()) {
         this._umap.browser.buildFilters()
       }
     }
     if (fields.includes('properties.filters')) {
       this.filters.load()
-      if (this._umap.browser.isOpen()) {
+      if (this._umap.browser?.isOpen()) {
         this._umap.browser.buildFilters()
       }
     }

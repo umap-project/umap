@@ -279,14 +279,4 @@ export default class Browser {
     menu.openBelow(element, items)
   }
 
-  static backButton(umap) {
-    const button = Utils.loadTemplate(
-      `<button class="icon icon-16 icon-back" title="${translate('Back to browser')}"></button>`
-    )
-    // Fixme: remove me when this is merged and released
-    // https://github.com/Leaflet/Leaflet/pull/9052
-    DOMUtils.disableClickPropagation(button)
-    button.addEventListener('click', () => umap.openBrowser())
-    return button
-  }
 }

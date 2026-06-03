@@ -2,7 +2,6 @@ import {
   uMapAlert as Alert,
   uMapAlertCreation as AlertCreation,
 } from '../components/alerts/alert.js'
-import Browser from './browser.js'
 import Caption from './caption.js'
 import * as Clipboard from './clipboard.js'
 import { Fields } from './data/fields.js'
@@ -141,7 +140,6 @@ export default class Umap extends Utils.WithEvents {
     this.request = new Request()
     this.fields = new Fields(this, this.dialog)
     this.filters = new Filters(this, this)
-    this.browser = new Browser(this)
     this.caption = new Caption(this)
     this.rules = new Rules(this, this)
 
@@ -376,6 +374,14 @@ export default class Umap extends Utils.WithEvents {
       this.share = new Share(this)
     }
     return this.share
+  }
+
+  async loadBrowser() {
+    if (!this.browser) {
+      const Browser = (await import('./browser.js')).default
+      this.browser = new Browser(this)
+    }
+    return this.browser
   }
 
   async loadTemplateFromQueryString() {
@@ -754,7 +760,7 @@ export default class Umap extends Utils.WithEvents {
   }
 
   onDataLayersChanged() {
-    if (this.browser) this.browser.update()
+    this.browser?.update()
     this.caption.refresh()
     this.bottomBar.redraw()
   }
@@ -1486,7 +1492,7 @@ export default class Umap extends Utils.WithEvents {
     fields = this.propagate(fields)
     if (fields.includes('properties.filters')) {
       this.filters.load()
-      if (this.browser.isOpen()) {
+      if (this.browser?.isOpen()) {
         this.browser.buildFilters()
       }
     }
@@ -1496,7 +1502,7 @@ export default class Umap extends Utils.WithEvents {
       switch (impact) {
         case 'ui':
           this.controlManager.update()
-          this.browser.redraw()
+          this.browser?.redraw()
           this.topBar.redraw()
           this.bottomBar.redraw()
           break
@@ -1749,7 +1755,9 @@ export default class Umap extends Utils.WithEvents {
   }
 
   openBrowser(mode) {
-    this.onceDatalayersLoaded(() => this.browser.open(mode))
+    this.onceDatalayersLoaded(() =>
+      this.loadBrowser().then((browser) => browser.open(mode))
+    )
   }
 
   openCaption() {

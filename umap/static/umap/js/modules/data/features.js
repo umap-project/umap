@@ -536,7 +536,7 @@ class Feature {
 
   isFiltered() {
     const filterKeys = this.datalayer.getFilterKeys()
-    const filter = this._umap.browser.options.filter
+    const filter = this._umap.browser?.options.filter
     if (filter && !this.matchFullTextFilter(filter, filterKeys)) return true
     for (const ancestor of this.datalayer.ancestry) {
       if (ancestor.filters.matchFeature(this)) return true
