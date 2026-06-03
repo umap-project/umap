@@ -2,9 +2,9 @@ import * as Utils from '../utils.js'
 import { DataLayerUpdater, FeatureUpdater, MapUpdater } from './updaters.js'
 
 export class UndoManager {
-  constructor(umap, updaters, syncEngine) {
+  constructor(umap, updaters, journal) {
     this._umap = umap
-    this._syncEngine = syncEngine
+    this._journal = journal
     this.updaters = updaters
     this._undoStack = []
     this._redoStack = []
@@ -90,7 +90,7 @@ export class UndoManager {
         updater.upsert(operation)
         break
     }
-    this._syncEngine._send(operation)
+    this._journal._send(operation)
   }
 
   _getUpdater(subject, metadata) {

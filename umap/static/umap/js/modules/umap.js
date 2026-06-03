@@ -21,7 +21,7 @@ import { Request, ServerRequest } from './request.js'
 import Rules from './rules.js'
 import { SCHEMA } from './schema.js'
 import Slideshow from './slideshow.js'
-import { SyncEngine } from './sync/engine.js'
+import { Journal } from './journal/engine.js'
 import { BottomBar, EditBar, TopBar } from './ui/bar.js'
 import ContextMenu from './ui/contextmenu.js'
 import { ControlManager } from './ui/controls.js'
@@ -100,8 +100,8 @@ export default class Umap extends Utils.WithEvents {
     }
 
     // Needed for permissions
-    this.syncEngine = new SyncEngine(this)
-    this.sync = this.syncEngine.proxy(this)
+    this.journalEngine = new Journal(this)
+    this.journal = this.journalEngine.proxy(this)
 
     // Needed to render controls
     this.permissions = new MapPermissions(this)
@@ -224,7 +224,7 @@ export default class Umap extends Utils.WithEvents {
   }
 
   get isDirty() {
-    return this.sync._undoManager.isDirty()
+    return this.journal._undoManager.isDirty()
   }
 
   get editedFeature() {
@@ -623,11 +623,11 @@ export default class Umap extends Utils.WithEvents {
       },
       'Ctrl+z': {
         if: () => this.editEnabled && !Utils.isWritable(event.target),
-        do: () => this.sync._undoManager.undo(),
+        do: () => this.journal._undoManager.undo(),
       },
       'Ctrl+Shift+Z': {
         if: () => this.editEnabled && !Utils.isWritable(event.target),
-        do: () => this.sync._undoManager.redo(),
+        do: () => this.journal._undoManager.redo(),
       },
       'Ctrl+m': {
         if: () => this.editEnabled,
@@ -719,7 +719,7 @@ export default class Umap extends Utils.WithEvents {
     }
 
     if (sync !== false) {
-      datalayer.sync.upsert({
+      datalayer.journal.upsert({
         id: datalayer.id,
         rank: datalayer.rank,
         parent: datalayer.parentId,
@@ -778,7 +778,7 @@ export default class Umap extends Utils.WithEvents {
   async saveAll() {
     if (!this.isDirty) return
     if (this._defaultExtent) this._setCenterAndZoom()
-    const status = await this.sync.save()
+    const status = await this.journal.save()
     if (!status) return
     // Do a blind render for now, as we are not sure what could
     // have changed, we'll be more subtil when we'll remove the
@@ -1140,7 +1140,7 @@ export default class Umap extends Utils.WithEvents {
       this.properties.limitBounds.north = bounds.getNorth().toFixed(6)
       this.properties.limitBounds.east = bounds.getEast().toFixed(6)
       boundsBuilder.fetchAll()
-      this.sync.update(
+      this.journal.update(
         'properties.limitBounds',
         this.properties.limitBounds,
         oldLimitBounds
@@ -1155,7 +1155,7 @@ export default class Umap extends Utils.WithEvents {
       this.properties.limitBounds.east = null
       boundsBuilder.fetchAll()
       this.mapProxy.handleLimitBounds()
-      this.sync.update(
+      this.journal.update(
         'properties.limitBounds',
         this.properties.limitBounds,
         oldLimitBounds
@@ -1419,7 +1419,7 @@ export default class Umap extends Utils.WithEvents {
     this.editEnabled = true
     this.drop.enable()
     this.fire('edit:enabled')
-    this.initSyncEngine()
+    this.initJournal()
     this.checkForLegacy()
     this.checkForAnonymous()
   }
@@ -1446,13 +1446,13 @@ export default class Umap extends Utils.WithEvents {
       needSaveAlert = true
       delete this._migrated
       // Force user to save
-      this.sync.update('properties.name', this.properties.name, this.properties.name)
+      this.journal.update('properties.name', this.properties.name, this.properties.name)
     }
     for (const datalayer of this.layers.tree) {
       if (!datalayer.isReadOnly() && datalayer._migrated) {
         datalayer._migrated = false
         // Force user to resave those datalayers
-        datalayer.sync.update(
+        datalayer.journal.update(
           'properties.name',
           datalayer.properties.name,
           datalayer.properties.name
@@ -1476,21 +1476,21 @@ export default class Umap extends Utils.WithEvents {
     this.fire('edit:disabled')
     this.editPanel.close()
     this.fullPanel.close()
-    this.sync.stop()
+    this.journal.stop()
   }
 
-  async initSyncEngine() {
+  async initJournal() {
     // this.properties.websocketEnabled is set by the server admin
     if (this.properties.websocketEnabled === false) return
     // this.properties.syncEnabled is set by the user in the map settings
     if (this.properties.syncEnabled !== true) {
-      this.sync.stop()
+      this.journal.stop()
     } else {
-      await this.sync.authenticate()
+      await this.journal.authenticate()
     }
   }
 
-  getSyncMetadata() {
+  getJournalMetadata() {
     return {
       subject: 'map',
     }
@@ -1542,7 +1542,7 @@ export default class Umap extends Utils.WithEvents {
           this.mapProxy.handleLimitBounds()
           break
         case 'sync':
-          this.initSyncEngine()
+          this.initJournal()
       }
     }
   }
@@ -1581,12 +1581,12 @@ export default class Umap extends Utils.WithEvents {
       },
       numberOfConnectedPeers: () => {
         Utils.eachElement('.connected-peers span', (el) => {
-          if (this.sync.websocketConnected) {
-            el.textContent = Object.keys(this.sync.getPeers()).length
+          if (this.journal.websocketConnected) {
+            el.textContent = Object.keys(this.journal.getPeers()).length
           } else {
             el.textContent = translate('Disconnected')
           }
-          el.parentElement.classList.toggle('off', !this.sync.websocketConnected)
+          el.parentElement.classList.toggle('off', !this.journal.websocketConnected)
         })
       },
       'properties.starred': () => {
@@ -1654,7 +1654,7 @@ export default class Umap extends Utils.WithEvents {
       // TODO: ask target parent to do the reorder
       const movedLayer = this.layers.tree.get(moved.dataset.id)
       const targetLayer = this.layers.tree.get(target.dataset.id)
-      this.sync.startBatch()
+      this.journal.startBatch()
       const oldParentId = movedLayer.parent?.id
       // Set the parent before adding child, so the rank will be
       // computed correctly
@@ -1662,7 +1662,7 @@ export default class Umap extends Utils.WithEvents {
       // which we want to control here (before/after/middle).
       const setParent = (parent) => {
         movedLayer._parent = parent
-        movedLayer.sync.update('parentId', parent?.id, oldParentId)
+        movedLayer.journal.update('parentId', parent?.id, oldParentId)
       }
       if (dragMode === 'above') {
         const parent = targetLayer.parent || this
@@ -1677,7 +1677,7 @@ export default class Umap extends Utils.WithEvents {
         parent.layers.add(movedLayer)
         setParent(targetLayer)
       }
-      this.sync.commitBatch()
+      this.journal.commitBatch()
       this.reorderDOM()
       this.fire('datalayer:changed')
     }
@@ -1982,10 +1982,10 @@ export default class Umap extends Utils.WithEvents {
     this.properties.zoom = this.mapProxy.zoom
     this._defaultExtent = false
     if (manual) {
-      this.sync.startBatch()
-      this.sync.update('properties.center', this.properties.center, oldCenter)
-      this.sync.update('properties.zoom', this.properties.zoom, oldZoom)
-      this.sync.commitBatch()
+      this.journal.startBatch()
+      this.journal.update('properties.center', this.properties.center, oldCenter)
+      this.journal.update('properties.zoom', this.properties.zoom, oldZoom)
+      this.journal.commitBatch()
     }
   }
 
@@ -1994,11 +1994,11 @@ export default class Umap extends Utils.WithEvents {
   }
 
   undo() {
-    this.sync._undoManager.undo()
+    this.journal._undoManager.undo()
   }
 
   redo() {
-    this.sync._undoManager.redo()
+    this.journal._undoManager.redo()
   }
 
   async screenshot() {

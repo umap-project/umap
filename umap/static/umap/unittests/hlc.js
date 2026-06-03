@@ -4,7 +4,7 @@ import sinon from 'sinon'
 import pkg from 'chai'
 const { expect } = pkg
 
-import { HybridLogicalClock } from '../js/modules/sync/hlc.js'
+import { HybridLogicalClock } from '../js/modules/journal/hlc.js'
 
 describe('HybridLogicalClock', () => {
   let clock

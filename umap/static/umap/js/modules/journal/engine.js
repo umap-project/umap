@@ -17,30 +17,32 @@ const RECONNECT_DELAY_FACTOR = 2
 const MAX_RECONNECT_DELAY = 32000
 
 /**
- * The syncEngine exposes an API to sync messages between peers over the network.
+ * The Journal records every mutation of the map state as an operation, syncs
+ * those operations with peers over a websocket transport, persists them to the
+ * backend on save, and exposes undo/redo on top.
  *
- * It's taking care of initializing the `transport` layer (sending and receiving
- * messages over websocket), the `operations` list (to store them locally),
- * and the `updaters` to apply messages to the map.
+ * It owns: the `transport` (websocket), the `operations` log, the `updaters`
+ * (that apply incoming operations), and the `undoManager`.
  *
- * You can use the `update`, `upsert` and `delete` methods.
+ * Public API: `update`, `upsert`, `delete`, `save`, plus `proxy(object)` for
+ * subject/metadata-curried access.
  *
  * @example
  *
  * ```
- * const sync = new SyncEngine(map)
+ * const journal = new Journal(map)
  *
  * // Get the authentication token from the umap server
- * sync.authenticate(tokenURI, webSocketURI, server)
+ * journal.authenticate(tokenURI, webSocketURI, server)
  *
  * // Alternatively, start the engine manually with
- * sync.start(webSocketURI, authToken)
+ * journal.start(webSocketURI, authToken)
  *
  * // Then use the `upsert`, `update` and `delete` methods.
- * let {metadata, subject} = object.getSyncMetadata()
- * sync.upsert(subject, metadata, "value")
- * sync.update(subject, metadata, "key", "value")
- * sync.delete(subject, metadata, "key")
+ * let {metadata, subject} = object.getJournalMetadata()
+ * journal.upsert(subject, metadata, "value")
+ * journal.update(subject, metadata, "key", "value")
+ * journal.delete(subject, metadata, "key")
  * ```
  *
  * A `proxy()` method is also exposed, making it easier to use without having
@@ -49,12 +51,12 @@ const MAX_RECONNECT_DELAY = 32000
  * @example
  * ```
  * // Or using the `proxy()` method:
- * let syncProxy = sync.proxy(object)
- * syncProxy.upsert("value")
- * syncProxy.update("key", "value")
+ * let proxy = journal.proxy(object)
+ * proxy.upsert("value")
+ * proxy.update("key", "value")
  * ```
  */
-export class SyncEngine {
+export class Journal {
   constructor(umap) {
     this._umap = umap
     this.updaters = {
@@ -481,15 +483,15 @@ export class SyncEngine {
   }
 
   /**
-   * Create a proxy for this sync engine.
+   * Create a subject/metadata-curried proxy bound to `object`.
    *
-   * The proxy will automatically call `object.getSyncMetadata` and inject the returned
-   * `subject` and `metadata`` to the `upsert`, `update` and `delete` calls.
+   * The proxy will automatically call `object.getJournalMetadata` and inject the returned
+   * `subject` and `metadata` to the `upsert`, `update` and `delete` calls.
    *
    * The proxy can be used as follows:
    *
    * ```
-   * const proxy = sync.proxy(object)
+   * const proxy = journal.proxy(object)
    * proxy.update('key', 'value')
    *```
    */
@@ -498,7 +500,7 @@ export class SyncEngine {
       get(target, prop) {
         // Only proxy these methods
         if (['upsert', 'update', 'delete', 'commitBatch'].includes(prop)) {
-          const { subject, metadata } = object.getSyncMetadata()
+          const { subject, metadata } = object.getJournalMetadata()
           // Reflect.get is calling the original method.
           // .bind is adding the parameters automatically
           return Reflect.get(...arguments).bind(target, subject, metadata)

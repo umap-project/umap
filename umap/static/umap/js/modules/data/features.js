@@ -20,7 +20,7 @@ import * as GeoUtils from '../geoutils.js'
 class Feature {
   constructor(umap, datalayer, geojson = {}, id = null) {
     this._umap = umap
-    this.sync = umap.syncEngine.proxy(this)
+    this.journal = umap.journalEngine.proxy(this)
     this._ui = null
 
     // DataLayer the feature belongs to
@@ -107,7 +107,7 @@ class Feature {
     const oldGeometry = Utils.CopyJSON(this._geometry)
     this.fromLatLngs(this._getLatLngs())
     if (sync) {
-      this.sync.update('geometry', this.geometry, oldGeometry)
+      this.journal.update('geometry', this.geometry, oldGeometry)
     }
   }
 
@@ -137,7 +137,7 @@ class Feature {
     return this.getDynamicOption(this.staticOptions.mainColor)
   }
 
-  getSyncMetadata() {
+  getJournalMetadata() {
     return {
       subject: 'feature',
       metadata: {
@@ -154,10 +154,10 @@ class Feature {
     // points via the websocket, as the other peers will get them themselves.
     if (this.datalayer?.isRemoteLayer()) return
     if (this._needs_upsert) {
-      this.sync.upsert(this.toGeoJSON(), null)
+      this.journal.upsert(this.toGeoJSON(), null)
       this._needs_upsert = false
     } else {
-      this.sync.update('geometry', this.geometry, this._geometry_bk)
+      this.journal.update('geometry', this.geometry, this._geometry_bk)
     }
   }
 
@@ -240,10 +240,10 @@ class Feature {
       </div>
     `)
 
-    // No need to sync the datalayer key, given we already do a delete/upsert when
+    // No need to journal the datalayer key, given we already do a delete/upsert when
     // it changes.
     let builder = new MutatingForm(this, [
-      ['datalayer', { handler: 'FeatureDataLayerSwitcher', sync: false }],
+      ['datalayer', { handler: 'FeatureDataLayerSwitcher', journal: false }],
     ])
     // removeLayer step will close the edit panel, let's reopen it
     builder.on('set', () => this.edit(event))
@@ -452,7 +452,7 @@ class Feature {
       this.datalayer.removeFeature(this)
     }
     datalayer.addFeature(this)
-    this.sync.upsert(this.toGeoJSON())
+    this.journal.upsert(this.toGeoJSON())
     this.redraw()
   }
 
@@ -516,14 +516,14 @@ class Feature {
   deleteField(name) {
     const oldValue = this.properties[name]
     delete this.properties[name]
-    this.sync.update(`properties.${name}`, undefined, oldValue)
+    this.journal.update(`properties.${name}`, undefined, oldValue)
   }
 
   renameField(from, to) {
     const oldValue = this.properties[from]
     this.properties[to] = this.properties[from]
     this.deleteField(from)
-    this.sync.update(`properties.${to}`, oldValue, undefined)
+    this.journal.update(`properties.${to}`, oldValue, undefined)
   }
 
   toGeoJSON() {
@@ -996,7 +996,7 @@ export class LineString extends Path {
     this.properties._umap_options.route.active = false
     this.redraw()
     this.edit()
-    this.sync.update('properties._umap_options.route', null, oldRoute)
+    this.journal.update('properties._umap_options.route', null, oldRoute)
   }
 
   restoreRoute() {
@@ -1004,7 +1004,7 @@ export class LineString extends Path {
     this._ensureRoute()
     delete this.properties._umap_options.route.active
     this.redraw()
-    this.sync.update(
+    this.journal.update(
       'properties._umap_options.route',
       this.properties._umap_options.route,
       oldRoute
@@ -1018,7 +1018,7 @@ export class LineString extends Path {
     this._ensureRoute()
     this.properties._umap_options.route.coordinates = Utils.CopyJSON(this.coordinates)
     this.redraw()
-    this.sync.update(
+    this.journal.update(
       'properties._umap_options.route',
       this.properties._umap_options.route,
       null
@@ -1132,7 +1132,7 @@ export class LineString extends Path {
       coordinates = await this._reduceMulti(coordinates, coords)
     }
     this.geometry = await GeoUtils.cleanCoords({ type: 'LineString', coordinates })
-    this.sync.update('geometry', this.geometry, oldGeometry)
+    this.journal.update('geometry', this.geometry, oldGeometry)
     if (!this.ui.editEnabled()) this.edit()
     this.ui.editor.reset()
   }
@@ -1260,7 +1260,7 @@ export class LineString extends Path {
         const oldGeometry = Utils.CopyJSON(this._geometry)
         this.geometry = geometry
         this.ui.resetTooltip()
-        this.sync.update('geometry', this.geometry, oldGeometry)
+        this.journal.update('geometry', this.geometry, oldGeometry)
         Alert.success(translate('Elevation has been added!'))
       }
     })
@@ -1277,7 +1277,7 @@ export class LineString extends Path {
             const oldGeometry = Utils.CopyJSON(this._geometry)
             this.geometry = geometry
             this.ui.resetTooltip()
-            this.sync.update('geometry', this.geometry, oldGeometry)
+            this.journal.update('geometry', this.geometry, oldGeometry)
           }
         })
     })

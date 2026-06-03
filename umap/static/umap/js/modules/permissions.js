@@ -11,7 +11,7 @@ export class MapPermissions {
   constructor(umap) {
     this.setProperties(umap.properties.permissions)
     this._umap = umap
-    this.sync = umap.syncEngine.proxy(this)
+    this.journal = umap.journalEngine.proxy(this)
   }
 
   setProperties(properties) {
@@ -27,7 +27,7 @@ export class MapPermissions {
     )
   }
 
-  getSyncMetadata() {
+  getJournalMetadata() {
     return {
       subject: 'mappermissions',
       metadata: {},
@@ -299,10 +299,10 @@ export class DataLayerPermissions {
     )
 
     this.datalayer = datalayer
-    this.sync = umap.syncEngine.proxy(this)
+    this.journal = umap.journalEngine.proxy(this)
   }
 
-  getSyncMetadata() {
+  getJournalMetadata() {
     return {
       subject: 'datalayerpermissions',
       metadata: { id: this.datalayer.id },

@@ -38,7 +38,7 @@ const LAYER_MAP = LAYER_TYPES.reduce((acc, klass) => {
 export class DataLayer {
   constructor(umap, spec = {}) {
     this._umap = umap
-    this.sync = umap.syncEngine.proxy(this)
+    this.journal = umap.journalEngine.proxy(this)
     this.features = new FeatureManager()
     this.layers = new LayerManager()
 
@@ -128,7 +128,7 @@ export class DataLayer {
     if (value === this.rank) return
     const oldRank = this.rank
     this._rank = value
-    this.sync.update('rank', value, oldRank, { undo: false })
+    this.journal.update('rank', value, oldRank, { undo: false })
   }
 
   get group() {
@@ -139,7 +139,7 @@ export class DataLayer {
     return this.getProperty('sortKey') || U.DEFAULT_LABEL_KEY
   }
 
-  getSyncMetadata() {
+  getJournalMetadata() {
     return {
       subject: 'datalayer',
       metadata: { id: this.id },
@@ -292,7 +292,7 @@ export class DataLayer {
     const [geojson, response, error] = await this._umap.server.get(this._dataUrl())
     if (!error) {
       this._umap.modifiedAt = response.headers.get('last-modified')
-      this.setReferenceVersion({ response, sync: false })
+      this.setReferenceVersion({ response, journal: false })
       delete geojson._umap_options
       // In case of maps pre 1.0 still around
       delete geojson._storage
@@ -465,7 +465,7 @@ export class DataLayer {
     }
     this.dataChanged()
     if (sync) {
-      feature.sync.upsert(feature.toGeoJSON(), null)
+      feature.journal.upsert(feature.toGeoJSON(), null)
     }
     return feature
   }
@@ -477,7 +477,7 @@ export class DataLayer {
     if (!this.features.has(feature.id)) return
     if (sync !== false) {
       const oldValue = feature.toGeoJSON()
-      feature.sync.delete(oldValue)
+      feature.journal.delete(oldValue)
     }
     try {
       this.hideFeature(feature)
@@ -637,9 +637,9 @@ export class DataLayer {
     return this._umap.formatter
       .parse(raw, format)
       .then((geojson) => {
-        this.sync.startBatch()
+        this.journal.startBatch()
         const data = this.addData(geojson)
-        this.sync.commitBatch()
+        this.journal.commitBatch()
         return data
       })
       .catch((error) => {
@@ -707,7 +707,7 @@ export class DataLayer {
   }
 
   del(sync = true, root = true) {
-    if (root) this.sync.startBatch()
+    if (root) this.journal.startBatch()
     const oldValue = Utils.CopyJSON(this.umapGeoJSON())
     // TODO merge datalayer del and features del in same
     // batch
@@ -717,9 +717,9 @@ export class DataLayer {
     }
     this.isDeleted = true
     if (sync) {
-      this.sync.delete(oldValue)
+      this.journal.delete(oldValue)
     }
-    if (root) this.sync.commitBatch()
+    if (root) this.journal.commitBatch()
     this.hide()
     this.parentPane.removeChild(this.pane)
     if (root) this.dataChanged()
@@ -728,9 +728,9 @@ export class DataLayer {
 
   empty() {
     if (this.isRemoteLayer()) return
-    this.sync.startBatch()
+    this.journal.startBatch()
     this.clear()
-    this.sync.commitBatch()
+    this.journal.commitBatch()
     this.dataChanged()
   }
 
@@ -1209,15 +1209,15 @@ export class DataLayer {
           if (geojson.properties) {
             const oldProperties = Utils.CopyJSON(this.properties)
             this.setProperties(geojson.properties)
-            this.sync.update('properties', this.properties, oldProperties)
+            this.journal.update('properties', this.properties, oldProperties)
           }
           this.empty()
           if (this.isRemoteLayer()) {
             this.fetchRemoteData()
           } else {
-            this.sync.startBatch()
+            this.journal.startBatch()
             this.addData(geojson)
-            this.sync.commitBatch()
+            this.journal.commitBatch()
           }
         }
       })
@@ -1369,10 +1369,10 @@ export class DataLayer {
     return this.isReadOnly() || this.isRemoteLayer()
   }
 
-  setReferenceVersion({ response, sync }) {
+  setReferenceVersion({ response, journal }) {
     this.referenceVersion = response.headers.get('X-Datalayer-Version')
-    if (sync) {
-      this.sync.update('referenceVersion', this.referenceVersion, null, {
+    if (journal) {
+      this.journal.update('referenceVersion', this.referenceVersion, null, {
         undo: false,
       })
     }
@@ -1444,7 +1444,7 @@ export class DataLayer {
       delete data.referenceVersion
       this.updateProperties(data.properties)
 
-      this.setReferenceVersion({ response, sync: true })
+      this.setReferenceVersion({ response, journal: true })
 
       this._umap.fire('datalayer:changed')
       this.redraw() // Needed for reordering features
