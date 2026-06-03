@@ -74,7 +74,24 @@ export class Journal {
     this.websocketConnected = false
     this.closeRequested = false
     this.peerId = Utils.generateId()
+    this._pendingActions = new Set()
     this._undoManager = new UndoManager(umap, this.updaters, this)
+  }
+
+  // Track an in-flight user-action so save() can await it and undo/redo
+  // can be blocked while it runs.
+  _track(promise) {
+    this._pendingActions.add(promise)
+    promise.finally(() => {
+      this._pendingActions.delete(promise)
+      this._undoManager.toggleState()
+    })
+    this._undoManager.toggleState()
+    return promise
+  }
+
+  hasPending() {
+    return this._pendingActions.size > 0
   }
 
   get isOpen() {
@@ -172,6 +189,13 @@ export class Journal {
   }
 
   update(subject, metadata, key, value, oldValue, { undo } = { undo: true }) {
+    if (typeof value === 'function') {
+      return this._track((async () => {
+        const resolved = await value()
+        if (resolved === undefined) return
+        this.update(subject, metadata, key, resolved, oldValue, { undo })
+      })())
+    }
     const operation = {
       verb: 'update',
       subject,
@@ -255,6 +279,9 @@ export class Journal {
   }
 
   async save() {
+    // Wait for any in-flight user-action so its journal.update has landed
+    // in the operation log before we compute the dirty set.
+    await Promise.allSettled([...this._pendingActions])
     const needSave = this._getDirtyObjects()
     for (const obj of needSave.keys()) {
       if (!(await this.saveOne(obj, needSave))) {

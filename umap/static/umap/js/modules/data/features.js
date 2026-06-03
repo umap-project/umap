@@ -1124,17 +1124,19 @@ export class LineString extends Path {
     }
   }
 
-  async mergeShapes() {
+  mergeShapes() {
     if (!this.isMulti()) return
     const oldGeometry = Utils.CopyJSON(this._geometry)
-    let coordinates = []
-    for (const coords of this.geometry.coordinates) {
-      coordinates = await this._reduceMulti(coordinates, coords)
-    }
-    this.geometry = await GeoUtils.cleanCoords({ type: 'LineString', coordinates })
-    this.journal.update('geometry', this.geometry, oldGeometry)
-    if (!this.ui.editEnabled()) this.edit()
-    this.ui.editor.reset()
+    this.journal.update('geometry', async () => {
+      let coordinates = []
+      for (const coords of this.geometry.coordinates) {
+        coordinates = await this._reduceMulti(coordinates, coords)
+      }
+      this.geometry = await GeoUtils.cleanCoords({ type: 'LineString', coordinates })
+      if (!this.ui.editEnabled()) this.edit()
+      this.ui.editor.reset()
+      return this.geometry
+    }, oldGeometry)
   }
 
   isMulti() {
@@ -1251,36 +1253,33 @@ export class LineString extends Path {
     button.addEventListener('click', async () => this.computeRoute())
   }
 
-  async computeElevation() {
+  computeElevation() {
     if (!this._umap.properties.ORSAPIKey) return
-    return this.loadORS().then(async ({ Importer }) => {
+    const oldGeometry = Utils.CopyJSON(this._geometry)
+    this.journal.update('geometry', async () => {
+      const { Importer } = await this.loadORS()
       const importer = new Importer(this._umap)
       const geometry = await importer.elevation(this.geometry)
-      if (geometry?.type) {
-        const oldGeometry = Utils.CopyJSON(this._geometry)
-        this.geometry = geometry
-        this.ui.resetTooltip()
-        this.journal.update('geometry', this.geometry, oldGeometry)
-        Alert.success(translate('Elevation has been added!'))
-      }
-    })
+      if (!geometry?.type) return
+      this.geometry = geometry
+      this.ui.resetTooltip()
+      Alert.success(translate('Elevation has been added!'))
+      return this.geometry
+    }, oldGeometry)
   }
 
-  async computeRoute() {
+  computeRoute() {
     if (!this._umap.properties.ORSAPIKey) return
-    return this.loadORS().then(async ({ Importer }) => {
+    const oldGeometry = Utils.CopyJSON(this._geometry)
+    this.journal.update('geometry', async () => {
+      const { Importer } = await this.loadORS()
       const importer = new Importer(this._umap)
-      await importer
-        .directions(this.properties._umap_options.route)
-        .then((geometry) => {
-          if (geometry?.type) {
-            const oldGeometry = Utils.CopyJSON(this._geometry)
-            this.geometry = geometry
-            this.ui.resetTooltip()
-            this.journal.update('geometry', this.geometry, oldGeometry)
-          }
-        })
-    })
+      const geometry = await importer.directions(this.properties._umap_options.route)
+      if (!geometry?.type) return
+      this.geometry = geometry
+      this.ui.resetTooltip()
+      return this.geometry
+    }, oldGeometry)
   }
 
   addExtraEditFieldset(container) {
