@@ -221,7 +221,7 @@ export default class Importer extends Utils.WithTemplate {
     )
     this.qs('[name=layer-name]').toggleAttribute('hidden', Boolean(this.layerId))
     this.qs('#clear').toggleAttribute('hidden', !this.layerId)
-    this.qs('[name=submit').toggleAttribute('disabled', !this.canSubmit())
+    this.qs('[name=submit]').toggleAttribute('disabled', !this.canSubmit())
   }
 
   onFileChange() {
@@ -269,11 +269,11 @@ export default class Importer extends Utils.WithTemplate {
 
   async open() {
     if (!this.container) await this.build()
-    const onLoad = this._umap.editPanel.open({
+    this.onLoad()
+    this._umap.editPanel.open({
       content: this.container,
       highlight: 'import',
     })
-    onLoad.then(() => this.onLoad())
   }
 
   openFiles() {

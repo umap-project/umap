@@ -513,7 +513,7 @@ def test_import_multipolygon(live_server, page, tilelayer):
     expect(paths).to_have_count(0)
     expect(layers).to_have_count(0)
     page.get_by_title("Import data").click()
-    page.wait_for_timeout(PANEL_ANIMATION_TIME)
+    expect(page.locator('.umap-import [name="submit"]')).to_be_visible()
     textarea = page.locator(".umap-import textarea")
     textarea.fill(json.dumps(data))
     page.locator('select[name="format"]').select_option("geojson")

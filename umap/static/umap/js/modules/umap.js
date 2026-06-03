@@ -322,26 +322,30 @@ export default class Umap extends Utils.WithEvents {
 
   async setViewFromQueryString() {
     if (this.properties.noControl) return
-    // TODO: move to a "initPanel" function
-    if (this.searchParams.has('share')) {
-      this.loadShare().then((share) => share.open())
-    } else if (this.properties.onLoadPanel === 'databrowser') {
-      this.panel.setDefaultMode('expanded')
-      this.openBrowser('data')
-    } else if (this.properties.onLoadPanel === 'datalayers') {
-      this.panel.setDefaultMode('condensed')
-      this.openBrowser('layers')
-    } else if (this.properties.onLoadPanel === 'datafilters') {
-      this.panel.setDefaultMode('expanded')
-      this.openBrowser('filters')
-    } else if (this.properties.onLoadPanel === 'caption') {
-      this.panel.setDefaultMode('condensed')
-      this.openCaption()
-    }
-    // Comes after default panels, so if it opens in a panel it will
-    // take precedence.
+    // If a feature in the query string opens in umap.panel (popupShape === 'Panel'),
+    // skip the default panel: it would race with the feature in the lazy era.
+    // Other popup shapes coexist fine.
     const slug = this.searchParams.get('feature')
-    if (slug && this.featuresIndex[slug]) this.featuresIndex[slug].view()
+    const feature = slug ? this.featuresIndex[slug] : null
+    const featureOwnsPanel = feature?.getOption('popupShape') === 'Panel'
+    if (!featureOwnsPanel) {
+      if (this.searchParams.has('share')) {
+        this.loadShare().then((share) => share.open())
+      } else if (this.properties.onLoadPanel === 'databrowser') {
+        this.panel.setDefaultMode('expanded')
+        this.openBrowser('data')
+      } else if (this.properties.onLoadPanel === 'datalayers') {
+        this.panel.setDefaultMode('condensed')
+        this.openBrowser('layers')
+      } else if (this.properties.onLoadPanel === 'datafilters') {
+        this.panel.setDefaultMode('expanded')
+        this.openBrowser('filters')
+      } else if (this.properties.onLoadPanel === 'caption') {
+        this.panel.setDefaultMode('condensed')
+        this.openCaption()
+      }
+    }
+    if (feature) feature.view()
     if (this.searchParams.has('edit')) {
       if (this.hasEditMode()) this.enableEdit()
       // Sometimes users share the ?edit link by mistake, let's remove
