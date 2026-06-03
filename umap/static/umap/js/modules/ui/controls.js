@@ -369,7 +369,7 @@ export class EmbedControl extends SimpleButton {
   icon = 'icon-share'
 
   onClick() {
-    this._umap.share.open()
+    this._umap.loadShare().then((share) => share.open())
   }
 }
 

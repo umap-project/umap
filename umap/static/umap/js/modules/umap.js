@@ -22,7 +22,6 @@ import { LeafletProxy } from './rendering/map.js'
 import { Request, ServerRequest } from './request.js'
 import Rules from './rules.js'
 import { SCHEMA } from './schema.js'
-import Share from './share.js'
 import Slideshow from './slideshow.js'
 import { SyncEngine } from './sync/engine.js'
 import { BottomBar, EditBar, TopBar } from './ui/bar.js'
@@ -144,7 +143,6 @@ export default class Umap extends Utils.WithEvents {
     this.filters = new Filters(this, this)
     this.browser = new Browser(this)
     this.caption = new Caption(this)
-    this.share = new Share(this)
     this.rules = new Rules(this, this)
 
     if (this.hasEditMode()) {
@@ -330,7 +328,7 @@ export default class Umap extends Utils.WithEvents {
     if (this.properties.noControl) return
     // TODO: move to a "initPanel" function
     if (this.searchParams.has('share')) {
-      this.share.open()
+      this.loadShare().then((share) => share.open())
     } else if (this.properties.onLoadPanel === 'databrowser') {
       this.panel.setDefaultMode('expanded')
       this.openBrowser('data')
@@ -370,6 +368,14 @@ export default class Umap extends Utils.WithEvents {
       this.importer = new Importer(this)
     }
     return this.importer
+  }
+
+  async loadShare() {
+    if (!this.share) {
+      const Share = (await import('./share.js')).default
+      this.share = new Share(this)
+    }
+    return this.share
   }
 
   async loadTemplateFromQueryString() {
@@ -1221,7 +1227,9 @@ export default class Umap extends Utils.WithEvents {
       empty.addEventListener('click', () => this.removeDataLayers())
     }
     clone.addEventListener('click', () => this.clone())
-    download.addEventListener('click', () => this.share.open())
+    download.addEventListener('click', () =>
+      this.loadShare().then((share) => share.open())
+    )
   }
 
   edit() {
