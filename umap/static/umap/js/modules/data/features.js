@@ -116,6 +116,10 @@ class Feature {
     this._geometry = this.convertLatLngs(latlngs)
   }
 
+  toLatLngs(geometry) {
+    return GeoUtils.flip(this.geometry).coordinates
+  }
+
   makeUI() {
     const klass = this.getUIClass()
     this._ui = new klass(this, this.toLatLngs())
@@ -734,10 +738,6 @@ export class Point extends Feature {
     this.ui.setLatLng(latlng)
   }
 
-  toLatLngs() {
-    return GeoJSON.coordsToLatLng(this.coordinates)
-  }
-
   convertLatLngs(latlng) {
     return { coordinates: GeoJSON.latLngToCoords(latlng), type: 'Point' }
   }
@@ -963,10 +963,6 @@ export class LineString extends Path {
     }
   }
 
-  toLatLngs(geometry) {
-    return GeoJSON.coordsToLatLngs(this.coordinates, this.type === 'LineString' ? 0 : 1)
-  }
-
   convertLatLngs(latlngs) {
     let multi = !GeoUtils.isFlat(latlngs)
     let coordinates = GeoJSON.latLngsToCoords(latlngs, multi ? 1 : 0, false)
@@ -1127,16 +1123,20 @@ export class LineString extends Path {
   mergeShapes() {
     if (!this.isMulti()) return
     const oldGeometry = Utils.CopyJSON(this._geometry)
-    this.journal.update('geometry', async () => {
-      let coordinates = []
-      for (const coords of this.geometry.coordinates) {
-        coordinates = await this._reduceMulti(coordinates, coords)
-      }
-      this.geometry = await GeoUtils.cleanCoords({ type: 'LineString', coordinates })
-      if (!this.ui.editEnabled()) this.edit()
-      this.ui.editor.reset()
-      return this.geometry
-    }, oldGeometry)
+    this.journal.update(
+      'geometry',
+      async () => {
+        let coordinates = []
+        for (const coords of this.geometry.coordinates) {
+          coordinates = await this._reduceMulti(coordinates, coords)
+        }
+        this.geometry = await GeoUtils.cleanCoords({ type: 'LineString', coordinates })
+        if (!this.ui.editEnabled()) this.edit()
+        this.ui.editor.reset()
+        return this.geometry
+      },
+      oldGeometry
+    )
   }
 
   isMulti() {
@@ -1256,30 +1256,38 @@ export class LineString extends Path {
   computeElevation() {
     if (!this._umap.properties.ORSAPIKey) return
     const oldGeometry = Utils.CopyJSON(this._geometry)
-    this.journal.update('geometry', async () => {
-      const { Importer } = await this.loadORS()
-      const importer = new Importer(this._umap)
-      const geometry = await importer.elevation(this.geometry)
-      if (!geometry?.type) return
-      this.geometry = geometry
-      this.ui.resetTooltip()
-      Alert.success(translate('Elevation has been added!'))
-      return this.geometry
-    }, oldGeometry)
+    this.journal.update(
+      'geometry',
+      async () => {
+        const { Importer } = await this.loadORS()
+        const importer = new Importer(this._umap)
+        const geometry = await importer.elevation(this.geometry)
+        if (!geometry?.type) return
+        this.geometry = geometry
+        this.ui.resetTooltip()
+        Alert.success(translate('Elevation has been added!'))
+        return this.geometry
+      },
+      oldGeometry
+    )
   }
 
   computeRoute() {
     if (!this._umap.properties.ORSAPIKey) return
     const oldGeometry = Utils.CopyJSON(this._geometry)
-    this.journal.update('geometry', async () => {
-      const { Importer } = await this.loadORS()
-      const importer = new Importer(this._umap)
-      const geometry = await importer.directions(this.properties._umap_options.route)
-      if (!geometry?.type) return
-      this.geometry = geometry
-      this.ui.resetTooltip()
-      return this.geometry
-    }, oldGeometry)
+    this.journal.update(
+      'geometry',
+      async () => {
+        const { Importer } = await this.loadORS()
+        const importer = new Importer(this._umap)
+        const geometry = await importer.directions(this.properties._umap_options.route)
+        if (!geometry?.type) return
+        this.geometry = geometry
+        this.ui.resetTooltip()
+        return this.geometry
+      },
+      oldGeometry
+    )
   }
 
   addExtraEditFieldset(container) {
@@ -1297,10 +1305,6 @@ export class Polygon extends Path {
       mainColor: 'fillColor',
       className: 'polygon',
     }
-  }
-
-  toLatLngs() {
-    return GeoJSON.coordsToLatLngs(this.coordinates, this.type === 'Polygon' ? 1 : 2)
   }
 
   convertLatLngs(latlngs) {

@@ -190,11 +190,13 @@ export class Journal {
 
   update(subject, metadata, key, value, oldValue, { undo } = { undo: true }) {
     if (typeof value === 'function') {
-      return this._track((async () => {
-        const resolved = await value()
-        if (resolved === undefined) return
-        this.update(subject, metadata, key, resolved, oldValue, { undo })
-      })())
+      return this._track(
+        (async () => {
+          const resolved = await value()
+          if (resolved === undefined) return
+          this.update(subject, metadata, key, resolved, oldValue, { undo })
+        })()
+      )
     }
     const operation = {
       verb: 'update',

@@ -188,14 +188,22 @@ class Rule {
     const oldRules = Utils.CopyJSON(this.parent.properties.rules || {})
     this.parent.rules.rules = this.parent.rules.rules.filter((rule) => rule !== this)
     this.parent.rules.commit()
-    this.parent.journal.update('properties.rules', this.parent.properties.rules, oldRules)
+    this.parent.journal.update(
+      'properties.rules',
+      this.parent.properties.rules,
+      oldRules
+    )
   }
 
   setter(key, value) {
     const oldRules = Utils.CopyJSON(this.parent.properties.rules || {})
     Utils.setObjectValue(this, key, value)
     this.parent.rules.commit()
-    this.parent.journal.update('properties.rules', this.parent.properties.rules, oldRules)
+    this.parent.journal.update(
+      'properties.rules',
+      this.parent.properties.rules,
+      oldRules
+    )
   }
 
   renderLegend(ul) {
@@ -254,7 +262,11 @@ export default class Rules {
     this.rules.splice(newIdx, 0, moved)
     this.parent.render(['rules'])
     this.commit()
-    this.parent.journal.update('properties.rules', this.parent.properties.rules, oldRules)
+    this.parent.journal.update(
+      'properties.rules',
+      this.parent.properties.rules,
+      oldRules
+    )
   }
 
   edit(container) {

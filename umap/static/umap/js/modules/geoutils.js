@@ -1,3 +1,5 @@
+import { flip } from '@turf/flip'
+
 export async function distance(from, to, options) {
   const { distance } = await import('@turf/distance')
   return distance(from, to, options)
@@ -16,3 +18,4 @@ export function isFlat(arr) {
     (typeof arr[0][0] !== 'object' && typeof arr[0][0] !== 'undefined')
   )
 }
+export { flip }
