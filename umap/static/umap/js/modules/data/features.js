@@ -57,7 +57,7 @@ class Feature {
   }
 
   get center() {
-    return this.ui.getCenter()
+    return GeoUtils.center(this.geometry)
   }
 
   get bounds() {
@@ -102,7 +102,7 @@ class Feature {
     this._setLatLngs(this.toLatLngs())
   }
 
-  toLatLngs(geometry) {
+  toLatLngs() {
     return GeoUtils.flip(this.geometry).coordinates
   }
 
@@ -192,7 +192,7 @@ class Feature {
     }
     this._umap.currentFeature = this
     this.attachPopup().then(() => {
-      this.ui.openPopup(latlng || this.center)
+      this.ui.openPopup(latlng || this.ui.getCenter())
     })
   }
 
@@ -580,15 +580,13 @@ class Feature {
     properties.rank = this.getRank() + 1
     properties.layer = this.datalayer.getName()
     properties.id = this.id
-    if (this.ui._map && this.hasGeom()) {
-      const center = this.center
-      properties.lat = center.lat
-      properties.lon = center.lng
-      properties.lng = center.lng
-      properties.alt = center?.alt
-      if (typeof this.ui.getMeasure !== 'undefined') {
-        properties.measure = this.ui.getMeasure()
-      }
+    if (this.hasGeom()) {
+      const [lng, lat, alt] = this.center
+      properties.lat = lat
+      properties.lon = lng
+      properties.lng = lng
+      properties.alt = alt
+      properties.measure = this.measure
     }
     return Object.assign(properties, this.properties)
   }
@@ -721,6 +719,10 @@ export class Point extends Feature {
     this.ui.setLatLng(latlng)
   }
 
+  get center() {
+    return this.coordinates
+  }
+
   getUIClass() {
     return super.getUIClass() || LeafletMarker
   }
@@ -851,7 +853,7 @@ class Path extends Feature {
     const items = super.getContextMenu(event)
     items.push({
       label: translate('Display measure'),
-      action: () => Alert.info(this.ui.getMeasure()),
+      action: () => Alert.info(this.measure),
     })
     return items
   }
@@ -926,6 +928,10 @@ export class LineString extends Path {
       mainColor: 'color',
       className: 'polyline',
     }
+  }
+
+  get measure() {
+    return Utils.readableDistance(GeoUtils.length(this.geometry, { units: 'meters' }))
   }
 
   getUIClass() {
@@ -1259,6 +1265,10 @@ export class Polygon extends Path {
       mainColor: 'fillColor',
       className: 'polygon',
     }
+  }
+
+  get measure() {
+    return Utils.readableArea(GeoUtils.area(this.geometry))
   }
 
   isEmpty() {

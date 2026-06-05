@@ -226,10 +226,10 @@ export class Formatter {
     const table = []
     for (const feature of features) {
       const row = feature.toGeoJSON().properties
-      const center = feature.center
+      const [lng, lat] = feature.center
       delete row._umap_options
-      row.Latitude = center.lat
-      row.Longitude = center.lng
+      row.Latitude = lat
+      row.Longitude = lng
       table.push(row)
     }
     return csv2geojson.dsv.csvFormat(table)

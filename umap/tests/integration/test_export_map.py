@@ -209,9 +209,9 @@ def test_csv_export(map, live_server, bootstrap, page):
     assert (
         path.read_text()
         == """name,Latitude,Longitude,description
-name poly,53.0072070131872,12.182431646910137,
+name poly,53.18871683333333,12.009887666666666,
 test one,52.57635,-0.274658,Some description
-test two,53.725145179688646,2.9700064980570517,"""
+test two,53.87398885714286,3.528180714285714,"""
     )
 
 
