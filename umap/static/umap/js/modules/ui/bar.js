@@ -362,7 +362,7 @@ export class EditBar extends WithTemplate {
     this.addDrawListener('multipolygon')
     this.addDrawListener('route')
     this.addClickListener('caption', () => this._umap.editCaption())
-    this.addClickListener('import', () => this._umap.importer.open())
+    this.addClickListener('import', () => this._umap.openImporter())
     this.addClickListener('templates', () => this.templateIimporter.open())
     this.addClickListener('layers', () => this._umap.editDatalayers())
     this.addClickListener('tilelayers', () =>

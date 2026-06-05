@@ -93,7 +93,7 @@ export default class TemplateImporter {
         confirmData.disabled = false
       }
     })
-    const onConfirm = (includeData) => {
+    const onConfirm = async (includeData) => {
       const templateId = form.template.value
       if (!templateId) {
         Alert.error(translate('You must select a template.'))
@@ -105,6 +105,7 @@ export default class TemplateImporter {
       if (!includeData) {
         url = `${url}?include_data=0`
       }
+      await this.umap.loadImporter()
       this.umap.importer.build()
       this.umap.importer.url = url
       this.umap.importer.format = 'umap'

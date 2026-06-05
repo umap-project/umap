@@ -369,7 +369,7 @@ export class EmbedControl extends SimpleButton {
   icon = 'icon-share'
 
   onClick() {
-    this._umap.share.open()
+    this._umap.loadShare().then((share) => share.open())
   }
 }
 
@@ -628,6 +628,7 @@ export const Search = PhotonSearch.extend({
       }
       const osm_type = types[feature.properties.osm_type]
       if (!osm_type || !osm_id) return
+      await this._umap.loadImporter()
       const importer = this._umap.importer
       importer.build()
       importer.format = 'geojson'

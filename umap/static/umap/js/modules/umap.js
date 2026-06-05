@@ -2,8 +2,6 @@ import {
   uMapAlert as Alert,
   uMapAlertCreation as AlertCreation,
 } from '../components/alerts/alert.js'
-import Browser from './browser.js'
-import Caption from './caption.js'
 import * as Clipboard from './clipboard.js'
 import { Fields } from './data/fields.js'
 import { DataLayer } from './data/layer.js'
@@ -15,8 +13,6 @@ import { Formatter } from './formatter.js'
 import Help from './help.js'
 import { getLocale, setLocale, translate } from './i18n.js'
 import * as Icon from './icon.js'
-import Importer from './importer.js'
-import { Importer as OpenRouteService } from './importers/openrouteservice.js'
 import { LayerManager } from './managers.js'
 import Orderable from './orderable.js'
 import { MapPermissions } from './permissions.js'
@@ -24,7 +20,6 @@ import { LeafletProxy } from './rendering/map.js'
 import { Request, ServerRequest } from './request.js'
 import Rules from './rules.js'
 import { SCHEMA } from './schema.js'
-import Share from './share.js'
 import Slideshow from './slideshow.js'
 import { SyncEngine } from './sync/engine.js'
 import { BottomBar, EditBar, TopBar } from './ui/bar.js'
@@ -144,10 +139,6 @@ export default class Umap extends Utils.WithEvents {
     this.request = new Request()
     this.fields = new Fields(this, this.dialog)
     this.filters = new Filters(this, this)
-    this.browser = new Browser(this)
-    this.caption = new Caption(this)
-    this.importer = new Importer(this)
-    this.share = new Share(this)
     this.rules = new Rules(this, this)
 
     if (this.hasEditMode()) {
@@ -331,26 +322,30 @@ export default class Umap extends Utils.WithEvents {
 
   async setViewFromQueryString() {
     if (this.properties.noControl) return
-    // TODO: move to a "initPanel" function
-    if (this.searchParams.has('share')) {
-      this.share.open()
-    } else if (this.properties.onLoadPanel === 'databrowser') {
-      this.panel.setDefaultMode('expanded')
-      this.openBrowser('data')
-    } else if (this.properties.onLoadPanel === 'datalayers') {
-      this.panel.setDefaultMode('condensed')
-      this.openBrowser('layers')
-    } else if (this.properties.onLoadPanel === 'datafilters') {
-      this.panel.setDefaultMode('expanded')
-      this.openBrowser('filters')
-    } else if (this.properties.onLoadPanel === 'caption') {
-      this.panel.setDefaultMode('condensed')
-      this.openCaption()
-    }
-    // Comes after default panels, so if it opens in a panel it will
-    // take precedence.
+    // If a feature in the query string opens in umap.panel (popupShape === 'Panel'),
+    // skip the default panel: it would race with the feature in the lazy era.
+    // Other popup shapes coexist fine.
     const slug = this.searchParams.get('feature')
-    if (slug && this.featuresIndex[slug]) this.featuresIndex[slug].view()
+    const feature = slug ? this.featuresIndex[slug] : null
+    const featureOwnsPanel = feature?.getOption('popupShape') === 'Panel'
+    if (!featureOwnsPanel) {
+      if (this.searchParams.has('share')) {
+        this.loadShare().then((share) => share.open())
+      } else if (this.properties.onLoadPanel === 'databrowser') {
+        this.panel.setDefaultMode('expanded')
+        this.openBrowser('data')
+      } else if (this.properties.onLoadPanel === 'datalayers') {
+        this.panel.setDefaultMode('condensed')
+        this.openBrowser('layers')
+      } else if (this.properties.onLoadPanel === 'datafilters') {
+        this.panel.setDefaultMode('expanded')
+        this.openBrowser('filters')
+      } else if (this.properties.onLoadPanel === 'caption') {
+        this.panel.setDefaultMode('condensed')
+        this.openCaption()
+      }
+    }
+    if (feature) feature.view()
     if (this.searchParams.has('edit')) {
       if (this.hasEditMode()) this.enableEdit()
       // Sometimes users share the ?edit link by mistake, let's remove
@@ -367,13 +362,47 @@ export default class Umap extends Utils.WithEvents {
     }
   }
 
+  async loadImporter() {
+    if (!this.importer) {
+      const Importer = (await import('./importer.js')).default
+      this.importer = new Importer(this)
+    }
+    return this.importer
+  }
+
+  async loadShare() {
+    if (!this.share) {
+      const Share = (await import('./share.js')).default
+      this.share = new Share(this)
+    }
+    return this.share
+  }
+
+  async loadBrowser() {
+    if (!this.browser) {
+      const Browser = (await import('./browser.js')).default
+      this.browser = new Browser(this)
+    }
+    return this.browser
+  }
+
+  async loadCaption() {
+    if (!this.caption) {
+      const Caption = (await import('./caption.js')).default
+      this.caption = new Caption(this)
+    }
+    return this.caption
+  }
+
   async loadTemplateFromQueryString() {
     const templateUrl = this.searchParams.get('templateUrl')
     if (templateUrl) {
-      this.importer.build()
-      this.importer.url = templateUrl
-      this.importer.format = 'umap'
-      this.importer.submit()
+      this.loadImporter().then((importer) => {
+        importer.build()
+        importer.url = templateUrl
+        importer.format = 'umap'
+        importer.submit()
+      })
     }
   }
 
@@ -563,7 +592,7 @@ export default class Umap extends Utils.WithEvents {
     const shortcuts = {
       Escape: {
         do: () => {
-          if (this.importer.dialog.visible) {
+          if (this.importer?.dialog.visible) {
             this.importer.dialog.close()
           } else if (this.mapProxy.onEscape()) {
             // Already done by mapProxy
@@ -614,11 +643,11 @@ export default class Umap extends Utils.WithEvents {
       },
       'Ctrl+i': {
         if: () => this.editEnabled,
-        do: () => this.importer.open(),
+        do: () => this.openImporter(),
       },
       'Ctrl+o': {
         if: () => this.editEnabled,
-        do: () => this.importer.openFiles(),
+        do: () => this.openFilesImporter(),
       },
       'Ctrl+h': {
         if: () => this.editEnabled,
@@ -639,6 +668,18 @@ export default class Umap extends Utils.WithEvents {
       }
     }
     document.addEventListener('keydown', onKeyDown)
+  }
+
+  openImporter() {
+    this.loadImporter().then((importer) => {
+      importer.open()
+    })
+  }
+
+  openFilesImporter() {
+    this.loadImporter().then((importer) => {
+      importer.openFiles()
+    })
   }
 
   async initDataLayers(datalayers) {
@@ -729,8 +770,8 @@ export default class Umap extends Utils.WithEvents {
   }
 
   onDataLayersChanged() {
-    if (this.browser) this.browser.update()
-    this.caption.refresh()
+    this.browser?.update()
+    this.caption?.refresh()
     this.bottomBar.redraw()
   }
 
@@ -1202,7 +1243,9 @@ export default class Umap extends Utils.WithEvents {
       empty.addEventListener('click', () => this.removeDataLayers())
     }
     clone.addEventListener('click', () => this.clone())
-    download.addEventListener('click', () => this.share.open())
+    download.addEventListener('click', () =>
+      this.loadShare().then((share) => share.open())
+    )
   }
 
   edit() {
@@ -1459,7 +1502,7 @@ export default class Umap extends Utils.WithEvents {
     fields = this.propagate(fields)
     if (fields.includes('properties.filters')) {
       this.filters.load()
-      if (this.browser.isOpen()) {
+      if (this.browser?.isOpen()) {
         this.browser.buildFilters()
       }
     }
@@ -1469,7 +1512,7 @@ export default class Umap extends Utils.WithEvents {
       switch (impact) {
         case 'ui':
           this.controlManager.update()
-          this.browser.redraw()
+          this.browser?.redraw()
           this.topBar.redraw()
           this.bottomBar.redraw()
           break
@@ -1722,11 +1765,15 @@ export default class Umap extends Utils.WithEvents {
   }
 
   openBrowser(mode) {
-    this.onceDatalayersLoaded(() => this.browser.open(mode))
+    this.onceDatalayersLoaded(() =>
+      this.loadBrowser().then((browser) => browser.open(mode))
+    )
   }
 
   openCaption() {
-    this.onceDatalayersLoaded(() => this.caption.open())
+    this.onceDatalayersLoaded(() =>
+      this.loadCaption().then((caption) => caption.open())
+    )
   }
 
   addAuthorLink(container) {
@@ -1918,8 +1965,9 @@ export default class Umap extends Utils.WithEvents {
 
   async askForIsochrone(event) {
     if (!this.properties.ORSAPIKey) return
-    const importer = new OpenRouteService(this)
-    importer.isochrone(event.latlng)
+    await this.loadImporter()
+    const { Importer } = await import('./importers/openrouteservice.js')
+    new Importer(this).isochrone(event.latlng)
   }
 
   setCenterAndZoom() {

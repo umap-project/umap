@@ -48,7 +48,7 @@ export default class TableEditor extends Utils.WithTemplate {
         label: actionLabel,
         action: () => {
           parent.filters.createFilterForm(name)
-          this._umap.browser.open('filters')
+          this._umap.loadBrowser().then((browser) => browser.open('filters'))
         },
       },
       {
@@ -89,7 +89,7 @@ export default class TableEditor extends Utils.WithTemplate {
   }
 
   renderBody() {
-    const inBbox = this._umap.browser.options.inBbox
+    const inBbox = this._umap.browser?.options.inBbox
     this.elements.body.innerHTML = ''
     this.datalayer.features.forEach((feature) => {
       if (feature.isFiltered()) return
@@ -137,7 +137,9 @@ export default class TableEditor extends Utils.WithTemplate {
       <button class="flat" type="button" data-ref="filters">
         <i class="icon icon-16 icon-filters"></i>${translate('Filter data')}
       </button>`)
-    filterButton.addEventListener('click', () => this._umap.browser.open('filters'))
+    filterButton.addEventListener('click', () =>
+      this._umap.loadBrowser().then((browser) => browser.open('filters'))
+    )
     actions.push(filterButton)
 
     this._umap.fullPanel.open({
@@ -270,7 +272,7 @@ export default class TableEditor extends Utils.WithTemplate {
         this.datalayer.show()
         this.datalayer.dataChanged()
         this.renderBody()
-        if (this._umap.browser.isOpen()) {
+        if (this._umap.browser?.isOpen()) {
           this._umap.browser.resetFilters()
           this._umap.browser.open('filters')
         }

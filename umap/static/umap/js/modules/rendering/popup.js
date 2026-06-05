@@ -3,9 +3,9 @@ import {
   DomEvent,
   Path,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
-import Browser from '../browser.js'
 import loadTemplate from './template.js'
 import * as DOMUtils from '../domutils.js'
+import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
 
 export default function loadPopup(name) {
@@ -67,12 +67,23 @@ const Panel = Popup.extend({
     zoomAnimation: false,
   },
 
+  backButton: function (umap) {
+    const button = Utils.loadTemplate(
+      `<button class="icon icon-16 icon-back" title="${translate('Back to browser')}"></button>`
+    )
+    // Fixme: remove me when this is merged and released
+    // https://github.com/Leaflet/Leaflet/pull/9052
+    DOMUtils.disableClickPropagation(button)
+    button.addEventListener('click', () => umap.openBrowser())
+    return button
+  },
+
   onAdd: function (leafletMap) {
     const umap = this.feature._umap
     umap.panel.setDefaultMode('expanded')
     umap.panel.open({
       content: this._content,
-      actions: [Browser.backButton(umap)],
+      actions: [this.backButton(umap)],
     })
 
     // fire events as in base class Popup.js:onAdd

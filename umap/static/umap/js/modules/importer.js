@@ -60,42 +60,41 @@ export default class Importer extends Utils.WithTemplate {
     this._umap = umap
     this.TYPES = ['geojson', 'csv', 'gpx', 'kml', 'osm', 'georss', 'umap']
     this.IMPORTERS = []
-    this.loadImporters()
     this.dialog = new Dialog({
       className: 'importers dark',
       back: () => this.showImporters(),
     })
   }
 
-  loadImporters() {
+  async loadImporters() {
     for (const [name, config] of Object.entries(
       this._umap.properties.importers || {}
     )) {
-      const register = (mod) => {
-        this.IMPORTERS.push(new mod.Importer(this._umap, config))
+      const register = ({ Importer }) => {
+        this.IMPORTERS.push(new Importer(this._umap, config))
       }
       // We need to have explicit static paths for Django's collectstatic with hashes.
       switch (name) {
         case 'geodatamine':
-          import('./importers/geodatamine.js').then(register)
+          register(await import('./importers/geodatamine.js'))
           break
         case 'communesfr':
-          import('./importers/communesfr.js').then(register)
+          register(await import('./importers/communesfr.js'))
           break
         case 'cadastrefr':
-          import('./importers/cadastrefr.js').then(register)
+          register(await import('./importers/cadastrefr.js'))
           break
         case 'overpass':
-          import('./importers/overpass.js').then(register)
+          register(await import('./importers/overpass.js'))
           break
         case 'datasets':
-          import('./importers/datasets.js').then(register)
+          register(await import('./importers/datasets.js'))
           break
         case 'banfr':
-          import('./importers/banfr.js').then(register)
+          register(await import('./importers/banfr.js'))
           break
         case 'opendata':
-          import('./importers/opendata.js').then(register)
+          register(await import('./importers/opendata.js'))
           break
       }
     }
@@ -192,14 +191,8 @@ export default class Importer extends Utils.WithTemplate {
     this.dialog.open({ template: element, cancel: false, accept: false, back: false })
   }
 
-  build() {
+  async build() {
     this.container = this.loadTemplate(TEMPLATE)
-    if (this.IMPORTERS.length) {
-      // TODO use this.elements instead of this.qs
-      const button = this.qs('[data-ref=importersButton]')
-      button.addEventListener('click', () => this.showImporters())
-      button.toggleAttribute('hidden', false)
-    }
     for (const type of this.TYPES) {
       this.qs('[name=format]').appendChild(
         DOMUtils.loadTemplate(`<option value="${type}">${type}</option>`)
@@ -211,6 +204,13 @@ export default class Importer extends Utils.WithTemplate {
     for (const element of this.container.querySelectorAll('[onchange]')) {
       element.addEventListener('change', () => this.onChange())
     }
+    if (!this.IMPORTERS.length) await this.loadImporters()
+    if (this.IMPORTERS.length) {
+      // TODO use this.elements instead of this.qs
+      const button = this.qs('[data-ref=importersButton]')
+      button.addEventListener('click', () => this.showImporters())
+      button.toggleAttribute('hidden', false)
+    }
   }
 
   onChange() {
@@ -221,7 +221,7 @@ export default class Importer extends Utils.WithTemplate {
     )
     this.qs('[name=layer-name]').toggleAttribute('hidden', Boolean(this.layerId))
     this.qs('#clear').toggleAttribute('hidden', !this.layerId)
-    this.qs('[name=submit').toggleAttribute('disabled', !this.canSubmit())
+    this.qs('[name=submit]').toggleAttribute('disabled', !this.canSubmit())
   }
 
   onFileChange() {
@@ -267,13 +267,13 @@ export default class Importer extends Utils.WithTemplate {
     )
   }
 
-  open() {
-    if (!this.container) this.build()
-    const onLoad = this._umap.editPanel.open({
+  async open() {
+    if (!this.container) await this.build()
+    this.onLoad()
+    this._umap.editPanel.open({
       content: this.container,
       highlight: 'import',
     })
-    onLoad.then(() => this.onLoad())
   }
 
   openFiles() {

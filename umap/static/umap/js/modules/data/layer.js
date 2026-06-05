@@ -4,7 +4,7 @@ import {
   uMapAlert as Alert,
   uMapAlertConflict as AlertConflict,
 } from '../../components/alerts/alert.js'
-import { MutatingForm, Form } from '../form/builder.js'
+import { MutatingForm } from '../form/builder.js'
 import { translate } from '../i18n.js'
 import { DataLayerPermissions } from '../permissions.js'
 import { Default as DefaultLayer } from '../rendering/layers/base.js'
@@ -159,13 +159,13 @@ export class DataLayer {
     fields = this.propagate(fields)
     if (fields.includes('properties.fields')) {
       this.fields?.pull()
-      if (this._umap.browser.isOpen()) {
+      if (this._umap.browser?.isOpen()) {
         this._umap.browser.buildFilters()
       }
     }
     if (fields.includes('properties.filters')) {
       this.filters.load()
-      if (this._umap.browser.isOpen()) {
+      if (this._umap.browser?.isOpen()) {
         this._umap.browser.buildFilters()
       }
     }
