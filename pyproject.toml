@@ -57,7 +57,7 @@ dev = [
   "isort==8.0.1",
 ]
 test = [
-  "daphne==4.2.1",
+  "daphne==4.2.2",
   "factory-boy==3.3.3",
   "playwright>=1.39",
   "pytest==9.0.3",
