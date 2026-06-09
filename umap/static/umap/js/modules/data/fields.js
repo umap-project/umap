@@ -231,7 +231,7 @@ export class Fields extends Map {
       const oldFields = Utils.CopyJSON(this.parent.properties.fields)
       resolve()
       this.push()
-      this.parent.sync.update(
+      this.parent.journal.update(
         'properties.fields',
         this.parent.properties.fields,
         oldFields
@@ -332,7 +332,7 @@ export class Fields extends Map {
       for (const key of orderedKeys) {
         this.add(copy[key])
       }
-      this.parent.sync.update(
+      this.parent.journal.update(
         'properties.fields',
         this.parent.properties.fields,
         oldFields
@@ -387,7 +387,7 @@ export class Fields extends Map {
         this.pull()
         return
       }
-      this.parent.sync.startBatch()
+      this.parent.journal.startBatch()
       const oldFields = Utils.CopyJSON(this.parent.properties.fields)
       if (!name) {
         this.add(data)
@@ -407,12 +407,12 @@ export class Fields extends Map {
       } else {
         this.push()
       }
-      this.parent.sync.update(
+      this.parent.journal.update(
         'properties.fields',
         this.parent.properties.fields,
         oldFields
       )
-      this.parent.sync.commitBatch()
+      this.parent.journal.commitBatch()
       this.parent.render(['properties.fields'])
     })
   }
@@ -437,19 +437,19 @@ export class Fields extends Map {
     return this.dialog
       .confirm(translate('Are you sure you want to delete this field?'))
       .then(() => {
-        this.parent.sync.startBatch()
+        this.parent.journal.startBatch()
         const oldFields = Utils.CopyJSON(this.parent.properties.fields)
         this.delete(name)
         if (this.parent.filters.has(name)) {
           this.parent.filters.remove(name)
         }
         this.parent.deleteField(name)
-        this.parent.sync.update(
+        this.parent.journal.update(
           'properties.fields',
           this.parent.properties.fields,
           oldFields
         )
-        this.parent.sync.commitBatch()
+        this.parent.journal.commitBatch()
       })
   }
 }

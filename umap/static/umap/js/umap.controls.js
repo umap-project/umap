@@ -163,12 +163,15 @@ U.Editable = L.Editable.extend({
       // Leaflet.Editable will delete the drawn shape if invalid
       // (eg. line has only one drawn point)
       // So let's check if the layer has no more shape
-      event.layer.feature.pullGeometry(false)
-      if (!event.layer.feature.hasGeom() || event.layer instanceof U.LeafletMarker) {
-        event.layer.feature.del()
+      const feature = event.layer.feature
+      // Sync _geometry from the UI so hasGeom() sees what is actually left.
+      const geometry = event.layer.toGeometry()
+      feature._geometry = geometry
+      if (!feature.hasGeom() || event.layer instanceof U.LeafletMarker) {
+        feature.del()
       } else {
-        event.layer.feature.onCommit()
-        event.layer.feature.edit()
+        feature.onCommit(geometry)
+        feature.edit()
       }
     })
     this.stopDrawing()

@@ -496,7 +496,7 @@ export class TilelayersControl extends SimpleButton {
       this._umap.mapProxy.tilelayers.select(tilelayer)
       if (options?.edit) {
         this._umap.properties.tilelayer = tilelayer.toJSON()
-        this._umap.sync.update(
+        this._umap.journal.update(
           'properties.tilelayer',
           this._umap.properties.tilelayer,
           oldTileLayer

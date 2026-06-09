@@ -4,15 +4,15 @@ import sinon from 'sinon'
 import pkg from 'chai'
 const { expect } = pkg
 
-import { MapUpdater } from '../js/modules/sync/updaters.js'
-import { SyncEngine, Operations } from '../js/modules/sync/engine.js'
+import { MapUpdater } from '../js/modules/journal/updaters.js'
+import { Journal, Operations } from '../js/modules/journal/engine.js'
 
-describe('SyncEngine', () => {
+describe('Journal', () => {
   const websocketTokenURI = 'http://localhost:8000/api/v1/maps/1/websocket_auth_token/'
   const websocketURI = 'ws://localhost:8000/ws/maps/1/'
 
   it('should initialize methods even before start', () => {
-    const engine = new SyncEngine({}, websocketTokenURI, websocketURI)
+    const engine = new Journal({}, websocketTokenURI, websocketURI)
     engine.upsert()
     engine.update()
     engine.delete()
@@ -21,7 +21,7 @@ describe('SyncEngine', () => {
 
 describe('#dispatch', () => {
   it('should raise an error on unknown updater', () => {
-    const dispatcher = new SyncEngine({})
+    const dispatcher = new Journal({})
     expect(() => {
       dispatcher.dispatch({
         kind: 'operation',
@@ -31,7 +31,7 @@ describe('#dispatch', () => {
     }).to.throw(Error)
   })
   it('should produce an error on malformated messages', () => {
-    const dispatcher = new SyncEngine({})
+    const dispatcher = new Journal({})
     expect(() => {
       dispatcher.dispatch({
         yeah: 'yeah',
@@ -40,7 +40,7 @@ describe('#dispatch', () => {
     }).to.throw(Error)
   })
   it('should raise an unknown operations', () => {
-    const dispatcher = new SyncEngine({})
+    const dispatcher = new Journal({})
     expect(() => {
       dispatcher.dispatch({
         kind: 'something-else',

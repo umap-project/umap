@@ -1,4 +1,3 @@
-import { GeoJSON } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import { MutatingForm } from '../form/builder.js'
 import { translate, getLocale } from '../i18n.js'
@@ -20,7 +19,7 @@ import * as GeoUtils from '../geoutils.js'
 class Feature {
   constructor(umap, datalayer, geojson = {}, id = null) {
     this._umap = umap
-    this.sync = umap.syncEngine.proxy(this)
+    this.journal = umap.journalEngine.proxy(this)
     this._ui = null
 
     // DataLayer the feature belongs to
@@ -103,17 +102,8 @@ class Feature {
     this._setLatLngs(this.toLatLngs())
   }
 
-  pullGeometry(sync = true) {
-    const oldGeometry = Utils.CopyJSON(this._geometry)
-    this.fromLatLngs(this._getLatLngs())
-    if (sync) {
-      this.sync.update('geometry', this.geometry, oldGeometry)
-    }
-  }
-
-  fromLatLngs(latlngs) {
-    this._geometry_bk = Utils.CopyJSON(this._geometry)
-    this._geometry = this.convertLatLngs(latlngs)
+  toLatLngs(geometry) {
+    return GeoUtils.flip(this.geometry).coordinates
   }
 
   makeUI() {
@@ -137,7 +127,7 @@ class Feature {
     return this.getDynamicOption(this.staticOptions.mainColor)
   }
 
-  getSyncMetadata() {
+  getJournalMetadata() {
     return {
       subject: 'feature',
       metadata: {
@@ -148,16 +138,17 @@ class Feature {
     }
   }
 
-  onCommit() {
-    this.pullGeometry(false)
+  onCommit(geometry) {
+    this._geometry_bk = Utils.CopyJSON(this._geometry)
+    this._geometry = geometry
     // When the layer is a remote layer, we don't want to sync the creation of the
     // points via the websocket, as the other peers will get them themselves.
     if (this.datalayer?.isRemoteLayer()) return
     if (this._needs_upsert) {
-      this.sync.upsert(this.toGeoJSON(), null)
+      this.journal.upsert(this.toGeoJSON(), null)
       this._needs_upsert = false
     } else {
-      this.sync.update('geometry', this.geometry, this._geometry_bk)
+      this.journal.update('geometry', this.geometry, this._geometry_bk)
     }
   }
 
@@ -240,10 +231,10 @@ class Feature {
       </div>
     `)
 
-    // No need to sync the datalayer key, given we already do a delete/upsert when
+    // No need to journal the datalayer key, given we already do a delete/upsert when
     // it changes.
     let builder = new MutatingForm(this, [
-      ['datalayer', { handler: 'FeatureDataLayerSwitcher', sync: false }],
+      ['datalayer', { handler: 'FeatureDataLayerSwitcher', journal: false }],
     ])
     // removeLayer step will close the edit panel, let's reopen it
     builder.on('set', () => this.edit(event))
@@ -452,7 +443,7 @@ class Feature {
       this.datalayer.removeFeature(this)
     }
     datalayer.addFeature(this)
-    this.sync.upsert(this.toGeoJSON())
+    this.journal.upsert(this.toGeoJSON())
     this.redraw()
   }
 
@@ -516,14 +507,14 @@ class Feature {
   deleteField(name) {
     const oldValue = this.properties[name]
     delete this.properties[name]
-    this.sync.update(`properties.${name}`, undefined, oldValue)
+    this.journal.update(`properties.${name}`, undefined, oldValue)
   }
 
   renameField(from, to) {
     const oldValue = this.properties[from]
     this.properties[to] = this.properties[from]
     this.deleteField(from)
-    this.sync.update(`properties.${to}`, oldValue, undefined)
+    this.journal.update(`properties.${to}`, oldValue, undefined)
   }
 
   toGeoJSON() {
@@ -726,20 +717,8 @@ export class Point extends Feature {
     }
   }
 
-  _getLatLngs() {
-    return this.ui.getLatLng()
-  }
-
   _setLatLngs(latlng) {
     this.ui.setLatLng(latlng)
-  }
-
-  toLatLngs() {
-    return GeoJSON.coordsToLatLng(this.coordinates)
-  }
-
-  convertLatLngs(latlng) {
-    return { coordinates: GeoJSON.latLngToCoords(latlng), type: 'Point' }
   }
 
   getUIClass() {
@@ -783,7 +762,7 @@ export class Point extends Feature {
         builder.restoreField('ui._latlng.lat')
         builder.restoreField('ui._latlng.lng')
       }
-      this.pullGeometry()
+      this.ui.onCommit()
       this.zoomTo({ easing: false })
     })
     const fieldset = DOMUtils.createFieldset(container, translate('Coordinates'))
@@ -803,10 +782,6 @@ export class Point extends Feature {
 class Path extends Feature {
   hasGeom() {
     return !this.isEmpty()
-  }
-
-  _getLatLngs() {
-    return this.ui.getLatLngs()
   }
 
   _setLatLngs(latlngs) {
@@ -856,22 +831,12 @@ class Path extends Feature {
 
   transferShape(at, to) {
     const shape = this.ui.enableEdit().deleteShapeAt(at)
-    // FIXME: make Leaflet.Editable send an event instead
-    this.pullGeometry()
     this.ui.disableEdit()
     if (!shape) return
     to.ui.enableEdit().appendShape(shape)
-    to.pullGeometry()
+    // appendShape (insertShape) does not fire `editable:edited`, so commit by hand.
+    to.ui.onCommit()
     if (this.isEmpty()) this.del()
-  }
-
-  isolateShape(latlngs) {
-    const properties = this.cloneProperties()
-    const type = this instanceof LineString ? 'LineString' : 'Polygon'
-    const geometry = this.convertLatLngs(latlngs)
-    const other = this.datalayer.makeFeature({ type, geometry, properties })
-    other.edit()
-    return other
   }
 
   zoomTo({ easing, callback }) {
@@ -963,21 +928,6 @@ export class LineString extends Path {
     }
   }
 
-  toLatLngs(geometry) {
-    return GeoJSON.coordsToLatLngs(this.coordinates, this.type === 'LineString' ? 0 : 1)
-  }
-
-  convertLatLngs(latlngs) {
-    let multi = !GeoUtils.isFlat(latlngs)
-    let coordinates = GeoJSON.latLngsToCoords(latlngs, multi ? 1 : 0, false)
-    if (coordinates.length === 1 && typeof coordinates[0][0] !== 'number') {
-      coordinates = Utils.flattenCoordinates(coordinates)
-      multi = false
-    }
-    const type = multi ? 'MultiLineString' : 'LineString'
-    return { coordinates, type }
-  }
-
   getUIClass() {
     const klass = super.getUIClass()
     if (klass) return klass
@@ -996,7 +946,7 @@ export class LineString extends Path {
     this.properties._umap_options.route.active = false
     this.redraw()
     this.edit()
-    this.sync.update('properties._umap_options.route', null, oldRoute)
+    this.journal.update('properties._umap_options.route', null, oldRoute)
   }
 
   restoreRoute() {
@@ -1004,7 +954,7 @@ export class LineString extends Path {
     this._ensureRoute()
     delete this.properties._umap_options.route.active
     this.redraw()
-    this.sync.update(
+    this.journal.update(
       'properties._umap_options.route',
       this.properties._umap_options.route,
       oldRoute
@@ -1018,7 +968,7 @@ export class LineString extends Path {
     this._ensureRoute()
     this.properties._umap_options.route.coordinates = Utils.CopyJSON(this.coordinates)
     this.redraw()
-    this.sync.update(
+    this.journal.update(
       'properties._umap_options.route',
       this.properties._umap_options.route,
       null
@@ -1124,17 +1074,23 @@ export class LineString extends Path {
     }
   }
 
-  async mergeShapes() {
+  mergeShapes() {
     if (!this.isMulti()) return
     const oldGeometry = Utils.CopyJSON(this._geometry)
-    let coordinates = []
-    for (const coords of this.geometry.coordinates) {
-      coordinates = await this._reduceMulti(coordinates, coords)
-    }
-    this.geometry = await GeoUtils.cleanCoords({ type: 'LineString', coordinates })
-    this.sync.update('geometry', this.geometry, oldGeometry)
-    if (!this.ui.editEnabled()) this.edit()
-    this.ui.editor.reset()
+    this.journal.update(
+      'geometry',
+      async () => {
+        let coordinates = []
+        for (const coords of this.geometry.coordinates) {
+          coordinates = await this._reduceMulti(coordinates, coords)
+        }
+        this.geometry = await GeoUtils.cleanCoords({ type: 'LineString', coordinates })
+        if (!this.ui.editEnabled()) this.edit()
+        this.ui.editor.reset()
+        return this.geometry
+      },
+      oldGeometry
+    )
   }
 
   isMulti() {
@@ -1251,36 +1207,41 @@ export class LineString extends Path {
     button.addEventListener('click', async () => this.computeRoute())
   }
 
-  async computeElevation() {
+  computeElevation() {
     if (!this._umap.properties.ORSAPIKey) return
-    return this.loadORS().then(async ({ Importer }) => {
-      const importer = new Importer(this._umap)
-      const geometry = await importer.elevation(this.geometry)
-      if (geometry?.type) {
-        const oldGeometry = Utils.CopyJSON(this._geometry)
+    const oldGeometry = Utils.CopyJSON(this._geometry)
+    this.journal.update(
+      'geometry',
+      async () => {
+        const { Importer } = await this.loadORS()
+        const importer = new Importer(this._umap)
+        const geometry = await importer.elevation(this.geometry)
+        if (!geometry?.type) return
         this.geometry = geometry
         this.ui.resetTooltip()
-        this.sync.update('geometry', this.geometry, oldGeometry)
         Alert.success(translate('Elevation has been added!'))
-      }
-    })
+        return this.geometry
+      },
+      oldGeometry
+    )
   }
 
-  async computeRoute() {
+  computeRoute() {
     if (!this._umap.properties.ORSAPIKey) return
-    return this.loadORS().then(async ({ Importer }) => {
-      const importer = new Importer(this._umap)
-      await importer
-        .directions(this.properties._umap_options.route)
-        .then((geometry) => {
-          if (geometry?.type) {
-            const oldGeometry = Utils.CopyJSON(this._geometry)
-            this.geometry = geometry
-            this.ui.resetTooltip()
-            this.sync.update('geometry', this.geometry, oldGeometry)
-          }
-        })
-    })
+    const oldGeometry = Utils.CopyJSON(this._geometry)
+    this.journal.update(
+      'geometry',
+      async () => {
+        const { Importer } = await this.loadORS()
+        const importer = new Importer(this._umap)
+        const geometry = await importer.directions(this.properties._umap_options.route)
+        if (!geometry?.type) return
+        this.geometry = geometry
+        this.ui.resetTooltip()
+        return this.geometry
+      },
+      oldGeometry
+    )
   }
 
   addExtraEditFieldset(container) {
@@ -1298,22 +1259,6 @@ export class Polygon extends Path {
       mainColor: 'fillColor',
       className: 'polygon',
     }
-  }
-
-  toLatLngs() {
-    return GeoJSON.coordsToLatLngs(this.coordinates, this.type === 'Polygon' ? 1 : 2)
-  }
-
-  convertLatLngs(latlngs) {
-    const holes = !GeoUtils.isFlat(latlngs)
-    let multi = holes && !GeoUtils.isFlat(latlngs[0])
-    let coordinates = GeoJSON.latLngsToCoords(latlngs, multi ? 2 : holes ? 1 : 0, true)
-    if (Utils.polygonMustBeFlattened(coordinates)) {
-      coordinates = coordinates[0]
-      multi = false
-    }
-    const type = multi ? 'MultiPolygon' : 'Polygon'
-    return { coordinates, type }
   }
 
   isEmpty() {

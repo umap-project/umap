@@ -127,7 +127,7 @@ export class TopBar extends WithTemplate {
       this._menu.openBelow(this.elements.user, actions)
     })
     this.elements.peers.addEventListener('mouseover', () => {
-      const connectedPeers = this._umap.sync.getPeers()
+      const connectedPeers = this._umap.journal.getPeers()
       if (!Object.keys(connectedPeers).length) return
       const ul = Utils.loadTemplate(
         `<ul>${Object.entries(connectedPeers)
@@ -195,13 +195,13 @@ export class TopBar extends WithTemplate {
     this.element.classList.toggle('draft', this._umap.permissions.isDraft())
     const syncEnabled = this._umap.getProperty('syncEnabled')
     this.elements.peers.hidden = !syncEnabled
-    this.elements.view.disabled = this._umap.sync._undoManager.isDirty()
+    this.elements.view.disabled = this._umap.journal._undoManager.isDirty()
     const isDraft = this._umap.permissions.isDraft()
     const isTemplate = this._umap.getProperty('is_template')
     this.elements.saveLabel.hidden = isDraft || isTemplate
     this.elements.saveDraftLabel.hidden = !isDraft || isTemplate
     this.elements.saveTemplateLabel.hidden = !isTemplate
-    this._umap.sync._undoManager.toggleState()
+    this._umap.journal._undoManager.toggleState()
     this.elements.share.hidden = this._umap.permissions.isAnonymousMap()
     this.elements.shareAnonymous.hidden = !this._umap.permissions.isAnonymousMap()
   }

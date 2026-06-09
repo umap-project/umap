@@ -2,9 +2,9 @@ import * as Utils from '../utils.js'
 import { DataLayerUpdater, FeatureUpdater, MapUpdater } from './updaters.js'
 
 export class UndoManager {
-  constructor(umap, updaters, syncEngine) {
+  constructor(umap, updaters, journal) {
     this._umap = umap
-    this._syncEngine = syncEngine
+    this._journal = journal
     this.updaters = updaters
     this._undoStack = []
     this._redoStack = []
@@ -13,10 +13,11 @@ export class UndoManager {
   toggleState() {
     // document is undefined during unittests
     if (typeof document === 'undefined') return
+    const pending = this._journal.hasPending()
     const undoButton = document.querySelector('.edit-undo')
     const redoButton = document.querySelector('.edit-redo')
-    if (undoButton) undoButton.disabled = !this._undoStack.length
-    if (redoButton) redoButton.disabled = !this._redoStack.length
+    if (undoButton) undoButton.disabled = !this._undoStack.length || pending
+    if (redoButton) redoButton.disabled = !this._redoStack.length || pending
     const dirty = this.isDirty()
     document.body.classList.toggle('umap-is-dirty', dirty)
     for (const button of document.querySelectorAll('.disabled-on-dirty')) {
@@ -56,6 +57,7 @@ export class UndoManager {
   }
 
   undo(redo = false) {
+    if (this._journal.hasPending()) return
     const fromStack = redo ? this._redoStack : this._undoStack
     const toStack = redo ? this._undoStack : this._redoStack
     const stage = fromStack.pop()
@@ -90,7 +92,7 @@ export class UndoManager {
         updater.upsert(operation)
         break
     }
-    this._syncEngine._send(operation)
+    this._journal._send(operation)
   }
 
   _getUpdater(subject, metadata) {

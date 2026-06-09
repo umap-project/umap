@@ -33,7 +33,7 @@ mkdir -p umap/static/umap/vendors/openrouteservice/ && cp node_modules/openroute
 mkdir -p umap/static/umap/vendors/snapdom/ && cp node_modules/@zumer/snapdom/dist/snapdom.min.mjs umap/static/umap/vendors/snapdom/
 mkdir -p umap/static/umap/vendors/simple-elevation-chart/ && cp node_modules/simple-elevation-chart/src/elevation.* umap/static/umap/vendors/simple-elevation-chart/
 # Turf
-for mod in meta helpers flatten distance invariant clean-coords boolean-point-on-line; do
+for mod in meta helpers flatten distance invariant clean-coords boolean-point-on-line flip clone; do
   mkdir -p umap/static/umap/vendors/turf/$mod && cp node_modules/@turf/$mod/dist/esm/index.js* umap/static/umap/vendors/turf/$mod/
 done
 

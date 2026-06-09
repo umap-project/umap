@@ -187,8 +187,8 @@ export class MutatingForm extends Form {
     if ('render' in this.obj) {
       this.obj.render([helper.field], this)
     }
-    if ('sync' in this.obj && helper.properties.sync !== false) {
-      this.obj.sync.update(helper.field, value, oldValue)
+    if ('journal' in this.obj && helper.properties.journal !== false) {
+      this.obj.journal.update(helper.field, value, oldValue)
     }
   }
 

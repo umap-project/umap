@@ -223,7 +223,7 @@ export class Filters {
       this.available.entries().map(([key, filter]) => filter.dumps())
     )
     if (sync) {
-      this._parent.sync.update(
+      this._parent.journal.update(
         'properties.filters',
         this._parent.properties.filters,
         oldValue
@@ -341,7 +341,7 @@ export class Filters {
       for (const fieldKey of orderedKeys) {
         layer.filters.add({ ...copy[fieldKey] })
       }
-      layer.filters._parent.sync.update(
+      layer.filters._parent.journal.update(
         'properties.filters',
         layer.filters._parent.properties.filters,
         oldValue
