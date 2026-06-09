@@ -6,6 +6,7 @@ import {
   GeoJSON,
   LatLng,
   LatLngBounds,
+  LineUtil,
   Marker,
   Polygon,
   Polyline,
@@ -104,7 +105,7 @@ const FeatureMixin = {
   },
 
   onCommit: function () {
-    this.feature.onCommit()
+    this.feature.onCommit(this.toGeometry())
   },
 
   isVisible() {
@@ -132,6 +133,13 @@ export const LeafletIcon = DivIcon.extend({
 })
 
 const PointMixin = {
+  toGeometry: function () {
+    return {
+      type: 'Point',
+      coordinates: GeoJSON.latLngToCoords(this.getLatLng()),
+    }
+  },
+
   isOnScreen: function (bounds) {
     bounds = bounds || this._map.getBounds()
     return bounds.contains(this.getCenter())
@@ -421,10 +429,16 @@ const PathMixin = {
   isolateShape: function (atLatLng) {
     if (!this.feature.isMulti()) return
     const shape = this.enableEdit().deleteShapeAt(atLatLng)
-    this.feature.pullGeometry()
     this.disableEdit()
     if (!shape) return
-    return this.feature.isolateShape(shape)
+    // TODO: remove direct call to feature.datalayer.
+    // Use an event instead ?
+    const other = this.feature.datalayer.makeFeature({
+      geometry: this.toGeometry(shape),
+      properties: this.feature.cloneProperties(),
+    })
+    other.edit()
+    return other
   },
 
   getStyleOptions: () => [
@@ -458,6 +472,19 @@ export const LeafletPolyline = Polyline.extend({
   includes: [FeatureMixin, PathMixin],
 
   getClass: () => LeafletPolyline,
+
+  toGeometry: function (latlngs = this.getLatLngs()) {
+    let multi = !LineUtil.isFlat(latlngs)
+    if (multi && latlngs.length === 1) {
+      // Simple LineString badly typed as Multi
+      latlngs = latlngs[0]
+      multi = false
+    }
+    return {
+      type: multi ? 'MultiLineString' : 'LineString',
+      coordinates: GeoJSON.latLngsToCoords(latlngs, multi ? 1 : 0, false),
+    }
+  },
 
   getMeasure: function (shape) {
     let shapes
@@ -579,6 +606,23 @@ export const LeafletPolygon = Polygon.extend({
 
   getClass: () => LeafletPolygon,
 
+  toGeometry: function (latlngs = this.getLatLngs()) {
+    let holes = !LineUtil.isFlat(latlngs)
+    let multi = holes && !LineUtil.isFlat(latlngs[0])
+    if (multi && latlngs.length === 1) {
+      // Simple LineString badly typed as Multi
+      latlngs = latlngs[0]
+      holes = !LineUtil.isFlat(latlngs)
+      multi = false
+    }
+    let coords = GeoJSON.latLngsToCoords(latlngs, multi ? 2 : holes ? 1 : 0, true)
+    if (!holes) coords = [coords]
+    return {
+      type: multi ? 'MultiPolygon' : 'Polygon',
+      coordinates: coords,
+    }
+  },
+
   startHole: function (event) {
     this.enableEdit().newHole(event.latlng)
   },
@@ -627,7 +671,7 @@ export const CircleMarker = BaseCircleMarker.extend({
   parentClass: BaseCircleMarker,
   includes: [FeatureMixin, PathMixin, PointMixin],
   initialize: function (feature, latlng) {
-    if (Array.isArray(latlng) && !(latlng[0] instanceof Number)) {
+    if (Array.isArray(latlng) && typeof latlng[0] !== 'number') {
       // Must be a line or polygon
       const bounds = new LatLngBounds(latlng)
       latlng = bounds.getCenter()

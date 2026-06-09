@@ -18,4 +18,5 @@ export function isFlat(arr) {
     (typeof arr[0][0] !== 'object' && typeof arr[0][0] !== 'undefined')
   )
 }
+
 export { flip }

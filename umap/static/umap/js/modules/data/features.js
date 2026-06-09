@@ -1,4 +1,3 @@
-import { GeoJSON } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import { MutatingForm } from '../form/builder.js'
 import { translate, getLocale } from '../i18n.js'
@@ -103,19 +102,6 @@ class Feature {
     this._setLatLngs(this.toLatLngs())
   }
 
-  pullGeometry(sync = true) {
-    const oldGeometry = Utils.CopyJSON(this._geometry)
-    this.fromLatLngs(this._getLatLngs())
-    if (sync) {
-      this.journal.update('geometry', this.geometry, oldGeometry)
-    }
-  }
-
-  fromLatLngs(latlngs) {
-    this._geometry_bk = Utils.CopyJSON(this._geometry)
-    this._geometry = this.convertLatLngs(latlngs)
-  }
-
   toLatLngs(geometry) {
     return GeoUtils.flip(this.geometry).coordinates
   }
@@ -152,8 +138,9 @@ class Feature {
     }
   }
 
-  onCommit() {
-    this.pullGeometry(false)
+  onCommit(geometry) {
+    this._geometry_bk = Utils.CopyJSON(this._geometry)
+    this._geometry = geometry
     // When the layer is a remote layer, we don't want to sync the creation of the
     // points via the websocket, as the other peers will get them themselves.
     if (this.datalayer?.isRemoteLayer()) return
@@ -730,16 +717,8 @@ export class Point extends Feature {
     }
   }
 
-  _getLatLngs() {
-    return this.ui.getLatLng()
-  }
-
   _setLatLngs(latlng) {
     this.ui.setLatLng(latlng)
-  }
-
-  convertLatLngs(latlng) {
-    return { coordinates: GeoJSON.latLngToCoords(latlng), type: 'Point' }
   }
 
   getUIClass() {
@@ -783,7 +762,7 @@ export class Point extends Feature {
         builder.restoreField('ui._latlng.lat')
         builder.restoreField('ui._latlng.lng')
       }
-      this.pullGeometry()
+      this.ui.onCommit()
       this.zoomTo({ easing: false })
     })
     const fieldset = DOMUtils.createFieldset(container, translate('Coordinates'))
@@ -803,10 +782,6 @@ export class Point extends Feature {
 class Path extends Feature {
   hasGeom() {
     return !this.isEmpty()
-  }
-
-  _getLatLngs() {
-    return this.ui.getLatLngs()
   }
 
   _setLatLngs(latlngs) {
@@ -856,22 +831,12 @@ class Path extends Feature {
 
   transferShape(at, to) {
     const shape = this.ui.enableEdit().deleteShapeAt(at)
-    // FIXME: make Leaflet.Editable send an event instead
-    this.pullGeometry()
     this.ui.disableEdit()
     if (!shape) return
     to.ui.enableEdit().appendShape(shape)
-    to.pullGeometry()
+    // appendShape (insertShape) does not fire `editable:edited`, so commit by hand.
+    to.ui.onCommit()
     if (this.isEmpty()) this.del()
-  }
-
-  isolateShape(latlngs) {
-    const properties = this.cloneProperties()
-    const type = this instanceof LineString ? 'LineString' : 'Polygon'
-    const geometry = this.convertLatLngs(latlngs)
-    const other = this.datalayer.makeFeature({ type, geometry, properties })
-    other.edit()
-    return other
   }
 
   zoomTo({ easing, callback }) {
@@ -961,17 +926,6 @@ export class LineString extends Path {
       mainColor: 'color',
       className: 'polyline',
     }
-  }
-
-  convertLatLngs(latlngs) {
-    let multi = !GeoUtils.isFlat(latlngs)
-    let coordinates = GeoJSON.latLngsToCoords(latlngs, multi ? 1 : 0, false)
-    if (coordinates.length === 1 && typeof coordinates[0][0] !== 'number') {
-      coordinates = Utils.flattenCoordinates(coordinates)
-      multi = false
-    }
-    const type = multi ? 'MultiLineString' : 'LineString'
-    return { coordinates, type }
   }
 
   getUIClass() {
@@ -1305,18 +1259,6 @@ export class Polygon extends Path {
       mainColor: 'fillColor',
       className: 'polygon',
     }
-  }
-
-  convertLatLngs(latlngs) {
-    const holes = !GeoUtils.isFlat(latlngs)
-    let multi = holes && !GeoUtils.isFlat(latlngs[0])
-    let coordinates = GeoJSON.latLngsToCoords(latlngs, multi ? 2 : holes ? 1 : 0, true)
-    if (Utils.polygonMustBeFlattened(coordinates)) {
-      coordinates = coordinates[0]
-      multi = false
-    }
-    const type = multi ? 'MultiPolygon' : 'Polygon'
-    return { coordinates, type }
   }
 
   isEmpty() {
