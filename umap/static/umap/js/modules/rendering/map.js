@@ -69,7 +69,8 @@ export class LeafletProxy {
       }
     })
     this.umap.on('map:view:set', (event) => {
-      const { easing, center, zoom } = event.detail
+      const { easing, zoom } = event.detail
+      const center = this.latLng({ coordinates: event.detail.center })
       if (easing) {
         this.map.flyTo(center, { maxZoom: zoom ?? this.zoom })
       } else {

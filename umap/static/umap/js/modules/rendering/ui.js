@@ -17,6 +17,7 @@ import * as GeoUtils from '../geoutils.js'
 import { translate } from '../i18n.js'
 import * as Icon from '../icon.js'
 import * as Utils from '../utils.js'
+import * as TextUtils from '../textutils.js'
 
 const FeatureMixin = {
   initialize: function (feature, latlngs) {
@@ -487,20 +488,8 @@ export const LeafletPolyline = Polyline.extend({
   },
 
   getMeasure: function (shape) {
-    let shapes
-    if (shape) {
-      shapes = [shape]
-    } else if (GeoUtils.isFlat(this._latlngs)) {
-      shapes = [this._latlngs]
-    } else {
-      shapes = this._latlngs
-    }
-    // FIXME: compute from data in feature (with TurfJS)
-    const length = shapes.reduce(
-      (acc, shape) => acc + L.GeoUtil.lineLength(this._map, shape),
-      0
-    )
-    return L.GeoUtil.readableDistance(length, this._map.measureTools.getMeasureUnit())
+    const length = GeoUtils.length(this.toGeometry(shape), { units: 'meters' })
+    return TextUtils.readableDistance(length)
   },
 
   getElevation: function () {
@@ -628,8 +617,7 @@ export const LeafletPolygon = Polygon.extend({
   },
 
   getMeasure: function (shape) {
-    const area = L.GeoUtil.geodesicArea(shape || this._defaultShape())
-    return L.GeoUtil.readableArea(area, this._map.measureTools.getMeasureUnit())
+    return TextUtils.readableArea(GeoUtils.area(this.toGeometry(shape)))
   },
 })
 const WORLD = [

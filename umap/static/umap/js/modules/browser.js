@@ -272,11 +272,9 @@ export default class Browser {
     for (const format of Object.keys(EXPORT_FORMATS)) {
       items.push({
         label: format,
-        action: () =>
-          this._umap.loadShare().then((share) => share.download(format)),
+        action: () => this._umap.loadShare().then((share) => share.download(format)),
       })
     }
     menu.openBelow(element, items)
   }
-
 }
