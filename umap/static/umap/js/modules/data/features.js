@@ -15,6 +15,7 @@ import * as Clipboard from '../clipboard.js'
 import * as DOMUtils from '../domutils.js'
 import * as Icon from '../icon.js'
 import * as GeoUtils from '../geoutils.js'
+import * as TextUtils from '../textutils.js'
 
 class Feature {
   constructor(umap, datalayer, geojson = {}, id = null) {
@@ -931,7 +932,9 @@ export class LineString extends Path {
   }
 
   get measure() {
-    return Utils.readableDistance(GeoUtils.length(this.geometry, { units: 'meters' }))
+    return TextUtils.readableDistance(
+      GeoUtils.length(this.geometry, { units: 'meters' })
+    )
   }
 
   getUIClass() {
@@ -1268,7 +1271,7 @@ export class Polygon extends Path {
   }
 
   get measure() {
-    return Utils.readableArea(GeoUtils.area(this.geometry))
+    return TextUtils.readableArea(GeoUtils.area(this.geometry))
   }
 
   isEmpty() {

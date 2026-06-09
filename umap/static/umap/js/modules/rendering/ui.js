@@ -17,6 +17,7 @@ import * as GeoUtils from '../geoutils.js'
 import { translate } from '../i18n.js'
 import * as Icon from '../icon.js'
 import * as Utils from '../utils.js'
+import * as TextUtils from '../textutils.js'
 
 const FeatureMixin = {
   initialize: function (feature, latlngs) {
@@ -488,7 +489,7 @@ export const LeafletPolyline = Polyline.extend({
 
   getMeasure: function (shape) {
     const length = GeoUtils.length(this.toGeometry(shape), { units: 'meters' })
-    return Utils.readableDistance(length)
+    return TextUtils.readableDistance(length)
   },
 
   getElevation: function () {
@@ -616,7 +617,7 @@ export const LeafletPolygon = Polygon.extend({
   },
 
   getMeasure: function (shape) {
-    return Utils.readableArea(GeoUtils.area(this.toGeometry(shape)))
+    return TextUtils.readableArea(GeoUtils.area(this.toGeometry(shape)))
   },
 })
 const WORLD = [
