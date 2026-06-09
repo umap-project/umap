@@ -6,13 +6,13 @@ import {
   GeoJSON,
   LatLng,
   LatLngBounds,
-  LineUtil,
   Marker,
   Polygon,
   Polyline,
   latLng,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
+import * as GeoUtils from '../geoutils.js'
 import { translate } from '../i18n.js'
 import * as Icon from '../icon.js'
 import * as Utils from '../utils.js'
@@ -463,7 +463,7 @@ export const LeafletPolyline = Polyline.extend({
     let shapes
     if (shape) {
       shapes = [shape]
-    } else if (LineUtil.isFlat(this._latlngs)) {
+    } else if (GeoUtils.isFlat(this._latlngs)) {
       shapes = [this._latlngs]
     } else {
       shapes = this._latlngs
@@ -490,7 +490,7 @@ export const LeafletPolyline = Polyline.extend({
       return [gain, loss]
     }
     let shapes
-    if (LineUtil.isFlat(this._latlngs)) {
+    if (GeoUtils.isFlat(this._latlngs)) {
       shapes = [this._latlngs]
     } else {
       shapes = this._latlngs

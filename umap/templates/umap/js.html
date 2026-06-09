@@ -1,6 +1,20 @@
 {% load static %}
 
 {% autoescape off %}
+<script type="importmap">
+  {
+    "imports": {
+      "@turf/meta": "{% static 'umap/vendors/turf/meta/index.js' %}",
+      "@turf/helpers": "{% static 'umap/vendors/turf/helpers/index.js' %}",
+      "@turf/flatten": "{% static 'umap/vendors/turf/flatten/index.js' %}",
+      "@turf/invariant": "{% static 'umap/vendors/turf/invariant/index.js' %}",
+      "@turf/distance": "{% static 'umap/vendors/turf/distance/index.js' %}",
+      "@turf/clean-coords": "{% static 'umap/vendors/turf/clean-coords/index.js' %}",
+      "@turf/boolean-point-on-line": "{% static 'umap/vendors/turf/boolean-point-on-line/index.js' %}",
+      "leaflet": "{% static 'umap/vendors/leaflet/leaflet-src.esm.js' %}"
+    }
+  }
+</script>
 <script type="module"
         src="{% static 'umap/vendors/leaflet/leaflet-src.esm.js' %}"
         defer></script>

@@ -1,8 +1,9 @@
+import * as DOMUtils from '../domutils.js'
+import * as GeoUtils from '../geoutils.js'
+import * as Icon from '../icon.js'
 import { getLocale, translate } from '../i18n.js'
 import { Request } from '../request.js'
 import * as Utils from '../utils.js'
-import * as DOMUtils from '../domutils.js'
-import * as Icon from '../icon.js'
 
 export default async function loadTemplate(name, feature, container) {
   let klass = PopupTemplate
@@ -341,19 +342,16 @@ class Route extends TitleMixin(PopupTemplate) {
     let prev
     let dist = 0
     const data = []
-    const latlngs = feature.ui.getLatLngs()
-    const map = feature._umap.mapProxy.map
     const properties = feature.extendedProperties()
-    for (const latlng of latlngs) {
-      if (!latlng.alt) {
+    for (const [lng, lat, alt] of feature.geometry.coordinates) {
+      if (!alt) {
         continue
       }
       if (prev) {
-        // TODO use Turf for geo computation
-        dist = map.distance(latlng, prev)
+        dist = await GeoUtils.distance([lng, lat], prev, { units: 'meters' })
       }
-      data.push([latlng.alt, dist])
-      prev = latlng
+      data.push([alt, dist])
+      prev = [lng, lat]
     }
     const [root, { altitude, chart }] = Utils.loadTemplateWithRefs(`
       <div>
@@ -385,9 +383,9 @@ class Route extends TitleMixin(PopupTemplate) {
         altitude.textContent = dataset.ele
       }
       icon = new Icon.RouteIcon()
-      const latlng = latlngs[dataset.index]
-      if (!latlng) return
-      feature._umap.fire('map:show:point', { id, latlng, icon })
+      const position = feature.geometry.coordinates[dataset.index]
+      if (!position) return
+      feature._umap.fire('map:show:point', { id, position, icon })
     })
     if (feature.properties.description) {
       const content = this.toHTML(feature, feature.properties.description)

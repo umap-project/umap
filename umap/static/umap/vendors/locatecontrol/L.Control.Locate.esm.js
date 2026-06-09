@@ -1,4 +1,4 @@
-import { Marker, setOptions, divIcon, Control, DomUtil, extend, LayerGroup, DomEvent, Util, circle } from '../leaflet/leaflet-src.esm.js';
+import { Marker, setOptions, divIcon, Control, DomUtil, extend, LayerGroup, DomEvent, Util, circle } from 'leaflet';
 
 /*!
 Copyright (c) 2016 Dominik Moritz
