@@ -1,8 +1,10 @@
+import { uMapAlert as Alert } from '../components/alerts/alert.js'
+import * as DOMUtils from './domutils.js'
 import { translate } from './i18n.js'
+import { LocationIcon } from './icon.js'
 import { Request, ServerRequest } from './request.js'
 import { escapeHTML, generateId } from './utils.js'
 import * as Utils from './utils.js'
-import * as DOMUtils from './domutils.js'
 
 export class BaseAutocomplete {
   constructor(parent, options) {
@@ -21,7 +23,6 @@ export class BaseAutocomplete {
     this.options = Object.assign({}, options)
     this.createInput()
     this.createContainer()
-    this.selectedContainer = this.initSelectedContainer()
   }
 
   get current() {
@@ -35,18 +36,28 @@ export class BaseAutocomplete {
     this._current = index
   }
 
+  get type() {
+    return 'text'
+  }
+
+  get containerClassName() {
+    return 'umap-autocomplete'
+  }
+
   createInput() {
     this.input = DOMUtils.loadTemplate(`
-      <input type="text" placeholder="${this.options.placeholder}" autocomplete="off" class="${this.options.className}" name="${this.options.name || 'autocomplete'}">
+      <input type="${this.type}" placeholder="${this.options.placeholder}" autocomplete="off" class="${this.options.className}" name="${this.options.name || 'autocomplete'}">
     `)
     this.parent.appendChild(this.input)
     this.input.addEventListener('keydown', (event) => this.onKeyDown(event))
-    this.input.addEventListener('keyup', (event) => this.onKeyUp(event))
+    this.input.addEventListener('input', () => this.onInput())
     this.input.addEventListener('blur', (event) => this.onBlur(event))
   }
 
   createContainer() {
-    this.container = DOMUtils.loadTemplate('<ul class="umap-autocomplete"></ul>')
+    this.container = DOMUtils.loadTemplate(
+      `<ul class="${this.containerClassName}"></ul>`
+    )
     document.body.appendChild(this.container)
   }
 
@@ -62,14 +73,14 @@ export class BaseAutocomplete {
   onKeyDown(event) {
     switch (event.key) {
       case 'Tab':
-        if (this.current !== null) this.setChoice()
+        if (this.current !== null) this.select()
         event.preventDefault()
         event.stopPropagation()
         break
       case 'Enter':
         event.preventDefault()
         event.stopPropagation()
-        this.setChoice()
+        this.select()
         break
       case 'Escape':
         event.preventDefault()
@@ -106,25 +117,11 @@ export class BaseAutocomplete {
     }
   }
 
-  onKeyUp(event) {
-    const special = [
-      'Tab',
-      'Enter',
-      'ArrowLeft',
-      'ArrowRight',
-      'ArrowDown',
-      'ArrowUp',
-      'Meta',
-      'Shift',
-      'Alt',
-      'Control',
-    ]
-    if (!special.includes(event.key)) {
-      if (this._typing) window.clearTimeout(this._typing)
-      this._typing = window.setTimeout(() => {
-        this.search()
-      }, this.options.throttling)
-    }
+  onInput() {
+    if (this._typing) window.clearTimeout(this._typing)
+    this._typing = window.setTimeout(() => {
+      this.search()
+    }, this.options.throttling)
   }
 
   onBlur() {
@@ -144,8 +141,8 @@ export class BaseAutocomplete {
     this.input.value = ''
   }
 
-  setChoice(choice) {
-    choice = choice || this.results[this.current]
+  select() {
+    const choice = this.results[this.current]
     if (choice) {
       this.input.value = choice.item.label
       this.options.on_select(choice)
@@ -168,12 +165,12 @@ export class BaseAutocomplete {
       this.current = result
       this.highlight()
     })
-    li.addEventListener('mousedown', () => this.setChoice())
+    li.addEventListener('mousedown', () => this.select())
     return result
   }
 
   resultToIndex(result) {
-    return this.results.findIndex((item) => item.item.value === result.item.value)
+    return this.results.indexOf(result)
   }
 
   handleResults(data) {
@@ -183,9 +180,15 @@ export class BaseAutocomplete {
     data.forEach((item) => {
       this.results.push(this.createResult(item))
     })
+    if (!data.length && this.options.emptyMessage) {
+      this.container.appendChild(
+        DOMUtils.loadTemplate(
+          Utils.sanitizeVars`<li class="umap-autocomplete-noresult">${this.options.emptyMessage}</li>`
+        )
+      )
+    }
     this.current = 0
     this.highlight()
-    //TODO manage no results
   }
 
   highlight() {
@@ -270,6 +273,11 @@ class BaseServerAjax extends BaseAjax {
 
 export const SingleMixin = (Base) =>
   class extends Base {
+    constructor(parent, options) {
+      super(parent, options)
+      this.selectedContainer = this.initSelectedContainer()
+    }
+
     initSelectedContainer() {
       const el = Utils.loadTemplate('<div class="umap-singleresult"></div>')
       this.input.parentNode.insertBefore(el, this.input.nextSibling)
@@ -296,6 +304,11 @@ export const SingleMixin = (Base) =>
 
 export const MultipleMixin = (Base) =>
   class extends Base {
+    constructor(parent, options) {
+      super(parent, options)
+      this.selectedContainer = this.initSelectedContainer()
+    }
+
     initSelectedContainer() {
       const el = Utils.loadTemplate('<ul class="umap-multiresult"></ul>')
       this.input.parentNode.insertBefore(el, this.input.nextSibling)
@@ -318,6 +331,196 @@ export const MultipleMixin = (Base) =>
 export class AjaxAutocompleteMultiple extends MultipleMixin(BaseServerAjax) {}
 
 export class AjaxAutocomplete extends SingleMixin(BaseServerAjax) {}
+
+// Parse coordinates in the search input to make a reverse search:
+// "48.3 4.8", "48.3, 4.8", "-48.3,-4.8"…
+const COORDS_PATTERN =
+  /^(?<lat>[-+]?\d{1,2}[.,]\d+)\s*[ ,]\s*(?<lng>[-+]?\d{1,3}[.,]\d+)$/
+
+// TODO: settings ?
+const REVERSE_URL = 'https://photon.komoot.io/reverse/?'
+
+export class Geocoder extends BaseAjax {
+  constructor(umap, parent) {
+    super(parent, {
+      url: umap.properties.urls.search,
+      placeholder: translate('Type a place name or coordinates'),
+      emptyMessage: translate('No results'),
+      className: 'umap-search-input',
+      minChar: 3,
+      limit: 10,
+      throttling: 300,
+    })
+    this._umap = umap
+  }
+
+  get type() {
+    return 'search'
+  }
+
+  get containerClassName() {
+    return 'umap-autocomplete umap-search'
+  }
+
+  createContainer() {
+    this.container = DOMUtils.loadTemplate(
+      `<ul class="${this.containerClassName}"></ul>`
+    )
+    this.parent.appendChild(this.container)
+  }
+
+  onBlur() {}
+
+  buildParams(value) {
+    const params = { q: value, limit: this.options.limit }
+    // Bias results towards the current view, but only when zoomed in enough.
+    if (this._umap.mapProxy.zoom > 10) {
+      const center = this._umap.mapProxy.center
+      params.lat = center.lat
+      params.lon = center.lng
+      params.location_bias_scale = 0.5
+    }
+    const bbox = this._umap.mapProxy.searchBbox
+    if (bbox) params.bbox = bbox
+    return params
+  }
+
+  buildUrl(value) {
+    return this.options.url + Utils.buildQueryString(this.buildParams(value))
+  }
+
+  async search() {
+    const value = this.input.value
+    const coords = COORDS_PATTERN.exec(value)
+    if (coords) {
+      this.clear()
+      const { lat, lng } = coords.groups
+      return this.reverse(
+        Number.parseFloat(lat.replace(',', '.')),
+        Number.parseFloat(lng.replace(',', '.'))
+      )
+    }
+    // Only numbers but not valid coordinates yet: abort.
+    if (/^[\d .,]*$/.test(value)) return
+    if (value.length < this.options.minChar) {
+      this.clear()
+      return
+    }
+    if (value === this.cache) return
+    this.cache = value
+    const geojson = await this._search(this.buildUrl(value))
+    if (geojson) this.handleResults(geojson.features)
+  }
+
+  async reverse(lat, lng) {
+    if (!Utils.LatLngIsValid([lat, lng])) {
+      Alert.error(translate('Invalid latitude or longitude'))
+      return
+    }
+    const url = `${REVERSE_URL}${Utils.buildQueryString({ limit: 1, lat, lon: lng })}`
+    const geojson = await this._search(url)
+    if (!geojson) return
+    geojson.features.unshift({
+      type: 'Feature',
+      geometry: { type: 'Point', coordinates: [lng, lat] },
+      properties: {
+        name: translate('Go to "{coords}"', { coords: `${lat} ${lng}` }),
+      },
+    })
+    this.handleResults(geojson.features)
+  }
+
+  createResult(feature) {
+    const el = this.formatResult(feature)
+    this.container.appendChild(el)
+    const result = { feature, el }
+    el.addEventListener('mouseover', () => {
+      this.current = result
+      this.highlight()
+    })
+    el.addEventListener('mousedown', () => this.select())
+    return result
+  }
+
+  formatResult(feature) {
+    const properties = feature.properties
+    const { name, housenumber, street, city, state, country } = properties
+    let title = name || housenumber || ''
+    if (!name && housenumber && street) title = `${housenumber} ${street}`
+    const type =
+      feature.properties.osm_value === 'yes'
+        ? feature.properties.osm_key
+        : feature.properties.osm_value
+    const details = [
+      type,
+      city !== name ? city : null,
+      state !== name ? state : null,
+      country,
+    ]
+    const [li, { point, geom }] = DOMUtils.loadTemplateWithRefs(Utils.sanitizeVars`
+      <li>
+        <span class="search-result-tools">
+          <button type="button" title="${translate('Add this geometry to my map')}" data-ref="geom"><i class="icon icon-16 icon-polygon-plus"></i></button>
+          <button type="button" title="${translate('Add this place to my map')}" data-ref="point"><i class="icon icon-16 icon-marker-plus"></i></button>
+        </span>
+        <strong>${title}</strong>
+        <small>${details.filter(Boolean).join(', ')}</small>
+      </li>
+    `)
+    geom.hidden = !['R', 'W'].includes(properties.osm_type)
+    point.addEventListener('mousedown', (event) => {
+      event.stopPropagation()
+      this._umap.defaultEditDataLayer().makeFeature(feature).edit()
+    })
+    geom.addEventListener('mousedown', async (event) => {
+      event.stopPropagation()
+      const osm_type = { R: 'relation', W: 'way', N: 'node' }[properties.osm_type]
+      if (!osm_type || !properties.osm_id) return
+      await this._umap.loadImporter()
+      const importer = this._umap.importer
+      importer.build()
+      importer.format = 'geojson'
+      importer.raw = await this.getOSMObject(osm_type, properties.osm_id)
+      importer.submit()
+    })
+    const id = 'location'
+    const icon = new LocationIcon()
+    li.addEventListener('mouseover', () => {
+      this._umap.fire('map:show:point', {
+        id,
+        position: feature.geometry.coordinates,
+        icon,
+      })
+    })
+    li.addEventListener('mouseout', () => {
+      this._umap.fire('map:hide:point', { id })
+    })
+    return li
+  }
+
+  async getOSMObject(osm_type, osm_id) {
+    const url = `https://www.openstreetmap.org/api/0.6/${osm_type}/${osm_id}/full`
+    const response = await this._umap.request.get(url)
+    if (response?.ok) {
+      const data = await this._umap.formatter.fromOSM(await response.text())
+      data.features = data.features.filter(
+        (feature) => feature.properties.id === `${osm_type}/${osm_id}`
+      )
+      return JSON.stringify(data)
+    }
+  }
+
+  select() {
+    const result = this.results[this.current]
+    if (result) {
+      const zoom = Math.max(this._umap.mapProxy.zoom, 14) // Never unzoom.
+      this._umap.fire('map:view:set', {
+        center: result.feature.geometry.coordinates,
+        zoom,
+      })
+    }
+  }
+}
 
 export class AutocompleteDatalist {
   constructor(input) {

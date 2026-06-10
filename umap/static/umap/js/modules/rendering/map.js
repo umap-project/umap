@@ -5,10 +5,10 @@ import {
   LatLngBounds,
   Map as LeafletMap,
   Marker,
+  TileLayer,
   latLng,
   setOptions,
   stamp,
-  TileLayer,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import { translate } from '../i18n.js'
@@ -226,6 +226,11 @@ export class LeafletProxy {
 
   get bounds() {
     return this.map.getBounds()
+  }
+
+  get searchBbox() {
+    // "west,south,east,north", or undefined
+    return this.map.options.maxBounds?.toBBoxString()
   }
 
   get center() {

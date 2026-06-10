@@ -308,7 +308,6 @@ ul.umap-autocomplete {
     position: absolute;
     background-color: white;
     z-index: var(--zindex-autocomplete);
-    box-shadow: 0 4px 9px #999999;
 }
 
 .umap-autocomplete li {
