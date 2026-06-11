@@ -667,7 +667,7 @@ export const Search = PhotonSearch.extend({
     if (choice) {
       const feature = choice.feature
       const zoom = Math.max(this._umap.mapProxy.zoom, 14) // Never unzoom.
-      this._umap.fire('map:view:set', {center: feature.geometry.coordinates, zoom})
+      this._umap.fire('map:view:set', { center: feature.geometry.coordinates, zoom })
     }
   },
 })

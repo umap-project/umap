@@ -20,11 +20,6 @@ import * as Utils from '../utils.js'
 import * as TextUtils from '../textutils.js'
 
 const FeatureMixin = {
-  initialize: function (feature, latlngs) {
-    this.feature = feature
-    this.parentClass.prototype.initialize.call(this, latlngs)
-  },
-
   onAdd: function (map) {
     this.addInteractions()
     return this.parentClass.prototype.onAdd.call(this, map)
@@ -64,38 +59,44 @@ const FeatureMixin = {
   },
 
   onClick: function (event) {
-    if (this._map.measureTools?.enabled()) return
-    this._popupHandlersAdded = true // Prevent leaflet from managing event
-    if (event.originalEvent.shiftKey) {
-      if (event.originalEvent.ctrlKey || event.originalEvent.metaKey) {
-        this.feature.datalayer.edit(event)
-      } else if (!this.feature.isReadOnly()) {
-        this.feature.toggleEditing(event)
-      }
-    } else if (!this._map.editTools?.drawing()) {
-      this.feature.view(event)
-    }
+    this._map.fire('feature:click', {
+      id: this.feature.id,
+      layer: this,
+      latlng: event.latlng,
+      originalEvent: event.originalEvent,
+    })
+    // if (this._map.measureTools?.enabled()) return
+    // this._popupHandlersAdded = true // Prevent leaflet from managing event
+    // if (event.originalEvent.shiftKey) {
+    //   if (event.originalEvent.ctrlKey || event.originalEvent.metaKey) {
+    //     this.feature.datalayer.edit(event)
+    //   } else if (!this.feature.isReadOnly()) {
+    //     this.feature.toggleEditing(event)
+    //   }
+    // } else if (!this._map.editTools?.drawing()) {
+    //   this.feature.view(event)
+    // }
     DomEvent.stop(event)
   },
 
-  resetTooltip: function () {
-    if (!this.feature.hasGeom()) return
-    const displayName = this.feature.getDisplayName()
-    let showLabel = this.feature.getOption('showLabel')
-    const oldLabelHover = this.feature.getOption('labelHover')
+  // resetTooltip: function () {
+  //   if (!this.feature.hasGeom()) return
+  //   const displayName = this.feature.getDisplayName()
+  //   let showLabel = this.feature.getOption('showLabel')
+  //   const oldLabelHover = this.feature.getOption('labelHover')
 
-    const options = {
-      direction: this.feature.getOption('labelDirection'),
-      interactive: this.feature.getOption('labelInteractive'),
-    }
+  //   const options = {
+  //     direction: this.feature.getOption('labelDirection'),
+  //     interactive: this.feature.getOption('labelInteractive'),
+  //   }
 
-    if (oldLabelHover && showLabel) showLabel = null // Retrocompat.
-    options.permanent = showLabel === true
-    this.unbindTooltip()
-    if ((showLabel === true || showLabel === null) && displayName) {
-      this.bindTooltip(Utils.escapeHTML(displayName), options)
-    }
-  },
+  //   if (oldLabelHover && showLabel) showLabel = null // Retrocompat.
+  //   options.permanent = showLabel === true
+  //   this.unbindTooltip()
+  //   if ((showLabel === true || showLabel === null) && displayName) {
+  //     this.bindTooltip(Utils.escapeHTML(displayName), options)
+  //   }
+  // },
 
   onContextMenu: function (event) {
     DomEvent.stop(event)
@@ -203,8 +204,8 @@ export const LeafletMarker = Marker.extend({
   parentClass: Marker,
   includes: [FeatureMixin, PointMixin],
 
-  initialize: function (feature, latlng) {
-    FeatureMixin.initialize.call(this, feature, latlng)
+  initialize: function (latlng) {
+    FeatureMixin.initialize.call(this, latlng)
     this.setIcon(this.getIcon())
   },
 
@@ -369,17 +370,17 @@ const PathMixin = {
     if (this._tooltip) this._tooltip.setLatLng(this.getCenter())
   },
 
-  beforeAdd: function (map) {
-    this.options.renderer = this.feature.datalayer.renderer
-    this.parentClass.prototype.beforeAdd.call(this, map)
-  },
+  // beforeAdd: function (map) {
+  //   this.options.renderer = this.feature.datalayer.renderer
+  //   this.parentClass.prototype.beforeAdd.call(this, map)
+  // },
 
   onAdd: function (map) {
     this._container = null
     FeatureMixin.onAdd.call(this, map)
     this.setStyle()
     if (this.editor?.enabled()) this.editor.addHooks()
-    this.resetTooltip()
+    // this.resetTooltip()
     this._path.dataset.feature = this.feature.id
   },
 
@@ -388,12 +389,13 @@ const PathMixin = {
     FeatureMixin.onRemove.call(this, map)
   },
 
-  setStyle: function (options = {}) {
+  getStyle: function (feature) {
+    const options = {}
     for (const option of this.getStyleOptions()) {
-      options[option] = this.feature.getDynamicOption(option)
+      options[option] = feature.getDynamicOption(option)
     }
     options.pointerEvents = options.interactive ? 'visiblePainted' : 'stroke'
-    this.parentClass.prototype.setStyle.call(this, options)
+    // this.parentClass.prototype.setStyle.call(this, options)
     // TODO remove me when this gets merged and released:
     // https://github.com/Leaflet/Leaflet/pull/9475
 
@@ -401,20 +403,19 @@ const PathMixin = {
 
     // Text decoration
     this.setText(null) // Reset.
-    const textPath = this.feature.getDynamicOption('textPath')
+    const textPath = feature.getDynamicOption('textPath')
     if (textPath) {
       const color =
-        this.feature.getOption('textPathColor') ||
-        this.feature.getDynamicOption('color')
+        feature.getOption('textPathColor') || feature.getDynamicOption('color')
       const textPathOptions = {
-        repeat: this.feature.getOption('textPathRepeat'),
-        offset: this.feature.getOption('textPathOffset') || undefined,
-        position: this.feature.getOption('textPathPosition'),
+        repeat: feature.getOption('textPathRepeat'),
+        offset: feature.getOption('textPathOffset') || undefined,
+        position: feature.getOption('textPathPosition'),
         attributes: {
           fill: color,
-          opacity: this.feature.getDynamicOption('opacity'),
-          rotate: this.feature.getOption('textPathRotate'),
-          'font-size': this.feature.getOption('textPathSize'),
+          opacity: feature.getDynamicOption('opacity'),
+          rotate: feature.getOption('textPathRotate'),
+          'font-size': feature.getOption('textPathSize'),
         },
       }
       this.setText(textPath, textPathOptions)
@@ -538,7 +539,7 @@ export const LeafletRoute = LeafletPolyline.extend({
     this._route = GeoJSON.coordsToLatLngs(
       feature.properties._umap_options.route?.coordinates
     )
-    FeatureMixin.initialize.call(this, feature, latlngs)
+    FeatureMixin.initialize.call(this, latlngs)
     delete this.dragging
   },
 
@@ -658,13 +659,13 @@ export const MaskPolygon = LeafletPolygon.extend({
 export const CircleMarker = BaseCircleMarker.extend({
   parentClass: BaseCircleMarker,
   includes: [FeatureMixin, PathMixin, PointMixin],
-  initialize: function (feature, latlng) {
+  initialize: function (latlng) {
     if (Array.isArray(latlng) && typeof latlng[0] !== 'number') {
       // Must be a line or polygon
       const bounds = new LatLngBounds(latlng)
       latlng = bounds.getCenter()
     }
-    FeatureMixin.initialize.call(this, feature, latlng)
+    FeatureMixin.initialize.call(this, latlng)
   },
   getClass: () => CircleMarker,
   getStyleOptions: function () {

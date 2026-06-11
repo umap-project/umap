@@ -275,8 +275,7 @@ export class DataLayer {
     if (this.layer) this.layer.clearLayers()
     // delete this.layer?
     if (visible) this._umap.mapProxy.removeLayer(this.layer)
-    const Class = LAYER_MAP[this.properties.type] || DefaultLayer
-    this.layer = new Class(this)
+    this._umap.mapProxy.createLayer(this)
     // Rendering layer changed, so let's force reset the feature rendering too.
     this.features.forEach((feature) => {
       feature.makeUI()
@@ -304,7 +303,8 @@ export class DataLayer {
   dataChanged() {
     if (!this.isLoaded() || this._batch) return
     this._umap.fire('datalayer:changed')
-    this.layer.dataChanged()
+    // TODO: reflect on rendering
+    // this.layer.dataChanged()
   }
 
   fromGeoJSON(geojson, sync = true) {
@@ -431,7 +431,7 @@ export class DataLayer {
 
   showFeature(feature) {
     if (feature.isFiltered()) return
-    this.layer.addLayer(feature.ui)
+    // this.layer.addLayer(feature.ui)
   }
 
   hideFeature(feature) {
@@ -439,6 +439,7 @@ export class DataLayer {
   }
 
   addFeature(feature, sync = false) {
+    console.log(feature)
     if (this.group) {
       console.error('Adding feature to a group', feature, this.datalayer)
       return
@@ -544,23 +545,26 @@ export class DataLayer {
   }
 
   addData(geojson, sync) {
-    return this._umap.mapProxy.addLayer(geojson)
-    // const id = Math.random()
-    // this._umap.loader.start(id)
-    // let data = []
-    // this._batch = true
-    // try {
-    //   // Do not fail if remote data is somehow invalid,
-    //   // otherwise the layer becomes uneditable.
-    //   data = this.makeFeatures(geojson, sync)
-    // } catch (err) {
-    //   console.debug('Error with DataLayer', this.id)
-    //   console.error(err)
-    // }
-    // this._batch = false
-    // this.dataChanged()
-    // this._umap.loader.stop(id)
-    // return data
+    const id = Math.random()
+    this._umap.loader.start(id)
+    let data = []
+    this._batch = true
+    try {
+      // Do not fail if remote data is somehow invalid,
+      // otherwise the layer becomes uneditable.
+      data = this.makeFeatures(geojson, sync)
+    } catch (err) {
+      console.debug('Error with DataLayer', this.id)
+      console.error(err)
+    }
+    this._batch = false
+    this._umap.mapProxy.addData(
+      this.id,
+      this._umap.formatter.toFeatureCollection(this.features.all())
+    )
+    this.dataChanged()
+    this._umap.loader.stop(id)
+    return data
   }
 
   makeFeatures(geojson = {}, sync = true) {
@@ -1225,7 +1229,7 @@ export class DataLayer {
   }
 
   async show() {
-    // this._umap.mapProxy.addLayer(this.layer)
+    // this._umap.mapProxy.addLayer(this)
     if (!this.isLoaded()) await this.fetchData()
     this.propagateVisibility({ force: true })
   }

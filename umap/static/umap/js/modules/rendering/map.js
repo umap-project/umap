@@ -9,16 +9,36 @@ import {
   setOptions,
   stamp,
   TileLayer,
+  GeoJSON,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
 import { LeafletIcon } from './ui.js'
+import { Default as DefaultLayer } from '../rendering/layers/base.js'
+import { Categorized, Choropleth, Circles } from '../rendering/layers/classified.js'
+import { Cluster } from '../rendering/layers/cluster.js'
+import { Heat } from '../rendering/layers/heat.js'
+
+export const LAYER_TYPES = [
+  DefaultLayer,
+  Cluster,
+  Heat,
+  Choropleth,
+  Categorized,
+  Circles,
+]
+
+const LAYER_MAP = LAYER_TYPES.reduce((acc, klass) => {
+  acc[klass.TYPE] = klass
+  return acc
+}, {})
 
 export class LeafletProxy {
   constructor(umap, element) {
     this.umap = umap
     this.points = {}
+    this.layers = {}
     this.map = new LeafletMap(element, {
       miniMapControl: false,
       attributionControl: false,
@@ -41,6 +61,24 @@ export class LeafletProxy {
         this.umap.tooltip.open({
           content: translate('Right-click to edit'),
         })
+      }
+    })
+    this.map.on('feature:click', (event) => {
+      console.log(event)
+      const { id, layer, latlng } = event
+      const feature = this.umap.getFeatureById(id)
+      if (this.map.measureTools?.enabled()) return
+      layer._popupHandlersAdded = true // Prevent leaflet from managing event
+      if (event.originalEvent.shiftKey) {
+        if (event.originalEvent.ctrlKey || event.originalEvent.metaKey) {
+          feature.datalayer.edit(event)
+        } else if (!feature.isReadOnly()) {
+          this.editLayer(id)
+          feature.edit()
+        }
+      } else if (!this.map.editTools?.drawing()) {
+        console.log('asking for feature.view')
+        feature.view({ center: [latlng.lng, latlng.lat] })
       }
     })
   }
@@ -86,6 +124,22 @@ export class LeafletProxy {
     )
     this.umap.on('draw:route', () => this.map.editTools.startRoute())
     this.umap.on('map:resize', () => this.map.invalidateSize())
+    this.umap.on('panel:show', (event) => {
+      const { content } = event.detail
+      this.umap.panel.open({ content })
+    })
+    this.umap.on('popup:show', (event) => {
+      const { content, center } = event.detail
+      console.log('we are in the show')
+      const [lon, lat] = center
+      this.map.openPopup(content, [lat, lon])
+    })
+    this.umap.on('feature:reset', (event) => {
+      const { feature } = event.detail
+      const group = this.layers[feature.datalayer.id]
+      const layer = this.getLayer(feature.id)
+      group.resetStyle(layer)
+    })
   }
 
   get container() {
@@ -228,6 +282,26 @@ export class LeafletProxy {
     return bounds
   }
 
+  getGeoContext() {
+    const bounds = this.bounds
+    const center = this.center
+    const context = {
+      bbox: bounds.toBBoxString(),
+      north: bounds.getNorthEast().lat,
+      east: bounds.getNorthEast().lng,
+      south: bounds.getSouthWest().lat,
+      west: bounds.getSouthWest().lng,
+      lat: center.lat,
+      lng: center.lng,
+      zoom: this.zoom,
+    }
+    context.left = context.west
+    context.bottom = context.south
+    context.right = context.east
+    context.top = context.north
+    return context
+  }
+
   get bounds() {
     return this.map.getBounds()
   }
@@ -248,7 +322,7 @@ export class LeafletProxy {
   initEditTools() {
     this.map.editTools = new U.Editable(this.umap)
   }
-
+  enableEdit() {}
   onEscape() {
     if (this.umap.editEnabled && this.map.editTools.drawing()) {
       this.map.editTools.onEscape()
@@ -288,8 +362,18 @@ export class LeafletProxy {
     this.map.removeLayer(layer)
   }
 
-  addLayer(layer) {
+  createLayer(datalayer) {
+    // const Class = LAYER_MAP[datalayer.properties.type] || DefaultLayer
+    // const layer = new Class(datalayer)
+    // console.log(geojson)
+    const layer = new DefaultLayer(datalayer)
+    this.layers[datalayer.id] = layer
+    console.log(layer)
     this.map.addLayer(layer)
+  }
+
+  addData(id, geojson) {
+    this.layers[id].addData(geojson)
   }
 
   hasLayer(layer) {
@@ -303,6 +387,18 @@ export class LeafletProxy {
   getExtentBBoxString() {
     // southwest_lng,southwest_lat,northeast_lng,northeast_lat'
     return this.map.options.maxBounds?.toBBoxString()
+  }
+
+  editLayer(id) {
+    const layer = this.getLayer(id)
+    console.log(layer)
+    layer.enableEdit()
+  }
+
+  getLayer(id) {
+    for (const layer of Object.values(this.map._layers)) {
+      if (layer.feature?.id === id) return layer
+    }
   }
 }
 
