@@ -98,11 +98,10 @@ export class OLProxy {
       this.map.addOverlay(overlay)
     })
     this.umap.on('feature:reset', (event) => {
-      const { feature } = event.detail
-      const source = this.sources[feature.datalayer.id]
-      const olFeature = source.getFeatureById(feature.id)
-      olFeature.setStyle(this.style(feature))
-      olFeature.changed()
+      const { sourceId, geojson } = event.detail
+      const olFeature = this.sources[sourceId]?.getFeatureById(geojson.id)
+      if (!olFeature) return
+      olFeature.setStyle(this.style(geojson.style, olFeature.getGeometry().getType()))
     })
   }
 
@@ -190,62 +189,69 @@ export class OLProxy {
     container.appendChild(pane)
     return pane
   }
-  hasLayer() {
-    return true
+  hasLayer(id) {
+    const layer = this.layers[id]
+    return Boolean(layer) && this.map.getLayers().getArray().includes(layer)
   }
+
+  removeLayer(id) {
+    const layer = this.layers[id]
+    if (layer) this.map.removeLayer(layer)
+  }
+
+  clear(id) {
+    this.sources[id]?.clear()
+  }
+
+  onZoomEnd(id) {
+    // No-op for now: OL has no cluster recompute, and zoom-based show/hide
+    // (fromZoom/toZoom) is not wired on the OL side yet.
+  }
+
+  hasDataVisible(id) {
+    return (this.sources[id]?.getFeatures().length ?? 0) > 0
+  }
+
+  removeFeature(id, featureId) {
+    const olFeature = this.sources[id]?.getFeatureById(featureId)
+    if (olFeature) this.sources[id].removeFeature(olFeature)
+  }
+
   createLayer(datalayer) {
     this.sources[datalayer.id] = new VectorSource()
     this.layers[datalayer.id] = new VectorLayer({
       source: this.sources[datalayer.id],
-      style: (olFeature) => {
-        console.log(olFeature, olFeature.getId())
-        const feature = datalayer.features.get(olFeature.getId())
-        console.log(feature)
-        return this.style(feature)
-      },
     })
-
-    // this.source = new VectorSource({
-    //   features: new GeoJSON().readFeatures(geojson, {
-    //     dataProjection: 'EPSG:4326',
-    //     featureProjection: 'EPSG:3857',
-    //   }),
-    // })
-
     this.map.addLayer(this.layers[datalayer.id])
   }
 
   addData(id, geojson) {
-    this.sources[id].addFeatures(
-      new GeoJSON().readFeatures(geojson, {
-        dataProjection: 'EPSG:4326',
-        featureProjection: 'EPSG:3857',
-      })
-    )
+    const format = new GeoJSON()
+    const options = { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' }
+    // OL drops the top-level `style` member on read, so read each feature and
+    // set its native OL style in the same pass.
+    const olFeatures = geojson.features.map((feature) => {
+      const olFeature = format.readFeature(feature, options)
+      olFeature.setStyle(this.style(feature.style, olFeature.getGeometry().getType()))
+      return olFeature
+    })
+    this.sources[id].addFeatures(olFeatures)
   }
 
-  style(feature) {
+  style(style = {}, geometryType) {
     const stroke = new Stroke({
-      color: rgba(
-        feature.getDynamicOption('color'),
-        feature.getDynamicOption('opacity')
-      ),
-      width: feature.getDynamicOption('weight'),
-      lineDash: feature.getDynamicOption('dashArray')?.split(',').map(Number),
+      color: rgba(style.color, style.opacity),
+      width: style.weight,
+      lineDash: style.dashArray?.split(',').map(Number),
     })
     const fill =
-      feature.getDynamicOption('fill') === false
+      style.fill === false
         ? undefined
         : new Fill({
-            color: rgba(
-              feature.getDynamicOption('fillColor') ||
-                feature.getDynamicOption('color'),
-              feature.getDynamicOption('fillOpacity')
-            ),
+            color: rgba(style.fillColor || style.color, style.fillOpacity),
           })
 
-    // Point → Circle (ou Icon si iconUrl), sinon Stroke/Fill pour ligne/polygone
-    if (feature.geometry.type === 'Point') {
+    if (geometryType === 'Point') {
       return new Style({ image: new CircleStyle({ radius: 6, fill, stroke }) })
     }
     return new Style({ stroke, fill })

@@ -259,7 +259,7 @@ export class DataLayer {
   }
 
   hasDataVisible() {
-    return this.layer.hasDataVisible()
+    return this._umap.mapProxy.hasDataVisible(this.id)
   }
 
   resetLayer(force) {
@@ -272,9 +272,8 @@ export class DataLayer {
       return
     }
     const visible = this.isVisible()
-    if (this.layer) this.layer.clearLayers()
-    // delete this.layer?
-    if (visible) this._umap.mapProxy.removeLayer(this.layer)
+    if (this.layer) this._umap.mapProxy.clear(this.id)
+    if (visible) this._umap.mapProxy.removeLayer(this.id)
     this._umap.mapProxy.createLayer(this)
     // Rendering layer changed, so let's force reset the feature rendering too.
     this.features.forEach((feature) => {
@@ -336,7 +335,7 @@ export class DataLayer {
 
   onZoomEnd() {
     if (this.isDeleted) return
-    this.layer?.onZoomEnd()
+    this._umap.mapProxy.onZoomEnd(this.id)
   }
 
   hasDynamicData() {
@@ -435,7 +434,7 @@ export class DataLayer {
   }
 
   hideFeature(feature) {
-    this.layer.removeLayer(feature.ui)
+    this._umap.mapProxy.removeFeature(this.id, feature.id)
   }
 
   addFeature(feature, sync = false) {
@@ -558,11 +557,10 @@ export class DataLayer {
       console.error(err)
     }
     this._batch = false
-    this._umap.mapProxy.addData(
-      this.id,
-      this._umap.formatter.toFeatureCollection(this.features.all())
-    )
+    // Compute classification before baking, so toRenderer() resolves the right
+    // per-feature colors/radius.
     this.dataChanged()
+    this._umap.mapProxy.addData(this.id, this.toRenderer())
     this._umap.loader.stop(id)
     return data
   }
@@ -1235,7 +1233,7 @@ export class DataLayer {
   }
 
   hide() {
-    this._umap.mapProxy.removeLayer(this.layer)
+    this._umap.mapProxy.removeLayer(this.id)
     this.propagateVisibility({ force: false })
   }
 
@@ -1274,7 +1272,7 @@ export class DataLayer {
     if (this.layers.count()) {
       return this.layers.tree.some((child) => child.isVisible())
     }
-    return Boolean(this.layer && this._umap.mapProxy.hasLayer(this.layer))
+    return Boolean(this.layer && this._umap.mapProxy.hasLayer(this.id))
   }
 
   hasVisibleChild() {
@@ -1282,13 +1280,17 @@ export class DataLayer {
   }
 
   get bounds() {
-    if (!this.group) return this.layer.getBounds()
+    // Bounds are geometry-derived data, aggregated from the features (or child
+    // layers for a group) — not asked from the renderer.
+    const items = this.group ? this.layers.root : this.features.all()
     let bounds
-    for (const child of this.layers.root) {
+    for (const item of items) {
+      const itemBounds = item.bounds
+      if (!itemBounds) continue
       if (!bounds) {
-        bounds = child.bounds
+        bounds = itemBounds
       } else {
-        bounds.extend(child.bounds)
+        bounds.extend(itemBounds)
       }
     }
     return bounds
@@ -1358,6 +1360,15 @@ export class DataLayer {
     geojson.rank = this.rank
     geojson.parent = this.parentId
     return geojson
+  }
+
+  // Render collection for the map proxy: each feature carries its resolved
+  // `style`. Never saved (cf umapGeoJSON, the save format).
+  toRenderer() {
+    return {
+      type: 'FeatureCollection',
+      features: this.features.all().map((feature) => feature.toRenderer()),
+    }
   }
 
   getDOMOrder() {

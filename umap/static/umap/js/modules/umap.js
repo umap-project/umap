@@ -17,7 +17,7 @@ import { LayerManager } from './managers.js'
 import Orderable from './orderable.js'
 import { MapPermissions } from './permissions.js'
 import { OLProxy } from './rendering/openlayers.js'
-import { LeafletProxy } from './rendering/map.js'
+import { LeafletProxy } from './rendering/leaflet.js'
 import { Request, ServerRequest } from './request.js'
 import Rules from './rules.js'
 import { SCHEMA } from './schema.js'
@@ -86,7 +86,13 @@ export default class Umap extends Utils.WithEvents {
     this.properties.zoomControl = false
     this.properties.fullscreenControl = false
 
-    this.mapProxy = new OLProxy(this, element)
+    if (this.searchParams.has('openlayers')) {
+      console.log('So you wanna run OL')
+      this.mapProxy = new OLProxy(this, element)
+    } else {
+      console.log('You go Leaflet')
+      this.mapProxy = new LeafletProxy(this, element)
+    }
     this.uiContainer = Utils.loadTemplate('<div class="umap-ui-container"></div>')
     this.mapProxy.attachUI(this.uiContainer)
     this.controlManager = new ControlManager(this)

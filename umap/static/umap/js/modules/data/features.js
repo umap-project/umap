@@ -548,6 +548,35 @@ class Feature {
     })
   }
 
+  getStyleProperties() {
+    return [
+      'smoothFactor',
+      'color',
+      'opacity',
+      'stroke',
+      'weight',
+      'fill',
+      'fillColor',
+      'fillOpacity',
+      'dashArray',
+      'interactive',
+    ]
+  }
+
+  getRenderProperties() {
+    const style = {}
+    for (const option of this.getStyleProperties()) {
+      style[option] = this.getDynamicOption(option)
+    }
+    return style
+  }
+
+  toRenderer() {
+    const geojson = this.toGeoJSON()
+    geojson.style = this.getRenderProperties()
+    return geojson
+  }
+
   isFiltered() {
     const filterKeys = this.datalayer.getFilterKeys()
     const filter = this._umap.browser?.options.filter
@@ -618,7 +647,10 @@ class Feature {
   }
 
   redraw() {
-    this._umap.fire('feature:reset', { feature: this })
+    this._umap.fire('feature:reset', {
+      sourceId: this.datalayer.id,
+      geojson: this.toRenderer(),
+    })
     // if (this.datalayer?.isVisible() && this.ui?.isVisible()) {
     //   if (this.getUIClass() !== this.ui.getClass()) {
     //     this.datalayer.hideFeature(this)
