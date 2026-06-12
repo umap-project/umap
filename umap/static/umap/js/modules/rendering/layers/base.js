@@ -3,21 +3,6 @@ import { translate } from '../../i18n.js'
 import * as Utils from '../../utils.js'
 import * as UI from '../ui.js'
 
-function getStyleOptions() {
-  return [
-    'smoothFactor',
-    'color',
-    'opacity',
-    'stroke',
-    'weight',
-    'fill',
-    'fillColor',
-    'fillOpacity',
-    'dashArray',
-    'interactive',
-  ]
-}
-
 export const LayerMixin = {
   browsable: true,
 
@@ -91,38 +76,11 @@ export const Default = GeoJSON.extend({
       polygonToLayer: (latlngs) => {
         return new UI.LeafletPolygon(latlngs)
       },
+      // The style is read straight from the feature's geojson `style` member
+      // (baked by the data layer). The proxy never touches a Feature.
       style: (geojsonFeature) => {
-        const feature = datalayer.features.get(geojsonFeature.id)
-        const options = {}
-        for (const option of getStyleOptions(geojsonFeature)) {
-          options[option] = feature.getDynamicOption(option)
-        }
+        const options = { ...geojsonFeature.style }
         options.pointerEvents = options.interactive ? 'visiblePainted' : 'stroke'
-        // this.parentClass.prototype.setStyle.call(this, options)
-        // TODO remove me when this gets merged and released:
-        // https://github.com/Leaflet/Leaflet/pull/9475
-
-        // this._path.classList.toggle('leaflet-interactive', options.interactive)
-
-        // Text decoration
-        // this.setText(null) // Reset.
-        const textPath = feature.getDynamicOption('textPath')
-        if (textPath) {
-          const color =
-            feature.getOption('textPathColor') || feature.getDynamicOption('color')
-          const textPathOptions = {
-            repeat: feature.getOption('textPathRepeat'),
-            offset: feature.getOption('textPathOffset') || undefined,
-            position: feature.getOption('textPathPosition'),
-            attributes: {
-              fill: color,
-              opacity: feature.getDynamicOption('opacity'),
-              rotate: feature.getOption('textPathRotate'),
-              'font-size': feature.getOption('textPathSize'),
-            },
-          }
-          // this.setText(textPath, textPathOptions)
-        }
         return options
       },
     })

@@ -20,6 +20,10 @@ import * as Utils from '../utils.js'
 import * as TextUtils from '../textutils.js'
 
 const FeatureMixin = {
+  initialize: function (latlngs) {
+    this.parentClass.prototype.initialize.call(this, latlngs)
+  },
+
   onAdd: function (map) {
     this.addInteractions()
     return this.parentClass.prototype.onAdd.call(this, map)

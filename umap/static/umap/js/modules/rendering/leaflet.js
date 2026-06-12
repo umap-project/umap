@@ -135,9 +135,13 @@ export class LeafletProxy {
       this.map.openPopup(content, [lat, lon])
     })
     this.umap.on('feature:reset', (event) => {
-      const { feature } = event.detail
-      const group = this.layers[feature.datalayer.id]
-      const layer = this.getLayer(feature.id)
+      const { sourceId, geojson } = event.detail
+      const group = this.layers[sourceId]
+      const layer = this.getLayer(geojson.id)
+      if (!layer) return
+      // Refresh the resolved style on the geojson the layer holds, then let
+      // Leaflet re-apply the style function.
+      layer.feature.style = geojson.style
       group.resetStyle(layer)
     })
   }
@@ -358,8 +362,9 @@ export class LeafletProxy {
     return this.map.createPane(`pane-${id}`, container || this.overlayPane)
   }
 
-  removeLayer(layer) {
-    this.map.removeLayer(layer)
+  removeLayer(id) {
+    const layer = this.layers[id]
+    if (layer) this.map.removeLayer(layer)
   }
 
   createLayer(datalayer) {
@@ -376,8 +381,26 @@ export class LeafletProxy {
     this.layers[id].addData(geojson)
   }
 
-  hasLayer(layer) {
-    return this.map.hasLayer(layer)
+  hasLayer(id) {
+    const layer = this.layers[id]
+    return Boolean(layer) && this.map.hasLayer(layer)
+  }
+
+  clear(id) {
+    this.layers[id]?.clearLayers()
+  }
+
+  onZoomEnd(id) {
+    this.layers[id]?.onZoomEnd?.()
+  }
+
+  hasDataVisible(id) {
+    return this.layers[id]?.hasDataVisible() ?? false
+  }
+
+  removeFeature(id, featureId) {
+    const layer = this.getLayer(featureId)
+    if (layer) this.layers[id]?.removeLayer(layer)
   }
 
   get hasExtent() {
