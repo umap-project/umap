@@ -5,7 +5,6 @@ import {
   AutocompleteDatalist,
 } from './autocomplete.js'
 import { LineString, Point, Polygon } from './data/features.js'
-import { LAYER_TYPES } from './data/layer.js'
 import Help from './help.js'
 import * as Icon from './icon.js'
 import { LeafletMarker, LeafletPolygon, LeafletPolyline } from './rendering/ui.js'
@@ -24,7 +23,6 @@ window.U = {
   AutocompleteDatalist,
   Help,
   Icon,
-  LAYER_TYPES,
   LeafletMarker,
   LeafletPolygon,
   LeafletPolyline,
