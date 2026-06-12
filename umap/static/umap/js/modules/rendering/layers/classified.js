@@ -9,6 +9,17 @@ import { LayerMixin } from './base.js'
 // Layer where each feature color is relative to the others,
 // so we need all features before being able to set one
 // feature layer
+
+// API
+// - type / getType (Circles)
+// - name / human type (eg. Proportional Circles, translatable)
+// - ensureConfig / getDefaultConfig
+// - getEditableProperties
+// - getProperty
+// - getDefaultProperty
+// - renderLegend
+// - compute
+
 const ClassifiedMixin = {
   initialize: function (datalayer) {
     this.datalayer = datalayer

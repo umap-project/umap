@@ -176,8 +176,9 @@ export class LeafletProxy {
   }
 
   setDefaultCenter() {
-    this.umap.properties.center = this.latLng(this.umap.properties.center)
-    this.map.setView(this.umap.properties.center, this.umap.properties.zoom)
+    const [lon, lat] = this.umap.properties.center
+    // this.umap.properties.center = this.latLng()
+    this.map.setView([lat, lon], this.umap.properties.zoom)
   }
 
   async initCenter() {

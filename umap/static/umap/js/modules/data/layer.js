@@ -8,7 +8,7 @@ import { MutatingForm } from '../form/builder.js'
 import { translate } from '../i18n.js'
 import { DataLayerPermissions } from '../permissions.js'
 import { Default as DefaultLayer } from '../rendering/layers/base.js'
-import { Categorized, Choropleth, Circles } from '../rendering/layers/classified.js'
+// import { Categorized, Choropleth, Circles } from '../rendering/layers/classified.js'
 import { Cluster } from '../rendering/layers/cluster.js'
 import { Heat } from '../rendering/layers/heat.js'
 import * as Schema from '../schema.js'
@@ -20,20 +20,20 @@ import Rules from '../rules.js'
 import { FeatureManager, LayerManager } from '../managers.js'
 import { Filters } from '../filters.js'
 import { Fields, getDefaultFields } from './fields.js'
+import { loadType } from './types.js'
+// export const LAYER_TYPES = [
+//   DefaultLayer,
+//   Cluster,
+//   Heat,
+//   Choropleth,
+//   Categorized,
+//   Circles,
+// ]
 
-export const LAYER_TYPES = [
-  DefaultLayer,
-  Cluster,
-  Heat,
-  Choropleth,
-  Categorized,
-  Circles,
-]
-
-const LAYER_MAP = LAYER_TYPES.reduce((acc, klass) => {
-  acc[klass.TYPE] = klass
-  return acc
-}, {})
+// const LAYER_MAP = LAYER_TYPES.reduce((acc, klass) => {
+//   acc[klass.TYPE] = klass
+//   return acc
+// }, {})
 
 export class DataLayer {
   constructor(umap, spec = {}) {
@@ -153,7 +153,7 @@ export class DataLayer {
     return `${translate('Layer')} ${this._umap.layers.tree.count() + 1}`
   }
 
-  render(fields, builder) {
+  async render(fields, builder) {
     // Propagate will remove the fields it has already
     // processed
     fields = this.propagate(fields)
@@ -181,10 +181,9 @@ export class DataLayer {
           if (fields.includes('properties.type')) {
             this.resetLayer()
           }
-          for (const field of fields) {
-            this.layer.onEdit(field, builder)
-          }
+          await this.compute()
           this.redraw()
+          this.renderLegend()
           break
         case 'remote-data':
           this.fetchRemoteData()
@@ -266,7 +265,7 @@ export class DataLayer {
     // Only reset if type is defined (undefined is the default) and different from current type
     if (
       this.layer &&
-      (!this.properties.type || this.properties.type === this.layer.getType()) &&
+      (!this.properties.type || this.properties.type === this.Type.type) &&
       !force
     ) {
       return
@@ -275,11 +274,7 @@ export class DataLayer {
     if (this.layer) this._umap.mapProxy.clear(this.id)
     if (visible) this._umap.mapProxy.removeLayer(this.id)
     this._umap.mapProxy.createLayer(this)
-    // Rendering layer changed, so let's force reset the feature rendering too.
-    this.features.forEach((feature) => {
-      feature.makeUI()
-      this.showFeature(feature)
-    })
+    this.Type = loadType(this.properties.type)
     if (visible) this.show()
   }
 
@@ -306,10 +301,10 @@ export class DataLayer {
     // this.layer.dataChanged()
   }
 
-  fromGeoJSON(geojson, sync = true) {
+  async fromGeoJSON(geojson, sync = true) {
     if (!geojson) return []
     this._needsFetch = false
-    const features = this.addData(geojson, sync)
+    const features = await this.addData(geojson, sync)
     this.onDataLoaded()
     return features
   }
@@ -322,7 +317,7 @@ export class DataLayer {
     if (this.isRemoteLayer()) {
       await this.fetchRemoteData()
     } else {
-      this.fromGeoJSON(geojson, false)
+      await this.fromGeoJSON(geojson, false)
     }
   }
 
@@ -381,7 +376,7 @@ export class DataLayer {
       this.dataChanged()
       return this._umap.formatter
         .parse(raw, this.properties.remoteData.format)
-        .then((geojson) => this.fromGeoJSON(geojson, false))
+        .then(async (geojson) => await this.fromGeoJSON(geojson, false))
         .catch((error) => {
           console.debug(error)
           Alert.error(
@@ -438,7 +433,7 @@ export class DataLayer {
   }
 
   addFeature(feature, sync = false) {
-    console.log(feature)
+    // console.log(feature)
     if (this.group) {
       console.error('Adding feature to a group', feature, this.datalayer)
       return
@@ -543,7 +538,15 @@ export class DataLayer {
     return field.values(this.features.all()).sort(Utils.naturalSort)
   }
 
-  addData(geojson, sync) {
+  async compute() {
+    this.computed = await this.Type.compute(
+      this.properties,
+      this.features.all(),
+      this.fields.keys()
+    )
+  }
+
+  async addData(geojson, sync) {
     const id = Math.random()
     this._umap.loader.start(id)
     let data = []
@@ -560,6 +563,7 @@ export class DataLayer {
     // Compute classification before baking, so toRenderer() resolves the right
     // per-feature colors/radius.
     this.dataChanged()
+    await this.compute()
     this._umap.mapProxy.addData(this.id, this.toRenderer())
     this._umap.loader.stop(id)
     return data
@@ -639,9 +643,9 @@ export class DataLayer {
   async importRaw(raw, format) {
     return this._umap.formatter
       .parse(raw, format)
-      .then((geojson) => {
+      .then(async (geojson) => {
         this.journal.startBatch()
-        const data = this.addData(geojson)
+        const data = await this.addData(geojson)
         this.journal.commitBatch()
         return data
       })
@@ -749,6 +753,7 @@ export class DataLayer {
     delete properties.id
     const geojson = Utils.CopyJSON(this.umapGeoJSON())
     const datalayer = this._umap.createDataLayer({ properties })
+    // TODO make it async
     datalayer.fromGeoJSON(geojson)
     return datalayer
   }
@@ -759,7 +764,9 @@ export class DataLayer {
       return
     }
     if (!this.isVisible()) return
-    this.features.forEach((feature) => feature.redraw())
+    // TODO: Let's reset for now, and add a more gentle way to redraw later
+    this._umap.mapProxy.clear(this.id)
+    this._umap.mapProxy.addData(this.id, this.toRenderer())
   }
 
   reindex() {
@@ -900,13 +907,13 @@ export class DataLayer {
   }
 
   _editLayerProperties(container) {
-    const layerFields = this.layer.getEditableProperties()
+    const layerFields = this.Type.editableProperties(this.fields)
 
     if (layerFields.length) {
       const builder = new MutatingForm(this, layerFields)
       const template = Utils.sanitizeVars`
         <details id="layer-properties">
-          <summary><h4>${this.layer.getName()}: ${translate('settings')}</h4></summary>
+          <summary><h4>${this.Type.name}: ${translate('settings')}</h4></summary>
           <fieldset data-ref=fieldset></fieldset>
         </details>
       `
@@ -1141,9 +1148,8 @@ export class DataLayer {
   }
 
   getProperty(key, feature) {
-    if (this.layer?.getOption) {
-      const value = this.layer.getOption(key, feature)
-      if (value !== undefined) return value
+    if (this.computed?.properties?.[feature?.id]?.[key] !== undefined) {
+      return this.computed.properties[feature.id][key]
     }
     if (feature) {
       const value = this.rules.getOption(key, feature)
@@ -1152,8 +1158,8 @@ export class DataLayer {
     if (this.getOwnProperty(key) !== undefined) {
       return this.getOwnProperty(key)
     }
-    if (this.layer?.defaults?.[key]) {
-      return this.layer.defaults[key]
+    if (this.Type?.defaults?.[key]) {
+      return this.Type.defaults[key]
     }
     const parent = this.parent || this._umap
     return parent.getProperty(key, feature)
@@ -1219,7 +1225,7 @@ export class DataLayer {
             this.fetchRemoteData()
           } else {
             this.journal.startBatch()
-            this.addData(geojson)
+            await this.addData(geojson)
             this.journal.commitBatch()
           }
         }
@@ -1453,7 +1459,7 @@ export class DataLayer {
       // been resolved. So we need to reload to get extra data (added by someone else)
       if (data.geojson) {
         this.clear(false)
-        this.fromGeoJSON(data.geojson)
+        await this.fromGeoJSON(data.geojson)
         delete data.geojson
       }
       delete data.id
@@ -1521,7 +1527,10 @@ export class DataLayer {
       `[data-id="${this.id}"] .datalayer-legend`
     )) {
       container.innerHTML = ''
-      if (this.layer.renderLegend) return this.layer.renderLegend(container)
+      if (this.computed?.caption) {
+        container.appendChild(this.computed.caption)
+        continue
+      }
       const rules = new Map()
       for (const rule of this.rules) {
         rules.set(rule.condition, rule)

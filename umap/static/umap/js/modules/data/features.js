@@ -125,8 +125,12 @@ class Feature {
     return `feature-${this.datalayer.id}-${this.id}`
   }
 
+  getMainColor() {
+    return this.staticOptions.mainColor
+  }
+
   getPreviewColor() {
-    return this.getDynamicOption(this.staticOptions.mainColor)
+    return this.getDynamicOption(this.getMainColor())
   }
 
   getJournalMetadata() {
@@ -560,6 +564,8 @@ class Feature {
       'fillOpacity',
       'dashArray',
       'interactive',
+      'shape',
+      'radius',
     ]
   }
 
