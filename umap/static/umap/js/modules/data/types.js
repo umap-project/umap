@@ -22,6 +22,8 @@ export function loadType(type) {
       return Circles
     case 'Cluster':
       return Cluster
+    case 'Heat':
+      return Heat
     default:
       return DefaultType
   }
@@ -425,10 +427,54 @@ class Cluster extends DefaultType {
   }
 }
 
+class Heat extends DefaultType {
+  static type = 'Heat'
+  static name = translate('Heatmap')
+  static key = 'heat'
+  static browsable = false
+
+  static renderConfig(properties) {
+    return {
+      [this.key]: {
+        radius: properties.heat?.radius,
+        intensityProperty: properties.heat?.intensityProperty,
+      },
+    }
+  }
+
+  static editableProperties(fields) {
+    return [
+      [
+        'properties.heat.radius',
+        {
+          handler: 'Range',
+          min: 10,
+          max: 100,
+          step: 5,
+          label: translate('Heatmap radius'),
+          helpText: translate('Override heatmap radius (default 25)'),
+        },
+      ],
+      [
+        'properties.heat.intensityProperty',
+        {
+          handler: 'Select',
+          selectOptions: [
+            ['', translate('Select field to compute intensity')],
+            ...fields.keys(),
+          ],
+          helpText: translate('Optional intensity field to compute heatmap'),
+        },
+      ],
+    ]
+  }
+}
+
 export const TYPES = [
   DefaultType,
   Choropleth,
   Categorized,
   Circles,
   Cluster,
+  Heat,
 ]
