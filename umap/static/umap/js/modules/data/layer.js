@@ -15,6 +15,7 @@ import * as Schema from '../schema.js'
 import TableEditor from '../tableeditor.js'
 import * as Utils from '../utils.js'
 import * as DOMUtils from '../domutils.js'
+import * as GeoUtils from '../geoutils.js'
 import { LineString, Point, Polygon } from './features.js'
 import Rules from '../rules.js'
 import { FeatureManager, LayerManager } from '../managers.js'
@@ -1289,15 +1290,9 @@ export class DataLayer {
     // Bounds are geometry-derived data, aggregated from the features (or child
     // layers for a group) — not asked from the renderer.
     const items = this.group ? this.layers.root : this.features.all()
-    let bounds
+    let bounds = null
     for (const item of items) {
-      const itemBounds = item.bounds
-      if (!itemBounds) continue
-      if (!bounds) {
-        bounds = itemBounds
-      } else {
-        bounds.extend(itemBounds)
-      }
+      bounds = GeoUtils.unionBbox(bounds, item.bounds)
     }
     return bounds
   }
@@ -1308,7 +1303,7 @@ export class DataLayer {
   }
 
   zoomToBounds(bounds) {
-    if (bounds?.isValid()) {
+    if (GeoUtils.isValidBbox(bounds)) {
       this._umap.fire('map:view:fit-bounds', {
         bounds,
         zoom: this.getProperty('zoomTo'),

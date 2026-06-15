@@ -1,10 +1,10 @@
-import { LatLngBounds } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
 import { translate } from './i18n.js'
 import { SCHEMA } from './schema.js'
 import Dialog from './ui/dialog.js'
 import * as Utils from './utils.js'
 import * as DOMUtils from './domutils.js'
+import * as GeoUtils from './geoutils.js'
 
 const TEMPLATE = `
   <div class="umap-import">
@@ -390,12 +390,9 @@ export default class Importer extends Utils.WithTemplate {
     if (!features.length) {
       this.onError()
     } else {
-      const bounds = new LatLngBounds()
+      let bounds = null
       for (const feature of features) {
-        const featureBounds = feature.ui.getBounds
-          ? feature.ui.getBounds()
-          : feature.ui.getCenter()
-        bounds.extend(featureBounds)
+        bounds = GeoUtils.unionBbox(bounds, feature.bounds)
       }
       this.onSuccess(features.length)
       layer.zoomToBounds(bounds)

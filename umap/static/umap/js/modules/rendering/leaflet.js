@@ -100,10 +100,11 @@ export class LeafletProxy {
     })
     this.umap.on('map:view:fit-bounds', (event) => {
       const { bounds, zoom, easing } = event.detail
+      const latLngBounds = this.toLatLngBounds(bounds)
       if (easing) {
-        this.map.flyToBounds(bounds, { maxZoom: zoom ?? this.zoom })
+        this.map.flyToBounds(latLngBounds, { maxZoom: zoom ?? this.zoom })
       } else {
-        this.map.fitBounds(bounds, zoom ?? this.zoom)
+        this.map.fitBounds(latLngBounds, zoom ?? this.zoom)
       }
     })
     this.umap.on('map:view:set', (event) => {
@@ -279,12 +280,11 @@ export class LeafletProxy {
     }
   }
 
-  getLayersBounds(layers) {
-    const bounds = new LatLngBounds()
-    for (const layer of layers) {
-      bounds.extend(layer.getBounds())
-    }
-    return bounds
+  toLatLngBounds([west, south, east, north]) {
+    return new LatLngBounds([
+      [south, west],
+      [north, east],
+    ])
   }
 
   getGeoContext() {
@@ -352,7 +352,7 @@ export class LeafletProxy {
   }
 
   getBoundsZoom(bounds, inside) {
-    return this.map.getBoundsZoom(bounds, inside)
+    return this.map.getBoundsZoom(this.toLatLngBounds(bounds), inside)
   }
 
   get overlayPane() {
