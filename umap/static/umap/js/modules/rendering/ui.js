@@ -32,10 +32,6 @@ const FeatureMixin = {
   onRemove: function (map) {
     this.removeInteractions()
     this.parentClass.prototype.onRemove.call(this, map)
-    if (this.feature._umap.editedFeature === this.feature) {
-      this.feature.endEdit()
-      this.feature._umap.editPanel.close()
-    }
   },
 
   _removeIcon: function () {

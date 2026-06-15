@@ -123,6 +123,9 @@ export class LeafletProxy {
       const [lon, lat] = center
       this.map.openPopup(content, [lat, lon])
     })
+    this.umap.on('feature:endedit', (event) => {
+      this.getLayer(event.detail.id)?.disableEdit()
+    })
     this.umap.on('feature:reset', (event) => {
       const { sourceId, geojson } = event.detail
       const group = this.layers[sourceId]
