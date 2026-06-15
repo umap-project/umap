@@ -20,6 +20,8 @@ export function loadType(type) {
       return Categorized
     case 'Circles':
       return Circles
+    case 'Cluster':
+      return Cluster
     default:
       return DefaultType
   }
@@ -384,9 +386,49 @@ class Circles extends DefaultType {
   }
 }
 
+class Cluster extends DefaultType {
+  static type = 'Cluster'
+  static name = translate('Clustered')
+  static key = 'cluster'
+
+  static renderConfig(properties) {
+    return {
+      [this.key]: {
+        radius: properties.cluster?.radius,
+        textColor: properties.cluster?.textColor,
+      },
+    }
+  }
+
+  static editableProperties(fields) {
+    return [
+      [
+        'properties.cluster.radius',
+        {
+          handler: 'Range',
+          min: 10,
+          max: 200,
+          step: 10,
+          placeholder: translate('Clustering radius'),
+          helpText: translate('Override clustering radius (default 80)'),
+        },
+      ],
+      [
+        'properties.cluster.textColor',
+        {
+          handler: 'TextColorPicker',
+          placeholder: translate('Auto'),
+          helpText: translate('Text color for the cluster label'),
+        },
+      ],
+    ]
+  }
+}
+
 export const TYPES = [
   DefaultType,
   Choropleth,
   Categorized,
   Circles,
+  Cluster,
 ]

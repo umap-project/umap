@@ -89,6 +89,12 @@ export const Default = GeoJSON.extend({
     })
   },
 
+  addData: function (geojson) {
+    // Leaflet's addData recurses per feature; only keep the collection itself (first call).
+    if (geojson.features) this.geojson = geojson
+    return GeoJSON.prototype.addData.call(this, geojson)
+  },
+
   onAdd: function (map) {
     LayerMixin.onAdd.call(this, map)
     return GeoJSON.prototype.onAdd.call(this, map)
