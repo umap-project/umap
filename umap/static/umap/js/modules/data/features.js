@@ -567,6 +567,10 @@ class Feature {
       'interactive',
       'shape',
       'radius',
+      'iconClass',
+      'iconUrl',
+      'iconOpacity',
+      'iconSize',
     ]
   }
 
@@ -756,7 +760,7 @@ class Feature {
 
   makePreview(element) {
     element.innerHTML = ''
-    const symbol = Icon.formatUrl(this.iconUrl, this)
+    const symbol = Icon.formatUrl(this.iconUrl, this.extendedProperties())
     const bgcolor = this.getPreviewColor()
     element.style.backgroundColor = bgcolor
     if (symbol && symbol !== SCHEMA.iconUrl.default) {

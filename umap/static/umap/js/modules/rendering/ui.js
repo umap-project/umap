@@ -154,7 +154,8 @@ const PointMixin = {
   addInteractions() {
     FeatureMixin.addInteractions.call(this)
     this.on('dragend', this._onDragEnd)
-    if (!this.feature.isReadOnly()) this.on('mouseover', this._enableDragging)
+    // FIXME pass readonly in the geojson?
+    //if (!this.feature.isReadOnly()) this.on('mouseover', this._enableDragging)
     this.on('mouseout', this._onMouseOut)
   },
 
@@ -208,7 +209,8 @@ export const LeafletMarker = Marker.extend({
   parentClass: Marker,
   includes: [FeatureMixin, PointMixin],
 
-  initialize: function (latlng) {
+  initialize: function (latlng, geojson) {
+    this.geojson = geojson
     FeatureMixin.initialize.call(this, latlng)
     this.setIcon(this.getIcon())
   },
@@ -253,16 +255,17 @@ export const LeafletMarker = Marker.extend({
     }
     this.options.icon = this.getIcon()
     Marker.prototype._initIcon.call(this)
-    this.resetTooltip()
+    // FIXME
+    // this.resetTooltip()
   },
 
   getIconClass: function () {
-    return this.feature.getOption('iconClass')
+    return this.geojson.style?.iconClass
   },
 
   getIcon: function () {
     const Class = Icon.getClass(this.getIconClass())
-    return new LeafletIcon(new Class(this.feature))
+    return new LeafletIcon(new Class(this.geojson))
   },
 
   _getTooltipAnchor: function () {
@@ -302,7 +305,8 @@ export const LeafletMarker = Marker.extend({
     // Override Leaflet default behaviour, which set the zIndex
     // according to feature's y coordinate, and group features
     // zIndex by their datalayer order
-    this._zIndex = this.feature.datalayer.getDOMOrder()
+    // FIXME pass in the geojson
+    // this._zIndex = this.feature.datalayer.getDOMOrder()
     this._updateZIndex(0)
   },
 })
