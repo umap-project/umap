@@ -69,6 +69,27 @@ def test_basic_circles_layer(map, live_server, page):
     )
 
 
+def test_can_set_circles_to_new_imported_data(tilelayer, live_server, page):
+    path = Path(__file__).parent.parent / "fixtures/test_circles_layer.geojson"
+    data = json.loads(path.read_text())
+    # Fresh geojson, without the circle settings
+    import_data = {"type": "FeatureCollection", "features": data["features"]}
+    page.goto(f"{live_server.url}/map/new/#12/47.2210/-1.5621")
+    page.get_by_title("Import data").click()
+    page.wait_for_timeout(300)
+    page.locator(".umap-import textarea").fill(json.dumps(import_data))
+    page.locator('select[name="format"]').select_option("geojson")
+    page.get_by_role("button", name="Import data", exact=True).click()
+
+    page.get_by_role("button", name="Manage layers").click()
+    page.locator(".panel").get_by_title("Edit", exact=True).click()
+    page.locator('select[name="type"]').select_option("Circles")
+    expect(page.locator("path")).to_have_count(10)
+    expect(page.locator('path[d*="a50,50"]')).to_have_count(0)
+    page.locator('select[name="property"]').select_option("capacity")
+    expect(page.locator('path[d*="a50,50"]')).to_have_count(1)
+
+
 def test_can_draw_new_circles(openmap, live_server, page):
     path = Path(__file__).parent.parent / "fixtures/test_circles_layer.geojson"
     data = json.loads(path.read_text())

@@ -29,8 +29,7 @@ export function loadType(type) {
   }
 }
 
-
-function buildCaption (items) {
+function buildCaption(items) {
   const ul = DOMUtils.loadTemplate('<ul></ul>')
   for (const [color, label] of items) {
     // TODO: do we really need this?
@@ -63,6 +62,10 @@ class DefaultType {
     return { properties: {} }
   }
 
+  static ensureProperties(properties) {
+    if (this.key) properties[this.key] ??= {}
+  }
+
   static editableProperties() {
     return []
   }
@@ -83,10 +86,6 @@ class Choropleth extends DefaultType {
     color: 'white',
     fillOpacity: 0.7,
     weight: 2,
-  }
-
-  static defaultConfig() {
-    return { key: {} }
   }
 
   static async compute(properties, features, fields) {
@@ -298,6 +297,11 @@ class Circles extends DefaultType {
     shape: 'circle',
   }
 
+  static ensureProperties(properties) {
+    super.ensureProperties(properties)
+    properties[this.key].radius ??= {}
+  }
+
   static async compute(properties, features, fields) {
     const key = properties[this.key]?.property || fields[0] || 'value'
     const values = features
@@ -318,7 +322,7 @@ class Circles extends DefaultType {
     }
     const featuresProperties = features.reduce((acc, feature) => {
       const value = +feature.properties?.[key]
-      if (!Number.isNaN(value)) acc[feature.id] = { radius: computeRadius(value) }
+      acc[feature.id] = { radius: Number.isNaN(value) ? minPX : computeRadius(value) }
       return acc
     }, {})
     // Legend: min / median / max circle sizes.
@@ -470,11 +474,4 @@ class Heat extends DefaultType {
   }
 }
 
-export const TYPES = [
-  DefaultType,
-  Choropleth,
-  Categorized,
-  Circles,
-  Cluster,
-  Heat,
-]
+export const TYPES = [DefaultType, Choropleth, Categorized, Circles, Cluster, Heat]
