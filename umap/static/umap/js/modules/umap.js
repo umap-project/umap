@@ -6,6 +6,7 @@ import * as Clipboard from './clipboard.js'
 import { Fields } from './data/fields.js'
 import { DataLayer } from './data/layer.js'
 import * as DOMUtils from './domutils.js'
+import * as GeoUtils from './geoutils.js'
 import DropControl from './drop.js'
 import { Filters, migrateLegacyFilters } from './filters.js'
 import { MutatingForm } from './form/builder.js'
@@ -1915,12 +1916,13 @@ export default class Umap extends Utils.WithEvents {
   }
 
   fitDataBounds() {
-    const layers = this.layers.tree
+    const allBounds = this.layers.tree
       .browsable()
       .visible()
-      .map((d) => d.layer)
-    const bounds = this.mapProxy.getLayersBounds(layers)
-    if (!this.hasData() || !bounds.isValid()) return false
+      .map((d) => d.bounds)
+    let bounds = null
+    for (const b of allBounds) bounds = GeoUtils.unionBbox(bounds, b)
+    if (!this.hasData() || !GeoUtils.isValidBbox(bounds)) return false
     this.fire('map:view:fit-bounds', { bounds })
   }
 

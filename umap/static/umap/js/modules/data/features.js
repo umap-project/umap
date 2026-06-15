@@ -63,7 +63,8 @@ class Feature {
   }
 
   get bounds() {
-    return this.ui.getBounds()
+    if (this.isEmpty()) return null
+    return GeoUtils.bbox(this.geometry)
   }
 
   get type() {
