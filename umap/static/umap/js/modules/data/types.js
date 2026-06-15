@@ -53,6 +53,7 @@ class DefaultType {
   // - compute
   static type = 'Default'
   static name = translate('Default')
+  static browsable = true
 
   static async compute() {
     return { properties: {} }

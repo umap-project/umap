@@ -265,14 +265,14 @@ export class DataLayer {
   resetLayer(force) {
     // Only reset if type is defined (undefined is the default) and different from current type
     if (
-      this.layer &&
+      this.Type &&
       (!this.properties.type || this.properties.type === this.Type.type) &&
       !force
     ) {
       return
     }
     const visible = this.isVisible()
-    if (this.layer) this._umap.mapProxy.clear(this.id)
+    if (this.Type) this._umap.mapProxy.clear(this.id)
     if (visible) this._umap.mapProxy.removeLayer(this.id)
     this._umap.mapProxy.createLayer(this)
     this.Type = loadType(this.properties.type)
@@ -1279,7 +1279,7 @@ export class DataLayer {
     if (this.layers.count()) {
       return this.layers.tree.some((child) => child.isVisible())
     }
-    return Boolean(this.layer && this._umap.mapProxy.hasLayer(this.id))
+    return this._umap.mapProxy.hasLayer(this.id)
   }
 
   hasVisibleChild() {
@@ -1313,7 +1313,7 @@ export class DataLayer {
 
   // Is this layer type browsable in theorie
   isBrowsable() {
-    return this.layer?.browsable
+    return this.Type?.browsable
   }
 
   // Is this layer browsable in theorie
