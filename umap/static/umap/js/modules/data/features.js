@@ -335,6 +335,10 @@ class Feature {
     }
   }
 
+  endEdit() {
+    this._umap.fire('feature:endedit', { id: this.id })
+  }
+
   getAdvancedEditActions(container) {
     const button = Utils.loadTemplate(`
       <button class="button" type="button">
@@ -426,6 +430,7 @@ class Feature {
   }
 
   del(sync) {
+    this.endEdit()
     if (this.datalayer) {
       this.datalayer.removeFeature(this, sync)
     }

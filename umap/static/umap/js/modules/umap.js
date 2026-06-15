@@ -180,6 +180,12 @@ export default class Umap extends Utils.WithEvents {
 
     this.initDataLayers()
     this.on('datalayer:changed', () => this.onDataLayersChanged())
+    this.on('feature:endedit', (event) => {
+      if (this.editedFeature?.id === event.detail.id) {
+        this.editedFeature = null
+        this.editPanel.close()
+      }
+    })
 
     if (this.properties.displayCaptionOnLoad) {
       // Retrocompat
@@ -240,10 +246,11 @@ export default class Umap extends Utils.WithEvents {
   }
 
   set editedFeature(feature) {
-    if (this._editedFeature && this._editedFeature !== feature) {
-      this._editedFeature.endEdit()
-    }
+    const previous = this._editedFeature
     this._editedFeature = feature
+    if (previous && previous.id !== feature?.id) {
+      this.fire('feature:endedit', { id: previous.id })
+    }
     this.fire('seteditedfeature')
   }
 
