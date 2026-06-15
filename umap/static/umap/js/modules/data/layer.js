@@ -274,8 +274,9 @@ export class DataLayer {
     const visible = this.isVisible()
     if (this.Type) this._umap.mapProxy.clear(this.id)
     if (visible) this._umap.mapProxy.removeLayer(this.id)
-    this._umap.mapProxy.createLayer(this)
+    // this.Type is needed by createLayer (for cluster/heat)
     this.Type = loadType(this.properties.type)
+    this._umap.mapProxy.createLayer(this)
     if (visible) this.show()
   }
 
@@ -434,7 +435,6 @@ export class DataLayer {
   }
 
   addFeature(feature, sync = false) {
-    // console.log(feature)
     if (this.group) {
       console.error('Adding feature to a group', feature, this.datalayer)
       return
@@ -1368,6 +1368,10 @@ export class DataLayer {
   toRenderer() {
     return {
       type: 'FeatureCollection',
+      style: {
+        color: this.getProperty('color'),
+        ...this.Type?.renderConfig?.(this.properties),
+      },
       features: this.features.all().map((feature) => feature.toRenderer()),
     }
   }

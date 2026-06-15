@@ -16,23 +16,11 @@ import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
 import { LeafletIcon } from './ui.js'
 import { Default as DefaultLayer } from '../rendering/layers/base.js'
-import { Categorized, Choropleth, Circles } from '../rendering/layers/classified.js'
 import { Cluster } from '../rendering/layers/cluster.js'
 import { Heat } from '../rendering/layers/heat.js'
 
-export const LAYER_TYPES = [
-  DefaultLayer,
-  Cluster,
-  Heat,
-  Choropleth,
-  Categorized,
-  Circles,
-]
-
-const LAYER_MAP = LAYER_TYPES.reduce((acc, klass) => {
-  acc[klass.TYPE] = klass
-  return acc
-}, {})
+// Leaflet layers we override (but only for the *rendering* part, no compute/config…)
+const LAYER_MAP = { Cluster, Heat }
 
 export class LeafletProxy {
   constructor(umap, element) {
@@ -369,12 +357,9 @@ export class LeafletProxy {
   }
 
   createLayer(datalayer) {
-    // const Class = LAYER_MAP[datalayer.properties.type] || DefaultLayer
-    // const layer = new Class(datalayer)
-    // console.log(geojson)
-    const layer = new DefaultLayer(datalayer)
+    const Class = LAYER_MAP[datalayer.Type?.type] || DefaultLayer
+    const layer = new Class(datalayer)
     this.layers[datalayer.id] = layer
-    console.log(layer)
     this.map.addLayer(layer)
   }
 

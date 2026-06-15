@@ -1,5 +1,4 @@
 import {
-  FeatureGroup,
   LayerGroup,
   Marker,
   Point,
@@ -9,9 +8,8 @@ import {
 } from '../../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from '../../i18n.js'
 import { Cluster as ClusterIcon } from '../../icon.js'
-import * as Utils from '../../utils.js'
 import { LeafletIcon } from '../ui.js'
-import { LayerMixin } from './base.js'
+import { Default as DefaultLayer } from './base.js'
 
 const MarkerCluster = Marker.extend({
   computeCoverage() {
@@ -84,25 +82,35 @@ const MarkerCluster = Marker.extend({
   },
 })
 
-export const Cluster = FeatureGroup.extend({
+export const Cluster = DefaultLayer.extend({
   statics: {
     NAME: translate('Clustered'),
     TYPE: 'Cluster',
   },
-  includes: [LayerMixin],
 
   initialize: function (datalayer) {
-    this.datalayer = datalayer
+    DefaultLayer.prototype.initialize.call(this, datalayer)
     this._bucket = []
     this._group = new LayerGroup()
-    if (!Utils.isObject(this.datalayer.properties.cluster)) {
-      this.datalayer.properties.cluster = {}
-    }
-    FeatureGroup.prototype.initialize.call(this)
   },
 
-  dataChanged: function () {
-    this.redraw()
+  addData: function (geojson) {
+    DefaultLayer.prototype.addData.call(this, geojson)
+    // addData recurses per feature; cluster once the whole collection is in.
+    if (geojson.features) this.redraw()
+  },
+
+  addLayer: function (layer) {
+    if (!layer.getLatLng) return DefaultLayer.prototype.addLayer.call(this, layer)
+    // Markers wait in the bucket until clustered, so they never hit the map raw.
+    this._bucket.push(layer)
+    return this
+  },
+
+  clearLayers: function () {
+    this.removeClusters()
+    this._bucket = []
+    return DefaultLayer.prototype.clearLayers.call(this)
   },
 
   removeClusters() {
@@ -115,24 +123,19 @@ export const Cluster = FeatureGroup.extend({
     }
   },
 
-  addClusters() {
-    if (this._map) {
-      for (const cluster of this._clusters) {
-        const layer = cluster._layers.length === 1 ? cluster._layers[0] : cluster
-        this._group.addLayer(layer)
-      }
+  redraw: function () {
+    if (!this._map) return
+    this.removeClusters()
+    this._cluster()
+    for (const cluster of this._clusters) {
+      const layer = cluster._layers.length === 1 ? cluster._layers[0] : cluster
+      this._group.addLayer(layer)
     }
   },
 
-  redraw: function () {
-    this.removeClusters()
-    this.compute()
-    this.addClusters()
-  },
-
-  compute() {
-    if (!this._map) return
-    const radius = this.datalayer.properties.cluster?.radius || 80
+  _cluster() {
+    const style = this.geojson?.style
+    const radius = style?.cluster?.radius || 80
     this._clusters = []
     this._bounds = this._map.getBounds().pad(0.1)
     const CRS = this._map.options.crs
@@ -149,8 +152,8 @@ export const Cluster = FeatureGroup.extend({
       }
       if (!cluster) {
         const umapIcon = new ClusterIcon({
-          color: this.datalayer.getColor(),
-          textColor: this.datalayer.properties.cluster?.textColor,
+          color: style?.color,
+          textColor: style?.cluster?.textColor,
           getCounter: () => cluster._layers.length,
         })
         cluster = new MarkerCluster(layer._latlng, { icon: new LeafletIcon(umapIcon) })
@@ -167,16 +170,8 @@ export const Cluster = FeatureGroup.extend({
     }
   },
 
-  addLayer: function (layer) {
-    if (!layer.getLatLng) return FeatureGroup.prototype.addLayer.call(this, layer)
-    // Do not add yet the layer to the map
-    // wait for datachanged event, so we can compute breaks only once
-    this._bucket.push(layer)
-    return this
-  },
-
   removeLayer: function (layer) {
-    if (!layer.getLatLng) return FeatureGroup.prototype.removeLayer.call(this, layer)
+    if (!layer.getLatLng) return DefaultLayer.prototype.removeLayer.call(this, layer)
     this._bucket = this._bucket.filter((el) => el !== layer)
     return this
   },
@@ -185,36 +180,30 @@ export const Cluster = FeatureGroup.extend({
     this.on('click', this.onClick)
     this.on('mouseover', this.onMouseOver)
     this.on('mouseout', this.onMouseOut)
-    this.compute()
-    LayerMixin.onAdd.call(this, map)
-    this.addClusters()
     map.addLayer(this._group)
-    return FeatureGroup.prototype.onAdd.call(this, map)
+    this.redraw()
+    return DefaultLayer.prototype.onAdd.call(this, map)
   },
 
   onRemove: function (map) {
     this.off('click', this.onClick)
     this.off('mouseover', this.onMouseOver)
     this.off('mouseout', this.onMouseOut)
-    LayerMixin.onRemove.call(this, map)
     this.removeClusters()
     map.removeLayer(this._group)
-    return FeatureGroup.prototype.onRemove.call(this, map)
+    return DefaultLayer.prototype.onRemove.call(this, map)
   },
 
   onZoomEnd: function () {
-    LayerMixin.onZoomEnd.call(this)
+    DefaultLayer.prototype.onZoomEnd.call(this)
     this.removeClusters()
   },
 
   onMoveEnd: function () {
-    LayerMixin.onMoveEnd.call(this)
-    // In case of dynamic data, the LayerMixin.onMoveEnd
-    // call with fetch the data and then call the compute
-    if (!this.datalayer.hasDynamicData()) {
-      this.compute()
-      this.addClusters()
-    }
+    DefaultLayer.prototype.onMoveEnd.call(this)
+    // For dynamic data, onMoveEnd fetches, which re-feeds addData (and thus
+    // redraws); otherwise we re-cluster for the new viewport here.
+    if (!this.datalayer.hasDynamicData()) this.redraw()
   },
 
   showCoverage(cluster) {
@@ -244,34 +233,6 @@ export const Cluster = FeatureGroup.extend({
       event.layer.spiderfy?.()
     } else {
       event.layer.zoomToCoverage?.()
-    }
-  },
-
-  getEditableProperties: () => [
-    [
-      'properties.cluster.radius',
-      {
-        handler: 'Range',
-        min: 10,
-        max: 200,
-        step: 10,
-        placeholder: translate('Clustering radius'),
-        helpText: translate('Override clustering radius (default 80)'),
-      },
-    ],
-    [
-      'properties.cluster.textColor',
-      {
-        handler: 'TextColorPicker',
-        placeholder: translate('Auto'),
-        helpText: translate('Text color for the cluster label'),
-      },
-    ],
-  ],
-
-  onEdit: function (field, builder) {
-    if (field === 'properties.cluster.radius' || field === 'properties.color') {
-      this.redraw()
     }
   },
 })
