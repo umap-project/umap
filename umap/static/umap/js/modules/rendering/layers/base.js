@@ -68,9 +68,9 @@ export const Default = GeoJSON.extend({
     GeoJSON.prototype.initialize.call(this, null, {
       pointToLayer: (geojson, latlng) => {
         if (geojson.style?.shape === 'circle') {
-          return new UI.CircleMarker(latlng)
+          return new UI.CircleMarker(latlng, geojson)
         }
-        return new UI.LeafletMarker(latlng)
+        return new UI.LeafletMarker(latlng, geojson)
       },
       polylineToLayer: (latlngs) => {
         console.log('latlngs', latlngs)
