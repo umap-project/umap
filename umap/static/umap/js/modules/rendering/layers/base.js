@@ -6,14 +6,6 @@ import * as UI from '../ui.js'
 export const LayerMixin = {
   browsable: true,
 
-  onAdd: function (map) {
-    map.on('moveend', this.onMoveEnd, this)
-  },
-
-  onRemove: function (map) {
-    map.off('moveend', this.onMoveEnd, this)
-  },
-
   getType: function () {
     const proto = Object.getPrototypeOf(this)
     return proto.constructor.TYPE
@@ -39,21 +31,6 @@ export const LayerMixin = {
   // Called when data changed on the datalayer
   dataChanged: () => {},
 
-  onMoveEnd: function () {
-    if (this.datalayer.hasDynamicData() && this.datalayer.showAtZoom()) {
-      this.datalayer.fetchData()
-    }
-  },
-
-  onZoomEnd() {
-    if (!this.datalayer.autoVisibility) return
-    if (!this.datalayer.showAtZoom() && this.datalayer.isVisible()) {
-      this.datalayer.hide()
-    }
-    if (this.datalayer.showAtZoom() && !this.datalayer.isVisible()) {
-      this.datalayer.show()
-    }
-  },
 }
 
 export const Default = GeoJSON.extend({
@@ -72,12 +49,11 @@ export const Default = GeoJSON.extend({
         }
         return new UI.LeafletMarker(latlng, geojson)
       },
-      polylineToLayer: (latlngs) => {
-        console.log('latlngs', latlngs)
-        return new UI.LeafletPolyline(latlngs)
+      polylineToLayer: (latlngs, options, geojson) => {
+        return new UI.LeafletPolyline(latlngs, geojson)
       },
-      polygonToLayer: (latlngs) => {
-        return new UI.LeafletPolygon(latlngs)
+      polygonToLayer: (latlngs, options, geojson) => {
+        return new UI.LeafletPolygon(latlngs, geojson)
       },
       // The style is read straight from the feature's geojson `style` member
       // (baked by the data layer). The proxy never touches a Feature.
@@ -93,16 +69,6 @@ export const Default = GeoJSON.extend({
     // Leaflet's addData recurses per feature; only keep the collection itself (first call).
     if (geojson.features) this.geojson = geojson
     return GeoJSON.prototype.addData.call(this, geojson)
-  },
-
-  onAdd: function (map) {
-    LayerMixin.onAdd.call(this, map)
-    return GeoJSON.prototype.onAdd.call(this, map)
-  },
-
-  onRemove: function (map) {
-    LayerMixin.onRemove.call(this, map)
-    return GeoJSON.prototype.onRemove.call(this, map)
   },
 })
 

@@ -20,7 +20,8 @@ import * as Utils from '../utils.js'
 import * as TextUtils from '../textutils.js'
 
 const FeatureMixin = {
-  initialize: function (latlngs) {
+  initialize: function (latlngs, geojson) {
+    this.geojson = geojson
     this.parentClass.prototype.initialize.call(this, latlngs)
   },
 
@@ -44,70 +45,56 @@ const FeatureMixin = {
     this.on('contextmenu editable:vertex:contextmenu', this.onContextMenu)
     this.on('click', this.onClick)
     this.on('editable:edited', this.onCommit)
-    // this.on('mouseover', this.onMouseOver)
   },
 
   removeInteractions: function () {
     this.off('contextmenu editable:vertex:contextmenu', this.onContextMenu)
     this.off('click', this.onClick)
     this.off('editable:edited', this.onCommit)
-    // this.off('mouseover', this.onMouseOver)
   },
 
   onMouseOver: function () {
-    this._map.fire('feature:mouseover')
+    this._map.fire('feature:mouseover', { id: this.geojson.id, layer: this })
   },
 
   onClick: function (event) {
     this._map.fire('feature:click', {
-      id: this.feature.id,
+      id: this.geojson.id,
       layer: this,
       latlng: event.latlng,
       originalEvent: event.originalEvent,
     })
-    // if (this._map.measureTools?.enabled()) return
-    // this._popupHandlersAdded = true // Prevent leaflet from managing event
-    // if (event.originalEvent.shiftKey) {
-    //   if (event.originalEvent.ctrlKey || event.originalEvent.metaKey) {
-    //     this.feature.datalayer.edit(event)
-    //   } else if (!this.feature.isReadOnly()) {
-    //     this.feature.toggleEditing(event)
-    //   }
-    // } else if (!this._map.editTools?.drawing()) {
-    //   this.feature.view(event)
-    // }
     DomEvent.stop(event)
   },
 
-  // resetTooltip: function () {
-  //   if (!this.feature.hasGeom()) return
-  //   const displayName = this.feature.getDisplayName()
-  //   let showLabel = this.feature.getOption('showLabel')
-  //   const oldLabelHover = this.feature.getOption('labelHover')
-
-  //   const options = {
-  //     direction: this.feature.getOption('labelDirection'),
-  //     interactive: this.feature.getOption('labelInteractive'),
-  //   }
-
-  //   if (oldLabelHover && showLabel) showLabel = null // Retrocompat.
-  //   options.permanent = showLabel === true
-  //   this.unbindTooltip()
-  //   if ((showLabel === true || showLabel === null) && displayName) {
-  //     this.bindTooltip(Utils.escapeHTML(displayName), options)
-  //   }
-  // },
+  resetTooltip: function () {
+    const { text, show, hover, direction, interactive } = this.geojson.label
+    let showLabel = show
+    if (hover && showLabel) showLabel = null // Retrocompat.
+    this.unbindTooltip()
+    if ((showLabel === true || showLabel === null) && text) {
+      this.bindTooltip(Utils.escapeHTML(text), {
+        direction,
+        interactive,
+        permanent: showLabel === true,
+      })
+    }
+  },
 
   onContextMenu: function (event) {
     DomEvent.stop(event)
-    const items = this.feature
-      .getContextMenu(event)
-      .concat(this.feature._umap.getSharedContextMenu(event))
-    this.feature._umap.contextmenu.open(event.originalEvent, items)
+    this._map.fire('feature:contextmenu', {
+      id: this.geojson.id,
+      latlng: event.latlng,
+      originalEvent: event.originalEvent,
+    })
   },
 
   onCommit: function () {
-    this.feature.onCommit(this.toGeometry())
+    this._map.fire('feature:commit', {
+      id: this.geojson.id,
+      geometry: this.toGeometry(),
+    })
   },
 
   isVisible() {
@@ -142,61 +129,28 @@ const PointMixin = {
     }
   },
 
-  isOnScreen: function (bounds) {
-    bounds = bounds || this._map.getBounds()
-    return bounds.contains(this.getCenter())
-  },
-
   addInteractions() {
     FeatureMixin.addInteractions.call(this)
-    this.on('dragend', this._onDragEnd)
-    // FIXME pass readonly in the geojson?
-    //if (!this.feature.isReadOnly()) this.on('mouseover', this._enableDragging)
-    this.on('mouseout', this._onMouseOut)
+    this.on('dragend', this.onDragEnd)
+    if (!this.geojson.readonly) this.on('mouseover', this.onMouseOver)
+    this.on('mouseout', this.onMouseOut)
   },
 
   removeInteractions() {
     FeatureMixin.removeInteractions.call(this)
-    this.off('dragend', this._onDragEnd)
-    if (!this.feature.isReadOnly()) this.off('mouseover', this._enableDragging)
-    this.off('mouseout', this._onMouseOut)
+    this.off('dragend', this.onDragEnd)
+    this.off('mouseover', this.onMouseOver)
+    this.off('mouseout', this.onMouseOut)
   },
 
-  _onDragEnd(event) {
-    if (this._cluster) {
-      delete this._originalLatLng
-      this.once('editable:edited', () => {
-        this.feature.datalayer.dataChanged()
-        this.feature.edit(event)
-      })
-    }
+  onDragEnd: function () {
+    this._map.fire('feature:dragend', { id: this.geojson.id, layer: this })
   },
 
-  _onMouseOut: function () {
+  onMouseOut: function () {
+    // Do not disable if the mouse went out while dragging.
     if (this.dragging?._draggable && !this.dragging._draggable._moving) {
-      // Do not disable if the mouse went out while dragging
-      this._disableDragging()
-    }
-  },
-
-  _enableDragging: function () {
-    // TODO: start dragging after 1 second on mouse down
-    if (this.feature._umap.editEnabled) {
-      if (!this.editEnabled()) this.enableEdit()
-      // Enabling dragging on the marker override the Draggable._OnDown
-      // event, which, as it stopPropagation, refrain the call of
-      // _onDown with map-pane element, which is responsible to
-      // set the _moved to false, and thus to enable the click.
-      // We should find a cleaner way to handle this.
-      this._map.dragging._draggable._moved = false
-    }
-  },
-
-  _disableDragging: function () {
-    if (this.feature._umap.editEnabled) {
-      if (this.editor?.drawing) return // when creating a new marker, the mouse can trigger the mouseover/mouseout event
-      // do not listen to them
-      this.disableEdit()
+      this._map.fire('feature:mouseout', { layer: this })
     }
   },
 }
@@ -206,8 +160,7 @@ export const LeafletMarker = Marker.extend({
   includes: [FeatureMixin, PointMixin],
 
   initialize: function (latlng, geojson) {
-    this.geojson = geojson
-    FeatureMixin.initialize.call(this, latlng)
+    FeatureMixin.initialize.call(this, latlng, geojson)
     this.setIcon(this.getIcon())
   },
 
@@ -226,14 +179,10 @@ export const LeafletMarker = Marker.extend({
   addInteractions() {
     PointMixin.addInteractions.call(this)
     this._popupHandlersAdded = true // prevent Leaflet from binding event on bindPopup
-    this.on('popupopen', this.highlight)
-    this.on('popupclose', this.resetHighlight)
   },
 
   removeInteractions() {
     PointMixin.removeInteractions.call(this)
-    this.off('popupopen', this.highlight)
-    this.off('popupclose', this.resetHighlight)
   },
 
   onMoveEnd: function () {
@@ -251,8 +200,7 @@ export const LeafletMarker = Marker.extend({
     }
     this.options.icon = this.getIcon()
     Marker.prototype._initIcon.call(this)
-    // FIXME
-    // this.resetTooltip()
+    this.resetTooltip()
   },
 
   getIconClass: function () {
@@ -266,7 +214,7 @@ export const LeafletMarker = Marker.extend({
 
   _getTooltipAnchor: function () {
     const [x, y] = this.options.icon.options.tooltipAnchor
-    const direction = this.feature.getOption('labelDirection')
+    const direction = this.geojson.label?.direction
     if (direction === 'left') return [-x, y]
     if (direction === 'bottom') return [0, 0]
     if (direction === 'top') return [0, y]
@@ -286,14 +234,12 @@ export const LeafletMarker = Marker.extend({
   },
 
   highlight: function () {
-    this.feature.activate()
-    this._redraw()
+    this._icon?.classList.add('umap-icon-active')
     this._bringToFront()
   },
 
-  resetHighlight: function () {
-    this.feature.deactivate()
-    this._redraw()
+  unhighlight: function () {
+    this._icon?.classList.remove('umap-icon-active')
     this._resetZIndex()
   },
 
@@ -345,15 +291,11 @@ const PathMixin = {
   addInteractions: function () {
     FeatureMixin.addInteractions.call(this)
     this.on('drag editable:drag', this._onDrag)
-    this.on('popupopen', this.highlightPath)
-    this.on('popupclose', this._redraw)
   },
 
   removeInteractions: function () {
     FeatureMixin.removeInteractions.call(this)
     this.off('drag editable:drag', this._onDrag)
-    this.off('popupopen', this.highlightPath)
-    this.off('popupclose', this._redraw)
   },
 
   bindTooltip: function (content, options) {
@@ -361,13 +303,8 @@ const PathMixin = {
     this.parentClass.prototype.bindTooltip.call(this, content, options)
   },
 
-  highlightPath: function () {
-    this.feature.activate()
-    this.parentClass.prototype.setStyle.call(this, {
-      fillOpacity: Math.sqrt(this.feature.getDynamicOption('fillOpacity', 1.0)),
-      opacity: 1.0,
-      weight: 1.3 * this.feature.getDynamicOption('weight'),
-    })
+  highlight: function () {
+    this.parentClass.prototype.setStyle.call(this, this.geojson.style.highlight)
   },
 
   _onDrag: function () {
@@ -384,8 +321,8 @@ const PathMixin = {
     FeatureMixin.onAdd.call(this, map)
     this.setStyle()
     if (this.editor?.enabled()) this.editor.addHooks()
-    // this.resetTooltip()
-    this._path.dataset.feature = this.feature.id
+    this.resetTooltip()
+    this._path.dataset.feature = this.geojson.id
   },
 
   onRemove: function (map) {
@@ -426,9 +363,8 @@ const PathMixin = {
     }
   },
 
-  _redraw: function () {
-    this.feature.deactivate()
-    this.setStyle()
+  unhighlight: function () {
+    this.parentClass.prototype.setStyle.call(this, this.geojson.style)
     this.resetTooltip()
   },
 
@@ -460,11 +396,6 @@ const PathMixin = {
     'interactive',
   ],
 
-  isOnScreen: function (bounds) {
-    bounds = bounds || this._map.getBounds()
-    return bounds.overlaps(this.getBounds())
-  },
-
   _setLatLngs: function (latlngs) {
     this.parentClass.prototype._setLatLngs.call(this, latlngs)
     if (this.editor?.enabled()) {
@@ -495,35 +426,6 @@ export const LeafletPolyline = Polyline.extend({
   getMeasure: function (shape) {
     const length = GeoUtils.length(this.toGeometry(shape), { units: 'meters' })
     return TextUtils.readableDistance(length)
-  },
-
-  getElevation: function () {
-    const lineElevation = (latlngs) => {
-      let gain = 0
-      let loss = 0
-      for (let i = 0, n = latlngs.length - 1; i < n; i++) {
-        const fromAlt = latlngs[i].alt
-        const toAlt = latlngs[i + 1].alt
-        if (fromAlt === undefined || toAlt === undefined) continue
-        if (fromAlt > toAlt) loss += fromAlt - toAlt
-        else gain += toAlt - fromAlt
-      }
-      return [gain, loss]
-    }
-    let shapes
-    if (GeoUtils.isFlat(this._latlngs)) {
-      shapes = [this._latlngs]
-    } else {
-      shapes = this._latlngs
-    }
-    let totalGain = 0
-    let totalLoss = 0
-    for (const shape of shapes) {
-      const [gain, loss] = lineElevation(shape)
-      totalGain += gain
-      totalLoss += loss
-    }
-    return [Math.round(totalGain), Math.round(totalLoss)]
   },
 })
 
@@ -663,13 +565,13 @@ export const MaskPolygon = LeafletPolygon.extend({
 export const CircleMarker = BaseCircleMarker.extend({
   parentClass: BaseCircleMarker,
   includes: [FeatureMixin, PathMixin, PointMixin],
-  initialize: function (latlng) {
+  initialize: function (latlng, geojson) {
     if (Array.isArray(latlng) && typeof latlng[0] !== 'number') {
       // Must be a line or polygon
       const bounds = new LatLngBounds(latlng)
       latlng = bounds.getCenter()
     }
-    FeatureMixin.initialize.call(this, latlng)
+    FeatureMixin.initialize.call(this, latlng, geojson)
   },
   getClass: () => CircleMarker,
   getStyleOptions: function () {

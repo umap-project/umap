@@ -194,7 +194,12 @@ export class OLProxy {
     return Boolean(layer) && this.map.getLayers().getArray().includes(layer)
   }
 
-  removeLayer(id) {
+  showLayer(id) {
+    const layer = this.layers[id]
+    if (layer) this.map.addLayer(layer)
+  }
+
+  hideLayer(id) {
     const layer = this.layers[id]
     if (layer) this.map.removeLayer(layer)
   }
@@ -222,7 +227,6 @@ export class OLProxy {
     this.layers[datalayer.id] = new VectorLayer({
       source: this.sources[datalayer.id],
     })
-    this.map.addLayer(this.layers[datalayer.id])
   }
 
   addData(id, geojson) {

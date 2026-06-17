@@ -116,18 +116,31 @@ def test_can_combine_cluster_with_remote_data_and_fromZoom(
         },
     }
     DataLayerFactory(map=map, settings=settings)
+    # This data contains two datasets, which whould be read one at load and
+    # the other when zoom-in again, as the data is remote data and with the
+    # dynamic option (so each map move == one call to the remote resource).
+    # Given there is also the fromZoom option set on the datalayer, the
+    # zoom out should not call the remote data.
     data = [
         {
             "type": "FeatureCollection",
             "features": [
                 {
                     "type": "Feature",
-                    "properties": {"name": "Point 2"},
+                    "properties": {"name": "Call 3"},
                     "geometry": {
                         "type": "Point",
-                        "coordinates": [4.3375, 11.2707],
+                        "coordinates": [4.3375, 12.2607],
                     },
-                }
+                },
+                {
+                    "type": "Feature",
+                    "properties": {"name": "Call 3 bis"},
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [4.3375, 12.2707],
+                    },
+                },
             ],
         },
         {
@@ -135,29 +148,71 @@ def test_can_combine_cluster_with_remote_data_and_fromZoom(
             "features": [
                 {
                     "type": "Feature",
-                    "properties": {"name": "Point 1"},
+                    "properties": {"name": "Call 2"},
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [4.3375, 12.2607],
+                    },
+                },
+                {
+                    "type": "Feature",
+                    "properties": {"name": "Call 2 bis"},
                     "geometry": {
                         "type": "Point",
                         "coordinates": [4.3375, 12.2707],
                     },
-                }
+                },
+            ],
+        },
+        {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": {"name": "Call 1"},
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [4.3375, 12.2607],
+                    },
+                },
+                {
+                    "type": "Feature",
+                    "properties": {"name": "Call 1 bis"},
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [4.3375, 12.2707],
+                    },
+                },
             ],
         },
     ]
 
+    requests = 0
+
     def handle(route):
+        nonlocal requests
+        requests += 1
         route.fulfill(json=data.pop())
 
     page.route("https://remote.org/data.json", handle)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#7/12.271/4.338")
-    expect(page.locator(".umap-div-icon")).to_have_count(1)
-    expect(page.get_by_role("tooltip", name="Point 1")).to_be_visible()
-    page.get_by_role("button", name="Zoom out").click()
-
-    # We are above fromZoom
+    expect(page.locator(".umap-cluster-icon")).to_have_count(1)
     expect(page.locator(".umap-div-icon")).to_have_count(0)
+    assert requests == 1
+    page.get_by_role("button", name="Zoom out").click()
+    assert requests == 1
+
+    # We are above fromZoom, so no call of the remote resource
+    expect(page.locator(".umap-div-icon")).to_have_count(0)
+    expect(page.locator(".umap-cluster-icon")).to_have_count(0)
 
     page.get_by_role("button", name="Zoom in").click()
 
-    expect(page.locator(".umap-div-icon")).to_have_count(1)
-    expect(page.get_by_role("tooltip", name="Point 2")).to_be_visible()
+    expect(page.locator(".umap-cluster-icon")).to_have_count(1)
+    expect(page.locator(".umap-div-icon")).to_have_count(0)
+    assert requests == 2
+
+    page.locator(".umap-cluster-icon").click()
+    expect(page.locator(".umap-div-icon")).to_have_count(2)
+    expect(page.get_by_role("tooltip", name="Call 3", exact=True)).to_be_visible()
+    assert requests == 3

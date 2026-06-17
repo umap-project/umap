@@ -186,6 +186,14 @@ export default class Umap extends Utils.WithEvents {
         this.editPanel.close()
       }
     })
+    this.on('panel:show', (event) => {
+      this.panel.setDefaultMode('expanded')
+      this.panel.open({
+        content: event.detail.content,
+        actions: [this.panelBackButton()],
+      })
+    })
+    this.on('panel:close', () => this.panel.close())
 
     if (this.properties.displayCaptionOnLoad) {
       // Retrocompat
@@ -252,14 +260,6 @@ export default class Umap extends Utils.WithEvents {
       this.fire('feature:endedit', { id: previous.id })
     }
     this.fire('seteditedfeature')
-  }
-
-  get activeFeature() {
-    return this._activeFeature
-  }
-
-  set activeFeature(feature) {
-    this._activeFeature = feature
   }
 
   get modifiedAt() {
@@ -1136,12 +1136,12 @@ export default class Umap extends Utils.WithEvents {
     `)
     limitBounds.appendChild(boundsButtons)
     current.addEventListener('click', () => {
-      const bounds = this.mapProxy.bounds
+      const [west, south, east, north] = this.mapProxy.bounds
       const oldLimitBounds = { ...this.properties.limitBounds }
-      this.properties.limitBounds.south = bounds.getSouth().toFixed(6)
-      this.properties.limitBounds.west = bounds.getWest().toFixed(6)
-      this.properties.limitBounds.north = bounds.getNorth().toFixed(6)
-      this.properties.limitBounds.east = bounds.getEast().toFixed(6)
+      this.properties.limitBounds.south = south.toFixed(6)
+      this.properties.limitBounds.west = west.toFixed(6)
+      this.properties.limitBounds.north = north.toFixed(6)
+      this.properties.limitBounds.east = east.toFixed(6)
       boundsBuilder.fetchAll()
       this.journal.update(
         'properties.limitBounds',
@@ -1773,6 +1773,17 @@ export default class Umap extends Utils.WithEvents {
     )
   }
 
+  panelBackButton() {
+    const button = Utils.loadTemplate(
+      `<button class="icon icon-16 icon-back" title="${translate('Back to browser')}"></button>`
+    )
+    // HOTFIX. Remove when this is released:
+    // https://github.com/Leaflet/Leaflet/pull/9052
+    DOMUtils.disableClickPropagation(button)
+    button.addEventListener('click', () => this.openBrowser())
+    return button
+  }
+
   openCaption() {
     this.onceDatalayersLoaded(() =>
       this.loadCaption().then((caption) => caption.open())
@@ -1851,8 +1862,7 @@ export default class Umap extends Utils.WithEvents {
     this.setProperties(importedData.properties)
 
     if (importedData.geometry) {
-      // TODO keep lon/lat form
-      this.properties.center = this.mapProxy.latLng(importedData.geometry)
+      this.properties.center = importedData.geometry.coordinates
     }
     for (const spec of importedData.layers) {
       // Never trust an id at this stage

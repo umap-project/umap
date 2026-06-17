@@ -45,4 +45,9 @@ export function isValidBbox(bbox) {
   return Array.isArray(bbox) && bbox.length === 4 && bbox.every(Number.isFinite)
 }
 
+// Bounding boxes are kept in geojson order: [west, south, east, north].
+export function bboxIntersects(a, b) {
+  return a[0] <= b[2] && a[2] >= b[0] && a[1] <= b[3] && a[3] >= b[1]
+}
+
 export { flip, area, length, bbox }

@@ -22,19 +22,7 @@ import { FeatureManager, LayerManager } from '../managers.js'
 import { Filters } from '../filters.js'
 import { Fields, getDefaultFields } from './fields.js'
 import { loadType } from './types.js'
-// export const LAYER_TYPES = [
-//   DefaultLayer,
-//   Cluster,
-//   Heat,
-//   Choropleth,
-//   Categorized,
-//   Circles,
-// ]
 
-// const LAYER_MAP = LAYER_TYPES.reduce((acc, klass) => {
-//   acc[klass.TYPE] = klass
-//   return acc
-// }, {})
 
 export class DataLayer {
   constructor(umap, spec = {}) {
@@ -104,6 +92,9 @@ export class DataLayer {
     }
     this.eventsController = new AbortController()
     this._umap.on('map:zoomend', () => this.onZoomEnd(), {
+      signal: this.eventsController.signal,
+    })
+    this._umap.on('map:moveend', () => this.onMoveEnd(), {
       signal: this.eventsController.signal,
     })
 
@@ -218,6 +209,7 @@ export class DataLayer {
   }
 
   showAtLoad() {
+    console.log("showAtLoad", this.autoVisibility, this.showAtZoom())
     return this.autoVisibility && this.showAtZoom()
   }
 
@@ -273,9 +265,10 @@ export class DataLayer {
     }
     const visible = this.isVisible()
     if (this.Type) this._umap.mapProxy.clear(this.id)
-    if (visible) this._umap.mapProxy.removeLayer(this.id)
+    if (visible) this._umap.mapProxy.hideLayer(this.id)
     // this.Type is needed by createLayer (for cluster/heat)
     this.Type = loadType(this.properties.type)
+    this.Type.ensureProperties(this.properties)
     this._umap.mapProxy.createLayer(this)
     if (visible) this.show()
   }
@@ -323,16 +316,33 @@ export class DataLayer {
     }
   }
 
+  onMoveEnd () {
+    console.log("onMoveEnd")
+    if (this.hasDynamicData() && this.showAtZoom()) {
+      this.fetchRemoteData()
+    }
+  }
+
+
   showAtZoom() {
     const from = Number.parseInt(this.properties.fromZoom, 10)
     const to = Number.parseInt(this.properties.toZoom, 10)
     const zoom = this._umap.mapProxy.zoom
+    console.log(zoom, from, to)
     return !((!Number.isNaN(from) && zoom < from) || (!Number.isNaN(to) && zoom > to))
   }
 
   onZoomEnd() {
-    if (this.isDeleted) return
-    this._umap.mapProxy.onZoomEnd(this.id)
+    console.log("onZoomEnd", this.autoVisibility, this.showAtZoom(), this.isVisible())
+    if (this.isDeleted || !this.autoVisibility) return
+    if (!this.showAtZoom() && this.isVisible()) {
+      console.log("hidding")
+      this.hide()
+    }
+    if (this.showAtZoom() && !this.isVisible()) {
+      console.log("showing")
+      this.show()
+    }
   }
 
   hasDynamicData() {
@@ -425,14 +435,14 @@ export class DataLayer {
     return this.properties.type === 'Cluster'
   }
 
-  showFeature(feature) {
-    if (feature.isFiltered()) return
-    // this.layer.addLayer(feature.ui)
-  }
+  // showFeature(feature) {
+  //   if (feature.isFiltered()) return
+  //   // this.layer.addLayer(feature.ui)
+  // }
 
-  hideFeature(feature) {
-    this._umap.mapProxy.removeFeature(this.id, feature.id)
-  }
+  // hideFeature(feature) {
+  //   this._umap.mapProxy.removeFeature(this.id, feature.id)
+  // }
 
   addFeature(feature, sync = false) {
     if (this.group) {
@@ -449,7 +459,11 @@ export class DataLayer {
       this.fields.pull()
     }
     try {
-      this.showFeature(feature)
+      // this._umap.fire('feature:add', {
+      //   sourceId: this.id,
+      //   geojson: feature.toRenderer(),
+      // })
+      // this.showFeature(feature)
     } catch (error) {
       console.error(error)
       if (this._umap.editEnabled) {
@@ -476,7 +490,11 @@ export class DataLayer {
       feature.journal.delete(oldValue)
     }
     try {
-      this.hideFeature(feature)
+      // this._umap.fire('feature:remove', {
+      //   sourceId: this.id,
+      //   geojson: feature.toRenderer(),
+      // })
+      // this.hideFeature(feature)
     } catch {}
     delete this._umap.featuresIndex[feature.getSlug()]
     feature.disconnectFromDataLayer(this)
@@ -565,6 +583,9 @@ export class DataLayer {
     // per-feature colors/radius.
     this.dataChanged()
     await this.compute()
+    // toRenderer() returns the full (accumulated) model, so replace rather than
+    // append, otherwise reimporting into the same layer duplicates features.
+    this._umap.mapProxy.clear(this.id)
     this._umap.mapProxy.addData(this.id, this.toRenderer())
     this._umap.loader.stop(id)
     return data
@@ -745,6 +766,7 @@ export class DataLayer {
   clear(sync = true) {
     this._batch = true
     this.features.forEach((feature) => feature.del(sync))
+    this._umap.mapProxy.clearLayer(this.id)
     this._batch = false
   }
 
@@ -1234,13 +1256,13 @@ export class DataLayer {
   }
 
   async show() {
-    // this._umap.mapProxy.addLayer(this)
+    this._umap.mapProxy.showLayer(this.id)
     if (!this.isLoaded()) await this.fetchData()
     this.propagateVisibility({ force: true })
   }
 
   hide() {
-    this._umap.mapProxy.removeLayer(this.id)
+    this._umap.mapProxy.hideLayer(this.id)
     this.propagateVisibility({ force: false })
   }
 
@@ -1372,7 +1394,10 @@ export class DataLayer {
         color: this.getProperty('color'),
         ...this.Type?.renderConfig?.(this.properties),
       },
-      features: this.features.all().map((feature) => feature.toRenderer()),
+      features: this.features
+        .all()
+        .filter((feature) => !feature.isFiltered())
+        .map((feature) => feature.toRenderer()),
     }
   }
 

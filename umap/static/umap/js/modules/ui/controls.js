@@ -280,7 +280,6 @@ export class MoreControl extends MoreableControl {
 class ScaleControl extends Control {
   static position = 'bottomleft'
   render() {
-    return Utils.loadTemplate('<div></div>')
     this._scaleControl = new LeafletControl.Scale()
     return this._scaleControl.addTo(this._umap.mapProxy.map)._container
   }

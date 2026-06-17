@@ -119,7 +119,7 @@ export default class Browser {
 
   onFormChange() {
     this._umap.layers.tree.browsable().map((datalayer) => {
-      datalayer.resetLayer(true)
+      datalayer.redraw()
       this.updateFeaturesList(datalayer)
       if (this._umap.fullPanel?.isOpen()) datalayer.tableEdit()
     })
