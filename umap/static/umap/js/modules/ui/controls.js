@@ -1,7 +1,6 @@
 import {
   LayerGroup,
   Control as LeafletControl,
-  latLng,
   TileLayer,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import {
@@ -584,9 +583,8 @@ export const Search = PhotonSearch.extend({
     if (pattern.test(this.input.value)) {
       this.hide()
       const { lat, lng } = pattern.exec(this.input.value).groups
-      const latlng = latLng(lat, lng)
-      if (Utils.LatLngIsValid(latlng)) {
-        this.reverse.doReverse(latlng)
+      if (Utils.coordinateIsValid([+lng, +lat])) {
+        this.reverse.doReverse({ lat, lng })
       } else {
         Alert.error(translate('Invalid latitude or longitude'))
       }

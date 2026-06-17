@@ -208,6 +208,17 @@ export class OLProxy {
     this.sources[id]?.clear()
   }
 
+  geometryToRenderer(layerId, featureId, geometry) {
+    const olFeature = this.sources[layerId]?.getFeatureById(featureId)
+    if (!olFeature) return
+    olFeature.setGeometry(
+      new GeoJSON().readGeometry(geometry, {
+        dataProjection: 'EPSG:4326',
+        featureProjection: 'EPSG:3857',
+      })
+    )
+  }
+
   onZoomEnd(id) {
     // No-op for now: OL has no cluster recompute, and zoom-based show/hide
     // (fromZoom/toZoom) is not wired on the OL side yet.
