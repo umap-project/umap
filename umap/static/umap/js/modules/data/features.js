@@ -106,7 +106,7 @@ class Feature {
   }
 
   pushGeometry() {
-    this._setLatLngs(this.toLatLngs())
+    this._umap.mapProxy.geometryToRenderer(this.datalayer.id, this.id, this.geometry)
   }
 
   toLatLngs() {
@@ -799,10 +799,6 @@ export class Point extends Feature {
     }
   }
 
-  _setLatLngs(latlng) {
-    this.ui.setLatLng(latlng)
-  }
-
   get center() {
     return this.coordinates
   }
@@ -835,20 +831,21 @@ export class Point extends Feature {
 
   appendEditFieldsets(container) {
     super.appendEditFieldsets(container)
-    // FIXME edit feature geometry.coordinates instead
-    // (by learning FormBuilder to deal with array indexes ?)
+    const [lng, lat] = this.coordinates
+    const latlng = { lat, lng }
     const coordinatesOptions = [
-      ['ui._latlng.lat', { handler: 'FloatInput', label: translate('Latitude') }],
-      ['ui._latlng.lng', { handler: 'FloatInput', label: translate('Longitude') }],
+      ['lat', { handler: 'FloatInput', label: translate('Latitude') }],
+      ['lng', { handler: 'FloatInput', label: translate('Longitude') }],
     ]
-    const builder = new MutatingForm(this, coordinatesOptions)
+    const builder = new MutatingForm(latlng, coordinatesOptions, { umap: this._umap })
     builder.on('set', () => {
-      if (!Utils.LatLngIsValid(this.ui._latlng)) {
+      const coordinates = [latlng.lng, latlng.lat]
+      if (!Utils.coordinateIsValid(coordinates)) {
         Alert.error(translate('Invalid latitude or longitude'))
-        builder.restoreField('ui._latlng.lat')
-        builder.restoreField('ui._latlng.lng')
+        return
       }
-      this.ui.onCommit()
+      this.onCommit({ type: 'Point', coordinates })
+      this.pushGeometry()
       this.zoomTo({ easing: false })
     })
     const fieldset = DOMUtils.createFieldset(container, translate('Coordinates'))
@@ -859,10 +856,6 @@ export class Point extends Feature {
 class Path extends Feature {
   hasGeom() {
     return !this.isEmpty()
-  }
-
-  _setLatLngs(latlngs) {
-    this.ui.setLatLngs(latlngs)
   }
 
   getShapeOptions() {

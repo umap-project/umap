@@ -8,8 +8,8 @@ export default class Hash {
     window.addEventListener('hashchange', () => this.parse())
   }
 
-  update({ zoom, latlng }) {
-    const [lat, lng] = latlng
+  update({ zoom, coordinate }) {
+    const [lng, lat] = coordinate
     window.location.hash = `#${zoom}/${lat}/${lng}`
   }
 
@@ -30,6 +30,6 @@ export default class Hash {
     const lat = parseFloat(args[1])
     const lng = parseFloat(args[2])
     if (isNaN(zoom) || isNaN(lat) || isNaN(lng)) return
-    this.umap.fire('map:view:update', { zoom, latlng: [lat, lng] })
+    this.umap.fire('map:view:update', { zoom, coordinate: [lng, lat] })
   }
 }

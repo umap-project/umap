@@ -13,6 +13,7 @@ import {
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import { translate } from '../i18n.js'
+import * as GeoUtils from '../geoutils.js'
 import * as Utils from '../utils.js'
 import { LeafletIcon } from './ui.js'
 import { Default as DefaultLayer } from '../rendering/layers/base.js'
@@ -110,13 +111,12 @@ export class LeafletProxy {
   proxyOutgoingEvents() {
     // For hash changes
     this.umap.on('map:view:update', (event) => {
-      console.log("hash changed", )
-      let { zoom, latlng } = event.detail
-      if (!Utils.LatLngIsValid(latlng)) return
+      let { zoom, coordinate } = event.detail
+      if (!Utils.coordinateIsValid(coordinate)) return
       zoom = Math.min(zoom, this.map.getMaxZoom())
       zoom = Math.max(zoom, this.map.getMinZoom())
-      console.log("changing map view to", latlng, zoom)
-      this.map.setView(latlng, zoom, {animate: false})
+      const [lng, lat] = coordinate
+      this.map.setView([lat, lng], zoom, { animate: false })
     })
     this.umap.on('map:show:point', (event) => {
       this.showPoint({ ...event.detail })
@@ -217,7 +217,7 @@ export class LeafletProxy {
       const center = this.map.getCenter()
       this.umap.fire('map:view:updated', {
         zoom: this.map.getZoom(),
-        latlng: [center.lat.toFixed(6), center.lng.toFixed(6)],
+        coordinate: [center.lng.toFixed(6), center.lat.toFixed(6)],
       })
     }
     this.map.on('moveend', updateHash)
@@ -447,6 +447,18 @@ export class LeafletProxy {
 
   clear(id) {
     this.layers[id]?.clearLayers()
+  }
+
+  geometryToRenderer(layerId, featureId, geometry) {
+    const group = this.layers[layerId]
+    if (!group) return
+    const layer =
+      group.getLayers().find((l) => l.feature?.id === featureId) ||
+      group._bucket?.find((m) => m.feature?.id === featureId)
+    if (!layer) return
+    const coordinates = GeoUtils.flip(geometry).coordinates
+    if (geometry.type === 'Point') layer.setLatLng(coordinates)
+    else layer.setLatLngs(coordinates)
   }
 
   hasDataVisible(id) {
