@@ -144,10 +144,12 @@ export class LeafletProxy {
     })
     this.umap.on('draw:marker', () => this.map.editTools.startMarker())
     this.umap.on('draw:polyline', () => this.map.editTools.startPolyline())
-    this.umap.on('draw:multiline', () => this.umap.editedFeature.ui.editor.newShape())
+    this.umap.on('draw:multiline', () =>
+      this.getLayer(this.umap.editedFeature.id)?.editor.newShape()
+    )
     this.umap.on('draw:polygon', () => this.map.editTools.startPolygon())
     this.umap.on('draw:multipolygon', () =>
-      this.umap.editedFeature.ui.editor.newShape()
+      this.getLayer(this.umap.editedFeature.id)?.editor.newShape()
     )
     this.umap.on('draw:route', () => this.map.editTools.startRoute())
     this.umap.on('map:resize', () => this.map.invalidateSize())
@@ -459,6 +461,8 @@ export class LeafletProxy {
     const coordinates = GeoUtils.flip(geometry).coordinates
     if (geometry.type === 'Point') layer.setLatLng(coordinates)
     else layer.setLatLngs(coordinates)
+    // Stale editing handles otherwise keep pointing at the previous geometry.
+    if (layer.editor?.enabled()) layer.editor.reset()
   }
 
   hasDataVisible(id) {

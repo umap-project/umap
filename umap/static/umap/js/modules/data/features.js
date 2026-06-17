@@ -1142,8 +1142,6 @@ export class LineString extends Path {
           coordinates = await this._reduceMulti(coordinates, coords)
         }
         this.geometry = await GeoUtils.cleanCoords({ type: 'LineString', coordinates })
-        if (!this.ui.editEnabled()) this.edit()
-        this.ui.editor.reset()
         return this.geometry
       },
       oldGeometry
