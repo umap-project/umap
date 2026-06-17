@@ -44,10 +44,35 @@ export class LeafletProxy {
         this.umap.fire(`map:${event.type}`, { event: event })
       }
     )
-    this.map.on('feature:mouseover', () => {
-      if (this.umap.editEnabled && !this.umap.editedFeature) {
+    this.map.on('feature:mouseover', (event) => {
+      if (!this.umap.editEnabled) return
+      if (!this.umap.editedFeature) {
         this.umap.tooltip.open({
           content: translate('Right-click to edit'),
+        })
+      }
+      // Drag-to-move on hover, for markers only.
+      const { layer } = event
+      if (layer.getLatLng && !layer.editEnabled()) {
+        layer.enableEdit()
+      }
+    })
+    this.map.on('feature:mouseout', (event) => {
+      if (!this.umap.editEnabled) return
+      const { layer } = event
+      if (!layer.editor?.drawing) layer.disableEdit()
+    })
+    this.map.on('feature:dragend', (event) => {
+      const { id, layer } = event
+      if (layer._cluster) {
+        const feature = this.umap.getFeatureById(id)
+        // Else unspiderfy snaps the marker back to its pre-spiderfy position.
+        delete layer._originalLatLng
+        // The layer
+        layer.once('editable:edited', () => {
+          // Force recompute of the related cluster
+          feature.datalayer.dataChanged()
+          feature.edit()
         })
       }
     })
@@ -69,16 +94,29 @@ export class LeafletProxy {
         feature.view({ center: [latlng.lng, latlng.lat] })
       }
     })
+    this.map.on('feature:commit', (event) => {
+      this.umap.getFeatureById(event.id)?.onCommit(event.geometry)
+    })
+    this.map.on('feature:contextmenu', (event) => {
+      const feature = this.umap.getFeatureById(event.id)
+      if (!feature) return
+      const items = feature
+        .getContextMenu(event)
+        .concat(this.umap.getSharedContextMenu(event))
+      this.umap.contextmenu.open(event.originalEvent, items)
+    })
   }
 
   proxyOutgoingEvents() {
     // For hash changes
     this.umap.on('map:view:update', (event) => {
+      console.log("hash changed", )
       let { zoom, latlng } = event.detail
       if (!Utils.LatLngIsValid(latlng)) return
       zoom = Math.min(zoom, this.map.getMaxZoom())
       zoom = Math.max(zoom, this.map.getMinZoom())
-      this.map.setView(latlng, zoom)
+      console.log("changing map view to", latlng, zoom)
+      this.map.setView(latlng, zoom, {animate: false})
     })
     this.umap.on('map:show:point', (event) => {
       this.showPoint({ ...event.detail })
@@ -114,27 +152,49 @@ export class LeafletProxy {
     this.umap.on('draw:route', () => this.map.editTools.startRoute())
     this.umap.on('map:resize', () => this.map.invalidateSize())
     this.umap.on('panel:show', (event) => {
-      const { content } = event.detail
-      this.umap.panel.open({ content })
+      this.revealInCluster(this.getLayer(event.detail.id))
+      // The panel popup isn't a Leaflet popup, so emulate its close lifecycle:
+      // close on a map background click, or when another Leaflet popup opens.
+      this.map.once('click popupopen', () => this.umap.fire('panel:close'))
     })
     this.umap.on('popup:show', (event) => {
-      const { content, center } = event.detail
-      console.log('we are in the show')
+      const { id, content, center } = event.detail
       const [lon, lat] = center
-      this.map.openPopup(content, [lat, lon])
+      // The popup is map-level (not layer-bound), so highlight the matching
+      // feature's layer here, and undo it once this popup closes.
+      const layer = this.getLayer(id)
+      const offset = layer?._getPopupAnchor?.()
+      this.map.openPopup(content, [lat, lon], offset ? { offset } : undefined)
+      layer?.highlight()
+      this.revealInCluster(layer)
+      this.map.once('popupclose', () => layer?.unhighlight())
     })
+    this.umap.on('popup:close', () => this.map.closePopup())
     this.umap.on('feature:endedit', (event) => {
       this.getLayer(event.detail.id)?.disableEdit()
     })
+    // this.umap.on('feature:add', (event) => {
+    //   const { sourceId, geojson } = event.detail
+    //   const group = this.layers[sourceId]
+    //   group.addData(geojson)
+    // })
+    // this.umap.on('feature:remove', (event) => {
+    //   const { sourceId, geojson } = event.detail
+    //   const group = this.layers[sourceId]
+    //   const layer = this.getLayer(geojson.id)
+    //   if (!layer) return
+    //   group.removeLayer(layer)
+    // })
     this.umap.on('feature:reset', (event) => {
       const { sourceId, geojson } = event.detail
       const group = this.layers[sourceId]
       const layer = this.getLayer(geojson.id)
       if (!layer) return
-      // Refresh the resolved style on the geojson the layer holds, then let
-      // Leaflet re-apply the style function.
-      layer.feature.style = geojson.style
+      // Swap in the freshly baked geojson (Leaflet reads layer.feature, our
+      // code reads layer.geojson — same object), then re-apply style + label.
+      layer.geojson = layer.feature = geojson
       group.resetStyle(layer)
+      layer.resetTooltip()
     })
   }
 
@@ -179,6 +239,7 @@ export class LeafletProxy {
     if (this.umap.properties.hash && window.location.hash) {
       // FIXME An invalid hash will cause the load to fail
       this.umap.hash.parse()
+      console.log("hash parsed")
     } else if (
       this.umap.properties.defaultView === 'locate' &&
       !this.umap.properties.noControl
@@ -279,32 +340,33 @@ export class LeafletProxy {
   }
 
   getGeoContext() {
-    const bounds = this.bounds
-    const center = this.center
+    const [west, south, east, north] = this.bounds
+    const [lng, lat] = this.center
     const context = {
-      bbox: bounds.toBBoxString(),
-      north: bounds.getNorthEast().lat,
-      east: bounds.getNorthEast().lng,
-      south: bounds.getSouthWest().lat,
-      west: bounds.getSouthWest().lng,
-      lat: center.lat,
-      lng: center.lng,
+      bbox: this.bounds.join(','),
+      north,
+      east,
+      south,
+      west,
+      lat,
+      lng,
       zoom: this.zoom,
     }
-    context.left = context.west
-    context.bottom = context.south
-    context.right = context.east
-    context.top = context.north
+    context.left = west
+    context.bottom = south
+    context.right = east
+    context.top = north
     return context
   }
 
   get bounds() {
-    return this.map.getBounds()
+    const bounds = this.map.getBounds()
+    return [bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()]
   }
 
   get center() {
-    // TODO return geojson, not LatLng
-    return this.map.getCenter()
+    const center = this.map.getCenter()
+    return [center.lng, center.lat]
   }
 
   set zoom(value) {
@@ -354,16 +416,24 @@ export class LeafletProxy {
     return this.map.createPane(`pane-${id}`, container || this.overlayPane)
   }
 
-  removeLayer(id) {
+  hideLayer(id) {
     const layer = this.layers[id]
     if (layer) this.map.removeLayer(layer)
   }
 
+  clearLayer(id) {
+    const layer = this.layers[id]
+    if (layer) layer.clearLayers()
+  }
+
   createLayer(datalayer) {
     const Class = LAYER_MAP[datalayer.Type?.type] || DefaultLayer
-    const layer = new Class(datalayer)
-    this.layers[datalayer.id] = layer
-    this.map.addLayer(layer)
+    this.layers[datalayer.id] = new Class(datalayer)
+  }
+
+  showLayer(id) {
+    const layer = this.layers[id]
+    if (layer) this.map.addLayer(layer)
   }
 
   addData(id, geojson) {
@@ -377,10 +447,6 @@ export class LeafletProxy {
 
   clear(id) {
     this.layers[id]?.clearLayers()
-  }
-
-  onZoomEnd(id) {
-    this.layers[id]?.onZoomEnd?.()
   }
 
   hasDataVisible(id) {
@@ -407,9 +473,19 @@ export class LeafletProxy {
     layer.enableEdit()
   }
 
+  revealInCluster(layer) {
+    const cluster = layer?._cluster
+    if (cluster) cluster.zoomToCoverage().then(() => cluster.spiderfy())
+  }
+
   getLayer(id) {
     for (const layer of Object.values(this.map._layers)) {
       if (layer.feature?.id === id) return layer
+    }
+    // Clustered markers wait in the cluster bucket, not on the map.
+    for (const group of Object.values(this.layers)) {
+      const layer = group._bucket?.find((marker) => marker.feature?.id === id)
+      if (layer) return layer
     }
   }
 }

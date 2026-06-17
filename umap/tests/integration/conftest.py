@@ -35,7 +35,10 @@ def new_page(context):
                 print(f"{prefix}: {msg.text}") if msg.type != "warning" else None
             ),
         )
-        page.on("pageerror", lambda exc: print(f"{prefix} uncaught exception: {exc}"))
+        page.on(
+            "pageerror",
+            lambda exc: print(f"{prefix} uncaught exception:\n{exc.stack}"),
+        )
         if not bool(os.environ.get("PWDEBUG", os.environ.get("FORCE_TILES", False))):
             page.route(re.compile(r".*\btile\..*"), mock_tiles)
         return page

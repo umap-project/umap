@@ -107,9 +107,9 @@ class DataIcon extends Icon {
 
   get className() {
     let className = super.className
-    // TODO: find a way to pass those properties through the geojson
-    // if (this.geojson.readonly) className += ' readonly'
-    // if (this.geojson.active) className += ' umap-icon-active'
+    if (this.geojson.readonly) className += ' readonly'
+    // `umap-icon-active` is toggled on the icon element by the marker itself
+    // (transient interaction state, not baked).
     return className
   }
 

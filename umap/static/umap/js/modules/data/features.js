@@ -54,8 +54,10 @@ class Feature {
   }
 
   get ui() {
-    // if (!this._ui) this.makeUI()
-    return this._ui
+    // Temporary bridge: resolve the live rendered layer from the proxy so
+    // Leaflet.Editable editing keeps working. To be removed once editing goes
+    // write-through (renderer-agnostic ops on the proxy).
+    return this._umap.mapProxy.getLayer(this.id)
   }
 
   get center() {
@@ -98,7 +100,9 @@ class Feature {
   }
 
   isOnScreen(bounds) {
-    return this.ui?.isOnScreen(bounds)
+    bounds = bounds || this._umap.mapProxy.bounds
+    if (!this.bounds) return false
+    return GeoUtils.bboxIntersects(bounds, this.bounds)
   }
 
   pushGeometry() {
@@ -220,9 +224,10 @@ class Feature {
     this.buildCard().then((element) => {
       console.log('card has been built')
       if (this.getOption('popupShape') === 'Panel') {
-        this._umap.fire('panel:show', { content: element })
+        this._umap.fire('panel:show', { id: this.id, content: element })
       } else {
         this._umap.fire('popup:show', {
+          id: this.id,
           content: element,
           center: center || this.center,
         })
@@ -472,11 +477,13 @@ class Feature {
 
   changeDataLayer(datalayer) {
     if (this.datalayer) {
-      this.datalayer.removeFeature(this)
+      const oldDatalayer = this.datalayer
+      oldDatalayer.removeFeature(this)
+      oldDatalayer.redraw()
     }
     datalayer.addFeature(this)
     this.journal.upsert(this.toGeoJSON())
-    this.redraw()
+    datalayer.redraw()
   }
 
   getOption(option, fallback) {
@@ -584,13 +591,30 @@ class Feature {
     for (const option of this.getStyleProperties()) {
       style[option] = this.getDynamicOption(option)
     }
+    style.highlight = {
+      opacity: 1,
+      fillOpacity: Math.sqrt(style.fillOpacity ?? 1),
+      weight: 1.3 * style.weight,
+    }
     return style
   }
 
   toRenderer() {
     const geojson = this.toGeoJSON()
     geojson.style = this.getRenderProperties()
+    geojson.readonly = this.isReadOnly()
+    geojson.label = this.getLabel()
     return geojson
+  }
+
+  getLabel() {
+    return {
+      text: this.getDisplayName(),
+      show: this.getOption('showLabel'),
+      hover: this.getOption('labelHover'),
+      direction: this.getOption('labelDirection'),
+      interactive: this.getOption('labelInteractive'),
+    }
   }
 
   isFiltered() {
@@ -748,19 +772,8 @@ class Feature {
     return items
   }
 
-  isActive() {
-    return this._umap.activeFeature === this
-  }
-
-  activate() {
-    this._umap.activeFeature = this
-  }
-
   deactivate() {
-    if (this._umap.activeFeature === this) {
-      this._umap.activeFeature = undefined
-      this.ui.closePopup()
-    }
+    this._umap.fire('popup:close')
   }
 
   makePreview(element) {
@@ -840,15 +853,6 @@ export class Point extends Feature {
     })
     const fieldset = DOMUtils.createFieldset(container, translate('Coordinates'))
     fieldset.appendChild(builder.build())
-  }
-
-  zoomTo(event) {
-    if (this.datalayer.isClustered() && this.ui._cluster) {
-      this.ui._cluster.zoomToCoverage().then(() => {
-        this.ui._cluster.spiderfy()
-      })
-    }
-    super.zoomTo(event)
   }
 }
 
@@ -1195,8 +1199,33 @@ export class LineString extends Path {
   }
 
   extendedProperties() {
-    const [gain, loss] = this.ui.getElevation()
+    const [gain, loss] = this.getElevation()
     return Object.assign({ gain, loss }, super.extendedProperties())
+  }
+
+  getElevation() {
+    const lineElevation = (coords) => {
+      let gain = 0
+      let loss = 0
+      for (let i = 0, n = coords.length - 1; i < n; i++) {
+        const fromAlt = coords[i][2]
+        const toAlt = coords[i + 1][2]
+        if (fromAlt === undefined || toAlt === undefined) continue
+        if (fromAlt > toAlt) loss += fromAlt - toAlt
+        else gain += toAlt - fromAlt
+      }
+      return [gain, loss]
+    }
+    const { type, coordinates } = this.geometry
+    const shapes = type === 'LineString' ? [coordinates] : coordinates
+    let totalGain = 0
+    let totalLoss = 0
+    for (const shape of shapes) {
+      const [gain, loss] = lineElevation(shape)
+      totalGain += gain
+      totalLoss += loss
+    }
+    return [Math.round(totalGain), Math.round(totalLoss)]
   }
 
   loadORS() {
@@ -1278,7 +1307,7 @@ export class LineString extends Path {
         const geometry = await importer.elevation(this.geometry)
         if (!geometry?.type) return
         this.geometry = geometry
-        this.ui.resetTooltip()
+        this.redraw()
         Alert.success(translate('Elevation has been added!'))
         return this.geometry
       },
@@ -1297,7 +1326,7 @@ export class LineString extends Path {
         const geometry = await importer.directions(this.properties._umap_options.route)
         if (!geometry?.type) return
         this.geometry = geometry
-        this.ui.resetTooltip()
+        this.redraw()
         return this.geometry
       },
       oldGeometry

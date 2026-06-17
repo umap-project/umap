@@ -125,21 +125,24 @@ class Choropleth extends DefaultType {
     // breaks = breaks.map((b) => +b.toFixed(2)).join(',')
     let colorScheme = properties.choropleth?.brewer
     if (!colorbrewer[colorScheme]) colorScheme = 'Blues'
-    colors = colorbrewer[colorScheme][breaks.length - 1] || []
+    // First break is the bottom boundary of the data range,
+    // so no feature value can be below it.
+    const thresholds = breaks.slice(1)
+    colors = colorbrewer[colorScheme][thresholds.length] || []
     const featuresProperties = features.reduce((acc, feature) => {
       const value = +feature.properties?.[key]
       // TODO test algo
       let color
-      for (const [index, threshold] of breaks.slice(1).entries()) {
+      for (const [index, threshold] of thresholds.entries()) {
         if (value <= threshold) {
-          color = colors[index - 1]
+          color = colors[index]
           break
         }
       }
+      console.log(feature.properties.nom, color)
       acc[feature.id] = { [feature.getMainColor()]: color }
       return acc
     }, {})
-    // properties: {'ie45fd': {'color': 'red'}, 'oie87r': {'fillColor': 'yellow'}}
     const items = breaks.slice(0, -1).map((el, index) => {
       const from = +breaks[index].toFixed(1)
       const to = +breaks[index + 1].toFixed(1)
