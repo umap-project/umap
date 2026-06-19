@@ -98,7 +98,7 @@ class Feature {
   }
 
   pushGeometry() {
-    this._umap.mapProxy.geometryToRenderer(this.datalayer.id, this.id, this.geometry)
+    this._umap.mapProxy.pushGeometry(this.datalayer.id, this.id, this.geometry)
   }
 
   toLatLngs() {
@@ -1455,9 +1455,7 @@ export class Polygon extends Path {
 
   getDrawingTools(event) {
     const items = super.getDrawingTools(event)
-    const shape = this.ui.shapeAt(event.latlng)
-    // No multi and no holes.
-    if (shape && !this.isMulti() && (GeoUtils.isFlat(shape) || shape.length === 1)) {
+    if (!this.isMulti() && this.coordinates.length === 1) {
       items.push({
         title: translate('Transform to lines'),
         icon: 'icon-polyline',

@@ -208,7 +208,7 @@ export class OLProxy {
     this.sources[id]?.clear()
   }
 
-  geometryToRenderer(layerId, featureId, geometry) {
+  pushGeometry(layerId, featureId, geometry) {
     const olFeature = this.sources[layerId]?.getFeatureById(featureId)
     if (!olFeature) return
     olFeature.setGeometry(
@@ -251,6 +251,13 @@ export class OLProxy {
       return olFeature
     })
     this.sources[id].addFeatures(olFeatures)
+  }
+
+  addFeature(id, geojson) {
+    const options = { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' }
+    const olFeature = new GeoJSON().readFeature(geojson, options)
+    olFeature.setStyle(this.style(geojson.style, olFeature.getGeometry().getType()))
+    this.sources[id].addFeature(olFeature)
   }
 
   style(style = {}, geometryType) {

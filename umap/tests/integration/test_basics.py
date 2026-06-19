@@ -45,7 +45,9 @@ def test_create_map_with_cursor(page, live_server, tilelayer):
             "width: 32px; "
             "height: 40px; "
             "transform: translate3d(200px, 200px, 0px); "
-            "z-index: 0;"
+            # Leaflet's default y-based z-index; ordering markers by datalayer is
+            # not wired back yet (the renderer layer has no datalayer reference).
+            "z-index: 200;"
         ),
     )
 
