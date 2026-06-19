@@ -100,9 +100,9 @@ class DataIcon extends Icon {
   }
 
   get iconUrl() {
-    // TODO save recent URL to show them in the first tab
-    const url = this.geojson.style?.iconUrl || this.properties.iconUrl
-    return formatUrl(url, this.geojson.properties)
+    const url = this.geojson.style?.iconUrl
+    if (url) this._setRecent(url)
+    return formatUrl(url || this.properties.iconUrl, this.geojson.properties)
   }
 
   get className() {
