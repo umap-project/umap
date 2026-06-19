@@ -92,6 +92,10 @@ export class LeafletProxy {
     return this.map._container
   }
 
+  attachUI(container) {
+    this.container.appendChild(container)
+  }
+
   render() {
     if (!this.map.measureTools) {
       new L.Measurable(this.map)
@@ -290,6 +294,15 @@ export class LeafletProxy {
 
   hasLayer(layer) {
     return this.map.hasLayer(layer)
+  }
+
+  get hasExtent() {
+    return Boolean(this.map.options.maxBounds)
+  }
+
+  getExtentBBoxString() {
+    // southwest_lng,southwest_lat,northeast_lng,northeast_lat'
+    return this.map.options.maxBounds?.toBBoxString()
   }
 }
 

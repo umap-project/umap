@@ -36,5 +36,9 @@ mkdir -p umap/static/umap/vendors/simple-elevation-chart/ && cp node_modules/sim
 for mod in meta helpers flatten distance invariant clean-coords boolean-point-on-line flip clone area centroid length; do
   mkdir -p umap/static/umap/vendors/turf/$mod && cp node_modules/@turf/$mod/dist/esm/index.js* umap/static/umap/vendors/turf/$mod/
 done
+cp -r node_modules/ol umap/static/umap/vendors/
+mkdir -p umap/static/umap/vendors/rbush/ && cp node_modules/rbush/index.js umap/static/umap/vendors/rbush/
+mkdir -p umap/static/umap/vendors/quickselect/ && cp node_modules/quickselect/index.js umap/static/umap/vendors/quickselect/
+
 
 echo 'Done!'

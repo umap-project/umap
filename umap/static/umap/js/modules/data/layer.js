@@ -544,22 +544,23 @@ export class DataLayer {
   }
 
   addData(geojson, sync) {
-    const id = Math.random()
-    this._umap.loader.start(id)
-    let data = []
-    this._batch = true
-    try {
-      // Do not fail if remote data is somehow invalid,
-      // otherwise the layer becomes uneditable.
-      data = this.makeFeatures(geojson, sync)
-    } catch (err) {
-      console.debug('Error with DataLayer', this.id)
-      console.error(err)
-    }
-    this._batch = false
-    this.dataChanged()
-    this._umap.loader.stop(id)
-    return data
+    return this._umap.mapProxy.addLayer(geojson)
+    // const id = Math.random()
+    // this._umap.loader.start(id)
+    // let data = []
+    // this._batch = true
+    // try {
+    //   // Do not fail if remote data is somehow invalid,
+    //   // otherwise the layer becomes uneditable.
+    //   data = this.makeFeatures(geojson, sync)
+    // } catch (err) {
+    //   console.debug('Error with DataLayer', this.id)
+    //   console.error(err)
+    // }
+    // this._batch = false
+    // this.dataChanged()
+    // this._umap.loader.stop(id)
+    // return data
   }
 
   makeFeatures(geojson = {}, sync = true) {
@@ -1224,7 +1225,7 @@ export class DataLayer {
   }
 
   async show() {
-    this._umap.mapProxy.addLayer(this.layer)
+    // this._umap.mapProxy.addLayer(this.layer)
     if (!this.isLoaded()) await this.fetchData()
     this.propagateVisibility({ force: true })
   }

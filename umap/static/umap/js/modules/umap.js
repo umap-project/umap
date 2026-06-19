@@ -16,7 +16,7 @@ import * as Icon from './icon.js'
 import { LayerManager } from './managers.js'
 import Orderable from './orderable.js'
 import { MapPermissions } from './permissions.js'
-import { LeafletProxy } from './rendering/map.js'
+import { OLProxy } from './rendering/openlayers.js'
 import { Request, ServerRequest } from './request.js'
 import Rules from './rules.js'
 import { SCHEMA } from './schema.js'
@@ -47,6 +47,7 @@ export default class Umap extends Utils.WithEvents {
   }
 
   async init(element, geojson) {
+    console.log(JSON.stringify(geojson))
     this.migrateLegacyProperties(geojson.properties)
     this.properties = Object.assign(
       {
@@ -81,13 +82,13 @@ export default class Umap extends Utils.WithEvents {
     // Prevent default creation of controls
     const zoomControl = this.properties.zoomControl
     const fullscreenControl = this.properties.fullscreenControl
-    const center = geojson.geometry
+    this.properties.center = geojson.geometry.coordinates
     this.properties.zoomControl = false
     this.properties.fullscreenControl = false
 
-    this.mapProxy = new LeafletProxy(this, element)
+    this.mapProxy = new OLProxy(this, element)
     this.uiContainer = Utils.loadTemplate('<div class="umap-ui-container"></div>')
-    this.mapProxy.container.appendChild(this.uiContainer)
+    this.mapProxy.attachUI(this.uiContainer)
     this.controlManager = new ControlManager(this)
     this.drop = new DropControl(this, this.mapProxy.container)
 
@@ -95,9 +96,9 @@ export default class Umap extends Utils.WithEvents {
     this.properties.fullscreenControl =
       fullscreenControl !== undefined ? fullscreenControl : true
 
-    if (center) {
-      this.properties.center = this.mapProxy.latLng(center)
-    }
+    // if (center) {
+    //   this.properties.center = this.mapProxy.position(center)
+    // }
 
     // Needed for permissions
     this.journalEngine = new Journal(this)
@@ -1406,10 +1407,9 @@ export default class Umap extends Utils.WithEvents {
 
   geometry() {
     /* Return a GeoJSON geometry Object */
-    const latlng = this.mapProxy.latLng(this.properties.center || this.mapProxy.center)
     return {
       type: 'Point',
-      coordinates: [latlng.lng, latlng.lat],
+      coordinates: this.properties.center,
     }
   }
 
@@ -1848,6 +1848,7 @@ export default class Umap extends Utils.WithEvents {
     this.setProperties(importedData.properties)
 
     if (importedData.geometry) {
+      // TODO keep lon/lat form
       this.properties.center = this.mapProxy.latLng(importedData.geometry)
     }
     for (const spec of importedData.layers) {
