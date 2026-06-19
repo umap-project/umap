@@ -86,16 +86,17 @@ export class LeafletProxy {
         if (event.originalEvent.ctrlKey || event.originalEvent.metaKey) {
           feature.datalayer.edit(event)
         } else if (!feature.isReadOnly()) {
-          this.editLayer(id)
           feature.edit()
         }
       } else if (!this.map.editTools?.drawing()) {
-        console.log('asking for feature.view')
         feature.view({ center: [latlng.lng, latlng.lat] })
       }
     })
     this.map.on('feature:commit', (event) => {
       this.umap.getFeatureById(event.id)?.onCommit(event.geometry)
+    })
+    this.map.on('feature:route', (event) => {
+      this.umap.getFeatureById(event.id)?.setRoute(event.coordinates)
     })
     this.map.on('feature:contextmenu', (event) => {
       const feature = this.umap.getFeatureById(event.id)
@@ -171,6 +172,9 @@ export class LeafletProxy {
       this.map.once('popupclose', () => layer?.unhighlight())
     })
     this.umap.on('popup:close', () => this.map.closePopup())
+    this.umap.on('feature:edit', (event) => {
+      this.editLayer(event.detail.id)
+    })
     this.umap.on('feature:endedit', (event) => {
       this.getLayer(event.detail.id)?.disableEdit()
     })

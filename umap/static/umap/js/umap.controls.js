@@ -10,9 +10,10 @@ U.Editable = L.Editable.extend({
     })
     this.on('editable:drawing:commit', function (event) {
       this.resetButtons()
-      if (this._umap.editedFeature !== event.layer) {
-        const promise = event.layer.feature.edit(event)
-        if (event.layer.feature.isRoute?.()) {
+      const feature = this._umap.getFeatureById(event.layer.geojson.id)
+      if (this._umap.editedFeature !== feature) {
+        const promise = feature.edit(event)
+        if (feature.isRoute?.()) {
           promise.then((panel) => {
             panel.scrollTo('details#edit-route')
           })
@@ -42,8 +43,9 @@ U.Editable = L.Editable.extend({
 
   startRoute: function (latlng) {
     const feature = this.createLineString()
-    feature.askForRouteSettings().then(async () => {
-      feature.ui.enableEdit(this.map).newShape(latlng)
+    feature.askForRouteSettings().then(() => {
+      const layer = this.drawNewFeature(feature)
+      layer.enableEdit(this.map).newShape(latlng)
     })
   },
 
