@@ -587,3 +587,16 @@ export const CircleMarker = BaseCircleMarker.extend({
     // Dummy function, as it inherits from PathMixin
   },
 })
+
+export function layerClass(geojson) {
+  const type = geojson.geometry?.type
+  if (type === 'Point' || type === 'MultiPoint') {
+    return geojson.style?.shape === 'circle' ? CircleMarker : LeafletMarker
+  }
+  if (type === 'Polygon' || type === 'MultiPolygon') {
+    return geojson.style?.mask ? MaskPolygon : LeafletPolygon
+  }
+  const route = geojson.properties?._umap_options?.route
+  if (route && route.active !== false) return LeafletRoute
+  return LeafletPolyline
+}

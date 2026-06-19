@@ -15,7 +15,7 @@ import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import { translate } from '../i18n.js'
 import * as GeoUtils from '../geoutils.js'
 import * as Utils from '../utils.js'
-import { LeafletIcon } from './ui.js'
+import { LeafletIcon, layerClass } from './ui.js'
 import { Default as DefaultLayer } from '../rendering/layers/base.js'
 import { Cluster } from '../rendering/layers/cluster.js'
 import { Heat } from '../rendering/layers/heat.js'
@@ -78,7 +78,6 @@ export class LeafletProxy {
       }
     })
     this.map.on('feature:click', (event) => {
-      console.log(event)
       const { id, layer, latlng } = event
       const feature = this.umap.getFeatureById(id)
       if (this.map.measureTools?.enabled()) return
@@ -192,6 +191,13 @@ export class LeafletProxy {
       const group = this.layers[sourceId]
       const layer = this.getLayer(geojson.id)
       if (!layer) return
+      if (layerClass(geojson) !== layer.getClass()) {
+        const wasEditing = layer.editEnabled()
+        this.removeFeature(sourceId, geojson.id)
+        this.addFeature(sourceId, geojson)
+        if (wasEditing) this.editLayer(geojson.id)
+        return
+      }
       // Swap in the freshly baked geojson (Leaflet reads layer.feature, our
       // code reads layer.geojson — same object), then re-apply style + label.
       layer.geojson = layer.feature = geojson
