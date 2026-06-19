@@ -6,7 +6,6 @@ import {
   Rectangle,
   latLngBounds,
 } from '../../../../vendors/leaflet/leaflet-src.esm.js'
-import { translate } from '../../i18n.js'
 import { Cluster as ClusterIcon } from '../../icon.js'
 import { LeafletIcon } from '../ui.js'
 import { Default as DefaultLayer } from './base.js'
@@ -83,11 +82,6 @@ const MarkerCluster = Marker.extend({
 })
 
 export const Cluster = DefaultLayer.extend({
-  statics: {
-    NAME: translate('Clustered'),
-    TYPE: 'Cluster',
-  },
-
   initialize: function (datalayer) {
     DefaultLayer.prototype.initialize.call(this, datalayer)
     this._bucket = []

@@ -5,17 +5,7 @@ import {
   latLngBounds,
   point,
 } from '../../../../vendors/leaflet/leaflet-src.esm.js'
-import { translate } from '../../i18n.js'
-import { LayerMixin } from './base.js'
-
 export const Heat = L.HeatLayer.extend({
-  statics: {
-    NAME: translate('Heatmap'),
-    TYPE: 'Heat',
-  },
-  includes: [LayerMixin],
-  browsable: false,
-
   initialize: function (datalayer) {
     this.datalayer = datalayer
     L.HeatLayer.prototype.initialize.call(this, [], {})
@@ -38,21 +28,9 @@ export const Heat = L.HeatLayer.extend({
     }
   },
 
-  onAdd: function (map) {
-    LayerMixin.onAdd.call(this, map)
-    return L.HeatLayer.prototype.onAdd.call(this, map)
-  },
-
-  onRemove: function (map) {
-    LayerMixin.onRemove.call(this, map)
-    return L.HeatLayer.prototype.onRemove.call(this, map)
-  },
-
   clearLayers: function () {
     this.setLatLngs([])
   },
-
-  getFeatures: () => ({}),
 
   getBounds: function () {
     return latLngBounds(this._latlngs)

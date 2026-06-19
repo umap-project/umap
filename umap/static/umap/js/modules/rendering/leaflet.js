@@ -509,10 +509,6 @@ export class LeafletProxy {
     return layer
   }
 
-  hasDataVisible(id) {
-    return this.layers[id]?.hasDataVisible() ?? false
-  }
-
   removeFeature(id, featureId) {
     const layer = this.getLayerInGroup(id, featureId)
     if (layer) this.layers[id]?.removeLayer(layer)
