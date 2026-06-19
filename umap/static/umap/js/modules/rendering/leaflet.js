@@ -66,7 +66,7 @@ export class LeafletProxy {
     this.map.on('feature:dragend', (event) => {
       const { id, layer } = event
       if (layer._cluster) {
-        const feature = this.umap.getFeatureById(id)
+        const feature = this.getFeatureById(id)
         // Else unspiderfy snaps the marker back to its pre-spiderfy position.
         delete layer._originalLatLng
         // The layer
@@ -79,7 +79,7 @@ export class LeafletProxy {
     })
     this.map.on('feature:click', (event) => {
       const { id, layer, latlng } = event
-      const feature = this.umap.getFeatureById(id)
+      const feature = this.getFeatureById(id)
       if (this.map.measureTools?.enabled()) return
       layer._popupHandlersAdded = true // Prevent leaflet from managing event
       if (event.originalEvent.shiftKey) {
@@ -93,13 +93,13 @@ export class LeafletProxy {
       }
     })
     this.map.on('feature:commit', (event) => {
-      this.umap.getFeatureById(event.id)?.onCommit(event.geometry)
+      this.getFeatureById(event.id)?.onCommit(event.geometry)
     })
     this.map.on('feature:route', (event) => {
-      this.umap.getFeatureById(event.id)?.setRoute(event.coordinates)
+      this.getFeatureById(event.id)?.setRoute(event.coordinates)
     })
     this.map.on('feature:contextmenu', (event) => {
-      const feature = this.umap.getFeatureById(event.id)
+      const feature = this.getFeatureById(event.id)
       if (!feature) return
       const items = feature
         .getContextMenu(event)
@@ -180,7 +180,9 @@ export class LeafletProxy {
     })
     this.umap.on('feature:hole', (event) => {
       const { id, coordinate } = event.detail
-      this.getLayer(id)?.enableEdit().newHole(this.latLng({ coordinates: coordinate }))
+      this.getLayer(id)
+        ?.enableEdit()
+        .newHole(this.latLng({ coordinates: coordinate }))
     })
     // this.umap.on('feature:add', (event) => {
     //   const { sourceId, geojson } = event.detail
@@ -224,6 +226,13 @@ export class LeafletProxy {
     return this.map._container
   }
 
+  getFeatureById(id) {
+    const [datalayerId, featureId] = id.split('/')
+    // TODO: better index of datalayers.
+    const datalayer = this.umap.layers.tree.all().get(datalayerId)
+    return datalayer?.features.get(featureId)
+  }
+
   attachUI(container) {
     this.container.appendChild(container)
   }
@@ -261,7 +270,7 @@ export class LeafletProxy {
     if (this.umap.properties.hash && window.location.hash) {
       // FIXME An invalid hash will cause the load to fail
       this.umap.hash.parse()
-      console.log("hash parsed")
+      console.log('hash parsed')
     } else if (
       this.umap.properties.defaultView === 'locate' &&
       !this.umap.properties.noControl
@@ -508,7 +517,7 @@ export class LeafletProxy {
   }
 
   connectDrawing(layer) {
-    const feature = this.umap.getFeatureById(layer.feature.id)
+    const feature = this.getFeatureById(layer.feature.id)
     this.layers[feature.datalayer.id].addLayer(layer)
     return layer
   }

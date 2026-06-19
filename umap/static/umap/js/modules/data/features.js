@@ -139,7 +139,7 @@ class Feature {
     // points via the websocket, as the other peers will get them themselves.
     if (this.datalayer?.isRemoteLayer()) return
     if (this._needs_upsert) {
-      this.journal.upsert(this.toGeoJSON(), null)
+      this.journal.upsert(this.toJournal(), null)
       this._needs_upsert = false
     } else {
       this.journal.update('geometry', this.geometry, this._geometry_bk)
@@ -462,7 +462,7 @@ class Feature {
       oldDatalayer.redraw()
     }
     datalayer.addFeature(this)
-    this.journal.upsert(this.toGeoJSON())
+    this.journal.upsert(this.toJournal())
     datalayer.redraw()
   }
 
@@ -541,8 +541,13 @@ class Feature {
       type: 'Feature',
       geometry: this.geometry,
       properties: this.cloneProperties(),
-      id: this.id,
     })
+  }
+
+  toJournal() {
+    const geojson = this.toGeoJSON()
+    geojson.id = this.id
+    return geojson
   }
 
   getStyleProperties() {
@@ -581,6 +586,7 @@ class Feature {
 
   toRenderer() {
     const geojson = this.toGeoJSON()
+    geojson.id = `${this.datalayer.id}/${this.id}`
     geojson.style = this.getRenderProperties()
     geojson.readonly = this.isReadOnly()
     geojson.label = this.getLabel()
@@ -635,7 +641,6 @@ class Feature {
 
   clone() {
     const geojson = this.toGeoJSON()
-    delete geojson.id
     delete geojson.properties.id
     const feature = this.datalayer.makeFeature(geojson)
     feature.edit()
@@ -1077,9 +1082,6 @@ export class LineString extends Path {
     geojson.geometry.coordinates = [
       Utils.flattenCoordinates(geojson.geometry.coordinates),
     ]
-
-    delete geojson.id // delete the copied id, a new one will be generated.
-
     const polygon = this.datalayer.makeFeature(geojson)
     polygon.edit()
     this.del()
@@ -1417,7 +1419,6 @@ export class Polygon extends Path {
 
   toLineString() {
     const geojson = this.toGeoJSON()
-    delete geojson.id
     delete geojson.properties.id
     geojson.geometry.type = 'LineString'
     geojson.geometry.coordinates = Utils.flattenCoordinates(

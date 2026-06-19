@@ -203,7 +203,7 @@ export class DataLayer {
   }
 
   showAtLoad() {
-    console.log("showAtLoad", this.autoVisibility, this.showAtZoom())
+    console.log('showAtLoad', this.autoVisibility, this.showAtZoom())
     return this.autoVisibility && this.showAtZoom()
   }
 
@@ -306,13 +306,12 @@ export class DataLayer {
     }
   }
 
-  onMoveEnd () {
-    console.log("onMoveEnd")
+  onMoveEnd() {
+    console.log('onMoveEnd')
     if (this.hasDynamicData() && this.showAtZoom()) {
       this.fetchRemoteData()
     }
   }
-
 
   showAtZoom() {
     const from = Number.parseInt(this.properties.fromZoom, 10)
@@ -323,14 +322,14 @@ export class DataLayer {
   }
 
   onZoomEnd() {
-    console.log("onZoomEnd", this.autoVisibility, this.showAtZoom(), this.isVisible())
+    console.log('onZoomEnd', this.autoVisibility, this.showAtZoom(), this.isVisible())
     if (this.isDeleted || !this.autoVisibility) return
     if (!this.showAtZoom() && this.isVisible()) {
-      console.log("hidding")
+      console.log('hidding')
       this.hide()
     }
     if (this.showAtZoom() && !this.isVisible()) {
-      console.log("showing")
+      console.log('showing')
       this.show()
     }
   }
@@ -450,7 +449,7 @@ export class DataLayer {
     }
     this.dataChanged()
     if (sync) {
-      feature.journal.upsert(feature.toGeoJSON(), null)
+      feature.journal.upsert(feature.toJournal(), null)
     }
     return feature
   }
@@ -461,7 +460,7 @@ export class DataLayer {
     // polygon, not yet valid (not enough points)
     if (!this.features.has(feature.id)) return
     if (sync !== false) {
-      const oldValue = feature.toGeoJSON()
+      const oldValue = feature.toJournal()
       feature.journal.delete(oldValue)
     }
     this._umap.mapProxy.removeFeature(this.id, feature.id)
@@ -1352,7 +1351,10 @@ export class DataLayer {
 
   umapGeoJSON() {
     const features = this.isRemoteLayer() ? [] : this.features.all()
-    const geojson = this._umap.formatter.toFeatureCollection(features)
+    const geojson = {
+      type: 'FeatureCollection',
+      features: features.map((f) => f.toJournal()),
+    }
     geojson.properties = this.properties
     geojson.id = this.id
     geojson.rank = this.rank

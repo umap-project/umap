@@ -10,7 +10,7 @@ U.Editable = L.Editable.extend({
     })
     this.on('editable:drawing:commit', function (event) {
       this.resetButtons()
-      const feature = this._umap.getFeatureById(event.layer.geojson.id)
+      const feature = this._umap.mapProxy.getFeatureById(event.layer.geojson.id)
       if (this._umap.editedFeature !== feature) {
         const promise = feature.edit(event)
         if (feature.isRoute?.()) {
@@ -161,7 +161,7 @@ U.Editable = L.Editable.extend({
   onEscape: function () {
     this.once('editable:drawing:end', (event) => {
       this._umap.tooltip.close()
-      const feature = this._umap.getFeatureById(event.layer.geojson.id)
+      const feature = this._umap.mapProxy.getFeatureById(event.layer.geojson.id)
       if (!feature) return
       // Leaflet.Editable will delete the drawn shape if invalid
       // (eg. line has only one drawn point)
