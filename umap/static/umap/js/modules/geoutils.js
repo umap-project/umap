@@ -20,6 +20,32 @@ export async function cleanCoords(geojson, options) {
   return cleanCoords(geojson, options)
 }
 
+// Index of the sub-shape of a Multi* geometry that `point` ([lng, lat]) sits on:
+// the polygon containing it, or the nearest line. -1 if none.
+export async function shapeAt(geometry, point) {
+  const shapes = geometry.coordinates
+  if (geometry.type === 'MultiPolygon') {
+    const { booleanPointInPolygon } = await import('@turf/boolean-point-in-polygon')
+    return shapes.findIndex((coordinates) =>
+      booleanPointInPolygon(point, { type: 'Polygon', coordinates })
+    )
+  }
+  if (geometry.type === 'MultiLineString') {
+    const { pointToLineDistance } = await import('@turf/point-to-line-distance')
+    let best = -1
+    let min = Number.POSITIVE_INFINITY
+    shapes.forEach((coordinates, index) => {
+      const distance = pointToLineDistance(point, { type: 'LineString', coordinates })
+      if (distance < min) {
+        min = distance
+        best = index
+      }
+    })
+    return best
+  }
+  return -1
+}
+
 // True if `arr` is a flat array of positions ([[lng, lat], ...] or [LatLng, ...]),
 // false if it has an extra nesting level (Multi/Polygon-like).
 export function isFlat(arr) {

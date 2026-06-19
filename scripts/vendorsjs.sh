@@ -32,9 +32,12 @@ mkdir -p umap/static/umap/vendors/openrouteservice/ && cp node_modules/openroute
 mkdir -p umap/static/umap/vendors/snapdom/ && cp node_modules/@zumer/snapdom/dist/snapdom.min.mjs umap/static/umap/vendors/snapdom/
 mkdir -p umap/static/umap/vendors/simple-elevation-chart/ && cp node_modules/simple-elevation-chart/src/elevation.* umap/static/umap/vendors/simple-elevation-chart/
 # Turf
-for mod in meta helpers flatten distance invariant clean-coords boolean-point-on-line flip clone area centroid length bbox; do
+for mod in meta helpers flatten distance invariant clean-coords boolean-point-on-line boolean-point-in-polygon point-to-line-distance nearest-point-on-line rhumb-distance flip clone area centroid length bbox; do
   mkdir -p umap/static/umap/vendors/turf/$mod && cp node_modules/@turf/$mod/dist/esm/index.js* umap/static/umap/vendors/turf/$mod/
 done
+# Deps of @turf/boolean-point-in-polygon (not @turf packages)
+mkdir -p umap/static/umap/vendors/point-in-polygon-hao/ && cp node_modules/point-in-polygon-hao/dist/esm/index.js* umap/static/umap/vendors/point-in-polygon-hao/
+mkdir -p umap/static/umap/vendors/robust-predicates/esm/ && cp node_modules/robust-predicates/index.js umap/static/umap/vendors/robust-predicates/ && cp node_modules/robust-predicates/esm/*.js umap/static/umap/vendors/robust-predicates/esm/
 # Simple Statistics
 mkdir -p umap/static/umap/vendors/simple-statistics/
 for mod in jenks jenks_breaks jenks_matrices quantile quantile_sorted quickselect equal_interval_breaks max min ckmeans make_matrix numeric_sort unique_count_sorted; do

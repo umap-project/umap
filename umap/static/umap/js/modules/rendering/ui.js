@@ -368,21 +368,6 @@ const PathMixin = {
     this.resetTooltip()
   },
 
-  isolateShape: function (atLatLng) {
-    if (!this.feature.isMulti()) return
-    const shape = this.enableEdit().deleteShapeAt(atLatLng)
-    this.disableEdit()
-    if (!shape) return
-    // TODO: remove direct call to feature.datalayer.
-    // Use an event instead ?
-    const other = this.feature.datalayer.makeFeature({
-      geometry: this.toGeometry(shape),
-      properties: this.feature.cloneProperties(),
-    })
-    other.edit()
-    return other
-  },
-
   getStyleOptions: () => [
     'smoothFactor',
     'color',
