@@ -6,21 +6,7 @@ export const Default = GeoJSON.extend({
   initialize: function (datalayer) {
     this.datalayer = datalayer
     GeoJSON.prototype.initialize.call(this, null, {
-      pointToLayer: (geojson, latlng) => {
-        if (geojson.style?.shape === 'circle') {
-          const layer = new UI.CircleMarker(latlng, geojson)
-          layer.options.pane = this.pane
-          return layer
-        }
-        return new UI.LeafletMarker(latlng, geojson)
-      },
-      polylineToLayer: (latlngs, options, geojson) => {
-        const Class = UI.layerClass(geojson)
-        const layer = new Class(latlngs, geojson)
-        layer.options.pane = this.pane
-        return layer
-      },
-      polygonToLayer: (latlngs, options, geojson) => {
+      geometryToLayer: (latlngs, options, geojson) => {
         const Class = UI.layerClass(geojson)
         const layer = new Class(latlngs, geojson)
         layer.options.pane = this.pane
