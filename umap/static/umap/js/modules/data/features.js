@@ -216,9 +216,6 @@ class Feature {
         })
       }
     })
-    // this.attachPopup().then(() => {
-    //   this.ui.openPopup(latlng)
-    // })
   }
 
   render(fields) {
@@ -851,14 +848,83 @@ class Path extends Feature {
     )
   }
 
-  transferShape(at, to) {
-    const shape = this.ui.enableEdit().deleteShapeAt(at)
-    this.ui.disableEdit()
-    if (!shape) return
-    to.ui.enableEdit().appendShape(shape)
-    // appendShape (insertShape) does not fire `editable:edited`, so commit by hand.
-    to.ui.onCommit()
-    if (this.isEmpty()) this.del()
+  async _removeShapeAt(coordinate) {
+    const index = await GeoUtils.shapeAt(this.geometry, coordinate)
+    if (index === -1) return null
+    const shapes = Utils.CopyJSON(this.coordinates)
+    const [extracted] = shapes.splice(index, 1)
+    const single = this.geometry.type.replace('Multi', '')
+    this.geometry = {
+      type: shapes.length > 1 ? this.geometry.type : single,
+      coordinates: shapes.length > 1 ? shapes : shapes[0],
+    }
+    return extracted
+  }
+
+  appendShape(coordinates) {
+    const oldGeometry = Utils.CopyJSON(this._geometry)
+    const type = this.geometry.type
+    const isMultiType = type.startsWith('Multi')
+    this.geometry = {
+      type: isMultiType ? type : `Multi${type}`,
+      coordinates: isMultiType
+        ? [...this.coordinates, coordinates]
+        : [this.coordinates, coordinates],
+    }
+    this.journal.update('geometry', this.geometry, oldGeometry)
+  }
+
+  isolateShape(coordinate) {
+    if (!this.isMulti()) return
+    const oldGeometry = Utils.CopyJSON(this._geometry)
+    return this.journal.update(
+      'geometry',
+      async () => {
+        const extracted = await this._removeShapeAt(coordinate)
+        if (!extracted) return
+        const single = this.geometry.type.replace('Multi', '')
+        this.datalayer
+          .makeFeature({
+            geometry: { type: single, coordinates: extracted },
+            properties: this.cloneProperties(),
+          })
+          .edit()
+        return this.geometry
+      },
+      oldGeometry
+    )
+  }
+
+  deleteShape(coordinate) {
+    if (!this.isMulti()) return
+    const oldGeometry = Utils.CopyJSON(this._geometry)
+    return this.journal.update(
+      'geometry',
+      async () => {
+        const extracted = await this._removeShapeAt(coordinate)
+        if (!extracted) return
+        return this.geometry
+      },
+      oldGeometry
+    )
+  }
+
+  transferShape(coordinate, to) {
+    if (this.isMulti()) {
+      const oldGeometry = Utils.CopyJSON(this._geometry)
+      return this.journal.update(
+        'geometry',
+        async () => {
+          const extracted = await this._removeShapeAt(coordinate)
+          if (!extracted) return
+          to.appendShape(extracted)
+          return this.geometry
+        },
+        oldGeometry
+      )
+    }
+    to.appendShape(Utils.CopyJSON(this.coordinates))
+    this.del()
   }
 
   zoomTo({ easing, callback }) {
@@ -896,13 +962,13 @@ class Path extends Feature {
           title: translate('Extract shape to separate feature'),
           icon: 'icon-extract-shape',
           action: () => {
-            this.ui.isolateShape(event.latlng)
+            this.isolateShape(event.coordinate)
           },
         },
         {
           title: translate('Delete this shape'),
           icon: 'icon-delete-shape',
-          action: () => this.ui.enableEdit().deleteShapeAt(event.latlng),
+          action: () => this.deleteShape(event.coordinate),
         }
       )
     }
@@ -914,7 +980,7 @@ class Path extends Feature {
         title: translate('Transfer shape to edited feature'),
         icon: 'icon-transfer-shape',
         action: () => {
-          this.transferShape(event.latlng, this._umap.editedFeature)
+          this.transferShape(event.coordinate, this._umap.editedFeature)
         },
       })
     }
@@ -955,7 +1021,6 @@ export class LineString extends Path {
       GeoUtils.length(this.geometry, { units: 'meters' })
     )
   }
-
 
   isSameClass(other) {
     return other instanceof LineString
