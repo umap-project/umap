@@ -2,13 +2,6 @@ import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import { MutatingForm } from '../form/builder.js'
 import { translate, getLocale } from '../i18n.js'
 import loadPopup from '../rendering/popup.js'
-import {
-  LeafletMarker,
-  LeafletPolygon,
-  LeafletPolyline,
-  LeafletRoute,
-  MaskPolygon,
-} from '../rendering/ui.js'
 import { SCHEMA } from '../schema.js'
 import * as Utils from '../utils.js'
 import * as Clipboard from '../clipboard.js'
@@ -22,7 +15,6 @@ class Feature {
   constructor(umap, datalayer, geojson = {}, id = null) {
     this._umap = umap
     this.journal = umap.journalEngine.proxy(this)
-    this._ui = null
 
     // DataLayer the feature belongs to
     this.datalayer = datalayer
@@ -111,15 +103,6 @@ class Feature {
 
   toLatLngs() {
     return GeoUtils.flip(this.geometry).coordinates
-  }
-
-  makeUI() {
-    const klass = this.getUIClass()
-    this._ui = new klass(this, this.toLatLngs())
-  }
-
-  getUIClass() {
-    return this.getOption('UIClass')
   }
 
   getClassName() {
@@ -691,15 +674,6 @@ class Feature {
       sourceId: this.datalayer.id,
       geojson: this.toRenderer(),
     })
-    // if (this.datalayer?.isVisible() && this.ui?.isVisible()) {
-    //   if (this.getUIClass() !== this.ui.getClass()) {
-    //     this.datalayer.hideFeature(this)
-    //     this.makeUI()
-    //     this.datalayer.showFeature(this)
-    //   } else if (this.datalayer?.isBrowsable()) {
-    //     this.ui._redraw()
-    //   }
-    // }
   }
 
   getContextMenu(event) {
@@ -803,9 +777,6 @@ export class Point extends Feature {
     return this.coordinates
   }
 
-  getUIClass() {
-    return super.getUIClass() || LeafletMarker
-  }
 
   hasGeom() {
     return Boolean(this.coordinates)
@@ -985,14 +956,6 @@ export class LineString extends Path {
     )
   }
 
-  getUIClass() {
-    const klass = super.getUIClass()
-    if (klass) return klass
-    if (this.isRoute()) {
-      return LeafletRoute
-    }
-    return LeafletPolyline
-  }
 
   isSameClass(other) {
     return other instanceof LineString
@@ -1349,9 +1312,8 @@ export class Polygon extends Path {
     return !this.coordinates.length || !this.coordinates[0].length
   }
 
-  getUIClass() {
-    if (this.getOption('mask')) return MaskPolygon
-    return super.getUIClass() || LeafletPolygon
+  getStyleProperties() {
+    return [...super.getStyleProperties(), 'mask']
   }
 
   isSameClass(other) {

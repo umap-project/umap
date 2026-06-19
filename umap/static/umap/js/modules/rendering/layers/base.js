@@ -45,15 +45,23 @@ export const Default = GeoJSON.extend({
     GeoJSON.prototype.initialize.call(this, null, {
       pointToLayer: (geojson, latlng) => {
         if (geojson.style?.shape === 'circle') {
-          return new UI.CircleMarker(latlng, geojson)
+          const layer = new UI.CircleMarker(latlng, geojson)
+          layer.options.pane = this.pane
+          return layer
         }
         return new UI.LeafletMarker(latlng, geojson)
       },
       polylineToLayer: (latlngs, options, geojson) => {
-        return new UI.LeafletPolyline(latlngs, geojson)
+        const Class = UI.layerClass(geojson)
+        const layer = new Class(latlngs, geojson)
+        layer.options.pane = this.pane
+        return layer
       },
       polygonToLayer: (latlngs, options, geojson) => {
-        return new UI.LeafletPolygon(latlngs, geojson)
+        const Class = UI.layerClass(geojson)
+        const layer = new Class(latlngs, geojson)
+        layer.options.pane = this.pane
+        return layer
       },
       // The style is read straight from the feature's geojson `style` member
       // (baked by the data layer). The proxy never touches a Feature.
