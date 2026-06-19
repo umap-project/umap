@@ -426,11 +426,11 @@ export const RouteEditor = L.Editable.PolylineEditor.extend({
 })
 
 export const LeafletRoute = LeafletPolyline.extend({
-  initialize: function (feature, latlngs) {
+  initialize: function (latlngs, geojson) {
     this._route = GeoJSON.coordsToLatLngs(
-      feature.properties._umap_options.route?.coordinates
+      geojson.properties._umap_options.route?.coordinates || []
     )
-    FeatureMixin.initialize.call(this, latlngs)
+    FeatureMixin.initialize.call(this, latlngs, geojson)
     delete this.dragging
   },
 
@@ -453,24 +453,19 @@ export const LeafletRoute = LeafletPolyline.extend({
   getClass: () => LeafletRoute,
 
   syncRoute() {
-    this.feature.properties._umap_options.route.coordinates = GeoJSON.latLngsToCoords(
-      this._route
-    )
+    this._map.fire('feature:route', {
+      id: this.geojson.id,
+      coordinates: GeoJSON.latLngsToCoords(this._route),
+    })
   },
 
   onDrawingMoved: function (event) {
     this.syncRoute()
-    if (this._route.length >= 2) {
-      this.feature.computeRoute()
-    }
   },
 
   onDrawingClick: function (event) {
     this._route.push(event.latlng)
     this.syncRoute()
-    if (this._route.length >= 2) {
-      this.feature.computeRoute()
-    }
   },
 
   shouldAllowGeometryEdit: function () {

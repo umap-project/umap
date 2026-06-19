@@ -307,7 +307,7 @@ class Feature {
       builder.form.querySelector('input')?.focus()
     })
     this._umap.editedFeature = this
-    this._umap.fire('feature:show', { id: this.id })
+    this._umap.fire('feature:edit', { id: this.id })
     // if (!this.isOnScreen()) this.zoomTo(event)
     return onPanelLoaded
   }
@@ -774,7 +774,6 @@ export class Point extends Feature {
     return this.coordinates
   }
 
-
   hasGeom() {
     return Boolean(this.coordinates)
   }
@@ -1030,7 +1029,8 @@ export class LineString extends Path {
     const oldRoute = Utils.CopyJSON(this.properties._umap_options.route)
     this.properties._umap_options.route.active = false
     this.redraw()
-    this.edit()
+    // The feature is no longer a route
+    this.edit({ force: true })
     this.journal.update('properties._umap_options.route', null, oldRoute)
   }
 
@@ -1044,7 +1044,7 @@ export class LineString extends Path {
       this.properties._umap_options.route,
       oldRoute
     )
-    this.edit().then((panel) => {
+    this.edit({ force: true }).then((panel) => {
       panel.scrollTo('details#edit-route')
     })
   }
@@ -1058,7 +1058,7 @@ export class LineString extends Path {
       this.properties._umap_options.route,
       null
     )
-    this.edit().then((panel) => {
+    this.edit({ force: true }).then((panel) => {
       panel.scrollTo('details#edit-route')
     })
   }
@@ -1332,6 +1332,11 @@ export class LineString extends Path {
       },
       oldGeometry
     )
+  }
+
+  setRoute(coordinates) {
+    this.properties._umap_options.route.coordinates = coordinates
+    if (coordinates.length >= 2) this.computeRoute()
   }
 
   computeRoute() {
