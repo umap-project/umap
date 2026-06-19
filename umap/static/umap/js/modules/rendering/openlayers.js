@@ -49,7 +49,7 @@ export class OLProxy {
       const { pixel, coordinate } = event
       this.map.forEachFeatureAtPixel(pixel, (olFeature, layer) => {
         const id = olFeature.getId()
-        const feature = this.umap.getFeatureById(id)
+        const feature = this.getFeatureById(id)
         if (this.map.measureTools?.enabled()) return
         layer._popupHandlersAdded = true // Prevent leaflet from managing event
         if (event.originalEvent.shiftKey) {
@@ -150,6 +150,14 @@ export class OLProxy {
   get container() {
     return this.map.overlayContainerStopEvent_.parentNode
   }
+
+  getFeatureById(id) {
+    const [datalayerId, featureId] = id.split('/')
+    // TODO: better index of datalayers.
+    const datalayer = this.umap.layers.tree.all().get(datalayerId)
+    return datalayer?.features.get(featureId)
+  }
+
   attachUI(container) {
     // this.map.overlayContainer.appendChild(container)
     this.container.appendChild(container)
@@ -170,7 +178,7 @@ export class OLProxy {
       const modify = new Modify({ source })
       modify.on('modifyend', (event) => {
         event.features.forEach((olFeature) => {
-          const feature = this.umap.getFeatureById(olFeature.getId())
+          const feature = this.getFeatureById(olFeature.getId())
           if (!feature) return
           const { geometry } = new GeoJSON().writeFeatureObject(olFeature, {
             dataProjection: 'EPSG:4326',

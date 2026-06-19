@@ -450,14 +450,6 @@ export default class Umap extends Utils.WithEvents {
     return this.filters.isActive() || this.layers.tree.some((d) => d.filters.isActive())
   }
 
-  getFeatureById(id) {
-    for (const layer of this.layers.tree) {
-      if (layer.features.has(id)) {
-        return layer.features.get(id)
-      }
-    }
-  }
-
   getOwnContextMenu(event) {
     const items = []
     if (this.editEnabled) {
