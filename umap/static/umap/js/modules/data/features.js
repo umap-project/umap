@@ -1464,9 +1464,13 @@ export class Polygon extends Path {
     }
     items.push({
       title: translate('Start a hole here'),
-      action: () => this.ui.startHole(event),
+      action: () => this.startHole(event.coordinate),
       icon: 'icon-hole',
     })
     return items
+  }
+
+  startHole(coordinate) {
+    this._umap.fire('feature:hole', { id: this.id, coordinate })
   }
 }

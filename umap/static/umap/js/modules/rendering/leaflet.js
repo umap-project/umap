@@ -178,6 +178,10 @@ export class LeafletProxy {
     this.umap.on('feature:endedit', (event) => {
       this.getLayer(event.detail.id)?.disableEdit()
     })
+    this.umap.on('feature:hole', (event) => {
+      const { id, coordinate } = event.detail
+      this.getLayer(id)?.enableEdit().newHole(this.latLng({ coordinates: coordinate }))
+    })
     // this.umap.on('feature:add', (event) => {
     //   const { sourceId, geojson } = event.detail
     //   const group = this.layers[sourceId]

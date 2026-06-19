@@ -480,10 +480,6 @@ export const LeafletPolygon = Polygon.extend({
     }
   },
 
-  startHole: function (event) {
-    this.enableEdit().newHole(event.latlng)
-  },
-
   getMeasure: function (shape) {
     return TextUtils.readableArea(GeoUtils.area(this.toGeometry(shape)))
   },
