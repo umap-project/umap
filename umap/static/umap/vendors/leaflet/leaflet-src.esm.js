@@ -9063,8 +9063,7 @@ function geometryToLayer(geojson, options) {
 	    coords = geometry ? geometry.coordinates : null,
 	    layers = [],
 	    pointToLayer = options && options.pointToLayer,
-	    polylineToLayer = options && options.polylineToLayer,
-	    polygonToLayer = options && options.polygonToLayer,
+	    _geometryToLayer = options && options.geometryToLayer,
 	    _coordsToLatLng = options && options.coordsToLatLng || coordsToLatLng,
 	    latlng, latlngs, i, len;
 
@@ -9075,6 +9074,9 @@ function geometryToLayer(geojson, options) {
 	switch (geometry.type) {
 	case 'Point':
 		latlng = _coordsToLatLng(coords);
+		if (_geometryToLayer) {
+			return _geometryToLayer(latlng, options, geojson);
+		}
 		return _pointToLayer(pointToLayer, geojson, latlng, options);
 
 	case 'MultiPoint':
@@ -9087,12 +9089,18 @@ function geometryToLayer(geojson, options) {
 	case 'LineString':
 	case 'MultiLineString':
 		latlngs = coordsToLatLngs(coords, geometry.type === 'LineString' ? 0 : 1, _coordsToLatLng);
-		return polylineToLayer ? polylineToLayer(latlngs, options, geojson) : new Polyline(latlngs, options);
+		if (_geometryToLayer) {
+			return _geometryToLayer(latlngs, options, geojson);
+		}
+		return new Polyline(latlngs, options);
 
 	case 'Polygon':
 	case 'MultiPolygon':
 		latlngs = coordsToLatLngs(coords, geometry.type === 'Polygon' ? 1 : 2, _coordsToLatLng);
-		return polygonToLayer ? polygonToLayer(latlngs, options, geojson) :  new Polygon(latlngs, options);
+		if (_geometryToLayer) {
+			return _geometryToLayer(latlngs, options, geojson);
+		}
+		return new Polygon(latlngs, options);
 
 	case 'GeometryCollection':
 		for (i = 0, len = geometry.geometries.length; i < len; i++) {
