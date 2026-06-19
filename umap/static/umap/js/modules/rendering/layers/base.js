@@ -1,45 +1,8 @@
 import { GeoJSON, TileLayer } from '../../../../vendors/leaflet/leaflet-src.esm.js'
-import { translate } from '../../i18n.js'
 import * as Utils from '../../utils.js'
 import * as UI from '../ui.js'
 
-export const LayerMixin = {
-  browsable: true,
-
-  getType: function () {
-    const proto = Object.getPrototypeOf(this)
-    return proto.constructor.TYPE
-  },
-
-  getName: function () {
-    const proto = Object.getPrototypeOf(this)
-    return proto.constructor.NAME
-  },
-
-  getFeatures: function () {
-    return this._layers
-  },
-
-  getEditableProperties: () => [],
-
-  onEdit: () => {},
-
-  hasDataVisible: function () {
-    return !!Object.keys(this._layers).length
-  },
-
-  // Called when data changed on the datalayer
-  dataChanged: () => {},
-
-}
-
 export const Default = GeoJSON.extend({
-  statics: {
-    NAME: translate('Default'),
-    TYPE: 'Default',
-  },
-  includes: [LayerMixin],
-
   initialize: function (datalayer) {
     this.datalayer = datalayer
     GeoJSON.prototype.initialize.call(this, null, {

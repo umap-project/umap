@@ -224,10 +224,6 @@ export class OLProxy {
     // (fromZoom/toZoom) is not wired on the OL side yet.
   }
 
-  hasDataVisible(id) {
-    return (this.sources[id]?.getFeatures().length ?? 0) > 0
-  }
-
   removeFeature(id, featureId) {
     const olFeature = this.sources[id]?.getFeatureById(featureId)
     if (olFeature) this.sources[id].removeFeature(olFeature)

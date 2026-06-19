@@ -244,10 +244,6 @@ export class DataLayer {
     this.parentPane.appendChild(this.pane)
   }
 
-  hasDataVisible() {
-    return this._umap.mapProxy.hasDataVisible(this.id)
-  }
-
   resetLayer(force) {
     // Only reset if type is defined (undefined is the default) and different from current type
     if (
