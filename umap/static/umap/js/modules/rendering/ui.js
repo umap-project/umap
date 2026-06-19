@@ -86,6 +86,10 @@ const FeatureMixin = {
     this._map.fire('feature:contextmenu', {
       id: this.geojson.id,
       latlng: event.latlng,
+      coordinate: [event.latlng.lng, event.latlng.lat],
+      // Set when right-clicking a vertex (editable:vertex:contextmenu): the
+      // edit context menu offers vertex tools (split, continue…) instead.
+      vertex: event.vertex,
       originalEvent: event.originalEvent,
     })
   },
@@ -270,24 +274,6 @@ const PathMixin = {
     )
   },
 
-  makeGeometryEditable: function () {
-    // Feature has been removed since then?
-    if (!this._map) return
-    if (this.feature._umap.editedFeature !== this.feature) {
-      this.disableEdit()
-      return
-    }
-    this._map.once('moveend', this.makeGeometryEditable, this)
-    if (this.shouldAllowGeometryEdit()) {
-      this.enableEdit()
-    } else {
-      this.feature._umap.tooltip.open({
-        content: translate('Please zoom in to edit the geometry'),
-      })
-      this.disableEdit()
-    }
-  },
-
   addInteractions: function () {
     FeatureMixin.addInteractions.call(this)
     this.on('drag editable:drag', this._onDrag)
@@ -310,11 +296,6 @@ const PathMixin = {
   _onDrag: function () {
     if (this._tooltip) this._tooltip.setLatLng(this.getCenter())
   },
-
-  // beforeAdd: function (map) {
-  //   this.options.renderer = this.feature.datalayer.renderer
-  //   this.parentClass.prototype.beforeAdd.call(this, map)
-  // },
 
   onAdd: function (map) {
     this._container = null
@@ -526,7 +507,7 @@ export const MaskPolygon = LeafletPolygon.extend({
     const newLatLngs = []
     newLatLngs.push(WORLD)
 
-    if (!this.feature.isMulti()) {
+    if (this.geojson.geometry?.type !== 'MultiPolygon') {
       latlngs = [latlngs]
     }
     for (const ring of latlngs) {

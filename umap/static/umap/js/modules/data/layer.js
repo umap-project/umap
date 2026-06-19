@@ -1,5 +1,3 @@
-// FIXME: this module should not depend on Leaflet
-import { SVG } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import {
   uMapAlert as Alert,
   uMapAlertConflict as AlertConflict,
@@ -21,7 +19,6 @@ import { FeatureManager, LayerManager } from '../managers.js'
 import { Filters } from '../filters.js'
 import { Fields, getDefaultFields } from './fields.js'
 import { loadType } from './types.js'
-
 
 export class DataLayer {
   constructor(umap, spec = {}) {
@@ -62,8 +59,6 @@ export class DataLayer {
       this._umap.layers.add(this)
     }
     this.pane = this._umap.mapProxy.createOverlayPane(this.id, this.parentPane)
-    // FIXME: should be on layer
-    this.renderer = new SVG({ pane: this.pane })
     this.pane.dataset.id = this.id
 
     if (!Utils.isObject(this.properties.remoteData)) {
@@ -457,21 +452,6 @@ export class DataLayer {
       this.properties.fields = getDefaultFields()
       this.fields.pull()
     }
-    try {
-      // this._umap.fire('feature:add', {
-      //   sourceId: this.id,
-      //   geojson: feature.toRenderer(),
-      // })
-      // this.showFeature(feature)
-    } catch (error) {
-      console.error(error)
-      if (this._umap.editEnabled) {
-        Alert.error(translate('Skipping invalid geometry'))
-      }
-      console.error('Invalid geometry', feature)
-      this.removeFeature(feature, false)
-      return
-    }
     this.dataChanged()
     if (sync) {
       feature.journal.upsert(feature.toGeoJSON(), null)
@@ -488,13 +468,7 @@ export class DataLayer {
       const oldValue = feature.toGeoJSON()
       feature.journal.delete(oldValue)
     }
-    try {
-      // this._umap.fire('feature:remove', {
-      //   sourceId: this.id,
-      //   geojson: feature.toRenderer(),
-      // })
-      // this.hideFeature(feature)
-    } catch {}
+    this._umap.mapProxy.removeFeature(this.id, feature.id)
     delete this._umap.featuresIndex[feature.getSlug()]
     feature.disconnectFromDataLayer(this)
     this.features.del(feature)
@@ -603,7 +577,7 @@ export class DataLayer {
     for (const featureJson of collection) {
       if (featureJson.geometry?.type === 'GeometryCollection') {
         for (const geometry of featureJson.geometry.geometries) {
-          const feature = this.makeFeature({
+          const feature = this._buildFeature({
             type: 'Feature',
             geometry,
             properties: featureJson.properties,
@@ -611,7 +585,7 @@ export class DataLayer {
           if (feature) features.push(feature)
         }
       } else {
-        const feature = this.makeFeature(featureJson, sync)
+        const feature = this._buildFeature(featureJson, sync)
         if (feature) features.push(feature)
       }
     }
@@ -619,6 +593,12 @@ export class DataLayer {
   }
 
   makeFeature(geojson = {}, sync = true, id = null) {
+    const feature = this._buildFeature(geojson, sync, id)
+    if (feature) this._umap.mapProxy.addFeature(this.id, feature.toRenderer())
+    return feature
+  }
+
+  _buildFeature(geojson = {}, sync = true, id = null) {
     // Both Feature and Geometry are valid geojson objects.
     const geometry = geojson.geometry || geojson
     let feature
@@ -1395,7 +1375,7 @@ export class DataLayer {
       },
       features: this.features
         .all()
-        .filter((feature) => !feature.isFiltered())
+        .filter((feature) => !feature.isFiltered() && !feature.isEmpty())
         .map((feature) => feature.toRenderer()),
     }
   }

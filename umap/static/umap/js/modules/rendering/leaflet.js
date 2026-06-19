@@ -203,10 +203,16 @@ export class LeafletProxy {
         return
       }
       // Swap in the freshly baked geojson (Leaflet reads layer.feature, our
-      // code reads layer.geojson — same object), then re-apply style + label.
+      // code reads layer.geojson — same object), then reflect it.
       layer.geojson = layer.feature = geojson
-      group.resetStyle(layer)
-      layer.resetTooltip()
+      if (layer.setIcon) {
+        // Marker: rebuild the icon (and tooltip) from the new geojson.
+        layer._redraw()
+      } else {
+        // Path/CircleMarker: re-read geojson.style through the group style fn.
+        group.resetStyle(layer)
+        layer.resetTooltip()
+      }
     })
   }
 
@@ -440,7 +446,11 @@ export class LeafletProxy {
 
   createLayer(datalayer) {
     const Class = LAYER_MAP[datalayer.Type?.type] || DefaultLayer
-    this.layers[datalayer.id] = new Class(datalayer)
+    const layer = new Class(datalayer)
+    // Paths render into the datalayer's own pane, so they stack by datalayer
+    // order; Leaflet lazily creates one renderer per pane.
+    layer.pane = `pane-${datalayer.id}`
+    this.layers[datalayer.id] = layer
   }
 
   showLayer(id) {
@@ -452,6 +462,10 @@ export class LeafletProxy {
     this.layers[id].addData(geojson)
   }
 
+  addFeature(id, geojson) {
+    this.layers[id]?.addData(geojson)
+  }
+
   hasLayer(id) {
     const layer = this.layers[id]
     return Boolean(layer) && this.map.hasLayer(layer)
@@ -461,12 +475,16 @@ export class LeafletProxy {
     this.layers[id]?.clearLayers()
   }
 
-  geometryToRenderer(layerId, featureId, geometry) {
+  getLayerInGroup(layerId, featureId) {
     const group = this.layers[layerId]
-    if (!group) return
-    const layer =
-      group.getLayers().find((l) => l.feature?.id === featureId) ||
-      group._bucket?.find((m) => m.feature?.id === featureId)
+    return (
+      group?.getLayers?.().find((l) => l.feature?.id === featureId) ||
+      group?._bucket?.find((m) => m.feature?.id === featureId)
+    )
+  }
+
+  pushGeometry(layerId, featureId, geometry) {
+    const layer = this.getLayerInGroup(layerId, featureId)
     if (!layer) return
     const coordinates = GeoUtils.flip(geometry).coordinates
     if (geometry.type === 'Point') layer.setLatLng(coordinates)
@@ -475,12 +493,28 @@ export class LeafletProxy {
     if (layer.editor?.enabled()) layer.editor.reset()
   }
 
+  startDrawing(layerId, geojson) {
+    // Build the layer so it looks real but let Leaflet.Editable add it to the map
+    const group = this.layers[layerId]
+    const layer = GeoJSON.geometryToLayer(geojson, group.options)
+    layer.feature = geojson
+    layer.defaultOptions = layer.options
+    group.resetStyle(layer)
+    return layer
+  }
+
+  connectDrawing(layer) {
+    const feature = this.umap.getFeatureById(layer.feature.id)
+    this.layers[feature.datalayer.id].addLayer(layer)
+    return layer
+  }
+
   hasDataVisible(id) {
     return this.layers[id]?.hasDataVisible() ?? false
   }
 
   removeFeature(id, featureId) {
-    const layer = this.getLayer(featureId)
+    const layer = this.getLayerInGroup(id, featureId)
     if (layer) this.layers[id]?.removeLayer(layer)
   }
 
@@ -495,8 +529,28 @@ export class LeafletProxy {
 
   editLayer(id) {
     const layer = this.getLayer(id)
-    console.log(layer)
-    layer.enableEdit()
+    if (!layer) return
+    // Paths gate geometry editing on vertex count vs zoom; markers edit freely.
+    if (layer.shouldAllowGeometryEdit) this.makeGeometryEditable(layer)
+    else layer.enableEdit()
+  }
+
+  makeGeometryEditable(layer) {
+    if (!layer._map) return
+    // Re-evaluate as the viewport changes; stop once another feature is edited.
+    if (this.umap.editedFeature?.id !== layer.feature.id) {
+      layer.disableEdit()
+      return
+    }
+    this.map.once('moveend', () => this.makeGeometryEditable(layer))
+    if (layer.shouldAllowGeometryEdit()) {
+      layer.enableEdit()
+    } else {
+      this.umap.tooltip.open({
+        content: translate('Please zoom in to edit the geometry'),
+      })
+      layer.disableEdit()
+    }
   }
 
   revealInCluster(layer) {
