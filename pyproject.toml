@@ -48,7 +48,7 @@ dev = [
   "Django==5.2.13",
   "hatch==1.17.0",
   "ruff==0.15.15",
-  "djlint==1.36.4",
+  "djlint==1.39.2",
   "mkdocs==1.6.1",
   "mkdocs-material==9.7.6",
   "mkdocs-static-i18n==1.3.1",
