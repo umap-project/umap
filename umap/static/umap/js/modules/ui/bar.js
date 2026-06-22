@@ -316,6 +316,118 @@ export class BottomBar extends WithTemplate {
   }
 }
 
+class ShapeDrawer {
+  constructor(umap, element) {
+    this._umap = umap
+    this._element = element
+    this._button = element.querySelector('button')
+    this._panel = null
+    this._button.addEventListener('click', (e) => {
+      e.stopPropagation()
+      this._panel ? this._close() : this._open()
+    })
+    document.addEventListener('click', (e) => {
+      if (this._panel && !this._element.contains(e.target)) this._close()
+    })
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this._panel) this._close()
+    })
+  }
+
+  _open() {
+    this._button.classList.add('on')
+    const panel = document.createElement('div')
+    panel.className = 'shape-drawer-panel dark'
+    panel.innerHTML = `
+      <ul class="shape-mode-bar">
+        <li>
+          <button type="button" data-mode="rect-drag" title="${translate('Draw rectangle by dragging')}">
+            <i class="icon icon-24 icon-rectanglepolygonat"></i>
+          </button>
+        </li>
+        <li>
+          <button type="button" data-mode="rect-dims" title="${translate('Rectangle with dimensions')}">
+            <i class="icon icon-24 icon-resize"></i>
+          </button>
+        </li>
+        <li>
+          <button type="button" data-mode="circle-drag" title="${translate('Draw circle by dragging')}">
+            <i class="icon icon-24 icon-polygon"></i>
+          </button>
+        </li>
+        <li>
+          <button type="button" data-mode="circle-radius" title="${translate('Circle with radius')}">
+            <i class="icon icon-24 icon-polygon-plus"></i>
+          </button>
+        </li>
+      </ul>
+      <div class="shape-dims-form" hidden></div>
+    `
+    panel.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-mode]')
+      if (!btn) return
+      e.stopPropagation()
+      this._handleMode(btn.dataset.mode, panel)
+    })
+    this._element.appendChild(panel)
+    this._panel = panel
+  }
+
+  _close() {
+    this._button.classList.remove('on')
+    this._panel?.remove()
+    this._panel = null
+  }
+
+  _handleMode(mode, panel) {
+    if (mode === 'rect-drag') {
+      this._close()
+      this._umap.fire('draw:rect-drag')
+    } else if (mode === 'circle-drag') {
+      this._close()
+      this._umap.fire('draw:circle-drag')
+    } else if (mode === 'rect-dims') {
+      this._showForm(panel, [
+        { name: 'width', label: translate('Width (m)'), value: 100 },
+        { name: 'height', label: translate('Height (m)'), value: 100 },
+      ], (vals) => this._umap.fire('draw:rect-at', { width: vals.width, height: vals.height }))
+    } else if (mode === 'circle-radius') {
+      this._showForm(panel, [
+        { name: 'radius', label: translate('Radius (m)'), value: 50 },
+      ], (vals) => this._umap.fire('draw:circle-at', { radius: vals.radius }))
+    }
+  }
+
+  _showForm(panel, fields, onSubmit) {
+    panel.querySelector('.shape-mode-bar').hidden = true
+    const form = panel.querySelector('.shape-dims-form')
+    form.hidden = false
+    form.innerHTML = `
+      ${fields.map((f) => `
+        <label class="shape-field">
+          <span>${f.label}</span>
+          <input type="number" name="${f.name}" value="${f.value}" min="0.1" step="any">
+        </label>`).join('')}
+      <button type="button" class="button shape-place-btn">
+        ${translate('Click map to place')} →
+      </button>
+    `
+    form.querySelector('.shape-place-btn').addEventListener('click', (e) => {
+      e.stopPropagation()
+      const vals = {}
+      let valid = true
+      for (const f of fields) {
+        const v = parseFloat(form.querySelector(`[name=${f.name}]`).value)
+        if (isNaN(v) || v <= 0) { valid = false; break }
+        vals[f.name] = v
+      }
+      if (!valid) return
+      this._close()
+      onSubmit(vals)
+    })
+  }
+}
+
 const EDIT_BAR_TEMPLATE = `
   <div class="umap-edit-bar dark with-transition">
     <ul>
@@ -328,7 +440,7 @@ const EDIT_BAR_TEMPLATE = `
       <li data-ref="multipolygon" hidden>
         <button class="drawing-tool" type="button" title="${translate('Add a polygon to the current multi')}"><i class="icon icon-24 icon-multipolygon"></i></button>
       </li>
-      <li data-ref="rectanglepolygonat"><button class="drawing-tool" type="button" data-getstarted><i class="icon icon-24 icon-rectanglepolygonat"></i></button></li>
+      <li data-ref="shapes" class="shape-drawer"><button class="drawing-tool" type="button" title="${translate('Draw shapes')}"><i class="icon icon-24 icon-rectanglepolygonat"></i></button></li>
       <li data-ref="route" hidden><button class="drawing-tool" type="button" data-getstarted title="${translate('Draw along routes')}"><i class="icon icon-24 icon-route"></i></button></li>
     </ul>
     <ul>
@@ -361,7 +473,7 @@ export class EditBar extends WithTemplate {
     this.addDrawListener('multiline')
     this.addDrawListener('polygon')
     this.addDrawListener('multipolygon')
-    this.addDrawListener('rectanglepolygonat')
+    new ShapeDrawer(this._umap, this.elements.shapes)
     this.addDrawListener('route')
     this.addClickListener('caption', () => this._umap.editCaption())
     this.addClickListener('import', () => this._umap.openImporter())
@@ -377,7 +489,6 @@ export class EditBar extends WithTemplate {
     this.addTitle('marker', 'DRAW_MARKER')
     this.addTitle('polyline', 'DRAW_LINE')
     this.addTitle('polygon', 'DRAW_POLYGON')
-    this.addTitle('rectanglepolygonat', 'DRAW_RECTANGLEPOLYGONAT')
     this._umap.on('seteditedfeature', () => this.redraw())
   }
 

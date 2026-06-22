@@ -663,7 +663,7 @@ export default class Umap extends Utils.WithEvents {
       },
       'Ctrl+r': {
         if: () => this.editEnabled,
-        do: () => this._leafletMap.editTools.startRectanglePolygonAt(),
+        do: () => this.fire('draw:rect-drag'),
       },
       'Ctrl+l': {
         if: () => this.editEnabled,
