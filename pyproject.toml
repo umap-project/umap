@@ -66,7 +66,7 @@ test = [
   "pytest-playwright==0.8.0",
   "pytest-rerunfailures==16.3",
   "pytest-xdist>=3.5.0,<4",
-  "moto[s3]==5.2.1"
+  "moto[s3]==5.2.2"
 ]
 deploy = [
   "Django==5.2.13",
