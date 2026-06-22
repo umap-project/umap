@@ -165,7 +165,7 @@ export class MapPermissions {
   _editDatalayers(container) {
     if (this._umap.hasLayers()) {
       const fieldset = Utils.loadTemplate(
-        `<fieldset class="separator"><legend>${translate('Datalayers' permissions')}</legend></fieldset>`
+        `<fieldset class="separator"><legend>${translate('Datalayers permissions')}</legend></fieldset>`
       )
       container.appendChild(fieldset)
       const appendLayer = (layer, parentContainer) => {
@@ -326,7 +326,7 @@ export class DataLayerPermissions {
         'properties.edit_status',
         {
           handler: 'IntSelect',
-          label: label,
+          label: translate('Who can edit'),
           labelClassName: 'sr-only',
           selectOptions: this._umap.properties.datalayer_edit_statuses,
         },

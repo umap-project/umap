@@ -1,19 +1,28 @@
 {
   "name": "leaflet-path-transform",
-  "version": "1.8.0-beta.4",
+  "version": "1.9.0",
   "description": "Scale/rotate/move plugin for leaflet vector layers ",
-  "main": "index.js",
-  "browser": "dist/L.Path.Transform.js",
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
+  "browser": "dist/index.js",
+  "unpkg": "dist/index.js",
+  "jsdelivr": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist/index.js",
+    "dist/index.mjs",
+    "dist/index.cjs"
+  ],
   "scripts": {
-    "prestart": "npm install",
-    "test": "tape test/*.js",
-    "start": "npm run watch & npm run server",
-    "server": "http-server -p 3001",
-    "watch": "watchify -v -d example/js/app.js -o example/js/bundle.js",
-    "lint": "eslint ./src/",
-    "build-js": "mkdir -p dist && cat ./node_modules/leaflet-path-drag/dist/L.Path.Drag-src.js ./src/header.js ./src/Util.js ./src/Matrix.js ./src/Path.Transform.js > ./dist/L.Path.Transform-src.js",
-    "compress": "uglifyjs ./dist/L.Path.Transform-src.js -o ./dist/L.Path.Transform.js --comments -m",
-    "build": "npm run lint && npm run build-js && npm run compress",
+    "start": "vite dev",
+    "lint": "eslint ./src/*.mjs",
+    "build": "vite build",
+    "demo": "vite build -c example/vite.config.ts",
     "release": "git push origin master && git checkout gh-pages && git merge master && git push origin gh-pages && npm publish"
   },
   "keywords": [
@@ -29,26 +38,25 @@
   "author": "Alexander Milevski <info@w8r.name>",
   "license": "MIT",
   "dependencies": {
-    "leaflet-path-drag": "^1.8.0-beta.3"
+    "leaflet-path-drag": "1.9.5"
   },
   "peerDependencies": {
-    "leaflet": "^1.8.0"
+    "leaflet": ">=1.8.0 <1.10.0"
   },
   "devDependencies": {
-    "eslint": "^5.9.0",
-    "http-server": "^14.1.1",
-    "tape": "^4.9.1",
-    "uglify-js": "^3.4.9",
-    "watchify": "^3.11.1"
+    "@typescript-eslint/eslint-plugin": "^7.1.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "prettier": "^3.2.5",
+    "vite": "^5.1.5"
   },
   "directories": {
     "example": "example"
   },
-  "files": [
-    "src/**/*.js",
-    "dist/*.js",
-    "index.js"
-  ],
+  "prettier": {
+    "printWidth": 80,
+    "singleQuote": true
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/w8r/Leaflet.Path.Transform.git"

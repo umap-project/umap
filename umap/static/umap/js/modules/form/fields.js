@@ -1332,7 +1332,7 @@ Fields.ManageEditors = class extends Fields.Base {
     }
   }
 }
-Fields.ManageTeams = class extends BaseElement {
+Fields.ManageTeams = class extends Fields.Base {
   build() {
     super.build()
     const options = {

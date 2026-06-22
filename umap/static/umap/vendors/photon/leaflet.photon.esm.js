@@ -1,49 +1,80 @@
+// ESM wrapper for leaflet.photon (CJS original uses a global L namespace)
 import {
-  Control,
+  Class,
+  Evented,
   DomUtil,
   DomEvent,
-  Evented,
-  latLng,
   Util,
-} from '../leaflet/leaflet-src.esm.js'
+  Browser,
+  Control,
+  setOptions,
+  latLng,
+} from 'leaflet'
 
-const PhotonBase = Evented.extend({
-  forEach: (els, callback) => {
+// Build a writable L namespace so the photon code can attach classes to it
+const L = {
+  Class,
+  Evented,
+  Mixin: { Events: Evented.prototype },
+  DomUtil,
+  DomEvent,
+  Util,
+  Browser,
+  Control,
+  setOptions,
+  latLng,
+  // Map.addInitHook is called by the original but not needed in our usage
+  Map: { addInitHook: () => {} },
+}
+
+L.PhotonBase = L.Class.extend({
+  forEach: function (els, callback) {
     Array.prototype.forEach.call(els, callback)
   },
 
-  ajax: function () {
-    const url = this.options.url + this.buildQueryString(this.getParams())
+  ajax: function (callback, thisobj) {
+    if (typeof this.xhr === 'object') {
+      this.xhr.abort()
+    }
+    this.xhr = new XMLHttpRequest()
+    var self = this
+    this.xhr.open('GET', this.options.url + this.buildQueryString(this.getParams()), true)
+    this.xhr.onload = function (e) {
+      self.fire('ajax:return')
+      if (this.status === 200) {
+        if (callback) {
+          var raw = this.response
+          raw = JSON.parse(raw)
+          callback.call(thisobj || this, raw)
+        }
+      }
+      delete this.xhr
+    }
     this.fire('ajax:send')
-    return new Promise((resolve) => {
-        fetch(url).then(async (resp) => {
-            if (resp.ok) {
-                resolve(await resp.json())
-            }
-           this.fire('ajax:return')
-        })
-    })
+    this.xhr.send()
   },
 
-  buildQueryString: (params) => {
-    const queryString = []
-    for (const [key, param] of Object.entries(params)) {
-      if (param) {
-        queryString.push(`${encodeURIComponent(key)}=${encodeURIComponent(param)}`)
+  buildQueryString: function (params) {
+    var queryString = []
+    for (var key in params) {
+      if (params[key]) {
+        queryString.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
       }
     }
     return queryString.join('&')
   },
 
-  featureToPopupContent: (feature) => {
-    const container = DomUtil.create('div', 'leaflet-photon-popup')
-    const title = DomUtil.create('h3', '', container)
+  featureToPopupContent: function (feature) {
+    var container = L.DomUtil.create('div', 'leaflet-photon-popup'),
+      title = L.DomUtil.create('h3', '', container)
     title.innerHTML = feature.properties.label
     return container
   },
 })
 
-const PhotonBaseSearch = PhotonBase.extend({
+L.PhotonBaseSearch = L.PhotonBase.extend({
+  includes: L.Evented.prototype,
+
   options: {
     url: 'https://photon.komoot.io/api/?',
     placeholder: 'Start typing...',
@@ -53,90 +84,76 @@ const PhotonBaseSearch = PhotonBase.extend({
     includePosition: true,
     bbox: null,
     noResultLabel: 'No result',
-    feedbackEmail: 'photon@komoot.de', // Set to null to remove feedback box
+    feedbackEmail: null,
     feedbackLabel: 'Feedback',
   },
 
   CACHE: '',
   RESULTS: [],
   KEYS: {
-    LEFT: 37,
-    UP: 38,
-    RIGHT: 39,
-    DOWN: 40,
-    TAB: 9,
-    RETURN: 13,
-    ESC: 27,
-    APPLE: 91,
-    SHIFT: 16,
-    ALT: 17,
-    CTRL: 18,
+    LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40,
+    TAB: 9, RETURN: 13, ESC: 27,
+    APPLE: 91, SHIFT: 16, ALT: 17, CTRL: 18,
   },
 
   initialize: function (input, options) {
     this.input = input
-    Util.setOptions(this, options)
-    let CURRENT = null
-
-    Object.defineProperty(this, 'CURRENT', {
-      get: () => CURRENT,
-      set: function (index) {
-        if (typeof index === 'object') {
-          index = this.resultToIndex(index)
-        }
-        CURRENT = index
-      },
-    })
-
-    this.input.type = 'search'
+    L.setOptions(this, options)
+    var CURRENT = null
+    try {
+      Object.defineProperty(this, 'CURRENT', {
+        get: function () { return CURRENT },
+        set: function (index) {
+          if (typeof index === 'object') index = this.resultToIndex(index)
+          CURRENT = index
+        },
+      })
+    } catch (e) {}
+    this.input.type = L.Browser.ie ? 'text' : 'search'
     this.input.placeholder = this.options.placeholder
     this.input.autocomplete = 'off'
     this.input.autocorrect = 'off'
-    DomEvent.disableClickPropagation(this.input)
-
-    DomEvent.on(this.input, 'keydown', this.onKeyDown, this)
-    DomEvent.on(this.input, 'input', this.onInput, this)
-    DomEvent.on(this.input, 'blur', this.onBlur, this)
-    DomEvent.on(this.input, 'focus', this.onFocus, this)
+    L.DomEvent.disableClickPropagation(this.input)
+    L.DomEvent.on(this.input, 'keydown', this.onKeyDown, this)
+    L.DomEvent.on(this.input, 'input', this.onInput, this)
+    L.DomEvent.on(this.input, 'blur', this.onBlur, this)
+    L.DomEvent.on(this.input, 'focus', this.onFocus, this)
     this.createResultsContainer()
   },
 
   createResultsContainer: function () {
     this.resultsContainer =
       this.options.resultsContainer ||
-      DomUtil.create('ul', 'photon-autocomplete', document.querySelector('body'))
+      L.DomUtil.create('ul', 'photon-autocomplete', document.querySelector('body'))
   },
 
   resizeContainer: function () {
-    const l = this.getLeft(this.input)
-    const t = this.getTop(this.input) + this.input.offsetHeight
-    this.resultsContainer.style.left = `${l}px`
-    this.resultsContainer.style.top = `${t}px`
-    const width = this.options.width ? this.options.width : this.input.offsetWidth - 2
-    this.resultsContainer.style.width = `${width}px`
+    var l = this.getLeft(this.input)
+    var t = this.getTop(this.input) + this.input.offsetHeight
+    this.resultsContainer.style.left = l + 'px'
+    this.resultsContainer.style.top = t + 'px'
+    var width = this.options.width ? this.options.width : this.input.offsetWidth - 2
+    this.resultsContainer.style.width = width + 'px'
   },
 
   onKeyDown: function (e) {
     switch (e.keyCode) {
       case this.KEYS.TAB:
-        if (this.CURRENT !== null) {
-          this.setChoice()
-        }
-        DomEvent.stop(e)
+        if (this.CURRENT !== null) this.setChoice()
+        L.DomEvent.stop(e)
         break
       case this.KEYS.RETURN:
-        DomEvent.stop(e)
+        L.DomEvent.stop(e)
         this.setChoice()
         break
       case this.KEYS.ESC:
-        DomEvent.stop(e)
+        L.DomEvent.stop(e)
         this.hide()
         this.input.blur()
         break
       case this.KEYS.DOWN:
         if (this.RESULTS.length > 0) {
           if (this.CURRENT !== null && this.CURRENT < this.RESULTS.length - 1) {
-            // what if one resutl?
             this.CURRENT++
             this.highlight()
           } else if (this.CURRENT === null) {
@@ -146,9 +163,7 @@ const PhotonBaseSearch = PhotonBase.extend({
         }
         break
       case this.KEYS.UP:
-        if (this.CURRENT !== null) {
-          DomEvent.stop(e)
-        }
+        if (this.CURRENT !== null) L.DomEvent.stop(e)
         if (this.RESULTS.length > 0) {
           if (this.CURRENT > 0) {
             this.CURRENT--
@@ -162,28 +177,27 @@ const PhotonBaseSearch = PhotonBase.extend({
     }
   },
 
-  onInput: function (_e) {
+  onInput: function (e) {
     if (typeof this.submitDelay === 'number') {
       window.clearTimeout(this.submitDelay)
       delete this.submitDelay
     }
     this.submitDelay = window.setTimeout(
-      Util.bind(this.search, this),
+      L.Util.bind(this.search, this),
       this.options.submitDelay
     )
   },
 
-  onBlur: function (_e) {
+  onBlur: function (e) {
     this.fire('blur')
-    setTimeout(() => {
-      this.hide()
-    }, 100)
+    var self = this
+    setTimeout(function () { self.hide() }, 100)
   },
 
-  onFocus: function (_e) {
+  onFocus: function (e) {
     this.fire('focus')
     this.input.select()
-    this.search() // In case we have a value from a previous search.
+    this.search()
   },
 
   clear: function () {
@@ -210,53 +224,43 @@ const PhotonBaseSearch = PhotonBase.extend({
   },
 
   search: function () {
-    const val = this.input.value
-    const minChar =
+    var val = this.input.value
+    var minChar =
       typeof this.options.minChar === 'function'
         ? this.options.minChar(val)
         : val.length >= this.options.minChar
     if (!val || !minChar) return this.clear()
-    if (`${val}` === `${this.CACHE}`) return
-    this.CACHE = val
+    if (val + '' === this.CACHE + '') return
+    else this.CACHE = val
     this._doSearch()
   },
 
   _doSearch: function () {
-    this.ajax().then((data) => this.handleResults(data))
+    this.ajax(this.handleResults, this)
   },
 
-  _onSelected: (_feature) => {},
+  _onSelected: function (feature) {},
 
   onSelected: function (choice) {
     return (this.options.onSelected || this._onSelected).call(this, choice)
   },
 
   _formatResult: function (feature, el) {
-    const title = DomUtil.create('strong', '', el)
-    const detailsContainer = DomUtil.create('small', '', el)
-    const details = []
-    const type = this.formatType(feature)
+    var title = L.DomUtil.create('strong', '', el),
+      detailsContainer = L.DomUtil.create('small', '', el),
+      details = [],
+      type = this.formatType(feature)
     if (feature.properties.name) {
       title.innerHTML = feature.properties.name
     } else if (feature.properties.housenumber) {
       title.innerHTML = feature.properties.housenumber
-      if (feature.properties.street) {
-        title.innerHTML += ` ${feature.properties.street}`
-      }
+      if (feature.properties.street) title.innerHTML += ' ' + feature.properties.street
     }
     if (type) details.push(type)
-    if (
-      feature.properties.city &&
-      feature.properties.city !== feature.properties.name
-    ) {
+    if (feature.properties.city && feature.properties.city !== feature.properties.name)
       details.push(feature.properties.city)
-    }
-    if (
-      feature.properties.state &&
-      feature.properties.state !== feature.properties.name
-    ) {
+    if (feature.properties.state && feature.properties.state !== feature.properties.name)
       details.push(feature.properties.state)
-    }
     if (feature.properties.country) details.push(feature.properties.country)
     detailsContainer.innerHTML = details.join(', ')
   },
@@ -269,100 +273,70 @@ const PhotonBaseSearch = PhotonBase.extend({
     return (this.options.formatType || this._formatType).call(this, feature)
   },
 
-  _formatType: (feature) =>
-    feature.properties.osm_value === 'yes'
+  _formatType: function (feature) {
+    return feature.properties.osm_value === 'yes'
       ? feature.properties.osm_key
-      : feature.properties.osm_value,
+      : feature.properties.osm_value
+  },
 
   createResult: function (feature) {
-    const el = DomUtil.create('li', '', this.resultsContainer)
+    var el = L.DomUtil.create('li', '', this.resultsContainer)
     this.formatResult(feature, el)
-    const result = {
-      feature: feature,
-      el: el,
-    }
-    // Touch handling needed
-    DomEvent.on(
-      el,
-      'mouseover',
-      function (_e) {
-        this.CURRENT = result
-        this.highlight()
-      },
-      this
-    )
-    DomEvent.on(
-      el,
-      'mousedown',
-      function (_e) {
-        this.setChoice()
-      },
-      this
-    )
+    var result = { feature: feature, el: el }
+    L.DomEvent.on(el, 'mouseover', function (e) { this.CURRENT = result; this.highlight() }, this)
+    L.DomEvent.on(el, 'mousedown', function (e) { this.setChoice() }, this)
     return result
   },
 
   resultToIndex: function (result) {
-    let out = null
-    this.forEach(this.RESULTS, (item, index) => {
-      if (item === result) {
-        out = index
-        return
-      }
+    var out = null
+    this.forEach(this.RESULTS, function (item, index) {
+      if (item === result) { out = index; return }
     })
     return out
   },
 
   handleResults: function (geojson) {
+    var self = this
     this.clear()
     this.resultsContainer.style.display = 'block'
     this.resizeContainer()
-    this.forEach(geojson.features, (feature) => {
-      this.RESULTS.push(this.createResult(feature))
+    this.forEach(geojson.features, function (feature) {
+      self.RESULTS.push(self.createResult(feature))
     })
     if (geojson.features.length === 0) {
-      const noresult = DomUtil.create('li', 'photon-no-result', this.resultsContainer)
+      var noresult = L.DomUtil.create('li', 'photon-no-result', this.resultsContainer)
       noresult.innerHTML = this.options.noResultLabel
     }
     if (this.options.feedbackEmail) {
-      const feedback = DomUtil.create('a', 'photon-feedback', this.resultsContainer)
-      feedback.href = `mailto:${this.options.feedbackEmail}`
+      var feedback = L.DomUtil.create('a', 'photon-feedback', this.resultsContainer)
+      feedback.href = 'mailto:' + this.options.feedbackEmail
       feedback.innerHTML = this.options.feedbackLabel
     }
     this.CURRENT = 0
     this.highlight()
-    if (this.options.resultsHandler) {
-      this.options.resultsHandler(geojson)
-    }
+    if (this.options.resultsHandler) this.options.resultsHandler(geojson)
   },
 
   highlight: function () {
-    this.forEach(this.RESULTS, (item, index) => {
-      if (index === this.CURRENT) {
-        DomUtil.addClass(item.el, 'on')
-      } else {
-        DomUtil.removeClass(item.el, 'on')
-      }
+    var self = this
+    this.forEach(this.RESULTS, function (item, index) {
+      if (index === self.CURRENT) L.DomUtil.addClass(item.el, 'on')
+      else L.DomUtil.removeClass(item.el, 'on')
     })
   },
 
-  getLeft: (el) => {
-    let tmp = el.offsetLeft
+  getLeft: function (el) {
+    var tmp = el.offsetLeft
     el = el.offsetParent
-    while (el) {
-      tmp += el.offsetLeft
-      el = el.offsetParent
-    }
+    while (el) { tmp += el.offsetLeft; el = el.offsetParent }
     return tmp
   },
 
-  getTop: (el) => {
-    let tmp = el.offsetTop
+  getTop: function (el) {
+    var tmp = el.offsetTop
     el = el.offsetParent
-    while (el) {
-      tmp += el.offsetTop
-      el = el.offsetParent
-    }
+    while (el) { tmp += el.offsetTop; el = el.offsetParent }
     return tmp
   },
 
@@ -376,10 +350,10 @@ const PhotonBaseSearch = PhotonBase.extend({
   },
 })
 
-export const PhotonSearch = PhotonBaseSearch.extend({
+L.PhotonSearch = L.PhotonBaseSearch.extend({
   initialize: function (map, input, options) {
     this.map = map
-    PhotonBaseSearch.prototype.initialize.call(this, input, options)
+    L.PhotonBaseSearch.prototype.initialize.call(this, input, options)
   },
 
   _onSelected: function (feature) {
@@ -390,7 +364,7 @@ export const PhotonSearch = PhotonBaseSearch.extend({
   },
 
   getParams: function () {
-    const params = PhotonBaseSearch.prototype.getParams.call(this)
+    var params = L.PhotonBaseSearch.prototype.getParams.call(this)
     if (this.options.includePosition) {
       params.lat = this.map.getCenter().lat
       params.lon = this.map.getCenter().lng
@@ -405,34 +379,9 @@ export const PhotonSearch = PhotonBaseSearch.extend({
   },
 })
 
-Control.Photon = Control.extend({
-  includes: Evented.prototype,
+L.PhotonReverse = L.PhotonBase.extend({
+  includes: L.Evented.prototype,
 
-  onAdd: function (map, options) {
-    this.map = map
-    this.container = DomUtil.create('div', 'leaflet-photon')
-
-    this.options = Util.extend(this.options, options)
-
-    this.input = DomUtil.create('input', 'photon-input', this.container)
-    this.search = new PhotonSearch(map, this.input, this.options)
-    this.search.on('blur', this.forwardEvent, this)
-    this.search.on('focus', this.forwardEvent, this)
-    this.search.on('hide', this.forwardEvent, this)
-    this.search.on('selected', this.forwardEvent, this)
-    this.search.on('ajax:send', this.forwardEvent, this)
-    this.search.on('ajax:return', this.forwardEvent, this)
-    return this.container
-  },
-
-  // TODO onRemove
-
-  forwardEvent: function (e) {
-    this.fire(e.type, e)
-  },
-})
-
-export const PhotonReverse = PhotonBase.extend({
   options: {
     url: 'https://photon.komoot.io/reverse/?',
     limit: 1,
@@ -440,21 +389,17 @@ export const PhotonReverse = PhotonBase.extend({
   },
 
   initialize: function (options) {
-    Util.setOptions(this, options)
+    L.setOptions(this, options)
   },
 
   doReverse: function (latlng) {
-    latlng = latLng(latlng)
+    latlng = L.latLng(latlng)
     this.fire('reverse', { latlng: latlng })
     this.latlng = latlng
-    this.ajax().then((data) => this.handleResults(data))
+    this.ajax(this.handleResults, this)
   },
 
-  _handleResults: (data) => {
-    /*eslint-disable no-console */
-    console.log(data)
-    /*eslint-enable no-alert */
-  },
+  _handleResults: function (data) {},
 
   handleResults: function (data) {
     return (this.options.handleResults || this._handleResults).call(this, data)
@@ -470,3 +415,8 @@ export const PhotonReverse = PhotonBase.extend({
     }
   },
 })
+
+export const PhotonBase = L.PhotonBase
+export const PhotonBaseSearch = L.PhotonBaseSearch
+export const PhotonSearch = L.PhotonSearch
+export const PhotonReverse = L.PhotonReverse
