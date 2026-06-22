@@ -900,6 +900,11 @@ class Path extends Feature {
         },
       })
     }
+    items.push({
+      title: translate('Transform/rotate shape'),
+      icon: 'icon-resize',
+      action: () => this.ui.startMyTransform(event),
+    })
     return items
   }
 
@@ -1263,14 +1268,12 @@ export class LineString extends Path {
 }
 
 export class Polygon extends Path {
-  constructor(umap, datalayer, geojson, id, transform = true) {
+  constructor(umap, datalayer, geojson, id) {
     super(umap, datalayer, geojson, id)
     this.staticOptions = {
       mainColor: 'fillColor',
       className: 'polygon',
-      transform: true,
     }
-    this.transform= true
   }
 
   get measure() {
@@ -1368,10 +1371,6 @@ export class Polygon extends Path {
       title: translate('Start a hole here'),
       action: () => this.ui.startHole(event),
       icon: 'icon-hole',
-    })
-    items.push({
-      label: translate('Transform/rotate shape'),
-      action: () => this.ui.startMyTransform(event),
     })
     return items
   }

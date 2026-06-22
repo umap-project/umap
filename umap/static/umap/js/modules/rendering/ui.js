@@ -12,6 +12,7 @@ import {
   Polyline,
   latLng,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
+import { Transform } from '../../../vendors/leaflet-path-transform/dist/index.mjs'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import * as GeoUtils from '../geoutils.js'
 import { translate } from '../i18n.js'
@@ -328,7 +329,7 @@ const PathMixin = {
     }
     this._map.once('moveend', this.makeGeometryEditable, this)
     if (this.shouldAllowGeometryEdit()) {
-      this.transform = true
+      this.stopTransform()
       this.enableEdit()
     } else {
       this.feature._umap.tooltip.open({
@@ -336,6 +337,29 @@ const PathMixin = {
       })
       this.disableEdit()
     }
+  },
+
+  startMyTransform: function () {
+    if (this._transformHandler) {
+      this.stopTransform()
+      return
+    }
+    if (this.editEnabled()) this.disableEdit()
+    const handler = new Transform(this, { rotation: true, scaling: true, uniformScaling: false })
+    this._transformHandler = handler
+    handler.enable()
+    this.on('transformed', this._onTransformed, this)
+  },
+
+  _onTransformed: function () {
+    this.feature.onCommit(this.toGeometry())
+  },
+
+  stopTransform: function () {
+    if (!this._transformHandler) return
+    this._transformHandler.disable()
+    this._transformHandler = null
+    this.off('transformed', this._onTransformed, this)
   },
 
   addInteractions: function () {
@@ -593,7 +617,6 @@ export const LeafletRoute = LeafletPolyline.extend({
 export const LeafletPolygon = Polygon.extend({
   parentClass: Polygon,
   includes: [FeatureMixin, PathMixin],
-  transform: true,
 
   getClass: () => LeafletPolygon,
 
@@ -620,11 +643,6 @@ export const LeafletPolygon = Polygon.extend({
   
   getMeasure: function (shape) {
     return TextUtils.readableArea(GeoUtils.area(this.toGeometry(shape)))
-  },
-  startMyTransform: function () {
-    this.enableEdit()
-    console.log('enableTransform' in this);
-    this.transform.enable()
   },
 })
 const WORLD = [
