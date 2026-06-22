@@ -17,7 +17,8 @@
         "noParameterAssign": "off"
       },
       "complexity": {
-        "noForEach": "off"
+        "noForEach": "off",
+        "noThisInStatic": "off"
       },
       "performance": {
         "noDelete": "off"

@@ -7,6 +7,7 @@ import { translate } from '../i18n.js'
 import * as Icon from '../icon.js'
 import { SCHEMA } from '../schema.js'
 import * as Utils from '../utils.js'
+import { TYPES as LAYER_TYPES } from '../data/types.js'
 
 export const Fields = {}
 
@@ -614,7 +615,7 @@ Fields.TextColorPicker = class extends Fields.ColorPicker {
 
 Fields.LayerTypeChooser = class extends Fields.Select {
   getOptions() {
-    return U.LAYER_TYPES.map((class_) => [class_.TYPE, class_.NAME])
+    return LAYER_TYPES.map((class_) => [class_.type, class_.name])
   }
 }
 

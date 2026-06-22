@@ -10,9 +10,10 @@ U.Editable = L.Editable.extend({
     })
     this.on('editable:drawing:commit', function (event) {
       this.resetButtons()
-      if (this._umap.editedFeature !== event.layer) {
-        const promise = event.layer.feature.edit(event)
-        if (event.layer.feature.isRoute?.()) {
+      const feature = this._umap.mapProxy.getFeatureById(event.layer.geojson.id)
+      if (this._umap.editedFeature !== feature) {
+        const promise = feature.edit(event)
+        if (feature.isRoute?.()) {
           promise.then((panel) => {
             panel.scrollTo('details#edit-route')
           })
@@ -42,8 +43,9 @@ U.Editable = L.Editable.extend({
 
   startRoute: function (latlng) {
     const feature = this.createLineString()
-    feature.askForRouteSettings().then(async () => {
-      feature.ui.enableEdit(this.map).newShape(latlng)
+    feature.askForRouteSettings().then(() => {
+      const layer = this.drawNewFeature(feature)
+      layer.enableEdit(this.map).newShape(latlng)
     })
   },
 
@@ -56,17 +58,17 @@ U.Editable = L.Editable.extend({
     return line
   },
 
-  createPolyline: function (latlngs, properties = {}) {
-    return this.createLineString().ui
+  createPolyline: function () {
+    return this.drawNewFeature(this.createLineString())
   },
 
-  createPolygon: function (latlngs) {
+  createPolygon: function () {
     const datalayer = this._umap.defaultEditDataLayer()
     const poly = new U.Polygon(this._umap, datalayer, {
       geometry: { type: 'Polygon', coordinates: [] },
     })
     poly._needs_upsert = true
-    return poly.ui
+    return this.drawNewFeature(poly)
   },
 
   createMarker: function (latlng) {
@@ -75,7 +77,12 @@ U.Editable = L.Editable.extend({
       geometry: { type: 'Point', coordinates: [latlng.lng, latlng.lat] },
     })
     point._needs_upsert = true
-    return point.ui
+    return this.drawNewFeature(point)
+  },
+
+  drawNewFeature: function (feature) {
+    feature.datalayer.addFeature(feature)
+    return this._umap.mapProxy.startDrawing(feature.datalayer.id, feature.toRenderer())
   },
 
   _getDefaultProperties: function () {
@@ -87,10 +94,7 @@ U.Editable = L.Editable.extend({
   },
 
   connectCreatedToMap: function (layer) {
-    // Overrided from Leaflet.Editable
-    const datalayer = this._umap.defaultEditDataLayer()
-    datalayer.addFeature(layer.feature)
-    return layer
+    return this._umap.mapProxy.connectDrawing(layer)
   },
 
   drawingTooltip: function (e) {
@@ -157,13 +161,11 @@ U.Editable = L.Editable.extend({
   onEscape: function () {
     this.once('editable:drawing:end', (event) => {
       this._umap.tooltip.close()
-      // When hitting Escape before adding a marker,
-      // it tries to edit an unconnected marker.
-      if (event?.layer?.feature?.datalayer === null) return
+      const feature = this._umap.mapProxy.getFeatureById(event.layer.geojson.id)
+      if (!feature) return
       // Leaflet.Editable will delete the drawn shape if invalid
       // (eg. line has only one drawn point)
       // So let's check if the layer has no more shape
-      const feature = event.layer.feature
       // Sync _geometry from the UI so hasGeom() sees what is actually left.
       const geometry = event.layer.toGeometry()
       feature._geometry = geometry

@@ -2,108 +2,38 @@
 import {
   Bounds,
   LatLng,
-  Marker,
   latLngBounds,
   point,
 } from '../../../../vendors/leaflet/leaflet-src.esm.js'
-import { translate } from '../../i18n.js'
-import * as Utils from '../../utils.js'
-import { LayerMixin } from './base.js'
-
 export const Heat = L.HeatLayer.extend({
-  statics: {
-    NAME: translate('Heatmap'),
-    TYPE: 'Heat',
-  },
-  includes: [LayerMixin],
-  browsable: false,
-
   initialize: function (datalayer) {
     this.datalayer = datalayer
-    L.HeatLayer.prototype.initialize.call(this, [], this.datalayer.properties.heat)
-    if (!Utils.isObject(this.datalayer.properties.heat)) {
-      this.datalayer.properties.heat = {}
-    }
+    L.HeatLayer.prototype.initialize.call(this, [], {})
   },
 
-  addLayer: function (layer) {
-    if (layer instanceof Marker) {
-      let latlng = layer.getLatLng()
-      let alt
-      if (this.datalayer.properties.heat?.intensityProperty) {
-        alt = Number.parseFloat(
-          layer.feature.properties[
-            this.datalayer.properties.heat.intensityProperty || 0
-          ]
-        )
-        latlng = new LatLng(latlng.lat, latlng.lng, alt)
+  addData: function (geojson) {
+    this.geojson = geojson
+    const config = geojson.style?.heat || {}
+    if (config.radius) this.setOptions({ radius: config.radius })
+    const key = config.intensityProperty
+    for (const feature of geojson.features || []) {
+      if (feature.geometry?.type !== 'Point') continue
+      const [lng, lat] = feature.geometry.coordinates
+      if (key) {
+        const alt = Number.parseFloat(feature.properties?.[key])
+        this.addLatLng(new LatLng(lat, lng, alt))
+      } else {
+        this.addLatLng(new LatLng(lat, lng))
       }
-      this.addLatLng(latlng)
     }
-  },
-
-  removeLayer: (layer) => {
-    // No op, there is no "removeLatLng" in Leaflet.heat
-    // but this method is expected by DataLayer
-  },
-
-  onAdd: function (map) {
-    LayerMixin.onAdd.call(this, map)
-    return L.HeatLayer.prototype.onAdd.call(this, map)
-  },
-
-  onRemove: function (map) {
-    LayerMixin.onRemove.call(this, map)
-    return L.HeatLayer.prototype.onRemove.call(this, map)
   },
 
   clearLayers: function () {
     this.setLatLngs([])
   },
 
-  getFeatures: () => ({}),
-
   getBounds: function () {
     return latLngBounds(this._latlngs)
-  },
-
-  getEditableProperties: function () {
-    return [
-      [
-        'properties.heat.radius',
-        {
-          handler: 'Range',
-          min: 10,
-          max: 100,
-          step: 5,
-          label: translate('Heatmap radius'),
-          helpText: translate('Override heatmap radius (default 25)'),
-        },
-      ],
-      [
-        'properties.heat.intensityProperty',
-        {
-          handler: 'Select',
-          selectOptions: [
-            ['', translate('Select field to compute intensity')],
-            ...this.datalayer.fields.keys(),
-          ],
-          helpText: translate('Optional intensity field to compute heatmap'),
-        },
-      ],
-    ]
-  },
-
-  onEdit: function (field, builder) {
-    if (field === 'properties.heat.intensityProperty') {
-      this.datalayer.resetLayer(true) // We need to repopulate the latlngs
-      return
-    }
-    if (field === 'properties.heat.radius') {
-      this.options.radius = this.datalayer.properties.heat.radius
-      this.redraw()
-    }
-    this._updateOptions()
   },
 
   redraw: function () {

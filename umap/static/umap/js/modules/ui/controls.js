@@ -1,7 +1,6 @@
 import {
   LayerGroup,
   Control as LeafletControl,
-  latLng,
   TileLayer,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import {
@@ -135,7 +134,7 @@ export class MeasureControl extends MoreableControl {
 
   render() {
     // TODO remove direct call to leafletMap => turf
-    const defaultUnit = this._umap.mapProxy.map.measureTools.options.defaultUnit
+    const defaultUnit = this._umap.mapProxy.map.measureTools?.options.defaultUnit
     const checked = (unit) => (unit === defaultUnit ? 'checked' : '')
     const [container, { toggle }] = Utils.loadTemplateWithRefs(`
       <div class="umap-control umap-control-measure">
@@ -434,11 +433,11 @@ export class AttributionControl extends Control {
   render() {
     const shortCredit = this._umap.getProperty('shortCredit')
     const captionMenus = this._umap.getProperty('captionMenus')
-    const tilelayer = this._umap.mapProxy.tilelayers.current
+    const tilelayer = this._umap.mapProxy.tilelayers?.current
     const template = Utils.sanitizeVars`
       <div class="umap-control-attribution">
         <div class="attribution-container">
-          ${Utils.toHTML(tilelayer.options.attribution)}
+          ${Utils.toHTML(tilelayer?.options.attribution)}
           <span data-ref="short"> — ${Utils.toHTML(shortCredit)}</span>
           <a  href="#" data-ref="caption"> — ${translate('Open caption')}</a>
           <a href="https://umap-project.org/" data-ref="site"> — ${translate('Powered by uMap')}</a>
@@ -558,7 +557,7 @@ export const Search = PhotonSearch.extend({
     this.options.location_bias_scale = 0.5
     PhotonSearch.prototype.initialize.call(this, map, input, options)
     this.options.url = this._umap.properties.urls.search
-    if (map.options.maxBounds) this.options.bbox = map.options.maxBounds.toBBoxString()
+    if (umap.mapProxy.hasExtent) this.options.bbox = umap.mapProxy.getExtentBBoxString()
     this.reverse = new PhotonReverse({
       handleResults: (geojson) => {
         this.handleResultsWithReverse(geojson)
@@ -584,9 +583,8 @@ export const Search = PhotonSearch.extend({
     if (pattern.test(this.input.value)) {
       this.hide()
       const { lat, lng } = pattern.exec(this.input.value).groups
-      const latlng = latLng(lat, lng)
-      if (Utils.LatLngIsValid(latlng)) {
-        this.reverse.doReverse(latlng)
+      if (Utils.coordinateIsValid([+lng, +lat])) {
+        this.reverse.doReverse({ lat, lng })
       } else {
         Alert.error(translate('Invalid latitude or longitude'))
       }
@@ -595,7 +593,7 @@ export const Search = PhotonSearch.extend({
     // Only numbers, abort.
     if (/^[\d .,]*$/.test(this.input.value)) return
     // Do normal search
-    this.options.includePosition = this.map.getZoom() > 10
+    this.options.includePosition = this._umap.mapProxy.zoom > 10
     PhotonSearch.prototype.search.call(this)
   },
 
@@ -665,11 +663,8 @@ export const Search = PhotonSearch.extend({
     choice = choice || this.RESULTS[this.CURRENT]
     if (choice) {
       const feature = choice.feature
-      const zoom = Math.max(this.map.getZoom(), 14) // Never unzoom.
-      this.map.setView(
-        [feature.geometry.coordinates[1], feature.geometry.coordinates[0]],
-        zoom
-      )
+      const zoom = Math.max(this._umap.mapProxy.zoom, 14) // Never unzoom.
+      this._umap.fire('map:view:set', { center: feature.geometry.coordinates, zoom })
     }
   },
 })

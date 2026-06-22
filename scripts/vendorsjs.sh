@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 rm -rf umap/static/umap/vendors/
 
-mkdir -p umap/static/umap/vendors/leaflet/ && cp -r node_modules/leaflet/dist/leaflet-src.esm.* umap/static/umap/vendors/leaflet/
+# mkdir -p umap/static/umap/vendors/leaflet/ && cp -r node_modules/leaflet/dist/leaflet-src.esm.* umap/static/umap/vendors/leaflet/
 mkdir -p umap/static/umap/vendors/leaflet/ && cp -r node_modules/leaflet/dist/*.css umap/static/umap/vendors/leaflet/
 mkdir -p umap/static/umap/vendors/leaflet/ && cp -r node_modules/leaflet/dist/images umap/static/umap/vendors/leaflet/images
 mkdir -p umap/static/umap/vendors/editable/ && cp -r node_modules/leaflet-editable/src/Leaflet.Editable.js umap/static/umap/vendors/editable/
@@ -25,7 +25,6 @@ mkdir -p umap/static/umap/vendors/locatecontrol/ && cp -r node_modules/leaflet.l
 mkdir -p umap/static/umap/vendors/dompurify/ && cp -r node_modules/dompurify/dist/purify.es.mjs umap/static/umap/vendors/dompurify/purify.es.js
 mkdir -p umap/static/umap/vendors/dompurify/ && cp -r node_modules/dompurify/dist/purify.es.mjs.map umap/static/umap/vendors/dompurify/purify.es.mjs.map
 mkdir -p umap/static/umap/vendors/colorbrewer/ && cp node_modules/colorbrewer/index.es.js umap/static/umap/vendors/colorbrewer/colorbrewer.js
-mkdir -p umap/static/umap/vendors/simple-statistics/ && cp node_modules/simple-statistics/dist/simple-statistics.min.* umap/static/umap/vendors/simple-statistics/
 mkdir -p umap/static/umap/vendors/geojson-to-gpx/ && cp node_modules/@dwayneparton/geojson-to-gpx/dist/index.js umap/static/umap/vendors/geojson-to-gpx/
 mkdir -p umap/static/umap/vendors/textpath/ && cp node_modules/leaflet-textpath/leaflet.textpath.js umap/static/umap/vendors/textpath/
 mkdir -p umap/static/umap/vendors/betterknown/ && cp node_modules/betterknown/dist/betterknown.mjs umap/static/umap/vendors/betterknown/
@@ -33,8 +32,20 @@ mkdir -p umap/static/umap/vendors/openrouteservice/ && cp node_modules/openroute
 mkdir -p umap/static/umap/vendors/snapdom/ && cp node_modules/@zumer/snapdom/dist/snapdom.min.mjs umap/static/umap/vendors/snapdom/
 mkdir -p umap/static/umap/vendors/simple-elevation-chart/ && cp node_modules/simple-elevation-chart/src/elevation.* umap/static/umap/vendors/simple-elevation-chart/
 # Turf
-for mod in meta helpers flatten distance invariant clean-coords boolean-point-on-line flip clone area centroid length; do
+for mod in meta helpers flatten distance invariant clean-coords boolean-point-on-line boolean-point-in-polygon point-to-line-distance nearest-point-on-line rhumb-distance flip clone area centroid length bbox; do
   mkdir -p umap/static/umap/vendors/turf/$mod && cp node_modules/@turf/$mod/dist/esm/index.js* umap/static/umap/vendors/turf/$mod/
 done
+# Deps of @turf/boolean-point-in-polygon (not @turf packages)
+mkdir -p umap/static/umap/vendors/point-in-polygon-hao/ && cp node_modules/point-in-polygon-hao/dist/esm/index.js* umap/static/umap/vendors/point-in-polygon-hao/
+mkdir -p umap/static/umap/vendors/robust-predicates/esm/ && cp node_modules/robust-predicates/index.js umap/static/umap/vendors/robust-predicates/ && cp node_modules/robust-predicates/esm/*.js umap/static/umap/vendors/robust-predicates/esm/
+# Simple Statistics
+mkdir -p umap/static/umap/vendors/simple-statistics/
+for mod in jenks jenks_breaks jenks_matrices quantile quantile_sorted quickselect equal_interval_breaks max min ckmeans make_matrix numeric_sort unique_count_sorted; do
+   cp node_modules/simple-statistics/src/$mod.js umap/static/umap/vendors/simple-statistics/
+done
+cp -r node_modules/ol umap/static/umap/vendors/
+mkdir -p umap/static/umap/vendors/rbush/ && cp node_modules/rbush/index.js umap/static/umap/vendors/rbush/
+mkdir -p umap/static/umap/vendors/quickselect/ && cp node_modules/quickselect/index.js umap/static/umap/vendors/quickselect/
+
 
 echo 'Done!'

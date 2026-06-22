@@ -1,5 +1,3 @@
-// FIXME: this module should not depend on Leaflet
-import { SVG } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import {
   uMapAlert as Alert,
   uMapAlertConflict as AlertConflict,
@@ -8,32 +6,19 @@ import { MutatingForm } from '../form/builder.js'
 import { translate } from '../i18n.js'
 import { DataLayerPermissions } from '../permissions.js'
 import { Default as DefaultLayer } from '../rendering/layers/base.js'
-import { Categorized, Choropleth, Circles } from '../rendering/layers/classified.js'
 import { Cluster } from '../rendering/layers/cluster.js'
 import { Heat } from '../rendering/layers/heat.js'
 import * as Schema from '../schema.js'
 import TableEditor from '../tableeditor.js'
 import * as Utils from '../utils.js'
 import * as DOMUtils from '../domutils.js'
+import * as GeoUtils from '../geoutils.js'
 import { LineString, Point, Polygon } from './features.js'
 import Rules from '../rules.js'
 import { FeatureManager, LayerManager } from '../managers.js'
 import { Filters } from '../filters.js'
 import { Fields, getDefaultFields } from './fields.js'
-
-export const LAYER_TYPES = [
-  DefaultLayer,
-  Cluster,
-  Heat,
-  Choropleth,
-  Categorized,
-  Circles,
-]
-
-const LAYER_MAP = LAYER_TYPES.reduce((acc, klass) => {
-  acc[klass.TYPE] = klass
-  return acc
-}, {})
+import { loadType } from './types.js'
 
 export class DataLayer {
   constructor(umap, spec = {}) {
@@ -74,8 +59,6 @@ export class DataLayer {
       this._umap.layers.add(this)
     }
     this.pane = this._umap.mapProxy.createOverlayPane(this.id, this.parentPane)
-    // FIXME: should be on layer
-    this.renderer = new SVG({ pane: this.pane })
     this.pane.dataset.id = this.id
 
     if (!Utils.isObject(this.properties.remoteData)) {
@@ -103,6 +86,9 @@ export class DataLayer {
     }
     this.eventsController = new AbortController()
     this._umap.on('map:zoomend', () => this.onZoomEnd(), {
+      signal: this.eventsController.signal,
+    })
+    this._umap.on('map:moveend', () => this.onMoveEnd(), {
       signal: this.eventsController.signal,
     })
 
@@ -153,7 +139,7 @@ export class DataLayer {
     return `${translate('Layer')} ${this._umap.layers.tree.count() + 1}`
   }
 
-  render(fields, builder) {
+  async render(fields, builder) {
     // Propagate will remove the fields it has already
     // processed
     fields = this.propagate(fields)
@@ -181,10 +167,9 @@ export class DataLayer {
           if (fields.includes('properties.type')) {
             this.resetLayer()
           }
-          for (const field of fields) {
-            this.layer.onEdit(field, builder)
-          }
+          await this.compute()
           this.redraw()
+          this.renderLegend()
           break
         case 'remote-data':
           this.fetchRemoteData()
@@ -218,6 +203,7 @@ export class DataLayer {
   }
 
   showAtLoad() {
+    console.log('showAtLoad', this.autoVisibility, this.showAtZoom())
     return this.autoVisibility && this.showAtZoom()
   }
 
@@ -258,30 +244,22 @@ export class DataLayer {
     this.parentPane.appendChild(this.pane)
   }
 
-  hasDataVisible() {
-    return this.layer.hasDataVisible()
-  }
-
   resetLayer(force) {
     // Only reset if type is defined (undefined is the default) and different from current type
     if (
-      this.layer &&
-      (!this.properties.type || this.properties.type === this.layer.getType()) &&
+      this.Type &&
+      (!this.properties.type || this.properties.type === this.Type.type) &&
       !force
     ) {
       return
     }
     const visible = this.isVisible()
-    if (this.layer) this.layer.clearLayers()
-    // delete this.layer?
-    if (visible) this._umap.mapProxy.removeLayer(this.layer)
-    const Class = LAYER_MAP[this.properties.type] || DefaultLayer
-    this.layer = new Class(this)
-    // Rendering layer changed, so let's force reset the feature rendering too.
-    this.features.forEach((feature) => {
-      feature.makeUI()
-      this.showFeature(feature)
-    })
+    if (this.Type) this._umap.mapProxy.clear(this.id)
+    if (visible) this._umap.mapProxy.hideLayer(this.id)
+    // this.Type is needed by createLayer (for cluster/heat)
+    this.Type = loadType(this.properties.type)
+    this.Type.ensureProperties(this.properties)
+    this._umap.mapProxy.createLayer(this)
     if (visible) this.show()
   }
 
@@ -304,13 +282,14 @@ export class DataLayer {
   dataChanged() {
     if (!this.isLoaded() || this._batch) return
     this._umap.fire('datalayer:changed')
-    this.layer.dataChanged()
+    // TODO: reflect on rendering
+    // this.layer.dataChanged()
   }
 
-  fromGeoJSON(geojson, sync = true) {
+  async fromGeoJSON(geojson, sync = true) {
     if (!geojson) return []
     this._needsFetch = false
-    const features = this.addData(geojson, sync)
+    const features = await this.addData(geojson, sync)
     this.onDataLoaded()
     return features
   }
@@ -323,7 +302,14 @@ export class DataLayer {
     if (this.isRemoteLayer()) {
       await this.fetchRemoteData()
     } else {
-      this.fromGeoJSON(geojson, false)
+      await this.fromGeoJSON(geojson, false)
+    }
+  }
+
+  onMoveEnd() {
+    console.log('onMoveEnd')
+    if (this.hasDynamicData() && this.showAtZoom()) {
+      this.fetchRemoteData()
     }
   }
 
@@ -331,12 +317,21 @@ export class DataLayer {
     const from = Number.parseInt(this.properties.fromZoom, 10)
     const to = Number.parseInt(this.properties.toZoom, 10)
     const zoom = this._umap.mapProxy.zoom
+    console.log(zoom, from, to)
     return !((!Number.isNaN(from) && zoom < from) || (!Number.isNaN(to) && zoom > to))
   }
 
   onZoomEnd() {
-    if (this.isDeleted) return
-    this.layer?.onZoomEnd()
+    console.log('onZoomEnd', this.autoVisibility, this.showAtZoom(), this.isVisible())
+    if (this.isDeleted || !this.autoVisibility) return
+    if (!this.showAtZoom() && this.isVisible()) {
+      console.log('hidding')
+      this.hide()
+    }
+    if (this.showAtZoom() && !this.isVisible()) {
+      console.log('showing')
+      this.show()
+    }
   }
 
   hasDynamicData() {
@@ -382,7 +377,7 @@ export class DataLayer {
       this.dataChanged()
       return this._umap.formatter
         .parse(raw, this.properties.remoteData.format)
-        .then((geojson) => this.fromGeoJSON(geojson, false))
+        .then(async (geojson) => await this.fromGeoJSON(geojson, false))
         .catch((error) => {
           console.debug(error)
           Alert.error(
@@ -429,14 +424,14 @@ export class DataLayer {
     return this.properties.type === 'Cluster'
   }
 
-  showFeature(feature) {
-    if (feature.isFiltered()) return
-    this.layer.addLayer(feature.ui)
-  }
+  // showFeature(feature) {
+  //   if (feature.isFiltered()) return
+  //   // this.layer.addLayer(feature.ui)
+  // }
 
-  hideFeature(feature) {
-    this.layer.removeLayer(feature.ui)
-  }
+  // hideFeature(feature) {
+  //   this._umap.mapProxy.removeFeature(this.id, feature.id)
+  // }
 
   addFeature(feature, sync = false) {
     if (this.group) {
@@ -452,20 +447,9 @@ export class DataLayer {
       this.properties.fields = getDefaultFields()
       this.fields.pull()
     }
-    try {
-      this.showFeature(feature)
-    } catch (error) {
-      console.error(error)
-      if (this._umap.editEnabled) {
-        Alert.error(translate('Skipping invalid geometry'))
-      }
-      console.error('Invalid geometry', feature)
-      this.removeFeature(feature, false)
-      return
-    }
     this.dataChanged()
     if (sync) {
-      feature.journal.upsert(feature.toGeoJSON(), null)
+      feature.journal.upsert(feature.toJournal(), null)
     }
     return feature
   }
@@ -476,12 +460,10 @@ export class DataLayer {
     // polygon, not yet valid (not enough points)
     if (!this.features.has(feature.id)) return
     if (sync !== false) {
-      const oldValue = feature.toGeoJSON()
+      const oldValue = feature.toJournal()
       feature.journal.delete(oldValue)
     }
-    try {
-      this.hideFeature(feature)
-    } catch {}
+    this._umap.mapProxy.removeFeature(this.id, feature.id)
     delete this._umap.featuresIndex[feature.getSlug()]
     feature.disconnectFromDataLayer(this)
     this.features.del(feature)
@@ -543,7 +525,15 @@ export class DataLayer {
     return field.values(this.features.all()).sort(Utils.naturalSort)
   }
 
-  addData(geojson, sync) {
+  async compute() {
+    this.computed = await this.Type.compute(
+      this.properties,
+      this.features.all(),
+      this.fields.keys()
+    )
+  }
+
+  async addData(geojson, sync) {
     const id = Math.random()
     this._umap.loader.start(id)
     let data = []
@@ -557,7 +547,14 @@ export class DataLayer {
       console.error(err)
     }
     this._batch = false
+    // Compute classification before baking, so toRenderer() resolves the right
+    // per-feature colors/radius.
     this.dataChanged()
+    await this.compute()
+    // toRenderer() returns the full (accumulated) model, so replace rather than
+    // append, otherwise reimporting into the same layer duplicates features.
+    this._umap.mapProxy.clear(this.id)
+    this._umap.mapProxy.addData(this.id, this.toRenderer())
     this._umap.loader.stop(id)
     return data
   }
@@ -575,7 +572,7 @@ export class DataLayer {
     for (const featureJson of collection) {
       if (featureJson.geometry?.type === 'GeometryCollection') {
         for (const geometry of featureJson.geometry.geometries) {
-          const feature = this.makeFeature({
+          const feature = this._buildFeature({
             type: 'Feature',
             geometry,
             properties: featureJson.properties,
@@ -583,7 +580,7 @@ export class DataLayer {
           if (feature) features.push(feature)
         }
       } else {
-        const feature = this.makeFeature(featureJson, sync)
+        const feature = this._buildFeature(featureJson, sync)
         if (feature) features.push(feature)
       }
     }
@@ -591,6 +588,12 @@ export class DataLayer {
   }
 
   makeFeature(geojson = {}, sync = true, id = null) {
+    const feature = this._buildFeature(geojson, sync, id)
+    if (feature) this._umap.mapProxy.addFeature(this.id, feature.toRenderer())
+    return feature
+  }
+
+  _buildFeature(geojson = {}, sync = true, id = null) {
     // Both Feature and Geometry are valid geojson objects.
     const geometry = geojson.geometry || geojson
     let feature
@@ -636,9 +639,9 @@ export class DataLayer {
   async importRaw(raw, format) {
     return this._umap.formatter
       .parse(raw, format)
-      .then((geojson) => {
+      .then(async (geojson) => {
         this.journal.startBatch()
-        const data = this.addData(geojson)
+        const data = await this.addData(geojson)
         this.journal.commitBatch()
         return data
       })
@@ -737,6 +740,7 @@ export class DataLayer {
   clear(sync = true) {
     this._batch = true
     this.features.forEach((feature) => feature.del(sync))
+    this._umap.mapProxy.clearLayer(this.id)
     this._batch = false
   }
 
@@ -746,6 +750,7 @@ export class DataLayer {
     delete properties.id
     const geojson = Utils.CopyJSON(this.umapGeoJSON())
     const datalayer = this._umap.createDataLayer({ properties })
+    // TODO make it async
     datalayer.fromGeoJSON(geojson)
     return datalayer
   }
@@ -756,7 +761,9 @@ export class DataLayer {
       return
     }
     if (!this.isVisible()) return
-    this.features.forEach((feature) => feature.redraw())
+    // TODO: Let's reset for now, and add a more gentle way to redraw later
+    this._umap.mapProxy.clear(this.id)
+    this._umap.mapProxy.addData(this.id, this.toRenderer())
   }
 
   reindex() {
@@ -897,13 +904,13 @@ export class DataLayer {
   }
 
   _editLayerProperties(container) {
-    const layerFields = this.layer.getEditableProperties()
+    const layerFields = this.Type.editableProperties(this.fields)
 
     if (layerFields.length) {
       const builder = new MutatingForm(this, layerFields)
       const template = Utils.sanitizeVars`
         <details id="layer-properties">
-          <summary><h4>${this.layer.getName()}: ${translate('settings')}</h4></summary>
+          <summary><h4>${this.Type.name}: ${translate('settings')}</h4></summary>
           <fieldset data-ref=fieldset></fieldset>
         </details>
       `
@@ -1138,9 +1145,8 @@ export class DataLayer {
   }
 
   getProperty(key, feature) {
-    if (this.layer?.getOption) {
-      const value = this.layer.getOption(key, feature)
-      if (value !== undefined) return value
+    if (this.computed?.properties?.[feature?.id]?.[key] !== undefined) {
+      return this.computed.properties[feature.id][key]
     }
     if (feature) {
       const value = this.rules.getOption(key, feature)
@@ -1149,8 +1155,8 @@ export class DataLayer {
     if (this.getOwnProperty(key) !== undefined) {
       return this.getOwnProperty(key)
     }
-    if (this.layer?.defaults?.[key]) {
-      return this.layer.defaults[key]
+    if (this.Type?.defaults?.[key]) {
+      return this.Type.defaults[key]
     }
     const parent = this.parent || this._umap
     return parent.getProperty(key, feature)
@@ -1216,7 +1222,7 @@ export class DataLayer {
             this.fetchRemoteData()
           } else {
             this.journal.startBatch()
-            this.addData(geojson)
+            await this.addData(geojson)
             this.journal.commitBatch()
           }
         }
@@ -1224,13 +1230,13 @@ export class DataLayer {
   }
 
   async show() {
-    this._umap.mapProxy.addLayer(this.layer)
+    this._umap.mapProxy.showLayer(this.id)
     if (!this.isLoaded()) await this.fetchData()
     this.propagateVisibility({ force: true })
   }
 
   hide() {
-    this._umap.mapProxy.removeLayer(this.layer)
+    this._umap.mapProxy.hideLayer(this.id)
     this.propagateVisibility({ force: false })
   }
 
@@ -1269,7 +1275,7 @@ export class DataLayer {
     if (this.layers.count()) {
       return this.layers.tree.some((child) => child.isVisible())
     }
-    return Boolean(this.layer && this._umap.mapProxy.hasLayer(this.layer))
+    return this._umap.mapProxy.hasLayer(this.id)
   }
 
   hasVisibleChild() {
@@ -1277,14 +1283,12 @@ export class DataLayer {
   }
 
   get bounds() {
-    if (!this.group) return this.layer.getBounds()
-    let bounds
-    for (const child of this.layers.root) {
-      if (!bounds) {
-        bounds = child.bounds
-      } else {
-        bounds.extend(child.bounds)
-      }
+    // Bounds are geometry-derived data, aggregated from the features (or child
+    // layers for a group) — not asked from the renderer.
+    const items = this.group ? this.layers.root : this.features.all()
+    let bounds = null
+    for (const item of items) {
+      bounds = GeoUtils.unionBbox(bounds, item.bounds)
     }
     return bounds
   }
@@ -1295,7 +1299,7 @@ export class DataLayer {
   }
 
   zoomToBounds(bounds) {
-    if (bounds?.isValid()) {
+    if (GeoUtils.isValidBbox(bounds)) {
       this._umap.fire('map:view:fit-bounds', {
         bounds,
         zoom: this.getProperty('zoomTo'),
@@ -1305,7 +1309,7 @@ export class DataLayer {
 
   // Is this layer type browsable in theorie
   isBrowsable() {
-    return this.layer?.browsable
+    return this.Type?.browsable
   }
 
   // Is this layer browsable in theorie
@@ -1347,12 +1351,31 @@ export class DataLayer {
 
   umapGeoJSON() {
     const features = this.isRemoteLayer() ? [] : this.features.all()
-    const geojson = this._umap.formatter.toFeatureCollection(features)
+    const geojson = {
+      type: 'FeatureCollection',
+      features: features.map((f) => f.toJournal()),
+    }
     geojson.properties = this.properties
     geojson.id = this.id
     geojson.rank = this.rank
     geojson.parent = this.parentId
     return geojson
+  }
+
+  // Render collection for the map proxy: each feature carries its resolved
+  // `style`. Never saved (cf umapGeoJSON, the save format).
+  toRenderer() {
+    return {
+      type: 'FeatureCollection',
+      style: {
+        color: this.getProperty('color'),
+        ...this.Type?.renderConfig?.(this.properties),
+      },
+      features: this.features
+        .all()
+        .filter((feature) => !feature.isFiltered() && !feature.isEmpty())
+        .map((feature) => feature.toRenderer()),
+    }
   }
 
   getDOMOrder() {
@@ -1437,7 +1460,7 @@ export class DataLayer {
       // been resolved. So we need to reload to get extra data (added by someone else)
       if (data.geojson) {
         this.clear(false)
-        this.fromGeoJSON(data.geojson)
+        await this.fromGeoJSON(data.geojson)
         delete data.geojson
       }
       delete data.id
@@ -1505,7 +1528,10 @@ export class DataLayer {
       `[data-id="${this.id}"] .datalayer-legend`
     )) {
       container.innerHTML = ''
-      if (this.layer.renderLegend) return this.layer.renderLegend(container)
+      if (this.computed?.caption) {
+        container.appendChild(this.computed.caption)
+        continue
+      }
       const rules = new Map()
       for (const rule of this.rules) {
         rules.set(rule.condition, rule)

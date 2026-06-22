@@ -2,13 +2,6 @@ import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import { MutatingForm } from '../form/builder.js'
 import { translate, getLocale } from '../i18n.js'
 import loadPopup from '../rendering/popup.js'
-import {
-  LeafletMarker,
-  LeafletPolygon,
-  LeafletPolyline,
-  LeafletRoute,
-  MaskPolygon,
-} from '../rendering/ui.js'
 import { SCHEMA } from '../schema.js'
 import * as Utils from '../utils.js'
 import * as Clipboard from '../clipboard.js'
@@ -16,12 +9,12 @@ import * as DOMUtils from '../domutils.js'
 import * as Icon from '../icon.js'
 import * as GeoUtils from '../geoutils.js'
 import * as TextUtils from '../textutils.js'
+import loadTemplate from '../rendering/template.js'
 
 class Feature {
   constructor(umap, datalayer, geojson = {}, id = null) {
     this._umap = umap
     this.journal = umap.journalEngine.proxy(this)
-    this._ui = null
 
     // DataLayer the feature belongs to
     this.datalayer = datalayer
@@ -53,8 +46,10 @@ class Feature {
   }
 
   get ui() {
-    if (!this._ui) this.makeUI()
-    return this._ui
+    // Temporary bridge: resolve the live rendered layer from the proxy so
+    // Leaflet.Editable editing keeps working. To be removed once editing goes
+    // write-through (renderer-agnostic ops on the proxy).
+    return this._umap.mapProxy.getLayer(this.id)
   }
 
   get center() {
@@ -62,7 +57,8 @@ class Feature {
   }
 
   get bounds() {
-    return this.ui.getBounds()
+    if (this.isEmpty()) return null
+    return GeoUtils.bbox(this.geometry)
   }
 
   get type() {
@@ -96,24 +92,17 @@ class Feature {
   }
 
   isOnScreen(bounds) {
-    return this.ui?.isOnScreen(bounds)
+    bounds = bounds || this._umap.mapProxy.bounds
+    if (!this.bounds) return false
+    return GeoUtils.bboxIntersects(bounds, this.bounds)
   }
 
   pushGeometry() {
-    this._setLatLngs(this.toLatLngs())
+    this._umap.mapProxy.pushGeometry(this.datalayer.id, this.id, this.geometry)
   }
 
   toLatLngs() {
     return GeoUtils.flip(this.geometry).coordinates
-  }
-
-  makeUI() {
-    const klass = this.getUIClass()
-    this._ui = new klass(this, this.toLatLngs())
-  }
-
-  getUIClass() {
-    return this.getOption('UIClass')
   }
 
   getClassName() {
@@ -124,8 +113,12 @@ class Feature {
     return `feature-${this.datalayer.id}-${this.id}`
   }
 
+  getMainColor() {
+    return this.staticOptions.mainColor
+  }
+
   getPreviewColor() {
-    return this.getDynamicOption(this.staticOptions.mainColor)
+    return this.getDynamicOption(this.getMainColor())
   }
 
   getJournalMetadata() {
@@ -146,7 +139,7 @@ class Feature {
     // points via the websocket, as the other peers will get them themselves.
     if (this.datalayer?.isRemoteLayer()) return
     if (this._needs_upsert) {
-      this.journal.upsert(this.toGeoJSON(), null)
+      this.journal.upsert(this.toJournal(), null)
       this._needs_upsert = false
     } else {
       this.journal.update('geometry', this.geometry, this._geometry_bk)
@@ -171,7 +164,26 @@ class Feature {
       }`
   }
 
-  view({ latlng } = {}) {
+  async buildCard() {
+    const container = document.createElement('div')
+    container.classList.add('umap-popup')
+    const name = this.getOption('popupTemplate')
+    const content = await loadTemplate(name, this, container)
+    const elements = container.querySelectorAll('img,iframe')
+    // for (const element of elements) {
+    //   this.onElementLoaded(element)
+    // }
+    if (!elements.length && container.textContent.replace('\n', '') === '') {
+      container.innerHTML = ''
+      container.appendChild(
+        DOMUtils.loadTemplate(Utils.sanitizeVars`<h3>${this.getDisplayName()}</h3>`)
+      )
+    }
+    return container
+  }
+
+  view({ center } = {}) {
+    console.log('we are in the view')
     const outlink = this.getOption('outlink')
     const target = this.getOption('outlinkTarget')
     if (outlink) {
@@ -192,8 +204,17 @@ class Feature {
       this._umap.slideshow.current = this
     }
     this._umap.currentFeature = this
-    this.attachPopup().then(() => {
-      this.ui.openPopup(latlng || this.ui.getCenter())
+    this.buildCard().then((element) => {
+      console.log('card has been built')
+      if (this.getOption('popupShape') === 'Panel') {
+        this._umap.fire('panel:show', { id: this.id, content: element })
+      } else {
+        this._umap.fire('popup:show', {
+          id: this.id,
+          content: element,
+          center: center || this.center,
+        })
+      }
     })
   }
 
@@ -286,7 +307,8 @@ class Feature {
       builder.form.querySelector('input')?.focus()
     })
     this._umap.editedFeature = this
-    if (!this.isOnScreen()) this.zoomTo(event)
+    this._umap.fire('feature:edit', { id: this.id })
+    // if (!this.isOnScreen()) this.zoomTo(event)
     return onPanelLoaded
   }
 
@@ -296,6 +318,10 @@ class Feature {
     } else {
       this.edit()
     }
+  }
+
+  endEdit() {
+    this._umap.fire('feature:endedit', { id: this.id })
   }
 
   getAdvancedEditActions(container) {
@@ -356,10 +382,6 @@ class Feature {
     ]
   }
 
-  endEdit() {
-    this.ui.disableEdit()
-  }
-
   getDisplayName() {
     const keys = U.LABEL_KEYS.slice() // Copy.
     const labelKey = this.getOption('labelKey')
@@ -392,14 +414,8 @@ class Feature {
     return loadPopup(this.getOption('popupShape') || old)
   }
 
-  async attachPopup() {
-    const Class = this.getPopupClass()
-    const popup = new Class(this)
-    this.ui.bindPopup(popup)
-    return popup.loadContent()
-  }
-
   del(sync) {
+    this.endEdit()
     if (this.datalayer) {
       this.datalayer.removeFeature(this, sync)
     }
@@ -441,11 +457,13 @@ class Feature {
 
   changeDataLayer(datalayer) {
     if (this.datalayer) {
-      this.datalayer.removeFeature(this)
+      const oldDatalayer = this.datalayer
+      oldDatalayer.removeFeature(this)
+      oldDatalayer.redraw()
     }
     datalayer.addFeature(this)
-    this.journal.upsert(this.toGeoJSON())
-    this.redraw()
+    this.journal.upsert(this.toJournal())
+    datalayer.redraw()
   }
 
   getOption(option, fallback) {
@@ -523,8 +541,66 @@ class Feature {
       type: 'Feature',
       geometry: this.geometry,
       properties: this.cloneProperties(),
-      id: this.id,
     })
+  }
+
+  toJournal() {
+    const geojson = this.toGeoJSON()
+    geojson.id = this.id
+    return geojson
+  }
+
+  getStyleProperties() {
+    return [
+      'smoothFactor',
+      'color',
+      'opacity',
+      'stroke',
+      'weight',
+      'fill',
+      'fillColor',
+      'fillOpacity',
+      'dashArray',
+      'interactive',
+      'shape',
+      'radius',
+      'iconClass',
+      'iconUrl',
+      'iconOpacity',
+      'iconSize',
+    ]
+  }
+
+  getRenderProperties() {
+    const style = {}
+    for (const option of this.getStyleProperties()) {
+      style[option] = this.getDynamicOption(option)
+    }
+    style.highlight = {
+      opacity: 1,
+      fillOpacity: Math.sqrt(style.fillOpacity ?? 1),
+      weight: 1.3 * style.weight,
+    }
+    return style
+  }
+
+  toRenderer() {
+    const geojson = this.toGeoJSON()
+    geojson.id = `${this.datalayer.id}/${this.id}`
+    geojson.style = this.getRenderProperties()
+    geojson.readonly = this.isReadOnly()
+    geojson.label = this.getLabel()
+    return geojson
+  }
+
+  getLabel() {
+    return {
+      text: this.getDisplayName(),
+      show: this.getOption('showLabel'),
+      hover: this.getOption('labelHover'),
+      direction: this.getOption('labelDirection'),
+      interactive: this.getOption('labelInteractive'),
+    }
   }
 
   isFiltered() {
@@ -565,7 +641,6 @@ class Feature {
 
   clone() {
     const geojson = this.toGeoJSON()
-    delete geojson.id
     delete geojson.properties.id
     const feature = this.datalayer.makeFeature(geojson)
     feature.edit()
@@ -574,7 +649,7 @@ class Feature {
 
   extendedProperties() {
     // Include context properties
-    const properties = this._umap.getGeoContext()
+    const properties = this._umap.mapProxy.getGeoContext()
     const locale = getLocale()
     if (locale) properties.locale = locale
     if (U.lang) properties.lang = U.lang
@@ -597,15 +672,10 @@ class Feature {
   }
 
   redraw() {
-    if (this.datalayer?.isVisible() && this.ui?.isVisible()) {
-      if (this.getUIClass() !== this.ui.getClass()) {
-        this.datalayer.hideFeature(this)
-        this.makeUI()
-        this.datalayer.showFeature(this)
-      } else if (this.datalayer?.isBrowsable()) {
-        this.ui._redraw()
-      }
-    }
+    this._umap.fire('feature:reset', {
+      sourceId: this.datalayer.id,
+      geojson: this.toRenderer(),
+    })
   }
 
   getContextMenu(event) {
@@ -678,24 +748,13 @@ class Feature {
     return items
   }
 
-  isActive() {
-    return this._umap.activeFeature === this
-  }
-
-  activate() {
-    this._umap.activeFeature = this
-  }
-
   deactivate() {
-    if (this._umap.activeFeature === this) {
-      this._umap.activeFeature = undefined
-      this.ui.closePopup()
-    }
+    this._umap.fire('popup:close')
   }
 
   makePreview(element) {
     element.innerHTML = ''
-    const symbol = Icon.formatUrl(this.iconUrl, this)
+    const symbol = Icon.formatUrl(this.iconUrl, this.extendedProperties())
     const bgcolor = this.getPreviewColor()
     element.style.backgroundColor = bgcolor
     if (symbol && symbol !== SCHEMA.iconUrl.default) {
@@ -716,16 +775,8 @@ export class Point extends Feature {
     }
   }
 
-  _setLatLngs(latlng) {
-    this.ui.setLatLng(latlng)
-  }
-
   get center() {
     return this.coordinates
-  }
-
-  getUIClass() {
-    return super.getUIClass() || LeafletMarker
   }
 
   hasGeom() {
@@ -752,62 +803,31 @@ export class Point extends Feature {
 
   appendEditFieldsets(container) {
     super.appendEditFieldsets(container)
-    // FIXME edit feature geometry.coordinates instead
-    // (by learning FormBuilder to deal with array indexes ?)
+    const [lng, lat] = this.coordinates
+    const latlng = { lat, lng }
     const coordinatesOptions = [
-      ['ui._latlng.lat', { handler: 'FloatInput', label: translate('Latitude') }],
-      ['ui._latlng.lng', { handler: 'FloatInput', label: translate('Longitude') }],
+      ['lat', { handler: 'FloatInput', label: translate('Latitude') }],
+      ['lng', { handler: 'FloatInput', label: translate('Longitude') }],
     ]
-    const builder = new MutatingForm(this, coordinatesOptions)
+    const builder = new MutatingForm(latlng, coordinatesOptions, { umap: this._umap })
     builder.on('set', () => {
-      if (!Utils.LatLngIsValid(this.ui._latlng)) {
+      const coordinates = [latlng.lng, latlng.lat]
+      if (!Utils.coordinateIsValid(coordinates)) {
         Alert.error(translate('Invalid latitude or longitude'))
-        builder.restoreField('ui._latlng.lat')
-        builder.restoreField('ui._latlng.lng')
+        return
       }
-      this.ui.onCommit()
+      this.onCommit({ type: 'Point', coordinates })
+      this.pushGeometry()
       this.zoomTo({ easing: false })
     })
     const fieldset = DOMUtils.createFieldset(container, translate('Coordinates'))
     fieldset.appendChild(builder.build())
-  }
-
-  zoomTo(event) {
-    if (this.datalayer.isClustered() && this.ui._cluster) {
-      this.ui._cluster.zoomToCoverage().then(() => {
-        this.ui._cluster.spiderfy()
-      })
-    }
-    super.zoomTo(event)
   }
 }
 
 class Path extends Feature {
   hasGeom() {
     return !this.isEmpty()
-  }
-
-  _setLatLngs(latlngs) {
-    this.ui.setLatLngs(latlngs)
-  }
-
-  edit(event) {
-    if (this._umap.editEnabled) {
-      const promise = super.edit(event)
-      if (!this.ui.editEnabled()) this.ui.makeGeometryEditable()
-      return promise
-    }
-  }
-
-  toggleEditing() {
-    if (this._umap.editEnabled) {
-      if (this.ui.editEnabled()) {
-        this.endEdit()
-        this._umap.editPanel.close()
-      } else {
-        this.edit()
-      }
-    }
   }
 
   getShapeOptions() {
@@ -832,14 +852,83 @@ class Path extends Feature {
     )
   }
 
-  transferShape(at, to) {
-    const shape = this.ui.enableEdit().deleteShapeAt(at)
-    this.ui.disableEdit()
-    if (!shape) return
-    to.ui.enableEdit().appendShape(shape)
-    // appendShape (insertShape) does not fire `editable:edited`, so commit by hand.
-    to.ui.onCommit()
-    if (this.isEmpty()) this.del()
+  async _removeShapeAt(coordinate) {
+    const index = await GeoUtils.shapeAt(this.geometry, coordinate)
+    if (index === -1) return null
+    const shapes = Utils.CopyJSON(this.coordinates)
+    const [extracted] = shapes.splice(index, 1)
+    const single = this.geometry.type.replace('Multi', '')
+    this.geometry = {
+      type: shapes.length > 1 ? this.geometry.type : single,
+      coordinates: shapes.length > 1 ? shapes : shapes[0],
+    }
+    return extracted
+  }
+
+  appendShape(coordinates) {
+    const oldGeometry = Utils.CopyJSON(this._geometry)
+    const type = this.geometry.type
+    const isMultiType = type.startsWith('Multi')
+    this.geometry = {
+      type: isMultiType ? type : `Multi${type}`,
+      coordinates: isMultiType
+        ? [...this.coordinates, coordinates]
+        : [this.coordinates, coordinates],
+    }
+    this.journal.update('geometry', this.geometry, oldGeometry)
+  }
+
+  isolateShape(coordinate) {
+    if (!this.isMulti()) return
+    const oldGeometry = Utils.CopyJSON(this._geometry)
+    return this.journal.update(
+      'geometry',
+      async () => {
+        const extracted = await this._removeShapeAt(coordinate)
+        if (!extracted) return
+        const single = this.geometry.type.replace('Multi', '')
+        this.datalayer
+          .makeFeature({
+            geometry: { type: single, coordinates: extracted },
+            properties: this.cloneProperties(),
+          })
+          .edit()
+        return this.geometry
+      },
+      oldGeometry
+    )
+  }
+
+  deleteShape(coordinate) {
+    if (!this.isMulti()) return
+    const oldGeometry = Utils.CopyJSON(this._geometry)
+    return this.journal.update(
+      'geometry',
+      async () => {
+        const extracted = await this._removeShapeAt(coordinate)
+        if (!extracted) return
+        return this.geometry
+      },
+      oldGeometry
+    )
+  }
+
+  transferShape(coordinate, to) {
+    if (this.isMulti()) {
+      const oldGeometry = Utils.CopyJSON(this._geometry)
+      return this.journal.update(
+        'geometry',
+        async () => {
+          const extracted = await this._removeShapeAt(coordinate)
+          if (!extracted) return
+          to.appendShape(extracted)
+          return this.geometry
+        },
+        oldGeometry
+      )
+    }
+    to.appendShape(Utils.CopyJSON(this.coordinates))
+    this.del()
   }
 
   zoomTo({ easing, callback }) {
@@ -877,13 +966,13 @@ class Path extends Feature {
           title: translate('Extract shape to separate feature'),
           icon: 'icon-extract-shape',
           action: () => {
-            this.ui.isolateShape(event.latlng)
+            this.isolateShape(event.coordinate)
           },
         },
         {
           title: translate('Delete this shape'),
           icon: 'icon-delete-shape',
-          action: () => this.ui.enableEdit().deleteShapeAt(event.latlng),
+          action: () => this.deleteShape(event.coordinate),
         }
       )
     }
@@ -895,7 +984,7 @@ class Path extends Feature {
         title: translate('Transfer shape to edited feature'),
         icon: 'icon-transfer-shape',
         action: () => {
-          this.transferShape(event.latlng, this._umap.editedFeature)
+          this.transferShape(event.coordinate, this._umap.editedFeature)
         },
       })
     }
@@ -937,15 +1026,6 @@ export class LineString extends Path {
     )
   }
 
-  getUIClass() {
-    const klass = super.getUIClass()
-    if (klass) return klass
-    if (this.isRoute()) {
-      return LeafletRoute
-    }
-    return LeafletPolyline
-  }
-
   isSameClass(other) {
     return other instanceof LineString
   }
@@ -954,7 +1034,8 @@ export class LineString extends Path {
     const oldRoute = Utils.CopyJSON(this.properties._umap_options.route)
     this.properties._umap_options.route.active = false
     this.redraw()
-    this.edit()
+    // The feature is no longer a route
+    this.edit({ force: true })
     this.journal.update('properties._umap_options.route', null, oldRoute)
   }
 
@@ -968,7 +1049,7 @@ export class LineString extends Path {
       this.properties._umap_options.route,
       oldRoute
     )
-    this.edit().then((panel) => {
+    this.edit({ force: true }).then((panel) => {
       panel.scrollTo('details#edit-route')
     })
   }
@@ -982,7 +1063,7 @@ export class LineString extends Path {
       this.properties._umap_options.route,
       null
     )
-    this.edit().then((panel) => {
+    this.edit({ force: true }).then((panel) => {
       panel.scrollTo('details#edit-route')
     })
   }
@@ -1001,9 +1082,6 @@ export class LineString extends Path {
     geojson.geometry.coordinates = [
       Utils.flattenCoordinates(geojson.geometry.coordinates),
     ]
-
-    delete geojson.id // delete the copied id, a new one will be generated.
-
     const polygon = this.datalayer.makeFeature(geojson)
     polygon.edit()
     this.del()
@@ -1094,8 +1172,6 @@ export class LineString extends Path {
           coordinates = await this._reduceMulti(coordinates, coords)
         }
         this.geometry = await GeoUtils.cleanCoords({ type: 'LineString', coordinates })
-        if (!this.ui.editEnabled()) this.edit()
-        this.ui.editor.reset()
         return this.geometry
       },
       oldGeometry
@@ -1144,8 +1220,33 @@ export class LineString extends Path {
   }
 
   extendedProperties() {
-    const [gain, loss] = this.ui.getElevation()
+    const [gain, loss] = this.getElevation()
     return Object.assign({ gain, loss }, super.extendedProperties())
+  }
+
+  getElevation() {
+    const lineElevation = (coords) => {
+      let gain = 0
+      let loss = 0
+      for (let i = 0, n = coords.length - 1; i < n; i++) {
+        const fromAlt = coords[i][2]
+        const toAlt = coords[i + 1][2]
+        if (fromAlt === undefined || toAlt === undefined) continue
+        if (fromAlt > toAlt) loss += fromAlt - toAlt
+        else gain += toAlt - fromAlt
+      }
+      return [gain, loss]
+    }
+    const { type, coordinates } = this.geometry
+    const shapes = type === 'LineString' ? [coordinates] : coordinates
+    let totalGain = 0
+    let totalLoss = 0
+    for (const shape of shapes) {
+      const [gain, loss] = lineElevation(shape)
+      totalGain += gain
+      totalLoss += loss
+    }
+    return [Math.round(totalGain), Math.round(totalLoss)]
   }
 
   loadORS() {
@@ -1227,12 +1328,17 @@ export class LineString extends Path {
         const geometry = await importer.elevation(this.geometry)
         if (!geometry?.type) return
         this.geometry = geometry
-        this.ui.resetTooltip()
+        this.redraw()
         Alert.success(translate('Elevation has been added!'))
         return this.geometry
       },
       oldGeometry
     )
+  }
+
+  setRoute(coordinates) {
+    this.properties._umap_options.route.coordinates = coordinates
+    if (coordinates.length >= 2) this.computeRoute()
   }
 
   computeRoute() {
@@ -1246,7 +1352,7 @@ export class LineString extends Path {
         const geometry = await importer.directions(this.properties._umap_options.route)
         if (!geometry?.type) return
         this.geometry = geometry
-        this.ui.resetTooltip()
+        this.redraw()
         return this.geometry
       },
       oldGeometry
@@ -1278,9 +1384,8 @@ export class Polygon extends Path {
     return !this.coordinates.length || !this.coordinates[0].length
   }
 
-  getUIClass() {
-    if (this.getOption('mask')) return MaskPolygon
-    return super.getUIClass() || LeafletPolygon
+  getStyleProperties() {
+    return [...super.getStyleProperties(), 'mask']
   }
 
   isSameClass(other) {
@@ -1314,7 +1419,6 @@ export class Polygon extends Path {
 
   toLineString() {
     const geojson = this.toGeoJSON()
-    delete geojson.id
     delete geojson.properties.id
     geojson.geometry.type = 'LineString'
     geojson.geometry.coordinates = Utils.flattenCoordinates(
@@ -1352,9 +1456,7 @@ export class Polygon extends Path {
 
   getDrawingTools(event) {
     const items = super.getDrawingTools(event)
-    const shape = this.ui.shapeAt(event.latlng)
-    // No multi and no holes.
-    if (shape && !this.isMulti() && (GeoUtils.isFlat(shape) || shape.length === 1)) {
+    if (!this.isMulti() && this.coordinates.length === 1) {
       items.push({
         title: translate('Transform to lines'),
         icon: 'icon-polyline',
@@ -1363,9 +1465,13 @@ export class Polygon extends Path {
     }
     items.push({
       title: translate('Start a hole here'),
-      action: () => this.ui.startHole(event),
+      action: () => this.startHole(event.coordinate),
       icon: 'icon-hole',
     })
     return items
+  }
+
+  startHole(coordinate) {
+    this._umap.fire('feature:hole', { id: this.id, coordinate })
   }
 }

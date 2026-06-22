@@ -707,8 +707,7 @@ export const COLORS = [
   'White',
 ]
 
-export const LatLngIsValid = (latlng) => {
-  const [lat, lng] = Array.isArray(latlng) ? latlng : [latlng.lat, latlng.lng]
+export const coordinateIsValid = ([lng, lat]) => {
   return (
     Number.isFinite(lat) &&
     Math.abs(lat) <= 90 &&
