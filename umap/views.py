@@ -324,7 +324,7 @@ class TeamMaps(PaginatorMixin, DetailView):
         user = self.request.user
         if user.is_authenticated and user in self.object.users.all():
             qs = Map.objects
-        return qs.filter(team=self.object).order_by("-modified_at")
+        return qs.filter(teams=self.object).order_by("-modified_at")
 
     def get_context_data(self, **kwargs):
         kwargs.update(
@@ -761,8 +761,10 @@ class PermissionsMixin:
             permissions["editors"] = [
                 editor.get_metadata() for editor in self.object.editors.all()
             ]
-        if self.object.team:
-            permissions["team"] = self.object.team.get_metadata()
+            permissions["teams"] = [
+                team.get_metadata() for team in self.object.teams.all()
+            ]
+        
         if not self.object.owner and self.object.is_anonymous_owner(self.request):
             permissions["anonymous_edit_url"] = self.object.get_anonymous_edit_url()
         return permissions

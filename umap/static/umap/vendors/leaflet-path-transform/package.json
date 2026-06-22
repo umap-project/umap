@@ -1,0 +1,60 @@
+{
+  "name": "leaflet-path-transform",
+  "version": "1.8.0-beta.4",
+  "description": "Scale/rotate/move plugin for leaflet vector layers ",
+  "main": "index.js",
+  "browser": "dist/L.Path.Transform.js",
+  "scripts": {
+    "prestart": "npm install",
+    "test": "tape test/*.js",
+    "start": "npm run watch & npm run server",
+    "server": "http-server -p 3001",
+    "watch": "watchify -v -d example/js/app.js -o example/js/bundle.js",
+    "lint": "eslint ./src/",
+    "build-js": "mkdir -p dist && cat ./node_modules/leaflet-path-drag/dist/L.Path.Drag-src.js ./src/header.js ./src/Util.js ./src/Matrix.js ./src/Path.Transform.js > ./dist/L.Path.Transform-src.js",
+    "compress": "uglifyjs ./dist/L.Path.Transform-src.js -o ./dist/L.Path.Transform.js --comments -m",
+    "build": "npm run lint && npm run build-js && npm run compress",
+    "release": "git push origin master && git checkout gh-pages && git merge master && git push origin gh-pages && npm publish"
+  },
+  "keywords": [
+    "leaflet",
+    "vector",
+    "scale",
+    "resize",
+    "rotate",
+    "move",
+    "geometry",
+    "edit"
+  ],
+  "author": "Alexander Milevski <info@w8r.name>",
+  "license": "MIT",
+  "dependencies": {
+    "leaflet-path-drag": "^1.8.0-beta.3"
+  },
+  "peerDependencies": {
+    "leaflet": "^1.8.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.9.0",
+    "http-server": "^14.1.1",
+    "tape": "^4.9.1",
+    "uglify-js": "^3.4.9",
+    "watchify": "^3.11.1"
+  },
+  "directories": {
+    "example": "example"
+  },
+  "files": [
+    "src/**/*.js",
+    "dist/*.js",
+    "index.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/w8r/Leaflet.Path.Transform.git"
+  },
+  "bugs": {
+    "url": "https://github.com/w8r/Leaflet.Path.Transform/issues"
+  },
+  "homepage": "https://github.com/w8r/Leaflet.Path.Transform#readme"
+}

@@ -276,6 +276,9 @@ html[dir="rtl"] .icon {
     background-position: calc(var(--tile) * 7) calc(var(--tile) * 4);
 }
 
+.icon-rectanglepolygonat {
+    background-position: calc(var(--tile) * 4) calc(var(--tile) * 7);
+}
 .icon-polygon-plus {
     background-position: calc(var(--tile) * 8) calc(var(--tile) * 4);
 }

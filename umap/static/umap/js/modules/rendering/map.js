@@ -84,6 +84,7 @@ export class LeafletProxy {
     this.umap.on('draw:multipolygon', () =>
       this.umap.editedFeature.ui.editor.newShape()
     )
+    this.umap.on('draw:rectanglepolygonat', () => this.map.editTools.startRectanglePolygonAt())
     this.umap.on('draw:route', () => this.map.editTools.startRoute())
     this.umap.on('map:resize', () => this.map.invalidateSize())
   }

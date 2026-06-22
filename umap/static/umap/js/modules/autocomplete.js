@@ -195,23 +195,11 @@ export class BaseAutocomplete {
   }
 
   getLeft(el) {
-    let tmp = el.offsetLeft
-    el = el.offsetParent
-    while (el) {
-      tmp += el.offsetLeft
-      el = el.offsetParent
-    }
-    return tmp
+    return el.getBoundingClientRect().left
   }
 
   getTop(el) {
-    let tmp = el.offsetTop
-    el = el.offsetParent
-    while (el) {
-      tmp += el.offsetTop
-      el = el.offsetParent
-    }
-    return tmp
+    return el.getBoundingClientRect().top
   }
 }
 
@@ -259,6 +247,14 @@ export class BaseAjax extends BaseAutocomplete {
 }
 
 class BaseServerAjax extends BaseAjax {
+  setUrl() {
+    if (this.options?.className === 'edit-teams') {
+      this.url = '/agnocomplete/AutocompleteTeam/?q={q}'
+    } else {
+      this.url = '/agnocomplete/AutocompleteUser/?q={q}'
+    }
+  }
+
   initRequest() {
     this.server = new ServerRequest()
   }

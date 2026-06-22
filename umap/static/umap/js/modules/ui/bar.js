@@ -328,6 +328,7 @@ const EDIT_BAR_TEMPLATE = `
       <li data-ref="multipolygon" hidden>
         <button class="drawing-tool" type="button" title="${translate('Add a polygon to the current multi')}"><i class="icon icon-24 icon-multipolygon"></i></button>
       </li>
+      <li data-ref="rectanglepolygonat"><button class="drawing-tool" type="button" data-getstarted><i class="icon icon-24 icon-rectanglepolygonat"></i></button></li>
       <li data-ref="route" hidden><button class="drawing-tool" type="button" data-getstarted title="${translate('Draw along routes')}"><i class="icon icon-24 icon-route"></i></button></li>
     </ul>
     <ul>
@@ -360,6 +361,7 @@ export class EditBar extends WithTemplate {
     this.addDrawListener('multiline')
     this.addDrawListener('polygon')
     this.addDrawListener('multipolygon')
+    this.addDrawListener('rectanglepolygonat')
     this.addDrawListener('route')
     this.addClickListener('caption', () => this._umap.editCaption())
     this.addClickListener('import', () => this._umap.openImporter())
@@ -375,6 +377,7 @@ export class EditBar extends WithTemplate {
     this.addTitle('marker', 'DRAW_MARKER')
     this.addTitle('polyline', 'DRAW_LINE')
     this.addTitle('polygon', 'DRAW_POLYGON')
+    this.addTitle('rectanglepolygonat', 'DRAW_RECTANGLEPOLYGONAT')
     this._umap.on('seteditedfeature', () => this.redraw())
   }
 

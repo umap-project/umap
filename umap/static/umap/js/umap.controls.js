@@ -68,6 +68,14 @@ U.Editable = L.Editable.extend({
     poly._needs_upsert = true
     return poly.ui
   },
+  createRectanglePolygonAt: function (latlngs) {
+    const datalayer = this._umap.defaultEditDataLayer()
+    const poly = new U.Polygon(this._umap, datalayer, {
+      geometry: { type: 'Polygon', coordinates: latlngs },
+    })
+    poly._needs_upsert = true
+    return poly;
+  },
 
   createMarker: function (latlng) {
     const datalayer = this._umap.defaultEditDataLayer()
@@ -77,6 +85,49 @@ U.Editable = L.Editable.extend({
     point._needs_upsert = true
     return point.ui
   },
+  
+
+  startRectanglePolygonAt: function () {
+    const map = this.map;
+    const umap = this._umap;
+    const datalayer = umap.defaultEditDataLayer();
+    const onClick = (e) => {
+        map.off('click', onClick);
+
+        const latlng = e.latlng;
+        const width = parseFloat(prompt('Width in meters:', '100'));
+        const height = parseFloat(prompt('Height in meters:', '100'));
+
+        if (!isNaN(width) && !isNaN(height)) {
+          const dLat = (height / 2) / 111320;
+          // 1 deg longitude = 40075000 * cos(lat) / 360
+          const metersPerDegLng = 40075000 * Math.cos(latlng.lat * Math.PI / 180) / 360;
+          const dLng = (width / 2) / metersPerDegLng;
+  
+          // CORRECT: [lng, lat] order for GeoJSON
+          const corners = [
+              [latlng.lng - dLng, latlng.lat - dLat], // SW
+              [latlng.lng + dLng, latlng.lat - dLat], // SE
+              [latlng.lng + dLng, latlng.lat + dLat], // NE
+              [latlng.lng - dLng, latlng.lat + dLat], // NW
+              [latlng.lng - dLng, latlng.lat - dLat], // Close polygon
+          ];
+            const feature = this.createRectanglePolygonAt([corners])
+            feature.pushGeometry();
+            feature.pullGeometry();
+            console.log(feature);
+            datalayer.addFeature(feature);
+            feature.ui.enableEdit();
+            feature.ui.editor.commitDrawing();
+        } else {
+          map._container.classList.remove('leaflet-editable-drawing');
+            alert('Invalid input.');
+        }
+    };
+    map._container.classList.add('leaflet-editable-drawing');
+    map.once('click', onClick);
+  },
+
 
   _getDefaultProperties: function () {
     const result = {}

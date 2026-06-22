@@ -328,6 +328,7 @@ const PathMixin = {
     }
     this._map.once('moveend', this.makeGeometryEditable, this)
     if (this.shouldAllowGeometryEdit()) {
+      this.transform = true
       this.enableEdit()
     } else {
       this.feature._umap.tooltip.open({
@@ -592,6 +593,7 @@ export const LeafletRoute = LeafletPolyline.extend({
 export const LeafletPolygon = Polygon.extend({
   parentClass: Polygon,
   includes: [FeatureMixin, PathMixin],
+  transform: true,
 
   getClass: () => LeafletPolygon,
 
@@ -615,9 +617,14 @@ export const LeafletPolygon = Polygon.extend({
   startHole: function (event) {
     this.enableEdit().newHole(event.latlng)
   },
-
+  
   getMeasure: function (shape) {
     return TextUtils.readableArea(GeoUtils.area(this.toGeometry(shape)))
+  },
+  startMyTransform: function () {
+    this.enableEdit()
+    console.log('enableTransform' in this);
+    this.transform.enable()
   },
 })
 const WORLD = [

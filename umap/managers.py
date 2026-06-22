@@ -24,7 +24,7 @@ class PrivateQuerySet(models.QuerySet):
         qs = (
             qs.filter(owner=user)
             .union(qs.filter(editors=user))
-            .union(qs.filter(team__in=teams))
+            .union(qs.filter(teams__in=teams))
         )
         return qs
 
