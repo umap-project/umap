@@ -301,6 +301,8 @@
     z-index: 200;
     min-width: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    background-color: var(--color-darkGray);
+    color: var(--color-veryLightGray);
 }
 
 .shape-mode-bar {
@@ -333,6 +335,7 @@
     flex-direction: column;
     gap: 6px;
     min-width: 150px;
+    padding:5px;
 }
 
 .shape-field {
