@@ -257,6 +257,7 @@ class BaseServerAjax extends BaseAjax {
 
   initRequest() {
     this.server = new ServerRequest()
+    if (!this.url) this.setUrl()
   }
   async _search(url) {
     const [{ data }, response] = await this.server.get(url)
