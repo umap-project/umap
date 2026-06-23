@@ -902,7 +902,7 @@ class Path extends Feature {
     }
     items.push({
       title: translate('Transform/rotate shape'),
-      icon: 'icon-resize',
+      icon: 'icon-redo',
       action: () => this.ui.startMyTransform(event),
     })
     return items

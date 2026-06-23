@@ -395,3 +395,19 @@ details:not([open]) .icon-toggle {
 .off .icon-zoom {
     background-position: var(--tile) calc(var(--tile) * 2);
 }
+
+.icon-circle-draw {
+    background-position: var(--tile) 0;
+}
+
+.icon-circle-place {
+    background-position: calc(var(--tile) * 2) 0;
+}
+
+.icon-rect-draw {
+    background-position: calc(var(--tile) * 3) 0;
+}
+
+.icon-rect-place {
+    background-position: calc(var(--tile) * 4) 0;
+}

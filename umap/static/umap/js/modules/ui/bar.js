@@ -337,27 +337,27 @@ class ShapeDrawer {
   _open() {
     this._button.classList.add('on')
     const panel = document.createElement('div')
-    panel.className = 'shape-drawer-panel dark'
+    panel.className = 'shape-drawer-panel'
     panel.innerHTML = `
       <ul class="shape-mode-bar">
         <li>
           <button type="button" data-mode="rect-drag" title="${translate('Draw rectangle by dragging')}">
-            <i class="icon icon-24 icon-rectanglepolygonat"></i>
+            <i class="icon icon-24 icon-rect-draw"></i>
           </button>
         </li>
         <li>
-          <button type="button" data-mode="rect-dims" title="${translate('Rectangle with dimensions')}">
-            <i class="icon icon-24 icon-resize"></i>
+          <button type="button" data-mode="rect-dims" title="${translate('Place Rectangle with dimensions')}">
+            <i class="icon icon-24 icon-rect-place"></i>
           </button>
         </li>
         <li>
           <button type="button" data-mode="circle-drag" title="${translate('Draw circle by dragging')}">
-            <i class="icon icon-24 icon-polygon"></i>
+            <i class="icon icon-24 icon-circle-draw"></i>
           </button>
         </li>
         <li>
-          <button type="button" data-mode="circle-radius" title="${translate('Circle with radius')}">
-            <i class="icon icon-24 icon-polygon-plus"></i>
+          <button type="button" data-mode="circle-radius" title="${translate('Place Circle with radius')}">
+            <i class="icon icon-24 icon-circle-place"></i>
           </button>
         </li>
       </ul>
@@ -440,7 +440,9 @@ const EDIT_BAR_TEMPLATE = `
       <li data-ref="multipolygon" hidden>
         <button class="drawing-tool" type="button" title="${translate('Add a polygon to the current multi')}"><i class="icon icon-24 icon-multipolygon"></i></button>
       </li>
-      <li data-ref="shapes" class="shape-drawer"><button class="drawing-tool" type="button" title="${translate('Draw shapes')}"><i class="icon icon-24 icon-rectanglepolygonat"></i></button></li>
+      <li data-ref="shapes" class="shape-drawer">
+        <button class="drawing-tool" type="button" title="${translate('Draw shapes')}"><i class="icon icon-24 icon-rectanglepolygonat"></i></button>
+      </li>
       <li data-ref="route" hidden><button class="drawing-tool" type="button" data-getstarted title="${translate('Draw along routes')}"><i class="icon icon-24 icon-route"></i></button></li>
     </ul>
     <ul>

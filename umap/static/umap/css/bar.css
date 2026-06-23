@@ -297,16 +297,14 @@
     position: absolute;
     right: calc(100% + 6px);
     top: 0;
-    padding: 6px;
     border-radius: var(--border-radius);
     z-index: 200;
-    min-width: 160px;
+    min-width: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
 
 .shape-mode-bar {
     display: flex;
-    gap: 2px;
     list-style: none;
     padding: 0;
     margin: 0;
@@ -320,6 +318,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.umap-edit-bar .shape-mode-bar li:first-of-type button {
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+}
+
+.umap-edit-bar .shape-mode-bar li:last-of-type  button {
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
 }
 
 .shape-dims-form {

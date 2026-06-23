@@ -345,10 +345,13 @@ const PathMixin = {
       return
     }
     if (this.editEnabled()) this.disableEdit()
+    this.feature._umap.editPanel.close()
     const handler = new Transform(this, { rotation: true, scaling: true, uniformScaling: false })
     this._transformHandler = handler
     handler.enable()
     this.on('transformed', this._onTransformed, this)
+    this._stopTransformOnClick = () => this.stopTransform()
+    this._map.on('click', this._stopTransformOnClick)
   },
 
   _onTransformed: function () {
@@ -360,6 +363,10 @@ const PathMixin = {
     this._transformHandler.disable()
     this._transformHandler = null
     this.off('transformed', this._onTransformed, this)
+    if (this._stopTransformOnClick) {
+      this._map.off('click', this._stopTransformOnClick)
+      this._stopTransformOnClick = null
+    }
   },
 
   addInteractions: function () {
