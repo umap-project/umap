@@ -1,42 +1,54 @@
 {% load static %}
 
 {% autoescape off %}
+<script type="importmap">
+  {
+    "imports": {
+      "@turf/meta": "{% static 'umap/vendors/turf/meta/index.js' %}",
+      "@turf/helpers": "{% static 'umap/vendors/turf/helpers/index.js' %}",
+      "@turf/flatten": "{% static 'umap/vendors/turf/flatten/index.js' %}",
+      "@turf/invariant": "{% static 'umap/vendors/turf/invariant/index.js' %}",
+      "@turf/distance": "{% static 'umap/vendors/turf/distance/index.js' %}",
+      "@turf/clean-coords": "{% static 'umap/vendors/turf/clean-coords/index.js' %}",
+      "@turf/boolean-point-on-line": "{% static 'umap/vendors/turf/boolean-point-on-line/index.js' %}",
+      "@turf/flip": "{% static 'umap/vendors/turf/flip/index.js' %}",
+      "@turf/clone": "{% static 'umap/vendors/turf/clone/index.js' %}",
+      "@turf/area": "{% static 'umap/vendors/turf/area/index.js' %}",
+      "@turf/centroid": "{% static 'umap/vendors/turf/centroid/index.js' %}",
+      "@turf/length": "{% static 'umap/vendors/turf/length/index.js' %}",
+      "leaflet": "{% static 'umap/vendors/leaflet/leaflet-src.esm.js' %}"
+    }
+  }
+</script>
 <script type="module"
-        src="{% static 'umap/vendors/leaflet/leaflet-src.esm.js' %}"
-        defer></script>
+src="{% static 'umap/vendors/leaflet/leaflet-src.esm.js' %}"
+defer></script>
 <script type="module"
-        src="{% static 'umap/js/modules/leaflet-configure.js' %}"
-        defer></script>
-<script src="{% static 'umap/vendors/markercluster/leaflet.markercluster.js' %}"
-        defer></script>
+src="{% static 'umap/js/modules/leaflet-configure.js' %}"
+defer></script>
 <script src="{% static 'umap/vendors/heat/leaflet-heat.js' %}" defer></script>
 {% if locale %}
-  {% with "umap/locale/"|add:locale|add:".js" as path %}
-    <script src="{% static path %}" defer></script>
-  {% endwith %}
+{% with "umap/locale/"|add:locale|add:".js" as path %}
+<script src="{% static path %}" defer></script>
+{% endwith %}
 {% endif %}
-<script type="module" src="{% static 'umap/js/modules/global.js' %}" defer></script>
 <script src="{% static 'umap/vendors/editable/Path.Drag.js' %}" defer></script>
 <script src="{% static 'umap/vendors/editable/Leaflet.Editable.js' %}" defer></script>
-<script src="{% static 'umap/vendors/hash/leaflet-hash.js' %}" defer></script>
-<script src="{% static 'umap/vendors/editinosm/Leaflet.EditInOSM.js' %}"
-        defer></script>
+<script type="module" src="{% static 'umap/js/modules/global.js' %}" defer></script>
 <script src="{% static 'umap/vendors/minimap/Control.MiniMap.min.js' %}"
-        defer></script>
+defer></script>
 <script src="{% static 'umap/vendors/csv2geojson/csv2geojson.js' %}" defer></script>
 <script src="{% static 'umap/vendors/osmtogeojson/osmtogeojson.js' %}" defer></script>
-<script src="{% static 'umap/vendors/loading/Control.Loading.js' %}" defer></script>
-<script src="{% static 'umap/vendors/photon/leaflet.photon.js' %}" defer></script>
 <script src="{% static 'umap/vendors/fullscreen/Leaflet.fullscreen.min.js' %}"
-        defer></script>
+defer></script>
 <script src="{% static 'umap/vendors/measurable/Leaflet.Measurable.js' %}"
-        defer></script>
-<script src="{% static 'umap/vendors/iconlayers/iconLayers.js' %}" defer></script>
-<script src="{% static 'umap/vendors/locatecontrol/L.Control.Locate.min.js' %}"
-        defer></script>
+defer></script>
+<script src="{% static 'umap/vendors/textpath/leaflet.textpath.js' %}"
+defer></script>
 <script src="{% static 'umap/vendors/simple-statistics/simple-statistics.min.js' %}"
-        defer></script>
-<script src="{% static 'umap/js/umap.core.js' %}" defer></script>
+defer></script>
 <script src="{% static 'umap/js/umap.controls.js' %}" defer></script>
 <script type="module" src="{% static 'umap/js/components/fragment.js' %}" defer></script>
+<script type="module" src="{% static 'umap/js/components/modal.js' %}" defer></script>
+<script type="module" src="{% static 'umap/js/components/copiable.js' %}" defer></script>
 {% endautoescape %}

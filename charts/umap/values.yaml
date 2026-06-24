@@ -2,7 +2,12 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# must be 1 if using persistent volumes
 replicaCount: 1
+
+# strategy.type must be Recreate if using persistent volumes
+strategy:
+  type: Recreate
 
 image:
   repository: umap/umap
@@ -74,11 +79,13 @@ umap:
   # Set environment variables supported by umap here
   # see: https://docs.umap-project.org/en/stable/config/settings/
   environment:
-    SECRET_KEY: CHANGE_ME
-    STATIC_ROOT: /srv/umap/static
-    MEDIA_ROOT: /srv/umap/uploads
+    - name: SECRET_KEY
+      value: CHANGE_ME
+    - name: STATIC_ROOT
+      value: /srv/umap/static
+    - name: MEDIA_ROOT
+      value: /srv/umap/uploads
   # Configure environment variables using an existing secret in the same namespace.
-  # In this case the values above are not used
   envFromSecret: null
 
   # You can also provide umap.conf content here:
@@ -89,6 +96,42 @@ umap:
   # Configure config file using an existing secret in the same namespace.
   # In this case the values above are not used
   configFromSecret: null
+
+nginx:
+  image:
+    repository: nginx
+    pullPolicy: IfNotPresent
+    # Overrides the image tag
+    tag: 1.27-alpine
+
+  # nginx config file content to override the one provided by the chart
+  # in this case remember to configure the listening port accordingly to nginx.service.port
+  # and the proxy pass to localhost:<service.port>
+  config: null
+ 
+  securityContext:
+    capabilities:
+      drop:
+      - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 1000
+
+  service:
+    type: ClusterIP
+    port: 8080
+
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
 
 persistence:
   enabled: true
@@ -105,7 +148,7 @@ persistence:
 # Alternatively, you can disable CNPG and provide your own
 # Postgis database by setting the `umap.environment.DATABASE_URL`
 cnpg:
-  enabled: true
+  enabled: false
   replicaCount: 2
   image:
     repository: ghcr.io/cloudnative-pg/postgis

@@ -12,7 +12,7 @@ your code repository.
 from umap.settings.base import *  # pylint: disable=W0614,W0401
 
 SECRET_KEY = "!!change me!!"
-INTERNAL_IPS = ("127.0.0.1",)
+INTERNAL_IPS = ["127.0.0.1"]
 ALLOWED_HOSTS = [
     "*",
 ]
@@ -37,9 +37,9 @@ ENABLE_ACCOUNT_LOGIN = True
 
 AUTHENTICATION_BACKENDS = (
     "social_core.backends.github.GithubOAuth2",
-    "social_core.backends.bitbucket.BitbucketOAuth",
+    "social_core.backends.bitbucket.BitbucketOAuth2",
     "social_core.backends.twitter.TwitterOAuth",
-    "social_core.backends.openstreetmap.OpenStreetMapOAuth",
+    "social_core.backends.openstreetmap_oauth2.OpenStreetMapOAuth2",
     "django.contrib.auth.backends.ModelBackend",
 )
 SOCIAL_AUTH_GITHUB_KEY = "xxx"
@@ -59,11 +59,9 @@ SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 SOCIAL_AUTH_BACKEND_ERROR_URL = "/"
 
-# If you want to add a playgroud map, add its primary key
+# If you want to add a playground map, add its primary key
 # UMAP_DEMO_PK = 204
-# If you want to add a showcase map on the home page, add its primary key
-# UMAP_SHOWCASE_PK = 1156
-# Add a baner to warn people this instance is not production ready.
+# Add a banner to warn people this instance is not production ready.
 UMAP_DEMO_SITE = True
 
 # Whether to allow non authenticated people to create maps.
@@ -82,6 +80,8 @@ UMAP_MAPS_PER_PAGE_OWNER = 10
 
 SITE_URL = "http://localhost:8019"
 SHORT_SITE_URL = "http://s.hort"
+# Add SITE_URL and SHORT_SITE_URL to this list to allow local (non-OAuth) logins
+CSRF_TRUSTED_ORIGINS = []
 
 # CACHES = {
 #     'default': {

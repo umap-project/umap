@@ -68,7 +68,7 @@ def test_user_dashboard_display_user_team_maps(client, map, team, user, share_st
 
 def test_user_dashboard_display_user_maps_distinct(client, map):
     # cf https://github.com/umap-project/umap/issues/1325
-    anonymap = MapFactory(name="Map witout owner should not appear")
+    anonymap = MapFactory(name="Map without owner should not appear")
     user1 = UserFactory(username="user1")
     user2 = UserFactory(username="user2")
     map.editors.add(user1)
@@ -80,3 +80,32 @@ def test_user_dashboard_display_user_maps_distinct(client, map):
     body = response.content.decode()
     assert body.count(f'<a href="/en/map/test-map_{map.pk}">test map</a>') == 1
     assert body.count(anonymap.name) == 0
+
+
+def test_user_dashboard_search(client, map):
+    new_map = MapFactory(name="A map about bicycle", owner=map.owner)
+    client.login(username=map.owner.username, password="123123")
+    response = client.get(f"{reverse('user_dashboard')}?q=bicycle")
+    assert response.status_code == 200
+    body = response.content.decode()
+    assert map.name not in body
+    assert new_map.name in body
+
+
+def test_user_dashboard_search_empty(client, map):
+    client.login(username=map.owner.username, password="123123")
+    response = client.get(f"{reverse('user_dashboard')}?q=car")
+    assert response.status_code == 200
+    body = response.content.decode()
+    assert map.name not in body
+    assert "No map found." in body
+
+
+def test_user_dashboard_filter_by_tag(client, map):
+    new_map = MapFactory(name="A map about bicycle", owner=map.owner, tags=["cycling"])
+    client.login(username=map.owner.username, password="123123")
+    response = client.get(f"{reverse('user_dashboard')}?tags=cycling")
+    assert response.status_code == 200
+    body = response.content.decode()
+    assert map.name not in body
+    assert new_map.name in body

@@ -4,7 +4,7 @@ import sinon from 'sinon'
 import pkg from 'chai'
 const { expect } = pkg
 
-import { HybridLogicalClock } from '../js/modules/sync/hlc.js'
+import { HybridLogicalClock } from '../js/modules/journal/hlc.js'
 
 describe('HybridLogicalClock', () => {
   let clock
@@ -104,8 +104,7 @@ describe('HybridLogicalClock', () => {
       expect(result.walltime).to.be.least(now)
       if (result.walltime > now) {
         expect(result.nn).to.equal(5)
-      }
-      else {
+      } else {
         expect(result.nn).to.equal(6)
       }
       expect(result.id).to.equal('local')

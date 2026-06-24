@@ -120,7 +120,7 @@ LANGUAGES = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = env("SECRET_KEY", default=None)
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -136,7 +136,7 @@ INSTALLED_APPS = (
     # Django does not find the app config in the default place, so the app is not loaded
     # so the "autodiscover" is not run.
     "agnocomplete.app.AgnocompleteConfig",
-)
+]
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
@@ -158,9 +158,9 @@ PROJECT_DIR = os.path.dirname(os.path.realpath(project_module.__file__))
 ROOT_URLCONF = "umap.urls"
 WSGI_APPLICATION = "umap.wsgi.application"
 
-LOGIN_URL = "/login/"
-LOGOUT_URL = "/logout/"
+LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "login_popup_end"
+LOGOUT_REDIRECT_URL = "/"
 
 STATIC_URL = "/static/"
 MEDIA_URL = "/uploads/"
@@ -229,7 +229,8 @@ TEMPLATES = [
 # Middleware
 # =============================================================================
 
-MIDDLEWARE = (
+MIDDLEWARE = [
+    "umap.middleware.geos_thread_cleanup",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -238,7 +239,7 @@ MIDDLEWARE = (
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "umap.middleware.deprecated_auth_backend",
-)
+]
 
 
 # =============================================================================
@@ -253,6 +254,8 @@ USER_DISPLAY_NAME = "{username}"
 # See https://django-agnocomplete.readthedocs.io/en/latest/autocomplete-definition.html#agnocompletemode
 USER_AUTOCOMPLETE_FIELDS = ["^username"]
 USER_URL_FIELD = "username"
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 TEAM_AUTOCOMPLETE_FIELDS = ['^name']
 
@@ -264,7 +267,7 @@ UMAP_ALLOW_EDIT_PROFILE = env.bool("UMAP_ALLOW_EDIT_PROFILE", default=True)
 
 UMAP_EXTRA_URLS = {
     "routing": "http://www.openstreetmap.org/directions?engine=osrm_car&route={lat},{lng}&locale={locale}#map={zoom}/{lat}/{lng}",  # noqa
-    "ajax_proxy": "/ajax-proxy/?url={url}&ttl={ttl}",
+    "ajax_proxy": "/ajax-proxy/{ttl}/?url={url}",
     "search": "https://photon.komoot.io/api/?",
     "edit_in_osm": "https://www.openstreetmap.org/edit#map={zoom}/{lat}/{lng}",
 }
@@ -280,6 +283,28 @@ UMAP_MAPS_PER_SEARCH = 25
 UMAP_MAPS_PER_PAGE_OWNER = 10
 UMAP_SEARCH_CONFIGURATION = "simple"
 UMAP_HELP_URL = "https://discover.umap-project.org/"
+UMAP_HELP_LINKS = [
+    {
+        "label": _("uMap user documentation"),
+        "url": "https://discover.umap-project.org/",
+        "lang": "en/fr",
+    },
+    {
+        "label": _("Video tutorials"),
+        "url": "https://discover.umap-project.org/videos/",
+        "lang": "en/fr",
+    },
+    {
+        "label": _("OpenStreetMap.org forum"),
+        "url": "https://community.openstreetmap.org/tag/umap",
+        "lang": "en/de",
+    },
+    {
+        "label": _("OpenStreetMap France forum"),
+        "url": "https://forum.openstreetmap.fr/c/utiliser/umap/29",
+        "lang": "fr",
+    },
+]
 USER_MAPS_URL = "user_maps"
 DATABASES = {
     "default": env.db(
@@ -318,20 +343,23 @@ UMAP_READONLY = env("UMAP_READONLY", default=False)
 UMAP_GZIP = True
 LOCALE_PATHS = [os.path.join(PROJECT_DIR, "locale")]
 
-LEAFLET_LONGITUDE = env.int("LEAFLET_LONGITUDE", default=2)
-LEAFLET_LATITUDE = env.int("LEAFLET_LATITUDE", default=51)
+LEAFLET_LONGITUDE = env.float("LEAFLET_LONGITUDE", default=2)
+LEAFLET_LATITUDE = env.float("LEAFLET_LATITUDE", default=51)
 LEAFLET_ZOOM = env.int("LEAFLET_ZOOM", default=6)
+UMAP_PICTOGRAMS_COLLECTIONS = {}
+EXTRA_URL_PATTERNS = []
+AJAX_PROXY_CACHE_DIR = env("AJAX_PROXY_CACHE_DIR", default=None)
 
 
 # =============================================================================
 # Third party app settings
 # =============================================================================
-LOGIN_URL = "login"
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/login/popup/end/"
 
 AUTHENTICATION_BACKENDS = ()
 DEPRECATED_AUTHENTICATION_BACKENDS = []
 
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = env.bool("SOCIAL_AUTH_REDIRECT_IS_HTTPS", default=False)
 SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_KEY = env(
     "SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_KEY", default=""
 )
@@ -368,3 +396,6 @@ LOGGING = {
 REALTIME_ENABLED = env.bool("REALTIME_ENABLED", default=False)
 
 REDIS_URL = env("REDIS_URL", default="redis://localhost:6379")
+
+OPENROUTESERVICE_APIKEY = env("OPENROUTESERVICE_APIKEY", default=None)
+OPENROUTESERVICE_HOST = env("OPENROUTESERVICE_HOST", default=None)

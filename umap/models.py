@@ -12,8 +12,8 @@ from django.urls import reverse
 from django.utils.functional import classproperty
 from django.utils.translation import gettext_lazy as _
 
-from .managers import PublicManager
-from .utils import _urls_for_js
+from .managers import PrivateManager, PublicManager
+from .utils import _urls_for_js, layers_tree, normalize_string
 
 
 # Did not find a clean way to do this in Django
@@ -235,15 +235,21 @@ class Map(NamedModel):
         blank=True, null=True, verbose_name=_("settings"), default=dict
     )
     tags = ArrayField(models.CharField(max_length=200), blank=True, default=list)
+    is_template = models.BooleanField(
+        default=False,
+        verbose_name=_("save as template"),
+        help_text=_("This map is a template map."),
+    )
 
     objects = models.Manager()
     public = PublicManager()
+    private = PrivateManager()
 
     @property
     def description(self):
         try:
             return self.settings["properties"]["description"]
-        except KeyError:
+        except (KeyError, TypeError):
             return ""
 
     @property
@@ -252,15 +258,14 @@ class Map(NamedModel):
 
     @property
     def preview_settings(self):
-        layers = self.datalayers
-        datalayer_data = [c.metadata() for c in layers]
-        map_settings = self.settings
+        map_settings = self.settings or {}
         if "properties" not in map_settings:
             map_settings["properties"] = {}
+        layers = [layer.metadata() for layer in self.datalayers]
         map_settings["properties"].update(
             {
                 "tilelayers": [TileLayer.get_default().json],
-                "datalayers": datalayer_data,
+                "datalayers": layers_tree(layers),
                 "urls": _urls_for_js(),
                 "STATIC_URL": settings.STATIC_URL,
                 "editMode": "disabled",
@@ -270,35 +275,55 @@ class Map(NamedModel):
                 "id": self.pk,
                 "schema": self.extra_schema,
                 "slideshow": {},
+                "defaultLabelKeys": settings.UMAP_LABEL_KEYS,
             }
         )
         return map_settings
+
+    def save(self, *args, **kwargs):
+        # settings is sometimes set to NULL in DB (through empty POST?),
+        # let's be defensive.
+        if self.settings is None:
+            self.settings = {}
+        # Some maps (legacy exports re-imported?) carry
+        # `tilelayer` as a bare id instead of the expected object.
+        props = self.settings.get("properties") or {}
+        if not isinstance(props.get("tilelayer", {}), dict):
+            del props["tilelayer"]
+        super().save(*args, **kwargs)
 
     def move_to_trash(self):
         self.share_status = Map.DELETED
         self.save()
 
     def delete(self, **kwargs):
-        # Explicitely call datalayers.delete, so we can deal with removing files
+        # Explicitly call datalayers.delete, so we can deal with removing files
         # (the cascade delete would not call the model delete method)
         # Use datalayer_set so to get also the deleted ones.
         for datalayer in self.datalayer_set.all():
             datalayer.delete()
         return super().delete(**kwargs)
 
-    def generate_umapjson(self, request):
-        umapjson = self.settings
+    def generate_umapjson(self, request, include_data=True):
+        umapjson = self.settings or {}
         umapjson["type"] = "umap"
+        if "properties" in umapjson:
+            umapjson["properties"].pop("is_template", None)
         umapjson["uri"] = request.build_absolute_uri(self.get_absolute_url())
         datalayers = []
         for datalayer in self.datalayers:
-            with datalayer.geojson.open("rb") as f:
-                layer = json.loads(f.read())
+            layer = {}
+            if include_data:
+                with datalayer.geojson.open("rb") as f:
+                    layer = json.loads(f.read())
             if datalayer.settings:
                 datalayer.settings.pop("id", None)
-                layer["_umap_options"] = datalayer.settings
+                datalayer.settings.pop("parent", None)
+                layer["id"] = datalayer.pk
+                layer["parent"] = datalayer.parent.pk if datalayer.parent else None
+                layer["properties"] = datalayer.settings
             datalayers.append(layer)
-        umapjson["layers"] = datalayers
+        umapjson["layers"] = layers_tree(datalayers, keep_ids=False)
         return umapjson
 
     def get_absolute_url(self):
@@ -414,8 +439,19 @@ class Map(NamedModel):
         new.save()
         for editor in self.editors.all():
             new.editors.add(editor)
-        for datalayer in self.datalayers:
-            datalayer.clone(map_inst=new)
+        saved = {}
+        layers = {dl.pk: dl for dl in self.datalayers}
+
+        def clone_layer(layer):
+            if layer.pk in saved:
+                return
+            if layer.parent_id and layer.parent_id not in saved:
+                clone_layer(layers[layer.parent_id])
+            new_dl = layer.clone(map_inst=new, parent_id=saved.get(layer.parent_id))
+            saved[layer.pk] = new_dl.pk
+
+        for layer in layers.values():
+            clone_layer(layer)
         return new
 
     def get_tags_display(self):
@@ -428,7 +464,11 @@ class Map(NamedModel):
             "iconUrl": {
                 "default": "%sumap/img/marker.svg" % settings.STATIC_URL,
             },
-            "tags": {"choices": sorted(settings.UMAP_TAGS, key=lambda i: i[0])},
+            "tags": {
+                "choices": sorted(
+                    settings.UMAP_TAGS, key=lambda i: normalize_string(i[1])
+                )
+            },
         }
 
 
@@ -492,6 +532,7 @@ class DataLayer(NamedModel):
     uuid = models.UUIDField(unique=True, primary_key=True, editable=False)
     old_id = models.IntegerField(null=True, blank=True)
     map = models.ForeignKey(Map, on_delete=models.CASCADE)
+    parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True)
     editors = models.ManyToManyField(
         settings.AUTH_USER_MODEL, blank=True, verbose_name=_("editors")
     )
@@ -536,33 +577,39 @@ class DataLayer(NamedModel):
         self.geojson.storage.onDatalayerDelete(self)
         return super().delete(**kwargs)
 
+    def _fallback_properties_from_file(self):
+        # For datalayers created before settings were saved in DB
+        try:
+            data = json.loads(self.geojson.read().decode())
+        except FileNotFoundError:
+            data = {}
+        metadata = data.get("_umap_options")
+        if not metadata:
+            metadata = {
+                "name": self.name,
+                "displayOnLoad": self.display_on_load,
+            }
+        # Save it to prevent file reading at each map load.
+        self.settings = metadata
+        # Do not update the modified_at.
+        self.save(update_fields=["settings"])
+        return metadata
+
     def metadata(self, request=None):
         # Retrocompat: minimal settings for maps not saved after settings property
         # has been introduced
-        metadata = self.settings
-        if not metadata:
-            # Fallback to file for old datalayers.
-            try:
-                data = json.loads(self.geojson.read().decode())
-            except FileNotFoundError:
-                data = {}
-            metadata = data.get("_umap_options")
-            if not metadata:
-                metadata = {
-                    "name": self.name,
-                    "displayOnLoad": self.display_on_load,
-                }
-            # Save it to prevent file reading at each map load.
-            self.settings = metadata
-            # Do not update the modified_at.
-            self.save(update_fields=["settings"])
+        properties = self.settings
+        if not properties:
+            properties = self._fallback_properties_from_file()
+        metadata = {"properties": properties}
         if self.old_id:
             metadata["old_id"] = self.old_id
         metadata["id"] = self.pk
         metadata["rank"] = self.rank
-        metadata["editMode"] = "simple" if self.can_edit(request) else "disabled"
+        metadata["parent"] = self.parent.pk if self.parent else None
+        metadata["editMode"] = "advanced" if self.can_edit(request) else "disabled"
         metadata["permissions"] = self.buildPermissions()
-        metadata["_referenceVersion"] = self.reference_version
+        metadata["referenceVersion"] = self.reference_version
         return metadata
 
     def buildPermissions(self):
@@ -585,10 +632,12 @@ class DataLayer(NamedModel):
         ]
         return permissions
 
-    def clone(self, map_inst=None):
+    def clone(self, map_inst=None, parent_id=None):
         new = self.__class__.objects.get(pk=self.pk)
         new._state.adding = True
         new.pk = uuid.uuid4()
+        if parent_id:
+            new.parent_id = parent_id
         if map_inst:
             new.map = map_inst
         new.geojson = File(new.geojson.file.file, name="tmpname")
@@ -617,6 +666,8 @@ class DataLayer(NamedModel):
         or the request.
         """
         if self.edit_status == self.INHERIT:
+            if self.parent:
+                return self.parent.can_edit(request)
             return self.map.can_edit(request)
         can = False
         if not request:

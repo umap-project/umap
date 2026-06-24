@@ -62,7 +62,7 @@ DATALAYER_DATA = {
             },
         },
     ],
-    "_umap_options": {
+    "properties": {
         "displayOnLoad": True,
         "browsable": True,
         "name": "Calque 1",
@@ -159,7 +159,7 @@ def test_filter_works_with_variable_in_labelKey(live_server, page, map):
     map.settings["properties"]["onLoadPanel"] = "databrowser"
     map.save()
     data = deepcopy(DATALAYER_DATA)
-    data["_umap_options"]["labelKey"] = "{name} ({bar})"
+    data["properties"]["labelKey"] = "{name} ({bar})"
     DataLayerFactory(map=map, data=data)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#2/19/-2")
     expect(page.get_by_title("Features in this layer: 3")).to_be_visible()
@@ -353,6 +353,43 @@ def test_should_redraw_list_on_feature_delete(live_server, openmap, page, bootst
     expect(buttons).to_have_count(3)
 
 
+def test_should_change_feature_title_and_color_on_edit(
+    live_server, openmap, page, bootstrap
+):
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#2/19/-2")
+    expect(page.locator(".umap-browser .feature.marker")).to_contain_text(
+        "one point in france"
+    )
+    page.locator(".leaflet-marker-icon").click(modifiers=["Shift"])
+    page.locator('input[name="name"]').fill("changed name")
+    expect(page.locator(".umap-browser .feature.marker")).to_contain_text(
+        "changed name"
+    )
+
+    # Change color
+    expect(
+        page.get_by_role("listitem").filter(has_text="changed name").locator("i")
+    ).to_have_css("background-color", "rgb(0, 0, 139)")
+    page.get_by_role("heading", name="Shape properties").click()
+    page.locator(".umap-field-color").get_by_role("button", name="define").first.click()
+    page.get_by_title("Crimson").click()
+    expect(
+        page.get_by_role("listitem").filter(has_text="changed name").locator("i")
+    ).to_have_css("background-color", "rgb(220, 20, 60)")
+
+    # Undo color
+    page.locator(".edit-undo").click()
+    expect(
+        page.get_by_role("listitem").filter(has_text="changed name").locator("i")
+    ).to_have_css("background-color", "rgb(0, 0, 139)")
+
+    # Undo title change
+    page.locator(".edit-undo").click()
+    expect(page.locator(".umap-browser .feature.marker")).to_contain_text(
+        "one point in france"
+    )
+
+
 def test_should_show_header_for_display_on_load_false(
     live_server, page, bootstrap, map, datalayer
 ):
@@ -455,31 +492,31 @@ def test_main_toolbox_toggle_all_layers(live_server, map, page):
                 "geometry": {"type": "Point", "coordinates": [3.35, 46.95]},
             },
         ],
-        "_umap_options": {"displayOnLoad": False},
+        "properties": {"displayOnLoad": False},
     }
     DataLayerFactory(map=map, data=data, settings={"displayOnLoad": False})
     page.goto(f"{live_server.url}{map.get_absolute_url()}#10/46.93/3.33")
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_have_count(2)
     # Only one is off
-    expect(page.locator(".datalayer.off")).to_have_count(1)
+    expect(page.locator(".datalayer summary.off")).to_have_count(1)
 
     # Click on button
     page.locator(".umap-browser").get_by_title("Show/hide all layers").click()
     # Should have hidden the two other layers
-    expect(page.locator(".datalayer.off")).to_have_count(3)
+    expect(page.locator(".datalayer summary.off")).to_have_count(3)
     expect(markers).to_have_count(0)
 
     # Click again
     page.locator(".umap-browser").get_by_title("Show/hide all layers").click()
     # Should shown all layers
-    expect(page.locator(".datalayer.off")).to_have_count(0)
+    expect(page.locator(".datalayer summary.off")).to_have_count(0)
     expect(markers).to_have_count(3)
 
     # Click again
     page.locator(".umap-browser").get_by_title("Show/hide all layers").click()
     # Should hidden again all layers
-    expect(page.locator(".datalayer.off")).to_have_count(3)
+    expect(page.locator(".datalayer summary.off")).to_have_count(3)
     expect(markers).to_have_count(0)
 
 
@@ -489,3 +526,135 @@ def test_honour_the_label_fields_settings(live_server, map, page, bootstrap, set
     expect(page.locator(".panel").get_by_text("this is label one")).to_be_visible()
     expect(page.locator(".panel").get_by_text("this is label two")).to_be_visible()
     expect(page.locator(".panel").get_by_text("this is label three")).to_be_visible()
+
+
+def test_can_toggle_visibility_from_parent(live_server, map, page):
+    map.settings["properties"]["onLoadPanel"] = "databrowser"
+    map.save()
+    root1 = DataLayerFactory(name="root 1", rank=0, map=map, data={}, group=True)
+    root2 = DataLayerFactory(
+        name="root 2",
+        rank=1,
+        map=map,
+        data={
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": {"type": "Point", "coordinates": [4, 49]},
+                    "properties": {"name": "root2 feature"},
+                }
+            ]
+        },
+    )
+    p1_child2 = DataLayerFactory(
+        name="p1 child 2",
+        rank=1,
+        parent=root1,
+        map=map,
+        data={
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": {"type": "Point", "coordinates": [5, 48]},
+                    "properties": {"name": "child2 feature"},
+                }
+            ]
+        },
+    )
+    p1_child1 = DataLayerFactory(
+        name="p1 child 1",
+        rank=0,
+        parent=root1,
+        map=map,
+        data={},
+        display_on_load=False,
+        group=True,
+    )
+    p1_grandchild1 = DataLayerFactory(
+        name="p1 grandchild 1",
+        rank=0,
+        parent=p1_child1,
+        map=map,
+        data={
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": {"type": "Point", "coordinates": [4, 48]},
+                    "properties": {"name": "grandchild feature"},
+                }
+            ]
+        },
+    )
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page.locator(f"summary[data-id='{root1.pk}']")).not_to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{root2.pk}']")).not_to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_child2.pk}']")).not_to_contain_class(
+        "off"
+    )
+    expect(page.locator(f"summary[data-id='{p1_child1.pk}']")).to_contain_class("off")
+    # Should inherit its parent status
+    expect(page.locator(f"summary[data-id='{p1_grandchild1.pk}']")).to_contain_class(
+        "off"
+    )
+    expect(page.get_by_text("grandchild feature")).to_be_hidden()
+    expect(page.get_by_text("child2 feature")).to_be_visible()
+    expect(page.get_by_text("root2 feature")).to_be_visible()
+
+    # Clicking on root 1 should also hide child2
+    page.locator(f"summary[data-id='{root1.pk}'] .icon-eye").click()
+    expect(page.locator(f"summary[data-id='{root1.pk}']")).to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_child2.pk}']")).to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_child1.pk}']")).to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_grandchild1.pk}']")).to_contain_class(
+        "off"
+    )
+    expect(page.get_by_text("grandchild feature")).to_be_hidden()
+    expect(page.get_by_text("child2 feature")).to_be_hidden()
+    expect(page.get_by_text("root2 feature")).to_be_visible()
+
+    # Clicking on child 1 should also show grandchild
+    page.locator(f"summary[data-id='{p1_child1.pk}'] .icon-eye").click()
+    expect(page.locator(f"summary[data-id='{root1.pk}']")).not_to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_child2.pk}']")).to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_child1.pk}']")).not_to_contain_class(
+        "off"
+    )
+    expect(
+        page.locator(f"summary[data-id='{p1_grandchild1.pk}']")
+    ).not_to_contain_class("off")
+    expect(page.get_by_text("grandchild feature")).to_be_visible()
+    expect(page.get_by_text("child2 feature")).to_be_hidden()
+    expect(page.get_by_text("root2 feature")).to_be_visible()
+
+    # Hiding again child 1 should also hide root1
+    page.locator(f"summary[data-id='{p1_child1.pk}'] .icon-eye").click()
+    expect(page.locator(f"summary[data-id='{root1.pk}']")).to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_child2.pk}']")).to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_child1.pk}']")).to_contain_class("off")
+    expect(page.locator(f"summary[data-id='{p1_grandchild1.pk}']")).to_contain_class(
+        "off"
+    )
+    expect(page.get_by_text("grandchild feature")).to_be_hidden()
+    expect(page.get_by_text("child2 feature")).to_be_hidden()
+    expect(page.get_by_text("root2 feature")).to_be_visible()
+
+
+def test_layers_should_be_closed_by_default(live_server, page, map):
+    DataLayerFactory(map=map, data=DATALAYER_DATA)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    panel = page.locator(".panel.left.on")
+
+    # In default mode
+    page.get_by_title("Open browser").click()
+    expect(panel.locator(".umap-browser")).to_be_visible()
+    expect(page.get_by_text("one point in france")).to_be_hidden()
+    expect(page.get_by_text("one line in new zeland")).to_be_hidden()
+    expect(page.get_by_text("one polygon in greenland")).to_be_hidden()
+
+    # In browse data mode
+    page.locator("#map").click(button="right")
+    page.get_by_text("Browse data").click()
+    expect(panel.locator(".umap-browser")).to_be_visible()
+    expect(page.get_by_text("one point in france")).to_be_visible()
+    expect(page.get_by_text("one line in new zeland")).to_be_visible()
+    expect(page.get_by_text("one polygon in greenland")).to_be_visible()

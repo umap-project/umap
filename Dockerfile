@@ -38,7 +38,7 @@ WORKDIR /srv/umap
 
 COPY . /srv/umap
 
-RUN /venv/bin/pip install .[docker,s3,sync]
+RUN /venv/bin/pip install .[deploy,s3,sync]
 
 FROM common
 

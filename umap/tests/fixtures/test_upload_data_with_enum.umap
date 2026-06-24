@@ -1,0 +1,151 @@
+{
+  "type": "umap",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      2.243270874023438,
+      47.61958693358351
+    ]
+  },
+  "properties": {
+    "name": "Map with Enum",
+    "tags": [
+      "tourism",
+      "cycling"
+    ],
+    "zoom": 10,
+    "center": {
+      "lat": 47.61958693358351,
+      "lng": 2.243270874023438
+    }
+  },
+  "layers": [
+    {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "geometry": {
+            "coordinates": [
+              4.492482,
+              47.539039
+            ],
+            "type": "Point"
+          },
+          "properties": {
+            "name": "I'm a foo",
+            "toilets": true,
+            "features": "foo"
+          },
+          "id": "tAuzC"
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              3.496243506779722,
+              47.86537360504818,
+              133.827948907274
+            ]
+          },
+          "properties": {
+            "name": "I'm a bar",
+            "toilets": false,
+            "features": "bar"
+          },
+          "id": "tAuzD"
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              0.7150469999999999,
+              49.23001199999999,
+              0
+            ]
+          },
+          "properties": {
+            "name": "I'm another foo",
+            "toilets": false,
+            "features": "foo"
+          },
+          "id": "tAuzE"
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "coordinates": [
+              4.931327,
+              48.022719
+            ],
+            "type": "Point"
+          },
+          "properties": {
+            "name": "I've no features"
+          },
+          "id": "RTaA8"
+        }
+      ],
+      "_umap_options": {
+        "name": "van.spots",
+        "rank": 0,
+        "color": "DodgerBlue",
+        "rules": [
+          {
+            "name": "has toilets",
+            "condition": "toilets=true",
+            "properties": {
+              "color": "green"
+            }
+          },
+          {
+            "name": "has foo",
+            "condition": "features=foo",
+            "properties": {
+              "color": "MediumOrchid"
+            }
+          },
+          {
+            "name": "has bar",
+            "condition": "features=bar",
+            "properties": {
+              "color": "red"
+            }
+          }
+        ],
+        "fields": [
+          {
+            "key": "name",
+            "type": "String"
+          },
+          {
+            "key": "toilets",
+            "type": "Boolean"
+          },
+          {
+            "key": "features",
+            "type": "Enum"
+          }
+        ],
+        "weight": 12,
+        "filters": [
+          {
+            "widget": "Switch",
+            "fieldKey": "toilets"
+          },
+          {
+            "widget": "Checkbox",
+            "fieldKey": "features"
+          }
+        ],
+        "editMode": "advanced",
+        "browsable": true,
+        "iconClass": "LargeCircle",
+        "inCaption": true,
+        "remoteData": {}
+      }
+    }
+  ]
+}

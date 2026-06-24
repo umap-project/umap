@@ -1,42 +1,41 @@
 import {
-  DomUtil,
-  Util as LeafletUtil,
-  latLngBounds,
-  stamp,
-} from '../../vendors/leaflet/leaflet-src.esm.js'
-import {
   uMapAlert as Alert,
   uMapAlertCreation as AlertCreation,
 } from '../components/alerts/alert.js'
-import Browser from './browser.js'
-import Caption from './caption.js'
+import * as Clipboard from './clipboard.js'
+import { Fields } from './data/fields.js'
 import { DataLayer } from './data/layer.js'
-import Facets from './facets.js'
+import * as DOMUtils from './domutils.js'
+import DropControl from './drop.js'
+import { Filters, migrateLegacyFilters } from './filters.js'
 import { MutatingForm } from './form/builder.js'
 import { Formatter } from './formatter.js'
 import Help from './help.js'
 import { getLocale, setLocale, translate } from './i18n.js'
-import Importer from './importer.js'
+import * as Icon from './icon.js'
+import { LayerManager } from './managers.js'
 import Orderable from './orderable.js'
 import { MapPermissions } from './permissions.js'
-import { LeafletMap } from './rendering/map.js'
+import { LeafletProxy } from './rendering/map.js'
 import { Request, ServerRequest } from './request.js'
 import Rules from './rules.js'
 import { SCHEMA } from './schema.js'
-import Share from './share.js'
 import Slideshow from './slideshow.js'
-import { SyncEngine } from './sync/engine.js'
+import { Journal } from './journal/engine.js'
 import { BottomBar, EditBar, TopBar } from './ui/bar.js'
 import ContextMenu from './ui/contextmenu.js'
+import { ControlManager } from './ui/controls.js'
 import Dialog from './ui/dialog.js'
+import Hash from './ui/hash.js'
+import Loader from './ui/loader.js'
 import { EditPanel, FullPanel, Panel } from './ui/panel.js'
 import Tooltip from './ui/tooltip.js'
 import URLs from './urls.js'
 import * as Utils from './utils.js'
-import { DataLayerManager } from './managers.js'
 
-export default class Umap {
+export default class Umap extends Utils.WithEvents {
   constructor(element, geojson) {
+    super()
     // We need to call async function in the init process,
     // the init itself does not need to be awaited, but some calls
     // in the process must be blocker
@@ -48,6 +47,7 @@ export default class Umap {
   }
 
   async init(element, geojson) {
+    this.migrateLegacyProperties(geojson.properties)
     this.properties = Object.assign(
       {
         enableMarkerDraw: true,
@@ -85,64 +85,66 @@ export default class Umap {
     this.properties.zoomControl = false
     this.properties.fullscreenControl = false
 
-    this._leafletMap = new LeafletMap(this, element)
+    this.mapProxy = new LeafletProxy(this, element)
+    this.uiContainer = Utils.loadTemplate('<div class="umap-ui-container"></div>')
+    this.mapProxy.container.appendChild(this.uiContainer)
+    this.controlManager = new ControlManager(this)
+    this.drop = new DropControl(this, this.mapProxy.container)
 
     this.properties.zoomControl = zoomControl !== undefined ? zoomControl : true
     this.properties.fullscreenControl =
       fullscreenControl !== undefined ? fullscreenControl : true
 
     if (center) {
-      this._leafletMap.options.center = this.properties.center =
-        this._leafletMap.latLng(center)
+      this.properties.center = this.mapProxy.latLng(center)
     }
 
     // Needed for permissions
-    this.syncEngine = new SyncEngine(this)
-    this.sync = this.syncEngine.proxy(this)
+    this.journalEngine = new Journal(this)
+    this.journal = this.journalEngine.proxy(this)
 
     // Needed to render controls
     this.permissions = new MapPermissions(this)
     this.urls = new URLs(this.properties.urls)
-    this.slideshow = new Slideshow(this, this._leafletMap)
+    this.slideshow = new Slideshow(this)
 
     if (geojson.properties.schema) this.overrideSchema(geojson.properties.schema)
+    if (geojson.properties.ttl) {
+      SCHEMA.ttl.choices = Array.from(Object.entries(geojson.properties.ttl))
+      SCHEMA.ttl.default = geojson.properties.default_ttl
+    }
 
     // Do not display in an iframe.
     if (this.isEmbed) {
       this.properties.homeControl = false
     }
 
-    this._leafletMap.setup()
+    this.loader = new Loader(this.uiContainer)
+    if (this.properties.hash) {
+      this.hash = new Hash(this)
+    }
+    // initCenter (in setup) needs the locate control to exist.
+    this.controlManager.init()
+    this.mapProxy.render()
+    this.controlManager.update()
 
-    this.panel = new Panel(this, this._leafletMap)
+    this.panel = new Panel(this)
     this.dialog = new Dialog({ className: 'dark' })
-    this.topBar = new TopBar(this, this._leafletMap._controlContainer)
-    this.bottomBar = new BottomBar(
-      this,
-      this.slideshow,
-      this._leafletMap._controlContainer
-    )
-    this.editBar = new EditBar(
-      this,
-      this._leafletMap,
-      this._leafletMap._controlContainer
-    )
-    this.tooltip = new Tooltip(this._leafletMap._controlContainer)
+    this.topBar = new TopBar(this, this.uiContainer)
+    this.bottomBar = new BottomBar(this, this.slideshow, this.uiContainer)
+    this.editBar = new EditBar(this, this.uiContainer)
+    this.tooltip = new Tooltip()
     this.contextmenu = new ContextMenu()
-    this.editContextmenu = new ContextMenu({ className: 'dark', orientation: 'rows' })
     this.server = new ServerRequest()
     this.request = new Request()
-    this.facets = new Facets(this)
-    this.browser = new Browser(this, this._leafletMap)
-    this.caption = new Caption(this, this._leafletMap)
-    this.importer = new Importer(this)
-    this.share = new Share(this)
-    this.rules = new Rules(this)
+    this.fields = new Fields(this, this.dialog)
+    this.filters = new Filters(this, this)
+    this.rules = new Rules(this, this)
 
     if (this.hasEditMode()) {
-      this.editPanel = new EditPanel(this, this._leafletMap)
-      this.fullPanel = new FullPanel(this, this._leafletMap)
-      this._leafletMap.initEditTools()
+      this.editPanel = new EditPanel(this)
+      this.fullPanel = new FullPanel(this)
+      this.mapProxy.initEditTools()
       this.topBar.setup()
       this.editBar.setup()
     }
@@ -161,18 +163,15 @@ export default class Umap {
     ) {
       this.properties.slideshow.active = true
     }
-    if (this.properties.advancedFilterKey) {
-      this.properties.facetKey = this.properties.advancedFilterKey
-      delete this.properties.advancedFilterKey
-    }
 
     // Global storage for retrieving datalayers and features.
-    this.datalayers = new DataLayerManager()
+    this.layers = new LayerManager()
     this.featuresIndex = {}
 
     this.formatter = new Formatter(this)
 
     this.initDataLayers()
+    this.on('datalayer:changed', () => this.onDataLayersChanged())
 
     if (this.properties.displayCaptionOnLoad) {
       // Retrocompat
@@ -205,13 +204,14 @@ export default class Umap {
       }
       this._defaultExtent = true
       this.properties.name = translate('Untitled map')
+      await this.loadTemplateFromQueryString()
       await this.loadDataFromQueryString()
     }
 
     if (!this.properties.noControl) {
       this.initShortcuts()
-      this._leafletMap.on('contextmenu', (e) => this.onContextMenu(e))
-      this.onceDataLoaded(this.setViewFromQueryString)
+      this.on('map:contextmenu', (event) => this.onContextMenu(event))
+      this.onceDataLoaded(() => this.setViewFromQueryString())
       this.bottomBar.setup()
       this.propagate()
     }
@@ -219,8 +219,12 @@ export default class Umap {
     window.onbeforeunload = () => (this.editEnabled && this.isDirty) || null
   }
 
+  get name() {
+    return this.properties.name
+  }
+
   get isDirty() {
-    return this.sync._undoManager.isDirty()
+    return this.journal._undoManager.isDirty()
   }
 
   get editedFeature() {
@@ -262,43 +266,48 @@ export default class Umap {
   }
 
   setPropertiesFromQueryString() {
-    const asBoolean = (key) => {
-      const value = this.searchParams.get(key)
+    const asBoolean = (key, value) => {
       if (value !== undefined && value !== null) {
         this.properties[key] = value === '1' || value === 'true'
       }
     }
-    const asNullableBoolean = (key) => {
+    const asNullableBoolean = (key, value) => {
       if (this.searchParams.has(key)) {
-        let value = this.searchParams.get(key)
         if (value === 'null') value = null
         else if (value === '0' || value === 'false') value = false
         else value = true
         this.properties[key] = value
       }
     }
-    const asNumber = (key) => {
-      const value = +this.searchParams.get(key)
+    const asNumber = (key, value) => {
+      value = +value
       if (!Number.isNaN(value)) this.properties[name] = value
     }
     // FIXME retrocompat
     asBoolean('displayDataBrowserOnLoad')
     asBoolean('displayCaptionOnLoad')
-    for (const [key, schema] of Object.entries(SCHEMA)) {
+    const setKey = (schema, key, value) => {
       switch (schema.type) {
         case Boolean:
-          if (schema.nullable) asNullableBoolean(key)
-          else asBoolean(key)
+          if (schema.nullable) asNullableBoolean(key, value)
+          else asBoolean(key, value)
           break
         case Number:
-          asNumber(key)
+          asNumber(key, value)
           break
         case String: {
           if (this.searchParams.has(key)) {
-            const value = this.searchParams.get(key)
             if (value !== undefined) this.properties[key] = value
             break
           }
+        }
+      }
+    }
+    for (const [key, schema] of Object.entries(SCHEMA)) {
+      setKey(schema, key, this.searchParams.get(key))
+      if (schema.legacy) {
+        for (const oldKey of schema.legacy) {
+          setKey(schema, key, this.searchParams.get(oldKey))
         }
       }
     }
@@ -313,26 +322,30 @@ export default class Umap {
 
   async setViewFromQueryString() {
     if (this.properties.noControl) return
-    // TODO: move to a "initPanel" function
-    if (this.searchParams.has('share')) {
-      this.share.open()
-    } else if (this.properties.onLoadPanel === 'databrowser') {
-      this.panel.setDefaultMode('expanded')
-      this.openBrowser('data')
-    } else if (this.properties.onLoadPanel === 'datalayers') {
-      this.panel.setDefaultMode('condensed')
-      this.openBrowser('layers')
-    } else if (this.properties.onLoadPanel === 'datafilters') {
-      this.panel.setDefaultMode('expanded')
-      this.openBrowser('filters')
-    } else if (this.properties.onLoadPanel === 'caption') {
-      this.panel.setDefaultMode('condensed')
-      this.openCaption()
-    }
-    // Comes after default panels, so if it opens in a panel it will
-    // take precedence.
+    // If a feature in the query string opens in umap.panel (popupShape === 'Panel'),
+    // skip the default panel: it would race with the feature in the lazy era.
+    // Other popup shapes coexist fine.
     const slug = this.searchParams.get('feature')
-    if (slug && this.featuresIndex[slug]) this.featuresIndex[slug].view()
+    const feature = slug ? this.featuresIndex[slug] : null
+    const featureOwnsPanel = feature?.getOption('popupShape') === 'Panel'
+    if (!featureOwnsPanel) {
+      if (this.searchParams.has('share')) {
+        this.loadShare().then((share) => share.open())
+      } else if (this.properties.onLoadPanel === 'databrowser') {
+        this.panel.setDefaultMode('expanded')
+        this.openBrowser('data')
+      } else if (this.properties.onLoadPanel === 'datalayers') {
+        this.panel.setDefaultMode('condensed')
+        this.openBrowser('layers')
+      } else if (this.properties.onLoadPanel === 'datafilters') {
+        this.panel.setDefaultMode('expanded')
+        this.openBrowser('filters')
+      } else if (this.properties.onLoadPanel === 'caption') {
+        this.panel.setDefaultMode('condensed')
+        this.openCaption()
+      }
+    }
+    if (feature) feature.view()
     if (this.searchParams.has('edit')) {
       if (this.hasEditMode()) this.enableEdit()
       // Sometimes users share the ?edit link by mistake, let's remove
@@ -349,6 +362,50 @@ export default class Umap {
     }
   }
 
+  async loadImporter() {
+    if (!this.importer) {
+      const Importer = (await import('./importer.js')).default
+      this.importer = new Importer(this)
+    }
+    return this.importer
+  }
+
+  async loadShare() {
+    if (!this.share) {
+      const Share = (await import('./share.js')).default
+      this.share = new Share(this)
+    }
+    return this.share
+  }
+
+  async loadBrowser() {
+    if (!this.browser) {
+      const Browser = (await import('./browser.js')).default
+      this.browser = new Browser(this)
+    }
+    return this.browser
+  }
+
+  async loadCaption() {
+    if (!this.caption) {
+      const Caption = (await import('./caption.js')).default
+      this.caption = new Caption(this)
+    }
+    return this.caption
+  }
+
+  async loadTemplateFromQueryString() {
+    const templateUrl = this.searchParams.get('templateUrl')
+    if (templateUrl) {
+      this.loadImporter().then((importer) => {
+        importer.build()
+        importer.url = templateUrl
+        importer.format = 'umap'
+        importer.submit()
+      })
+    }
+  }
+
   async loadDataFromQueryString() {
     let data = this.searchParams.get('data')
     const dataUrls = this.searchParams.getAll('dataUrl')
@@ -358,19 +415,27 @@ export default class Umap {
         dataUrl = decodeURIComponent(dataUrl)
         dataUrl = this.renderUrl(dataUrl)
         dataUrl = this.proxyUrl(dataUrl)
-        const datalayer = this.createDirtyDataLayer()
+        const datalayer = this.createDataLayer()
         await datalayer
           .importFromUrl(dataUrl, dataFormat)
           .then(() => datalayer.zoomTo())
       }
     } else if (data) {
       data = decodeURIComponent(data)
-      const datalayer = this.createDirtyDataLayer()
+      const datalayer = this.createDataLayer()
       await datalayer.importRaw(data, dataFormat).then(() => datalayer.zoomTo())
     }
   }
 
-  getOwnContextMenuItems(event) {
+  hasFilters() {
+    return this.filters.size || this.layers.tree.some((d) => d.filters.size)
+  }
+
+  hasActiveFilters() {
+    return this.filters.isActive() || this.layers.tree.some((d) => d.filters.isActive())
+  }
+
+  getOwnContextMenu(event) {
     const items = []
     if (this.hasEditMode()) {
       if (this.editEnabled) {
@@ -383,19 +448,23 @@ export default class Umap {
         if (this.properties.enableMarkerDraw) {
           items.push({
             label: this.help.displayLabel('DRAW_MARKER'),
-            action: () => this._leafletMap.editTools.startMarker(),
+            action: () => this.fire('draw:marker'),
           })
         }
         if (this.properties.enablePolylineDraw) {
           items.push({
-            label: this.help.displayLabel('DRAW_POLYGON'),
-            action: () => this._leafletMap.editTools.startPolygon(),
+            label: this.help.displayLabel('DRAW_LINE'),
+            action: () => this.fire('draw:polyline'),
           })
         }
         if (this.properties.enablePolygonDraw) {
           items.push({
-            label: this.help.displayLabel('DRAW_LINE'),
-            action: () => this._leafletMap.editTools.startPolyline(),
+            label: this.help.displayLabel('DRAW_POLYGON'),
+            action: () => this.fire('draw:polygon'),
+          })
+          items.push({
+            label: this.help.displayLabel('DRAW_RECTANGLEPOLYGONAT'),
+            action: () => this.fire('draw:rectanglepolygonat'),
           })
         }
         items.push('-')
@@ -423,7 +492,7 @@ export default class Umap {
         action: () => this.openBrowser('data'),
       }
     )
-    if (this.properties.facetKey) {
+    if (this.hasFilters()) {
       items.push({
         label: translate('Filter data'),
         action: () => this.openBrowser('filters'),
@@ -442,28 +511,46 @@ export default class Umap {
     return items
   }
 
-  getSharedContextMenuItems(event) {
-    const items = []
+  getSharedContextMenu(event) {
+    const latlng = `${event.latlng.lat.toFixed(6)},${event.latlng.lng.toFixed(6)}`
+    const items = [
+      {
+        label: latlng,
+        action: () => Clipboard.copy(latlng),
+      },
+    ]
     if (this.properties.urls.routing) {
-      items.push('-', {
+      items.push({
         label: translate('Directions from here'),
         action: () => this.openExternalRouting(event),
       })
     }
+    if (this.properties.ORSAPIKey) {
+      items.push({
+        label: translate('Compute isochrone from here'),
+        action: () => this.askForIsochrone(event),
+      })
+    }
     if (this.properties.urls.edit_in_osm) {
-      items.push('-', {
+      items.push({
         label: translate('Edit in OpenStreetMap'),
         action: () => this.editInOSM(event),
       })
     }
+    items.push({
+      label: translate('Open in OpenStreetMap'),
+      action: () => this.openInOSM(event),
+    })
+    if (items.length) items.unshift('-')
     return items
   }
 
-  onContextMenu(event) {
-    const items = this.getOwnContextMenuItems(event).concat(
-      this.getSharedContextMenuItems(event)
+  onContextMenu(umapEvent) {
+    const mapEvent = umapEvent.detail.event
+    const items = this.getOwnContextMenu(mapEvent).concat(
+      this.getSharedContextMenu(mapEvent)
     )
-    this.contextmenu.open(event.originalEvent, items)
+    this.contextmenu.open(mapEvent.originalEvent, items)
   }
 
   // Merge the given schema with the default one
@@ -475,7 +562,7 @@ export default class Umap {
   }
 
   search() {
-    if (this._leafletMap._controls.search) this._leafletMap._controls.search.open()
+    this.controlManager.controls.search?.onClick()
   }
 
   hasEditMode() {
@@ -492,15 +579,18 @@ export default class Umap {
     return SCHEMA[key]?.default
   }
 
+  getColor() {
+    return this.getProperty('color')
+  }
+
   getOption(key, feature) {
-    // TODO: remove when umap.forms.js is refactored and does not call blindly
-    // obj.getOption anymore
+    // TODO: remove when field.js does not call blindly obj.getOption anymore
     return this.getProperty(key, feature)
   }
 
   getGeoContext() {
-    const bounds = this._leafletMap.getBounds()
-    const center = this._leafletMap.getCenter()
+    const bounds = this.mapProxy.bounds
+    const center = this.mapProxy.center
     const context = {
       bbox: bounds.toBBoxString(),
       north: bounds.getNorthEast().lat,
@@ -509,7 +599,7 @@ export default class Umap {
       west: bounds.getSouthWest().lng,
       lat: center.lat,
       lng: center.lng,
-      zoom: this._leafletMap.getZoom(),
+      zoom: this.mapProxy.zoom,
     }
     context.left = context.west
     context.bottom = context.south
@@ -526,12 +616,10 @@ export default class Umap {
     const shortcuts = {
       Escape: {
         do: () => {
-          if (this.importer.dialog.visible) {
+          if (this.importer?.dialog.visible) {
             this.importer.dialog.close()
-          } else if (this.editEnabled && this._leafletMap.editTools.drawing()) {
-            this._leafletMap.editTools.onEscape()
-          } else if (this._leafletMap.measureTools.enabled()) {
-            this._leafletMap.measureTools.stopDrawing()
+          } else if (this.mapProxy.onEscape()) {
+            // Already done by mapProxy
           } else if (this.fullPanel?.isOpen()) {
             this.fullPanel?.close()
           } else if (this.editPanel?.isOpen()) {
@@ -559,31 +647,35 @@ export default class Umap {
       },
       'Ctrl+z': {
         if: () => this.editEnabled && !Utils.isWritable(event.target),
-        do: () => this.sync._undoManager.undo(),
+        do: () => this.journal._undoManager.undo(),
       },
       'Ctrl+Shift+Z': {
         if: () => this.editEnabled && !Utils.isWritable(event.target),
-        do: () => this.sync._undoManager.redo(),
+        do: () => this.journal._undoManager.redo(),
       },
       'Ctrl+m': {
         if: () => this.editEnabled,
-        do: () => this._leafletMap.editTools.startMarker(),
+        do: () => this.fire('draw:marker'),
       },
       'Ctrl+p': {
         if: () => this.editEnabled,
-        do: () => this._leafletMap.editTools.startPolygon(),
+        do: () => this.fire('draw:polygon'),
+      },
+      'Ctrl+r': {
+        if: () => this.editEnabled,
+        do: () => this.fire('draw:rect-drag'),
       },
       'Ctrl+l': {
         if: () => this.editEnabled,
-        do: () => this._leafletMap.editTools.startPolyline(),
+        do: () => this.fire('draw:polyline'),
       },
       'Ctrl+i': {
         if: () => this.editEnabled,
-        do: () => this.importer.open(),
+        do: () => this.openImporter(),
       },
       'Ctrl+o': {
         if: () => this.editEnabled,
-        do: () => this.importer.openFiles(),
+        do: () => this.openFilesImporter(),
       },
       'Ctrl+h': {
         if: () => this.editEnabled,
@@ -606,16 +698,28 @@ export default class Umap {
     document.addEventListener('keydown', onKeyDown)
   }
 
+  openImporter() {
+    this.loadImporter().then((importer) => {
+      importer.open()
+    })
+  }
+
+  openFilesImporter() {
+    this.loadImporter().then((importer) => {
+      importer.openFiles()
+    })
+  }
+
   async initDataLayers(datalayers) {
     datalayers = datalayers || this.properties.datalayers
-    for (const options of datalayers) {
+    for (const spec of datalayers) {
       // `false` to not propagate syncing elements served from uMap
-      this.createDataLayer(options, false)
+      const datalayer = this.createDataLayer(spec, false)
     }
     this.datalayersLoaded = true
     this.fire('datalayersloaded')
     const toLoad = []
-    for (const datalayer of this.datalayers.active()) {
+    for (const datalayer of this.layers.tree) {
       if (datalayer.showAtLoad()) toLoad.push(() => datalayer.show())
     }
     while (toLoad.length) {
@@ -627,83 +731,91 @@ export default class Umap {
     this.fire('dataloaded')
   }
 
-  createDataLayer(options = {}, sync = true) {
-    options.name =
-      options.name || `${translate('Layer')} ${this.datalayers.count() + 1}`
-    const datalayer = new DataLayer(this, this._leafletMap, options)
+  createDataLayer(spec = {}, sync = true) {
+    if (!spec.properties && spec._umap_options) {
+      spec.properties = spec._umap_options
+    }
+    if (!spec.properties && spec._storage) {
+      spec.properties = spec._storage
+    }
+    delete spec._storage
+    delete spec._umap_options
+
+    const datalayer = new DataLayer(this, spec)
+    if (spec.features) {
+      datalayer.fromUmapGeoJSON(spec)
+    }
 
     if (sync !== false) {
-      datalayer.sync.upsert(datalayer.options)
+      datalayer.journal.upsert({
+        id: datalayer.id,
+        rank: datalayer.rank,
+        parent: datalayer.parentId,
+        properties: datalayer.properties,
+      })
     }
-    return datalayer
-  }
+    for (const childSpec of spec.layers || []) {
+      childSpec.parent = datalayer.id
+      this.createDataLayer(childSpec, sync)
+    }
 
-  createDirtyDataLayer(options) {
-    const datalayer = this.createDataLayer(options, true)
     return datalayer
   }
 
   newDataLayer() {
-    const datalayer = this.createDirtyDataLayer({})
+    const datalayer = this.createDataLayer()
     datalayer.edit()
   }
 
+  newGroup() {
+    const group = this.createDataLayer({ properties: { group: true } })
+    group.edit()
+  }
+
   reindexDataLayers() {
-    this.datalayers.active().map((datalayer) => datalayer.reindex())
-    this.onDataLayersChanged()
+    this.layers.tree.map((datalayer) => datalayer.reindex())
+    this.fire('datalayer:changed')
   }
 
-  reorderDataLayers() {
-    const parent = this._leafletMap.getPane('overlayPane')
-    const datalayers = Object.values(this.datalayers)
-      .filter((datalayer) => !datalayer._isDeleted)
-      .sort((datalayer1, datalayer2) => datalayer1.rank > datalayer2.rank)
-    for (const datalayer of datalayers) {
-      const child = parent.querySelector(`[data-id="${datalayer.id}"]`)
-      parent.appendChild(child)
-    }
-  }
-
-  onceDatalayersLoaded(callback, context) {
+  onceDatalayersLoaded(callback) {
     // Once datalayers **metadata** have been loaded
     if (this.datalayersLoaded) {
-      callback.call(context || this, this)
+      callback()
     } else {
-      this._leafletMap.once('datalayersloaded', callback, context)
+      this.once('datalayersloaded', callback)
     }
     return this
   }
 
-  onceDataLoaded(callback, context) {
+  onceDataLoaded(callback) {
     // Once datalayers **data** have been loaded
     if (this.dataloaded) {
-      callback.call(context || this, this)
+      callback()
     } else {
-      this._leafletMap.once('dataloaded', callback, context || this)
+      this.once('dataloaded', callback)
     }
     return this
   }
 
   onDataLayersChanged() {
-    if (this.browser) this.browser.update()
-    this.caption.refresh()
+    this.browser?.update()
+    this.caption?.refresh()
+    this.bottomBar.redraw()
   }
 
   async saveAll() {
     if (!this.isDirty) return
     if (this._defaultExtent) this._setCenterAndZoom()
-    const status = await this.sync.save()
+    const status = await this.journal.save()
     if (!status) return
     // Do a blind render for now, as we are not sure what could
     // have changed, we'll be more subtil when we'll remove the
     // save action
     this.render(['name', 'user', 'permissions'])
-    if (!this._leafletMap.listens('saved')) {
-      // When we save only layers, we don't have the map feedback message
-      this._leafletMap.on('saved', () => {
-        Alert.success(translate('Map has been saved!'))
-      })
-    }
+    // When we save only layers, we don't have the map feedback message
+    this.onMapSaved(() => {
+      Alert.success(translate('Map has been saved!'))
+    })
     this.fire('saved')
   }
 
@@ -711,7 +823,19 @@ export default class Umap {
     return this.properties.name || translate('Untitled map')
   }
 
+  migrateLegacyProperties(properties) {
+    if (properties.miniMap) {
+      properties.miniMapControl = properties.miniMap
+      delete properties.miniMap
+      this._migrated = true
+    }
+    if (migrateLegacyFilters(properties)) {
+      this._migrated = true
+    }
+  }
+
   setProperties(newProperties) {
+    this.migrateLegacyProperties(newProperties)
     for (const key of Object.keys(SCHEMA)) {
       if (newProperties[key] !== undefined) {
         this.properties[key] = newProperties[key]
@@ -723,22 +847,18 @@ export default class Umap {
   }
 
   hasData() {
-    for (const datalayer of this.datalayers.active()) {
+    for (const datalayer of this.layers.tree) {
       if (datalayer.hasData()) return true
     }
   }
 
   hasLayers() {
-    return Boolean(this.datalayers.count())
-  }
-
-  allProperties() {
-    return [].concat(...this.datalayers.active().map((dl) => dl.allProperties()))
+    return Boolean(this.layers.tree.root().count())
   }
 
   sortedValues(property) {
     return []
-      .concat(...this.datalayers.active().map((dl) => dl.sortedValues(property)))
+      .concat(...this.layers.tree.map((dl) => dl.sortedValues(property)))
       .filter((val, idx, arr) => arr.indexOf(val) === idx)
       .sort(Utils.naturalSort)
   }
@@ -746,10 +866,19 @@ export default class Umap {
   editCaption() {
     if (!this.editEnabled) return
     if (this.properties.editMode !== 'advanced') return
-    const container = DomUtil.create('div')
-    const metadataFields = ['properties.name', 'properties.description']
-
-    DomUtil.createTitle(container, translate('Edit map details'), 'icon-caption')
+    const container = DOMUtils.loadTemplate(`
+      <div>
+        <h3>
+          <i class="icon icon-16 icon-info"></i>
+          ${translate('Edit map details')}
+        </h3>
+      </div>
+    `)
+    const metadataFields = [
+      'properties.name',
+      'properties.description',
+      'properties.is_template',
+    ]
     const builder = new MutatingForm(this, metadataFields, {
       className: 'map-metadata',
       umap: this,
@@ -757,13 +886,13 @@ export default class Umap {
     const form = builder.build()
     container.appendChild(form)
 
-    const tags = DomUtil.createFieldset(container, translate('Tags'))
+    const tags = DOMUtils.createFieldset(container, translate('Tags'))
     const tagsFields = ['properties.tags']
     const tagsBuilder = new MutatingForm(this, tagsFields, {
       umap: this,
     })
     tags.appendChild(tagsBuilder.build())
-    const credits = DomUtil.createFieldset(container, translate('Credits'))
+    const credits = DOMUtils.createFieldset(container, translate('Credits'))
     const creditsFields = [
       'properties.licence',
       'properties.shortCredit',
@@ -779,7 +908,11 @@ export default class Umap {
   editCenter() {
     if (!this.editEnabled) return
     if (this.properties.editMode !== 'advanced') return
-    const container = DomUtil.create('div')
+    const container = DOMUtils.loadTemplate(`
+      <div>
+        <h3><i class="icon icon-16 icon-zoom"></i>${translate('Edit map default view')}</h3>
+      </div>
+    `)
     const metadataFields = [
       ['properties.zoom', { handler: 'IntInput', label: translate('Default zoom') }],
       [
@@ -793,13 +926,12 @@ export default class Umap {
       'properties.defaultView',
     ]
 
-    DomUtil.createTitle(container, translate('Edit map default view'), 'icon-zoom')
     const builder = new MutatingForm(this, metadataFields, {
       className: 'map-metadata',
       umap: this,
     })
     const form = builder.build()
-    const button = Utils.loadTemplate(
+    const button = DOMUtils.loadTemplate(
       `<button type="button">${translate('Use current center and zoom')}</button>`
     )
     button.addEventListener('click', () => {
@@ -813,13 +945,13 @@ export default class Umap {
 
   _editControls(container) {
     let UIFields = []
-    for (const name of this._leafletMap.HIDDABLE_CONTROLS) {
+    for (const name of ControlManager.MOREABLE_CONTROLS) {
       UIFields.push(`properties.${name}Control`)
     }
     UIFields = UIFields.concat([
       'properties.moreControl',
       'properties.scrollWheelZoom',
-      'properties.miniMap',
+      'properties.miniMapControl',
       'properties.scaleControl',
       'properties.onLoadPanel',
       'properties.displayPopupFooter',
@@ -828,7 +960,7 @@ export default class Umap {
       'properties.layerSwitcher',
     ])
     const builder = new MutatingForm(this, UIFields, { umap: this })
-    const controlsOptions = DomUtil.createFieldset(
+    const controlsOptions = DOMUtils.createFieldset(
       container,
       translate('User interface options')
     )
@@ -839,6 +971,7 @@ export default class Umap {
     const shapeOptions = [
       'properties.color',
       'properties.iconClass',
+      'properties.iconSize',
       'properties.iconUrl',
       'properties.iconOpacity',
       'properties.opacity',
@@ -851,30 +984,29 @@ export default class Umap {
     ]
 
     const builder = new MutatingForm(this, shapeOptions, { umap: this })
-    const defaultShapeProperties = DomUtil.createFieldset(
+    const defaultShapeProperties = DOMUtils.createFieldset(
       container,
       translate('Default shape properties')
     )
     defaultShapeProperties.appendChild(builder.build())
   }
 
-  _editDefaultProperties(container) {
-    const optionsFields = [
+  _editDefaultKeys(container) {
+    const shapeOptions = [
       'properties.zoomTo',
       'properties.easing',
       'properties.labelKey',
       'properties.sortKey',
       'properties.filterKey',
-      'properties.facetKey',
       'properties.slugKey',
     ]
 
-    const builder = new MutatingForm(this, optionsFields, { umap: this })
-    const defaultProperties = DomUtil.createFieldset(
+    const builder = new MutatingForm(this, shapeOptions, { umap: this })
+    const defaultShapeProperties = DOMUtils.createFieldset(
       container,
       translate('Default properties')
     )
-    defaultProperties.appendChild(builder.build())
+    defaultShapeProperties.appendChild(builder.build())
   }
 
   _editInteractionsProperties(container) {
@@ -888,7 +1020,7 @@ export default class Umap {
       'properties.outlinkTarget',
     ]
     const builder = new MutatingForm(this, popupFields, { umap: this })
-    const popupFieldset = DomUtil.createFieldset(
+    const popupFieldset = DOMUtils.createFieldset(
       container,
       translate('Default interaction options')
     )
@@ -940,7 +1072,7 @@ export default class Umap {
         { handler: 'Switch', label: translate('TMS format') },
       ],
     ]
-    const customTilelayer = DomUtil.createFieldset(
+    const customTilelayer = DOMUtils.createFieldset(
       container,
       translate('Custom background')
     )
@@ -991,7 +1123,7 @@ export default class Umap {
       ],
       ['properties.overlay.tms', { handler: 'Switch', label: translate('TMS format') }],
     ]
-    const overlay = DomUtil.createFieldset(container, translate('Custom overlay'))
+    const overlay = DOMUtils.createFieldset(container, translate('Custom overlay'))
     const builder = new MutatingForm(this, overlayFields, { umap: this })
     overlay.appendChild(builder.build())
   }
@@ -1000,7 +1132,7 @@ export default class Umap {
     if (!Utils.isObject(this.properties.limitBounds)) {
       this.properties.limitBounds = {}
     }
-    const limitBounds = DomUtil.createFieldset(container, translate('Limit bounds'))
+    const limitBounds = DOMUtils.createFieldset(container, translate('Limit bounds'))
     const boundsFields = [
       [
         'properties.limitBounds.south',
@@ -1021,36 +1153,37 @@ export default class Umap {
     ]
     const boundsBuilder = new MutatingForm(this, boundsFields, { umap: this })
     limitBounds.appendChild(boundsBuilder.build())
-    const boundsButtons = DomUtil.create('div', 'button-bar half', limitBounds)
-    DomUtil.createButton(
-      'button',
-      boundsButtons,
-      translate('Use current bounds'),
-      () => {
-        const bounds = this._leafletMap.getBounds()
-        const oldLimitBounds = { ...this.properties.limitBounds }
-        this.properties.limitBounds.south = LeafletUtil.formatNum(bounds.getSouth())
-        this.properties.limitBounds.west = LeafletUtil.formatNum(bounds.getWest())
-        this.properties.limitBounds.north = LeafletUtil.formatNum(bounds.getNorth())
-        this.properties.limitBounds.east = LeafletUtil.formatNum(bounds.getEast())
-        boundsBuilder.fetchAll()
-        this.sync.update(
-          'properties.limitBounds',
-          this.properties.limitBounds,
-          oldLimitBounds
-        )
-        this._leafletMap.handleLimitBounds()
-      }
-    )
-    DomUtil.createButton('button', boundsButtons, translate('Empty'), () => {
+    const [boundsButtons, { current, empty }] = DOMUtils.loadTemplateWithRefs(`
+      <div class="button-bar half">
+        <button type="button" data-ref="current">${translate('Use current bounds')}</button>
+        <button type="button" class="flat" data-ref="empty">${translate('Empty')}</button>
+      </div>
+    `)
+    limitBounds.appendChild(boundsButtons)
+    current.addEventListener('click', () => {
+      const bounds = this.mapProxy.bounds
+      const oldLimitBounds = { ...this.properties.limitBounds }
+      this.properties.limitBounds.south = bounds.getSouth().toFixed(6)
+      this.properties.limitBounds.west = bounds.getWest().toFixed(6)
+      this.properties.limitBounds.north = bounds.getNorth().toFixed(6)
+      this.properties.limitBounds.east = bounds.getEast().toFixed(6)
+      boundsBuilder.fetchAll()
+      this.journal.update(
+        'properties.limitBounds',
+        this.properties.limitBounds,
+        oldLimitBounds
+      )
+      this.mapProxy.handleLimitBounds()
+    })
+    empty.addEventListener('click', () => {
       const oldLimitBounds = { ...this.properties.limitBounds }
       this.properties.limitBounds.south = null
       this.properties.limitBounds.west = null
       this.properties.limitBounds.north = null
       this.properties.limitBounds.east = null
       boundsBuilder.fetchAll()
-      this._leafletMap.handleLimitBounds()
-      this.sync.update(
+      this.mapProxy.handleLimitBounds()
+      this.journal.update(
         'properties.limitBounds',
         this.properties.limitBounds,
         oldLimitBounds
@@ -1059,7 +1192,7 @@ export default class Umap {
   }
 
   _editSlideshow(container) {
-    const slideshow = DomUtil.createFieldset(container, translate('Slideshow'))
+    const slideshow = DOMUtils.createFieldset(container, translate('Slideshow'))
     const slideshowFields = [
       [
         'properties.slideshow.active',
@@ -1092,7 +1225,10 @@ export default class Umap {
   }
 
   _editSync(container) {
-    const sync = DomUtil.createFieldset(container, translate('Real-time collaboration'))
+    const sync = DOMUtils.createFieldset(
+      container,
+      translate('Real-time collaboration')
+    )
     const builder = new MutatingForm(this, ['properties.syncEnabled'], {
       umap: this,
     })
@@ -1100,7 +1236,7 @@ export default class Umap {
   }
 
   _advancedActions(container) {
-    const advancedActions = DomUtil.createFieldset(
+    const advancedActions = DOMUtils.createFieldset(
       container,
       translate('Advanced actions')
     )
@@ -1124,7 +1260,7 @@ export default class Umap {
     </div>
     `
     const [bar, { del, clear, empty, clone, download }] =
-      Utils.loadTemplateWithRefs(tpl)
+      DOMUtils.loadTemplateWithRefs(tpl)
     advancedActions.appendChild(bar)
     if (this.permissions.isOwner()) {
       del.hidden = false
@@ -1135,21 +1271,23 @@ export default class Umap {
       empty.addEventListener('click', () => this.removeDataLayers())
     }
     clone.addEventListener('click', () => this.clone())
-    download.addEventListener('click', () => this.share.open())
+    download.addEventListener('click', () =>
+      this.loadShare().then((share) => share.open())
+    )
   }
 
   edit() {
     if (!this.editEnabled) return
     if (this.properties.editMode !== 'advanced') return
-    const container = DomUtil.create('div')
-    DomUtil.createTitle(
-      container,
-      translate('Map advanced properties'),
-      'icon-settings'
-    )
+    const container = DOMUtils.loadTemplate(`
+      <div>
+        <h3><i class="icon icon-16 icon-settings"></i>${translate('Map advanced properties')}</h3>
+      </div>
+    `)
     this._editControls(container)
     this._editShapeProperties(container)
-    this._editDefaultProperties(container)
+    this._editDefaultKeys(container)
+    this.fields.edit(container)
     this._editInteractionsProperties(container)
     this.rules.edit(container)
     this._editTilelayer(container)
@@ -1168,6 +1306,33 @@ export default class Umap {
     })
   }
 
+  onAnonymousSave(editUrl) {
+    AlertCreation.info(
+      this,
+      translate('Hey, you created a map without an account!'),
+      Number.Infinity,
+      editUrl,
+      this.properties.urls.map_send_edit_link ? this.sendEditLinkEmail.bind(this) : null
+    )
+  }
+
+  onMapSaved(callback) {
+    // The saved message is different according to some situations:
+    // - is the user logged in or not ?
+    // - is it a new map or an existing map ?
+    // This is usually managed on the uMap.save method.
+    // But when updating a map while uMap itself is not dirty
+    // there is a fallback message (in saveAll), but at this stage
+    // we are not able to know if the map has been saved before and
+    // thus if there is yet a "saved message" ready to be displayed.
+    if (this._saveMessageSemaphore) return
+    this._saveMessageSemaphore = true
+    this.once('saved', () => {
+      callback()
+      this._saveMessageSemaphore = undefined
+    })
+  }
+
   async save() {
     const geojson = {
       type: 'Feature',
@@ -1176,6 +1341,7 @@ export default class Umap {
     }
     const formData = new FormData()
     formData.append('name', this.properties.name)
+    formData.append('is_template', Boolean(this.properties.is_template))
     formData.append('center', JSON.stringify(this.geometry()))
     formData.append('tags', this.properties.tags || [])
     formData.append('settings', JSON.stringify(geojson))
@@ -1186,11 +1352,10 @@ export default class Umap {
     if (error) {
       return
     }
-    // TOOD: map.save may not always be the first call during save process
+    // TODO: map.save may not always be the first call during save process
     // since SAVEMANAGER refactor
     if (data.login_required) {
-      window.onLogin = () => this.saveAll()
-      window.open(data.login_required)
+      this.askForLogin().then(() => this.saveAll())
       return
     }
     this.properties.user = data.user
@@ -1198,26 +1363,18 @@ export default class Umap {
       this.properties.id = data.id
       this.permissions.setProperties(data.permissions)
       this.permissions.commit()
-      if (data.permissions?.anonymous_edit_url) {
-        this._leafletMap.once('saved', () => {
-          AlertCreation.info(
-            translate('Your map has been created with an anonymous account!'),
-            Number.Infinity,
-            data.permissions.anonymous_edit_url,
-            this.properties.urls.map_send_edit_link
-              ? this.sendEditLinkEmail.bind(this)
-              : null
-          )
-        })
+      const anonymousEditUrl = data.permissions?.anonymous_edit_url
+      if (anonymousEditUrl) {
+        this.onMapSaved(() => this.onAnonymousSave(anonymousEditUrl))
       } else {
-        this._leafletMap.once('saved', () => {
+        this.onMapSaved(() => {
           Alert.success(translate('Congratulations, your map has been created!'))
         })
       }
     } else {
       this.permissions.setProperties(data.permissions)
       this.permissions.commit()
-      this._leafletMap.once('saved', () => {
+      this.onMapSaved(() => {
         Alert.success(data.info || translate('Map has been saved!'))
       })
     }
@@ -1230,6 +1387,29 @@ export default class Umap {
     return true
   }
 
+  askForLogin() {
+    const promise = new Promise((resolve) => {
+      const bc = new BroadcastChannel('auth')
+      bc.onmessage = (event) => {
+        if (event.data === 'auth:ok') {
+          bc.postMessage('auth:close')
+          const url = this.urls.get('whoami', { map_id: this.id })
+          this.server.get(url).then(([data]) => {
+            this.properties.user = data.user
+            if (!this.id) {
+              this.properties.permissions.owner = { ...data.user }
+            }
+            this.permissions.pull()
+            this.render(['user', 'properties.permissions'])
+            resolve()
+          })
+        }
+      }
+    })
+    window.open(this.urls.get('login'))
+    return promise
+  }
+
   exportProperties() {
     const properties = {}
     for (const key of Object.keys(SCHEMA)) {
@@ -1240,29 +1420,25 @@ export default class Umap {
     return properties
   }
 
+  renameField(oldName, newName) {
+    for (const datalayer of this.layers.tree) {
+      datalayer.renameFeaturesField(oldName, newName)
+    }
+  }
+
+  deleteField(name) {
+    for (const datalayer of this.layers.tree) {
+      datalayer.deleteFeaturesField(name)
+    }
+  }
+
   geometry() {
     /* Return a GeoJSON geometry Object */
-    const latlng = this._leafletMap.latLng(
-      this.properties.center || this._leafletMap.getCenter()
-    )
+    const latlng = this.mapProxy.latLng(this.properties.center || this.mapProxy.center)
     return {
       type: 'Point',
       coordinates: [latlng.lng, latlng.lat],
     }
-  }
-
-  toGeoJSON() {
-    let features = []
-    this.datalayers.active().map((datalayer) => {
-      if (datalayer.isVisible()) {
-        features = features.concat(datalayer.featuresToGeoJSON())
-      }
-    })
-    const geojson = {
-      type: 'FeatureCollection',
-      features: features,
-    }
-    return geojson
   }
 
   enableEdit() {
@@ -1271,7 +1447,52 @@ export default class Umap {
     this.editEnabled = true
     this.drop.enable()
     this.fire('edit:enabled')
-    this.initSyncEngine()
+    this.initJournal()
+    this.checkForLegacy()
+    this.checkForAnonymous()
+  }
+
+  checkForAnonymous() {
+    if (
+      this.permissions.isAnonymousMap() &&
+      this.permissions.isOwner() &&
+      this.permissions.userIsAuth()
+    ) {
+      this.dialog
+        .confirm(
+          translate('This map is anonymous, do you want to attach it to your account?')
+        )
+        .then(() => {
+          this.permissions.attach()
+        })
+    }
+  }
+
+  checkForLegacy() {
+    let needSaveAlert = false
+    if (this._migrated) {
+      needSaveAlert = true
+      delete this._migrated
+      // Force user to save
+      this.journal.update('properties.name', this.properties.name, this.properties.name)
+    }
+    for (const datalayer of this.layers.tree) {
+      if (!datalayer.isReadOnly() && datalayer._migrated) {
+        datalayer._migrated = false
+        // Force user to resave those datalayers
+        datalayer.journal.update(
+          'properties.name',
+          datalayer.properties.name,
+          datalayer.properties.name
+        )
+        needSaveAlert = true
+      }
+    }
+    if (needSaveAlert) {
+      Alert.warning(
+        translate('The map has been upgraded to latest version, please save it.')
+      )
+    }
   }
 
   disableEdit() {
@@ -1283,45 +1504,43 @@ export default class Umap {
     this.fire('edit:disabled')
     this.editPanel.close()
     this.fullPanel.close()
-    this.sync.stop()
+    this.journal.stop()
   }
 
-  fire(name) {
-    this._leafletMap.fire(name)
-  }
-
-  async initSyncEngine() {
+  async initJournal() {
     // this.properties.websocketEnabled is set by the server admin
     if (this.properties.websocketEnabled === false) return
     // this.properties.syncEnabled is set by the user in the map settings
     if (this.properties.syncEnabled !== true) {
-      this.sync.stop()
+      this.journal.stop()
     } else {
-      await this.sync.authenticate()
+      await this.journal.authenticate()
     }
   }
 
-  getSyncMetadata() {
+  getJournalMetadata() {
     return {
       subject: 'map',
     }
-  }
-
-  onPropertiesUpdated(fields = []) {
-    this._leafletMap.pullProperties()
   }
 
   render(fields = []) {
     // Propagate will remove the fields it has already
     // processed
     fields = this.propagate(fields)
+    if (fields.includes('properties.filters')) {
+      this.filters.load()
+      if (this.browser?.isOpen()) {
+        this.browser.buildFilters()
+      }
+    }
 
     const impacts = Utils.getImpactsFromSchema(fields)
     for (const impact of impacts) {
       switch (impact) {
         case 'ui':
-          this._leafletMap.renderUI()
-          this.browser.redraw()
+          this.controlManager.update()
+          this.browser?.redraw()
           this.topBar.redraw()
           this.bottomBar.redraw()
           break
@@ -1329,7 +1548,7 @@ export default class Umap {
           if (fields.includes('properties.rules')) {
             this.rules.load()
           }
-          this.datalayers.visible().map((datalayer) => {
+          this.layers.tree.visible().map((datalayer) => {
             datalayer.redraw()
           })
           break
@@ -1341,22 +1560,23 @@ export default class Umap {
           // this get called once per datalayers.
           // (and same for undo/redo of the action)
           // TODO: call only once
-          this.reorderDataLayers()
+          this.reorderDOM()
           break
         case 'background':
-          this._leafletMap.initTileLayers()
+          this.mapProxy.tilelayers.init(this.properties.tilelayers)
+          this.mapProxy.tilelayers.selectDefault()
           break
         case 'bounds':
-          this._leafletMap.handleLimitBounds()
+          this.mapProxy.handleLimitBounds()
           break
         case 'sync':
-          this.initSyncEngine()
+          this.initJournal()
       }
     }
   }
 
   // This method does a targeted update of the UI,
-  // it whould be merged with `render`` method and the
+  // it would be merged with `render`` method and the
   // SCHEMA at some point
   propagate(fields = []) {
     const impacts = {
@@ -1367,7 +1587,7 @@ export default class Umap {
       },
       user: () => {
         Utils.eachElement('.umap-user .username', (el) => {
-          if (this.properties.user?.id) {
+          if (this.permissions.userIsAuth()) {
             el.textContent = this.properties.user.name
           }
         })
@@ -1389,12 +1609,12 @@ export default class Umap {
       },
       numberOfConnectedPeers: () => {
         Utils.eachElement('.connected-peers span', (el) => {
-          if (this.sync.websocketConnected) {
-            el.textContent = Object.keys(this.sync.getPeers()).length
+          if (this.journal.websocketConnected) {
+            el.textContent = Object.keys(this.journal.getPeers()).length
           } else {
             el.textContent = translate('Disconnected')
           }
-          el.parentElement.classList.toggle('off', !this.sync.websocketConnected)
+          el.parentElement.classList.toggle('off', !this.journal.websocketConnected)
         })
       },
       'properties.starred': () => {
@@ -1420,52 +1640,76 @@ export default class Umap {
   // (edit and viewing)
   // cf https://github.com/umap-project/umap/issues/585
   defaultEditDataLayer() {
-    let datalayer
-    let fallback
-    datalayer = this.lastUsedDataLayer
-    if (
-      datalayer &&
-      !datalayer.isDataReadOnly() &&
-      datalayer.isBrowsable() &&
-      datalayer.isVisible()
-    ) {
-      return datalayer
+    let layer = this.lastUsedDataLayer
+    if (layer && layer.allowFeatures() && layer.isVisible()) {
+      return layer
     }
-    datalayer = this.datalayers.find((datalayer) => {
-      if (!datalayer.isDataReadOnly() && datalayer.isBrowsable()) {
-        fallback = datalayer
-        if (datalayer.isVisible()) return true
-      }
-    })
-    if (datalayer) return datalayer
-    if (fallback) {
-      // No datalayer visible, let's force one
-      fallback.show()
-      return fallback
+    layer = this.layers.tree
+      .visible()
+      .filter((layer) => layer.allowFeatures())
+      .first()
+    if (layer) return layer
+    layer = this.layers.tree.filter((layer) => layer.allowFeatures()).first()
+    if (layer) {
+      // No layer visible, let's force one
+      layer.show()
+      return layer
     }
-    return this.createDirtyDataLayer()
+    return this.createDataLayer()
   }
 
   eachFeature(callback) {
-    this.datalayers.browsable().map((datalayer) => {
-      if (datalayer.isVisible()) datalayer.eachFeature(callback)
+    this.layers.tree.browsable().map((datalayer) => {
+      if (datalayer.isVisible()) datalayer.features.forEach(callback)
     })
   }
 
   removeDataLayers() {
-    this.datalayers.active().map((datalayer) => {
+    this.layers.tree.map((datalayer) => {
       datalayer.del()
     })
   }
 
   emptyDataLayers() {
-    this.datalayers.active().map((datalayer) => {
+    this.layers.tree.map((datalayer) => {
       datalayer.empty()
     })
   }
 
-  editDatalayers() {
+  async editDatalayers() {
     if (!this.editEnabled) return
+    const onReorder = async (moved, target, dragMode) => {
+      // TODO: ask target parent to do the reorder
+      const movedLayer = this.layers.tree.get(moved.dataset.id)
+      const targetLayer = this.layers.tree.get(target.dataset.id)
+      this.journal.startBatch()
+      const oldParentId = movedLayer.parent?.id
+      // Set the parent before adding child, so the rank will be
+      // computed correctly
+      // We do not call parent setter, as it will issue a layers.add
+      // which we want to control here (before/after/middle).
+      const setParent = (parent) => {
+        movedLayer._parent = parent
+        movedLayer.journal.update('parentId', parent?.id, oldParentId)
+      }
+      if (dragMode === 'above') {
+        const parent = targetLayer.parent || this
+        parent.layers.addAfter(movedLayer, targetLayer)
+        setParent(targetLayer.parent)
+      } else if (dragMode === 'below') {
+        const parent = targetLayer.parent || this
+        parent.layers.addBefore(movedLayer, targetLayer)
+        setParent(targetLayer.parent)
+      } else if (dragMode === 'middle') {
+        const parent = targetLayer
+        parent.layers.add(movedLayer)
+        setParent(targetLayer)
+      }
+      this.journal.commitBatch()
+      this.reorderDOM()
+      this.fire('datalayer:changed')
+    }
+
     const template = `
       <div>
         <h3><i class="icon icon-16 icon-layers"></i>${translate('Manage layers')}</h3>
@@ -1473,75 +1717,98 @@ export default class Umap {
       </div>
     `
     const [container, { ul }] = Utils.loadTemplateWithRefs(template)
-    this.datalayers.reverse().map((datalayer) => {
-      const row = Utils.loadTemplate(
-        `<li class="orderable"><i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i></li>`
+    const showLayer = (layer, container) => {
+      const nochildren =
+        !layer.isLoaded() || layer.features.count() || layer.isRemoteLayer()
+          ? ' no-children'
+          : ''
+      const [li, { body, toolbox, formbox, icon }] = Utils.loadTemplateWithRefs(`
+          <li class="orderable${nochildren}">
+            <details open data-ondelete data-id="${layer.id}">
+              <summary class="with-toolbox" data-ontoggle data-id="${layer.id}">
+                <span>
+                  <i class="icon icon-16" data-ref="icon"></i>
+                  <span data-ref=formbox class="datalayer-editable-title truncate"></span>
+                </span>
+                <span data-ref=toolbox class="toolbox"></span>
+              </summary>
+              <ul data-ref="body" class="orderable-container"></ul>
+            </details>
+          </li>
+        `)
+      if (layer.group) {
+        icon.classList.add('icon-folder')
+      } else if (layer.isRemoteLayer()) {
+        icon.classList.add('icon-remote')
+      } else {
+        icon.classList.add('icon-layer')
+      }
+      layer.renderToolbox(toolbox)
+      toolbox.appendChild(
+        Utils.loadTemplate(
+          `<i class="icon icon-16 icon-drag" title="${translate('Drag to reorder')}"></i>`
+        )
       )
-      datalayer.renderToolbox(row)
       const builder = new MutatingForm(
-        datalayer,
-        [['options.name', { handler: 'EditableText' }]],
+        layer,
+        [['properties.name', { handler: 'EditableText' }]],
         { className: 'umap-form-inline' }
       )
       const form = builder.build()
-      row.appendChild(form)
-      row.classList.toggle('off', !datalayer.isVisible())
-      row.dataset.id = datalayer.id
-      ul.appendChild(row)
-    })
-    const onReorder = (src, dst, initialIndex, finalIndex) => {
-      const movedLayer = this.datalayers[src.dataset.id]
-      const targetLayer = this.datalayers[dst.dataset.id]
-      const minIndex = Math.min(movedLayer.getDOMOrder(), targetLayer.getDOMOrder())
-      const maxIndex = Math.max(movedLayer.getDOMOrder(), targetLayer.getDOMOrder())
-      if (finalIndex === 0) movedLayer.bringToTop()
-      else if (finalIndex > initialIndex) movedLayer.insertBefore(targetLayer)
-      else movedLayer.insertAfter(targetLayer)
-      this.sync.startBatch()
-      this.datalayers.reverse().map((datalayer) => {
-        const rank = datalayer.getDOMOrder()
-        if (rank >= minIndex && rank <= maxIndex) {
-          const oldRank = datalayer.rank
-          datalayer.rank = rank
-          datalayer.sync.update('options.rank', rank, oldRank)
-        }
-      })
-      this.sync.commitBatch()
-      this.onDataLayersChanged()
+      formbox.appendChild(form)
+      li.dataset.id = layer.id
+      container.appendChild(li)
+      for (const child of layer.layers.tree.root()) {
+        showLayer(child, body)
+      }
     }
-    const orderable = new Orderable(ul, onReorder)
+    const layers = this.layers.tree.root()
+    for (const layer of layers) {
+      showLayer(layer, ul)
+    }
+    new Orderable(ul, onReorder, { allowTree: true })
 
-    const bar = DomUtil.create('div', 'button-bar', container)
-    DomUtil.createButton(
-      'show-on-edit block add-datalayer button',
-      bar,
-      translate('Add a layer'),
-      this.newDataLayer,
-      this
-    )
+    const [bar, { addLayer, addGroup }] = DOMUtils.loadTemplateWithRefs(`
+      <div class="button-bar half">
+        <button type="button" class="block add-datalayer" data-ref="addLayer">${translate('Add a layer')}</button>
+        <button type="button" class="block add-group flat" data-ref="addGroup">${translate('Add a group')}</button>
+      </div>
+    `)
+    addLayer.addEventListener('click', () => this.newDataLayer())
+    addGroup.addEventListener('click', () => this.newGroup())
+    container.appendChild(bar)
 
     this.editPanel.open({ content: container, highlight: 'layers' })
   }
 
-  getDataLayerByUmapId(id) {
-    const datalayer = this.datalayers[id]
-    if (!datalayer) throw new Error(`Can't find datalayer with id ${id}`)
-    return datalayer
+  reorderDOM() {
+    for (const layer of this.layers.root.reverse()) {
+      this.mapProxy.overlayPane.appendChild(layer.pane)
+    }
+    for (const layer of this.layers.tree) {
+      if (layer.layers.count()) {
+        layer.reorderDOM()
+      }
+    }
   }
 
   openBrowser(mode) {
-    this.onceDatalayersLoaded(() => this.browser.open(mode))
+    this.onceDatalayersLoaded(() =>
+      this.loadBrowser().then((browser) => browser.open(mode))
+    )
   }
 
   openCaption() {
-    this.onceDatalayersLoaded(() => this.caption.open())
+    this.onceDatalayersLoaded(() =>
+      this.loadCaption().then((caption) => caption.open())
+    )
   }
 
   addAuthorLink(container) {
     const author = this.properties.author
     if (author?.name) {
       const el = Utils.loadTemplate(
-        `<span class="umap-map-author"> ${translate('by')} <a href="${author.url}">${author.name}</a></span>`
+        Utils.sanitizeVars`<span class="umap-map-author"> ${translate('by')} <a href="${author.url}">${author.name}</a></span>`
       )
       container.appendChild(el)
     }
@@ -1579,7 +1846,10 @@ export default class Umap {
     if (type === 'umap') {
       this.importUmapFile(file, 'umap')
     } else {
-      if (!layer) layer = this.createDirtyDataLayer({ name: file.name })
+      if (!layer) {
+        const properties = { name: file.name }
+        layer = this.createDataLayer({ properties })
+      }
       layer.importFromFile(file, type)
     }
   }
@@ -1606,19 +1876,16 @@ export default class Umap {
     this.setProperties(importedData.properties)
 
     if (importedData.geometry) {
-      this.properties.center = this._leafletMap.latLng(importedData.geometry)
+      this.properties.center = this.mapProxy.latLng(importedData.geometry)
     }
-    for (const geojson of importedData.layers) {
-      if (!geojson._umap_options && geojson._storage) {
-        geojson._umap_options = geojson._storage
-        delete geojson._storage
+    for (const spec of importedData.layers) {
+      // Never trust an id at this stage
+      delete spec?.id
+      delete spec.properties?.id
+      if (spec.properties?.iconUrl?.startsWith('/')) {
+        spec.properties.iconUrl = remoteOrigin + spec.properties.iconUrl
       }
-      delete geojson._umap_options?.id // Never trust an id at this stage
-      if (geojson._umap_options?.iconUrl?.startsWith('/')) {
-        geojson._umap_options.iconUrl = remoteOrigin + geojson._umap_options.iconUrl
-      }
-      const dataLayer = this.createDirtyDataLayer(geojson._umap_options)
-      dataLayer.fromUmapGeoJSON(geojson)
+      const datalayer = this.createDataLayer(spec)
     }
 
     // For now render->propagate expect a `properties.` prefix.
@@ -1626,8 +1893,10 @@ export default class Umap {
     const fields = Object.keys(importedData.properties).map(
       (field) => `properties.${field}`
     )
+    this.fields.pull()
+    this.filters.load()
     this.render(fields)
-    this._leafletMap._setDefaultCenter()
+    this.mapProxy.setDefaultCenter()
   }
 
   importUmapFile(file) {
@@ -1639,7 +1908,7 @@ export default class Umap {
         this.importRaw(rawData)
       } catch (e) {
         console.error('Error importing data', e)
-        U.Alert.error(
+        Alert.error(
           translate('Invalid umap data in {filename}', { filename: file.name })
         )
       }
@@ -1677,18 +1946,14 @@ export default class Umap {
     await this.server.post(sendLink, {}, formData)
   }
 
-  getLayersBounds() {
-    const bounds = new latLngBounds()
-    this.datalayers.browsable().map((d) => {
-      if (d.isVisible()) bounds.extend(d.layer.getBounds())
-    })
-    return bounds
-  }
-
   fitDataBounds() {
-    const bounds = this.getLayersBounds()
+    const layers = this.layers.tree
+      .browsable()
+      .visible()
+      .map((d) => d.layer)
+    const bounds = this.mapProxy.getLayersBounds(layers)
     if (!this.hasData() || !bounds.isValid()) return false
-    this._leafletMap.fitBounds(bounds)
+    this.fire('map:view:fit-bounds', { bounds })
   }
 
   proxyUrl(url, ttl) {
@@ -1706,7 +1971,7 @@ export default class Umap {
       lat: event.latlng.lat,
       lng: event.latlng.lng,
       locale: getLocale(),
-      zoom: this._leafletMap.getZoom(),
+      zoom: this.mapProxy.zoom,
     })
     if (url) window.open(url)
   }
@@ -1715,9 +1980,22 @@ export default class Umap {
     const url = this.urls.get('edit_in_osm', {
       lat: event.latlng.lat,
       lng: event.latlng.lng,
-      zoom: Math.max(this._leafletMap.getZoom(), 16),
+      zoom: Math.max(this.mapProxy.zoom, 16),
     })
     if (url) window.open(url)
+  }
+
+  openInOSM(event) {
+    window.open(
+      `https://www.openstreetmap.org/query?lat=${event.latlng.lat}&lon=${event.latlng.lng}`
+    )
+  }
+
+  async askForIsochrone(event) {
+    if (!this.properties.ORSAPIKey) return
+    await this.loadImporter()
+    const { Importer } = await import('./importers/openrouteservice.js')
+    new Importer(this).isochrone(event.latlng)
   }
 
   setCenterAndZoom() {
@@ -1728,14 +2006,14 @@ export default class Umap {
   _setCenterAndZoom(manual) {
     const oldCenter = { ...this.properties.center }
     const oldZoom = this.properties.zoom
-    this.properties.center = this._leafletMap.getCenter()
-    this.properties.zoom = this._leafletMap.getZoom()
+    this.properties.center = this.mapProxy.center
+    this.properties.zoom = this.mapProxy.zoom
     this._defaultExtent = false
     if (manual) {
-      this.sync.startBatch()
-      this.sync.update('properties.center', this.properties.center, oldCenter)
-      this.sync.update('properties.zoom', this.properties.zoom, oldZoom)
-      this.sync.commitBatch()
+      this.journal.startBatch()
+      this.journal.update('properties.center', this.properties.center, oldCenter)
+      this.journal.update('properties.zoom', this.properties.zoom, oldZoom)
+      this.journal.commitBatch()
     }
   }
 
@@ -1744,10 +2022,38 @@ export default class Umap {
   }
 
   undo() {
-    this.sync._undoManager.undo()
+    this.journal._undoManager.undo()
   }
 
   redo() {
-    this.sync._undoManager.redo()
+    this.journal._undoManager.redo()
+  }
+
+  async screenshot() {
+    const { snapdom, preCache } = await import('../../vendors/snapdom/snapdom.min.mjs')
+    const el = document.querySelector('#map')
+    await preCache(el)
+    const result = await snapdom(el, {
+      scale: 1,
+      type: 'jpg',
+      fast: false,
+      exclude: [
+        '.leaflet-control',
+        '.umap-loader',
+        '.panel',
+        '.umap-caption-bar',
+        '.umap-main-edit-toolbox',
+        '.umap-edit-bar',
+      ],
+    })
+    return result
+  }
+
+  async openPrinter(action) {
+    if (!this._printer) {
+      const Printer = (await import('./printer.js')).default
+      this._printer = new Printer(this)
+    }
+    this._printer.open(action)
   }
 }

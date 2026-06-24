@@ -5,7 +5,7 @@
     max-width: 300px;
     position: absolute;
     box-shadow: var(--block-shadow);
-    display: none;
+    display: block;
     color: #eeeeec;
     border-radius: var(--border-radius);
     z-index: var(--zindex-tooltip);
@@ -13,13 +13,13 @@
     --tooltip-color: var(--color-darkGray);
     background-color: var(--tooltip-color);
     --arrow-size: 8px;
+    font-size: 0.8rem;
 }
+
 .tooltip-accent {
     --tooltip-color: var(--color-lightCyan);
 }
-.umap-tooltip .umap-tooltip-container {
-    display: block;
-}
+
 .umap-tooltip-container.tooltip-top:after {
     top: 100%;
     left: calc(50% - var(--arrow-size));
@@ -33,6 +33,7 @@
     border-width: var(--arrow-size);
     margin-left: calc(-50% + 2 * var(--arrow-size));
 }
+
 .umap-tooltip-container.tooltip-bottom:before {
     top: calc(var(--arrow-size) * -2);
     left: calc(50% - var(--arrow-size));
@@ -46,16 +47,19 @@
     border-width: var(--arrow-size);
     transform: rotate(180deg);
 }
+
 .tooltip-accent ul {
     padding-top: var(--small-box-padding);
     padding-bottom: var(--small-box-padding);
 }
+
 .tooltip-accent li {
     background-color: var(--color-light);
     color: var(--color-dark);
     padding: var(--small-box-padding);
     margin-bottom: var(--small-box-padding);
 }
+
 .tooltip-accent li:last-of-type {
     margin-bottom: 0;
 }

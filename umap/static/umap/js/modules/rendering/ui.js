@@ -1,8 +1,9 @@
 // Goes here all code related to Leaflet, DOM and user interactions.
 import {
   CircleMarker as BaseCircleMarker,
+  DivIcon,
   DomEvent,
-  DomUtil,
+  GeoJSON,
   LatLng,
   LatLngBounds,
   LineUtil,
@@ -11,10 +12,13 @@ import {
   Polyline,
   latLng,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
+import { Transform } from '../../../vendors/leaflet-path-transform/dist/index.mjs'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
+import * as GeoUtils from '../geoutils.js'
 import { translate } from '../i18n.js'
+import * as Icon from '../icon.js'
 import * as Utils from '../utils.js'
-import * as Icon from './icon.js'
+import * as TextUtils from '../textutils.js'
 
 const FeatureMixin = {
   initialize: function (feature, latlngs) {
@@ -28,10 +32,11 @@ const FeatureMixin = {
   },
 
   onRemove: function (map) {
+    this.removeInteractions()
     this.parentClass.prototype.onRemove.call(this, map)
-    if (map._umap.editedFeature === this.feature) {
+    if (this.feature._umap.editedFeature === this.feature) {
       this.feature.endEdit()
-      map._umap.editPanel.close()
+      this.feature._umap.editPanel.close()
     }
   },
 
@@ -45,26 +50,31 @@ const FeatureMixin = {
     this.on('contextmenu editable:vertex:contextmenu', this.onContextMenu)
     this.on('click', this.onClick)
     this.on('editable:edited', this.onCommit)
+    // this.on('mouseover', this.onMouseOver)
+  },
+
+  removeInteractions: function () {
+    this.off('contextmenu editable:vertex:contextmenu', this.onContextMenu)
+    this.off('click', this.onClick)
+    this.off('editable:edited', this.onCommit)
+    // this.off('mouseover', this.onMouseOver)
+  },
+
+  onMouseOver: function () {
+    this._map.fire('feature:mouseover')
   },
 
   onClick: function (event) {
     if (this._map.measureTools?.enabled()) return
     this._popupHandlersAdded = true // Prevent leaflet from managing event
-    if (!this._map._umap.editEnabled) {
-      this.feature.view(event)
-    } else if (!this.feature.isReadOnly()) {
-      if (event.originalEvent.shiftKey) {
-        if (event.originalEvent.ctrlKey || event.originalEvent.metaKey) {
-          this.feature.datalayer.edit(event)
-        } else {
-          this.feature.toggleEditing(event)
-        }
-      } else if (!this._map.editTools?.drawing()) {
-        this._map._umap.editContextmenu.open(
-          event.originalEvent,
-          this.feature.getInplaceEditMenu(event)
-        )
+    if (event.originalEvent.shiftKey) {
+      if (event.originalEvent.ctrlKey || event.originalEvent.metaKey) {
+        this.feature.datalayer.edit(event)
+      } else if (!this.feature.isReadOnly()) {
+        this.feature.toggleEditing(event)
       }
+    } else if (!this._map.editTools?.drawing()) {
+      this.feature.view(event)
     }
     DomEvent.stop(event)
   },
@@ -91,28 +101,74 @@ const FeatureMixin = {
   onContextMenu: function (event) {
     DomEvent.stop(event)
     const items = this.feature
-      .getContextMenuItems(event)
-      .concat(this._map._umap.getSharedContextMenuItems(event))
-    this._map._umap.contextmenu.open(event.originalEvent, items)
+      .getContextMenu(event)
+      .concat(this.feature._umap.getSharedContextMenu(event))
+    this.feature._umap.contextmenu.open(event.originalEvent, items)
   },
 
   onCommit: function () {
-    this.feature.onCommit()
+    this.feature.onCommit(this.toGeometry())
+  },
+
+  isVisible() {
+    return Boolean(this._map?.hasLayer(this))
   },
 }
 
+export const LeafletIcon = DivIcon.extend({
+  initialize: function (umapIcon) {
+    this.umapIcon = umapIcon
+    DivIcon.prototype.initialize.call(this, {
+      iconSize: umapIcon.size,
+      iconAnchor: umapIcon.anchor,
+      popupAnchor: umapIcon.popupAnchor,
+      tooltipAnchor: umapIcon.tooltipAnchor,
+      className: umapIcon.className,
+    })
+  },
+  createIcon: function () {
+    const el = this.umapIcon.render()
+    this._setIconStyles(el, 'icon')
+    return el
+  },
+  createShadow: () => {},
+})
+
 const PointMixin = {
+  toGeometry: function () {
+    return {
+      type: 'Point',
+      coordinates: GeoJSON.latLngToCoords(this.getLatLng()),
+    }
+  },
+
   isOnScreen: function (bounds) {
+    bounds = bounds || this._map.getBounds()
     return bounds.contains(this.getCenter())
   },
 
   addInteractions() {
     FeatureMixin.addInteractions.call(this)
-    this.on('dragend', (event) => {
-      this.feature.edit(event)
-    })
+    this.on('dragend', this._onDragEnd)
     if (!this.feature.isReadOnly()) this.on('mouseover', this._enableDragging)
     this.on('mouseout', this._onMouseOut)
+  },
+
+  removeInteractions() {
+    FeatureMixin.removeInteractions.call(this)
+    this.off('dragend', this._onDragEnd)
+    if (!this.feature.isReadOnly()) this.off('mouseover', this._enableDragging)
+    this.off('mouseout', this._onMouseOut)
+  },
+
+  _onDragEnd(event) {
+    if (this._cluster) {
+      delete this._originalLatLng
+      this.once('editable:edited', () => {
+        this.feature.datalayer.dataChanged()
+        this.feature.edit(event)
+      })
+    }
   },
 
   _onMouseOut: function () {
@@ -124,7 +180,7 @@ const PointMixin = {
 
   _enableDragging: function () {
     // TODO: start dragging after 1 second on mouse down
-    if (this._map._umap.editEnabled) {
+    if (this.feature._umap.editEnabled) {
       if (!this.editEnabled()) this.enableEdit()
       // Enabling dragging on the marker override the Draggable._OnDown
       // event, which, as it stopPropagation, refrain the call of
@@ -136,7 +192,7 @@ const PointMixin = {
   },
 
   _disableDragging: function () {
-    if (this._map._umap.editEnabled) {
+    if (this.feature._umap.editEnabled) {
       if (this.editor?.drawing) return // when creating a new marker, the mouse can trigger the mouseover/mouseout event
       // do not listen to them
       this.disableEdit()
@@ -172,6 +228,12 @@ export const LeafletMarker = Marker.extend({
     this.on('popupclose', this.resetHighlight)
   },
 
+  removeInteractions() {
+    PointMixin.removeInteractions.call(this)
+    this.off('popupopen', this.highlight)
+    this.off('popupclose', this.resetHighlight)
+  },
+
   onMoveEnd: function () {
     this._initIcon()
     this.update()
@@ -187,8 +249,6 @@ export const LeafletMarker = Marker.extend({
     }
     this.options.icon = this.getIcon()
     Marker.prototype._initIcon.call(this)
-    // Allow to run code when icon is actually part of the DOM
-    this.options.icon.onAdd()
     this.resetTooltip()
   },
 
@@ -198,21 +258,16 @@ export const LeafletMarker = Marker.extend({
 
   getIcon: function () {
     const Class = Icon.getClass(this.getIconClass())
-    return new Class({ feature: this.feature })
+    return new LeafletIcon(new Class(this.feature))
   },
 
   _getTooltipAnchor: function () {
-    const anchor = this.options.icon.options.tooltipAnchor.clone()
+    const [x, y] = this.options.icon.options.tooltipAnchor
     const direction = this.feature.getOption('labelDirection')
-    if (direction === 'left') {
-      anchor.x *= -1
-    } else if (direction === 'bottom') {
-      anchor.x = 0
-      anchor.y = 0
-    } else if (direction === 'top') {
-      anchor.x = 0
-    }
-    return anchor
+    if (direction === 'left') return [-x, y]
+    if (direction === 'bottom') return [0, 0]
+    if (direction === 'top') return [0, y]
+    return [x, y]
   },
 
   _redraw: function () {
@@ -238,45 +293,94 @@ export const LeafletMarker = Marker.extend({
     this._redraw()
     this._resetZIndex()
   },
+
+  _resetZIndex() {
+    // Override Leaflet default behaviour, which set the zIndex
+    // according to feature's y coordinate, and group features
+    // zIndex by their datalayer order
+    this._zIndex = this.feature.datalayer.getDOMOrder()
+    this._updateZIndex(0)
+  },
 })
 
 const PathMixin = {
-  _onMouseOver: function () {
+  maxVertex: 100,
+  onMouseOver: function () {
     if (this._map.measureTools?.enabled()) {
-      this._map._umap.tooltip.open({ content: this.getMeasure(), anchor: this })
-    } else if (this._map._umap.editEnabled && !this._map._umap.editedFeature) {
-      this._map._umap.tooltip.open({
-        content: translate('Click to edit'),
-        anchor: this,
-      })
+      this.feature._umap.tooltip.open({ content: this.getMeasure(), anchor: this })
+    } else {
+      FeatureMixin.onMouseOver.call(this)
     }
+  },
+
+  shouldAllowGeometryEdit: function () {
+    const pointsCount = this._parts.reduce((acc, part) => acc + part.length, 0)
+    return (
+      pointsCount < this.maxVertex || this._map.getZoom() === this._map.getMaxZoom()
+    )
   },
 
   makeGeometryEditable: function () {
     // Feature has been removed since then?
     if (!this._map) return
-    if (this._map._umap.editedFeature !== this.feature) {
+    if (this.feature._umap.editedFeature !== this.feature) {
       this.disableEdit()
       return
     }
     this._map.once('moveend', this.makeGeometryEditable, this)
-    const pointsCount = this._parts.reduce((acc, part) => acc + part.length, 0)
-    if (pointsCount > 100 && this._map.getZoom() < this._map.getMaxZoom()) {
-      this._map._umap.tooltip.open({
-        content: L._('Please zoom in to edit the geometry'),
+    if (this.shouldAllowGeometryEdit()) {
+      this.stopTransform()
+      this.enableEdit()
+    } else {
+      this.feature._umap.tooltip.open({
+        content: translate('Please zoom in to edit the geometry'),
       })
       this.disableEdit()
-    } else {
-      this.enableEdit()
+    }
+  },
+
+  startMyTransform: function () {
+    if (this._transformHandler) {
+      this.stopTransform()
+      return
+    }
+    if (this.editEnabled()) this.disableEdit()
+    this.feature._umap.editPanel.close()
+    const handler = new Transform(this, { rotation: true, scaling: true, uniformScaling: false })
+    this._transformHandler = handler
+    handler.enable()
+    this.on('transformed', this._onTransformed, this)
+    this._stopTransformOnClick = () => this.stopTransform()
+    this._map.on('click', this._stopTransformOnClick)
+  },
+
+  _onTransformed: function () {
+    this.feature.onCommit(this.toGeometry())
+  },
+
+  stopTransform: function () {
+    if (!this._transformHandler) return
+    this._transformHandler.disable()
+    this._transformHandler = null
+    this.off('transformed', this._onTransformed, this)
+    if (this._stopTransformOnClick) {
+      this._map.off('click', this._stopTransformOnClick)
+      this._stopTransformOnClick = null
     }
   },
 
   addInteractions: function () {
     FeatureMixin.addInteractions.call(this)
-    this.on('mouseover', this._onMouseOver)
     this.on('drag editable:drag', this._onDrag)
     this.on('popupopen', this.highlightPath)
     this.on('popupclose', this._redraw)
+  },
+
+  removeInteractions: function () {
+    FeatureMixin.removeInteractions.call(this)
+    this.off('drag editable:drag', this._onDrag)
+    this.off('popupopen', this.highlightPath)
+    this.off('popupclose', this._redraw)
   },
 
   bindTooltip: function (content, options) {
@@ -285,6 +389,7 @@ const PathMixin = {
   },
 
   highlightPath: function () {
+    this.feature.activate()
     this.parentClass.prototype.setStyle.call(this, {
       fillOpacity: Math.sqrt(this.feature.getDynamicOption('fillOpacity', 1.0)),
       opacity: 1.0,
@@ -294,6 +399,11 @@ const PathMixin = {
 
   _onDrag: function () {
     if (this._tooltip) this._tooltip.setLatLng(this.getCenter())
+  },
+
+  beforeAdd: function (map) {
+    this.options.renderer = this.feature.datalayer.renderer
+    this.parentClass.prototype.beforeAdd.call(this, map)
   },
 
   onAdd: function (map) {
@@ -320,27 +430,48 @@ const PathMixin = {
     // https://github.com/Leaflet/Leaflet/pull/9475
 
     this._path.classList.toggle('leaflet-interactive', options.interactive)
+
+    // Text decoration
+    this.setText(null) // Reset.
+    const textPath = this.feature.getDynamicOption('textPath')
+    if (textPath) {
+      const color =
+        this.feature.getOption('textPathColor') ||
+        this.feature.getDynamicOption('color')
+      const textPathOptions = {
+        repeat: this.feature.getOption('textPathRepeat'),
+        offset: this.feature.getOption('textPathOffset') || undefined,
+        position: this.feature.getOption('textPathPosition'),
+        attributes: {
+          fill: color,
+          opacity: this.feature.getDynamicOption('opacity'),
+          rotate: this.feature.getOption('textPathRotate'),
+          'font-size': this.feature.getOption('textPathSize'),
+        },
+      }
+      this.setText(textPath, textPathOptions)
+    }
   },
 
   _redraw: function () {
+    this.feature.deactivate()
     this.setStyle()
     this.resetTooltip()
-  },
-
-  onVertexRawClick: function (event) {
-    this._map._umap.editContextmenu.open(
-      event.originalEvent,
-      this.feature.getInplaceEditVertexMenu(event)
-    )
   },
 
   isolateShape: function (atLatLng) {
     if (!this.feature.isMulti()) return
     const shape = this.enableEdit().deleteShapeAt(atLatLng)
-    this.feature.pullGeometry()
     this.disableEdit()
     if (!shape) return
-    return this.feature.isolateShape(shape)
+    // TODO: remove direct call to feature.datalayer.
+    // Use an event instead ?
+    const other = this.feature.datalayer.makeFeature({
+      geometry: this.toGeometry(shape),
+      properties: this.feature.cloneProperties(),
+    })
+    other.edit()
+    return other
   },
 
   getStyleOptions: () => [
@@ -357,6 +488,7 @@ const PathMixin = {
   ],
 
   isOnScreen: function (bounds) {
+    bounds = bounds || this._map.getBounds()
     return bounds.overlaps(this.getBounds())
   },
 
@@ -374,21 +506,22 @@ export const LeafletPolyline = Polyline.extend({
 
   getClass: () => LeafletPolyline,
 
-  getMeasure: function (shape) {
-    let shapes
-    if (shape) {
-      shapes = [shape]
-    } else if (LineUtil.isFlat(this._latlngs)) {
-      shapes = [this._latlngs]
-    } else {
-      shapes = this._latlngs
+  toGeometry: function (latlngs = this.getLatLngs()) {
+    let multi = !LineUtil.isFlat(latlngs)
+    if (multi && latlngs.length === 1) {
+      // Simple LineString badly typed as Multi
+      latlngs = latlngs[0]
+      multi = false
     }
-    // FIXME: compute from data in feature (with TurfJS)
-    const length = shapes.reduce(
-      (acc, shape) => acc + L.GeoUtil.lineLength(this._map, shape),
-      0
-    )
-    return L.GeoUtil.readableDistance(length, this._map.measureTools.getMeasureUnit())
+    return {
+      type: multi ? 'MultiLineString' : 'LineString',
+      coordinates: GeoJSON.latLngsToCoords(latlngs, multi ? 1 : 0, false),
+    }
+  },
+
+  getMeasure: function (shape) {
+    const length = GeoUtils.length(this.toGeometry(shape), { units: 'meters' })
+    return TextUtils.readableDistance(length)
   },
 
   getElevation: function () {
@@ -405,7 +538,7 @@ export const LeafletPolyline = Polyline.extend({
       return [gain, loss]
     }
     let shapes
-    if (LineUtil.isFlat(this._latlngs)) {
+    if (GeoUtils.isFlat(this._latlngs)) {
       shapes = [this._latlngs]
     } else {
       shapes = this._latlngs
@@ -421,19 +554,102 @@ export const LeafletPolyline = Polyline.extend({
   },
 })
 
+export const RouteEditor = L.Editable.PolylineEditor.extend({
+  options: {
+    skipMiddleMarkers: true,
+    draggable: false,
+  },
+
+  getLatLngs: function () {
+    return this.feature._route
+  },
+})
+
+export const LeafletRoute = LeafletPolyline.extend({
+  initialize: function (feature, latlngs) {
+    this._route = GeoJSON.coordsToLatLngs(
+      feature.properties._umap_options.route?.coordinates
+    )
+    FeatureMixin.initialize.call(this, feature, latlngs)
+    delete this.dragging
+  },
+
+  addInteractions: function () {
+    PathMixin.addInteractions.call(this)
+    this.on('editable:drawing:clicked', this.onDrawingClick)
+    this.on('editable:vertex:dragend editable:vertex:deleted', this.onDrawingMoved)
+  },
+
+  removeInteractions: function () {
+    PathMixin.removeInteractions.call(this)
+    this.off('editable:drawing:clicked', this.onDrawingClick)
+    this.off('editable:vertex:dragend editable:vertex:deleted', this.onDrawingMoved)
+  },
+
+  getEditorClass: (tools) => {
+    return RouteEditor
+  },
+
+  getClass: () => LeafletRoute,
+
+  syncRoute() {
+    this.feature.properties._umap_options.route.coordinates = GeoJSON.latLngsToCoords(
+      this._route
+    )
+  },
+
+  onDrawingMoved: function (event) {
+    this.syncRoute()
+    if (this._route.length >= 2) {
+      this.feature.computeRoute()
+    }
+  },
+
+  onDrawingClick: function (event) {
+    this._route.push(event.latlng)
+    this.syncRoute()
+    if (this._route.length >= 2) {
+      this.feature.computeRoute()
+    }
+  },
+
+  shouldAllowGeometryEdit: function () {
+    return (
+      this._route.length < this.maxVertex ||
+      this._map.getZoom() === this._map.getMaxZoom()
+    )
+  },
+})
+
 export const LeafletPolygon = Polygon.extend({
   parentClass: Polygon,
   includes: [FeatureMixin, PathMixin],
 
   getClass: () => LeafletPolygon,
 
+  toGeometry: function (latlngs = this.getLatLngs()) {
+    let holes = !LineUtil.isFlat(latlngs)
+    let multi = holes && !LineUtil.isFlat(latlngs[0])
+    if (multi && latlngs.length === 1) {
+      // Simple LineString badly typed as Multi
+      latlngs = latlngs[0]
+      holes = !LineUtil.isFlat(latlngs)
+      multi = false
+    }
+    let coords = GeoJSON.latLngsToCoords(latlngs, multi ? 2 : holes ? 1 : 0, true)
+    if (!holes) coords = [coords]
+    return {
+      type: multi ? 'MultiPolygon' : 'Polygon',
+      coordinates: coords,
+    }
+  },
+
   startHole: function (event) {
     this.enableEdit().newHole(event.latlng)
   },
-
+  
   getMeasure: function (shape) {
-    const area = L.GeoUtil.geodesicArea(shape || this._defaultShape())
-    return L.GeoUtil.readableArea(area, this._map.measureTools.getMeasureUnit())
+    return TextUtils.readableArea(GeoUtils.area(this.toGeometry(shape)))
   },
 })
 const WORLD = [
@@ -475,7 +691,7 @@ export const CircleMarker = BaseCircleMarker.extend({
   parentClass: BaseCircleMarker,
   includes: [FeatureMixin, PathMixin, PointMixin],
   initialize: function (feature, latlng) {
-    if (Array.isArray(latlng) && !(latlng[0] instanceof Number)) {
+    if (Array.isArray(latlng) && typeof latlng[0] !== 'number') {
       // Must be a line or polygon
       const bounds = new LatLngBounds(latlng)
       latlng = bounds.getCenter()
@@ -490,5 +706,9 @@ export const CircleMarker = BaseCircleMarker.extend({
   },
   getCenter: function () {
     return this._latlng
+  },
+
+  setText() {
+    // Dummy function, as it inherits from PathMixin
   },
 })

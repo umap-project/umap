@@ -150,9 +150,7 @@ def test_can_draw_multi(live_server, page, tilelayer):
     expect(add_shape).to_be_hidden()
     lines.first.click(button="right", position={"x": 10, "y": 1})
     expect(page.get_by_role("button", name="Transform to polygon")).to_be_hidden()
-    expect(
-        page.get_by_role("button", name="Remove shape from the multi")
-    ).to_be_visible()
+    expect(page.get_by_role("button", name="Delete this shape")).to_be_visible()
 
 
 def test_can_transfer_shape_from_simple_polyline(live_server, page, tilelayer):
@@ -263,6 +261,9 @@ def test_can_extract_shape(live_server, page, tilelayer):
     map.click(position={"x": 200, "y": 200})
     # Click again to finish
     map.click(position={"x": 200, "y": 200})
+    # Let the panel fully open, not to close the contextmenu (when
+    # refocus on panel input)
+    page.wait_for_timeout(300)
     expect(lines).to_have_count(1)
     lines.first.click(position={"x": 10, "y": 1}, button="right")
     extract_button.click()
@@ -281,6 +282,9 @@ def test_can_clone_polyline(live_server, page, tilelayer, settings):
     map.click(position={"x": 100, "y": 200})
     # Click again to finish
     map.click(position={"x": 100, "y": 200})
+    # Let the panel fully open, not to close the contextmenu (when
+    # refocus on panel input)
+    page.wait_for_timeout(300)
     expect(lines).to_have_count(1)
     lines.first.click(position={"x": 10, "y": 1}, button="right")
     page.get_by_role("button", name="Clone this feature").click()
@@ -306,6 +310,8 @@ def test_can_transform_polyline_to_polygon(live_server, page, tilelayer, setting
     map.click(position={"x": 100, "y": 200})
     # Click again to finish
     map.click(position={"x": 100, "y": 200})
+    page.wait_for_timeout(300)  # Time for the panel animation to finish
+
     expect(paths).to_have_count(1)
     expect(polygons).to_have_count(0)
     paths.first.click(position={"x": 10, "y": 1}, button="right")
@@ -326,13 +332,16 @@ def test_can_delete_shape_using_toolbar(live_server, page, tilelayer, settings):
     map.click(position={"x": 100, "y": 100})
     map.click(position={"x": 100, "y": 200})
     map.click(position={"x": 100, "y": 200})
+    # Let the panel fully open, not to close the contextmenu (when
+    # refocus on panel input)
+    page.wait_for_timeout(300)
 
     # Now split the line
-    map.click(position={"x": 100, "y": 100})
+    map.click(position={"x": 100, "y": 100}, button="right")
     page.get_by_role("button", name="Split line").click()
 
     # Delete part of it
-    map.click(position={"x": 125, "y": 100})
+    map.click(position={"x": 125, "y": 100}, button="right")
     page.get_by_role("button", name="Delete this shape").click()
     data = save_and_get_json(page)
     assert len(data["features"]) == 1
@@ -369,7 +378,7 @@ def test_can_merge_lines(live_server, page, tilelayer, settings):
     )
 
     # Right click and merge nodes
-    map.click(button="right", position={"x": 100, "y": 200})
+    map.click(button="right", position={"x": 100, "y": 120})
     page.get_by_role("button", name="Merge lines").click()
     data = save_and_get_json(page)
     assert len(data["features"]) == 1

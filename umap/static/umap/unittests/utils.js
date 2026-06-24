@@ -120,28 +120,28 @@ describe('Utils', () => {
     it('should handle iframe', () => {
       assert.equal(
         Utils.toHTML('A simple iframe: {{{http://osm.org/pouet.html}}}'),
-        'A simple iframe: <div><iframe height="300px" width="100%" src="http://osm.org/pouet.html" frameborder="0"></iframe></div>'
+        'A simple iframe: <div><iframe style="width: 100%; height: 300px; border: 0;" src="http://osm.org/pouet.html" allowfullscreen=""></iframe></div>'
       )
     })
 
     it('should handle iframe with height', () => {
       assert.equal(
         Utils.toHTML('A simple iframe: {{{http://osm.org/pouet.html|200}}}'),
-        'A simple iframe: <div><iframe height="200px" width="100%" src="http://osm.org/pouet.html" frameborder="0"></iframe></div>'
+        'A simple iframe: <div><iframe style="width: 100%; height: 200px; border: 0;" src="http://osm.org/pouet.html" allowfullscreen=""></iframe></div>'
       )
     })
 
     it('should handle iframe with height and width', () => {
       assert.equal(
         Utils.toHTML('A simple iframe: {{{http://osm.org/pouet.html|200*400}}}'),
-        'A simple iframe: <div><iframe height="200px" width="400px" src="http://osm.org/pouet.html" frameborder="0"></iframe></div>'
+        'A simple iframe: <div><iframe style="width: 400px; height: 200px; border: 0;" src="http://osm.org/pouet.html" allowfullscreen=""></iframe></div>'
       )
     })
 
     it('should handle iframe with height with px', () => {
       assert.equal(
         Utils.toHTML('A simple iframe: {{{http://osm.org/pouet.html|200px}}}'),
-        'A simple iframe: <div><iframe height="200px" width="100%" src="http://osm.org/pouet.html" frameborder="0"></iframe></div>'
+        'A simple iframe: <div><iframe style="width: 100%; height: 200px; border: 0;" src="http://osm.org/pouet.html" allowfullscreen=""></iframe></div>'
       )
     })
 
@@ -150,7 +150,7 @@ describe('Utils', () => {
         Utils.toHTML(
           'A simple iframe: {{{https://osm.org/?url=https%3A//anotherurl.com}}}'
         ),
-        'A simple iframe: <div><iframe height="300px" width="100%" src="https://osm.org/?url=https%3A//anotherurl.com" frameborder="0"></iframe></div>'
+        'A simple iframe: <div><iframe style="width: 100%; height: 300px; border: 0;" src="https://osm.org/?url=https%3A//anotherurl.com" allowfullscreen=""></iframe></div>'
       )
     })
 
@@ -159,7 +159,7 @@ describe('Utils', () => {
         Utils.toHTML(
           'A double iframe: {{{https://osm.org/pouet}}}{{{https://osm.org/boudin}}}'
         ),
-        'A double iframe: <div><iframe height="300px" width="100%" src="https://osm.org/pouet" frameborder="0"></iframe></div><div><iframe height="300px" width="100%" src="https://osm.org/boudin" frameborder="0"></iframe></div>'
+        'A double iframe: <div><iframe style="width: 100%; height: 300px; border: 0;" src="https://osm.org/pouet" allowfullscreen=""></iframe></div><div><iframe style="width: 100%; height: 300px; border: 0;" src="https://osm.org/boudin" allowfullscreen=""></iframe></div>'
       )
     })
 
@@ -168,7 +168,7 @@ describe('Utils', () => {
         Utils.toHTML(
           'An iframe with query string: {{{https://osm.org/pouet.html?name=foobar&description=baz baz}}}'
         ),
-        'An iframe with query string: <div><iframe height="300px" width="100%" src="https://osm.org/pouet.html?name=foobar&amp;description=baz baz" frameborder="0"></iframe></div>'
+        'An iframe with query string: <div><iframe style="width: 100%; height: 300px; border: 0;" src="https://osm.org/pouet.html?name=foobar&amp;description=baz baz" allowfullscreen=""></iframe></div>'
       )
     })
 
@@ -251,7 +251,7 @@ describe('Utils', () => {
     })
 
     it('should not fail with null value', () => {
-      assert.equal(Utils.escapeHTML(null), '')
+      assert.equal(Utils.escapeHTML(null), 'null')
     })
   })
 
@@ -515,113 +515,6 @@ describe('Utils', () => {
     })
   })
 
-  describe('#polygonMustBeFlattened', () => {
-    it('should return false for simple polygon', () => {
-      const coords = [
-        [
-          [100.0, 0.0],
-          [101.0, 0.0],
-          [101.0, 1.0],
-          [100.0, 1.0],
-          [100.0, 0.0],
-        ],
-      ]
-      assert.notOk(Utils.polygonMustBeFlattened(coords))
-    })
-
-    it('should return false for simple polygon with hole', () => {
-      const coords = [
-        [
-          [100.0, 0.0],
-          [101.0, 0.0],
-          [101.0, 1.0],
-          [100.0, 1.0],
-          [100.0, 0.0],
-        ],
-        [
-          [100.8, 0.8],
-          [100.8, 0.2],
-          [100.2, 0.2],
-          [100.2, 0.8],
-          [100.8, 0.8],
-        ],
-      ]
-      assert.notOk(Utils.polygonMustBeFlattened(coords))
-    })
-
-    it('should return false for multipolygon', () => {
-      const coords = [
-        [
-          [
-            [102.0, 2.0],
-            [103.0, 2.0],
-            [103.0, 3.0],
-            [102.0, 3.0],
-            [102.0, 2.0],
-          ],
-        ],
-        [
-          [
-            [100.0, 0.0],
-            [101.0, 0.0],
-            [101.0, 1.0],
-            [100.0, 1.0],
-            [100.0, 0.0],
-          ],
-          [
-            [100.2, 0.2],
-            [100.2, 0.8],
-            [100.8, 0.8],
-            [100.8, 0.2],
-            [100.2, 0.2],
-          ],
-        ],
-      ]
-      assert.notOk(Utils.polygonMustBeFlattened(coords))
-    })
-
-    it('should return true for false multi polygon', () => {
-      const coords = [
-        [
-          [
-            [100.0, 0.0],
-            [101.0, 0.0],
-            [101.0, 1.0],
-            [100.0, 1.0],
-            [100.0, 0.0],
-          ],
-        ],
-      ]
-      assert.ok(Utils.polygonMustBeFlattened(coords))
-    })
-
-    it('should return true for false multi polygon with hole', () => {
-      const coords = [
-        [
-          [
-            [100.0, 0.0],
-            [101.0, 0.0],
-            [101.0, 1.0],
-            [100.0, 1.0],
-            [100.0, 0.0],
-          ],
-          [
-            [100.8, 0.8],
-            [100.8, 0.2],
-            [100.2, 0.2],
-            [100.2, 0.8],
-            [100.8, 0.8],
-          ],
-        ],
-      ]
-      assert.ok(Utils.polygonMustBeFlattened(coords))
-    })
-
-    it('should return false for empty coords', () => {
-      assert.notOk(Utils.polygonMustBeFlattened([]))
-    })
-  })
-
   describe('#usableOption()', () => {
     it('should consider false', () => {
       assert.ok(Utils.usableOption({ key: false }, 'key'))
@@ -838,6 +731,24 @@ describe('Utils', () => {
         '2024-03-03T00:00:00.000Z'
       )
     })
+    it('should parse a French date', () => {
+      assert.equal(
+        Utils.parseNaiveDate('14/09/2020').toISOString(),
+        '2020-09-14T00:00:00.000Z'
+      )
+    })
+    it('should parse a French date with ambiguous day number', () => {
+      assert.equal(
+        Utils.parseNaiveDate('08/09/2020').toISOString(),
+        '2020-09-08T00:00:00.000Z'
+      )
+    })
+    it('should parse a US date', () => {
+      assert.equal(
+        Utils.parseNaiveDate('1/14/2020').toISOString(),
+        '2020-01-14T00:00:00.000Z'
+      )
+    })
   })
 
   describe('#isObject', () => {
@@ -865,45 +776,45 @@ describe('Utils', () => {
 
   describe('setObjectValue', () => {
     it('should be able to set object properties', () => {
-      let obj = {}
+      const obj = {}
       Utils.setObjectValue(obj, 'foo', 'foo')
       expect(obj).deep.equal({ foo: 'foo' })
     })
 
     it('should be able to set object properties recursively on existing objects', () => {
-      let obj = { foo: {} }
+      const obj = { foo: {} }
       Utils.setObjectValue(obj, 'foo.bar', 'foo')
       expect(obj).deep.equal({ foo: { bar: 'foo' } })
     })
 
     it('should be able to set object properties recursively on deep objects', () => {
-      let obj = { foo: { bar: { baz: {} } } }
+      const obj = { foo: { bar: { baz: {} } } }
       Utils.setObjectValue(obj, 'foo.bar.baz.test', 'value')
       expect(obj).deep.equal({ foo: { bar: { baz: { test: 'value' } } } })
     })
 
     it('should be able to replace object properties recursively on deep objects', () => {
-      let obj = { foo: { bar: { baz: { test: 'test' } } } }
+      const obj = { foo: { bar: { baz: { test: 'test' } } } }
       Utils.setObjectValue(obj, 'foo.bar.baz.test', 'value')
       expect(obj).deep.equal({ foo: { bar: { baz: { test: 'value' } } } })
     })
 
     it('should not set object properties recursively on non-existing objects', () => {
-      let obj = { foo: {} }
+      const obj = { foo: {} }
       Utils.setObjectValue(obj, 'bar.bar', 'value')
 
       expect(obj).deep.equal({ foo: {} })
     })
 
     it('should delete keys for undefined values', () => {
-      let obj = { foo: 'foo' }
+      const obj = { foo: 'foo' }
       Utils.setObjectValue(obj, 'foo', undefined)
 
       expect(obj).deep.equal({})
     })
 
     it('should delete keys for undefined values, recursively', () => {
-      let obj = { foo: { bar: 'bar' } }
+      const obj = { foo: { bar: 'bar' } }
       Utils.setObjectValue(obj, 'foo.bar', undefined)
 
       expect(obj).deep.equal({ foo: {} })

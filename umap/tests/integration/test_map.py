@@ -147,16 +147,16 @@ def test_default_view_latest_with_polygon(map, live_server, page):
     expect(layers).to_have_count(1)
 
 
-def test_default_view_locate(browser, live_server, map):
+def test_default_view_locate(browser, live_server, map, new_page):
     context = browser.new_context(
         geolocation={"longitude": 8.52967, "latitude": 39.16267},
         permissions=["geolocation"],
     )
     map.settings["properties"]["defaultView"] = "locate"
     map.save()
-    page = context.new_page()
+    page = new_page(custom_context=context)
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    expect(page).to_have_url(re.compile(r".*#18/39\.16267/8\.52967"))
+    expect(page).to_have_url(re.compile(r".*#18/39\.162670/8\.529670"))
 
 
 def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
@@ -199,11 +199,11 @@ def test_minimap_on_load(map, live_server, datalayer, page):
 
 def test_zoom_control_on_load(map, live_server, page):
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    expect(page.locator(".leaflet-control-zoom")).to_be_visible()
+    expect(page.locator(".umap-control-zoom")).to_be_visible()
     map.settings["properties"]["zoomControl"] = False
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    expect(page.locator(".leaflet-control-zoom")).to_be_hidden()
+    expect(page.locator(".umap-control-zoom")).to_be_hidden()
 
 
 def test_feature_in_query_string_has_precedence_over_onloadpanel(
@@ -224,7 +224,7 @@ def test_feature_in_query_string_has_precedence_over_onloadpanel(
                 },
             }
         ],
-        "_umap_options": {"popupShape": "Panel"},
+        "properties": {"popupShape": "Panel"},
     }
     DataLayerFactory(map=map, data=data)
     page.goto(f"{live_server.url}{map.get_absolute_url()}?feature=FooBar")
@@ -233,3 +233,32 @@ def test_feature_in_query_string_has_precedence_over_onloadpanel(
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     expect(page.get_by_role("heading", name="FooBar")).to_be_hidden()
     expect(page.get_by_role("heading", name="This is my map")).to_be_visible()
+
+
+def test_limitbounds(map, live_server, new_page, tilelayer):
+    map.settings["properties"]["limitBounds"] = {
+        "east": 2.848,
+        "west": 0.650,
+        "north": 43.116,
+        "south": 42.391,
+    }
+    map.settings["properties"]["zoom"] = 6
+    map.settings["geometry"] = {
+        "type": "Point",
+        "coordinates": [5, 12],
+    }
+    map.save()
+
+    # Load the map default view
+    page = new_page()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+
+    # We should be in the limitBounds center
+    expect(page).to_have_url(re.compile(r".*#9/42\..+/1\..+"))
+
+    # Force a hash (on a new page, to workaround playwright hallucinations)
+    page = new_page()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/51.0/2.0")
+
+    # We should still be in the limitBounds center
+    expect(page).to_have_url(re.compile(r".*#9/42\..+/1\..+"))

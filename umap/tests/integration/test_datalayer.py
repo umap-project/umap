@@ -1,8 +1,6 @@
-import json
 import re
 
 import pytest
-from django.core.files.base import ContentFile
 from playwright.sync_api import expect
 
 from ..base import DataLayerFactory
@@ -10,34 +8,29 @@ from ..base import DataLayerFactory
 pytestmark = pytest.mark.django_db
 
 
-def set_options(datalayer, **options):
-    # For now we need to change both the DB and the FS…
-    datalayer.settings.update(options)
-    data = json.load(datalayer.geojson.file)
-    data["_umap_options"].update(**options)
-    datalayer.geojson = ContentFile(json.dumps(data), "foo.json")
-    datalayer.save()
-
-
 def test_honour_displayOnLoad_false(map, live_server, datalayer, page):
-    set_options(datalayer, displayOnLoad=False)
+    datalayer.settings.update(displayOnLoad=False)
+    datalayer.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datalayers")
     expect(page.locator(".leaflet-marker-icon")).to_be_hidden()
     layers = page.locator(".umap-browser .datalayer")
     markers = page.locator(".leaflet-marker-icon")
-    layers_off = page.locator(".umap-browser .datalayer.off")
+    layers_off = page.locator(".umap-browser .datalayer summary.off")
     expect(layers).to_have_count(1)
     expect(layers_off).to_have_count(1)
     page.get_by_role("button", name="Open browser").click()
     page.get_by_label("Zoom in").click()
+    page.wait_for_timeout(300)
     expect(markers).to_be_hidden()
-    page.get_by_title("Show/hide layer").click()
+    with page.expect_response(re.compile(rf".*/datalayer/{map.pk}/{datalayer.pk}/.*")):
+        page.get_by_title("Show/hide layer").click()
     expect(layers_off).to_have_count(0)
     expect(markers).to_be_visible()
 
 
 def test_should_honour_fromZoom(live_server, map, datalayer, page):
-    set_options(datalayer, displayOnLoad=True, fromZoom=6)
+    datalayer.settings.update(displayOnLoad=True, fromZoom=6)
+    datalayer.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}#5/48.55/14.68")
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_be_hidden()
@@ -54,22 +47,30 @@ def test_should_honour_fromZoom(live_server, map, datalayer, page):
     expect(markers).to_be_visible()
 
 
-def test_should_honour_toZoom(live_server, map, datalayer, page):
-    set_options(datalayer, displayOnLoad=True, toZoom=6)
+def test_should_honour_toZoom(live_server, map, datalayer, page, new_page):
+    datalayer.settings.update(displayOnLoad=True, toZoom=6)
+    datalayer.save()
+    # Loading at zoom 7 should not show the marker
     page.goto(f"{live_server.url}{map.get_absolute_url()}#7/48.55/14.68")
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_be_hidden()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.55/14.68")
-    expect(page).to_have_url(re.compile(r".*#6/48\..+/14\..+"))
+
+    # Loading at zoom 6 should show the marker
+    page2 = new_page()
+    markers = page2.locator(".leaflet-marker-icon")
+    page2.goto(f"{live_server.url}{map.get_absolute_url()}#6/48.55/14.68")
+    expect(page2).to_have_url(re.compile(r".*#6/48\..+/14\..+"))
     expect(markers).to_be_visible()
-    page.get_by_label("Zoom out").click()
-    expect(page).to_have_url(re.compile(r".*#5/48\..+/14\..+"))
+
+    # Now try to unzoom/rezoom and check that markers show/hide accordingly.
+    page2.get_by_label("Zoom out").click()
+    expect(page2).to_have_url(re.compile(r".*#5/48\..+/14\..+"))
     expect(markers).to_be_visible()
-    page.get_by_label("Zoom in").click()
-    expect(page).to_have_url(re.compile(r".*#6/48\..+/14\..+"))
+    page2.get_by_label("Zoom in").click()
+    expect(page2).to_have_url(re.compile(r".*#6/48\..+/14\..+"))
     expect(markers).to_be_visible()
-    page.get_by_label("Zoom in").click()
-    expect(page).to_have_url(re.compile(r".*#7/48\..+/14\..+"))
+    page2.get_by_label("Zoom in").click()
+    expect(page2).to_have_url(re.compile(r".*#7/48\..+/14\..+"))
     expect(markers).to_be_hidden()
 
 
@@ -99,7 +100,7 @@ def test_should_honour_color_variable(live_server, map, page):
                 },
             },
         ],
-        "_umap_options": {
+        "properties": {
             "name": "Calque 2",
             "color": "{mycolor}",
             "fillColor": "{mycolor}",
@@ -108,7 +109,7 @@ def test_should_honour_color_variable(live_server, map, page):
     DataLayerFactory(map=map, data=data)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/47.5/2.5")
     expect(page.locator(".leaflet-overlay-pane path[fill='tomato']"))
-    markers = page.locator(".leaflet-marker-icon .icon_container")
+    markers = page.locator(".leaflet-marker-icon .icon-container")
     expect(markers).to_have_css("background-color", "rgb(240, 248, 255)")
 
 
@@ -116,9 +117,8 @@ def test_datalayers_in_query_string(live_server, datalayer, map, page):
     map.settings["properties"]["onLoadPanel"] = "datalayers"
     map.save()
     with_old_id = DataLayerFactory(old_id=134, map=map, name="with old id")
-    set_options(with_old_id, name="with old id")
-    visible = page.locator(".umap-browser .datalayer:not(.off) .datalayer-name")
-    hidden = page.locator(".umap-browser .datalayer.off .datalayer-name")
+    visible = page.locator(".umap-browser .datalayer summary:not(.off) .datalayer-name")
+    hidden = page.locator(".umap-browser .datalayer summary.off .datalayer-name")
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     expect(visible).to_have_count(2)
     expect(hidden).to_have_count(0)

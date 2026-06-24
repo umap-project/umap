@@ -5,20 +5,12 @@ import * as Utils from '../../utils.js'
 export const LayerMixin = {
   browsable: true,
 
-  onInit: function (leafletMap) {
-    if (this.datalayer.autoLoaded()) leafletMap.on('zoomend', this.onZoomEnd, this)
+  onAdd: function (map) {
+    map.on('moveend', this.onMoveEnd, this)
   },
 
-  onDelete: function (leafletMap) {
-    leafletMap.off('zoomend', this.onZoomEnd, this)
-  },
-
-  onAdd: function (leafletMap) {
-    leafletMap.on('moveend', this.onMoveEnd, this)
-  },
-
-  onRemove: function (leafletMap) {
-    leafletMap.off('moveend', this.onMoveEnd, this)
+  onRemove: function (map) {
+    map.off('moveend', this.onMoveEnd, this)
   },
 
   getType: function () {
@@ -35,7 +27,7 @@ export const LayerMixin = {
     return this._layers
   },
 
-  getEditableOptions: () => [],
+  getEditableProperties: () => [],
 
   onEdit: () => {},
 
@@ -48,12 +40,12 @@ export const LayerMixin = {
 
   onMoveEnd: function () {
     if (this.datalayer.hasDynamicData() && this.datalayer.showAtZoom()) {
-      this.datalayer.fetchRemoteData()
+      this.datalayer.fetchData()
     }
   },
 
   onZoomEnd() {
-    if (this.datalayer._forcedVisibility) return
+    if (!this.datalayer.autoVisibility) return
     if (!this.datalayer.showAtZoom() && this.datalayer.isVisible()) {
       this.datalayer.hide()
     }
@@ -73,17 +65,16 @@ export const Default = FeatureGroup.extend({
   initialize: function (datalayer) {
     this.datalayer = datalayer
     FeatureGroup.prototype.initialize.call(this)
-    LayerMixin.onInit.call(this, this.datalayer._leafletMap)
   },
 
-  onAdd: function (leafletMap) {
-    LayerMixin.onAdd.call(this, leafletMap)
-    return FeatureGroup.prototype.onAdd.call(this, leafletMap)
+  onAdd: function (map) {
+    LayerMixin.onAdd.call(this, map)
+    return FeatureGroup.prototype.onAdd.call(this, map)
   },
 
-  onRemove: function (leafletMap) {
-    LayerMixin.onRemove.call(this, leafletMap)
-    return FeatureGroup.prototype.onRemove.call(this, leafletMap)
+  onRemove: function (map) {
+    LayerMixin.onRemove.call(this, map)
+    return FeatureGroup.prototype.onRemove.call(this, map)
   },
 })
 

@@ -21,6 +21,19 @@ def test_can_edit_name(page, live_server, tilelayer):
     )
 
 
+def test_changing_name_is_debounced(live_server, openmap, page):
+    openmap.name = "previous"
+    openmap.save()
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    page.get_by_role("button", name="Edit map name and caption").click()
+    page.get_by_role("textbox", name="name").click()
+    page.get_by_role("textbox", name="name").press_sequentially("changed")
+    page.locator(".edit-undo").click()
+
+    page.get_by_role("button", name="Edit map name and caption").click()
+    expect(page.get_by_role("textbox", name="name")).to_have_value("previous")
+
+
 def test_can_display_help(page, live_server, tilelayer):
     page.goto(f"{live_server.url}/en/map/new/")
 
@@ -99,7 +112,7 @@ def test_map_color_impacts_data(live_server, page, tilelayer):
     page.get_by_title("Lime", exact=True).click()
 
     # Assert the new color was used
-    marker_style = page.locator(".leaflet-marker-icon .icon_container").get_attribute(
+    marker_style = page.locator(".leaflet-marker-icon .icon-container").get_attribute(
         "style"
     )
     assert "lime" in marker_style
@@ -115,6 +128,7 @@ def test_limitbounds_impacts_ui(live_server, page, tilelayer):
     page.get_by_text("Limit bounds").click()
     default_zoom_url = f"{live_server.url}/en/map/new/#5/51.110/7.053"
     page.goto(default_zoom_url)
+    page.wait_for_timeout(300)
     page.get_by_role("button", name="Use current bounds").click()
 
     zoom_in = page.get_by_label("Zoom in")
@@ -128,7 +142,7 @@ def test_limitbounds_impacts_ui(live_server, page, tilelayer):
     # But not to zoom out of the window
     zoom_out.click()  # back to normal
     page.wait_for_timeout(500)
-    assert "leaflet-disabled" in zoom_out.get_attribute("class")
+    assert "disabled" in zoom_out.get_attribute("class")
 
 
 def test_sortkey_impacts_datalayerindex(map, live_server, page):
@@ -198,6 +212,7 @@ def test_sortkey_impacts_datalayerindex(map, live_server, page):
     page.locator(".panel .umap-field-sortKey .blur-container button").click()
 
     # Features should be sorted by key  (First, Second, Third)
+    page.locator(".umap-browser .datalayer-name").click()
     first_listed_feature = page.locator(".umap-browser .datalayer ul > li").nth(0)
     second_listed_feature = page.locator(".umap-browser .datalayer ul > li").nth(1)
     third_listed_feature = page.locator(".umap-browser .datalayer ul > li").nth(2)

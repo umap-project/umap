@@ -38,7 +38,7 @@ DATALAYER_DATA = {
                 "_umap_options": {
                     "color": "OliveDrab",
                 },
-                "name": "test",
+                "name": "test one",
                 "description": "Some description",
             },
             "id": "QwNjg",
@@ -54,7 +54,7 @@ DATALAYER_DATA = {
                     "fill": False,
                     "opacity": 0.6,
                 },
-                "name": "test",
+                "name": "test two",
             },
             "id": "YwMTM",
             "geometry": {
@@ -100,10 +100,20 @@ def test_umap_export(map, live_server, bootstrap, page):
         },
         "layers": [
             {
-                "_umap_options": {
+                "properties": {
                     "browsable": True,
                     "displayOnLoad": True,
                     "name": "test datalayer",
+                    "fields": [
+                        {
+                            "key": "name",
+                            "type": "String",
+                        },
+                        {
+                            "key": "description",
+                            "type": "Text",
+                        },
+                    ],
                 },
                 "features": [
                     {
@@ -133,7 +143,7 @@ def test_umap_export(map, live_server, bootstrap, page):
                         "id": "QwNjg",
                         "properties": {
                             "_umap_options": {"color": "OliveDrab"},
-                            "name": "test",
+                            "name": "test one",
                             "description": "Some description",
                         },
                         "type": "Feature",
@@ -154,7 +164,7 @@ def test_umap_export(map, live_server, bootstrap, page):
                         "id": "YwMTM",
                         "properties": {
                             "_umap_options": {"fill": False, "opacity": 0.6},
-                            "name": "test",
+                            "name": "test two",
                         },
                         "type": "Feature",
                     },
@@ -199,9 +209,28 @@ def test_csv_export(map, live_server, bootstrap, page):
     assert (
         path.read_text()
         == """name,Latitude,Longitude,description
-name poly,53.0072070131872,12.182431646910137,
-test,52.57635,-0.274658,Some description
-test,53.725145179688646,2.9700064980570517,"""
+name poly,53.18871683333333,12.009887666666666,
+test one,52.57635,-0.274658,Some description
+test two,53.87398885714286,3.528180714285714,"""
+    )
+
+
+def test_wkt_export(map, live_server, bootstrap, page):
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?share")
+    button = page.get_by_role("button", name="wkt")
+    expect(button).to_be_visible()
+    with page.expect_download() as download_info:
+        button.click()
+    download = download_info.value
+    assert download.suggested_filename == "test_map.csv"
+    path = Path("/tmp/") / download.suggested_filename
+    download.save_as(path)
+    assert (
+        path.read_text()
+        == """name,geometry,description
+name poly,"POLYGON ((11.25 53.585984,10.151367 52.975108,12.689209 52.167194,14.084473 53.199452,12.634277 53.618579,11.25 53.585984,11.25 53.585984))",
+test one,POINT (-0.274658 52.57635),Some description
+test two,"LINESTRING (-0.571289 54.476422,0.439453 54.610255,1.724854 53.448807,4.163818 53.988395,5.306396 53.533778,6.591797 53.709714,7.042236 53.350551)","""
     )
 
 
@@ -218,7 +247,7 @@ def test_gpx_export(map, live_server, bootstrap, page):
     download.save_as(path)
     assert (
         path.read_text()
-        == """<?xml version="1.0" encoding="UTF-8"?><gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="@dwayneparton/geojson-to-gpx"><wpt lat="52.57635" lon="-0.274658"><name>test</name><desc>Some description</desc></wpt><trk><name>test</name><trkseg><trkpt lat="54.476422" lon="-0.571289"/><trkpt lat="54.610255" lon="0.439453"/><trkpt lat="53.448807" lon="1.724854"/><trkpt lat="53.988395" lon="4.163818"/><trkpt lat="53.533778" lon="5.306396"/><trkpt lat="53.709714" lon="6.591797"/><trkpt lat="53.350551" lon="7.042236"/></trkseg></trk></gpx>"""
+        == """<?xml version="1.0" encoding="UTF-8"?><gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="@dwayneparton/geojson-to-gpx"><wpt lat="52.57635" lon="-0.274658"><name>test one</name><desc>Some description</desc></wpt><trk><name>test two</name><trkseg><trkpt lat="54.476422" lon="-0.571289"/><trkpt lat="54.610255" lon="0.439453"/><trkpt lat="53.448807" lon="1.724854"/><trkpt lat="53.988395" lon="4.163818"/><trkpt lat="53.533778" lon="5.306396"/><trkpt lat="53.709714" lon="6.591797"/><trkpt lat="53.350551" lon="7.042236"/></trkseg></trk></gpx>"""
     )
 
 
@@ -234,7 +263,7 @@ def test_kml_export(map, live_server, bootstrap, page):
     download.save_as(path)
     assert (
         path.read_text()
-        == """<kml xmlns="http://www.opengis.net/kml/2.2"><Document>\n<Placemark id="gyNzM">\n<name>name poly</name><ExtendedData></ExtendedData>\n  <Polygon>\n<outerBoundaryIs>\n  <LinearRing><coordinates>11.25,53.585984\n10.151367,52.975108\n12.689209,52.167194\n14.084473,53.199452\n12.634277,53.618579\n11.25,53.585984\n11.25,53.585984</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>\n<Placemark id="QwNjg">\n<name>test</name><description>Some description</description><ExtendedData>\n  <Data name="_umap_options"><value>{"color":"OliveDrab"}</value></Data></ExtendedData>\n  <Point><coordinates>-0.274658,52.57635</coordinates></Point></Placemark>\n<Placemark id="YwMTM">\n<name>test</name><ExtendedData>\n  <Data name="_umap_options"><value>{"fill":false,"opacity":0.6}</value></Data></ExtendedData>\n  <LineString><coordinates>-0.571289,54.476422\n0.439453,54.610255\n1.724854,53.448807\n4.163818,53.988395\n5.306396,53.533778\n6.591797,53.709714\n7.042236,53.350551</coordinates></LineString></Placemark></Document></kml>"""
+        == """<kml xmlns="http://www.opengis.net/kml/2.2"><Document>\n<Placemark id="gyNzM">\n<name>name poly</name><ExtendedData></ExtendedData>\n  <Polygon>\n<outerBoundaryIs>\n  <LinearRing><coordinates>11.25,53.585984\n10.151367,52.975108\n12.689209,52.167194\n14.084473,53.199452\n12.634277,53.618579\n11.25,53.585984\n11.25,53.585984</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>\n<Placemark id="QwNjg">\n<name>test one</name><description>Some description</description><ExtendedData>\n  <Data name="_umap_options"><value>{"color":"OliveDrab"}</value></Data></ExtendedData>\n  <Point><coordinates>-0.274658,52.57635</coordinates></Point></Placemark>\n<Placemark id="YwMTM">\n<name>test two</name><ExtendedData>\n  <Data name="_umap_options"><value>{"fill":false,"opacity":0.6}</value></Data></ExtendedData>\n  <LineString><coordinates>-0.571289,54.476422\n0.439453,54.610255\n1.724854,53.448807\n4.163818,53.988395\n5.306396,53.533778\n6.591797,53.709714\n7.042236,53.350551</coordinates></LineString></Placemark></Document></kml>"""
     )
 
 
@@ -274,7 +303,7 @@ def test_geojson_export(map, live_server, bootstrap, page):
                 "id": "QwNjg",
                 "properties": {
                     "_umap_options": {"color": "OliveDrab"},
-                    "name": "test",
+                    "name": "test one",
                     "description": "Some description",
                 },
                 "type": "Feature",
@@ -295,10 +324,74 @@ def test_geojson_export(map, live_server, bootstrap, page):
                 "id": "YwMTM",
                 "properties": {
                     "_umap_options": {"fill": False, "opacity": 0.6},
-                    "name": "test",
+                    "name": "test two",
                 },
                 "type": "Feature",
             },
         ],
         "type": "FeatureCollection",
     }
+
+
+def test_export_should_respect_filters(map, live_server, bootstrap, page):
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.locator("summary").filter(has_text="Filters").locator("i").click()
+    page.get_by_role("textbox", name="Search map features…").fill("test")
+    page.wait_for_timeout(300)  # Wait for debounce
+    page.get_by_role("button", name="Share and download").click()
+    button = page.get_by_role("button", name="geojson")
+    expect(button).to_be_visible()
+    with page.expect_download() as download_info:
+        button.click()
+    download = download_info.value
+    assert download.suggested_filename == "test_map.geojson"
+    path = Path("/tmp/") / download.suggested_filename
+    download.save_as(path)
+    assert json.loads(path.read_text()) == {
+        "features": [
+            {
+                "geometry": {"coordinates": [-0.274658, 52.57635], "type": "Point"},
+                "id": "QwNjg",
+                "properties": {
+                    "_umap_options": {"color": "OliveDrab"},
+                    "name": "test one",
+                    "description": "Some description",
+                },
+                "type": "Feature",
+            },
+            {
+                "geometry": {
+                    "coordinates": [
+                        [-0.571289, 54.476422],
+                        [0.439453, 54.610255],
+                        [1.724854, 53.448807],
+                        [4.163818, 53.988395],
+                        [5.306396, 53.533778],
+                        [6.591797, 53.709714],
+                        [7.042236, 53.350551],
+                    ],
+                    "type": "LineString",
+                },
+                "id": "YwMTM",
+                "properties": {
+                    "_umap_options": {"fill": False, "opacity": 0.6},
+                    "name": "test two",
+                },
+                "type": "Feature",
+            },
+        ],
+        "type": "FeatureCollection",
+    }
+
+
+def test_png_export(map, live_server, bootstrap, page):
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?share#6/53.406/6.757")
+    page.get_by_role("button", name="png").click()
+    with page.expect_download() as download_info:
+        page.get_by_role("button", name="Download", exact=True).click()
+    download = download_info.value
+    assert download.suggested_filename == "test_map.png"
+    path = Path("/tmp/") / download.suggested_filename
+    download.save_as(path)
+    # Something has been saved…
+    assert path.read_bytes()

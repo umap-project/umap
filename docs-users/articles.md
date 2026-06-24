@@ -1,5 +1,14 @@
 # Articles
 
+## [Greeting uMap 3](https://www.openstreetmap.org/user/David%20Larlet/diary/406936) (2025-06-17)
+
+> After one more year of French administration funding (thank you!), we are so proud to have released versions 3.X of uMap since last April. Since then, we made a couple of adjustments to ease the deployment of that new version.
+>
+> The main feature of that version is the long awaited real-time collaboration! Thanks to Alexis for the development and NLnet for the funding 👏
+
+[Full article →](https://www.openstreetmap.org/user/David%20Larlet/diary/406936){ .md-button }
+
+
 ## [Towards uMap 3 😱](https://www.openstreetmap.org/user/David%20Larlet/diary/404654) (2024-07-16)
 
 > The latest 2.4.X release sets the path for two major requested features: real-time collaboration and one-click remote data importers.
@@ -85,7 +94,7 @@
 >
 > uMap is now ten years old, and is deployed on many instances around the world. The one I know well is hosted by OSM France, and is close to reach one million maps created and 100.000 users.
 >
-> This incubation program is ported by the French [“Accélérateur d’initiatives citoyennes”](https://citoyens.transformation.gouv.fr/), it includes coaches and a small budget for non tech needs (UI/UX…). One goal of this program is to find financial support for uMap development and maintainance. A French administration, the [Agence pour la cohésion des territoires](https://agence-cohesion-territoires.gouv.fr/), is the first uMap financial backer since a few months. This allowed us to put up a small team to work, part time, in uMap […]
+> This incubation program is ported by the French [“Accélérateur d’initiatives citoyennes”](https://citoyens.transformation.gouv.fr/), it includes coaches and a small budget for non tech needs (UI/UX…). One goal of this program is to find financial support for uMap development and maintenance. A French administration, the [Agence pour la cohésion des territoires](https://agence-cohesion-territoires.gouv.fr/), is the first uMap financial backer since a few months. This allowed us to put up a small team to work, part time, in uMap […]
 
 [Full article →](https://www.openstreetmap.org/user/ybon/diary/402248){ .md-button }
 

@@ -24,7 +24,7 @@ DATALAYER_DATA = {
             "properties": {"_umap_options": {"color": "DarkCyan"}, "name": "Here"},
         }
     ],
-    "_umap_options": {"displayOnLoad": True, "name": "FooBarFoo"},
+    "properties": {"displayOnLoad": True, "name": "FooBarFoo"},
 }
 FIXTURES = Path(__file__).parent.parent / "fixtures"
 
@@ -136,7 +136,7 @@ def test_can_change_picto_at_marker_level(openmap, live_server, page, pictos):
     expect(define).to_be_visible()
     expect(undefine).to_be_hidden()
     define.click()
-    # Map has an icon defined, so it shuold open on Recent tab
+    # Map has an icon defined, so it should open on Recent tab
     symbols = page.locator(".umap-pictogram-body .umap-pictogram-choice")
     expect(page.get_by_text("Recent")).to_be_visible()
     expect(symbols).to_have_count(1)

@@ -13,6 +13,8 @@ from .helpers import save_and_get_json
 
 pytestmark = pytest.mark.django_db
 
+PANEL_ANIMATION_TIME = 350
+
 
 def test_layers_list_is_updated(live_server, tilelayer, page):
     page.goto(f"{live_server.url}/map/new/")
@@ -22,9 +24,8 @@ def test_layers_list_is_updated(live_server, tilelayer, page):
     page.locator("[name=layer-id]").select_option(label="Import in a new layer")
     page.get_by_role("button", name="Manage layers").click()
     page.get_by_role("button", name="Add a layer").click()
-    page.locator('input[name="name"]').click()
     page.locator('input[name="name"]').fill("foobar")
-    page.wait_for_timeout(300)  # Time for the input debounce.
+    page.wait_for_timeout(300)  # Wait for the input throttling.
     page.get_by_role("button", name=f"Import data ({modifier}+I)").click()
     # Should still work
     page.locator("[name=layer-id]").select_option(label="Import in a new layer")
@@ -67,7 +68,7 @@ def test_umap_import_from_file(live_server, tilelayer, page):
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
     expect(layers).to_have_count(2)
-    nonloaded = page.locator(".umap-browser .datalayer.off")
+    nonloaded = page.locator(".umap-browser .datalayer summary.off")
     expect(nonloaded).to_have_count(1)
 
 
@@ -76,6 +77,7 @@ def test_umap_import_from_textarea(live_server, tilelayer, page, settings):
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_role("button", name="Open browser").click()
     page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
     path = Path(__file__).parent.parent / "fixtures/test_upload_data.umap"
     textarea.fill(path.read_text())
@@ -108,9 +110,8 @@ def test_import_geojson_from_textarea(tilelayer, live_server, page):
     expect(markers).to_have_count(0)
     expect(paths).to_have_count(0)
     expect(layers).to_have_count(0)
-    button = page.get_by_title("Import data")
-    expect(button).to_be_visible()
-    button.click()
+    page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
     path = Path(__file__).parent.parent / "fixtures/test_upload_data.json"
     textarea.fill(path.read_text())
@@ -133,9 +134,8 @@ def test_import_invalid_data(tilelayer, live_server, page):
     expect(markers).to_have_count(0)
     expect(paths).to_have_count(0)
     expect(layers).to_have_count(0)
-    button = page.get_by_title("Import data")
-    expect(button).to_be_visible()
-    button.click()
+    page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
     textarea.fill("invalid data")
     for format in ["geojson", "csv", "gpx", "kml", "georss", "osm", "umap"]:
@@ -153,9 +153,8 @@ def test_import_kml_from_textarea(tilelayer, live_server, page):
     expect(markers).to_have_count(0)
     expect(paths).to_have_count(0)
     expect(layers).to_have_count(0)
-    button = page.get_by_title("Import data")
-    expect(button).to_be_visible()
-    button.click()
+    page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
     path = Path(__file__).parent.parent / "fixtures/test_upload_data.kml"
     textarea.fill(path.read_text())
@@ -177,9 +176,8 @@ def test_import_gpx_from_textarea(tilelayer, live_server, page, settings):
     expect(markers).to_have_count(0)
     expect(paths).to_have_count(0)
     expect(layers).to_have_count(0)
-    button = page.get_by_title("Import data")
-    expect(button).to_be_visible()
-    button.click()
+    page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
     path = Path(__file__).parent.parent / "fixtures/test_upload_data.gpx"
     textarea.fill(path.read_text())
@@ -234,9 +232,8 @@ def test_import_osm_from_textarea(tilelayer, live_server, page):
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_have_count(0)
     expect(layers).to_have_count(0)
-    button = page.get_by_title("Import data")
-    expect(button).to_be_visible()
-    button.click()
+    page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
     path = Path(__file__).parent.parent / "fixtures/test_upload_data_osm.json"
     textarea.fill(path.read_text())
@@ -254,9 +251,8 @@ def test_import_csv_from_textarea(tilelayer, live_server, page):
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_have_count(0)
     expect(layers).to_have_count(0)
-    button = page.get_by_title("Import data")
-    expect(button).to_be_visible()
-    button.click()
+    page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
     path = Path(__file__).parent.parent / "fixtures/test_upload_data.csv"
     textarea.fill(path.read_text())
@@ -276,6 +272,7 @@ def test_can_import_in_existing_datalayer(live_server, datalayer, page, openmap)
     expect(layers).to_have_count(1)
     page.get_by_role("button", name="Edit").click()
     page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
     path = Path(__file__).parent.parent / "fixtures/test_upload_data.csv"
     textarea.fill(path.read_text())
@@ -297,6 +294,7 @@ def test_can_replace_datalayer_data(live_server, datalayer, page, openmap):
     expect(layers).to_have_count(1)
     page.get_by_role("button", name="Edit").click()
     page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
     path = Path(__file__).parent.parent / "fixtures/test_upload_data.csv"
     textarea.fill(path.read_text())
@@ -318,6 +316,7 @@ def test_can_import_in_new_datalayer(live_server, datalayer, page, openmap):
     expect(layers).to_have_count(1)
     page.get_by_role("button", name="Edit").click()
     page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
     path = Path(__file__).parent.parent / "fixtures/test_upload_data.csv"
     textarea.fill(path.read_text())
@@ -364,6 +363,7 @@ def test_should_remove_dot_in_property_names(live_server, page, settings, tilela
     }
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
     textarea.fill(json.dumps(data))
     page.locator('select[name="format"]').select_option("geojson")
@@ -422,9 +422,8 @@ def test_import_geometry_collection(live_server, page, tilelayer):
     expect(markers).to_have_count(0)
     expect(paths).to_have_count(0)
     expect(layers).to_have_count(0)
-    button = page.get_by_title("Import data")
-    expect(button).to_be_visible()
-    button.click()
+    page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
     textarea.fill(json.dumps(data))
     page.locator('select[name="format"]').select_option("geojson")
@@ -477,9 +476,8 @@ def test_import_geometry_collection_in_feature(live_server, page, tilelayer):
     expect(markers).to_have_count(0)
     expect(paths).to_have_count(0)
     expect(layers).to_have_count(0)
-    button = page.get_by_title("Import data")
-    expect(button).to_be_visible()
-    button.click()
+    page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
     textarea.fill(json.dumps(data))
     page.locator('select[name="format"]').select_option("geojson")
@@ -489,6 +487,7 @@ def test_import_geometry_collection_in_feature(live_server, page, tilelayer):
     expect(markers).to_have_count(1)
     expect(paths).to_have_count(2)
     # Geometries are treated as separate features.
+    page.get_by_text("Layer 1").click()  # Open layer box in browser.
     expect(page.get_by_text("foobar")).to_have_count(3)
 
 
@@ -513,9 +512,8 @@ def test_import_multipolygon(live_server, page, tilelayer):
     paths = page.locator("path")
     expect(paths).to_have_count(0)
     expect(layers).to_have_count(0)
-    button = page.get_by_title("Import data")
-    expect(button).to_be_visible()
-    button.click()
+    page.get_by_title("Import data").click()
+    expect(page.locator('.umap-import [name="submit"]')).to_be_visible()
     textarea = page.locator(".umap-import textarea")
     textarea.fill(json.dumps(data))
     page.locator('select[name="format"]').select_option("geojson")
@@ -545,9 +543,8 @@ def test_import_multipolyline(live_server, page, tilelayer):
     paths = page.locator("path")
     expect(paths).to_have_count(0)
     expect(layers).to_have_count(0)
-    button = page.get_by_title("Import data")
-    expect(button).to_be_visible()
-    button.click()
+    page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
     textarea.fill(json.dumps(data))
     page.locator('select[name="format"]').select_option("geojson")
@@ -555,6 +552,37 @@ def test_import_multipolyline(live_server, page, tilelayer):
     # A layer has been created
     expect(layers).to_have_count(1)
     expect(paths).to_have_count(1)
+
+
+def test_import_false_multipoint(live_server, page, tilelayer):
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "geometry": {
+                    "coordinates": [[1.43661447777346, 43.59853484073553]],
+                    "type": "MultiPoint",
+                },
+                "properties": {"name": "foo bar"},
+            }
+        ],
+    }
+    page.goto(f"{live_server.url}/map/new/")
+    page.get_by_title("Open browser").click()
+    layers = page.locator(".umap-browser .datalayer")
+    markers = page.locator(".leaflet-marker-icon")
+    expect(markers).to_have_count(0)
+    expect(layers).to_have_count(0)
+    page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
+    textarea = page.locator(".umap-import textarea")
+    textarea.fill(json.dumps(data))
+    page.locator('select[name="format"]').select_option("geojson")
+    page.get_by_role("button", name="Import data", exact=True).click()
+    # A layer has been created
+    expect(layers).to_have_count(1)
+    expect(markers).to_have_count(1)
 
 
 def test_should_not_import_empty_coordinates(live_server, page, tilelayer):
@@ -612,6 +640,7 @@ def test_should_not_import_empty_coordinates(live_server, page, tilelayer):
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Open browser").click()
     page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
     textarea.fill(json.dumps(data))
     page.locator('select[name="format"]').select_option("geojson")
@@ -627,6 +656,7 @@ def test_import_csv_without_valid_latlon_headers(tilelayer, live_server, page):
     layers = page.locator(".umap-browser .datalayer")
     markers = page.locator(".leaflet-marker-icon")
     page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
     textarea.fill("a,b,c\n12.23,48.34,mypoint\n12.23,48.34,mypoint2")
     page.locator('select[name="format"]').select_option("csv")
@@ -644,6 +674,7 @@ def test_import_csv_with_commas_in_latlon(tilelayer, live_server, page, settings
     layers = page.locator(".umap-browser .datalayer")
     markers = page.locator(".leaflet-marker-icon")
     page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
     textarea.fill("lat;lon;foobar\n12,24;48,34;mypoint\n12,23;48,35;mypoint2")
     page.locator('select[name="format"]').select_option("csv")
@@ -670,6 +701,116 @@ def test_import_csv_with_commas_in_latlon(tilelayer, live_server, page, settings
     }
 
 
+def test_import_csv_with_wkt_geom(tilelayer, live_server, page, settings):
+    settings.UMAP_ALLOW_ANONYMOUS = True
+    page.goto(f"{live_server.url}/map/new/")
+    page.get_by_title("Open browser").click()
+    layers = page.locator(".umap-browser .datalayer")
+    markers = page.locator(".leaflet-marker-icon")
+    paths = page.locator("path")
+    page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
+    textarea = page.locator(".umap-import textarea")
+    textarea.fill(
+        "Geom;foobar\nPOLYGON ((-64.8 32.3, -65.5 18.3, -80.3 25.2, -64.8 32.3));mypoly\nPOINT(48.35 12.23);mypoint"
+    )
+    page.locator('select[name="format"]').select_option("csv")
+    page.get_by_role("button", name="Import data", exact=True).click()
+    expect(layers).to_have_count(1)
+    expect(markers).to_have_count(1)
+    expect(paths).to_have_count(1)
+    with page.expect_response(re.compile(r".*/datalayer/create/.*")):
+        page.get_by_role("button", name="Save").click()
+    datalayer = DataLayer.objects.last()
+    saved_data = json.loads(Path(datalayer.geojson.path).read_text())
+    assert saved_data["features"][0]["geometry"] == {
+        "coordinates": [
+            48.35,
+            12.23,
+        ],
+        "type": "Point",
+    }
+    assert saved_data["features"][1]["geometry"] == {
+        "coordinates": [
+            [
+                [
+                    -64.8,
+                    32.3,
+                ],
+                [
+                    -65.5,
+                    18.3,
+                ],
+                [
+                    -80.3,
+                    25.2,
+                ],
+                [
+                    -64.8,
+                    32.3,
+                ],
+            ],
+        ],
+        "type": "Polygon",
+    }
+
+
+def test_import_csv_with_geojson_geom(tilelayer, live_server, page, settings):
+    settings.UMAP_ALLOW_ANONYMOUS = True
+    page.goto(f"{live_server.url}/map/new/")
+    page.get_by_title("Open browser").click()
+    layers = page.locator(".umap-browser .datalayer")
+    markers = page.locator(".leaflet-marker-icon")
+    paths = page.locator("path")
+    page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
+    textarea = page.locator(".umap-import textarea")
+    textarea.fill(
+        "geojson;foobar\n"
+        '{"coordinates": [[[-64.8,32.3],[-65.5,18.3],[-80.3,25.2],[-64.8,32.3]]],"type": "Polygon"};mypoly\n'
+        '{"coordinates": [48.35,12.23],"type": "Point"};mypoint'
+    )
+    page.locator('select[name="format"]').select_option("csv")
+    page.get_by_role("button", name="Import data", exact=True).click()
+    expect(layers).to_have_count(1)
+    expect(markers).to_have_count(1)
+    expect(paths).to_have_count(1)
+    with page.expect_response(re.compile(r".*/datalayer/create/.*")):
+        page.get_by_role("button", name="Save").click()
+    datalayer = DataLayer.objects.last()
+    saved_data = json.loads(Path(datalayer.geojson.path).read_text())
+    assert saved_data["features"][0]["geometry"] == {
+        "coordinates": [
+            48.35,
+            12.23,
+        ],
+        "type": "Point",
+    }
+    assert saved_data["features"][1]["geometry"] == {
+        "coordinates": [
+            [
+                [
+                    -64.8,
+                    32.3,
+                ],
+                [
+                    -65.5,
+                    18.3,
+                ],
+                [
+                    -80.3,
+                    25.2,
+                ],
+                [
+                    -64.8,
+                    32.3,
+                ],
+            ],
+        ],
+        "type": "Polygon",
+    }
+
+
 def test_create_remote_data(page, live_server, tilelayer):
     def handle(route):
         route.fulfill(
@@ -693,7 +834,7 @@ def test_create_remote_data(page, live_server, tilelayer):
     page.goto(f"{live_server.url}/map/new/")
     expect(page.locator(".leaflet-marker-icon")).to_be_hidden()
     page.get_by_role("button", name="Import data").click()
-    page.get_by_placeholder("Provide an URL here").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
     page.get_by_placeholder("Provide an URL here").fill("https://remote.org/data.json")
     page.locator("[name=format]").select_option("geojson")
     page.get_by_role("radio", name="Link to the layer as remote data").click()
@@ -916,9 +1057,8 @@ def test_import_osm_relation(tilelayer, live_server, page):
     paths = page.locator("path")
     expect(paths).to_have_count(0)
     expect(layers).to_have_count(0)
-    button = page.get_by_title("Import data")
-    expect(button).to_be_visible()
-    button.click()
+    page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
     file_path = Path(__file__).parent.parent / "fixtures/test_import_osm_relation.json"
     textarea.fill(file_path.read_text())
@@ -936,9 +1076,8 @@ def test_import_georss_from_textarea(tilelayer, live_server, page):
     markers = page.locator(".leaflet-marker-icon")
     expect(markers).to_have_count(0)
     expect(layers).to_have_count(0)
-    button = page.get_by_title("Import data")
-    expect(button).to_be_visible()
-    button.click()
+    page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
     path = Path(__file__).parent.parent / "fixtures/test_upload_georss.xml"
     textarea.fill(path.read_text())
@@ -984,3 +1123,17 @@ def test_umap_import_with_iconurl(live_server, tilelayer, page):
             'img[src="https://umap.incubateur.anct.gouv.fr/uploads/pictogram/car-24.png"]'
         )
     ).to_have_count(2)
+
+
+def test_umap_import_with_enum_and_filter(live_server, tilelayer, page):
+    page.goto(f"{live_server.url}/map/new/")
+    page.get_by_title("Import data").click()
+    file_input = page.locator("input[type='file']")
+    with page.expect_file_chooser() as fc_info:
+        file_input.click()
+    file_chooser = fc_info.value
+    path = Path(__file__).parent.parent / "fixtures/test_upload_data_with_enum.umap"
+    file_chooser.set_files(path)
+    page.get_by_role("button", name="Import data", exact=True).click()
+    markers = page.locator(".umap-large-circle-icon")
+    expect(markers).to_have_count(4)

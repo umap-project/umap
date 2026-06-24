@@ -1,4 +1,3 @@
-import { DomUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import { BaseAjax, SingleMixin } from '../autocomplete.js'
 import { translate } from '../i18n.js'
@@ -45,10 +44,10 @@ export class Importer {
         columns.innerHTML = ''
         const tr = document.createElement('tr')
         for (const column of cols) {
-          tr.appendChild(Utils.loadTemplate(`<th>${column}</th>`))
+          tr.appendChild(Utils.loadTemplate(Utils.sanitizeVars`<th>${column}</th>`))
           columns.appendChild(
             Utils.loadTemplate(
-              `<label><input type="checkbox" value="${column}" /> ${column}</label>`
+              Utils.sanitizeVars`<label><input type="checkbox" value="${column}" /> ${column}</label>`
             )
           )
         }
@@ -56,7 +55,9 @@ export class Importer {
         for (const row of rows) {
           const tr = document.createElement('tr')
           for (const column of cols) {
-            tr.appendChild(Utils.loadTemplate(`<td>${row[column]}</td>`))
+            tr.appendChild(
+              Utils.loadTemplate(Utils.sanitizeVars`<td>${row[column]}</td>`)
+            )
           }
           table.appendChild(tr)
         }

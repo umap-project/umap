@@ -140,7 +140,8 @@ class Peer:
             message = JoinRequest.model_validate_json(text_data)
             signed = TimestampSigner().unsign_object(message.token, max_age=30)
             user, map_id, permissions = signed.values()
-            assert str(map_id) == self.map_id
+            if str(map_id) != self.map_id:
+                raise ValueError("Wrong id")
             if "edit" not in permissions:
                 return await self.disconnect()
             self.peer_id = message.peer
@@ -184,4 +185,7 @@ class Peer:
             logging.debug(err)
 
 
-urlpatterns = [path("ws/sync/<str:map_id>", name="ws_sync", view=sync)]
+script_name = ""
+if settings.FORCE_SCRIPT_NAME:
+    script_name = f"{settings.FORCE_SCRIPT_NAME.strip('/')}/"
+urlpatterns = [path(f"{script_name}ws/sync/<str:map_id>", name="ws_sync", view=sync)]

@@ -1,7 +1,7 @@
 import { translate } from '../i18n.js'
 import { SCHEMA } from '../schema.js'
 import * as Utils from '../utils.js'
-import getClass from './fields.js'
+import { getClass } from './fields.js'
 
 export class Form extends Utils.WithEvents {
   constructor(obj, fields, properties) {
@@ -44,43 +44,48 @@ export class Form extends Utils.WithEvents {
   makeField(field) {
     // field can be either a string like "option.name" or a full definition array,
     // like ['properties.tilelayer.tms', {handler: 'CheckBox', helpText: 'TMS format'}]
-    let properties
+    let contextProperties = {}
     if (Array.isArray(field)) {
-      properties = field[1] || {}
+      contextProperties = field[1]
       field = field[0]
-    } else {
-      properties = this.defaultProperties[this.getName(field)] || {}
     }
+    const defaultProperties = this.defaultProperties[this.getName(field)] || {}
+    const properties = Object.assign({}, defaultProperties, contextProperties)
     const class_ = getClass(properties.handler || 'Input')
     this.helpers[field] = new class_(this, field, properties)
     return this.helpers[field]
   }
 
-  getter(field) {
-    const path = field.split('.')
+  getter(helper) {
+    const path = helper.field.split('.')
     let value = this.obj
     for (const sub of path) {
       try {
         value = value[sub]
       } catch {
-        console.debug(field)
+        console.debug(helper.field)
       }
     }
     return value
   }
 
-  setter(field, value) {
-    Utils.setObjectValue(this.obj, field, value)
+  setter(helper, value) {
+    if ('setter' in this.obj) {
+      this.obj.setter(helper.field, value)
+    } else {
+      Utils.setObjectValue(this.obj, helper.field, value)
+    }
   }
 
   restoreField(field) {
-    const initial = this.helpers[field].initial
-    this.setter(field, initial)
+    const helper = this.helpers[field]
+    const initial = helper.initial
+    this.setter(helper, initial)
   }
 
   getName(field) {
     const fieldEls = field.split('.')
-    return fieldEls[fieldEls.length - 1]
+    return Utils.escapeHTML(fieldEls[fieldEls.length - 1])
   }
 
   fetchAll() {
@@ -103,10 +108,18 @@ export class Form extends Utils.WithEvents {
 
   finish() {}
 
+  getHelperTemplate(helper) {
+    let tpl = helper.getTemplate()
+    if (helper.properties.label && !tpl.includes(helper.properties.label)) {
+      tpl = `<label>${helper.properties.label}${tpl}</label>`
+    }
+    return tpl
+  }
+
   getTemplate(helper) {
     return `
       <div class="formbox" data-ref=container>
-        ${helper.getTemplate()}
+        ${this.getHelperTemplate(helper)}
         <small class="help-text" data-ref=helpText></small>
       </div>`
   }
@@ -115,18 +128,23 @@ export class Form extends Utils.WithEvents {
 export class MutatingForm extends Form {
   constructor(obj, fields, properties) {
     super(obj, fields, properties)
+    this.debounce = true
     this._umap = obj._umap || properties.umap
     this.computeDefaultProperties()
-    // this.on('finish', this.finish)
   }
 
   computeDefaultProperties() {
     const customHandlers = {
       sortKey: 'PropertyInput',
       easing: 'Switch',
-      facetKey: 'PropertyInput',
       slugKey: 'PropertyInput',
       labelKey: 'PropertyInput',
+      color: 'ColorPicker',
+      fillColor: 'ColorPicker',
+      textPathColor: 'ColorPicker',
+      iconUrl: 'IconUrl',
+      licence: 'LicenceChooser',
+      datalayersControl: 'DataLayersControl',
     }
     for (const [key, defaults] of Object.entries(SCHEMA)) {
       const properties = Object.assign({}, defaults)
@@ -153,21 +171,7 @@ export class MutatingForm extends Form {
       } else if (properties.type === Number) {
         if (properties.step) properties.handler = 'Range'
         else properties.handler = 'IntInput'
-      } else {
-        switch (key) {
-          case 'color':
-          case 'fillColor':
-            properties.handler = 'ColorPicker'
-            break
-          case 'iconUrl':
-            properties.handler = 'IconUrl'
-            break
-          case 'licence':
-            properties.handler = 'LicenceChooser'
-            break
-        }
       }
-
       if (customHandlers[key]) {
         properties.handler = customHandlers[key]
       }
@@ -177,25 +181,21 @@ export class MutatingForm extends Form {
     }
   }
 
-  setter(field, value) {
-    const oldValue = this.getter(field)
-    if ('setter' in this.obj) {
-      this.obj.setter(field, value)
-    } else {
-      super.setter(field, value)
-    }
+  setter(helper, value) {
+    const oldValue = this.getter(helper)
+    super.setter(helper, value)
     if ('render' in this.obj) {
-      this.obj.render([field], this)
+      this.obj.render([helper.field], this)
     }
-    if ('sync' in this.obj) {
-      this.obj.sync.update(field, value, oldValue)
+    if ('journal' in this.obj && helper.properties.journal !== false) {
+      this.obj.journal.update(helper.field, value, oldValue)
     }
   }
 
   getTemplate(helper) {
     let template
     if (helper.properties.inheritable) {
-      const extraClassName = this.getter(helper.field) === undefined ? ' undefined' : ''
+      const extraClassName = this.getter(helper) === undefined ? ' undefined' : ''
       template = `
         <div class="umap-field-${helper.name} formbox inheritable${extraClassName}">
           <div class="header" data-ref=header>

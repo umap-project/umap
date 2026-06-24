@@ -272,7 +272,7 @@ def test_anonymous_can_edit_in_inherit_mode_and_map_in_public_mode(
     assert datalayer.can_edit(fake_request)
 
 
-def test_should_remove_all_versions_on_delete(map, settings):
+def test_should_remove_all_versions_on_delete():
     datalayer = DataLayerFactory(uuid="0f1161c0-c07f-4ba4-86c5-8d8981d8a813", old_id=17)
     root = Path(datalayer.geojson.storage._base_path(datalayer))
     before = len(datalayer.geojson.storage.listdir(root)[1])
@@ -291,3 +291,21 @@ def test_should_remove_all_versions_on_delete(map, settings):
     datalayer.delete()
     found = set(datalayer.geojson.storage.listdir(root)[1])
     assert found == {other, f"{other}.gz"}
+
+
+def test_simple_metadata(datalayer):
+    assert datalayer.metadata() == {
+        "referenceVersion": datalayer.reference_version,
+        "properties": {
+            "browsable": True,
+            "displayOnLoad": True,
+            "name": "test datalayer",
+        },
+        "rank": datalayer.rank,
+        "editMode": "disabled",
+        "id": datalayer.pk,
+        "parent": None,
+        "permissions": {
+            "edit_status": 0,
+        },
+    }

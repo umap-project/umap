@@ -31,7 +31,7 @@ def test_basic_choropleth_map_with_custom_brewer(openmap, live_server, page):
     data = json.loads(path.read_text())
 
     # Change brewer at load
-    data["_umap_options"]["choropleth"]["brewer"] = "Reds"
+    data["properties"]["choropleth"]["brewer"] = "Reds"
     DataLayerFactory(data=data, map=openmap)
 
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
@@ -70,7 +70,7 @@ def test_basic_choropleth_map_with_custom_classes(openmap, live_server, page):
     data = json.loads(path.read_text())
 
     # Change brewer at load
-    data["_umap_options"]["choropleth"]["classes"] = 6
+    data["properties"]["choropleth"]["classes"] = 6
     DataLayerFactory(data=data, map=openmap)
 
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}")

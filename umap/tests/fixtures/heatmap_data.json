@@ -1030,7 +1030,7 @@
             "id": "YxMTE"
         }
     ],
-    "_umap_options": {
+    "properties": {
         "displayOnLoad": true,
         "inCaption": true,
         "browsable": true,

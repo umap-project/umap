@@ -1,6 +1,6 @@
-import { DomUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { BaseAjax, SingleMixin } from '../autocomplete.js'
 import * as Util from '../utils.js'
+import * as DOMUtils from '../domutils.js'
 
 export class AutocompleteCommunes extends SingleMixin(BaseAjax) {
   createResult(item) {
@@ -29,13 +29,12 @@ export class Importer {
   }
 
   async open(importer) {
-    const container = DomUtil.create('div')
-    DomUtil.createTitle(container, this.name)
-    DomUtil.element({
-      tagName: 'p',
-      parent: container,
-      textContent: "Importer les contours d'une commune française.",
-    })
+    const container = DOMUtils.loadTemplate(`
+      <div>
+        <h3>${this.name}</h3>
+        <p>Importer les contours d'une commune française.</p>
+      </div>
+    `)
     const options = {
       placeholder: 'Nom ou code INSEE…',
       url: 'https://geo.api.gouv.fr/communes?nom={q}&limit=5',

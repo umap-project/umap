@@ -1,10 +1,20 @@
 import gzip
+import ipaddress
 import json
+import logging
 import os
+import socket
+import unicodedata
+from pathlib import Path
+from urllib.parse import urlparse
 
 from django.conf import settings
+from django.contrib.staticfiles import finders
 from django.core.serializers.json import DjangoJSONEncoder
-from django.urls import URLPattern, URLResolver, get_resolver
+from django.core.validators import URLValidator, ValidationError
+from django.urls import URLPattern, URLResolver, get_resolver, reverse
+
+logger = logging.getLogger(__name__)
 
 
 def _get_url_names(module):
@@ -26,15 +36,22 @@ def _urls_for_js():
     """
     Return templated URLs prepared for javascript.
     """
-    urls = {}
+    urls = {
+        "agnocomplete": f"{reverse('agnocomplete:agnocomplete', kwargs={'klass': 'AutocompleteUser'})}?q={{q}}"
+    }
     modules = ["umap.urls"]
     if settings.REALTIME_ENABLED:
         modules.append("umap.sync.app")
     for module in modules:
         names = _get_url_names(module)
+        prefix = settings.FORCE_SCRIPT_NAME or ""
         urls.update(
-            dict(zip(names, [get_uri_template(url, module=module) for url in names]))
+            zip(
+                names,
+                [get_uri_template(url, prefix=prefix, module=module) for url in names],
+            )
         )
+    urls["login"] = get_login_url()
     urls.update(getattr(settings, "UMAP_EXTRA_URLS", {}))
     return urls
 
@@ -77,7 +94,7 @@ def get_uri_template(urlname, args=None, prefix="", module=None):
             result, params = possibility[0]
             return _convert(result, params)
         else:
-            # If there are optionnal arguments passed, use them to try to find
+            # If there are optional arguments passed, use them to try to find
             # the correct pattern.
             # First, we need to build a list with all the arguments
             seen_params = []
@@ -147,6 +164,7 @@ def gzip_file(from_path, to_path):
         with gzip.open(to_path, "wb") as f_out:
             f_out.writelines(f_in)
     os.utime(to_path, ns=(stat.st_mtime_ns, stat.st_mtime_ns))
+    os.chmod(to_path, settings.FILE_UPLOAD_PERMISSIONS)
 
 
 def is_ajax(request):
@@ -185,3 +203,111 @@ def merge_features(reference: list, latest: list, incoming: list):
 def json_dumps(obj, **kwargs):
     """Utility using the Django JSON Encoder when dumping objects"""
     return json.dumps(obj, cls=DjangoJSONEncoder, **kwargs)
+
+
+def collect_pictograms():
+    pictograms = {}
+
+    for name, definition in settings.UMAP_PICTOGRAMS_COLLECTIONS.items():
+        root = Path(definition["path"])
+        subfolder = "pictograms"
+        if not root.is_absolute():
+            found_path = finders.find(root)
+            if not found_path:
+                print(f"Cannot find {root} in STATIFILES_DIRS")
+                continue
+            root = Path(found_path.removesuffix(definition["path"].rstrip("/")))
+            subfolder = definition["path"]
+        categories = {}
+        for path in (root / subfolder).iterdir():
+            if path.is_dir():
+                categories[path.name] = []
+                for subpath in path.iterdir():
+                    if subpath.is_dir() or subpath.name.startswith("."):
+                        continue
+                    src = subpath.relative_to(root)
+                    categories[path.name].append(
+                        {
+                            "name": subpath.stem,
+                            "src": f"{settings.STATIC_URL}{src}",
+                        }
+                    )
+        pictograms[name] = {
+            "attribution": definition.get("attribution"),
+            "categories": categories,
+        }
+
+    return pictograms
+
+
+def normalize_string(s):
+    n = unicodedata.normalize("NFKD", str(s))
+    return "".join([c for c in n if not unicodedata.combining(c)]).lower()
+
+
+def get_login_url():
+    if "/" in settings.LOGIN_URL:
+        return settings.LOGIN_URL
+    return reverse(settings.LOGIN_URL)
+
+
+def validate_url(request):
+    if not request.method == "GET":
+        raise ValueError("Wrong HTTP method")
+    url = request.GET.get("url")
+    if not url:
+        raise ValueError("Missing URL")
+    # Tolerate raw spaces (typically Overpass queries) — URLValidator would
+    # otherwise reject them.
+    url = url.replace(" ", "+")
+    try:
+        URLValidator()(url)
+    except ValidationError as err:
+        raise ValueError(err)
+    if not (http_referer := request.META.get("HTTP_REFERER")):
+        raise ValueError("Missing HTTP_REFERER")
+    referer = urlparse(http_referer)
+    target = urlparse(url)
+    site_url = urlparse(settings.SITE_URL)
+    if not target.hostname:
+        raise ValueError("No hostname")
+    if referer.hostname != site_url.hostname:
+        raise ValueError(f"{referer.hostname} != {site_url.hostname}")
+    if target.hostname == "localhost":
+        raise ValueError("Invalid localhost target")
+    if target.netloc == site_url.netloc:
+        raise ValueError("Invalid netloc")
+    try:
+        results = socket.getaddrinfo(target.hostname, None)
+    except socket.gaierror as err:
+        raise ValueError(err)
+    else:
+        all_ips = list(set(r[4][0] for r in results))
+        for ip in all_ips:
+            if ipaddress.ip_address(ip).is_private:
+                raise ValueError("Private IP")
+    return url
+
+
+def layers_tree(layers, keep_ids=True):
+    root = {str(layer["id"]): {"layers": [], **layer} for layer in layers}
+    for branch in root.values():
+        if branch["parent"]:
+            parent_id = str(branch["parent"])
+            if parent_id not in root:
+                logger.error(
+                    "layers_tree: layer %s references missing parent %s",
+                    branch["id"],
+                    branch["parent"],
+                )
+                continue
+            root[parent_id]["layers"].append(branch)
+    for [id, branch] in root.copy().items():
+        if not keep_ids:
+            del branch["id"]
+        if branch["parent"]:
+            del root[id]
+        del branch["parent"]
+        if not branch["layers"]:
+            del branch["layers"]
+    return list(root.values())

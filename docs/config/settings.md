@@ -3,7 +3,10 @@
 uMap runs with Django, so any Django setting should work, if you know what you
 are doing.
 
-The Django settings reference is here: https://docs.djangoproject.com/en/4.2/ref/settings/
+The Django settings reference is here: https://docs.djangoproject.com/en/stable/ref/settings/
+
+Some configuration ([tile layers](./admin.md#tile-layers) for instance) is managed through the
+[administration page](./admin.md).
 
 Here are a few relevant settings for uMap.
 
@@ -17,6 +20,24 @@ Those settings should either:
 - be declared as env vars directly, for simple ones (string/boolean/list)
 
 
+#### AJAX_PROXY_CACHE_DIR
+
+Path to a writable directory where the ajax proxy will store cached upstream
+responses (used to bypass CORS for user-loaded remote data). Required.
+
+Each cache entry is a single file `umap_<urlhash>.cache`; entries grow with
+proxied URL diversity, so prefer a dedicated directory you can rotate or
+purge if needed.
+
+Set as an env var: `AJAX_PROXY_CACHE_DIR=/var/cache/umap-proxy`
+
+uMap refuses to start if the directory is missing or not writable.
+
+There is no automatic eviction: schedule the management command
+`umap clear_proxy_cache` (e.g. via cron) to drop entries older than a
+configurable threshold (`--max-age <seconds>`, default 86400).
+
+
 #### ALLOWED_HOSTS
 
 The hosts that uMap expects.
@@ -27,6 +48,10 @@ Can be set through env var too: `ALLOWED_HOSTS=umap.mydomain.org,u.mydomain.org`
 #### DEBUG
 
 Set it to `True` for easier debugging in case of error.
+
+#### DEFAULT_FROM_EMAIL
+
+See `EMAIL_BACKEND`.
 
 #### DEPRECATED_AUTHENTICATION_BACKENDS
 
@@ -41,7 +66,7 @@ their account.
 Must be configured if you want uMap to send emails to anonymous users.
 
 UMap can send the anonymous edit link by email. For this to work, you need to
-add email specific settings. See [Django](https://docs.djangoproject.com/en/4.2/topics/email/#smtp-backend)
+add email specific settings. See [Django](https://docs.djangoproject.com/en/stable/topics/email/#smtp-backend)
 documentation.
 
 In general, you'll need to add something like this in your local settings:
@@ -68,9 +93,20 @@ Can be set through env var: `ENABLE_ACCOUNT_LOGIN=1`
 User accounts can be managed via the Django admin page (`{SITE_URL}/admin`).
 The required superuser must be created on the command line with this command: `umap createsuperuser`.
 
-#### DEFAULT_FROM_EMAIL
+#### EXTRA_URL_PATTERNS
 
-See `EMAIL_BACKEND`.
+List of (path, view_look, name) to add to the uMap urlpatterns.
+This can be useful for example to add a custom login URL.
+
+```python title="local_settings.py"
+EXTRA_URL_PATTERNS = [
+    (
+        "sso-login/",
+        "django_yunohost_integration.yunohost_utils.SSOwatLoginRedirectView",
+        "ssowat-login",
+    ),
+]
+```
 
 #### LANGUAGE_CODE
 
@@ -86,7 +122,19 @@ Default longitude, latitude and zoom for the map
 Where uMap should store your datalayers and icons, must be consistent with your
 Nginx configuration.
 
-See [Django documentation for MEDIA_ROOT](https://docs.djangoproject.com/en/4.2/ref/settings/#media-root)
+See [Django documentation for MEDIA_ROOT](https://docs.djangoproject.com/en/stable/ref/settings/#media-root)
+
+#### OPENROUTESERVICE_APIKEY
+
+API key for [OpenRouteService](https://openrouteservice.org/). When defined, it will activate
+elevation, routing and isochrone features on the map.
+
+#### OPENROUTESERVICE_HOST
+
+URL for a self hosted [OpenRouteService](https://openrouteservice.org/) instance. When defined, all API calls
+will be redirected to this specific instance. The variable expects an URL without a trailing slash.
+
+For example: `OPENROUTESERVICE_HOST="https://openrouteservice.foobar.example/ors"
 
 #### REALTIME_ENABLED
 
@@ -107,7 +155,7 @@ Must be defined to something unique and secret.
 
 Running uMap / Django with a known SECRET_KEY defeats many of Django’s security protections, and can lead to privilege escalation and remote code execution vulnerabilities.
 
-See [Django documentation for SECRET_KEY](https://docs.djangoproject.com/en/4.2/ref/settings/#secret-key)
+See [Django documentation for SECRET_KEY](https://docs.djangoproject.com/en/stable/ref/settings/#secret-key)
 
 
 #### SHORT_SITE_URL
@@ -134,6 +182,14 @@ The final URL of you instance, including the protocol:
 `SITE_URL=http://umap.org`
 
 
+#### CSRF_TRUSTED_ORIGINS
+
+List of HTTP origins (scheme and host, for example `http://umap.org`)
+to trust for POST requests.  This is necessary if you wish to allow
+local (non-OAuth) logins, in which case you should add the values of
+`SITE_URL` and `SHORT_SITE_URL`.
+
+
 #### SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_KEY, SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_SECRET
 
 If you use OpenStreetMap as OAuth 2 provider, you can use those settings.
@@ -146,7 +202,7 @@ Otherwise, use any valid [python-social-auth configuration](https://python-socia
 Where uMap should store static files (CSS, JS…), must be consistent with your
 Nginx configuration.
 
-See [Django documentation for STATIC_ROOT](https://docs.djangoproject.com/en/4.2/ref/settings/#static-root)
+See [Django documentation for STATIC_ROOT](https://docs.djangoproject.com/en/stable/ref/settings/#static-root)
 
 
 #### STORAGES
@@ -166,7 +222,7 @@ Eg.: `USER_AUTOCOMPLETE_FIELDS = ["^username", "email"]`
 
 #### USER_DISPLAY_NAME
 
-Advanced setting for controling which user fields will be used for displaying
+Advanced setting for controlling which user fields will be used for displaying
 their name on the application, depending on which fields you collect with your
 OAuth configuration.
 For example: `USER_DISPLAY_NAME = "{username}"`
@@ -206,10 +262,10 @@ See [customization](customize.md) for details.
 #### UMAP_EXTRA_URLS
 
 By default:
-```
+```python title="local_settings.py"
 UMAP_EXTRA_URLS = {
     'routing': 'http://www.openstreetmap.org/directions?engine=osrm_car&route={lat},{lng}&locale={locale}#map={zoom}/{lat}/{lng}',
-    'ajax_proxy': '/ajax-proxy/?url={url}&ttl={ttl}',
+    'ajax_proxy': '/ajax-proxy/{ttl}/?url={url}',
     'search': 'https://photon.komoot.io/api/?',
 }
 ```
@@ -243,6 +299,37 @@ ready for production use (no backup, etc.)
 
 Link to show on the header under the "Feedback and help" label.
 
+
+#### UMAP_HELP_LINKS
+
+List of external resources to display in the help dialog.
+
+```python title="local_settings.py"
+UMAP_HELP_LINKS = [
+    {
+        "label": "uMap user documentation",
+        "url": "https://discover.umap-project.org/",
+        "lang": "en/fr",
+    },
+    {
+        "label": "Video tutorials",
+        "url": "https://discover.umap-project.org/videos/",
+        "lang": "en/fr",
+    },
+    {
+        "label": "OpenStreetMap.org forum",
+        "url": "https://community.openstreetmap.org/tag/umap",
+        "lang": "en/de",
+    },
+    {
+        "label": "OpenStreetMap France forum",
+        "url": "https://forum.openstreetmap.fr/c/utiliser/umap/29",
+        "lang": "fr",
+    },
+]
+```
+
+
 #### UMAP_HOME_FEED
 
 Which feed to display on the home page. Three valid values:
@@ -253,13 +340,14 @@ Which feed to display on the home page. Three valid values:
 
 #### UMAP_HOST_INFOS
 
-Informations about the entity hosting this uMap instance.
+Information about the entity hosting this uMap instance.
 
-```
+```python title="local_settings.py"
 UMAP_HOST_INFOS = {
     "name": "OpenStreetMap France",
     "url": "https://openstreetmap.fr",
-    "contact": "blah@openstreetmap.fr"
+    "email": "blah@openstreetmap.fr",
+    "tos": "https://terms-of-service.org",
 }
 ```
 
@@ -274,7 +362,7 @@ Only the key is mandatory to activate an importer (eg. `{"overpass": {}}`).
 
 Example:
 
-```
+```python title="local_settings.py"
 UMAP_IMPORTERS = {
     "geodatamine": {"name": "my custom name"},
     "overpass": {"url": "https://overpass-api.de/api/interpreter"},
@@ -320,6 +408,21 @@ How many total maps to return in the search.
 #### UMAP_MAPS_PER_PAGE_OWNER
 
 How many maps to show in the user "my maps" page.
+
+#### UMAP_PICTOGRAMS_COLLECTIONS
+
+List of icon sets available. When defined, this will replace the pictograms
+set through the uMap admin.
+
+See [icons](icons.md) page.
+
+```python title="settings.py"
+UMAP_PICTOGRAMS_COLLECTIONS = {
+    "MyCollection": {"path": "/path/to/collection", "attribution": "Someone"},
+    "OtherCollection": {"path": "/path/to/other", "attribution": "Else"},
+}
+```
+
 
 #### UMAP_SEARCH_CONFIGURATION
 

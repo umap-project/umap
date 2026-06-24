@@ -39,7 +39,7 @@ def test_can_remove_user_from_team(live_server, map, user, user2, team, login):
         page.get_by_role("link", name="My teams").click()
     with page.expect_navigation():
         page.get_by_role("link", name="Edit").click()
-    page.locator("li").filter(has_text="Averell").locator(".close").click()
+    page.locator("li").filter(has_text="Averell").locator(".icon-close").click()
     page.get_by_role("button", name="Save").click()
     assert Team.objects.count() == 1
     modified = Team.objects.first()

@@ -51,7 +51,6 @@ export const SCHEMA = {
   color: {
     type: String,
     impacts: ['data'],
-    handler: 'ColorPicker',
     label: translate('color'),
     helpEntries: ['colorValue'],
     inheritable: true,
@@ -84,7 +83,6 @@ export const SCHEMA = {
     type: Boolean,
     impacts: ['ui'],
     nullable: true,
-    handler: 'DataLayersControl',
     label: translate('Display the open browser control'),
     default: true,
   },
@@ -125,13 +123,6 @@ export const SCHEMA = {
   edit_status: {
     type: Number,
   },
-  editinosmControl: {
-    type: Boolean,
-    impacts: ['ui'],
-    nullable: true,
-    label: translate('Display the control to open OpenStreetMap editor'),
-    default: null,
-  },
   editors: {
     type: Array,
   },
@@ -142,12 +133,12 @@ export const SCHEMA = {
     label: translate('Display the embed control'),
     default: true,
   },
-  facetKey: {
-    type: String,
+  filters: {
+    type: Array,
     impacts: ['ui'],
-    helpEntries: ['facetKey'],
-    placeholder: translate('Example: key1,key2|Label 2,key3|Label 3|checkbox'),
-    label: translate('Filters keys'),
+  },
+  fields: {
+    type: Array,
   },
   fill: {
     type: Boolean,
@@ -160,7 +151,6 @@ export const SCHEMA = {
   fillColor: {
     type: String,
     impacts: ['data'],
-    handler: 'ColorPicker',
     label: translate('fill color'),
     helpEntries: ['fillColor'],
     inheritable: true,
@@ -200,6 +190,13 @@ export const SCHEMA = {
     type: Object,
     impacts: ['data'],
   },
+  group: {
+    type: Boolean,
+    impacts: ['ui'],
+    label: translate('This layer is a group'),
+    helpText: translate('Groups can have children layers, but cannot have data.'),
+    default: false,
+  },
   heat: {
     type: Object,
     impacts: ['data'],
@@ -218,6 +215,7 @@ export const SCHEMA = {
     choices: [
       ['Default', translate('Default')],
       ['Circle', translate('Circle')],
+      ['LargeCircle', translate('Large Circle')],
       ['Drop', translate('Drop')],
       ['Ball', translate('Ball')],
       ['Raw', translate('None')],
@@ -234,10 +232,20 @@ export const SCHEMA = {
     inheritable: true,
     default: 1,
   },
+  iconSize: {
+    type: Number,
+    impacts: ['data'],
+    min: 12,
+    max: 64,
+    step: 4,
+    label: translate('Icon size'),
+    helpText: translate('Will only affect raw and large circle icons.'),
+    inheritable: true,
+    default: 24,
+  },
   iconUrl: {
     type: String,
     impacts: ['data'],
-    handler: 'IconUrl',
     label: translate('Icon symbol'),
     inheritable: true,
   },
@@ -252,6 +260,12 @@ export const SCHEMA = {
     helpEntries: ['interactive'],
     inheritable: true,
     default: true,
+  },
+  is_template: {
+    type: Boolean,
+    impacts: ['ui'],
+    label: translate('This map is a template'),
+    default: false,
   },
   labelDirection: {
     type: String,
@@ -321,11 +335,12 @@ export const SCHEMA = {
     impacts: ['data'],
     label: translate('Display the polygon inverted'),
   },
-  miniMap: {
+  miniMapControl: {
     type: Boolean,
     impacts: ['ui'],
     label: translate('Do you want to display a minimap?'),
     default: false,
+    legacy: ['miniMap'],
   },
   moreControl: {
     type: Boolean,
@@ -388,6 +403,10 @@ export const SCHEMA = {
   owner: {
     type: Object,
   },
+  parentId: {
+    type: String,
+    impacts: ['data'],
+  },
   permanentCredit: {
     type: 'Text',
     impacts: ['ui'],
@@ -433,18 +452,34 @@ export const SCHEMA = {
       ['GeoRSSLink', translate('GeoRSS (only link)')],
       ['OSM', translate('OpenStreetMap')],
       ['Wikipedia', translate('Wikipedia')],
+      ['Route', translate('Route')],
     ],
     default: 'Default',
+  },
+  printControl: {
+    type: Boolean,
+    impacts: ['ui'],
+    nullable: true,
+    label: translate('Display the print control'),
+    default: null,
   },
   rank: {
     type: Number,
     impacts: ['datalayer-rank'],
+  },
+  referenceVersion: {
+    type: Number,
+    impacts: ['data'],
   },
   remoteData: {
     type: Object,
     impacts: ['remote-data'],
   },
   rules: {
+    type: Object,
+    impacts: ['data'],
+  },
+  route: {
     type: Object,
     impacts: ['data'],
   },
@@ -458,6 +493,7 @@ export const SCHEMA = {
     type: Boolean,
     impacts: ['ui'],
     label: translate('Allow scroll wheel zoom?'),
+    default: true,
   },
   searchControl: {
     type: Boolean,
@@ -539,6 +575,60 @@ export const SCHEMA = {
   team: {
     type: Object,
   },
+  textPath: {
+    type: String,
+    impacts: ['data'],
+    label: translate('Add text along path'),
+  },
+  textPathColor: {
+    type: String,
+    impacts: ['data'],
+    label: translate('Text color'),
+  },
+  textPathOffset: {
+    type: Number,
+    label: translate('Text offset'),
+    impacts: ['data'],
+    default: 1,
+    min: -20,
+    max: 20,
+    step: 1,
+  },
+  textPathPosition: {
+    type: String,
+    impacts: ['data'],
+    label: translate('Text position'),
+    default: 'center',
+    choices: [
+      ['start', translate('start')],
+      ['center', translate('center')],
+      ['end', translate('end')],
+    ],
+  },
+  textPathRepeat: {
+    type: Boolean,
+    label: translate('Text repeat'),
+    impacts: ['data'],
+    default: true,
+  },
+  textPathRotate: {
+    type: Number,
+    label: translate('Text rotate'),
+    impacts: ['data'],
+    default: 0,
+    min: 0,
+    max: 360,
+    step: 1,
+  },
+  textPathSize: {
+    type: Number,
+    label: translate('Text size'),
+    impacts: ['data'],
+    default: 20,
+    min: 10,
+    max: 30,
+    step: 1,
+  },
   tilelayer: {
     type: Object,
     impacts: ['background'],
@@ -559,13 +649,6 @@ export const SCHEMA = {
   ttl: {
     type: Number,
     label: translate('Cache proxied request'),
-    choices: [
-      ['', translate('No cache')],
-      ['300', translate('5 min')],
-      ['3600', translate('1 hour')],
-      ['86400', translate('1 day')],
-    ],
-    default: '300',
   },
   type: {
     type: String,
@@ -603,10 +686,6 @@ export const SCHEMA = {
   // FIXME This is an internal Leaflet property, we might want to do this differently.
   _latlng: {
     type: Object,
-    impacts: ['data'],
-  },
-  _referenceVersion: {
-    type: Number,
     impacts: ['data'],
   },
 }

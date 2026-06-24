@@ -1,24 +1,90 @@
-import { Evented } from '../../../../vendors/leaflet/leaflet-src.esm.js'
-// WARNING must be loaded dynamically, or at least after leaflet.markercluster
-// Uses global L.MarkerCluster and L.MarkerClusterGroup, not exposed as ESM
+import {
+  FeatureGroup,
+  LayerGroup,
+  Marker,
+  Point,
+  Polyline,
+  Rectangle,
+  latLngBounds,
+} from '../../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from '../../i18n.js'
+import { Cluster as ClusterIcon } from '../../icon.js'
 import * as Utils from '../../utils.js'
-import { Cluster as ClusterIcon } from '../icon.js'
+import { LeafletIcon } from '../ui.js'
 import { LayerMixin } from './base.js'
 
-const MarkerCluster = L.MarkerCluster.extend({
-  // Custom class so we can call computeTextColor
-  // when element is already on the DOM.
+const MarkerCluster = Marker.extend({
+  computeCoverage() {
+    if (this._layers.length < 2) return
+    if (!this._coverage) {
+      const latlngs = this._layers.map((layer) => layer._latlng)
+      const bounds = latLngBounds(latlngs)
+      this._coverage = new Rectangle(latlngs, {
+        color: this.options.icon.umapIcon.properties.color,
+        stroke: false,
+      })
+      this._latlng = bounds.getCenter()
+    }
+  },
 
-  _initIcon: function () {
-    L.MarkerCluster.prototype._initIcon.call(this)
-    const div = this._icon.querySelector('div')
-    // Compute text color only when icon is added to the DOM.
-    div.style.color = this._iconObj.computeTextColor(div)
+  async zoomToCoverage() {
+    let resolve = undefined
+    const promise = new Promise((r) => {
+      resolve = r
+    })
+    if (this._map && this._coverage) {
+      this._map.once('moveend', () => resolve())
+      this._map.fitBounds(this._coverage.getBounds())
+    }
+    return promise
+  },
+
+  _spiderfyLatLng: function (center, index) {
+    const step = 20
+    const maxRadius = 150
+    const zoom = this._map.getZoom()
+    const angle = (index * step * Math.PI) / 180
+    const progress = index / this._layers.length
+    const radius = maxRadius * (1 - progress) ** 0.4
+    const x = radius * Math.cos(angle)
+    const y = radius * Math.sin(angle)
+    const point = this._map.project([center.lat, center.lng], zoom)
+    const latlng = this._map.unproject(new Point(point.x + x, point.y + y), zoom)
+    return latlng
+  },
+
+  spiderfy() {
+    if (!this._map) return
+    const crs = this._map.options.crs
+    if (this._spider && this._map.hasLayer(this._spider)) this.unspiderfy()
+    this._spider = new LayerGroup()
+    let i = 1
+    const center = this.getLatLng()
+    for (const layer of this._layers) {
+      const latlng = this._spiderfyLatLng(center, i++)
+      layer._originalLatLng = layer._latlng
+      layer.setLatLng(latlng)
+      this._spider.addLayer(layer)
+      const line = new Polyline([center, latlng], { color: 'black', weight: 1 })
+      this._spider.addLayer(line)
+    }
+    this._map.addLayer(this._spider)
+    this._icon.hidden = true
+    this._map.once('click zoomstart', this.unspiderfy, this)
+    this.once('remove', this.unspiderfy, this)
+  },
+
+  unspiderfy() {
+    if (this._icon) this._icon.hidden = false
+    if (this._spider) this._spider.remove()
+    for (const layer of this._layers) {
+      if (layer._originalLatLng) layer.setLatLng(layer._originalLatLng)
+      delete layer._originalLatLng
+    }
   },
 })
 
-export const Cluster = L.MarkerClusterGroup.extend({
+export const Cluster = FeatureGroup.extend({
   statics: {
     NAME: translate('Clustered'),
     TYPE: 'Cluster',
@@ -27,71 +93,174 @@ export const Cluster = L.MarkerClusterGroup.extend({
 
   initialize: function (datalayer) {
     this.datalayer = datalayer
-    if (!Utils.isObject(this.datalayer.options.cluster)) {
-      this.datalayer.options.cluster = {}
+    this._bucket = []
+    this._group = new LayerGroup()
+    if (!Utils.isObject(this.datalayer.properties.cluster)) {
+      this.datalayer.properties.cluster = {}
     }
-    const options = {
-      polygonOptions: {
-        color: this.datalayer.getColor(),
-      },
-      iconCreateFunction: (cluster) => new ClusterIcon(datalayer, cluster),
-    }
-    if (this.datalayer.options.cluster?.radius) {
-      options.maxClusterRadius = this.datalayer.options.cluster.radius
-    }
-    L.MarkerClusterGroup.prototype.initialize.call(this, options)
-    LayerMixin.onInit.call(this, this.datalayer._leafletMap)
-    this._markerCluster = MarkerCluster
-    this._layers = []
+    FeatureGroup.prototype.initialize.call(this)
   },
 
-  onAdd: function (map) {
-    LayerMixin.onAdd.call(this, map)
-    return L.MarkerClusterGroup.prototype.onAdd.call(this, map)
+  dataChanged: function () {
+    this.redraw()
   },
 
-  onRemove: function (map) {
-    // In some situation, the onRemove is called before the layer is really
-    // added to the map: basically when combining a defaultView=data + max/minZoom
-    // and loading the map at a zoom outside of that zoom range.
-    // FIXME: move this upstream (_unbindEvents should accept a map parameter
-    // instead of relying on this._map)
-    this._map = map
-    LayerMixin.onRemove.call(this, map)
-    return L.MarkerClusterGroup.prototype.onRemove.call(this, map)
+  removeClusters() {
+    this.hideCoverage()
+    for (const layer of this._bucket) {
+      delete layer._cluster
+    }
+    if (this._map) {
+      this._group.clearLayers()
+    }
+  },
+
+  addClusters() {
+    if (this._map) {
+      for (const cluster of this._clusters) {
+        const layer = cluster._layers.length === 1 ? cluster._layers[0] : cluster
+        this._group.addLayer(layer)
+      }
+    }
+  },
+
+  redraw: function () {
+    this.removeClusters()
+    this.compute()
+    this.addClusters()
+  },
+
+  compute() {
+    if (!this._map) return
+    const radius = this.datalayer.properties.cluster?.radius || 80
+    this._clusters = []
+    this._bounds = this._map.getBounds().pad(0.1)
+    const CRS = this._map.options.crs
+    for (const layer of this._bucket) {
+      if (layer._cluster) continue
+      if (!this._bounds.contains(layer._latlng)) continue
+      layer._xy = CRS.latLngToPoint(layer._latlng, this._map.getZoom())
+      let cluster = null
+      for (const candidate of this._clusters) {
+        if (candidate._xy.distanceTo(layer._xy) <= radius) {
+          cluster = candidate
+          break
+        }
+      }
+      if (!cluster) {
+        const umapIcon = new ClusterIcon({
+          color: this.datalayer.getColor(),
+          textColor: this.datalayer.properties.cluster?.textColor,
+          getCounter: () => cluster._layers.length,
+        })
+        cluster = new MarkerCluster(layer._latlng, { icon: new LeafletIcon(umapIcon) })
+        cluster.addEventParent(this)
+        cluster._xy ??= layer._xy
+        cluster._layers = []
+        this._clusters.push(cluster)
+      }
+      cluster._layers.push(layer)
+      layer._cluster = cluster
+    }
+    for (const cluster of this._clusters) {
+      cluster.computeCoverage()
+    }
   },
 
   addLayer: function (layer) {
-    this._layers.push(layer)
-    try {
-      return L.MarkerClusterGroup.prototype.addLayer.call(this, layer)
-    } catch (error) {
-      console.debug(error)
-      // Certainly a race condition when loading a clustered layer
-      // while zooming (this for example can happen at load, when the
-      // initial zoom is changed by uMap).
-      // FIXME: remove when this is merged:
-      // https://github.com/Leaflet/Leaflet.markercluster/pull/1048/files
-      return this
-    }
+    if (!layer.getLatLng) return FeatureGroup.prototype.addLayer.call(this, layer)
+    // Do not add yet the layer to the map
+    // wait for datachanged event, so we can compute breaks only once
+    this._bucket.push(layer)
+    return this
   },
 
   removeLayer: function (layer) {
-    this._layers.splice(this._layers.indexOf(layer), 1)
-    return L.MarkerClusterGroup.prototype.removeLayer.call(this, layer)
+    if (!layer.getLatLng) return FeatureGroup.prototype.removeLayer.call(this, layer)
+    this._bucket = this._bucket.filter((el) => el !== layer)
+    return this
   },
 
-  getEditableOptions: () => [
+  onAdd: function (map) {
+    this.on('click', this.onClick)
+    this.on('mouseover', this.onMouseOver)
+    this.on('mouseout', this.onMouseOut)
+    this.compute()
+    LayerMixin.onAdd.call(this, map)
+    this.addClusters()
+    map.addLayer(this._group)
+    return FeatureGroup.prototype.onAdd.call(this, map)
+  },
+
+  onRemove: function (map) {
+    this.off('click', this.onClick)
+    this.off('mouseover', this.onMouseOver)
+    this.off('mouseout', this.onMouseOut)
+    LayerMixin.onRemove.call(this, map)
+    this.removeClusters()
+    map.removeLayer(this._group)
+    return FeatureGroup.prototype.onRemove.call(this, map)
+  },
+
+  onZoomEnd: function () {
+    LayerMixin.onZoomEnd.call(this)
+    this.removeClusters()
+  },
+
+  onMoveEnd: function () {
+    LayerMixin.onMoveEnd.call(this)
+    // In case of dynamic data, the LayerMixin.onMoveEnd
+    // call with fetch the data and then call the compute
+    if (!this.datalayer.hasDynamicData()) {
+      this.compute()
+      this.addClusters()
+    }
+  },
+
+  showCoverage(cluster) {
+    if (cluster._coverage) {
+      this._shownCoverage = cluster._coverage
+      this._map.addLayer(this._shownCoverage)
+    }
+  },
+
+  hideCoverage() {
+    if (this._shownCoverage && this._map) {
+      this._map.removeLayer(this._shownCoverage)
+    }
+  },
+
+  onMouseOver(event) {
+    event.layer?.computeCoverage?.()
+    this.showCoverage(event.layer)
+  },
+
+  onMouseOut(event) {
+    this.hideCoverage()
+  },
+
+  onClick(event) {
+    if (this._map.getZoom() === this._map.getMaxZoom()) {
+      event.layer.spiderfy?.()
+    } else {
+      event.layer.zoomToCoverage?.()
+    }
+  },
+
+  getEditableProperties: () => [
     [
-      'options.cluster.radius',
+      'properties.cluster.radius',
       {
-        handler: 'BlurIntInput',
+        handler: 'Range',
+        min: 10,
+        max: 200,
+        step: 10,
         placeholder: translate('Clustering radius'),
         helpText: translate('Override clustering radius (default 80)'),
       },
     ],
     [
-      'options.cluster.textColor',
+      'properties.cluster.textColor',
       {
         handler: 'TextColorPicker',
         placeholder: translate('Auto'),
@@ -101,13 +270,8 @@ export const Cluster = L.MarkerClusterGroup.extend({
   ],
 
   onEdit: function (field, builder) {
-    if (field === 'options.cluster.radius') {
-      // No way to reset radius of an already instanciated MarkerClusterGroup...
-      this.datalayer.resetLayer(true)
-      return
-    }
-    if (field === 'options.color') {
-      this.options.polygonOptions.color = this.datalayer.getColor()
+    if (field === 'properties.cluster.radius' || field === 'properties.color') {
+      this.redraw()
     }
   },
 })

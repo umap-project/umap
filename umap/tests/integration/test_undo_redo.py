@@ -207,7 +207,7 @@ def test_can_undo_redo_polygon_geometry_change(live_server, page, tilelayer):
 def test_can_undo_redo_marker_create(live_server, page, tilelayer):
     page.goto(f"{live_server.url}/en/map/new")
 
-    page.get_by_title("Open Browser").click()
+    page.get_by_title("Open browser").click()
     marker = page.locator(".leaflet-marker-icon")
     map = page.locator("#map")
 
@@ -265,3 +265,109 @@ def test_undo_redo_import(live_server, page, tilelayer):
 
     page.locator(".edit-redo").click()
     expect(features_count).to_have_text("(5)")
+
+
+def test_can_undo_redo_datalayer_delete_with_parent(live_server, openmap, page):
+    openmap.settings["properties"]["onLoadPanel"] = "databrowser"
+    openmap.save()
+    root1 = DataLayerFactory(name="root 1", rank=0, map=openmap, data={})
+    child1 = DataLayerFactory(
+        name="child",
+        rank=0,
+        parent=root1,
+        map=openmap,
+        data={},
+    )
+    DataLayerFactory(
+        name="grandchild",
+        rank=0,
+        parent=child1,
+        map=openmap,
+        data={
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": {"type": "Point", "coordinates": [4, 48]},
+                    "properties": {"name": "grandchild feature"},
+                }
+            ]
+        },
+    )
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#6/48/4")
+    expect(page.locator(".leaflet-marker-icon")).to_have_count(1)
+    expect(page.locator(".panel.left").get_by_text("grandchild (1)")).to_be_visible()
+    expect(page.locator(".panel.left").get_by_text("child", exact=True)).to_be_visible()
+
+    # Delete child
+    page.locator(f'summary[data-id="{child1.pk}"] .icon-delete').click()
+    expect(page.locator(".leaflet-marker-icon")).to_have_count(0)
+    expect(page.locator(".panel.left").get_by_text("grandchild (1)")).to_be_hidden()
+    expect(page.locator(".panel.left").get_by_text("child", exact=True)).to_be_hidden()
+
+    # Undo
+    page.locator(".edit-undo").click()
+    expect(page.locator(".leaflet-marker-icon")).to_have_count(1)
+    expect(page.locator(".panel.left").get_by_text("grandchild (1)")).to_be_visible()
+    expect(page.locator(".panel.left").get_by_text("child", exact=True)).to_be_visible()
+
+
+def test_can_undo_redo_datalayer_delete_with_children(live_server, openmap, page):
+    openmap.settings["properties"]["onLoadPanel"] = "databrowser"
+    openmap.save()
+    root1 = DataLayerFactory(name="root 1", rank=0, map=openmap, data={})
+    child1 = DataLayerFactory(
+        name="child",
+        rank=0,
+        parent=root1,
+        map=openmap,
+        data={},
+    )
+    DataLayerFactory(
+        name="grandchild",
+        rank=0,
+        parent=child1,
+        map=openmap,
+        data={
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": {"type": "Point", "coordinates": [4, 48]},
+                    "properties": {"name": "grandchild feature"},
+                }
+            ]
+        },
+    )
+    DataLayerFactory(
+        name="child2",
+        rank=0,
+        parent=root1,
+        map=openmap,
+        data={
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": {"type": "Point", "coordinates": [5, 48]},
+                    "properties": {"name": "grandchild feature"},
+                }
+            ]
+        },
+    )
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#6/48/4")
+    expect(page.locator(".leaflet-marker-icon")).to_have_count(2)
+    expect(page.locator(".panel.left").get_by_text("grandchild (1)")).to_be_visible()
+    expect(page.locator(".panel.left").get_by_text("child2 (1)")).to_be_visible()
+    expect(page.locator(".panel.left").get_by_text("child", exact=True)).to_be_visible()
+
+    # Delete parent
+    page.locator(f'summary[data-id="{root1.pk}"] .icon-delete').click()
+    expect(page.locator(".leaflet-marker-icon")).to_have_count(0)
+    expect(page.locator(".panel.left").get_by_text("grandchild (1)")).to_be_hidden()
+    expect(page.locator(".panel.left").get_by_text("child2 (1)")).to_be_hidden()
+    expect(page.locator(".panel.left").get_by_text("child", exact=True)).to_be_hidden()
+
+    # Undo
+    page.locator(".edit-undo").click()
+    expect(page.locator(".leaflet-marker-icon")).to_have_count(2)
+    expect(page.locator(".panel.left").get_by_text("grandchild (1)")).to_be_visible()
+    expect(page.locator(".panel.left").get_by_text("child2 (1)")).to_be_visible()
+    expect(page.locator(".panel.left").get_by_text("child", exact=True)).to_be_visible()

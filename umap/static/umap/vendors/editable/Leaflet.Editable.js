@@ -814,6 +814,8 @@
   // 🍂namespace Editable; 🍂class BaseEditor; 🍂aka L.Editable.BaseEditor
   // When editing a feature (Marker, Polyline…), an editor is attached to it. This
   // editor basically knows how to handle the edition.
+  // 🍂option draggable: boolean = false
+  // Disable dragging of the feature while in edit mode
   L.Editable.BaseEditor = L.Handler.extend({
     initialize: function (map, feature, options) {
       L.setOptions(this, options)
@@ -854,7 +856,7 @@
 
     onFeatureAdd: function () {
       this.tools.editLayer.addLayer(this.editLayer)
-      if (this.feature.dragging) this.feature.dragging.enable()
+      if (this.feature.dragging && this.options.draggable != false) this.feature.dragging.enable()
     },
 
     hasMiddleMarkers: function () {

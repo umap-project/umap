@@ -1,27 +1,26 @@
-import {
-  DomEvent,
-  DomUtil,
-  GeoJSON,
-  LineUtil,
-  stamp,
-} from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import { MutatingForm } from '../form/builder.js'
-import { translate } from '../i18n.js'
+import { translate, getLocale } from '../i18n.js'
 import loadPopup from '../rendering/popup.js'
 import {
   LeafletMarker,
   LeafletPolygon,
   LeafletPolyline,
+  LeafletRoute,
   MaskPolygon,
 } from '../rendering/ui.js'
 import { SCHEMA } from '../schema.js'
 import * as Utils from '../utils.js'
+import * as Clipboard from '../clipboard.js'
+import * as DOMUtils from '../domutils.js'
+import * as Icon from '../icon.js'
+import * as GeoUtils from '../geoutils.js'
+import * as TextUtils from '../textutils.js'
 
 class Feature {
   constructor(umap, datalayer, geojson = {}, id = null) {
     this._umap = umap
-    this.sync = umap.syncEngine.proxy(this)
+    this.journal = umap.journalEngine.proxy(this)
     this._ui = null
 
     // DataLayer the feature belongs to
@@ -59,7 +58,7 @@ class Feature {
   }
 
   get center() {
-    return this.ui.getCenter()
+    return GeoUtils.center(this.geometry)
   }
 
   get bounds() {
@@ -84,6 +83,18 @@ class Feature {
     this.pushGeometry()
   }
 
+  get fields() {
+    return this.datalayer.inheritedFields.values()
+  }
+
+  setter(key, value) {
+    if (key === 'datalayer') {
+      this.changeDataLayer(value)
+    } else {
+      Utils.setObjectValue(this, key, value)
+    }
+  }
+
   isOnScreen(bounds) {
     return this.ui?.isOnScreen(bounds)
   }
@@ -92,22 +103,14 @@ class Feature {
     this._setLatLngs(this.toLatLngs())
   }
 
-  pullGeometry(sync = true) {
-    const oldGeometry = Utils.CopyJSON(this._geometry)
-    this.fromLatLngs(this._getLatLngs())
-    if (sync) {
-      this.sync.update('geometry', this.geometry, oldGeometry)
-    }
-  }
-
-  fromLatLngs(latlngs) {
-    this._geometry_bk = Utils.CopyJSON(this._geometry)
-    this._geometry = this.convertLatLngs(latlngs)
+  toLatLngs() {
+    return GeoUtils.flip(this.geometry).coordinates
   }
 
   makeUI() {
     const klass = this.getUIClass()
     this._ui = new klass(this, this.toLatLngs())
+    
   }
 
   getUIClass() {
@@ -118,11 +121,15 @@ class Feature {
     return this.staticOptions.className
   }
 
+  getUniqueClassName() {
+    return `feature-${this.datalayer.id}-${this.id}`
+  }
+
   getPreviewColor() {
     return this.getDynamicOption(this.staticOptions.mainColor)
   }
 
-  getSyncMetadata() {
+  getJournalMetadata() {
     return {
       subject: 'feature',
       metadata: {
@@ -133,16 +140,17 @@ class Feature {
     }
   }
 
-  onCommit() {
-    this.pullGeometry(false)
+  onCommit(geometry) {
+    this._geometry_bk = Utils.CopyJSON(this._geometry)
+    this._geometry = geometry
     // When the layer is a remote layer, we don't want to sync the creation of the
     // points via the websocket, as the other peers will get them themselves.
     if (this.datalayer?.isRemoteLayer()) return
     if (this._needs_upsert) {
-      this.sync.upsert(this.toGeoJSON(), null)
+      this.journal.upsert(this.toGeoJSON(), null)
       this._needs_upsert = false
     } else {
-      this.sync.update('geometry', this.geometry, this._geometry_bk)
+      this.journal.update('geometry', this.geometry, this._geometry_bk)
     }
   }
 
@@ -186,7 +194,7 @@ class Feature {
     }
     this._umap.currentFeature = this
     this.attachPopup().then(() => {
-      this.ui.openPopup(latlng || this.center)
+      this.ui.openPopup(latlng || this.ui.getCenter())
     })
   }
 
@@ -195,69 +203,100 @@ class Feature {
       return field.startsWith('properties.')
     })
     if (impactData) {
+      Utils.eachElement(`.${this.getUniqueClassName()} .feature-title`, (el) => {
+        el.textContent = this.getDisplayName()
+        el.title = this.getDisplayName()
+      })
       if (this._umap.currentFeature === this) {
         this.view()
       }
-      this.datalayer.indexProperties(this)
+    }
+    const impactPreview = fields.some((field) => {
+      return field.startsWith('properties._umap_options')
+    })
+    if (impactPreview) {
+      Utils.eachElement(`.${this.getUniqueClassName()} .feature-color`, (el) => {
+        this.makePreview(el)
+      })
     }
     this.redraw()
   }
 
   edit(event) {
     if (!this._umap.editEnabled || this.isReadOnly()) return
-    if (this._umap.editedFeature === this) return
-    const container = DomUtil.create('div', 'umap-feature-container')
-    DomUtil.createTitle(
-      container,
-      translate('Feature properties'),
-      `icon-${this.getClassName()}`
-    )
+    if (this._umap.editedFeature === this && !event?.force) return
+    // If this feature is active (popup open), let's close it.
+    this.deactivate()
+    const container = DOMUtils.loadTemplate(`
+      <div class="umap-feature-container">
+        <h3><i class="icon icon-16 icon-${this.getClassName()}"></i> ${translate('Feature properties')}</h3>
+      </div>
+    `)
 
+    // No need to journal the datalayer key, given we already do a delete/upsert when
+    // it changes.
     let builder = new MutatingForm(this, [
-      ['datalayer', { handler: 'DataLayerSwitcher' }],
+      ['datalayer', { handler: 'FeatureDataLayerSwitcher', journal: false }],
     ])
     // removeLayer step will close the edit panel, let's reopen it
     builder.on('set', () => this.edit(event))
     container.appendChild(builder.build())
 
     const properties = []
-    let labelKeyFound = undefined
-    for (const property of this.datalayer.allProperties()) {
-      if (!labelKeyFound && U.LABEL_KEYS.includes(property)) {
-        labelKeyFound = property
-        continue
+    for (const field of this.fields) {
+      const options = { handler: 'Input', label: field.key }
+      if (field.key === 'description' || field.TYPE === 'Text') {
+        options.handler = 'Textarea'
+        options.helpEntries = ['textFormatting']
+      } else if (field.TYPE === 'Number') {
+        options.handler = 'FloatInput'
+      } else if (field.TYPE === 'Date') {
+        options.handler = 'DateInput'
+      } else if (field.TYPE === 'Datetime') {
+        options.handler = 'DateTimeInput'
+      } else if (field.TYPE === 'Boolean') {
+        options.handler = 'Switch'
+      } else if (field.TYPE === 'Enum') {
+        options.helpText = translate('Comma separated list of values')
       }
-      if (property === 'description') {
-        continue
-      }
-      properties.push([`properties.${property}`, { label: property }])
+      properties.push([`properties.${field.key}`, options])
     }
-    // We always want name and description for now (properties management to come)
-    properties.unshift('properties.description')
-    if (!labelKeyFound) {
-      labelKeyFound = U.DEFAULT_LABEL_KEY
-    }
-    properties.unshift([`properties.${labelKeyFound}`, { label: labelKeyFound }])
     builder = new MutatingForm(this, properties, {
       id: 'umap-feature-properties',
     })
-    container.appendChild(builder.build())
-    this.appendEditFieldsets(container)
-    const advancedActions = DomUtil.createFieldset(
-      container,
-      translate('Advanced actions')
+    const form = builder.build()
+    container.appendChild(form)
+    const button = Utils.loadTemplate(
+      `<button type="button"><i class="icon icon-16 icon-add"></i>${translate('Add a new field')}</button>`
     )
-    this.getAdvancedEditActions(advancedActions)
-    const onLoad = this._umap.editPanel.open({ content: container })
-    onLoad.then(() => {
-      builder.helpers[`properties.${labelKeyFound}`].input.focus()
+    button.addEventListener('click', () => {
+      this.datalayer.fields.editField().then(() => this.edit({ force: true }))
+    })
+    form.appendChild(button)
+    this.appendEditFieldsets(container)
+    const [details, { fieldset }] = Utils.loadTemplateWithRefs(`
+      <details>
+        <summary><h4>${translate('Advanced actions')}</h4></summary>
+        <fieldset class="button-bar by2" data-ref=fieldset></fieldset>
+      </details>
+    `)
+    container.appendChild(details)
+    this.getAdvancedEditActions(fieldset)
+    const onPanelLoaded = this._umap.editPanel.open({ content: container })
+    onPanelLoaded.then(() => {
+      builder.form.querySelector('input')?.focus()
     })
     this._umap.editedFeature = this
-    if (!this.ui.isOnScreen(this._umap._leafletMap.getBounds())) this.zoomTo(event)
+    if (!this.isOnScreen()) this.zoomTo(event)
+    return onPanelLoaded
   }
 
   toggleEditing() {
-    this.edit()
+    if (this._umap.editedFeature === this) {
+      this._umap.editPanel.close()
+    } else {
+      this.edit()
+    }
   }
 
   getAdvancedEditActions(container) {
@@ -272,22 +311,26 @@ class Feature {
     container.appendChild(button)
   }
 
+  addExtraEditFieldset(container) {}
+
   appendEditFieldsets(container) {
     const optionsFields = this.getShapeOptions()
     let builder = new MutatingForm(this, optionsFields, {
       id: 'umap-feature-shape-properties',
     })
-    const shapeProperties = DomUtil.createFieldset(
+    const shapeProperties = DOMUtils.createFieldset(
       container,
       translate('Shape properties')
     )
     shapeProperties.appendChild(builder.build())
 
+    this.addExtraEditFieldset(container)
+
     const advancedOptions = this.getAdvancedOptions()
     builder = new MutatingForm(this, advancedOptions, {
       id: 'umap-feature-advanced-properties',
     })
-    const advancedProperties = DomUtil.createFieldset(
+    const advancedProperties = DOMUtils.createFieldset(
       container,
       translate('Advanced properties')
     )
@@ -295,7 +338,7 @@ class Feature {
 
     const interactionOptions = this.getInteractionOptions()
     builder = new MutatingForm(this, interactionOptions)
-    const popupFieldset = DomUtil.createFieldset(
+    const popupFieldset = DOMUtils.createFieldset(
       container,
       translate('Interaction options')
     )
@@ -336,7 +379,10 @@ class Feature {
   }
 
   hasPopupFooter() {
-    if (this.datalayer.isRemoteLayer() && this.datalayer.options.remoteData.dynamic) {
+    if (
+      this.datalayer.isRemoteLayer() &&
+      this.datalayer.properties.remoteData.dynamic
+    ) {
       return false
     }
     return this._umap.getProperty('displayPopupFooter')
@@ -355,7 +401,6 @@ class Feature {
   }
 
   del(sync) {
-    this._umap._leafletMap.closePopup()
     if (this.datalayer) {
       this.datalayer.removeFeature(this, sync)
     }
@@ -363,8 +408,6 @@ class Feature {
 
   connectToDataLayer(datalayer) {
     this.datalayer = datalayer
-    // FIXME should be in layer/ui
-    this.ui.options.renderer = this.datalayer.renderer
   }
 
   disconnectFromDataLayer(datalayer) {
@@ -385,7 +428,7 @@ class Feature {
     this.properties = Object.fromEntries(
       Object.entries(geojson.properties || {}).map(this.cleanProperty)
     )
-    this.properties._umap_options = L.extend(
+    this.properties._umap_options = Object.assign(
       {},
       this.properties._storage_options,
       this.properties._umap_options
@@ -401,9 +444,8 @@ class Feature {
     if (this.datalayer) {
       this.datalayer.removeFeature(this)
     }
-
     datalayer.addFeature(this)
-    this.sync.upsert(this.toGeoJSON())
+    this.journal.upsert(this.toGeoJSON())
     this.redraw()
   }
 
@@ -414,7 +456,7 @@ class Feature {
     } else if (Utils.usableOption(this.properties._umap_options, option)) {
       value = this.properties._umap_options[option]
     } else if (this.datalayer) {
-      value = this.datalayer.getOption(option, this)
+      value = this.datalayer.getProperty(option, this)
     } else {
       value = this._umap.getProperty(option)
     }
@@ -433,16 +475,12 @@ class Feature {
 
   zoomTo({ easing, latlng, callback } = {}) {
     if (easing === undefined) easing = this._umap.getProperty('easing')
-    if (callback) this._umap._leafletMap.once('moveend', callback.bind(this))
-    if (easing) {
-      this._umap._leafletMap.flyTo(this.center, this.getBestZoom())
-    } else {
-      latlng = latlng || this.center
-      this._umap._leafletMap.setView(
-        latlng,
-        this.getBestZoom() || this._umap._leafletMap.getZoom()
-      )
-    }
+    if (callback) this._umap.once('map:moveend', (event) => callback.call(this, event))
+    this._umap.fire('map:view:set', {
+      center: latlng || this.center,
+      zoom: this.getBestZoom(),
+      easing,
+    })
   }
 
   getBestZoom() {
@@ -458,8 +496,8 @@ class Feature {
   }
 
   cloneProperties() {
-    const properties = L.extend({}, this.properties)
-    properties._umap_options = L.extend({}, properties._umap_options)
+    const properties = Object.assign({}, this.properties)
+    properties._umap_options = Object.assign({}, properties._umap_options)
     if (Object.keys && Object.keys(properties._umap_options).length === 0) {
       delete properties._umap_options // It can make a difference on big data sets
     }
@@ -468,13 +506,17 @@ class Feature {
     return properties
   }
 
-  deleteProperty(property) {
-    delete this.properties[property]
+  deleteField(name) {
+    const oldValue = this.properties[name]
+    delete this.properties[name]
+    this.journal.update(`properties.${name}`, undefined, oldValue)
   }
 
-  renameProperty(from, to) {
+  renameField(from, to) {
+    const oldValue = this.properties[from]
     this.properties[to] = this.properties[from]
-    this.deleteProperty(from)
+    this.deleteField(from)
+    this.journal.update(`properties.${to}`, oldValue, undefined)
   }
 
   toGeoJSON() {
@@ -486,30 +528,17 @@ class Feature {
     })
   }
 
-  getInplaceEditMenu() {
-    return [
-      {
-        action: () => this.toggleEditing(),
-        title: translate('Toggle edit mode (⇧+Click)'),
-        icon: 'icon-edit',
-      },
-      {
-        action: () => this.del(),
-        title: translate('Delete this feature'),
-        icon: 'icon-delete',
-      },
-    ]
-  }
-
   isFiltered() {
     const filterKeys = this.datalayer.getFilterKeys()
-    const filter = this._umap.browser.options.filter
-    if (filter && !this.matchFilter(filter, filterKeys)) return true
-    if (!this.matchFacets()) return true
+    const filter = this._umap.browser?.options.filter
+    if (filter && !this.matchFullTextFilter(filter, filterKeys)) return true
+    for (const ancestor of this.datalayer.ancestry) {
+      if (ancestor.filters.matchFeature(this)) return true
+    }
     return false
   }
 
-  matchFilter(filter, keys) {
+  matchFullTextFilter(filter, keys) {
     filter = filter.toLowerCase()
     // When user hasn't touched settings, when a feature has no name
     // it will use the datalayer's name, so let's make the filtering
@@ -525,28 +554,6 @@ class Feature {
       if (value.toLowerCase().indexOf(filter) !== -1) return true
     }
     return false
-  }
-
-  matchFacets() {
-    const selected = this._umap.facets.selected
-    for (const [name, { type, min, max, choices }] of Object.entries(selected)) {
-      let value = this.properties[name]
-      const parser = this._umap.facets.getParser(type)
-      value = parser(value)
-      switch (type) {
-        case 'date':
-        case 'datetime':
-        case 'number':
-          if (!Number.isNaN(min) && !Number.isNaN(value) && min > value) return false
-          if (!Number.isNaN(max) && !Number.isNaN(value) && max < value) return false
-          break
-        default:
-          value = value || translate('<empty value>')
-          if (choices?.length && !choices.includes(value)) return false
-          break
-      }
-    }
-    return true
   }
 
   isMulti() {
@@ -569,30 +576,29 @@ class Feature {
   extendedProperties() {
     // Include context properties
     const properties = this._umap.getGeoContext()
-    const locale = L.getLocale()
+    const locale = getLocale()
     if (locale) properties.locale = locale
     if (U.lang) properties.lang = U.lang
     properties.rank = this.getRank() + 1
     properties.layer = this.datalayer.getName()
-    if (this.ui._map && this.hasGeom()) {
-      const center = this.center
-      properties.lat = center.lat
-      properties.lon = center.lng
-      properties.lng = center.lng
-      properties.alt = center?.alt
-      if (typeof this.ui.getMeasure !== 'undefined') {
-        properties.measure = this.ui.getMeasure()
-      }
+    properties.id = this.id
+    if (this.hasGeom()) {
+      const [lng, lat, alt] = this.center
+      properties.lat = lat
+      properties.lon = lng
+      properties.lng = lng
+      properties.alt = alt
+      properties.measure = this.measure
     }
     return Object.assign(properties, this.properties)
   }
 
   getRank() {
-    return this.datalayer._index.indexOf(L.stamp(this))
+    return this.datalayer.features.getIndex(this)
   }
 
   redraw() {
-    if (this.datalayer?.isVisible()) {
+    if (this.datalayer?.isVisible() && this.ui?.isVisible()) {
       if (this.getUIClass() !== this.ui.getClass()) {
         this.datalayer.hideFeature(this)
         this.makeUI()
@@ -603,9 +609,14 @@ class Feature {
     }
   }
 
-  getContextMenuItems(event) {
+  getContextMenu(event) {
     const permalink = this.getPermalink()
-    let items = []
+    const items = []
+    if (this._umap.editEnabled && !this.isReadOnly()) {
+      items.push({
+        items: this.getEditContextMenu(event),
+      })
+    }
     if (permalink) {
       items.push({
         label: translate('Permalink'),
@@ -623,36 +634,46 @@ class Feature {
     items.push({
       label: translate('Copy as GeoJSON'),
       action: () => {
-        L.Util.copyToClipboard(JSON.stringify(this.toGeoJSON()))
-        this._umap.tooltip.open({ content: L._('✅ Copied!') })
+        Clipboard.copy(JSON.stringify(this.toGeoJSON()))
       },
     })
-    if (this._umap.editEnabled && !this.isReadOnly()) {
-      items = items.concat(this.getContextMenuEditItems(event))
-    }
     return items
   }
 
-  getContextMenuEditItems() {
-    let items = ['-']
-    if (this._umap.editedFeature !== this) {
-      items.push({
-        label: `${translate('Edit this feature')} (⇧+Click)`,
-        action: () => this.edit(),
-      })
-    }
-    items = items.concat(
+  getDrawingTools(event) {
+    return [
       {
-        label: this._umap.help.displayLabel('EDIT_FEATURE_LAYER'),
+        title: translate('Toggle edit mode (⇧+Click)'),
+        action: () => this.toggleEditing(),
+        icon: 'icon-edit',
+      },
+    ]
+  }
+
+  getEditContextMenu(event) {
+    const items = []
+    const vertexClicked = event.vertex
+    if (vertexClicked) {
+      items.push(...this.getVertexTools(event))
+    } else {
+      items.push(...this.getDrawingTools(event))
+    }
+    items.push(
+      '-',
+      {
+        title: this._umap.help.displayLabel('EDIT_FEATURE_LAYER', false),
+        icon: 'icon-layers',
         action: () => this.datalayer.edit(),
       },
       {
-        label: translate('Delete this feature'),
-        action: () => this.del(),
+        title: translate('Clone this feature'),
+        icon: 'icon-copy',
+        action: () => this.clone(),
       },
       {
-        label: translate('Clone this feature'),
-        action: () => this.clone(),
+        title: translate('Delete this feature'),
+        icon: 'icon-delete',
+        action: () => this.del(),
       }
     )
     return items
@@ -667,7 +688,23 @@ class Feature {
   }
 
   deactivate() {
-    if (this._umap.activeFeature === this) this._umap.activeFeature = undefined
+    if (this._umap.activeFeature === this) {
+      this._umap.activeFeature = undefined
+      this.ui.closePopup()
+    }
+  }
+
+  makePreview(element) {
+    element.innerHTML = ''
+    const symbol = Icon.formatUrl(this.iconUrl, this)
+    const bgcolor = this.getPreviewColor()
+    element.style.backgroundColor = bgcolor
+    if (symbol && symbol !== SCHEMA.iconUrl.default) {
+      const icon = Icon.makeElement(symbol, element)
+      Icon.setContrast(icon, element, symbol, bgcolor)
+    } else if (DOMUtils.contrastedColor(element, bgcolor)) {
+      element.classList.add('icon-white')
+    }
   }
 }
 
@@ -680,20 +717,12 @@ export class Point extends Feature {
     }
   }
 
-  _getLatLngs() {
-    return this.ui.getLatLng()
-  }
-
   _setLatLngs(latlng) {
     this.ui.setLatLng(latlng)
   }
 
-  toLatLngs() {
-    return GeoJSON.coordsToLatLng(this.coordinates)
-  }
-
-  convertLatLngs(latlng) {
-    return { coordinates: GeoJSON.latLngToCoords(latlng), type: 'Point' }
+  get center() {
+    return this.coordinates
   }
 
   getUIClass() {
@@ -704,14 +733,15 @@ export class Point extends Feature {
     return Boolean(this.coordinates)
   }
 
-  _getIconUrl(name = 'icon') {
-    return this.getOption(`${name}Url`)
+  get iconUrl() {
+    return this.getOption('iconUrl')
   }
 
   getShapeOptions() {
     return [
       'properties._umap_options.color',
       'properties._umap_options.iconClass',
+      'properties._umap_options.iconSize',
       'properties._umap_options.iconUrl',
       'properties._umap_options.iconOpacity',
     ]
@@ -731,25 +761,25 @@ export class Point extends Feature {
     ]
     const builder = new MutatingForm(this, coordinatesOptions)
     builder.on('set', () => {
-      if (!this.ui._latlng.isValid()) {
+      if (!Utils.LatLngIsValid(this.ui._latlng)) {
         Alert.error(translate('Invalid latitude or longitude'))
         builder.restoreField('ui._latlng.lat')
         builder.restoreField('ui._latlng.lng')
       }
-      this.pullGeometry()
+      this.ui.onCommit()
       this.zoomTo({ easing: false })
     })
-    const fieldset = DomUtil.createFieldset(container, translate('Coordinates'))
+    const fieldset = DOMUtils.createFieldset(container, translate('Coordinates'))
     fieldset.appendChild(builder.build())
   }
 
   zoomTo(event) {
-    if (this.datalayer.isClustered() && !this.ui._icon) {
-      // callback is mandatory for zoomToShowLayer
-      this.datalayer.layer.zoomToShowLayer(this.ui, event.callback || (() => {}))
-    } else {
-      super.zoomTo(event)
+    if (this.datalayer.isClustered() && this.ui._cluster) {
+      this.ui._cluster.zoomToCoverage().then(() => {
+        this.ui._cluster.spiderfy()
+      })
     }
+    super.zoomTo(event)
   }
 }
 
@@ -758,24 +788,15 @@ class Path extends Feature {
     return !this.isEmpty()
   }
 
-  _getLatLngs() {
-    return this.ui.getLatLngs()
-  }
-
   _setLatLngs(latlngs) {
     this.ui.setLatLngs(latlngs)
   }
 
-  connectToDataLayer(datalayer) {
-    super.connectToDataLayer(datalayer)
-    // We keep markers on their own layer on top of the paths.
-    this.ui.options.pane = this.datalayer.pane
-  }
-
   edit(event) {
     if (this._umap.editEnabled) {
-      super.edit(event)
+      const promise = super.edit(event)
       if (!this.ui.editEnabled()) this.ui.makeGeometryEditable()
+      return promise
     }
   }
 
@@ -808,49 +829,38 @@ class Path extends Feature {
 
   getBestZoom() {
     return (
-      this.getOption('zoomTo') ||
-      this._umap._leafletMap.getBoundsZoom(this.bounds, true)
+      this.getOption('zoomTo') || this._umap.mapProxy.getBoundsZoom(this.bounds, true)
     )
   }
 
   transferShape(at, to) {
     const shape = this.ui.enableEdit().deleteShapeAt(at)
-    // FIXME: make Leaflet.Editable send an event instead
-    this.pullGeometry()
     this.ui.disableEdit()
     if (!shape) return
     to.ui.enableEdit().appendShape(shape)
-    to.pullGeometry()
+    // appendShape (insertShape) does not fire `editable:edited`, so commit by hand.
+    to.ui.onCommit()
     if (this.isEmpty()) this.del()
   }
 
-  isolateShape(latlngs) {
-    const properties = this.cloneProperties()
-    const type = this instanceof LineString ? 'LineString' : 'Polygon'
-    const geometry = this.convertLatLngs(latlngs)
-    const other = this.datalayer.makeFeature({ type, geometry, properties })
-    other.edit()
-    return other
+  zoomTo({ easing, callback }) {
+    // Use bounds instead of centroid for paths.
+    easing = easing || this._umap.getProperty('easing')
+    const zoom = this.getBestZoom()
+    this._umap.fire('map:view:fit-bounds', { bounds: this.bounds, zoom, easing })
+    if (callback) callback.call(this)
   }
 
-  getInplaceEditMenu(event) {
-    const items = super.getInplaceEditMenu()
-    if (this.isMulti()) {
-      items.push({
-        action: () => this.ui.enableEdit().deleteShapeAt(event.latlng),
-        title: translate('Delete this shape'),
-        icon: 'icon-delete-shape',
-      })
-      items.push({
-        action: () => this.ui.isolateShape(event.latlng),
-        title: translate('Extract shape to separate feature'),
-        icon: 'icon-extract-shape',
-      })
-    }
+  getContextMenu(event) {
+    const items = super.getContextMenu(event)
+    items.push({
+      label: translate('Display measure'),
+      action: () => Alert.info(this.measure),
+    })
     return items
   }
 
-  getInplaceEditVertexMenu(event) {
+  getVertexTools(event) {
     return [
       {
         action: () => event.vertex.delete(),
@@ -860,77 +870,59 @@ class Path extends Feature {
     ]
   }
 
-  zoomTo({ easing, callback }) {
-    // Use bounds instead of centroid for paths.
-    easing = easing || this._umap.getProperty('easing')
-    if (easing) {
-      this._umap._leafletMap.flyToBounds(this.bounds, this.getBestZoom())
-    } else {
-      this._umap._leafletMap.fitBounds(
-        this.bounds,
-        this.getBestZoom() || this._umap._leafletMap.getZoom()
+  getDrawingTools(event) {
+    const items = super.getDrawingTools(event)
+    if (this.isMulti()) {
+      items.push(
+        {
+          title: translate('Extract shape to separate feature'),
+          icon: 'icon-extract-shape',
+          action: () => {
+            this.ui.isolateShape(event.latlng)
+          },
+        },
+        {
+          title: translate('Delete this shape'),
+          icon: 'icon-delete-shape',
+          action: () => this.ui.enableEdit().deleteShapeAt(event.latlng),
+        }
       )
     }
-    if (callback) callback.call(this)
-  }
-
-  getContextMenuItems(event) {
-    const items = super.getContextMenuItems(event)
-    items.push({
-      label: translate('Display measure'),
-      action: () => Alert.info(this.ui.getMeasure()),
-    })
-    if (this._umap.editEnabled && !this.isReadOnly() && this.isMulti()) {
-      items.push(...this.getContextMenuMultiItems(event))
-    }
-    return items
-  }
-
-  getContextMenuMultiItems(event) {
-    const items = [
-      '-',
-      {
-        label: translate('Remove shape from the multi'),
-        action: () => {
-          this.ui.enableEdit().deleteShapeAt(event.latlng)
-        },
-      },
-    ]
-    const shape = this.ui.shapeAt(event.latlng)
-    if (this.ui._latlngs.indexOf(shape) > 0) {
-      items.push({
-        label: translate('Make main shape'),
-        action: () => {
-          this.ui.enableEdit().deleteShape(shape)
-          this.ui.editor.prependShape(shape)
-        },
-      })
-    }
-    return items
-  }
-
-  getContextMenuEditItems(event) {
-    const items = super.getContextMenuEditItems(event)
     if (
       this._umap?.editedFeature !== this &&
       this.isSameClass(this._umap.editedFeature)
     ) {
       items.push({
-        label: translate('Transfer shape to edited feature'),
+        title: translate('Transfer shape to edited feature'),
+        icon: 'icon-transfer-shape',
         action: () => {
           this.transferShape(event.latlng, this._umap.editedFeature)
         },
       })
     }
-    if (this.isMulti()) {
-      items.push({
-        label: translate('Extract shape to separate feature'),
-        action: () => {
-          this.ui.isolateShape(event.latlng)
-        },
-      })
-    }
+    items.push({
+      title: translate('Transform/rotate shape'),
+      icon: 'icon-redo',
+      action: () => this.ui.startMyTransform(event),
+    })
     return items
+  }
+
+  addExtraEditFieldset(container) {
+    const options = [
+      'properties._umap_options.textPath',
+      'properties._umap_options.textPathColor',
+      'properties._umap_options.textPathRepeat',
+      'properties._umap_options.textPathRotate',
+      'properties._umap_options.textPathSize',
+      'properties._umap_options.textPathOffset',
+      'properties._umap_options.textPathPosition',
+    ]
+    const builder = new MutatingForm(this, options, {
+      id: 'umap-feature-line-decoration',
+    })
+    const fieldset = DOMUtils.createFieldset(container, translate('Line decoration'))
+    fieldset.appendChild(builder.build())
   }
 }
 
@@ -945,27 +937,68 @@ export class LineString extends Path {
     }
   }
 
-  toLatLngs(geometry) {
-    return GeoJSON.coordsToLatLngs(this.coordinates, this.type === 'LineString' ? 0 : 1)
-  }
-
-  convertLatLngs(latlngs) {
-    let multi = !LineUtil.isFlat(latlngs)
-    let coordinates = GeoJSON.latLngsToCoords(latlngs, multi ? 1 : 0, false)
-    if (coordinates.length === 1 && typeof coordinates[0][0] !== 'number') {
-      coordinates = Utils.flattenCoordinates(coordinates)
-      multi = false
-    }
-    const type = multi ? 'MultiLineString' : 'LineString'
-    return { coordinates, type }
+  get measure() {
+    return TextUtils.readableDistance(
+      GeoUtils.length(this.geometry, { units: 'meters' })
+    )
   }
 
   getUIClass() {
-    return super.getUIClass() || LeafletPolyline
+    const klass = super.getUIClass()
+    if (klass) return klass
+    if (this.isRoute()) {
+      return LeafletRoute
+    }
+    return LeafletPolyline
   }
 
   isSameClass(other) {
     return other instanceof LineString
+  }
+
+  cancelRoute() {
+    const oldRoute = Utils.CopyJSON(this.properties._umap_options.route)
+    this.properties._umap_options.route.active = false
+    this.redraw()
+    this.edit()
+    this.journal.update('properties._umap_options.route', null, oldRoute)
+  }
+
+  restoreRoute() {
+    const oldRoute = Utils.CopyJSON(this.properties._umap_options.route)
+    this._ensureRoute()
+    delete this.properties._umap_options.route.active
+    this.redraw()
+    this.journal.update(
+      'properties._umap_options.route',
+      this.properties._umap_options.route,
+      oldRoute
+    )
+    this.edit().then((panel) => {
+      panel.scrollTo('details#edit-route')
+    })
+  }
+
+  toRoute() {
+    this._ensureRoute()
+    this.properties._umap_options.route.coordinates = Utils.CopyJSON(this.coordinates)
+    this.redraw()
+    this.journal.update(
+      'properties._umap_options.route',
+      this.properties._umap_options.route,
+      null
+    )
+    this.edit().then((panel) => {
+      panel.scrollTo('details#edit-route')
+    })
+  }
+
+  async askForRouteSettings() {
+    const container = Utils.loadTemplate(
+      `<div><h3>${translate('Route settings')}</h3></div>`
+    )
+    container.appendChild(await this.routeForm())
+    return this._umap.dialog.open({ template: container })
   }
 
   toPolygon() {
@@ -982,98 +1015,137 @@ export class LineString extends Path {
     this.del()
   }
 
-  getAdvancedEditActions(container) {
-    super.getAdvancedEditActions(container)
-    DomUtil.createButton(
-      'button umap-to-polygon',
-      container,
-      translate('Transform to polygon'),
-      this.toPolygon,
-      this
+  isRoute() {
+    return (
+      !!this.properties._umap_options.route &&
+      this.properties._umap_options.route.active !== false
     )
   }
 
-  _mergeShapes(from, to) {
-    const toLeft = to[0]
-    const toRight = to[to.length - 1]
-    const fromLeft = from[0]
-    const fromRight = from[from.length - 1]
-    const l2ldistance = toLeft.distanceTo(fromLeft)
-    const l2rdistance = toLeft.distanceTo(fromRight)
-    const r2ldistance = toRight.distanceTo(fromLeft)
-    const r2rdistance = toRight.distanceTo(fromRight)
-    let toMerge
-    if (l2rdistance < Math.min(l2ldistance, r2ldistance, r2rdistance)) {
-      toMerge = [from, to]
-    } else if (r2ldistance < Math.min(l2ldistance, l2rdistance, r2rdistance)) {
-      toMerge = [to, from]
-    } else if (r2rdistance < Math.min(l2ldistance, l2rdistance, r2ldistance)) {
-      from.reverse()
-      toMerge = [to, from]
-    } else {
-      from.reverse()
-      toMerge = [from, to]
+  getAdvancedEditActions(container) {
+    super.getAdvancedEditActions(container)
+    const button = Utils.loadTemplate(`
+      <button type="button"><i class="icon icon-24 icon-polygon"></i>${translate('Transform to polygon')}</button>
+    `)
+    container.appendChild(button)
+    button.addEventListener('click', () => this.toPolygon())
+    if (this.isRoute()) {
+      const button = Utils.loadTemplate(`
+        <button class="button" type="button"><i class="icon icon-24 icon-polyline"></i>${translate('Transform to regular line')}</button>
+      `)
+      container.appendChild(button)
+      button.addEventListener('click', () => this.cancelRoute())
+    } else if (!this.isMulti() && this.coordinates.length < 10) {
+      const button = Utils.loadTemplate(`
+        <button class="button" type="button"><i class="icon icon-24 icon-route"></i>${translate('Transform to route')}</button>
+      `)
+      container.appendChild(button)
+      button.addEventListener('click', () =>
+        this.askForRouteSettings().then(() => {
+          this.toRoute()
+          this.computeRoute()
+        })
+      )
+    } else if (this.properties._umap_options.route?.coordinates) {
+      const button = Utils.loadTemplate(`
+        <button class="button" type="button"><i class="icon icon-24 icon-route"></i>${translate('Restore route')}</button>
+      `)
+      container.appendChild(button)
+      button.addEventListener('click', () => this.restoreRoute())
     }
-    const a = toMerge[0]
-    const b = toMerge[1]
-    const p1 = this._umap._leafletMap.latLngToContainerPoint(a[a.length - 1])
-    const p2 = this._umap._leafletMap.latLngToContainerPoint(b[0])
-    const tolerance = 5 // px on screen
-    if (Math.abs(p1.x - p2.x) <= tolerance && Math.abs(p1.y - p2.y) <= tolerance) {
-      a.pop()
+    if (this._umap.properties.ORSAPIKey) {
+      const button = Utils.loadTemplate(`
+        <button class="button" type="button"><i class="icon icon-24 icon-mountain"></i>${translate('Compute elevations')}</button>
+      `)
+      container.appendChild(button)
+      button.addEventListener('click', () => this.computeElevation())
     }
-    return a.concat(b)
+  }
+
+  async _reduceMulti(previous, current) {
+    if (!previous?.length) return current
+    const previousStart = previous[0]
+    const previousEnd = previous[previous.length - 1]
+    const currentStart = current[0]
+    const currentEnd = current[current.length - 1]
+    // Compute distance between edges (start/end with all combinations)
+    const ss = await GeoUtils.distance(previousStart, currentStart)
+    const se = await GeoUtils.distance(previousStart, currentEnd)
+    const ee = await GeoUtils.distance(previousEnd, currentEnd)
+    const es = await GeoUtils.distance(previousEnd, currentStart)
+    const shortest = Math.min(ss, ee, es, se)
+    // Find the shortest distance
+    switch (shortest) {
+      case se:
+        return [...current, ...previous]
+      case es:
+        return [...previous, ...current]
+      case ee:
+        return [...previous, ...[...current].reverse()]
+      case ss:
+        return [...[...current].reverse(), ...previous]
+      default:
+        throw new Error('Cannot compute merge orientation (invalid coordinates?)')
+    }
   }
 
   mergeShapes() {
     if (!this.isMulti()) return
-    const latlngs = this.ui.getLatLngs()
-    if (!latlngs.length) return
-    while (latlngs.length > 1) {
-      latlngs.splice(0, 2, this._mergeShapes(latlngs[1], latlngs[0]))
-    }
-    this.ui.setLatLngs(latlngs[0])
-    this.pullGeometry()
-    if (!this.ui.editEnabled()) this.edit()
-    this.ui.editor.reset()
+    const oldGeometry = Utils.CopyJSON(this._geometry)
+    this.journal.update(
+      'geometry',
+      async () => {
+        let coordinates = []
+        for (const coords of this.geometry.coordinates) {
+          coordinates = await this._reduceMulti(coordinates, coords)
+        }
+        this.geometry = await GeoUtils.cleanCoords({ type: 'LineString', coordinates })
+        if (!this.ui.editEnabled()) this.edit()
+        this.ui.editor.reset()
+        return this.geometry
+      },
+      oldGeometry
+    )
   }
 
   isMulti() {
-    return !LineUtil.isFlat(this.coordinates) && this.coordinates.length > 1
+    return !GeoUtils.isFlat(this.coordinates) && this.coordinates.length > 1
   }
 
-  getContextMenuEditItems(event) {
-    const items = super.getContextMenuEditItems(event)
-    const vertexClicked = event.vertex
-    if (!this.isMulti()) {
+  getVertexTools(event) {
+    const items = super.getVertexTools(event)
+    const index = event.vertex.getIndex()
+    if (index !== 0 && index !== event.vertex.getLastIndex()) {
       items.push({
-        label: translate('Transform to polygon'),
-        action: () => this.toPolygon(),
+        title: translate('Split line'),
+        icon: 'icon-split-line',
+        action: () => event.vertex.split(),
       })
-    }
-    if (vertexClicked) {
-      const index = event.vertex.getIndex()
-      if (index !== 0 && index !== event.vertex.getLastIndex()) {
-        items.push({
-          label: translate('Split line'),
-          action: () => event.vertex.split(),
-        })
-      } else if (index === 0 || index === event.vertex.getLastIndex()) {
-        items.push({
-          label: this._umap.help.displayLabel('CONTINUE_LINE'),
-          action: () => event.vertex.continue(),
-        })
-      }
+    } else if (index === 0 || index === event.vertex.getLastIndex()) {
+      items.push({
+        title: this._umap.help.displayLabel('CONTINUE_LINE', false),
+        icon: 'icon-continue-line',
+        action: () => event.vertex.continue(),
+      })
     }
     return items
   }
 
-  getContextMenuMultiItems(event) {
-    const items = super.getContextMenuMultiItems(event)
-    items.push({
-      label: translate('Merge lines'),
-      action: () => this.mergeShapes(),
-    })
+  getDrawingTools(event) {
+    const items = super.getDrawingTools(event)
+    if (this.isMulti()) {
+      items.push({
+        title: translate('Merge lines'),
+        icon: 'icon-merge',
+        action: () => this.mergeShapes(),
+      })
+    } else {
+      items.push({
+        title: translate('Transform to polygon'),
+        icon: 'icon-polygon',
+        action: () => this.toPolygon(),
+      })
+    }
     return items
   }
 
@@ -1082,23 +1154,116 @@ export class LineString extends Path {
     return Object.assign({ gain, loss }, super.extendedProperties())
   }
 
-  getInplaceEditVertexMenu(event) {
-    const items = super.getInplaceEditVertexMenu(event)
-    const index = event.vertex.getIndex()
-    if (index === 0 || index === event.vertex.getLastIndex()) {
-      items.push({
-        action: () => event.vertex.continue(),
-        title: translate('Continue line'),
-        icon: 'icon-continue-line',
-      })
-    } else {
-      items.push({
-        action: () => event.vertex.split(),
-        title: translate('Split line'),
-        icon: 'icon-split-line',
-      })
+  loadORS() {
+    return import('../importers/openrouteservice.js')
+  }
+
+  async _ensureRoute() {
+    if (!this.properties._umap_options.route) {
+      this.properties._umap_options.route = {}
     }
-    return items
+    return this.loadORS().then(({ PROFILES, PREFERENCES }) => {
+      this.properties._umap_options.route.profile ??= PROFILES[0][0]
+      this.properties._umap_options.route.preference ??= PREFERENCES[0][0]
+      this.properties._umap_options.route.elevation ??= false
+      this.properties._umap_options.route.coordinates ??= []
+      return { PROFILES, PREFERENCES }
+    })
+  }
+
+  async routeForm() {
+    return this._ensureRoute().then(({ PROFILES, PREFERENCES }) => {
+      const metadatas = [
+        [
+          'profile',
+          {
+            handler: 'Select',
+            selectOptions: PROFILES,
+            label: translate('Profile'),
+          },
+        ],
+        [
+          'elevation',
+          {
+            handler: 'Switch',
+            label: translate('Compute elevations'),
+          },
+        ],
+        [
+          'preference',
+          {
+            handler: 'Select',
+            selectOptions: PREFERENCES,
+            label: translate('Route preference'),
+          },
+        ],
+      ]
+      const form = new MutatingForm(this.properties._umap_options.route, metadatas, {
+        umap: this._umap,
+      })
+      return form.build()
+    })
+  }
+
+  async _editRoute(container) {
+    const template = `
+        <details id="edit-route">
+          <summary>${translate('Route settings')}</summary>
+          <fieldset data-ref=fieldset></fieldset>
+        </details>
+      `
+    const [details, { fieldset }] = Utils.loadTemplateWithRefs(template)
+    container.appendChild(details)
+    fieldset.appendChild(await this.routeForm())
+    const button = Utils.loadTemplate(
+      `<button data-ref=button type="button">${translate('Compute route')}</button>`
+    )
+    fieldset.appendChild(button)
+    button.addEventListener('click', async () => this.computeRoute())
+  }
+
+  computeElevation() {
+    if (!this._umap.properties.ORSAPIKey) return
+    const oldGeometry = Utils.CopyJSON(this._geometry)
+    this.journal.update(
+      'geometry',
+      async () => {
+        const { Importer } = await this.loadORS()
+        const importer = new Importer(this._umap)
+        const geometry = await importer.elevation(this.geometry)
+        if (!geometry?.type) return
+        this.geometry = geometry
+        this.ui.resetTooltip()
+        Alert.success(translate('Elevation has been added!'))
+        return this.geometry
+      },
+      oldGeometry
+    )
+  }
+
+  computeRoute() {
+    if (!this._umap.properties.ORSAPIKey) return
+    const oldGeometry = Utils.CopyJSON(this._geometry)
+    this.journal.update(
+      'geometry',
+      async () => {
+        const { Importer } = await this.loadORS()
+        const importer = new Importer(this._umap)
+        const geometry = await importer.directions(this.properties._umap_options.route)
+        if (!geometry?.type) return
+        this.geometry = geometry
+        this.ui.resetTooltip()
+        return this.geometry
+      },
+      oldGeometry
+    )
+  }
+
+  addExtraEditFieldset(container) {
+    super.addExtraEditFieldset(container)
+    if (this._umap.properties.ORSAPIKey && this.isRoute()) {
+      this._editRoute(container)
+    }
   }
 }
 
@@ -1111,20 +1276,8 @@ export class Polygon extends Path {
     }
   }
 
-  toLatLngs() {
-    return GeoJSON.coordsToLatLngs(this.coordinates, this.type === 'Polygon' ? 1 : 2)
-  }
-
-  convertLatLngs(latlngs) {
-    const holes = !LineUtil.isFlat(latlngs)
-    let multi = holes && !LineUtil.isFlat(latlngs[0])
-    let coordinates = GeoJSON.latLngsToCoords(latlngs, multi ? 2 : holes ? 1 : 0, true)
-    if (Utils.polygonMustBeFlattened(coordinates)) {
-      coordinates = coordinates[0]
-      multi = false
-    }
-    const type = multi ? 'MultiPolygon' : 'Polygon'
-    return { coordinates, type }
+  get measure() {
+    return TextUtils.readableArea(GeoUtils.area(this.geometry))
   }
 
   isEmpty() {
@@ -1186,48 +1339,38 @@ export class Polygon extends Path {
 
   getAdvancedEditActions(container) {
     super.getAdvancedEditActions(container)
-    const toLineString = DomUtil.createButton(
-      'button umap-to-polyline',
-      container,
-      translate('Transform to lines'),
-      this.toLineString,
-      this
+    const toLineString = DOMUtils.loadTemplate(
+      `<button type="button" class="umap-to-polyline">
+        <i class="icon icon-24 icon-polyline"></i>${translate('Transform to lines')}
+      </button>`
     )
+    container.appendChild(toLineString)
+    toLineString.addEventListener('click', () => this.toLineString())
   }
 
   isMulti() {
-    // Change me when Leaflet#3279 is merged.
-    // FIXME use TurfJS
     return (
-      !LineUtil.isFlat(this.coordinates) &&
-      !LineUtil.isFlat(this.coordinates[0]) &&
+      !GeoUtils.isFlat(this.coordinates) &&
+      !GeoUtils.isFlat(this.coordinates[0]) &&
       this.coordinates.length > 1
     )
   }
 
-  getInplaceEditMenu(event) {
-    const items = super.getInplaceEditMenu()
-    items.push({
-      action: () => this.ui.startHole(event),
-      title: translate('Start a hole here'),
-      icon: 'icon-hole',
-    })
-    return items
-  }
-
-  getContextMenuEditItems(event) {
-    const items = super.getContextMenuEditItems(event)
+  getDrawingTools(event) {
+    const items = super.getDrawingTools(event)
     const shape = this.ui.shapeAt(event.latlng)
     // No multi and no holes.
-    if (shape && !this.isMulti() && (LineUtil.isFlat(shape) || shape.length === 1)) {
+    if (shape && !this.isMulti() && (GeoUtils.isFlat(shape) || shape.length === 1)) {
       items.push({
-        label: translate('Transform to lines'),
+        title: translate('Transform to lines'),
+        icon: 'icon-polyline',
         action: () => this.toLineString(),
       })
     }
     items.push({
-      label: translate('Start a hole here'),
+      title: translate('Start a hole here'),
       action: () => this.ui.startHole(event),
+      icon: 'icon-hole',
     })
     return items
   }

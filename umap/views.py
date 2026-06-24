@@ -1,18 +1,18 @@
+import asyncio
+import base64
 import io
 import json
-import mimetypes
+import logging
 import re
-import socket
+import tempfile
+import time
 import zipfile
 from datetime import datetime, timedelta
-from http.client import InvalidURL
-from io import BytesIO
 from pathlib import Path
 from smtplib import SMTPException
-from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlparse
-from urllib.request import Request, build_opener
 
+import httpx
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import BACKEND_SESSION_KEY, get_user_model
@@ -22,11 +22,13 @@ from django.contrib.postgres.search import SearchQuery, SearchVector
 from django.contrib.sessions.models import Session
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.exceptions import PermissionDenied
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.mail import send_mail
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.signing import BadSignature, Signer, TimestampSigner
-from django.core.validators import URLValidator, ValidationError
+from django.db.models import QuerySet
 from django.http import (
+    FileResponse,
     Http404,
     HttpResponse,
     HttpResponseBadRequest,
@@ -39,7 +41,6 @@ from django.middleware.gzip import re_accepts_gzip
 from django.shortcuts import get_object_or_404
 from django.urls import resolve, reverse, reverse_lazy
 from django.utils import translation
-from django.utils.encoding import smart_bytes
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _
 from django.views.decorators.cache import cache_control
@@ -70,13 +71,18 @@ from .models import DataLayer, Licence, Map, Pictogram, Star, Team, TileLayer
 from .utils import (
     ConflictError,
     _urls_for_js,
+    collect_pictograms,
     gzip_file,
     is_ajax,
     json_dumps,
+    layers_tree,
     merge_features,
+    validate_url,
 )
 
 User = get_user_model()
+
+logger = logging.getLogger(__name__)
 
 
 PRIVATE_IP = re.compile(
@@ -87,6 +93,12 @@ PRIVATE_IP = re.compile(
     r"|(^192\.168\.))"
 )
 ANONYMOUS_COOKIE_MAX_AGE = 60 * 60 * 24 * 30  # One month
+DEFAULT_TTL = 300
+TTL = {
+    DEFAULT_TTL: _("5 min"),
+    3600: _("1 hour"),
+    86400: _("1 day"),
+}
 
 
 class PaginatorMixin:
@@ -138,9 +150,7 @@ class PublicMapsMixin(object):
         return maps
 
     def get_highlighted_maps(self):
-        staff = User.objects.filter(is_staff=True)
-        stars = Star.objects.filter(by__in=staff).values("map")
-        qs = Map.public.filter(pk__in=stars)
+        qs = Map.public.starred_by_staff()
         maps = qs.order_by("-modified_at")
         return maps
 
@@ -165,17 +175,9 @@ class Home(PaginatorMixin, TemplateView, PublicMapsMixin):
             except Map.DoesNotExist:
                 pass
 
-        showcase_map = None
-        if hasattr(settings, "UMAP_SHOWCASE_PK"):
-            try:
-                showcase_map = Map.public.get(pk=settings.UMAP_SHOWCASE_PK)
-            except Map.DoesNotExist:
-                pass
-
         return {
             "maps": maps,
             "demo_map": demo_map,
-            "showcase_map": showcase_map,
         }
 
 
@@ -332,10 +334,9 @@ class TeamMaps(PaginatorMixin, DetailView):
 
 
 class SearchMixin:
-    def get_search_queryset(self, **kwargs):
+    def get_search_queryset(self, qs, **kwargs):
         q = self.request.GET.get("q")
         tags = [t for t in self.request.GET.getlist("tags") if t]
-        qs = Map.objects.all()
         if q:
             vector = SearchVector("name", config=settings.UMAP_SEARCH_CONFIGURATION)
             query = SearchQuery(
@@ -353,10 +354,10 @@ class Search(PaginatorMixin, TemplateView, PublicMapsMixin, SearchMixin):
     list_template_name = "umap/map_list.html"
 
     def get_context_data(self, **kwargs):
-        qs = self.get_search_queryset()
+        qs = self.get_search_queryset(Map.public.all())
         qs_count = 0
         results = []
-        if qs is not None:
+        if isinstance(qs, QuerySet):
             qs = qs.filter(share_status=Map.PUBLIC).order_by("-modified_at")
             qs_count = qs.count()
             results = self.paginate(qs)
@@ -382,14 +383,11 @@ class UserDashboard(PaginatorMixin, DetailView, SearchMixin):
         return self.get_queryset().get(pk=self.request.user.pk)
 
     def get_maps(self):
-        qs = self.get_search_queryset() or Map.objects.all()
-        qs = qs.exclude(share_status__in=[Map.DELETED, Map.BLOCKED])
-        teams = self.object.teams.all()
-        qs = (
-            qs.filter(owner=self.object)
-            .union(qs.filter(editors=self.object))
-            .union(qs.filter(teams__in=teams))
-        )
+        qs = Map.private.filter(is_template=False)
+        search_qs = self.get_search_queryset(qs)
+        if isinstance(search_qs, QuerySet):
+            qs = search_qs
+        qs = qs.for_user(self.object)
         return qs.order_by("-modified_at")
 
     def get_context_data(self, **kwargs):
@@ -398,7 +396,26 @@ class UserDashboard(PaginatorMixin, DetailView, SearchMixin):
         return super().get_context_data(**kwargs)
 
 
-user_dashboard = UserDashboard.as_view()
+class UserTemplates(PaginatorMixin, DetailView, SearchMixin):
+    model = User
+    template_name = "umap/user_templates.html"
+    list_template_name = "umap/map_table.html"
+
+    def get_object(self):
+        return self.get_queryset().get(pk=self.request.user.pk)
+
+    def get_maps(self):
+        qs = Map.private.filter(is_template=True)
+        search_qs = self.get_search_queryset(qs)
+        if isinstance(search_qs, QuerySet):
+            qs = search_qs
+        qs = qs.for_user(self.object)
+        return qs.order_by("-modified_at")
+
+    def get_context_data(self, **kwargs):
+        page = self.paginate(self.get_maps(), settings.UMAP_MAPS_PER_PAGE_OWNER)
+        kwargs.update({"q": self.request.GET.get("q"), "maps": page})
+        return super().get_context_data(**kwargs)
 
 
 class UserDownload(DetailView, SearchMixin):
@@ -408,9 +425,9 @@ class UserDownload(DetailView, SearchMixin):
         return self.get_queryset().get(pk=self.request.user.pk)
 
     def get_maps(self):
-        qs = Map.objects.filter(id__in=self.request.GET.getlist("map_id"))
-        qs = qs.filter(owner=self.object).union(qs.filter(editors=self.object))
-        return qs.order_by("-modified_at")
+        qs = Map.private.filter(id__in=self.request.GET.getlist("map_id"))
+        qsu = qs.for_user(self.object)
+        return qsu.order_by("-modified_at")
 
     def render_to_response(self, context, *args, **kwargs):
         zip_buffer = io.BytesIO()
@@ -431,109 +448,126 @@ class UserDownload(DetailView, SearchMixin):
 user_download = UserDownload.as_view()
 
 
-class MapsShowCase(View):
-    def get(self, *args, **kwargs):
-        maps = Map.public.filter(center__distance_gt=(DEFAULT_CENTER, D(km=1)))
-        maps = maps.order_by("-modified_at")[:2500]
-
-        def make(m):
-            description = m.description or ""
-            if m.owner:
-                description = "{description}\n{by} [[{url}|{name}]]".format(
-                    description=description,
-                    by=_("by"),
-                    url=m.owner.get_url(),
-                    name=m.owner,
-                )
-            description = "{}\n[[{}|{}]]".format(
-                description, m.get_absolute_url(), _("View the map")
-            )
-            geometry = m.settings.get("geometry", json.loads(m.center.geojson))
-            return {
-                "type": "Feature",
-                "geometry": geometry,
-                "properties": {"name": m.name, "description": description},
-            }
-
-        geojson = {"type": "FeatureCollection", "features": [make(m) for m in maps]}
-        return HttpResponse(smart_bytes(json_dumps(geojson)))
-
-
-showcase = MapsShowCase.as_view()
-
-
-def validate_url(request):
-    assert request.method == "GET", "Wrong HTTP method"
-    url = request.GET.get("url")
-    assert url, "Missing URL"
-    try:
-        URLValidator(url)
-    except ValidationError as err:
-        raise AssertionError(err)
-    assert "HTTP_REFERER" in request.META, "Missing HTTP_REFERER"
-    referer = urlparse(request.META.get("HTTP_REFERER"))
-    toproxy = urlparse(url)
-    local = urlparse(settings.SITE_URL)
-    assert toproxy.hostname, "No hostname"
-    assert referer.hostname == local.hostname, f"{referer.hostname} != {local.hostname}"
-    assert toproxy.hostname != "localhost", "Invalid localhost target"
-    assert toproxy.netloc != local.netloc, "Invalid netloc"
-    try:
-        # clean this when in python 3.4
-        ipaddress = socket.gethostbyname(toproxy.hostname)
-    except Exception as err:
-        raise AssertionError(err)
-    assert not PRIVATE_IP.match(ipaddress), "Private IP"
-    return url
-
-
 class AjaxProxy(View):
-    def get(self, *args, **kwargs):
+    HTTP_TIMEOUT = 10.0
+    SEMAPHORE_TIMEOUT = 30  # Generous buffer over HTTP_TIMEOUT.
+    USER_AGENT = "uMapProxy +https://umap-project.org"
+
+    async def get(self, request, ttl, *args, **kwargs):
         try:
-            url = validate_url(self.request)
-        except AssertionError as err:
+            url = validate_url(request)
+        except ValueError as err:
             print(f"AjaxProxy: {err}")
             return HttpResponseBadRequest()
-        try:
-            ttl = int(self.request.GET.get("ttl"))
-        except (TypeError, ValueError):
-            ttl = None
-        if getattr(settings, "UMAP_XSENDFILE_HEADER", None):
-            response = HttpResponse()
-            response[settings.UMAP_XSENDFILE_HEADER] = f"/proxy/{quote_plus(url)}"
-            if ttl:
-                response["X-Accel-Expires"] = ttl
-            return response
 
-        # You should not use this in production (use Nginx or so)
-        headers = {"User-Agent": "uMapProxy +http://wiki.openstreetmap.org/wiki/UMap"}
-        url = url.replace(" ", "+")
-        request = Request(url, headers=headers)
-        opener = build_opener()
+        cache_dir = Path(settings.AJAX_PROXY_CACHE_DIR)
+        basename = f"umap_{base64.urlsafe_b64encode(url.encode()).decode()}"
+        cache_file = cache_dir / f"{basename}.cache"
+        semaphore = cache_dir / f"{basename}.tmp"
+
+        # Fast path: serve directly if cache is fresh, no lock needed.
         try:
-            proxied_request = opener.open(request, timeout=10)
-        except HTTPError as e:
-            return HttpResponse(e.msg, status=e.code, content_type="text/plain")
-        except URLError:
-            return HttpResponseBadRequest("URL error")
-        except InvalidURL:
-            return HttpResponseBadRequest("Invalid URL")
-        except TimeoutError:
-            return HttpResponseBadRequest("Timeout")
-        else:
-            status_code = proxied_request.code
-            content_type = proxied_request.headers.get("Content-Type")
-            if not content_type:
-                content_type, encoding = mimetypes.guess_type(url)
-            content = proxied_request.read()
-            # Quick hack to prevent Django from adding a Vary: Cookie header
-            self.request.session.accessed = False
-            response = HttpResponse(
-                content, status=status_code, content_type=content_type
-            )
-            if ttl:
-                response["X-Accel-Expires"] = ttl
-            return response
+            age = time.time() - cache_file.stat().st_mtime
+            fresh = age <= ttl
+        except FileNotFoundError:
+            fresh = False
+        status = "HIT"
+
+        if not fresh:
+            # Acquire the semaphore atomically (O_CREAT|O_EXCL). If another worker
+            # holds it, wait — but treat a long-held semaphore as stale (crashed
+            # worker) to avoid getting wedged forever.
+            for _ in range(10):
+                try:
+                    semaphore.touch(exist_ok=False)
+                    break
+                except FileExistsError:
+                    try:
+                        held_age = time.time() - semaphore.stat().st_mtime
+                    except FileNotFoundError:
+                        continue
+                    if held_age > self.SEMAPHORE_TIMEOUT:
+                        semaphore.unlink(missing_ok=True)
+                        continue
+                    await asyncio.sleep(1)
+            else:
+                return HttpResponseServerError()
+
+            try:
+                # Re-check freshness under lock: another worker may have just
+                # refreshed the cache while we were waiting.
+                try:
+                    age = time.time() - cache_file.stat().st_mtime
+                    fresh = age <= ttl
+                except FileNotFoundError:
+                    fresh = False
+                if not fresh:
+                    status = "MISS"
+                    try:
+                        await self._fetch(url, cache_file, cache_dir)
+                    except ValueError as err:
+                        return HttpResponseBadRequest(str(err))
+            finally:
+                semaphore.unlink(missing_ok=True)
+
+        try:
+            fileobj = cache_file.open("rb")
+            content_type = fileobj.readline().decode("ascii", errors="replace").strip()
+        except OSError as err:
+            return HttpResponseBadRequest(str(err))
+        # Prevent SessionMiddleware from adding Vary: Cookie, which would defeat
+        # any HTTP cache (CDN, reverse proxy) sitting in front of uMap.
+        if hasattr(request, "session"):
+            request.session.accessed = False
+        response = FileResponse(fileobj, content_type=content_type)
+        response.headers["X-CACHE"] = status
+        return response
+
+    async def _fetch(self, url, cache_file, cache_dir):
+        # Cache file layout: first line is the content-type (ASCII, terminated
+        # by \n), the rest is the raw response body. This keeps everything in
+        # a single file while preserving the full content-type (with charset).
+        tmp_path = None
+        try:
+            try:
+                async with httpx.AsyncClient(
+                    timeout=self.HTTP_TIMEOUT,
+                    follow_redirects=True,
+                    headers={"User-Agent": self.USER_AGENT},
+                ) as client:
+                    async with client.stream("GET", url) as resp:
+                        if resp.status_code >= 400:
+                            raise ValueError(f"Upstream {resp.status_code}")
+                        content_type = (
+                            resp.headers.get("content-type")
+                            or "application/octet-stream"
+                        )
+                        # HTTP forbids CR/LF in headers, but a malformed
+                        # upstream could still send them — strip defensively
+                        # so the header line stays a single line.
+                        content_type = (
+                            content_type.replace("\n", " ").replace("\r", " ").strip()
+                        )
+                        with tempfile.NamedTemporaryFile(
+                            delete=False, dir=cache_dir, prefix=f"{cache_file.name}."
+                        ) as tmp:
+                            tmp_path = Path(tmp.name)
+                            tmp.write(
+                                f"{content_type}\n".encode("ascii", errors="replace")
+                            )
+                            async for chunk in resp.aiter_bytes():
+                                tmp.write(chunk)
+            except httpx.TimeoutException:
+                raise ValueError("Timeout")
+            except httpx.InvalidURL:
+                raise ValueError("Invalid URL")
+            except httpx.RequestError:
+                raise ValueError("URL error")
+            tmp_path.replace(cache_file)
+            tmp_path = None
+        finally:
+            if tmp_path is not None:
+                tmp_path.unlink(missing_ok=True)
 
 
 ajax_proxy = AjaxProxy.as_view()
@@ -570,6 +604,11 @@ class SessionMixin:
         }
 
 
+class WhoAmI(SessionMixin, View):
+    def get(self, request, *args, **kwargs):
+        return simple_json_response(user=self.get_user_data())
+
+
 class FormLessEditMixin:
     http_method_names = [
         "post",
@@ -590,7 +629,8 @@ class MapDetailMixin(SessionMixin):
 
     def set_preconnect(self, properties, context):
         # Try to extract the tilelayer domain, in order to but a preconnect meta.
-        url_template = properties.get("tilelayer", {}).get("url_template")
+        tilelayer = properties.get("tilelayer") or {}
+        url_template = tilelayer.get("url_template")
         # Not explicit tilelayer set, take the first of the list, which will be
         # used by frontend too.
         if not url_template:
@@ -619,7 +659,14 @@ class MapDetailMixin(SessionMixin):
             "websocketEnabled": settings.REALTIME_ENABLED,
             "importers": settings.UMAP_IMPORTERS,
             "defaultLabelKeys": settings.UMAP_LABEL_KEYS,
+            "help_links": settings.UMAP_HELP_LINKS,
+            "ttl": TTL,
+            "default_ttl": DEFAULT_TTL,
         }
+        if settings.OPENROUTESERVICE_APIKEY:
+            properties["ORSAPIKey"] = settings.OPENROUTESERVICE_APIKEY
+        if settings.OPENROUTESERVICE_HOST:
+            properties["ORSHost"] = settings.OPENROUTESERVICE_HOST
         created = bool(getattr(self, "object", None))
         if created:
             properties.update(
@@ -749,9 +796,8 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
         return self.object.get_absolute_url()
 
     def get_datalayers(self):
-        # When initializing datalayers from map, we cannot get the reference version
-        # the normal way, which is from the header X-Reference-Version
-        return [dl.metadata(self.request) for dl in self.object.datalayers]
+        layers = [l.metadata(self.request) for l in self.object.datalayers]
+        return layers_tree(layers)
 
     @property
     def edit_mode(self):
@@ -777,6 +823,7 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
         if "properties" not in map_settings:
             map_settings["properties"] = {}
         map_settings["properties"]["name"] = self.object.name
+        map_settings["properties"]["is_template"] = self.object.is_template
         map_settings["properties"]["permissions"] = self.get_permissions()
         author = self.object.get_author()
         if author:
@@ -804,7 +851,10 @@ class MapDownload(DetailView):
         return reverse("map_download", args=(self.object.pk,))
 
     def render_to_response(self, context, *args, **kwargs):
-        umapjson = self.object.generate_umapjson(self.request)
+        include_data = self.request.GET.get("include_data") != "0"
+        umapjson = self.object.generate_umapjson(
+            self.request, include_data=include_data
+        )
         response = simple_json_response(**umapjson)
         response["Content-Disposition"] = (
             f'attachment; filename="umap_backup_{self.object.slug}.umap"'
@@ -993,12 +1043,7 @@ class UpdateMapPermissions(FormLessEditMixin, UpdateView):
 class AttachAnonymousMap(View):
     def post(self, *args, **kwargs):
         self.object = kwargs["map_inst"]
-        if (
-            self.object.owner
-            or not self.object.is_anonymous_owner(self.request)
-            or not self.object.can_edit(self.request)
-            or not self.request.user.is_authenticated
-        ):
+        if not self.request.user.is_authenticated:
             return HttpResponseForbidden()
         self.object.owner = self.request.user
         self.object.save()
@@ -1010,12 +1055,6 @@ class SendEditLink(FormLessEditMixin, FormView):
 
     def post(self, form, **kwargs):
         self.object = kwargs["map_inst"]
-        if (
-            self.object.owner
-            or not self.object.is_anonymous_owner(self.request)
-            or not self.object.can_edit(self.request)
-        ):
-            return HttpResponseForbidden()
         form = self.get_form()
         if form.is_valid():
             email = form.cleaned_data["email"]
@@ -1057,7 +1096,7 @@ class MapDelete(DeleteView):
         if is_ajax(self.request):
             return simple_json_response(redirect=redirect_url)
         else:
-            return HttpResponseRedirect(form.data.get("next") or redirect_url)
+            return HttpResponseRedirect(redirect_url)
 
 
 class MapClone(PermissionsMixin, View):
@@ -1143,9 +1182,9 @@ class MapAnonymousEditUrl(RedirectView):
         return response
 
 
-# ############## #
+# ############## #
 #    DataLayer   #
-# ############## #
+# ############## #
 
 
 class DataLayerView(BaseDetailView):
@@ -1181,10 +1220,18 @@ class DataLayerView(BaseDetailView):
     def render_to_response(self, context, **response_kwargs):
         response = None
         # Generate gzip if needed
-        if not self.is_s3 and self.accepts_gzip:
-            gzip_path = Path(f"{self.filepath}.gz")
-            if not gzip_path.exists():
-                gzip_file(self.filepath, gzip_path)
+        if not self.is_s3:
+            if not self.filepath.exists():
+                logger.warning(
+                    "Missing datalayer file %s for layer %s",
+                    self.filepath,
+                    self.object.pk,
+                )
+                raise Http404("Missing data for layer")
+            if self.accepts_gzip:
+                gzip_path = Path(f"{self.filepath}.gz")
+                if not gzip_path.exists():
+                    gzip_file(self.filepath, gzip_path)
 
         if getattr(settings, "UMAP_XSENDFILE_HEADER", None):
             response = HttpResponse()
@@ -1244,7 +1291,8 @@ class DataLayerCreate(FormLessEditMixin, CreateView):
 
         form.instance.uuid = uuid
         self.object = form.save()
-        assert uuid == self.object.uuid
+        if uuid != self.object.uuid:
+            raise HttpResponseBadRequest("UUID is not matching")
 
         # Simple response with only metadata
         data = self.object.metadata(self.request)
@@ -1296,12 +1344,7 @@ class DataLayerUpdate(FormLessEditMixin, UpdateView):
             return None
 
     def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        if self.object.map.pk != int(self.kwargs["map_id"]):
-            return HttpResponseForbidden()
-
-        if not self.object.can_edit(request=self.request):
-            return HttpResponseForbidden()
+        self.object = kwargs["datalayer_inst"]
 
         reference_version = self.request.headers.get("X-Datalayer-Reference")
         if self.has_changes_since(reference_version):
@@ -1310,8 +1353,20 @@ class DataLayerUpdate(FormLessEditMixin, UpdateView):
                 return HttpResponse(status=412)
 
             # Replace the uploaded file by the merged version.
-            self.request.FILES["geojson"].file = BytesIO(
-                json_dumps(merged).encode("utf-8")
+            # The geojson here can be either a NamedTemporaryFile or an
+            # InMemoryUploadedFile, depending on whether is bigger than the
+            # FILE_UPLOAD_MAX_MEMORY_SIZE setting (2.5Mo by default).
+            # Now that we loaded all in RAM, let's use an InMemoryUploadedFile.
+            orig = self.request.FILES["geojson"]
+            file = io.BytesIO(json_dumps(merged).encode("utf-8"))
+            file_size = file.getbuffer().nbytes
+            self.request.FILES["geojson"] = InMemoryUploadedFile(
+                file=file,
+                field_name="geojson",
+                name=orig.name,
+                content_type="application/geo+json",
+                size=file_size,
+                charset="utf-8",
             )
 
             # Mark the data to be reloaded by form_valid
@@ -1334,9 +1389,7 @@ class DataLayerDelete(DeleteView):
     model = DataLayer
 
     def form_valid(self, form):
-        self.object = self.get_object()
-        if self.object.map != self.kwargs["map_inst"]:
-            return HttpResponseForbidden()
+        self.object = self.kwargs["datalayer_inst"]
         self.object.move_to_trash()
         return simple_json_response(info=_("Layer successfully deleted."))
 
@@ -1363,17 +1416,30 @@ class UpdateDataLayerPermissions(FormLessEditMixin, UpdateView):
         return simple_json_response(info=_("Permissions updated with success!"))
 
 
-# ############## #
+# ############## #
 #     Picto      #
-# ############## #
+# ############## #
 
 
 class PictogramJSONList(ListView):
     model = Pictogram
 
     def render_to_response(self, context, **response_kwargs):
-        content = [p.json for p in Pictogram.objects.all()]
-        return simple_json_response(pictogram_list=content)
+        if settings.UMAP_PICTOGRAMS_COLLECTIONS:
+            content = collect_pictograms()
+        else:
+            categories = {}
+            for picto in Pictogram.objects.all():
+                category = picto.category or _("Generic")
+                categories.setdefault(category, [])
+                categories[category].append(picto.json)
+            content = {
+                settings.SITE_NAME: {
+                    "attribution": settings.SITE_NAME,
+                    "categories": categories,
+                }
+            }
+        return simple_json_response(data=content)
 
 
 # ############## #
@@ -1393,6 +1459,10 @@ def stats(request):
     return simple_json_response(
         **{
             "version": VERSION,
+            "realtime_enabled": settings.REALTIME_ENABLED,
+            "anonymous_allowed": settings.UMAP_ALLOW_ANONYMOUS,
+            "importers": list(settings.UMAP_IMPORTERS.keys()),
+            "teams_count": Team.objects.count(),
             "maps_count": Map.objects.count(),
             "maps_active_last_week_count": Map.objects.filter(
                 modified_at__gt=last_week
@@ -1442,7 +1512,7 @@ def webmanifest(request):
 
 def logout(request):
     do_logout(request)
-    return HttpResponseRedirect("/")
+    return HttpResponseRedirect(settings.LOGOUT_REDIRECT_URL)
 
 
 class LoginPopupEnd(TemplateView):
@@ -1458,3 +1528,26 @@ class LoginPopupEnd(TemplateView):
         if backend in settings.DEPRECATED_AUTHENTICATION_BACKENDS:
             return HttpResponseRedirect(reverse("user_profile"))
         return super().get(*args, **kwargs)
+
+
+class TemplateList(ListView):
+    model = Map
+
+    def render_to_response(self, context, **response_kwargs):
+        source = self.request.GET.get("source")
+        if source == "mine":
+            qs = Map.private.filter(is_template=True).for_user(self.request.user)
+        elif source == "staff":
+            qs = Map.public.starred_by_staff().filter(is_template=True)
+        else:
+            qs = Map.public.filter(is_template=True)
+        templates = [
+            {
+                "id": m.id,
+                "name": m.name,
+                "description": m.description,
+                "url": m.get_absolute_url(),
+            }
+            for m in qs.order_by("-modified_at")
+        ]
+        return simple_json_response(templates=templates)

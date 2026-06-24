@@ -12,7 +12,7 @@ export class uMapElement extends HTMLElement {
 
   /**
    * Retrieves a clone of the content template either using the `template`
-   * attribute or an id mathing the name of the component:
+   * attribute or an id matching the name of the component:
    *
    * `umap-alert` component => `umap-alert-template` template id lookup.
    */

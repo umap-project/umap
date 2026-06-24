@@ -42,7 +42,7 @@ Cliquez sur **Construire et exécuter la requête** : la requête est créée
 dans l’éditeur à gauche de la carte, puis le résultat est affiché sur la
 carte.
 
-![overpass_turbo_assistant.jpg](../../static/tutoriels/11-je-valorise-les-donnees-openstreetmap-avec-overpass-et-umap/overpass_turbo_assistant.jpg)
+![Capture d’écran du site d'Overpass Turbo en utilisant l'assistant](../../static/tutoriels/11-je-valorise-les-donnees-openstreetmap-avec-overpass-et-umap/overpass_turbo_assistant.png)
 
 #### Adapter la requête pour uMap
 
@@ -58,22 +58,20 @@ modifier dans l’éditeur de requête la clause **`[out:json]`** par
 la différence de format dans l’onglet **Données** qui montre le résultat
 de la requête.
 
-![overpass_turbo_format_xml.jpg](../../static/tutoriels/11-je-valorise-les-donnees-openstreetmap-avec-overpass-et-umap/overpass_turbo_format_xml.jpg)
+![Capture d’écran du site d'Overpass Turbo avec l'option XML activée et les données rendues visibles](../../static/tutoriels/11-je-valorise-les-donnees-openstreetmap-avec-overpass-et-umap/overpass_turbo_format_xml.png)
 
 #### Exporter la requête Overpass
 
 Exportez la requête en cliquant sur **Exporter** : un panneau s’affiche.
-Ouvrez l’onglet **Requête** et cliquez sur **compact** à droite de
-**Overpass QL**. Un nouvel onglet intitulé **Overpass API Converted
-Query** apparaît. Faites un **clic droit** sur la ligne soulignée en
-bleu, et choisir **Copier l’adresse du lien** (avec Mozilla Firefox) :
+Aller à la partie **Requête** et cliquez droit sur **compact** à droite de
+**Overpass QL** et choisir **Copier l’adresse du lien** (avec Mozilla Firefox) :
 l’URL de la requête est copié dans le presse-papier.
 
-![overpass_turbo_exporter.jpg](../../static/tutoriels/11-je-valorise-les-donnees-openstreetmap-avec-overpass-et-umap/overpass_turbo_exporter.jpg)
+![Capture d’écran du site d'Overpass Turbo avec le déroulé des opérations à réaliser](../../static/tutoriels/11-je-valorise-les-donnees-openstreetmap-avec-overpass-et-umap/overpass_turbo_exporter.png)
 
 #### Utiliser la requête dans uMap
 
-![umap_requete_overpass_url.png](../../static/tutoriels/11-je-valorise-les-donnees-openstreetmap-avec-overpass-et-umap/umap_requete_overpass_url.png)
+![Capture d’écran du site de Umap](../../static/tutoriels/11-je-valorise-les-donnees-openstreetmap-avec-overpass-et-umap/umap_requete_overpass_url.png)
 
 Dans un nouvelle carte uMap, créez un calque et ouvrez l’onglet
 **Données distantes**. Collez dans la case URL le contenu du
@@ -87,7 +85,7 @@ modifiez pas !
 Vous pouvez configurer le calque comme cela a été décrit dans les
 tutoriels précédents.
 
-![umap_overpass_infobulle.jpg](../../static/tutoriels/11-je-valorise-les-donnees-openstreetmap-avec-overpass-et-umap/umap_overpass_infobulle.jpg)
+![Capture d’écran du site de uMap avec les marqueurs affichés](../../static/tutoriels/11-je-valorise-les-donnees-openstreetmap-avec-overpass-et-umap/umap_overpass_infobulle.jpg)
 
 De la même façon que les valeurs d’un tableur peuvent être affichées dans les
 infobulles (voir [cette section](9-map-from-spreadsheet.md)
@@ -110,8 +108,6 @@ obtenir les parkings à vélos de Nantes est semblable à celle utilisée
 pour les locations, et peut être créée avec l’assistant :
 `amenity=bicycle_parking in Nantes`.
 
-![overpass_turbo_export_geojson.png](../../static/tutoriels/11-je-valorise-les-donnees-openstreetmap-avec-overpass-et-umap/overpass_turbo_export_geojson.png)
-
 L’exécution de cette requête prend près de 5 secondes. Ce délai est trop
 long pour une carte *interactive*. Aussi plutôt que d’exécuter le
 requête lors de l’affichage de la carte nous préférons extraire les
@@ -119,12 +115,15 @@ données et les importer dans uMap.
 
 #### Importer des données statiques
 
-Dans Overpass Turbo, cliquez sur **Exporter**, sélectionnez l’onglet
-**Données** puis cliquez sur **Download/copy as GeoJSON**. Cette
+![Capture d’écran du site d'Overpass Turbo avec l'endroit où cliquer](../../static/tutoriels/11-je-valorise-les-donnees-openstreetmap-avec-overpass-et-umap/overpass_turbo_export_geojson.png)
+
+Dans Overpass Turbo, cliquez sur **Exporter**, dans la section
+**Données** il y a une catégorie **GeoJSON**, cliquez sur **télécharger**. Cette
 opération convertit le résultat de la requête dans le format GeoJSON (un
 format standard pour transférer des données géographiques sur internet)
 et crée un fichier nommé `export.geojson` dans le dossier
-`Téléchargements` de votre ordinateur.
+`Téléchargements` de votre ordinateur
+(vous pouvez aussi cliquer sur **copier** et utiliser votre presse-papier).
 
 Dans la carte uMap importez le fichier ainsi produit dans un nouveau
 calque (voir [cette section](9-map-from-spreadsheet.md) du tutoriel précédent).
@@ -135,7 +134,7 @@ déplace. Cela est dû au nombre élevé de marqueurs affichés sur la carte
 
 #### Afficher une carte de densité
 
-![umap_heatmap.png](../../static/tutoriels/11-je-valorise-les-donnees-openstreetmap-avec-overpass-et-umap/umap_heatmap.png)
+![Paramètres uMap pour afficher une carte de densité](../../static/tutoriels/11-je-valorise-les-donnees-openstreetmap-avec-overpass-et-umap/umap_heatmap.png)
 
 Une possibilité pour
 contourner ce problème est d’afficher les marqueurs sous forme de
@@ -251,35 +250,38 @@ rectangle.
 
 #### Simplifier la requête Overpass
 
-!!! note
+Pour faciliter l’opération nous commençons par
+simplifier la requête Overpass. Les points importants sont :
 
-    Pour faciliter l’opération nous commençons par
-    simplifier la requête Overpass. Les points importants sont :
+1.  placer la clause **`[bbox:{{bbox}}]`** en entête de requête pour que
+    ce paramètre ne soit présent qu’une seule fois
+2.  remplacer la production du résultat par la clause **`out center;`**
+    qui permet de convertir chaque *way* (fermé ou pas) en un point
 
-    1.  placer la clause **`[bbox:{{bbox}}]`** en entête de requête pour que
-        ce paramètre ne soit présent qu’une seule fois
-    2.  remplacer la production du résultat par la clause **`out center;`**
-        qui permet de convertir chaque *way* (fermé ou pas) en un point
+        [out:xml][bbox:{{bbox}}];
+        (
+         node["amenity"="bicycle_parking"];
+         way["amenity"="bicycle_parking"];
+        );
+        out center;
 
-            [out:xml][bbox:{{bbox}}];
-            (
-             node["amenity"="bicycle_parking"];
-             way["amenity"="bicycle_parking"];
-            );
-            out center;
+Nous obtenons alors ce résultat sur la carte :
+
+![Capture du site d'Overpass Turbo avec la nouvelle requête](../../static/tutoriels/11-je-valorise-les-donnees-openstreetmap-avec-overpass-et-umap/requete_dynamique.png)
 
 
 #### Adapter et exporter la requête
 
-![requete_dynamique.png](../../static/tutoriels/11-je-valorise-les-donnees-openstreetmap-avec-overpass-et-umap/requete_dynamique.png)
 
 L’opération est délicate, et exige sang froid et concentration :
 
 1.  remplacez `{{box}}` par `{south},{west},{north},{east}` : il s’agit
     de 4 variables qu’uMap remplacera, lors de l’exécution de la
     requête, par les valeurs définissant l’emprise de la carte.
-2.  exportez la requête en utilisant l’option **download/copy as
-    standalone query** : un fichier texte est produit et téléchargé.
+2.  **exportez** la requête en utilisant l’option **requête autonome → télécharger** :
+    un fichier texte est produit et téléchargé.
+    ![Capture du site d'Overpass Turbo avec la nouvelle requête modifiée](../../static/tutoriels/11-je-valorise-les-donnees-openstreetmap-avec-overpass-et-umap/requete_dynamique_2.png)
+
 3.  ouvrez le fichier dans un éditeur de texte et ajoutez en début de
     ligne la base de l’URL permettant d’exécuter une requête Overpass :
     `http://overpass-api.de/api/interpreter?data=`
@@ -290,8 +292,7 @@ L’opération est délicate, et exige sang froid et concentration :
 6.  selon le serveur Overpass utilisé, l’option **Avec
     proxy** doit être activée ou désactivée (voir ci-dessous)
 
-Par commodité la requête modifiée est reprise ci-dessous, où elle peut
-être copiée par un triple-clic :
+Par commodité la requête modifiée est reprise ci-dessous :
 
     http://overpass-api.de/api/interpreter?data=[out:xml][bbox:{south},{west},{north},{east}];(node["amenity"="bicycle_parking"];way["amenity"="bicycle_parking"];);out center;
 
@@ -306,7 +307,7 @@ Par commodité la requête modifiée est reprise ci-dessous, où elle peut
 
 !!! note
 
-    N’utilisez pas la variable {bbox} car elle sera
+    N’utilisez pas la variable `{bbox}` car elle sera
     remplacée par des coordonnées dont l’ordre (W,S,N,E) n’est pas celui
     attendu par Overpass (S,W,N,E) !
 

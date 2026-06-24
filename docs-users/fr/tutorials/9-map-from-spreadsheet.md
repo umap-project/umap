@@ -98,6 +98,12 @@ Adresse Nationale (BAN). Il fournit plusieurs outils, dont le [géocodeur
 CSV](https://adresse.data.gouv.fr/csv) qui permet de géocoder une liste
 d’adresses très rapidement avec de bons résultats.
 
+Au Québec, le service gouvernemental [Adresses
+Québec](https://mrnf.gouv.qc.ca/repertoire-geographique/adresses-quebec-aqgeobati/)
+comprend une [API
+REST](https://servicescarto.mern.gouv.qc.ca/pes/rest/services/Territoire/AdressesQuebec_Geocodage/GeocodeServer)
+qui permet de géocoder des adresses complètes ou partielles.
+
 [DoGeocodeur](https://dogeo.fr/_apps/DoGeocodeur/) est un site
 particulièrement bien pensé : il sait utiliser plusieurs géocodeurs
 (Google, IGN, BAN…) et combiner leur résultat, afficher le résultat

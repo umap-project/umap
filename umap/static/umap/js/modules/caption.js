@@ -5,7 +5,7 @@ import * as Utils from './utils.js'
 const TEMPLATE = `
 <div class="umap-caption">
   <div class="header">
-    <i class="icon icon-16 icon-caption icon-block"></i>
+    <i class="icon icon-16 icon-info icon-block"></i>
     <hgroup>
       <h3><span class="map-name" data-ref="name"></span></h3>
       <p data-ref="author"></p>
@@ -26,19 +26,19 @@ const TEMPLATE = `
         <h5>${translate('Map background credits')}</h5>
         <p><strong data-ref="bgName"></strong> <span data-ref="bgAttribution"></span></p>
         <p data-ref="poweredBy"></p>
+        <p data-ref="routing" hidden></p>
       </fieldset>
     </details>
   </div>
 </div>`
 
 export default class Caption extends Utils.WithTemplate {
-  constructor(umap, leafletMap) {
+  constructor(umap) {
     super()
     this._umap = umap
-    this._leafletMap = leafletMap
     this.loadTemplate(TEMPLATE)
     this.elements.star.addEventListener('click', async () => {
-      if (this._umap.properties.user?.id) {
+      if (this._umap.permissions.userIsAuth()) {
         await this._umap.star()
         this.refresh()
       } else {
@@ -68,11 +68,9 @@ export default class Caption extends Utils.WithTemplate {
       this.elements.description.hidden = true
     }
     this.elements.datalayersContainer.innerHTML = ''
-    this._umap.datalayers
-      .reverse()
-      .map((datalayer) =>
-        this.addDataLayer(datalayer, this.elements.datalayersContainer)
-      )
+    for (const layer of this._umap.layers.root) {
+      this.addDataLayer(layer, this.elements.datalayersContainer)
+    }
     this.addCredits()
     if (this._umap.properties.created_at) {
       const created_at = translate('created at {date}', {
@@ -81,37 +79,49 @@ export default class Caption extends Utils.WithTemplate {
       const modified_at = translate('modified at {date}', {
         date: this._umap.modifiedAt.toLocaleDateString(),
       })
-      this.elements.dates.innerHTML = `${created_at} - ${modified_at}`
+      this.elements.dates.textContent = `${created_at} - ${modified_at}`
     } else {
       this.elements.dates.hidden = true
     }
     this._umap.panel.open({ content: this.element }).then(() => {
       // Create the legend when the panel is actually on the DOM
-      this._umap.datalayers.reverse().map((datalayer) => datalayer.renderLegend())
+      this._umap.layers.tree.map((datalayer) => datalayer.renderLegend())
       this._umap.propagate()
     })
   }
 
-  addDataLayer(datalayer, parent) {
-    if (!datalayer.options.inCaption) return
+  addDataLayer(datalayer, container) {
+    if (!datalayer.inCaption) return
+
     const template = `
-    <p class="caption-item ${datalayer.cssId}">
+    <details open class="caption-item datalayer" data-ondelete data-id="${datalayer.id}">
+      <summary data-ontoggle data-id="${datalayer.id}" class="with-toolbox">
+          <span>
+            <i class="icon icon-16 icon-folder" data-ref="parentIcon"></i>
+            <h4 data-ref="name" data-onrename class="datalayer-name truncate"></h4>
+          </span>
+        <span data-ref="toolbox"></span>
+      </summary>
       <span class="datalayer-legend"></span>
-      <strong data-ref="toolbox"></strong>
-      <span class="text" data-ref="description"></span>
-    </p>`
-    const [element, { toolbox, description }] = Utils.loadTemplateWithRefs(template)
-    if (datalayer.options.description) {
-      description.innerHTML = Utils.toHTML(datalayer.options.description)
-    } else {
-      description.hidden = true
+      <p class="text" data-ref="description"></p>
+      <div data-ref="childrenContainer"></div>
+    </details>
+    `
+    const [element, { toolbox, description, childrenContainer, name, parentIcon }] =
+      Utils.loadTemplateWithRefs(template)
+    if (datalayer.properties.description) {
+      description.innerHTML = Utils.toHTML(datalayer.properties.description)
     }
     datalayer.renderToolbox(toolbox)
-    parent.appendChild(element)
+    container.appendChild(element)
     // Use textContent for security
-    const name = Utils.loadTemplate('<span></span>')
-    name.textContent = datalayer.options.name
-    toolbox.appendChild(name)
+    name.textContent = datalayer.name
+    if (!datalayer.group) {
+      parentIcon.hidden = true
+    }
+    for (const child of datalayer.layers.root) {
+      this.addDataLayer(child, childrenContainer)
+    }
   }
 
   addCredits() {
@@ -129,9 +139,13 @@ export default class Caption extends Utils.WithTemplate {
     } else {
       this.elements.licence.hidden = true
     }
-    this.elements.bgName.textContent = this._leafletMap.selectedTilelayer.options.name
-    this.elements.bgAttribution.innerHTML =
-      this._leafletMap.selectedTilelayer.getAttribution()
+    const tilelayer = this._umap.mapProxy.tilelayers.current
+    if (tilelayer) {
+      this.elements.bgName.textContent = tilelayer.options.name
+      this.elements.bgAttribution.innerHTML = Utils.escapeHTML(
+        tilelayer.getAttribution()
+      )
+    }
     const urls = {
       leaflet: 'http://leafletjs.com',
       django: 'https://www.djangoproject.com',
@@ -148,5 +162,12 @@ export default class Caption extends Utils.WithTemplate {
       `,
       urls
     )
+    if (this._umap.properties.ORSAPIKey) {
+      this.elements.routing.innerHTML = translate(
+        `Routing, isochrone and elevation, thanks to <a href="{url}">OpenRouteService</a>.`,
+        { url: 'https://openrouteservice.org/' }
+      )
+      this.elements.routing.hidden = false
+    }
   }
 }

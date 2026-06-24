@@ -1,6 +1,7 @@
 from django.conf import settings as djsettings
 
 from . import VERSION
+from .utils import get_login_url, normalize_string
 
 
 def settings(request):
@@ -13,8 +14,11 @@ def settings(request):
         "UMAP_READONLY": djsettings.UMAP_READONLY,
         "UMAP_DEMO_SITE": djsettings.UMAP_DEMO_SITE,
         "UMAP_HOST_INFOS": djsettings.UMAP_HOST_INFOS,
+        "LOGIN_URL": get_login_url(),
         "UMAP_ALLOW_EDIT_PROFILE": djsettings.UMAP_ALLOW_EDIT_PROFILE,
-        "UMAP_TAGS": djsettings.UMAP_TAGS,
+        "UMAP_TAGS": sorted(
+            djsettings.UMAP_TAGS, key=lambda item: normalize_string(item[1])
+        ),
     }
 
 

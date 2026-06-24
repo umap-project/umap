@@ -1,8 +1,9 @@
-import { DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
+import * as Clipboard from './clipboard.js'
 import { MutatingForm } from './form/builder.js'
 import { translate } from './i18n.js'
 import * as Utils from './utils.js'
+import * as DOMUtils from './domutils.js'
 
 // Dedicated object so we can deal with a separate dirty status, and thus
 // call the endpoint only when needed, saving one call at each save.
@@ -10,7 +11,7 @@ export class MapPermissions {
   constructor(umap) {
     this.setProperties(umap.properties.permissions)
     this._umap = umap
-    this.sync = umap.syncEngine.proxy(this)
+    this.journal = umap.journalEngine.proxy(this)
   }
 
   setProperties(properties) {
@@ -26,7 +27,7 @@ export class MapPermissions {
     )
   }
 
-  getSyncMetadata() {
+  getJournalMetadata() {
     return {
       subject: 'mappermissions',
       metadata: {},
@@ -42,12 +43,42 @@ export class MapPermissions {
   }
 
   isAnonymousMap() {
-    return !this._umap.properties.permissions.owner
+    return !this.properties.owner
+  }
+
+  isDraft() {
+    return this.properties.share_status === 0
+  }
+
+  userIsAuth() {
+    return Boolean(this._umap.properties.user?.id)
   }
 
   _editAnonymous(container) {
-    const fields = []
     if (this.isOwner()) {
+      // We have a user, and this user has come through here, so they can edit the map, so let's allow to own the map.
+      // Note: real check is made on the back office anyway.
+      const template = `
+          <div class="anonymous soft-round aplat">
+            <h4><i class="icon icon-16 icon-anonymous"></i> ${translate('Anonymous map')}</h4>
+            <div data-ref="copiableInput"></div>
+            <p data-ref="p" hidden><button type="button" data-ref="button">${translate('Attach the map to my account')}</button></p>
+          </div>
+        `
+      const [root, { button, copiableInput, p }] = Utils.loadTemplateWithRefs(template)
+      container.appendChild(root)
+      if (this.properties.anonymous_edit_url) {
+        Clipboard.copiableInput(
+          copiableInput,
+          translate('Secret edit link:'),
+          this.properties.anonymous_edit_url
+        )
+      }
+      if (this.userIsAuth()) {
+        button.addEventListener('click', () => this.attach())
+        p.hidden = false
+      }
+      const fields = []
       fields.push([
         'properties.edit_status',
         {
@@ -67,31 +98,6 @@ export class MapPermissions {
       const builder = new MutatingForm(this, fields)
       const form = builder.build()
       container.appendChild(form)
-
-      if (this.properties.anonymous_edit_url) {
-        DomUtil.createCopiableInput(
-          container,
-          translate('Secret edit link:'),
-          this.properties.anonymous_edit_url
-        )
-      }
-
-      if (this._umap.properties.user?.id) {
-        // We have a user, and this user has come through here, so they can edit the map, so let's allow to own the map.
-        // Note: real check is made on the back office anyway.
-        const advancedActions = DomUtil.createFieldset(
-          container,
-          translate('Advanced actions')
-        )
-        const advancedButtons = DomUtil.create('div', 'button-bar', advancedActions)
-        DomUtil.createButton(
-          'button',
-          advancedButtons,
-          translate('Attach the map to my account'),
-          this.attach,
-          this
-        )
-      }
     }
   }
 
@@ -121,13 +127,21 @@ export class MapPermissions {
       ])
       collaboratorsFields.push([
         'properties.owner',
-        { handler: 'ManageOwner', label: translate("Map's owner") },
+        {
+          handler: 'ManageOwner',
+          label: translate("Map's owner"),
+          url: this._umap.properties.urls.agnocomplete,
+        },
       ])
       
     }
     collaboratorsFields.push([
       'properties.editors',
-      { handler: 'ManageEditors', label: translate("Map's editors") },
+      {
+        handler: 'ManageEditors',
+        label: translate("Map's editors"),
+        url: this._umap.properties.urls.agnocomplete,
+      },
     ])
     collaboratorsFields.push([
       'properties.teams',
@@ -151,12 +165,30 @@ export class MapPermissions {
   _editDatalayers(container) {
     if (this._umap.hasLayers()) {
       const fieldset = Utils.loadTemplate(
-        `<fieldset class="separator"><legend>${translate('Datalayers')}</legend></fieldset>`
+        `<fieldset class="separator"><legend>${translate('Datalayers permissions')}</legend></fieldset>`
       )
       container.appendChild(fieldset)
-      this._umap.datalayers.active().map((datalayer) => {
-        datalayer.permissions.edit(fieldset)
-      })
+      const appendLayer = (layer, parentContainer) => {
+        const [details, { body, icon }] = Utils.loadTemplateWithRefs(
+          `<details open class="layer-group">
+            <summary><i class="icon icon-16" data-ref="icon"></i>${layer.getName()}</summary>
+            <div data-ref="body"></div>
+          </details>`
+        )
+        if (layer.group) {
+          icon.classList.add('icon-folder')
+        } else {
+          icon.hidden = true
+        }
+        parentContainer.appendChild(details)
+        layer.permissions.edit(body)
+        for (const child of layer.layers) {
+          appendLayer(child, body)
+        }
+      }
+      for (const layer of this._umap.layers.root) {
+        appendLayer(layer, fieldset)
+      }
     }
   }
 
@@ -166,8 +198,11 @@ export class MapPermissions {
       Alert.info(translate('Please save the map first'))
       return
     }
-    const container = DomUtil.create('div', 'umap-edit-permissions')
-    DomUtil.createTitle(container, translate('Update permissions'), 'icon-key')
+    const container = DOMUtils.loadTemplate(`
+      <div class="umap-edit-permissions">
+        <h3><i class="icon icon-16 icon-key"></i> ${translate('Update permissions')}</h3>
+      </div>
+    `)
     if (this.isAnonymousMap()) this._editAnonymous(container)
     else this._editWithOwner(container)
     this._editDatalayers(container)
@@ -182,6 +217,8 @@ export class MapPermissions {
     const [data, response, error] = await this._umap.server.post(this.getAttachUrl())
     if (!error) {
       this.properties.owner = this._umap.properties.user
+      this._umap.properties.user.is_owner = true
+      this.render()
       Alert.success(translate('Map has been attached to your account'))
       this._umap.editPanel.close()
     }
@@ -237,6 +274,10 @@ export class MapPermissions {
     )
   }
 
+  pull() {
+    this.setProperties(this._umap.properties.permissions)
+  }
+
   getShareStatusDisplay() {
     if (this._umap.properties.share_statuses) {
       return Object.fromEntries(this._umap.properties.share_statuses)[
@@ -244,30 +285,29 @@ export class MapPermissions {
       ]
     }
   }
-
-  isDraft() {
-    return this.properties.share_status === 0
-  }
 }
 
 export class DataLayerPermissions {
-  constructor(umap, datalayer) {
+  constructor(umap, datalayer, permissions) {
     this._umap = umap
-    this.setPermissions(datalayer.options.permissions)
+    this.setPermissions(permissions)
 
     this.datalayer = datalayer
-    this.sync = umap.syncEngine.proxy(this)
+    this.journal = umap.journalEngine.proxy(this)
   }
+
   setPermissions(permissions) {
     this.properties = Object.assign(
       {
         editors: [],
+        teams: [],
         edit_status: null,
       },
       permissions
     )
   }
-  getSyncMetadata() {
+
+  getJournalMetadata() {
     return {
       subject: 'datalayerpermissions',
       metadata: { id: this.datalayer.id },
@@ -278,7 +318,7 @@ export class DataLayerPermissions {
   }
   edit(container) {
     const fieldset = Utils.loadTemplate(
-      `<fieldset class="separator"><legend>${translate('"{layer}" permissions',{layer:this.datalayer.getName()})}</legend></fieldset>`
+      `<fieldset class="separator"><legend>${translate('"{layer}" permissions', { layer: this.datalayer.getName() })}</legend></fieldset>`
     )
     container.appendChild(fieldset)
     const fields = [
@@ -286,9 +326,8 @@ export class DataLayerPermissions {
         'properties.edit_status',
         {
           handler: 'IntSelect',
-          label: translate('Who can edit "{layer}"', {
-            layer: this.datalayer.getName(),
-          }),
+          label: translate('Who can edit'),
+          labelClassName: 'sr-only',
           selectOptions: this._umap.properties.datalayer_edit_statuses,
         },
       ],
@@ -334,17 +373,6 @@ export class DataLayerPermissions {
       {},
       formData
     )
-    if (!error) {
-      this.commit()
-      return true
-    }
-  }
-
-  commit() {
-    this.datalayer.options.permissions = Object.assign(
-      {},
-      this.datalayer.options.permissions,
-      this.properties
-    )
+    return !error
   }
 }

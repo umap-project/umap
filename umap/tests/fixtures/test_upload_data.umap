@@ -107,10 +107,9 @@
                     }
                 }
             ],
-            "_umap_options": {
+            "properties": {
                 "displayOnLoad": true,
                 "name": "Cities",
-                "id": 108,
                 "remoteData": {},
                 "description": "A layer with some cities",
                 "color": "Navy",
@@ -160,7 +159,7 @@
                     }
                 }
             ],
-            "_umap_options": {
+            "properties": {
                 "displayOnLoad": true,
                 "name": "Tunnels",
                 "id": 109,

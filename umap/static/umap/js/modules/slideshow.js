@@ -13,7 +13,7 @@ const TOOLBOX_TEMPLATE = `
 `
 
 export default class Slideshow extends WithTemplate {
-  constructor(umap, leafletMap, properties) {
+  constructor(umap, properties) {
     super()
     this._umap = umap
     this._id = null
@@ -23,13 +23,9 @@ export default class Slideshow extends WithTemplate {
     this._current = null
 
     if (this.properties.autoplay) {
-      this._umap.onceDataLoaded(function () {
-        this.play()
-      }, this)
+      this._umap.onceDataLoaded(() => this.play())
     }
-    leafletMap.on('edit:enabled', () => {
-      this.stop()
-    })
+    umap.on('edit:enabled', () => this.stop())
   }
 
   set current(feature) {
@@ -39,7 +35,7 @@ export default class Slideshow extends WithTemplate {
   get current() {
     if (!this._current) {
       const datalayer = this.defaultDatalayer()
-      if (datalayer) this._current = datalayer.getFeatureByIndex(0)
+      if (datalayer) this._current = datalayer.features.first()
     }
     return this._current
   }
@@ -66,7 +62,7 @@ export default class Slideshow extends WithTemplate {
   }
 
   defaultDatalayer() {
-    return this._umap.datalayers.find((d) => d.canBrowse())
+    return this._umap.layers.tree.find((d) => d.canBrowse())
   }
 
   startSpinner() {
@@ -89,8 +85,8 @@ export default class Slideshow extends WithTemplate {
   play() {
     if (this._id) return
     if (this._umap.editEnabled || !this.isEnabled()) return
-    L.DomUtil.addClass(document.body, this.CLASSNAME)
-    this._id = window.setInterval(L.bind(this.loop, this), this.properties.delay)
+    document.body.classList.add(this.CLASSNAME)
+    this._id = window.setInterval(() => this.loop(), this.properties.delay)
     this.startSpinner()
     this.loop()
   }
@@ -103,7 +99,7 @@ export default class Slideshow extends WithTemplate {
   pause() {
     if (this._id) {
       this.stopSpinner()
-      L.DomUtil.removeClass(document.body, this.CLASSNAME)
+      document.body.classList.remove(this.CLASSNAME)
       window.clearInterval(this._id)
       this._id = null
     }

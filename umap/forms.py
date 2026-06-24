@@ -50,7 +50,7 @@ class AnonymousMapPermissionsForm(forms.ModelForm):
 class DataLayerForm(forms.ModelForm):
     class Meta:
         model = DataLayer
-        fields = ("geojson", "name", "display_on_load", "rank", "settings")
+        fields = ("geojson", "name", "display_on_load", "rank", "settings", "parent")
 
 
 class DataLayerPermissionsForm(forms.ModelForm):
@@ -91,7 +91,7 @@ class MapSettingsForm(forms.ModelForm):
         return self.cleaned_data["center"]
 
     class Meta:
-        fields = ("settings", "name", "center", "slug", "tags")
+        fields = ("settings", "name", "center", "slug", "tags", "is_template")
         model = Map
 
 

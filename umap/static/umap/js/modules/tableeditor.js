@@ -1,8 +1,7 @@
-import { DomEvent, DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { MutatingForm } from './form/builder.js'
 import { translate } from './i18n.js'
 import ContextMenu from './ui/contextmenu.js'
-import { WithTemplate, loadTemplate } from './utils.js'
+import * as Utils from './utils.js'
 
 const TEMPLATE = `
   <table>
@@ -14,12 +13,11 @@ const TEMPLATE = `
   </table>
 `
 
-export default class TableEditor extends WithTemplate {
-  constructor(umap, datalayer, leafletMap) {
+export default class TableEditor extends Utils.WithTemplate {
+  constructor(umap, datalayer) {
     super()
     this.datalayer = datalayer
     this._umap = umap
-    this._leafletMap = leafletMap
     this.contextmenu = new ContextMenu({ className: 'dark' })
     this.table = this.loadTemplate(TEMPLATE)
     if (!this.datalayer.isRemoteLayer()) {
@@ -35,35 +33,38 @@ export default class TableEditor extends WithTemplate {
     })
   }
 
-  openHeaderMenu(property) {
-    const actions = []
-    let filterItem
-    if (this._umap.facets.has(property)) {
-      filterItem = {
-        label: translate('Remove filter for this column'),
-        action: () => {
-          this._umap.facets.remove(property)
-          this._umap.browser.open('filters')
-        },
-      }
+  openHeaderMenu(name) {
+    const parent = [this.datalayer, ...this.datalayer.ancestors, this._umap].find(
+      (parent) => parent.fields.has(name)
+    )
+    let actionLabel
+    if (parent.filters.has(name)) {
+      actionLabel = translate('Edit filter for this field')
     } else {
-      filterItem = {
-        label: translate('Add filter for this column'),
-        action: () => {
-          this._umap.facets.add(property)
-          this._umap.browser.open('filters')
-        },
-      }
+      actionLabel = translate('Add filter for this field')
     }
-    actions.push(filterItem)
-    if (!this.datalayer.isRemoteLayer()) {
+    const actions = [
+      {
+        label: actionLabel,
+        action: () => {
+          parent.filters.createFilterForm(name)
+          this._umap.loadBrowser().then((browser) => browser.open('filters'))
+        },
+      },
+      {
+        label: translate('Edit this field'),
+        action: () => {
+          parent.fields.editField(name).then(() => this.open())
+        },
+      },
+    ]
+    // Only allow deleting fields for map and local datalayer.
+    if (!parent.isRemoteLayer?.()) {
       actions.push({
-        label: translate('Rename this column'),
-        action: () => this.renameProperty(property),
-      })
-      actions.push({
-        label: translate('Delete this column'),
-        action: () => this.deleteProperty(property),
+        label: translate('Delete this field'),
+        action: () => {
+          parent.fields.confirmDelete(name).then(() => this.open())
+        },
       })
     }
     this.contextmenu.open(event, actions)
@@ -71,13 +72,13 @@ export default class TableEditor extends WithTemplate {
 
   renderHeaders() {
     this.elements.header.innerHTML = ''
-    const th = loadTemplate('<th><input type="checkbox" /></th>')
+    const th = Utils.loadTemplate('<th><input type="checkbox" /></th>')
     const checkbox = th.firstChild
     this.elements.header.appendChild(th)
-    for (const property of this.properties) {
+    for (const field of this.datalayer.inheritedFields.values()) {
       this.elements.header.appendChild(
-        loadTemplate(
-          `<th>${property}<button data-property="${property}" class="flat" aria-label="${translate('Advanced actions')}">…</button></th>`
+        Utils.loadTemplate(
+          `<th>${field.key}<button data-property="${field.key}" class="flat" aria-label="${translate('Advanced actions')}">…</button></th>`
         )
       )
     }
@@ -88,96 +89,43 @@ export default class TableEditor extends WithTemplate {
   }
 
   renderBody() {
-    const bounds = this._leafletMap.getBounds()
-    const inBbox = this._umap.browser.options.inBbox
-    let html = ''
-    this.datalayer.eachFeature((feature) => {
+    const inBbox = this._umap.browser?.options.inBbox
+    this.elements.body.innerHTML = ''
+    this.datalayer.features.forEach((feature) => {
       if (feature.isFiltered()) return
-      if (inBbox && !feature.isOnScreen(bounds)) return
-      const tds = this.properties.map(
-        (prop) =>
-          `<td tabindex="0" data-property="${prop}">${feature.properties[prop] || ''}</td>`
+      if (inBbox && !feature.isOnScreen()) return
+      const tds = Array.from(this.datalayer.inheritedFields.values()).map(
+        (field) =>
+          Utils.sanitizeVars`<td tabindex="0" data-property="${field.key}">${feature.properties[field.key] ?? ''}</td>`
       )
-      html += `<tr data-feature="${feature.id}"><th><input type="checkbox" /></th>${tds.join('')}</tr>`
+      this.elements.body.appendChild(
+        Utils.loadTemplate(
+          `<tr data-feature="${feature.id}"><th><input type="checkbox" /></th>${tds.join('')}</tr>`
+        )
+      )
     })
-    this.elements.body.innerHTML = html
   }
 
-  resetProperties() {
-    this.properties = this.datalayer.allProperties()
-    if (this.properties.length === 0) {
-      this.properties = [U.DEFAULT_LABEL_KEY, 'description']
-    }
-  }
-
-  validateName(name) {
-    if (name.includes('.')) {
-      U.Alert.error(translate('Name “{name}” should not contain a dot.', { name }))
-      return false
-    }
-    if (this.properties.includes(name)) {
-      U.Alert.error(translate('This name already exists: “{name}”', { name }))
-      return false
-    }
-    return true
-  }
-
-  renameProperty(property) {
-    this._umap.dialog
-      .prompt(translate('Please enter the new name of this property'))
-      .then(({ prompt }) => {
-        if (!prompt || !this.validateName(prompt)) return
-        this.datalayer.eachFeature((feature) => {
-          feature.renameProperty(property, prompt)
-        })
-        this.datalayer.deindexProperty(property)
-        this.datalayer.indexProperty(prompt)
-        this.open()
-      })
-  }
-
-  deleteProperty(property) {
-    this._umap.dialog
-      .confirm(
-        translate('Are you sure you want to delete this property on all the features?')
-      )
-      .then(() => {
-        this.datalayer.eachFeature((feature) => {
-          feature.deleteProperty(property)
-        })
-        this.datalayer.deindexProperty(property)
-        this.resetProperties()
-        this.open()
-      })
-  }
-
-  addProperty() {
-    this._umap.dialog
-      .prompt(translate('Please enter the name of the property'))
-      .then(({ prompt }) => {
-        if (!prompt || !this.validateName(prompt)) return
-        this.datalayer.indexProperty(prompt)
-        this.open()
-      })
+  addField() {
+    this.datalayer.fields.editField().then(() => this.open())
   }
 
   open() {
     const id = 'tableeditor:edit'
-    this.resetProperties()
     this.renderHeaders()
     this.elements.body.innerHTML = ''
     this.renderBody()
 
     const actions = []
     if (!this.datalayer.isRemoteLayer()) {
-      const addButton = loadTemplate(`
+      const addButton = Utils.loadTemplate(`
         <button class="flat" type="button" data-ref="add">
-          <i class="icon icon-16 icon-add"></i>${translate('Add a new property')}
+          <i class="icon icon-16 icon-add"></i>${translate('Add a new field')}
         </button>`)
-      addButton.addEventListener('click', () => this.addProperty())
+      addButton.addEventListener('click', () => this.addField())
       actions.push(addButton)
 
-      const deleteButton = loadTemplate(`
+      const deleteButton = Utils.loadTemplate(`
         <button class="flat" type="button" data-ref="delete">
           <i class="icon icon-16 icon-delete"></i>${translate('Delete selected rows')}
         </button>`)
@@ -185,11 +133,13 @@ export default class TableEditor extends WithTemplate {
       actions.push(deleteButton)
     }
 
-    const filterButton = loadTemplate(`
+    const filterButton = Utils.loadTemplate(`
       <button class="flat" type="button" data-ref="filters">
         <i class="icon icon-16 icon-filters"></i>${translate('Filter data')}
       </button>`)
-    filterButton.addEventListener('click', () => this._umap.browser.open('filters'))
+    filterButton.addEventListener('click', () =>
+      this._umap.loadBrowser().then((browser) => browser.open('filters'))
+    )
     actions.push(filterButton)
 
     this._umap.fullPanel.open({
@@ -204,10 +154,10 @@ export default class TableEditor extends WithTemplate {
     const property = cell.dataset.property
     const field = `properties.${property}`
     const tr = event.target.closest('tr')
-    const feature = this.datalayer.getFeatureById(tr.dataset.feature)
+    const feature = this.datalayer.features.get(tr.dataset.feature)
     const handler = property === 'description' ? 'Textarea' : 'Input'
     const builder = new MutatingForm(feature, [[field, { handler }]], {
-      id: `umap-feature-properties_${L.stamp(feature)}`,
+      id: `umap-feature-properties_${feature.id}`,
     })
     cell.innerHTML = ''
     cell.appendChild(builder.build())
@@ -316,13 +266,13 @@ export default class TableEditor extends WithTemplate {
         this.datalayer.hide()
         for (const row of selectedRows) {
           const id = row.dataset.feature
-          const feature = this.datalayer.getFeatureById(id)
+          const feature = this.datalayer.features.get(id)
           feature.del()
         }
         this.datalayer.show()
         this.datalayer.dataChanged()
         this.renderBody()
-        if (this._umap.browser.isOpen()) {
+        if (this._umap.browser?.isOpen()) {
           this._umap.browser.resetFilters()
           this._umap.browser.open('filters')
         }

@@ -1,0 +1,19 @@
+{% extends "umap/content.html" %}
+
+{% load i18n static %}
+
+{% block head_title %}
+  {% translate "My Templates" %} - {{ SITE_DESCRIPTION }}
+{% endblock head_title %}
+{% block maincontent %}
+  {% include "umap/dashboard_menu.html" with selected="templates" %}
+  {% trans "Search my templates" as submit_label %}
+  {% trans "Template’s name" as label_title %}
+  {% blocktranslate asvar download_label with count=maps.object_list|length trimmed %}
+    Download {{ count }} templates
+  {% endblocktranslate %}
+  {% blocktranslate asvar empty_label %}You have no template yet.{% endblocktranslate %}
+  {% translate "Create a template" as create_label %}
+  {% translate "No template found." as empty_search_label %}
+  {% include "umap/user_map_table.html" with submit_label=submit_label label_title=label_title download_label=download_label empty_label=empty_label create_label=create_label empty_search_label=empty_search_label %}
+{% endblock maincontent %}

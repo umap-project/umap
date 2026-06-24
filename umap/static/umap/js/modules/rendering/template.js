@@ -1,8 +1,9 @@
-import { DomEvent, DomUtil } from '../../../vendors/leaflet/leaflet-src.esm.js'
+import * as DOMUtils from '../domutils.js'
+import * as GeoUtils from '../geoutils.js'
+import * as Icon from '../icon.js'
 import { getLocale, translate } from '../i18n.js'
 import { Request } from '../request.js'
 import * as Utils from '../utils.js'
-import * as Icon from './icon.js'
 
 export default async function loadTemplate(name, feature, container) {
   let klass = PopupTemplate
@@ -22,6 +23,9 @@ export default async function loadTemplate(name, feature, container) {
     case 'Wikipedia':
       klass = Wikipedia
       break
+    case 'Route':
+      klass = Route
+      break
   }
   const content = new klass()
   return await content.render(feature, container)
@@ -30,8 +34,7 @@ export default async function loadTemplate(name, feature, container) {
 class PopupTemplate {
   renderTitle(feature) {}
 
-  renderBody(feature) {
-    const template = feature.getOption('popupContentTemplate')
+  toHTML(feature, template) {
     const target = feature.getOption('outlinkTarget')
     const properties = feature.extendedProperties()
     // Resolve properties inside description
@@ -40,9 +43,15 @@ class PopupTemplate {
       properties
     )
     properties.name = properties.name ?? feature.getDisplayName()
-    let content = Utils.greedyTemplate(template, properties)
-    content = Utils.toHTML(content, { target: target })
-    return Utils.loadTemplate(`<div class="umap-popup-container text">${content}</div>`)
+    const content = Utils.greedyTemplate(template, properties)
+    return Utils.toHTML(content, { target })
+  }
+
+  renderBody(feature) {
+    const template = feature.getOption('popupContentTemplate')
+    return Utils.loadTemplate(
+      `<div class="umap-popup-container text">${this.toHTML(feature, template)}</div>`
+    )
   }
 
   renderFooter(feature) {
@@ -58,12 +67,12 @@ class PopupTemplate {
       const previousFeature = feature.getPrevious()
       // Fixme: remove me when this is merged and released
       // https://github.com/Leaflet/Leaflet/pull/9052
-      DomEvent.disableClickPropagation(footer)
+      DOMUtils.disableClickPropagation(footer)
       if (nextFeature) {
         next.title = translate('Go to «{feature}»', {
           feature: nextFeature.properties.name || translate('next'),
         })
-        DomEvent.on(next, 'click', () => {
+        next.addEventListener('click', () => {
           nextFeature.zoomTo({ callback: (event) => nextFeature.view(event) })
         })
       }
@@ -71,11 +80,11 @@ class PopupTemplate {
         previous.title = translate('Go to «{feature}»', {
           feature: previousFeature.properties.name || translate('previous'),
         })
-        DomEvent.on(previous, 'click', () => {
+        previous.addEventListener('click', () => {
           previousFeature.zoomTo({ callback: (event) => previousFeature.view(event) })
         })
       }
-      DomEvent.on(zoom, 'click', () => feature.zoomTo())
+      zoom.addEventListener('click', () => feature.zoomTo())
       return footer
     }
   }
@@ -84,7 +93,11 @@ class PopupTemplate {
     const title = this.renderTitle(feature)
     if (title) container.appendChild(title)
     const body = await this.renderBody(feature)
-    if (body) DomUtil.add('div', 'umap-popup-content', container, body)
+    if (body) {
+      const div = DOMUtils.loadTemplate('<div class="umap-popup-content"></div>')
+      div.appendChild(body)
+      container.appendChild(div)
+    }
     const footer = this.renderFooter(feature)
     if (footer) container.appendChild(footer)
   }
@@ -94,35 +107,28 @@ export const TitleMixin = (Base) =>
     renderTitle(feature) {
       const title = feature.getDisplayName()
       if (title) {
-        return Utils.loadTemplate(`<h3 class="popup-title">${title}</h3>`)
+        return Utils.loadTemplate(
+          Utils.sanitizeVars`<h3 class="popup-title">${title}</h3>`
+        )
       }
     }
   }
 
 class Table extends TitleMixin(PopupTemplate) {
-  getValue(feature, key) {
-    // TODO, manage links (url, mailto, wikipedia...)
-    const value = Utils.escapeHTML(feature.properties[key]).trim()
-    if (value.indexOf('http') === 0) {
-      return `<a href="${value}" target="_blank">${value}</a>`
-    }
-    return value
-  }
-
-  makeRow(feature, key) {
+  makeRow(feature, field) {
     return Utils.loadTemplate(
-      `<tr><th>${key}</th><td>${this.getValue(feature, key)}</td></tr>`
+      Utils.sanitizeVars`<tr><th>${field.key}</th><td>${field.render(feature.properties[field.key])}</td></tr>`
     )
   }
 
   async renderBody(feature) {
     const table = document.createElement('table')
 
-    for (const key in feature.properties) {
-      if (typeof feature.properties[key] === 'object' || U.LABEL_KEYS.includes(key)) {
+    for (const field of feature.fields) {
+      if (U.LABEL_KEYS.includes(field.key)) {
         continue
       }
-      table.appendChild(this.makeRow(feature, key))
+      table.appendChild(this.makeRow(feature, field))
     }
     return table
   }
@@ -130,16 +136,17 @@ class Table extends TitleMixin(PopupTemplate) {
 
 class GeoRSSImage extends TitleMixin(PopupTemplate) {
   async renderBody(feature) {
-    const body = DomUtil.create('a')
-    body.href = feature.properties.link
-    body.target = '_blank'
+    const body = DOMUtils.loadTemplate(
+      Utils.sanitizeVars`<a href="${feature.properties.link}" target="_blank"></a>`
+    )
     if (feature.properties.img) {
-      const img = DomUtil.create('img', '', body)
-      img.src = feature.properties.img
       // Sadly, we are unable to override this from JS the clean way
       // See https://github.com/Leaflet/Leaflet/commit/61d746818b99d362108545c151a27f09d60960ee#commitcomment-6061847
-      img.style.maxWidth = '500px'
-      img.style.maxHeight = '500px'
+      body.appendChild(
+        DOMUtils.loadTemplate(
+          Utils.sanitizeVars`<img src=${feature.properties.img} style="max-width: 500px; max-height: 500px;">`
+        )
+      )
     }
     return body
   }
@@ -149,7 +156,7 @@ class GeoRSSLink extends PopupTemplate {
   async renderBody(feature) {
     if (feature.properties.link) {
       return Utils.loadTemplate(
-        `<a href="${feature.properties.link}" target="_blank"><h3>${feature.getDisplayName()}</h3></a>`
+        Utils.sanitizeVars`<a href="${feature.properties.link}" target="_blank"><h3>${feature.getDisplayName()}</h3></a>`
       )
     }
   }
@@ -157,15 +164,16 @@ class GeoRSSLink extends PopupTemplate {
 
 class OSM extends PopupTemplate {
   renderTitle(feature) {
-    const title = DomUtil.add('h3', 'popup-title')
     const color = feature.getPreviewColor()
-    title.style.backgroundColor = color
+    const [title, { iconContainer }] = DOMUtils.loadTemplateWithRefs(Utils.sanitizeVars`
+    <h3 class="popup-title" style="background-color: ${color};">
+      <span data-ref="iconContainer"></span> ${this.getName(feature)}
+    </h3>`)
     const iconUrl = feature.getDynamicOption('iconUrl')
-    const icon = Icon.makeElement(iconUrl, title)
-    DomUtil.addClass(icon, 'icon')
+    const icon = Icon.makeElement(iconUrl, iconContainer)
+    icon.classList.add('icon')
     Icon.setContrast(icon, title, iconUrl, color)
-    if (DomUtil.contrastedColor(title, color)) title.style.color = 'white'
-    DomUtil.add('span', '', title, this.getName(feature))
+    if (DOMUtils.contrastedColor(title, color)) title.style.color = 'white'
     return title
   }
 
@@ -173,7 +181,7 @@ class OSM extends PopupTemplate {
     const props = feature.properties
     const locale = getLocale()
     if (locale && props[`name:${locale}`]) return props[`name:${locale}`]
-    return props.name
+    return props.name || feature.getDisplayName()
   }
 
   async renderBody(feature) {
@@ -182,44 +190,67 @@ class OSM extends PopupTemplate {
     const locale = getLocale()
     const street = props['addr:street']
     if (street) {
-      const row = DomUtil.add('address', 'address', body)
       const number = props['addr:housenumber']
+      let content
       if (number) {
-        // Poor way to deal with international forms of writting addresses
-        DomUtil.add('span', '', row, `${translate('No.')}: ${number}`)
-        DomUtil.add('span', '', row, `${translate('Street')}: ${street}`)
+        // Poor way to deal with international forms of writing addresses
+        content = `<span>${translate('№')}: ${number}</span><span>${translate('Street')}: ${street}</span>`
       } else {
-        DomUtil.add('span', '', row, street)
+        content = street
       }
+      const row = DOMUtils.loadTemplate(
+        Utils.sanitizeVars`<address class="address">${content}</address>`
+      )
+      body.appendChild(row)
     }
     if (props.website) {
       body.appendChild(
-        Utils.loadTemplate(`<div><a href="${props.website}">${props.website}</a></div>`)
+        Utils.loadTemplate(
+          Utils.sanitizeVars`<div><a href="${props.website}">${props.website}</a></div>`
+        )
       )
     }
     const phone = props.phone || props['contact:phone']
     if (phone) {
       body.appendChild(
-        Utils.loadTemplate(`<div><a href="tel:${phone}">${phone}</a></div>`)
+        Utils.loadTemplate(
+          Utils.sanitizeVars`<div><a href="tel:${phone}">${phone}</a></div>`
+        )
       )
     }
     if (props.mobile) {
       body.appendChild(
         Utils.loadTemplate(
-          `<div><a href="tel:${props.mobile}">${props.mobile}</a></div>`
+          Utils.sanitizeVars`<div><a href="tel:${props.mobile}">${props.mobile}</a></div>`
         )
       )
     }
     const email = props.email || props['contact:email']
     if (email) {
       body.appendChild(
-        Utils.loadTemplate(`<div><a href="mailto:${email}">${email}</a></div>`)
+        Utils.loadTemplate(
+          Utils.sanitizeVars`<div><a href="mailto:${email}">${email}</a></div>`
+        )
       )
     }
     if (props.panoramax) {
       body.appendChild(
         Utils.loadTemplate(
-          `<div><img src="https://api.panoramax.xyz/api/pictures/${props.panoramax}/sd.jpg" /></div>`
+          Utils.sanitizeVars`<div><img src="https://api.panoramax.xyz/api/pictures/${props.panoramax}/sd.jpg" /></div>`
+        )
+      )
+    }
+    if (props.image) {
+      body.appendChild(
+        Utils.loadTemplate(
+          Utils.sanitizeVars`<div><img src="${props.image}" alt="" /></div>`
+        )
+      )
+    }
+    if (props.mapillary) {
+      body.appendChild(
+        Utils.loadTemplate(
+          Utils.sanitizeVars`<div><a href="https://www.mapillary.com/app/?focus=photo&pKey=${props.mapillary}" target="_blank">${translate('Mapillary')}<i class="icon icon-16 icon-external-link"></i></a></div>`
         )
       )
     }
@@ -227,7 +258,15 @@ class OSM extends PopupTemplate {
     if (wikipedia) {
       body.appendChild(
         Utils.loadTemplate(
-          `<div class="wikipedia-link"><a href="https://wikipedia.org/wiki/${wikipedia}" target="_blank">${translate('Wikipedia')}</a></div>`
+          Utils.sanitizeVars`<div><a href="https://wikipedia.org/wiki/${wikipedia}" target="_blank">${translate('Wikipedia')}<i class="icon icon-16 icon-external-link"></i></a></div>`
+        )
+      )
+    }
+    const wikidata = props[`wikidata:${locale}`] || props.wikidata
+    if (wikidata) {
+      body.appendChild(
+        Utils.loadTemplate(
+          Utils.sanitizeVars`<div><a href="https://www.wikidata.org/wiki/${wikidata}" target="_blank">${translate('Wikidata')}<i class="icon icon-16 icon-external-link"></i></a></div>`
         )
       )
     }
@@ -235,7 +274,7 @@ class OSM extends PopupTemplate {
     if (id) {
       body.appendChild(
         Utils.loadTemplate(
-          `<div class="osm-link"><a href="https://www.openstreetmap.org/${id}">${translate('See on OpenStreetMap')}</a></div>`
+          Utils.sanitizeVars`<div class="osm-link"><a href="https://www.openstreetmap.org/${id}">${translate('See on OpenStreetMap')}<i class="icon icon-16 icon-external-link"></i></a></div>`
         )
       )
     }
@@ -250,7 +289,7 @@ class Wikipedia extends PopupTemplate {
     if (wikipedia && _WIKIPEDIA_CACHE[wikipedia]) return _WIKIPEDIA_CACHE[wikipedia]
     // Wikipedia value should be in form of "{locale}:{title}", according to https://wiki.openstreetmap.org/wiki/Key:wikipedia
     const [locale, page] = wikipedia.split(':')
-    const url = `https://${locale}.wikipedia.org/w/api.php?action=query&format=json&origin=*&pithumbsize=500&prop=extracts|pageimages&titles=${page}`
+    const url = `https://${locale}.wikipedia.org/w/api.php?action=query&format=json&origin=*&pithumbsize=500&exintro=1&prop=extracts|pageimages&titles=${page}`
     const request = new Request()
     const response = await request.get(url)
     if (response?.ok) {
@@ -270,9 +309,21 @@ class Wikipedia extends PopupTemplate {
       const title = page.title || feature.getDisplayName()
       const extract = page.extract || ''
       const thumbnail = page.thumbnail?.source
-      const [content, { image }] = Utils.loadTemplateWithRefs(
-        `<div><h3>${Utils.escapeHTML(title)}</h3><img data-ref="image" hidden src="" />${Utils.escapeHTML(extract)}</div>`
-      )
+      const [content, { image }] = Utils.loadTemplateWithRefs(`
+      <div>
+        <h3>${Utils.escapeHTML(title)}</h3>
+        <img data-ref="image" hidden src="" />
+        <p>
+          ${Utils.escapeHTML(extract)}
+        </p>
+        <p>
+          © ${translate('Wikipedia contributors')} •
+          <a href="https://wikipedia.org/wiki/${wikipedia}" target="_blank">
+            ${translate('See on Wikipedia')}
+            <i class="icon icon-16 icon-external-link"></i>
+          </a>
+        </p>
+      </div>`)
       if (thumbnail) {
         image.src = thumbnail
         image.hidden = false
@@ -280,5 +331,66 @@ class Wikipedia extends PopupTemplate {
       body.appendChild(content)
     }
     return body
+  }
+}
+
+class Route extends TitleMixin(PopupTemplate) {
+  async renderBody(feature) {
+    if (feature.type !== 'LineString' || feature.isMulti()) {
+      return super.renderBody(feature)
+    }
+    let prev
+    let dist = 0
+    const data = []
+    const properties = feature.extendedProperties()
+    for (const [lng, lat, alt] of feature.geometry.coordinates) {
+      if (!alt) {
+        continue
+      }
+      if (prev) {
+        dist = await GeoUtils.distance([lng, lat], prev, { units: 'meters' })
+      }
+      data.push([alt, dist])
+      prev = [lng, lat]
+    }
+    const [root, { altitude, chart }] = Utils.loadTemplateWithRefs(`
+      <div>
+        <p>
+          ${translate('Distance:')} ${properties.measure} •
+          ${translate('Gain:')} ${properties.gain} m ↗ •
+          ${translate('Loss:')} ${properties.loss} m ↘ •
+          ${translate('Altitude:')} <span data-ref="altitude">—</span> m
+        </p>
+        <object width="100%"
+          data="${feature._umap.getStaticPathFor('../vendors/simple-elevation-chart/elevation.svg')}"
+          data-elevation="${JSON.stringify(data)}"
+          data-ref="chart"
+          type="image/svg+xml">
+      </div>
+    `)
+    const id = 'route-icon'
+    let icon
+    const removeIcon = () => {
+      if (icon) {
+        feature._umap.fire('map:hide:point', { id })
+      }
+    }
+    chart.addEventListener('mouseout', removeIcon)
+    feature._umap.on('map:popupclose', removeIcon)
+    chart.addEventListener('chart:over', (event) => {
+      const dataset = event.detail.element.dataset
+      if (dataset.ele) {
+        altitude.textContent = dataset.ele
+      }
+      icon = new Icon.RouteIcon()
+      const position = feature.geometry.coordinates[dataset.index]
+      if (!position) return
+      feature._umap.fire('map:show:point', { id, position, icon })
+    })
+    if (feature.properties.description) {
+      const content = this.toHTML(feature, feature.properties.description)
+      root.appendChild(Utils.loadTemplate(`<p>${content}</p>`))
+    }
+    return root
   }
 }

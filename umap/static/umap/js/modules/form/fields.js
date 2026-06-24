@@ -4,19 +4,19 @@ import {
   AutocompleteDatalist,
 } from '../autocomplete.js'
 import { translate } from '../i18n.js'
-import * as Icon from '../rendering/icon.js'
+import * as Icon from '../icon.js'
 import { SCHEMA } from '../schema.js'
 import * as Utils from '../utils.js'
 
-const Fields = {}
+export const Fields = {}
 
-export default function getClass(name) {
+export function getClass(name) {
   if (typeof name === 'function') return name
   if (!Fields[name]) throw Error(`Unknown class ${name}`)
   return Fields[name]
 }
 
-class BaseElement {
+Fields.Base = class {
   constructor(builder, field, properties) {
     this.builder = builder
     this.obj = this.builder.obj
@@ -25,7 +25,7 @@ class BaseElement {
     this.setProperties(properties)
     this.fieldEls = this.field.split('.')
     this.name = this.builder.getName(field)
-    this.id = `${this.builder.properties.id || Date.now()}.${this.name}`
+    this.id = `id.${this.builder.properties.id || Date.now()}.${this.name}`
   }
 
   getDefaultProperties() {
@@ -49,6 +49,7 @@ class BaseElement {
     this.elements = elements
     this.container = elements.container
     this.form.appendChild(this.root)
+    return [root, elements]
   }
 
   getTemplate() {
@@ -56,6 +57,7 @@ class BaseElement {
   }
 
   build() {
+    if (!this.elements.helpText) return
     if (this.properties.helpText) {
       this.elements.helpText.textContent = this.properties.helpText
     } else {
@@ -85,7 +87,7 @@ class BaseElement {
     const path = this.field.split('.')
     const key = path[path.length - 1]
     if (!this.properties.inheritable) {
-      value = this.builder.getter(this.field)
+      value = this.builder.getter(this)
     } else {
       value = this.obj.getOption(key)
     }
@@ -106,15 +108,26 @@ class BaseElement {
     this.builder.fire('set', { helper: this })
   }
 
+  listenForSync(element) {
+    let callback = () => this.sync()
+    if (this.builder.debounce) {
+      callback = Utils.debounce(callback, 300)
+    }
+    element.addEventListener('input', callback)
+  }
+
   set() {
-    this.builder.setter(this.field, this.toJS())
+    this.builder.setter(this, this.toJS())
   }
 
   getLabelTemplate() {
     const label = this.properties.label
     const help = this.properties.helpEntries?.join() || ''
+    const className = this.properties.labelClassName
+      ? `class="${this.properties.labelClassName}"`
+      : ''
     return label
-      ? `<label title="${label}" data-ref=label data-help="${help}">${label}</label>`
+      ? `<label data-ref=label for="${this.id}" data-help="${help}"${className}>${label}</label>`
       : ''
   }
 
@@ -129,19 +142,17 @@ class BaseElement {
   }
 }
 
-Fields.Textarea = class extends BaseElement {
+Fields.Textarea = class extends Fields.Base {
   getTemplate() {
-    return `<textarea placeholder="${this.properties.placeholder || ''}" data-ref=textarea></textarea>`
+    return Utils.sanitizeVars`<textarea placeholder="${this.properties.placeholder || ''}" name="${this.name}" id="${this.id}" data-ref=textarea></textarea>`
   }
 
   build() {
     super.build()
     this.textarea = this.elements.textarea
+    this.input = this.textarea
     this.fetch()
-    this.textarea.addEventListener(
-      'input',
-      Utils.debounce(() => this.sync(), 300)
-    )
+    this.listenForSync(this.textarea)
     this.textarea.addEventListener('keypress', (event) => this.onKeyPress(event))
   }
 
@@ -168,9 +179,9 @@ Fields.Textarea = class extends BaseElement {
   }
 }
 
-Fields.Input = class extends BaseElement {
+Fields.Input = class extends Fields.Base {
   getTemplate() {
-    return `<input type="${this.type()}" name="${this.name}" placeholder="${this.properties.placeholder || ''}" data-ref=input />`
+    return Utils.sanitizeVars`<input type="${this.type()}" name="${this.name}" placeholder="${this.properties.placeholder || ''}" data-ref=input id="${this.id}" />`
   }
 
   build() {
@@ -189,8 +200,11 @@ Fields.Input = class extends BaseElement {
     if (this.properties.step) {
       this.input.step = this.properties.step
     }
+    if (this.properties.disabled) {
+      this.input.disabled = true
+    }
     this.fetch()
-    this.listenForSync()
+    this.listenForSync(this.input)
     this.input.addEventListener('keydown', (event) => this.onKeyDown(event))
   }
 
@@ -198,13 +212,6 @@ Fields.Input = class extends BaseElement {
     const value = this.toHTML() !== undefined ? this.toHTML() : null
     this.initial = value
     this.input.value = value
-  }
-
-  listenForSync() {
-    this.input.addEventListener(
-      'input',
-      Utils.debounce(() => this.sync(), 300)
-    )
   }
 
   type() {
@@ -231,7 +238,7 @@ Fields.BlurInput = class extends Fields.Input {
   }
 
   getTemplate() {
-    return `<div class="blur-container">${super.getTemplate()}<button type="button">✔</button></div>`
+    return `<div class="blur-container">${super.getTemplate()}<button type="button" class="icon">✔</button></div>`
   }
 
   build() {
@@ -295,13 +302,50 @@ Fields.BlurFloatInput = class extends FloatMixin(Fields.BlurInput) {
   }
 }
 
-Fields.CheckBox = class extends BaseElement {
+const DateMixin = (Base) =>
+  class extends Base {
+    toHTML() {
+      const raw = super.toHTML()
+      if (!raw) return null
+      const parsed = Utils.parseNaiveDate(raw)
+      if (!parsed) return null
+      return parsed.toISOString().substring(0, 10)
+    }
+
+    type() {
+      return 'date'
+    }
+  }
+
+Fields.DateInput = class extends DateMixin(Fields.Input) {}
+
+const DateTimeMixin = (Base) =>
+  class extends Base {
+    toHTML() {
+      const raw = super.toHTML()
+      if (!raw) return null
+      const datetime = new Date(raw)
+      if (isNaN(datetime)) return null
+      return datetime.toISOString()
+    }
+
+    type() {
+      return 'datetime-local'
+    }
+  }
+
+Fields.DateTimeInput = class extends DateTimeMixin(Fields.Input) {}
+
+Fields.CheckBox = class extends Fields.Base {
   getTemplate() {
-    return `<input type=checkbox name="${this.name}" data-ref=input />`
+    return Utils.sanitizeVars`<input type=checkbox name="${this.name}" data-ref=input />`
   }
 
   build() {
     this.input = this.elements.input
+    if (this.properties.disabled) {
+      this.input.disabled = true
+    }
     this.input._helper = this
     this.fetch()
     this.input.addEventListener('change', () => this.sync())
@@ -326,9 +370,9 @@ Fields.CheckBox = class extends BaseElement {
   }
 }
 
-Fields.CheckBoxes = class extends BaseElement {
+Fields.CheckBoxes = class extends Fields.Base {
   getInputTemplate(value, label) {
-    return `<label><input type=checkbox value="${value}" name="${this.name}" data-ref=input />${label}</label>`
+    return Utils.sanitizeVars`<label><input type=checkbox value="${value}" name="${this.name}" data-ref=input />${label}</label>`
   }
 
   build() {
@@ -349,13 +393,16 @@ Fields.CheckBoxes = class extends BaseElement {
   }
 }
 
-Fields.Select = class extends BaseElement {
+Fields.Select = class extends Fields.Base {
   getTemplate() {
-    return `<select name="${this.name}" data-ref=select></select>`
+    return Utils.sanitizeVars`<select name="${this.name}" data-ref=select id="${this.id}"></select>`
   }
 
   build() {
     this.select = this.elements.select
+    if (this.properties.disabled) {
+      this.select.disabled = true
+    }
     this.validValues = []
     this.buildOptions()
     this.select.addEventListener('change', () => this.sync())
@@ -363,6 +410,9 @@ Fields.Select = class extends BaseElement {
   }
 
   getOptions() {
+    if (this.properties.getOptions) {
+      return this.properties.getOptions()
+    }
     return this.properties.selectOptions
   }
 
@@ -373,17 +423,20 @@ Fields.Select = class extends BaseElement {
   buildOptions() {
     this.select.innerHTML = ''
     for (const option of this.getOptions()) {
-      if (typeof option === 'string') this.buildOption(option, option)
-      else this.buildOption(option[0], option[1])
+      if (typeof option === 'string') this.buildOption(option)
+      else this.buildOption(...option)
     }
   }
 
-  buildOption(value, label) {
+  buildOption(value, label, disabled) {
     this.validValues.push(value)
     const option = Utils.loadTemplate('<option></option>')
     this.select.appendChild(option)
     option.value = value
-    option.textContent = label
+    option.textContent = label ?? value
+    if (disabled) {
+      option.disabled = true
+    }
     if (this.toHTML() === value) {
       option.selected = 'selected'
     }
@@ -419,9 +472,9 @@ Fields.IntSelect = class extends Fields.Select {
   }
 }
 
-Fields.EditableText = class extends BaseElement {
+Fields.EditableText = class extends Fields.Base {
   getTemplate() {
-    return `<span contentEditable class="${this.properties.className || ''}" data-ref=input></span>`
+    return `<span class="${this.properties.className || ''}" data-ref=input></span>`
   }
 
   buildTemplate() {
@@ -435,6 +488,24 @@ Fields.EditableText = class extends BaseElement {
     this.fetch()
     this.input.addEventListener('input', () => this.sync())
     this.input.addEventListener('keypress', (event) => this.onKeyPress(event))
+    this.input.addEventListener('dblclick', () => {
+      if (this.input.contentEditable !== true) {
+        this.input.contentEditable = true
+        this.input.focus()
+      }
+    })
+    this.input.addEventListener('blur', () => {
+      this.input.contentEditable = false
+    })
+    this.input.addEventListener('mouseover', () => {
+      this.builder._umap.tooltip.open({
+        content: translate('Double click to edit the name'),
+        anchor: this.input,
+        position: 'bottom',
+        delay: 500,
+        duration: 5000,
+      })
+    })
   }
 
   value() {
@@ -557,32 +628,100 @@ Fields.SlideshowDelay = class extends Fields.IntSelect {
   }
 }
 
-Fields.DataLayerSwitcher = class extends Fields.Select {
+const BaseDataLayerSwitcher = class extends Fields.Select {
+  isOptionDisabled(layer) {
+    return !layer.isLoaded() || layer.isDataReadOnly()
+  }
+
   getOptions() {
-    const options = []
-    this.builder._umap.datalayers.reverse().map((datalayer) => {
-      if (
-        datalayer.isLoaded() &&
-        !datalayer.isDataReadOnly() &&
-        datalayer.isBrowsable()
-      ) {
-        options.push([datalayer.id, datalayer.getName()])
-      }
-    })
+    return this.builder._umap.layers.tree.browsable().reduce((acc, layer) => {
+      const disabled = this.isOptionDisabled(layer)
+      acc.push([layer.id, layer.getName(true), disabled])
+      return acc
+    }, [])
+  }
+
+  toHTML() {
+    return this.obj.datalayer?.id
+  }
+
+  toJS() {
+    return this.builder._umap.layers.tree.get(this.value())
+  }
+
+  set() {
+    const layerId = this.toJS()
+    this.builder.setter(this, layerId)
+    this.onSet(layerId)
+  }
+
+  onSet(layerId) {
+    this.builder._umap.lastUsedDataLayer = this.builder._umap.layers.tree.get(layerId)
+  }
+}
+
+Fields.NullableDataLayerSwitcher = class extends BaseDataLayerSwitcher {
+  getOptions() {
+    const options = super.getOptions()
+    options.unshift([null, translate('Import in a new layer')])
+    return options
+  }
+}
+
+Fields.ParentSwitcher = class extends BaseDataLayerSwitcher {
+  isOptionDisabled(layer) {
+    return (
+      super.isOptionDisabled(layer) ||
+      layer === this.obj ||
+      !layer.group ||
+      layer.ancestors.includes(this.obj)
+    )
+  }
+
+  getOptions() {
+    const options = super.getOptions()
+    options.unshift([null, translate('Choose a group')])
     return options
   }
 
   toHTML() {
-    return this.obj.datalayer.id
+    return this.builder.getter(this)
   }
 
   toJS() {
-    return this.builder._umap.datalayers[this.value()]
+    // Only return the UUID, as the DataLayer.parent setter will
+    // convert it to a DataLayer instance, and this allows to sync
+    // the value to other peers (we cannot sync object instances).
+    return this.value()
   }
 
-  set() {
-    this.builder._umap.lastUsedDataLayer = this.toJS()
-    this.obj.changeDataLayer(this.toJS())
+  // Do not set lastUsedDataLayer when setting a parent layer.
+  onSet(layer) {}
+}
+
+Fields.FeatureDataLayerSwitcher = class extends BaseDataLayerSwitcher {
+  isOptionDisabled(layer) {
+    return super.isOptionDisabled(layer) || layer.group
+  }
+
+  getTemplate() {
+    return `
+      <div class="select-with-actions">
+        ${super.getTemplate()}
+        <button type="button" class="icon icon-16 icon-edit flat" data-ref=openEditPanel></button>
+        <button type="button" class="icon icon-16 icon-table flat" data-ref=openTableEditor></button>
+      </div>
+    `
+  }
+
+  build() {
+    super.build()
+    this.elements.openEditPanel.addEventListener('click', () => {
+      this.obj.datalayer.edit()
+    })
+    this.elements.openTableEditor.addEventListener('click', () => {
+      this.obj.datalayer.tableEdit()
+    })
   }
 }
 
@@ -654,7 +793,7 @@ Fields.PropertyInput = class extends Fields.BlurInput {
     super.build()
     const autocomplete = new AutocompleteDatalist(this.input)
     // Will be used on Umap and DataLayer
-    const properties = this.builder.obj.allProperties()
+    const properties = Array.from(this.builder.obj.fields.keys())
     autocomplete.suggestions = properties
   }
 }
@@ -662,6 +801,15 @@ Fields.PropertyInput = class extends Fields.BlurInput {
 Fields.IconUrl = class extends Fields.BlurInput {
   type() {
     return 'hidden'
+  }
+
+  get() {
+    // We never want to have parent value here
+    // TODO: check if/when we need the getOption call
+    // in the super method, maybe it's useless for all fields.
+    const path = this.field.split('.')
+    const key = path[path.length - 1]
+    return this.builder.getter(this)
   }
 
   getTemplate() {
@@ -691,10 +839,10 @@ Fields.IconUrl = class extends Fields.BlurInput {
 
   async onDefine() {
     this.footer.innerHTML = ''
-    const [{ pictogram_list }, response, error] = await this.builder._umap.server.get(
+    const [{ data }, response, error] = await this.builder._umap.server.get(
       this.builder._umap.properties.urls.pictogram_list_json
     )
-    if (!error) this.pictogram_list = pictogram_list
+    if (!error) this.pictogramCollections = data
     this.buildTabs()
     const value = this.value()
     if (Icon.RECENT.length) this.showRecentTab()
@@ -725,7 +873,7 @@ Fields.IconUrl = class extends Fields.BlurInput {
         <button class="flat tab-url" data-ref=url>${translate('URL')}</button>
       </div>
     `)
-    this.tabs.appendChild(root)
+    ;[recent, symbols, chars, url].forEach((node) => this.tabs.appendChild(node))
     if (Icon.RECENT.length) {
       recent.addEventListener('click', (event) => {
         event.stopPropagation()
@@ -807,36 +955,52 @@ Fields.IconUrl = class extends Fields.BlurInput {
     this.updatePreview()
   }
 
-  addCategory(items, name) {
+  addCategory(items, name, parent, attribution = null) {
     const hidden = name ? '' : ' hidden'
-    const [parent, { grid }] = Utils.loadTemplateWithRefs(`
+    const [container, { grid }] = Utils.loadTemplateWithRefs(`
       <div class="umap-pictogram-category">
         <h6${hidden}>${name}</h6>
         <div class="umap-pictogram-grid" data-ref=grid></div>
       </div>
     `)
     let hasIcons = false
-    for (const item of items) {
+    const sorted = items.sort((a, b) => Utils.naturalSort(a.name, b.name, U.lang))
+    for (const item of sorted) {
+      item.attribution ??= attribution
       hasIcons = this.addIconPreview(item, grid) || hasIcons
     }
-    if (hasIcons) this.grid.appendChild(parent)
+    if (hasIcons) parent.appendChild(container)
   }
 
   buildSymbolsList() {
     this.grid.innerHTML = ''
     const categories = {}
     let category
-    for (const props of this.pictogram_list) {
-      category = props.category || translate('Generic')
-      categories[category] = categories[category] || []
-      categories[category].push(props)
-    }
-    const sorted = Object.entries(categories).sort(([a], [b]) =>
-      Utils.naturalSort(a, b, U.lang)
+    const collectionsNames = Object.keys(this.pictogramCollections)
+    const [container, { select, icons }] = Utils.loadTemplateWithRefs(
+      '<div><select data-ref="select"></select><div data-ref="icons"></div></div>'
     )
-    for (const [name, items] of sorted) {
-      this.addCategory(items, name)
+    for (const name of collectionsNames) {
+      const option = Utils.loadTemplate(`<option value="${name}">${name}</option>`)
+      select.appendChild(option)
     }
+    this.grid.appendChild(container)
+    select.hidden = collectionsNames.length === 1
+    const loadCollection = (name) => {
+      icons.innerHTML = ''
+      const collection = this.pictogramCollections[name || collectionsNames[0]]
+      if (!collection) return
+      const sorted = Object.entries(collection.categories).sort(([a], [b]) =>
+        Utils.naturalSort(a, b, U.lang)
+      )
+      for (const [name, items] of sorted) {
+        this.addCategory(items, name, icons, collection.attribution)
+      }
+    }
+    loadCollection()
+    select.addEventListener('change', (event) => {
+      loadCollection(event.target.value)
+    })
   }
 
   buildRecentList() {
@@ -844,7 +1008,7 @@ Fields.IconUrl = class extends Fields.BlurInput {
     const items = U.Icon.RECENT.map((src) => ({
       src,
     }))
-    this.addCategory(items)
+    this.addCategory(items, null, this.grid)
   }
 
   isDefault() {
@@ -923,216 +1087,27 @@ Fields.Url = class extends Fields.Input {
 }
 
 Fields.Switch = class extends Fields.CheckBox {
+  getLabelTemplate() {
+    if (!this.properties.inheritable) return ''
+    return super.getLabelTemplate()
+  }
   getTemplate() {
-    const label = this.properties.label
-    const help = this.properties.helpEntries?.join() || ''
-    return `${super.getTemplate()}<label title="${label}" for="${this.id}" data-ref=customLabel data-help="${help}">${label}</label>`
+    const label = this.properties.inheritable ? '' : this.properties.label
+    const help = this.properties.inheritable
+      ? ''
+      : this.properties.helpEntries?.join() || ''
+    return `${super.getTemplate()}<label for="${this.id}" data-ref=customLabel data-help="${help}">${label}</label>`
   }
 
   build() {
     super.build()
-    // We have it in our template
-    if (!this.properties.inheritable) {
-      // We already have the label near the switch,
-      // only show the default label in inheritable mode
-      // as the switch itself may be hidden (until "defined")
-      if (this.elements.label) {
-        this.elements.label.hidden = true
-        this.elements.label.innerHTML = ''
-        this.elements.label.title = ''
-      }
-    }
     this.container.classList.add('with-switch')
     this.input.classList.add('switch')
     this.input.id = this.id
   }
 }
 
-Fields.FacetSearchBase = class extends BaseElement {
-  buildLabel() {}
-}
-
-Fields.FacetSearchChoices = class extends Fields.FacetSearchBase {
-  getTemplate() {
-    return `
-      <fieldset class="umap-facet">
-        <legend data-ref=label>${Utils.escapeHTML(this.properties.label)}</legend>
-        <ul data-ref=ul></ul>
-      </fieldset>
-      `
-  }
-
-  build() {
-    this.type = this.properties.criteria.type
-
-    const choices = this.properties.criteria.choices
-    choices.sort()
-    choices.forEach((value) => this.buildLi(value))
-    super.build()
-  }
-
-  buildLi(value) {
-    const name = `${this.type}_${this.name}`
-    const [li, { input, label }] = Utils.loadTemplateWithRefs(`
-      <li>
-        <label>
-          <input type="${this.type}" name="${name}" data-ref=input />
-          <span data-ref=label></span>
-        </label>
-      </li>
-    `)
-    label.textContent = value
-    input.checked = this.get().choices.includes(value)
-    input.dataset.value = value
-    input.addEventListener('change', () => this.sync())
-    this.elements.ul.appendChild(li)
-  }
-
-  toJS() {
-    return {
-      type: this.type,
-      choices: [...this.elements.ul.querySelectorAll('input:checked')].map(
-        (i) => i.dataset.value
-      ),
-    }
-  }
-}
-
-Fields.MinMaxBase = class extends Fields.FacetSearchBase {
-  getInputType(type) {
-    return type
-  }
-
-  getLabels() {
-    return [translate('Min'), translate('Max')]
-  }
-
-  prepareForHTML(value) {
-    return value.valueOf()
-  }
-
-  getTemplate() {
-    const [minLabel, maxLabel] = this.getLabels()
-    const { min, max, type } = this.properties.criteria
-    this.type = type
-    const inputType = this.getInputType(this.type)
-    const minHTML = this.prepareForHTML(min)
-    const maxHTML = this.prepareForHTML(max)
-    return `
-      <fieldset class="umap-facet">
-        <legend>${Utils.escapeHTML(this.properties.label)}</legend>
-        <label>${minLabel}<input min="${minHTML}" max="${maxHTML}" step=any type="${inputType}" data-ref=minInput /></label>
-        <label>${maxLabel}<input min="${minHTML}" max="${maxHTML}" step=any type="${inputType}" data-ref=maxInput /></label>
-      </fieldset>
-    `
-  }
-
-  build() {
-    this.minInput = this.elements.minInput
-    this.maxInput = this.elements.maxInput
-    const { min, max, type } = this.properties.criteria
-    const { min: modifiedMin, max: modifiedMax } = this.get()
-
-    const currentMin = modifiedMin !== undefined ? modifiedMin : min
-    const currentMax = modifiedMax !== undefined ? modifiedMax : max
-    if (min != null) {
-      // The value stored using setAttribute is not modified by
-      // user input, and will be used as initial value when calling
-      // form.reset(), and can also be retrieve later on by using
-      // getAttributing, to compare with current value and know
-      // if this value has been modified by the user
-      // https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/reset
-      this.minInput.setAttribute('value', this.prepareForHTML(min))
-      this.minInput.value = this.prepareForHTML(currentMin)
-    }
-
-    if (max != null) {
-      // Cf comment above about setAttribute vs value
-      this.maxInput.setAttribute('value', this.prepareForHTML(max))
-      this.maxInput.value = this.prepareForHTML(currentMax)
-    }
-    this.toggleStatus()
-
-    this.minInput.addEventListener('change', () => this.sync())
-    this.maxInput.addEventListener('change', () => this.sync())
-    super.build()
-  }
-
-  toggleStatus() {
-    this.minInput.dataset.modified = this.isMinModified()
-    this.maxInput.dataset.modified = this.isMaxModified()
-  }
-
-  sync() {
-    super.sync()
-    this.toggleStatus()
-  }
-
-  isMinModified() {
-    const default_ = this.minInput.getAttribute('value')
-    const current = this.minInput.value
-    return current !== default_
-  }
-
-  isMaxModified() {
-    const default_ = this.maxInput.getAttribute('value')
-    const current = this.maxInput.value
-    return current !== default_
-  }
-
-  toJS() {
-    const opts = {
-      type: this.type,
-    }
-    if (this.minInput.value !== '' && this.isMinModified()) {
-      opts.min = this.prepareForJS(this.minInput.value)
-    }
-    if (this.maxInput.value !== '' && this.isMaxModified()) {
-      opts.max = this.prepareForJS(this.maxInput.value)
-    }
-    return opts
-  }
-}
-
-Fields.FacetSearchNumber = class extends Fields.MinMaxBase {
-  prepareForJS(value) {
-    return new Number(value)
-  }
-}
-
-Fields.FacetSearchDate = class extends Fields.MinMaxBase {
-  prepareForJS(value) {
-    return new Date(value)
-  }
-
-  toLocaleDateTime(dt) {
-    return new Date(dt.valueOf() - dt.getTimezoneOffset() * 60000)
-  }
-
-  prepareForHTML(value) {
-    // Value must be in local time
-    if (Number.isNaN(value)) return
-    return this.toLocaleDateTime(value).toISOString().substr(0, 10)
-  }
-
-  getLabels() {
-    return [translate('From'), translate('Until')]
-  }
-}
-
-Fields.FacetSearchDateTime = class extends Fields.FacetSearchDate {
-  getInputType(type) {
-    return 'datetime-local'
-  }
-
-  prepareForHTML(value) {
-    // Value must be in local time
-    if (Number.isNaN(value)) return
-    return this.toLocaleDateTime(value).toISOString().slice(0, -1)
-  }
-}
-
-Fields.MultiChoice = class extends BaseElement {
+Fields.MultiChoice = class extends Fields.Base {
   getDefault() {
     return 'null'
   }
@@ -1166,7 +1141,10 @@ Fields.MultiChoice = class extends BaseElement {
   }
 
   getChoices() {
-    return this.properties.choices || this.choices
+    let choices = this.properties.choices || this.choices
+    // Allow to pass flat arrays [c1, c2, c3] instead of [[c1, v1], [c2, v2]]
+    if (!Array.isArray(choices[0])) choices = choices.map((key) => [key, key])
+    return choices
   }
 
   getTemplate() {
@@ -1183,13 +1161,13 @@ Fields.MultiChoice = class extends BaseElement {
   }
 
   addChoice(value, label, counter) {
-    const id = `${Date.now()}.${this.name}.${counter}`
+    const id = `id.${Date.now()}.${this.name}.${counter}`
     const input = Utils.loadTemplate(
-      `<input type="radio" name="${this.name}" id="${id}" value="${value}" />`
+      Utils.sanitizeVars`<input type="radio" name="${this.name}" id="${id}" value="${value}" />`
     )
     this.elements.wrapper.appendChild(input)
     this.elements.wrapper.appendChild(
-      Utils.loadTemplate(`<label for="${id}">${label}</label>`)
+      Utils.loadTemplate(Utils.sanitizeVars`<label for="${id}">${label}</label>`)
     )
     input.addEventListener('change', () => this.sync())
   }
@@ -1266,11 +1244,10 @@ Fields.Range = class extends Fields.FloatInput {
     const step = this.properties.step || 1
     const digits = step < 1 ? 1 : 0
     const id = `range-${this.properties.label || this.name}`
-    for (
-      let i = this.properties.min;
-      i <= this.properties.max;
-      i += this.properties.step
-    ) {
+    const range = this.properties.max - this.properties.min
+    const ticks = this.properties.ticks || Math.min(20, range / step)
+    const tickStep = range / ticks
+    for (let i = this.properties.min; i <= this.properties.max; i += tickStep) {
       const ii = i.toFixed(digits)
       options += `<option value="${ii}" label="${ii}"></option>`
     }
@@ -1282,13 +1259,14 @@ Fields.Range = class extends Fields.FloatInput {
   }
 }
 
-Fields.ManageOwner = class extends BaseElement {
+Fields.ManageOwner = class extends Fields.Base {
   build() {
     super.build()
     const options = {
       className: 'edit-owner',
-      on_select: L.bind(this.onSelect, this),
+      on_select: (choice) => this.onSelect(choice),
       placeholder: translate("Type new owner's username"),
+      url: this.properties.url,
     }
     this.autocomplete = new AjaxAutocomplete(this.container, options)
     const owner = this.toHTML()
@@ -1313,14 +1291,15 @@ Fields.ManageOwner = class extends BaseElement {
   }
 }
 
-Fields.ManageEditors = class extends BaseElement {
+Fields.ManageEditors = class extends Fields.Base {
   build() {
     super.build()
     const options = {
       className: 'edit-editors',
-      on_select: L.bind(this.onSelect, this),
-      on_unselect: L.bind(this.onUnselect, this),
+      on_select: (choice) => this.onSelect(choice),
+      on_unselect: (choice) => this.onUnselect(choice),
       placeholder: translate("Type editor's username"),
+      url: this.properties.url,
     }
     this.autocomplete = new AjaxAutocompleteMultiple(this.container, options)
     this._values = this.toHTML() || []
@@ -1353,7 +1332,7 @@ Fields.ManageEditors = class extends BaseElement {
     }
   }
 }
-Fields.ManageTeams = class extends BaseElement {
+Fields.ManageTeams = class extends Fields.Base {
   build() {
     super.build()
     const options = {

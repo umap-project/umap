@@ -1,5 +1,11 @@
 # Installation
 
+!!! info "Goal"
+
+    This is the documentation to install uMap on your computer.
+    Check out the [deployment documentation](./deploy/overview.md) if you want to install uMap on your server.
+    A Docker image is also available which [can be used as a local installation](./deploy/docker.md#developing-with-docker).
+
 ## System dependencies
 
 uMap is built with the [Python](https://python.org) language, and the [Django](https://djangoproject.com) framework. It needs a [PostgreSQL](https://www.postgresql.org/) database, with the [Postgis](https://postgis.net/) extension enabled.
@@ -39,6 +45,17 @@ createuser umap -U postgres
 createdb umap -O umap -U postgres
 psql umap -c "CREATE EXTENSION postgis" -Upostgres
 ```
+
+On Debian, you will need run these commands explicitly as the `postgres` user, for example:
+
+```bash
+sudo -u postgres createuser umap
+sudo -u postgres createdb umap -O umap
+sudo -u postgres psql umap -c "CREATE EXTENSION postgis"
+```
+
+Also, since PostgreSQL uses Unix user accounts for authentication, you
+must create a system user called `umap` which will run uMap.
 
 ## Getting started
 
@@ -129,7 +146,8 @@ TWITTER_CONSUMER_KEY = "xxx"
 TWITTER_CONSUMER_SECRET = "yyy"
 ```
 
-Example of callback URL to use for setting up OAuth apps
+Example of callback URL to use for setting up OAuth apps (where
+`umap.foo.bar` should be replaced with your site URL):
 
 http://umap.foo.bar/complete/github/
 

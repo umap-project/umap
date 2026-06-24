@@ -1,5 +1,21 @@
 # Vidéos uMap
 
+## Atelier State of the map 2025 : Grist 🤝 uMap - Tutoriel 13 juin 2025
+
+<iframe title="Atelier State of the map 2025 : Grist 🤝 uMap  - Tutoriel" width="560" height="315" src="https://tube.numerique.gouv.fr/videos/embed/khyihwBWNexSAu2YCxowAo" frameborder="0" allowfullscreen="" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+
+## uMap, quoi de neuf ? 14 juin 2025
+
+<iframe title="uMap, quoi de neuf ?" width="560" height="315" src="https://peertube.openstreetmap.fr/videos/embed/7avEP5WPUvur4za46zXGLj" frameborder="0" allowfullscreen="" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+
+## uMap Visio-Ouverte de jeudi 22 mai 2025
+
+<iframe title="uMap-Visio-ouverte de jeudi 22 mai 2025" width="560" height="315" src="https://tube.numerique.gouv.fr/videos/embed/4ZC2ZMSaE5XWtQTzxyXgiZ" frameborder="0" allowfullscreen="" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+
+## uMap Visio-Ouverte de jeudi 13 mars 2025
+
+<iframe title="uMap-Visio-Ouverte de jeudi 13 mars 2025" width="560" height="315" src="https://tube.numerique.gouv.fr/videos/embed/9WaG6B8KpbZwhD4gLiPCFL" frameborder="0" allowfullscreen="" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+
 ## Faire la carte de son marché de Noël
 
 <iframe title="Faire la carte de son marché de Noël" width="560" height="315" src="https://tube.numerique.gouv.fr/videos/embed/7d3a95ad-37dc-4af1-ac15-17992cb95869" frameborder="0" allowfullscreen="" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>

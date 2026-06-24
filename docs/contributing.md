@@ -52,11 +52,41 @@ This will run JavaScript and Python unittests + Playwright integration tests
 
 #### Python unit tests
 
+Python unit tests require you to have a PostgreSQL server with either:
+
+1. Super-user access (the `postgres` user) with password
+   authentication, as you might have in a Docker container.  This is
+   how the GitHub CI tests run.
+2. A `test_umap` database already created with PostGIS enabled.
+
+If you are running PostgreSQL on a Debian installation with peer
+authentication (meaning, your PostgreSQL username is the same as your
+Unix username), you will need to create the test database before
+running tests, like this:
+
+```bash
+sudo -u postgres createdb test_umap -O $USER
+sudo -u postgres psql test_umap -c "CREATE EXTENSION postgis"
+```
+
+You will also need to run the tests with `pytest -n 0` to prevent
+`pytest` from running multiple processes, each of which requires its
+own database.  Alternately, you can manually create a database for
+each process as shown above - the databases will be named
+`test_umap_gw0` through `test_umap_gw3`.
+
+The Django configuration for testing is **not** in
+`umap/settings/local.py` but in `umap/tests/settings.py`.  If you need
+to configure a specific remote PostgreSQL server for testing, you can
+set `DATABASES` in this file.
+
+Now you can run the unit tests:
+
 ```bash
 pytest . --ignore umap/tests/integration
 ```
 
-By default, the tests are run in parallel to reduce the time taken to run them. You can run them in serial mode by using the `-n1` option.
+By default, the tests are run in parallel to reduce the time taken to run them. You can run them in serial mode by using the `-n 0` option.
 
 If you only want to run one test, you can add `-k specific-test-name` to the command line.
 

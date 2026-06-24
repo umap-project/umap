@@ -20,10 +20,9 @@ export const Heat = L.HeatLayer.extend({
 
   initialize: function (datalayer) {
     this.datalayer = datalayer
-    L.HeatLayer.prototype.initialize.call(this, [], this.datalayer.options.heat)
-    LayerMixin.onInit.call(this, this.datalayer._leafletMap)
-    if (!Utils.isObject(this.datalayer.options.heat)) {
-      this.datalayer.options.heat = {}
+    L.HeatLayer.prototype.initialize.call(this, [], this.datalayer.properties.heat)
+    if (!Utils.isObject(this.datalayer.properties.heat)) {
+      this.datalayer.properties.heat = {}
     }
   },
 
@@ -31,9 +30,11 @@ export const Heat = L.HeatLayer.extend({
     if (layer instanceof Marker) {
       let latlng = layer.getLatLng()
       let alt
-      if (this.datalayer.options.heat?.intensityProperty) {
+      if (this.datalayer.properties.heat?.intensityProperty) {
         alt = Number.parseFloat(
-          layer.feature.properties[this.datalayer.options.heat.intensityProperty || 0]
+          layer.feature.properties[
+            this.datalayer.properties.heat.intensityProperty || 0
+          ]
         )
         latlng = new LatLng(latlng.lat, latlng.lng, alt)
       }
@@ -66,35 +67,41 @@ export const Heat = L.HeatLayer.extend({
     return latLngBounds(this._latlngs)
   },
 
-  getEditableOptions: () => [
-    [
-      'options.heat.radius',
-      {
-        handler: 'Range',
-        min: 10,
-        max: 100,
-        step: 5,
-        label: translate('Heatmap radius'),
-        helpText: translate('Override heatmap radius (default 25)'),
-      },
-    ],
-    [
-      'options.heat.intensityProperty',
-      {
-        handler: 'BlurInput',
-        placeholder: translate('Heatmap intensity property'),
-        helpText: translate('Optional intensity property for heatmap'),
-      },
-    ],
-  ],
+  getEditableProperties: function () {
+    return [
+      [
+        'properties.heat.radius',
+        {
+          handler: 'Range',
+          min: 10,
+          max: 100,
+          step: 5,
+          label: translate('Heatmap radius'),
+          helpText: translate('Override heatmap radius (default 25)'),
+        },
+      ],
+      [
+        'properties.heat.intensityProperty',
+        {
+          handler: 'Select',
+          selectOptions: [
+            ['', translate('Select field to compute intensity')],
+            ...this.datalayer.fields.keys(),
+          ],
+          helpText: translate('Optional intensity field to compute heatmap'),
+        },
+      ],
+    ]
+  },
 
   onEdit: function (field, builder) {
-    if (field === 'options.heat.intensityProperty') {
+    if (field === 'properties.heat.intensityProperty') {
       this.datalayer.resetLayer(true) // We need to repopulate the latlngs
       return
     }
-    if (field === 'options.heat.radius') {
-      this.options.radius = this.datalayer.options.heat.radius
+    if (field === 'properties.heat.radius') {
+      this.options.radius = this.datalayer.properties.heat.radius
+      this.redraw()
     }
     this._updateOptions()
   },

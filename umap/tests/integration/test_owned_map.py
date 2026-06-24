@@ -16,7 +16,7 @@ def test_map_update_with_owner(map, live_server, login):
     enable = page.get_by_role("button", name="Edit")
     expect(enable).to_be_visible()
     enable.click()
-    disable = page.get_by_role("button", name="View")
+    disable = page.get_by_role("button", name="View", exact=True)
     expect(disable).to_be_visible()
     save = page.get_by_role("button", name="Save")
     expect(save).to_be_visible()
@@ -72,7 +72,9 @@ def test_owner_permissions_form(map, datalayer, live_server, login):
     expect(owner_field).to_be_visible()
     editors_field = page.locator(".umap-field-editors input")
     expect(editors_field).to_be_visible()
-    datalayer_label = page.get_by_text('Who can edit "test datalayer"')
+    datalayer_label = page.locator(".umap-edit-permissions").get_by_text(
+        "test datalayer"
+    )
     expect(datalayer_label).to_be_visible()
     options = page.locator(".datalayer-permissions select[name='edit_status'] option")
     expect(options).to_have_count(4)
@@ -95,7 +97,7 @@ def test_map_update_with_editor(map, live_server, login, user):
     enable = page.get_by_role("button", name="Edit")
     expect(enable).to_be_visible()
     enable.click()
-    disable = page.get_by_role("button", name="View")
+    disable = page.get_by_role("button", name="View", exact=True)
     expect(disable).to_be_visible()
     save = page.get_by_role("button", name="Save")
     expect(save).to_be_visible()
@@ -123,7 +125,9 @@ def test_permissions_form_with_editor(map, datalayer, live_server, login, user):
     expect(owner_field).to_be_hidden()
     editors_field = page.locator(".umap-field-editors input")
     expect(editors_field).to_be_visible()
-    datalayer_label = page.get_by_text('Who can edit "test datalayer"')
+    datalayer_label = page.locator(".umap-edit-permissions").get_by_text(
+        "test datalayer"
+    )
     expect(datalayer_label).to_be_visible()
 
 
@@ -183,7 +187,7 @@ def test_can_change_perms_after_create(tilelayer, live_server, login, user):
     page.goto(f"{live_server.url}/en/map/new")
     # Create a layer
     page.get_by_title("Manage layers").click()
-    page.get_by_title("Add a layer").click()
+    page.get_by_role("button", name="Add a layer").click()
     page.locator("input[name=name]").fill("Layer 1")
     expect(
         page.get_by_role("button", name="Visibility: Draft (private)")
@@ -200,7 +204,9 @@ def test_can_change_perms_after_create(tilelayer, live_server, login, user):
     )
     expect(page.locator(".umap-field-owner")).to_be_visible()
     expect(page.locator(".umap-field-editors input")).to_be_visible()
-    expect(page.get_by_text('Who can edit "Layer 1"')).to_be_visible()
+    expect(
+        page.locator(".umap-edit-permissions").get_by_text("Layer 1")
+    ).to_be_visible()
     options = page.locator(".datalayer-permissions select[name='edit_status'] option")
     expect(options).to_have_count(4)
     option = page.locator(
@@ -217,7 +223,7 @@ def test_can_change_owner(map, live_server, login, user):
     page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
     edit_permissions = page.get_by_title("Update permissions and editors")
     edit_permissions.click()
-    close = page.locator(".umap-field-owner .close")
+    close = page.locator(".umap-field-owner .icon-close")
     close.click()
     input = page.locator("input.edit-owner")
     with page.expect_response(re.compile(r".*/agnocomplete/.*")):

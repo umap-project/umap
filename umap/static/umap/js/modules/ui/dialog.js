@@ -37,7 +37,8 @@ export default class Dialog extends WithTemplate {
     this.init()
   }
 
-  collectFormData(formData) {
+  collectFormData() {
+    const formData = new FormData(this.elements.form)
     const object = {}
     formData.forEach((value, key) => {
       if (!Reflect.has(object, key)) {
@@ -77,8 +78,7 @@ export default class Dialog extends WithTemplate {
     if (!this.dialogSupported) {
       this.elements.form.addEventListener('submit', (event) => {
         event.preventDefault()
-        this.dialog.returnValue = 'accept'
-        this.close()
+        this.accept()
       })
     }
     this.dialog.addEventListener('keydown', (e) => {
@@ -117,7 +117,6 @@ export default class Dialog extends WithTemplate {
     this.elements.cancel.hidden = !dialog.cancel
     this.elements.message.textContent = dialog.message
     this.elements.message.hidden = !dialog.message
-    this.elements.target = dialog.target || ''
     this.elements.template.innerHTML = ''
     if (dialog.template?.nodeType === 1) {
       this.elements.template.appendChild(dialog.template)
@@ -136,49 +135,64 @@ export default class Dialog extends WithTemplate {
     if (currentZIndex) {
       this.dialog.style.zIndex = currentZIndex + 1
     }
-
-    this.toggle(true)
-
+    if (this.dialogSupported) {
+      this.dialog.show()
+    } else {
+      this.dialog.hidden = false
+    }
     if (this.hasFormData) this.focusable[0].focus()
     else this.elements.accept.focus()
-
     return this.waitForUser()
   }
 
-  close() {
-    this.toggle(false)
-    this.dialog.returnValue = undefined
+  on(...args) {
+    this.dialog.addEventListener(...args)
   }
 
-  toggle(open = false) {
+  close() {
+    this._closing = true
     if (this.dialogSupported) {
-      if (open) this.dialog.show()
-      else this.dialog.close()
+      this.dialog.close()
     } else {
-      this.dialog.hidden = !open
-      if (this.elements.target && !open) {
-        this.elements.target.focus()
-      }
-      if (!open) {
-        this.dialog.dispatchEvent(new CustomEvent('close'))
-      }
+      this.dialog.hidden = true
+      this.dialog.dispatchEvent(new CustomEvent('close'))
     }
+  }
+
+  accept() {
+    this.dialog.returnValue = 'accept'
+    return new Promise((resolve) => {
+      this.dialog.addEventListener(
+        'close',
+        () => {
+          resolve()
+        },
+        { once: true }
+      )
+      this.close()
+    })
   }
 
   waitForUser() {
     return new Promise((resolve) => {
-      this.dialog.addEventListener(
-        'close',
-        (event) => {
-          if (this.dialog.returnValue === 'accept') {
-            const value = this.hasFormData
-              ? this.collectFormData(new FormData(this.elements.form))
-              : true
-            resolve(value)
-          }
-        },
-        { once: true }
-      )
+      const onClose = () => {
+        this._closing = false
+        if (this.dialog.returnValue === 'accept') {
+          const value = this.hasFormData ? this.collectFormData() : true
+          resolve(value)
+        }
+      }
+      const waitForClose = () => {
+        this.dialog.returnValue = undefined
+        this.dialog.addEventListener('close', () => onClose(), { once: true })
+      }
+      if (this._closing) {
+        // We are opening a new dialog while another is not fully closed,
+        // so let's first wait for that one to be fully closed
+        this.dialog.addEventListener('close', () => waitForClose(), { once: true })
+      } else {
+        waitForClose()
+      }
     })
   }
 

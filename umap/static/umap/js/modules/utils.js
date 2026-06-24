@@ -3,15 +3,16 @@ import { default as DOMPurifyInitializer } from '../../vendors/dompurify/purify.
 /**
  * Generate a pseudo-unique identifier (5 chars long, mixed-case alphanumeric)
  *
- * Here's the collision risk:
- * - for 6 chars, 1 in 100 000
- * - for 5 chars, 5 in 100 000
- * - for 4 chars, 500 in 100 000
- *
  * @returns string
  */
-export function generateId() {
-  return btoa(Math.random().toString()).substring(10, 15)
+const CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+export function generateId(length = 5) {
+  let result = ''
+  const charactersLength = CHARACTERS.length
+  for (let i = 0; i < length; i++) {
+    result += CHARACTERS.charAt(Math.floor(Math.random() * charactersLength))
+  }
+  return result
 }
 
 /**
@@ -39,7 +40,7 @@ function _getPropertyName(field) {
  * Return an array of unique impacts.
  *
  * @param {fields}  list[fields]
- * @param object schema object. If ommited, global U.SCHEMA will be used.
+ * @param object schema object. If omitted, global U.SCHEMA will be used.
  * @returns Array[string]
  */
 export function getImpactsFromSchema(fields, schema) {
@@ -91,9 +92,12 @@ export default function getPurify() {
   return DOMPurifyInitializer(window)
 }
 
-export function escapeHTML(s) {
-  s = s ? s.toString() : ''
-  s = getPurify().sanitize(s, {
+export function escapeHTML(s = '') {
+  if (s?.toString) {
+    s = s.toString()
+  }
+  const DOMPurify = getPurify()
+  s = DOMPurify.sanitize(`${s}`, {
     ADD_TAGS: ['iframe'],
     ALLOWED_TAGS: [
       'h3',
@@ -136,7 +140,24 @@ export function escapeHTML(s) {
     ALLOWED_URI_REGEXP:
       /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp|geo):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
   })
+  if (
+    DOMPurify.removed?.length > 1 ||
+    (DOMPurify.removed.length && DOMPurify.removed[0].element.tagName !== 'BODY')
+  ) {
+    console.debug('Removed by DOMPurify!')
+    console.debug(DOMPurify.removed)
+    console.trace()
+  }
   return s
+}
+
+export function sanitizeVars(strings, ...values) {
+  let result = ''
+  strings.forEach((str, i) => {
+    result += str
+    result += escapeHTML(values[i])
+  })
+  return result
 }
 
 export function toHTML(r, options) {
@@ -176,15 +197,15 @@ export function toHTML(r, options) {
   // iframe
   r = r.replace(
     /{{{(https?[^|{]*)}}}/g,
-    '<div><iframe frameborder="0" src="$1" width="100%" height="300px"></iframe></div>'
+    '<div><iframe allowfullscreen src="$1" style="width: 100%; height: 300px; border: 0;"></iframe></div>'
   )
   r = r.replace(
     /{{{(https?[^|{]*)\|(\d*)(px)?}}}/g,
-    '<div><iframe frameborder="0" src="$1" width="100%" height="$2px"></iframe></div>'
+    '<div><iframe allowfullscreen src="$1" style="width: 100%; height: $2px; border: 0;"></iframe></div>'
   )
   r = r.replace(
     /{{{(https?[^|{]*)\|(\d*)(px)?\*(\d*)(px)?}}}/g,
-    '<div><iframe frameborder="0" src="$1" width="$4px" height="$2px"></iframe></div>'
+    '<div><iframe allowfullscreen src="$1" style="width: $4px; height: $2px; border: 0;"></iframe></div>'
   )
 
   // images
@@ -329,10 +350,6 @@ export function flattenCoordinates(coords) {
   return coords
 }
 
-export function polygonMustBeFlattened(coords) {
-  return coords.length === 1 && typeof coords?.[0]?.[0]?.[0] !== 'number'
-}
-
 export function buildQueryString(params) {
   const query_string = []
   for (const key in params) {
@@ -399,8 +416,30 @@ export function template(str, data) {
   })
 }
 
+const DATE_REGEX = [
+  // Format 1: "YYYY-MM-DD"
+  /^(?<year>\d{4})[\-\/](?<month>\d{2})[\-\/](?<day>\d{2})$/,
+  // Format2 : "DD-MM-YYYY"
+  /^(?<day>0[1-9]|[12][0-9]|3[01])[\-\/](?<month>0[1-9]|1[0-2])[\-\/](?<year>\d{4})/,
+]
+
 export function parseNaiveDate(value) {
-  const naive = new Date(value)
+  let naive
+  if (!value) return undefined
+  value = String(value)
+  for (const regex of DATE_REGEX) {
+    const parsed = value.match(regex)
+    if (parsed) {
+      const { year, month, day } = parsed.groups
+      naive = new Date(year, Number.parseInt(month, 10) - 1, Number.parseInt(day, 10))
+      break
+    }
+  }
+  if (!naive) {
+    naive = new Date(value)
+  }
+  // Number.isNaN will always return false for invalid date
+  if (isNaN(naive)) return undefined
   // Let's pretend naive date are UTC, and remove time…
   return new Date(Date.UTC(naive.getFullYear(), naive.getMonth(), naive.getDate()))
 }
@@ -413,21 +452,24 @@ export function toggleBadge(element, value) {
   else delete element.dataset.badge
 }
 
-export function loadTemplate(html) {
+function buildTemplate(html) {
   const template = document.createElement('template')
   template.innerHTML = html
-  return template.content.firstElementChild
+  return [template, template.content.firstElementChild]
+}
+
+export function loadTemplate(html) {
+  const [template, root] = buildTemplate(html)
+  return root
 }
 
 export function loadTemplateWithRefs(html) {
-  const template = document.createElement('template')
-  template.innerHTML = html
-  const element = template.content.firstElementChild
+  const [template, root] = buildTemplate(html)
   const elements = {}
   for (const node of template.content.querySelectorAll('[data-ref]')) {
     elements[node.dataset.ref] = node
   }
-  return [element, elements]
+  return [root, elements]
 }
 
 export class WithTemplate {
@@ -458,9 +500,13 @@ export class WithEvents {
     this._target = new EventTarget()
   }
 
-  on(eventType, callback) {
+  on(eventType, callback, options) {
     if (typeof callback !== 'function') return
-    this._target.addEventListener(eventType, callback)
+    this._target.addEventListener(eventType, callback, options)
+  }
+
+  once(eventType, callback) {
+    this.on(eventType, callback, { once: true })
   }
 
   fire(eventType, detail) {
@@ -502,10 +548,12 @@ export function setObjectValue(obj, key, value) {
   if (objectToSet === undefined) return
 
   // Set the value (or delete it)
+  objectToSet[lastKey] = value
+  // This will not work for setter (eg. DataLayer.parentId)
+  // but the line above (setting the property as undefined)
+  // will do the job.
   if (typeof value === 'undefined') {
     delete objectToSet[lastKey]
-  } else {
-    objectToSet[lastKey] = value
   }
 }
 
@@ -658,3 +706,36 @@ export const COLORS = [
   'Ivory',
   'White',
 ]
+
+export const LatLngIsValid = (latlng) => {
+  const [lat, lng] = Array.isArray(latlng) ? latlng : [latlng.lat, latlng.lng]
+  return (
+    Number.isFinite(lat) &&
+    Math.abs(lat) <= 90 &&
+    Number.isFinite(lng) &&
+    Math.abs(lng) <= 180
+  )
+}
+
+export const toggleLayers = (layers, force) => {
+  // If at least one layer is shown, hide all
+  // otherwise show all
+  let allHidden = force
+  if (force === undefined) {
+    allHidden = !layers.tree.find((layer) => layer.isVisible())
+  }
+  layers.tree.map((layer) => {
+    layer.toggle(allHidden)
+  })
+  return allHidden
+}
+
+export const asciiTree = (layers) => {
+  for (const layer of layers) {
+    console.group(layer.rank, layer.getName())
+    for (const child of layer.layers) {
+      asciiTree(child.layers)
+    }
+    console.groupEnd()
+  }
+}

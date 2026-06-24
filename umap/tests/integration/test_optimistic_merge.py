@@ -3,6 +3,7 @@ import re
 from pathlib import Path
 from time import sleep
 
+import pytest
 from playwright.sync_api import expect
 
 from umap.models import DataLayer
@@ -12,13 +13,18 @@ from ..base import DataLayerFactory, MapFactory
 DATALAYER_UPDATE = re.compile(r".*/datalayer/update/.*")
 
 
-def test_created_markers_are_merged(context, live_server, tilelayer):
+# Test with in memory upload AND streamed upload
+@pytest.mark.parametrize("upload_limit", (2621440, 0))
+def test_created_markers_are_merged(
+    new_page, live_server, tilelayer, settings, upload_limit
+):
+    settings.FILE_UPLOAD_MAX_MEMORY_SIZE = upload_limit
     # Let's create a new map with an empty datalayer
     map = MapFactory(name="server-side merge")
     datalayer = DataLayerFactory(map=map, edit_status=DataLayer.ANONYMOUS, data={})
 
     # Now navigate to this map and create marker
-    page_one = context.new_page()
+    page_one = new_page("page 1")
     page_one.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
 
     save_p1 = page_one.get_by_role("button", name="Save")
@@ -47,15 +53,22 @@ def test_created_markers_are_merged(context, live_server, tilelayer):
         "browsable": True,
         "displayOnLoad": True,
         "name": "test datalayer",
-        "editMode": "advanced",
         "inCaption": True,
-        "id": str(datalayer.pk),
-        "rank": 0,
         "remoteData": {},
+        "fields": [
+            {
+                "key": "name",
+                "type": "String",
+            },
+            {
+                "key": "description",
+                "type": "Text",
+            },
+        ],
     }
 
     # Now navigate to this map from another tab
-    page_two = context.new_page()
+    page_two = new_page("page 2")
 
     page_two.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
 
@@ -87,10 +100,17 @@ def test_created_markers_are_merged(context, live_server, tilelayer):
         "displayOnLoad": True,
         "name": "test datalayer",
         "inCaption": True,
-        "editMode": "advanced",
-        "id": str(datalayer.pk),
-        "rank": 0,
         "remoteData": {},
+        "fields": [
+            {
+                "key": "name",
+                "type": "String",
+            },
+            {
+                "key": "description",
+                "type": "Text",
+            },
+        ],
     }
 
     # Now create another marker in the first tab
@@ -107,10 +127,17 @@ def test_created_markers_are_merged(context, live_server, tilelayer):
         "displayOnLoad": True,
         "name": "test datalayer",
         "inCaption": True,
-        "editMode": "advanced",
-        "id": str(datalayer.pk),
-        "rank": 0,
         "remoteData": {},
+        "fields": [
+            {
+                "key": "name",
+                "type": "String",
+            },
+            {
+                "key": "description",
+                "type": "Text",
+            },
+        ],
     }
 
     # And again
@@ -127,10 +154,17 @@ def test_created_markers_are_merged(context, live_server, tilelayer):
         "displayOnLoad": True,
         "name": "test datalayer",
         "inCaption": True,
-        "editMode": "advanced",
-        "id": str(datalayer.pk),
-        "rank": 0,
         "remoteData": {},
+        "fields": [
+            {
+                "key": "name",
+                "type": "String",
+            },
+            {
+                "key": "description",
+                "type": "Text",
+            },
+        ],
     }
     expect(marker_pane_p1).to_have_count(4)
 
@@ -149,24 +183,31 @@ def test_created_markers_are_merged(context, live_server, tilelayer):
         "displayOnLoad": True,
         "name": "test datalayer",
         "inCaption": True,
-        "editMode": "advanced",
-        "id": str(datalayer.pk),
-        "rank": 0,
         "remoteData": {},
+        "fields": [
+            {
+                "key": "name",
+                "type": "String",
+            },
+            {
+                "key": "description",
+                "type": "Text",
+            },
+        ],
     }
     expect(marker_pane_p2).to_have_count(5)
 
 
-def test_empty_datalayers_can_be_merged(context, live_server, tilelayer):
+def test_empty_datalayers_can_be_merged(new_page, live_server, tilelayer):
     # Let's create a new map with an empty datalayer
     map = MapFactory(name="server-side merge")
     DataLayerFactory(map=map, edit_status=DataLayer.ANONYMOUS, data={})
 
     # Open two tabs at the same time, on the same empty map
-    page_one = context.new_page()
+    page_one = new_page("page 1")
     page_one.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
 
-    page_two = context.new_page()
+    page_two = new_page("page 2")
     page_two.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
 
     save_p1 = page_one.get_by_role("button", name="Save")
@@ -213,15 +254,15 @@ def test_empty_datalayers_can_be_merged(context, live_server, tilelayer):
     expect(marker_pane_p2).to_have_count(2)
 
 
-def test_same_second_edit_doesnt_conflict(context, live_server, tilelayer):
+def test_same_second_edit_doesnt_conflict(new_page, live_server, tilelayer):
     # Let's create a new map with an empty datalayer
     map = MapFactory(name="server-side merge")
     datalayer = DataLayerFactory(map=map, edit_status=DataLayer.ANONYMOUS, data={})
 
     # Open the created map on two pages.
-    page_one = context.new_page()
+    page_one = new_page("page 1")
     page_one.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
-    page_two = context.new_page()
+    page_two = new_page("page 2")
     page_two.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
 
     save_p1 = page_one.get_by_role("button", name="Save")
@@ -276,18 +317,25 @@ def test_same_second_edit_doesnt_conflict(context, live_server, tilelayer):
         "displayOnLoad": True,
         "name": "test datalayer",
         "inCaption": True,
-        "editMode": "advanced",
-        "id": str(datalayer.pk),
-        "rank": 0,
         "remoteData": {},
+        "fields": [
+            {
+                "key": "name",
+                "type": "String",
+            },
+            {
+                "key": "description",
+                "type": "Text",
+            },
+        ],
     }
 
 
-def test_should_display_alert_on_conflict(context, live_server, datalayer, openmap):
+def test_should_display_alert_on_conflict(new_page, live_server, datalayer, openmap):
     # Open the map on two pages.
-    page_one = context.new_page()
+    page_one = new_page("page 1")
     page_one.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
-    page_two = context.new_page()
+    page_two = new_page("page 2")
     page_two.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
 
     # Change name on page one and save

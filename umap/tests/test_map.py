@@ -5,7 +5,7 @@ from django.urls import reverse
 from umap.forms import DEFAULT_CENTER
 from umap.models import Map
 
-from .base import MapFactory
+from .base import DataLayerFactory, MapFactory
 
 pytestmark = pytest.mark.django_db
 
@@ -141,6 +141,36 @@ def test_clone_should_clone_datalayers_and_features_too(map, user, datalayer):
     assert other.name == datalayer.name
     assert other.geojson is not None
     assert other.geojson.path != datalayer.geojson.path
+
+
+def test_clone_should_adapt_datalayer_parent(map, user, datalayer):
+    datalayer.name = "parent"
+    datalayer.save()
+    child = DataLayerFactory(name="child", parent=datalayer, map=map)
+    grandchild = DataLayerFactory(name="grandchild", parent=child, map=map)
+    great_grandchild = DataLayerFactory(
+        name="great_grandchild", parent=grandchild, map=map
+    )
+    clone = map.clone()
+    assert map.pk != clone.pk
+    assert map.datalayer_set.count() == 4
+    assert clone.datalayer_set.count() == 4
+    new_parent = clone.datalayer_set.filter(name="parent").first()
+    new_child = clone.datalayer_set.filter(name="child").first()
+    new_grandchild = clone.datalayer_set.filter(name="grandchild").first()
+    new_great_grandchild = clone.datalayer_set.filter(name="great_grandchild").first()
+
+    assert new_child.parent.pk != datalayer.pk
+    assert new_child.parent == new_parent
+    assert new_child.parent in clone.datalayer_set.all()
+
+    assert new_grandchild.parent.pk != child.pk
+    assert new_grandchild.parent == new_child
+    assert new_grandchild.parent in clone.datalayer_set.all()
+
+    assert new_great_grandchild.parent.pk != grandchild.pk
+    assert new_great_grandchild.parent == new_grandchild
+    assert new_great_grandchild.parent in clone.datalayer_set.all()
 
 
 def test_publicmanager_should_get_only_public_maps(map, user, licence):

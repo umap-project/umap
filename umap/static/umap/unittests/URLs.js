@@ -45,15 +45,23 @@ describe('URLs', () => {
 
   describe('datalayer_save()', () => {
     it('should return the create URL if created is false', () => {
-      expect(urls.datalayer_save({ map_id: '123', pk: '00000000-0000-0000-0000-000000000000', created: false })).to.be.equal(
-        '/maps/123/datalayers/00000000-0000-0000-0000-000000000000/create/'
-      )
+      expect(
+        urls.datalayer_save({
+          map_id: '123',
+          pk: '00000000-0000-0000-0000-000000000000',
+          created: false,
+        })
+      ).to.be.equal('/maps/123/datalayers/00000000-0000-0000-0000-000000000000/create/')
     })
 
     it('should return the update URL if created is true', () => {
-      expect(urls.datalayer_save({ map_id: '123', pk: '00000000-0000-0000-0000-000000000000', created: true })).to.be.equal(
-        '/maps/123/datalayers/00000000-0000-0000-0000-000000000000/update/'
-      )
+      expect(
+        urls.datalayer_save({
+          map_id: '123',
+          pk: '00000000-0000-0000-0000-000000000000',
+          created: true,
+        })
+      ).to.be.equal('/maps/123/datalayers/00000000-0000-0000-0000-000000000000/update/')
     })
   })
 })

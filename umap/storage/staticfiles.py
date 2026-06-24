@@ -33,12 +33,24 @@ class UmapManifestStaticFilesStorage(ManifestStaticFilesStorage):
                 'import"%(url)s"\n',
             ),
             (
-                r"""(?P<matched>import\(["'](?P<url>.*?)["']\)\.then)""",
+                r"""(?P<matched>import\(["'](?P<url>[\.\/].*?)["']\)\.then)""",
                 """import("%(url)s").then""",
             ),
             (
-                r"""(?P<matched>await import\(["'](?P<url>.*?)["']\))""",
+                r"""(?P<matched>await import\(["'](?P<url>[\.\/].*?)["']\))""",
                 """await import("%(url)s")""",
+            ),
+        ),
+    )
+
+    patterns = ManifestStaticFilesStorage.patterns + (
+        (
+            "*.svg",
+            (
+                (
+                    r'(?P<matched>xlink:href="(?P<url>.*\.js)")',
+                    'xlink:href="%(url)s"',
+                ),
             ),
         ),
     )

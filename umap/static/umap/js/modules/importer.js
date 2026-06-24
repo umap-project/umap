@@ -1,13 +1,10 @@
-import {
-  DomEvent,
-  DomUtil,
-  LatLngBounds,
-} from '../../vendors/leaflet/leaflet-src.esm.js'
+import { LatLngBounds } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
 import { translate } from './i18n.js'
 import { SCHEMA } from './schema.js'
 import Dialog from './ui/dialog.js'
 import * as Utils from './utils.js'
+import * as DOMUtils from './domutils.js'
 
 const TEMPLATE = `
   <div class="umap-import">
@@ -17,7 +14,7 @@ const TEMPLATE = `
       <input type="file" multiple autofocus onchange />
       <textarea onchange placeholder="${translate('Paste your data here')}"></textarea>
       <input class="highlightable" type="url" placeholder="${translate('Provide an URL here')}" onchange />
-      <button class="flat importers" hidden data-ref="importersButton"><i class="icon icon-16 icon-magic"></i>${translate('Import helpers')}</button>
+      <button type=button class="importers" hidden data-ref="importersButton"><i class="icon icon-16 icon-magic"></i>${translate('Import helpers')}</button>
     </fieldset>
     <fieldset class="formbox">
       <legend class="counter" data-help="importFormats">${translate(
@@ -63,39 +60,41 @@ export default class Importer extends Utils.WithTemplate {
     this._umap = umap
     this.TYPES = ['geojson', 'csv', 'gpx', 'kml', 'osm', 'georss', 'umap']
     this.IMPORTERS = []
-    this.loadImporters()
     this.dialog = new Dialog({
       className: 'importers dark',
       back: () => this.showImporters(),
     })
   }
 
-  loadImporters() {
+  async loadImporters() {
     for (const [name, config] of Object.entries(
       this._umap.properties.importers || {}
     )) {
-      const register = (mod) => {
-        this.IMPORTERS.push(new mod.Importer(this._umap, config))
+      const register = ({ Importer }) => {
+        this.IMPORTERS.push(new Importer(this._umap, config))
       }
       // We need to have explicit static paths for Django's collectstatic with hashes.
       switch (name) {
         case 'geodatamine':
-          import('./importers/geodatamine.js').then(register)
+          register(await import('./importers/geodatamine.js'))
           break
         case 'communesfr':
-          import('./importers/communesfr.js').then(register)
+          register(await import('./importers/communesfr.js'))
           break
         case 'cadastrefr':
-          import('./importers/cadastrefr.js').then(register)
+          register(await import('./importers/cadastrefr.js'))
           break
         case 'overpass':
-          import('./importers/overpass.js').then(register)
+          register(await import('./importers/overpass.js'))
           break
         case 'datasets':
-          import('./importers/datasets.js').then(register)
+          register(await import('./importers/datasets.js'))
           break
         case 'banfr':
-          import('./importers/banfr.js').then(register)
+          register(await import('./importers/banfr.js'))
+          break
+        case 'opendata':
+          register(await import('./importers/opendata.js'))
           break
       }
     }
@@ -166,10 +165,16 @@ export default class Importer extends Utils.WithTemplate {
     this.onChange()
   }
 
+  set layer(layer) {
+    this._layer = layer
+  }
+
   get layer() {
+    const properties = { name: this.layerName }
     return (
-      this._umap.datalayers[this.layerId] ||
-      this._umap.createDirtyDataLayer({ name: this.layerName })
+      this._layer ||
+      this._umap.layers.tree.get(this.layerId) ||
+      this._umap.createDataLayer({ properties })
     )
   }
 
@@ -186,27 +191,25 @@ export default class Importer extends Utils.WithTemplate {
     this.dialog.open({ template: element, cancel: false, accept: false, back: false })
   }
 
-  build() {
+  async build() {
     this.container = this.loadTemplate(TEMPLATE)
+    for (const type of this.TYPES) {
+      this.qs('[name=format]').appendChild(
+        DOMUtils.loadTemplate(`<option value="${type}">${type}</option>`)
+      )
+    }
+    this._umap.help.parse(this.container)
+    this.qs('[name=submit]').addEventListener('click', () => this.submit())
+    this.qs('[type=file]').addEventListener('change', () => this.onFileChange())
+    for (const element of this.container.querySelectorAll('[onchange]')) {
+      element.addEventListener('change', () => this.onChange())
+    }
+    if (!this.IMPORTERS.length) await this.loadImporters()
     if (this.IMPORTERS.length) {
       // TODO use this.elements instead of this.qs
       const button = this.qs('[data-ref=importersButton]')
       button.addEventListener('click', () => this.showImporters())
       button.toggleAttribute('hidden', false)
-    }
-    for (const type of this.TYPES) {
-      DomUtil.element({
-        tagName: 'option',
-        parent: this.qs('[name=format]'),
-        value: type,
-        textContent: type,
-      })
-    }
-    this._umap.help.parse(this.container)
-    this.qs('[name=submit]').addEventListener('click', () => this.submit())
-    DomEvent.on(this.qs('[type=file]'), 'change', this.onFileChange, this)
-    for (const element of this.container.querySelectorAll('[onchange]')) {
-      DomEvent.on(element, 'change', this.onChange, this)
     }
   }
 
@@ -218,7 +221,7 @@ export default class Importer extends Utils.WithTemplate {
     )
     this.qs('[name=layer-name]').toggleAttribute('hidden', Boolean(this.layerId))
     this.qs('#clear').toggleAttribute('hidden', !this.layerId)
-    this.qs('[name=submit').toggleAttribute('disabled', !this.canSubmit())
+    this.qs('[name=submit]').toggleAttribute('disabled', !this.canSubmit())
   }
 
   onFileChange() {
@@ -243,32 +246,34 @@ export default class Importer extends Utils.WithTemplate {
     this.raw = null
     const layerSelect = this.qs('[name="layer-id"]')
     layerSelect.innerHTML = ''
-    this._umap.datalayers.reverse().map((datalayer) => {
-      if (datalayer.isLoaded() && !datalayer.isRemoteLayer()) {
-        DomUtil.element({
-          tagName: 'option',
-          parent: layerSelect,
-          textContent: datalayer.options.name,
-          value: datalayer.id,
-        })
-      }
-    })
-    DomUtil.element({
-      tagName: 'option',
-      value: '',
-      textContent: translate('Import in a new layer'),
-      parent: layerSelect,
-      selected: true,
-    })
+    this._umap.layers.tree
+      .filter(
+        (datalayer) =>
+          datalayer.isLoaded() &&
+          !datalayer.isRemoteLayer() &&
+          !datalayer.layers.count()
+      )
+      .map((datalayer) => {
+        layerSelect.appendChild(
+          DOMUtils.loadTemplate(
+            Utils.sanitizeVars`<option value="${datalayer.id}">${datalayer.getName()}</option>`
+          )
+        )
+      })
+    layerSelect.appendChild(
+      DOMUtils.loadTemplate(
+        `<option value="" selected>${translate('Import in a new layer')}</option>`
+      )
+    )
   }
 
-  open() {
-    if (!this.container) this.build()
-    const onLoad = this._umap.editPanel.open({
+  async open() {
+    if (!this.container) await this.build()
+    this.onLoad()
+    this._umap.editPanel.open({
       content: this.container,
       highlight: 'import',
     })
-    onLoad.then(() => this.onLoad())
   }
 
   openFiles() {
@@ -325,13 +330,13 @@ export default class Importer extends Utils.WithTemplate {
       return false
     }
     const layer = this.layer
-    layer.options.remoteData = {
+    layer.properties.remoteData = {
       url: this.url,
       format: this.format,
     }
     if (this._umap.properties.urls.ajax_proxy) {
-      layer.options.remoteData.proxy = true
-      layer.options.remoteData.ttl = SCHEMA.ttl.default
+      layer.properties.remoteData.proxy = true
+      layer.properties.remoteData.ttl = SCHEMA.ttl.default
     }
     layer.fetchRemoteData(true).then((features) => {
       if (features?.length) {
@@ -345,7 +350,7 @@ export default class Importer extends Utils.WithTemplate {
 
   async copy() {
     // Format may be guessed from file later.
-    // Usefull in case of multiple files with different formats.
+    // Useful in case of multiple files with different formats.
     if (!this.format && !this.files.length) {
       this.onError(translate('Please choose a format'))
       return false

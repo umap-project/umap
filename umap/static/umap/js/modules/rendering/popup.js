@@ -1,11 +1,12 @@
 import {
   Popup as BasePopup,
   DomEvent,
-  DomUtil,
   Path,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
-import Browser from '../browser.js'
 import loadTemplate from './template.js'
+import * as DOMUtils from '../domutils.js'
+import { translate } from '../i18n.js'
+import * as Utils from '../utils.js'
 
 export default function loadPopup(name) {
   switch (name) {
@@ -25,7 +26,8 @@ const Popup = BasePopup.extend({
   },
 
   loadContent: async function () {
-    const container = DomUtil.create('div', 'umap-popup')
+    const container = document.createElement('div')
+    container.classList.add('umap-popup')
     const name = this.feature.getOption('popupTemplate')
     this.content = await loadTemplate(name, this.feature, container)
     const elements = container.querySelectorAll('img,iframe')
@@ -34,7 +36,11 @@ const Popup = BasePopup.extend({
     }
     if (!elements.length && container.textContent.replace('\n', '') === '') {
       container.innerHTML = ''
-      DomUtil.add('h3', '', container, this.feature.getDisplayName())
+      container.appendChild(
+        DOMUtils.loadTemplate(
+          Utils.sanitizeVars`<h3>${this.feature.getDisplayName()}</h3>`
+        )
+      )
     }
     this.setContent(container)
   },
@@ -61,11 +67,23 @@ const Panel = Popup.extend({
     zoomAnimation: false,
   },
 
+  backButton: function (umap) {
+    const button = Utils.loadTemplate(
+      `<button class="icon icon-16 icon-back" title="${translate('Back to browser')}"></button>`
+    )
+    // Fixme: remove me when this is merged and released
+    // https://github.com/Leaflet/Leaflet/pull/9052
+    DOMUtils.disableClickPropagation(button)
+    button.addEventListener('click', () => umap.openBrowser())
+    return button
+  },
+
   onAdd: function (leafletMap) {
-    leafletMap._umap.panel.setDefaultMode('expanded')
-    leafletMap._umap.panel.open({
+    const umap = this.feature._umap
+    umap.panel.setDefaultMode('expanded')
+    umap.panel.open({
       content: this._content,
-      actions: [Browser.backButton(leafletMap._umap)],
+      actions: [this.backButton(umap)],
     })
 
     // fire events as in base class Popup.js:onAdd
@@ -79,7 +97,7 @@ const Panel = Popup.extend({
   },
 
   onRemove: function (leafletMap) {
-    leafletMap._umap.panel.close()
+    this.feature._umap.panel.close()
 
     // fire events as in base class Popup.js:onRemove
     leafletMap.fire('popupclose', { popup: this })

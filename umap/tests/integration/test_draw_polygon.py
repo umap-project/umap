@@ -154,9 +154,7 @@ def test_can_draw_multi(live_server, page, tilelayer):
     expect(multi_button).to_be_hidden()
     polygons.first.click(button="right", position={"x": 10, "y": 10})
     expect(page.get_by_role("button", name="Transform to lines")).to_be_hidden()
-    expect(
-        page.get_by_role("button", name="Remove shape from the multi")
-    ).to_be_visible()
+    expect(page.get_by_role("button", name="Delete this shape")).to_be_visible()
 
 
 def test_can_draw_hole(page, live_server, tilelayer):
@@ -178,8 +176,9 @@ def test_can_draw_hole(page, live_server, tilelayer):
     expect(polygons).to_have_count(1)
     expect(vertices).to_have_count(4)
 
+    page.wait_for_timeout(350)  # Time for the panel animation to finish
     # First vertex of the hole will be created here
-    map.click(position={"x": 180, "y": 120})
+    map.click(position={"x": 180, "y": 120}, button="right")
     page.get_by_role("button", name="Start a hole here").click()
     map.click(position={"x": 180, "y": 180})
     map.click(position={"x": 120, "y": 180})
@@ -375,6 +374,7 @@ def test_can_clone_polygon(live_server, page, tilelayer, settings):
     map.click(position={"x": 100, "y": 100})
     # Click again to finish
     map.click(position={"x": 100, "y": 100})
+    page.wait_for_timeout(350)  # Time for the panel animation to finish
     expect(polygons).to_have_count(1)
     polygons.first.click(button="right")
     page.get_by_role("button", name="Clone this feature").click()
@@ -401,6 +401,7 @@ def test_can_transform_polygon_to_line(live_server, page, tilelayer, settings):
     map.click(position={"x": 100, "y": 100})
     expect(polygons).to_have_count(1)
     expect(paths).to_have_count(1)
+    page.wait_for_timeout(350)  # Time for the panel animation to finish
     polygons.first.click(button="right")
     page.get_by_role("button", name="Transform to lines").click()
     # No more polygons (will fill), but one path, it must be a line
@@ -428,6 +429,8 @@ def test_can_draw_a_polygon_and_invert_it(live_server, page, tilelayer, settings
     page.get_by_text("Advanced properties").click()
     page.get_by_text("Display the polygon inverted").click()
     data = save_and_get_json(page)
+    # Close save message
+    page.get_by_role("dialog").get_by_role("button", name="Close").click()
     assert len(data["features"]) == 1
     assert data["features"][0]["geometry"]["type"] == "Polygon"
     assert data["features"][0]["geometry"]["coordinates"] == [
@@ -455,7 +458,7 @@ def test_can_draw_a_polygon_and_invert_it(live_server, page, tilelayer, settings
         ],
     ]
 
-    page.get_by_role("button", name="View").click()
+    page.get_by_role("button", name="View", exact=True).click()
     popup = page.locator(".leaflet-popup")
     expect(popup).to_be_hidden()
     # Now click on the middle of the polygon, it should not show the popup
@@ -471,10 +474,11 @@ def test_vertexmarker_not_shown_if_too_many(live_server, map, page, settings):
     settings.UMAP_ALLOW_ANONYMOUS = True
     page.goto(f"{live_server.url}/en/map/new/#15/48.4395/3.3189")
     page.get_by_title("Import data").click()
+    page.wait_for_timeout(350)  # Time for the panel animation to finish
     page.locator(".umap-import textarea").fill(geojson)
     page.locator('select[name="format"]').select_option("geojson")
     page.get_by_role("button", name="Import data", exact=True).click()
-    page.locator("path").click()
+    page.locator("path").click(button="right")
     page.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
     expect(page.locator(".umap-tooltip-container")).to_contain_text(
         "Please zoom in to edit the geometry"

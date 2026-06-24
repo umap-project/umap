@@ -7,6 +7,23 @@
 
 ## Procédons par étapes
 
+Nous avons vu dans
+le tutoriel [Naviguer dans une carte](1-browsing-a-map.md)
+comment associer un nom et
+une description à un élément de la carte. Ce nom et cette description
+sont affichés dans une infobulle (*popup* en anglais) qui apparaît
+lorsqu’on clique sur l’élément.
+
+Le contenu de cette infobulle peut être enrichi de plusieurs manières :
+
+-   en formatant le texte : titres, caractères gras et italiques
+-   en insérant un ou plusieurs liens vers une page Web
+-   en insérant une image ou une vidéo
+
+Mettre en forme une infobulle nécessite d’utiliser une syntaxe décrite
+en cliquant sur le point d’interrogation visible à droite de l’intitulé
+**description**, reprise ci-contre.
+
 <shot-scraper
     data-output="static/tutoriels/help-box.png"
     data-url="https://umap.openstreetmap.fr/fr/map/new/"
@@ -29,24 +46,7 @@
     "
     >Panneau d’aide au formatage.</shot-scraper>
 
-
-Nous avons vu dans
-le tutoriel [Naviguer dans une carte](1-browsing-a-map.md)
-comment associer un nom et
-une description à un élément de la carte. Ce nom et cette description
-sont affichés dans une infobulle (*popup* en anglais) qui apparaît
-lorsqu’on clique sur l’élément.
-
-Le contenu de cette infobulle peut être enrichi de plusieurs manières :
-
--   en formatant le texte : titres, caractères gras et italiques
--   en insérant un ou plusieurs liens vers une page Web
--   en insérant une image ou une vidéo
-
-Mettre en forme une infobulle nécessite d’utiliser une syntaxe décrite
-en cliquant sur le point d’interrogation visible à droite de l’intitulé
-**description**, reprise ci-contre.
-
+Il y a d’autres options disponibles [dans la FAQ](../support/faq.md#text-formatting).
 
 ### 1. Mettre en forme le texte d’une infobulle
 

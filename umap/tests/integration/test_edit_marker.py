@@ -33,6 +33,15 @@ def bootstrap(map, live_server):
 
 
 def test_can_edit_on_shift_click(live_server, openmap, page, datalayer):
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    page.locator(".leaflet-marker-icon").click(modifiers=["Shift"])
+    expect(page.get_by_text("Feature properties")).to_be_visible()
+    # Help button for text
+    page.locator(".umap-field-description").get_by_role("button", name="Help").click()
+    expect(page.locator("dialog").get_by_role("heading", name="Help")).to_be_visible()
+
+
+def test_can_edit_on_ctrl_shift_click(live_server, openmap, page, datalayer):
     modifier = "Meta" if platform.system() == "Darwin" else "Control"
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.locator(".leaflet-marker-icon").click(modifiers=[modifier, "Shift"])
@@ -47,11 +56,11 @@ def test_marker_style_should_have_precedence(live_server, openmap, page, bootstr
     page.locator(".panel").get_by_title("Edit", exact=True).click()
     page.get_by_text("Shape properties").click()
     page.locator(".umap-field-color .define").click()
-    expect(page.locator(".leaflet-marker-icon .icon_container")).to_have_css(
+    expect(page.locator(".leaflet-marker-icon .icon-container")).to_have_css(
         "background-color", "rgb(0, 0, 139)"
     )
     page.get_by_title("DarkRed").first.click()
-    expect(page.locator(".leaflet-marker-icon .icon_container")).to_have_css(
+    expect(page.locator(".leaflet-marker-icon .icon-container")).to_have_css(
         "background-color", "rgb(139, 0, 0)"
     )
 
@@ -60,7 +69,7 @@ def test_marker_style_should_have_precedence(live_server, openmap, page, bootstr
     page.get_by_text("Shape properties").click()
     page.locator("#umap-feature-shape-properties").get_by_text("define").first.click()
     page.get_by_title("GoldenRod", exact=True).click()
-    expect(page.locator(".leaflet-marker-icon .icon_container")).to_have_css(
+    expect(page.locator(".leaflet-marker-icon .icon-container")).to_have_css(
         "background-color", "rgb(218, 165, 32)"
     )
 
@@ -70,14 +79,14 @@ def test_marker_style_should_have_precedence(live_server, openmap, page, bootstr
     page.get_by_text("Shape properties").click()
     page.locator(".umap-field-color input").click()
     page.get_by_title("DarkViolet").first.click()
-    expect(page.locator(".leaflet-marker-icon .icon_container")).to_have_css(
+    expect(page.locator(".leaflet-marker-icon .icon-container")).to_have_css(
         "background-color", "rgb(218, 165, 32)"
     )
 
 
 def test_should_open_an_edit_toolbar_on_click(live_server, openmap, page, bootstrap):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
-    page.locator(".leaflet-marker-icon").click()
+    page.locator(".leaflet-marker-icon").click(button="right")
     expect(page.get_by_role("button", name="Toggle edit mode")).to_be_visible()
     expect(page.get_by_role("button", name="Delete this feature")).to_be_visible()
 
@@ -99,7 +108,7 @@ def test_should_follow_datalayer_style_when_changing_datalayer(
     live_server, openmap, page
 ):
     data = deepcopy(DATALAYER_DATA)
-    data["_umap_options"] = {"color": "DarkCyan"}
+    data["properties"] = {"color": "DarkCyan"}
     DataLayerFactory(map=openmap, data=data)
     DataLayerFactory(
         map=openmap,
@@ -107,14 +116,25 @@ def test_should_follow_datalayer_style_when_changing_datalayer(
         data={
             "type": "FeatureCollection",
             "features": [],
-            "_umap_options": {"color": "DarkViolet"},
+            "properties": {"color": "DarkViolet"},
         },
     )
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
-    marker = page.locator(".leaflet-marker-icon .icon_container")
+    marker = page.locator(".leaflet-marker-icon .icon-container")
     expect(marker).to_have_css("background-color", "rgb(0, 139, 139)")
     # Change datalayer
-    marker.click()
+    marker.click(button="right")
     page.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
     page.locator(".umap-field-datalayer select").select_option(label="other datalayer")
     expect(marker).to_have_css("background-color", "rgb(148, 0, 211)")
+
+
+def test_add_property_from_feature_properties_panel(
+    live_server, openmap, page, datalayer
+):
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    page.locator(".leaflet-marker-icon").click(modifiers=["Shift"])
+    page.get_by_role("button", name="Add a new field").click()
+    page.locator('input[name="key"]').fill("newprop")
+    page.get_by_role("button", name="OK").click()
+    expect(page.locator(".panel.right").get_by_text("newprop")).to_be_visible()

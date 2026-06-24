@@ -1,18 +1,22 @@
+import json
+import re
+from pathlib import Path
+
 from playwright.sync_api import expect
 
-from umap.models import Map
+from umap.models import DataLayer, Map
 
 from ..base import DataLayerFactory
 
 
-def test_dynamic_remote_data(page, live_server, tilelayer, map):
+def intercept_remote_data(page):
     data = [
         {
             "type": "FeatureCollection",
             "features": [
                 {
                     "type": "Feature",
-                    "properties": {"name": "Point 2"},
+                    "properties": {"name": "Point 2", "foobar": "bla"},
                     "geometry": {
                         "type": "Point",
                         "coordinates": [4.3375, 11.2707],
@@ -25,7 +29,7 @@ def test_dynamic_remote_data(page, live_server, tilelayer, map):
             "features": [
                 {
                     "type": "Feature",
-                    "properties": {"name": "Point 1"},
+                    "properties": {"name": "Point 1", "foobar": "baz"},
                     "geometry": {
                         "type": "Point",
                         "coordinates": [4.3375, 12.2707],
@@ -38,6 +42,12 @@ def test_dynamic_remote_data(page, live_server, tilelayer, map):
     def handle(route):
         route.fulfill(json=data.pop())
 
+    # Intercept the route to the proxy
+    page.route("https://remote.org/data.json", handle)
+
+
+def test_dynamic_remote_data(page, live_server, tilelayer, map):
+    intercept_remote_data(page)
     settings = {
         "remoteData": {
             "url": "https://remote.org/data.json",
@@ -55,8 +65,6 @@ def test_dynamic_remote_data(page, live_server, tilelayer, map):
     }
     map.save()
 
-    # Intercept the route to the proxy
-    page.route("https://remote.org/data.json", handle)
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
 
     expect(page.get_by_role("tooltip", name="Point 1")).to_be_visible()
@@ -77,3 +85,50 @@ def test_dynamic_remote_data(page, live_server, tilelayer, map):
     # Map must not be dirty
     page.get_by_role("button", name="Edit").click()
     expect(page.locator(".edit-undo")).to_be_disabled()
+
+
+def test_create_remote_data_layer(page, live_server, tilelayer, settings):
+    settings.UMAP_ALLOW_ANONYMOUS = True
+    intercept_remote_data(page)
+    page.goto(f"{live_server.url}/en/map/new#6/11.2707/4.3375")
+    page.get_by_role("button", name="Manage layers").click()
+    page.get_by_role("button", name="Add a layer").click()
+    page.get_by_text("Remote data").click()
+    page.locator('.panel input[name="url"]').fill("https://remote.org/data.json")
+    # We have a setTimeout on each input to throttle, so wait for it
+    page.wait_for_timeout(300)
+    page.locator('select[name="format"]').select_option("geojson")
+    # with page.expect_response(re.compile("https://remote.org/data.json")):
+    page.get_by_role("button", name="Verify remote URL").click()
+    expect(page.locator(".leaflet-marker-icon")).to_have_count(1)
+    with page.expect_response(re.compile(".*/datalayer/create/.*")):
+        page.get_by_role("button", name="Save draft", exact=True).click()
+    assert DataLayer.objects.count() == 1
+    datalayer = DataLayer.objects.last()
+    data = json.loads(Path(datalayer.geojson.path).read_text())
+    assert data == {
+        "properties": {
+            "browsable": True,
+            "displayOnLoad": True,
+            "fields": [
+                {
+                    "key": "name",
+                    "type": "String",
+                },
+                {
+                    "key": "foobar",
+                    "type": "String",
+                },
+            ],
+            "inCaption": True,
+            "name": "Layer 1",
+            "remoteData": {
+                "format": "geojson",
+                "url": "https://remote.org/data.json",
+            },
+        },
+        "rank": 0,
+        "id": str(datalayer.pk),
+        "features": [],
+        "type": "FeatureCollection",
+    }

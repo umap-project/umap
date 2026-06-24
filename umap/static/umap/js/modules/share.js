@@ -1,8 +1,9 @@
-import { DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { MutatingForm } from './form/builder.js'
 import { EXPORT_FORMATS } from './formatter.js'
 import { translate } from './i18n.js'
+import { ControlManager } from './ui/controls.js'
 import * as Utils from './utils.js'
+import * as DOMUtils from './domutils.js'
 
 export default class Share {
   constructor(umap) {
@@ -10,40 +11,36 @@ export default class Share {
   }
 
   build() {
-    this.container = DomUtil.create('div', '')
-    this.title = DomUtil.createTitle(
-      this.container,
-      translate('Share and download'),
-      'icon-share'
-    )
-
-    DomUtil.createCopiableInput(
-      this.container,
-      translate('Link to view the map'),
-      window.location.protocol + Utils.getBaseUrl()
-    )
-
+    const downloadUrl = this._umap.urls.get('map_download', {
+      map_id: this._umap.id,
+    })
+    const [container, { shortUrl, list, customLink, textarea, iframeOptionsWrapper }] =
+      DOMUtils.loadTemplateWithRefs(`
+      <div>
+        <h3><i class="icon icon-16 icon-share"></i> ${translate('Share and download')}</h3>
+        <h4>${translate('Share')}</h4>
+        <copiable-input data-label="${translate('Link to view the map')}" data-value="${window.location.protocol + Utils.getBaseUrl()}"></copiable-input>
+        <copiable-input data-label="${translate('Short link')}" data-value="${this._umap.properties.shortUrl}" data-ref="shortUrl" hidden></copiable-input>
+        <copiable-textarea data-label="${translate('Customized link')}" data-ref="customLink"></copiable-textarea>
+        <copiable-textarea data-label="${translate('Iframe')}" data-ref="textarea"></copiable-textarea>
+        <div data-ref="iframeOptionsWrapper"></div>
+        <hr>
+        <h4>${translate('Download')}</h4>
+        <h5>${translate("Only visible layers' data")}</h5>
+        <ul data-ref="list" class="downloads"></ul>
+        <h5>${translate('All data and settings of the map')}</h5>
+        <p>
+          <a href="${downloadUrl}" download="backup.umap">
+            <i class="icon icon-16 icon-backup"></i>${translate('full backup')}
+          </a>
+        </p>
+      </div>
+    `)
+    this.container = container
     if (this._umap.properties.shortUrl) {
-      DomUtil.createCopiableInput(
-        this.container,
-        translate('Short link'),
-        this._umap.properties.shortUrl
-      )
+      shortUrl.hidden = false
     }
-
-    DomUtil.create('hr', '', this.container)
-
-    DomUtil.add('h4', '', this.container, translate('Download'))
-    DomUtil.add(
-      'small',
-      'label',
-      this.container,
-      translate("Only visible layers' data")
-    )
-    const list = document.createElement('ul')
-    list.classList.add('downloads')
-    this.container.appendChild(list)
-    for (const format of Object.keys(EXPORT_FORMATS)) {
+    for (const format of Object.keys(EXPORT_FORMATS).concat('jpg', 'png')) {
       const button = Utils.loadTemplate(`
         <li>
           <button class="flat" type="button">
@@ -54,38 +51,7 @@ export default class Share {
       button.addEventListener('click', () => this.download(format))
       list.appendChild(button)
     }
-    DomUtil.create('div', 'vspace', this.container)
-    DomUtil.add(
-      'small',
-      'label',
-      this.container,
-      translate('All data and settings of the map')
-    )
-    const downloadUrl = this._umap.urls.get('map_download', {
-      map_id: this._umap.id,
-    })
-    const link = Utils.loadTemplate(`
-      <div>
-        <a href="${downloadUrl}">
-          <i class="icon icon-16 icon-backup"></i>${translate('full backup')}
-        </a>
-      </div>
-    `)
-    this.container.appendChild(link)
-    // File will be named by back-office
-    link.setAttribute('download', 'backup.umap')
-    DomUtil.create('hr', '', this.container)
 
-    const embedTitle = DomUtil.add('h4', '', this.container, translate('Embed the map'))
-    const iframe = DomUtil.create('textarea', 'umap-share-iframe', this.container)
-    const urlTitle = DomUtil.add('h4', '', this.container, translate('Direct link'))
-    const exportUrl = DomUtil.createCopiableInput(
-      this.container,
-      translate('Share this link to open a customized map view'),
-      ''
-    )
-
-    exportUrl.type = 'text'
     const UIFields = [
       ['dimensions.width', { handler: 'Input', label: translate('width') }],
       ['dimensions.height', { handler: 'Input', label: translate('height') }],
@@ -110,26 +76,28 @@ export default class Share {
       ],
       'queryString.moreControl',
       'queryString.scrollWheelZoom',
-      'queryString.miniMap',
+      'queryString.miniMapControl',
       'queryString.scaleControl',
       'queryString.onLoadPanel',
       'queryString.captionBar',
       'queryString.captionMenus',
     ]
-    // TODO: move HIDDABLE_CONTROLS to SCHEMA ?
-    for (const name of this._umap._leafletMap.HIDDABLE_CONTROLS) {
+    for (const name of ControlManager.MOREABLE_CONTROLS) {
       UIFields.push(`queryString.${name}Control`)
     }
     const iframeExporter = new IframeExporter(this._umap)
     const buildIframeCode = () => {
-      iframe.textContent = iframeExporter.build()
-      exportUrl.value = window.location.protocol + iframeExporter.buildUrl()
+      textarea.setAttribute('value', iframeExporter.build())
+      customLink.setAttribute(
+        'value',
+        window.location.protocol + iframeExporter.buildUrl()
+      )
     }
     buildIframeCode()
     const builder = new MutatingForm(iframeExporter, UIFields)
     builder.on('set', buildIframeCode)
-    const iframeOptions = DomUtil.createFieldset(
-      this.container,
+    const iframeOptions = DOMUtils.createFieldset(
+      iframeOptionsWrapper,
       translate('Embed and link options')
     )
     iframeOptions.appendChild(builder.build())
@@ -142,22 +110,29 @@ export default class Share {
 
   async format(mode) {
     const type = EXPORT_FORMATS[mode]
-    const content = await type.formatter(this._umap)
+    const features = this._umap.layers.tree
+      .visible()
+      .reduce((acc, dl) => acc.concat(dl.features.visible()), [])
+    const content = await this._umap.formatter.stringify(features, mode)
     const filename = Utils.slugify(this._umap.properties.name) + type.ext
     return { content, filetype: type.filetype, filename }
   }
 
   async download(mode) {
-    const { content, filetype, filename } = await this.format(mode)
-    const blob = new Blob([content], { type: filetype })
-    window.URL = window.URL || window.webkitURL
-    const el = document.createElement('a')
-    el.download = filename
-    el.href = window.URL.createObjectURL(blob)
-    el.style.display = 'none'
-    document.body.appendChild(el)
-    el.click()
-    document.body.removeChild(el)
+    if (!(mode in EXPORT_FORMATS)) {
+      this._umap.openPrinter(mode)
+    } else {
+      const { content, filetype, filename } = await this.format(mode)
+      const blob = new Blob([content], { type: filetype })
+      window.URL = window.URL || window.webkitURL
+      const el = document.createElement('a')
+      el.download = filename
+      el.href = window.URL.createObjectURL(blob)
+      el.style.display = 'none'
+      document.body.appendChild(el)
+      el.click()
+      document.body.removeChild(el)
+    }
   }
 }
 
@@ -174,7 +149,7 @@ class IframeExporter {
 
     this.queryString = {
       scaleControl: false,
-      miniMap: false,
+      miniMapControl: false,
       scrollWheelZoom: false,
       zoomControl: true,
       editMode: 'disabled',
@@ -204,23 +179,24 @@ class IframeExporter {
       delete this.queryString.feature
     }
     if (this.options.keepCurrentDatalayers) {
-      this._umap.datalayers.visible().map((datalayer) => {
-        if (datalayer.createdOnServer) {
+      this._umap.layers.tree
+        .visible()
+        .filter((d) => d.createdOnServer)
+        .map((datalayer) => {
           datalayers.push(datalayer.id)
-        }
-      })
+        })
       this.queryString.datalayers = datalayers.join(',')
     } else {
       delete this.queryString.datalayers
     }
     const currentView = this.options.currentView ? window.location.hash : ''
-    const queryString = L.extend({}, this.queryString, options)
+    const queryString = Object.assign({}, this.queryString, options)
     return `${this.baseUrl}?${Utils.buildQueryString(queryString)}${currentView}`
   }
 
   build() {
     const iframeUrl = this.buildUrl()
-    let code = `<iframe width="${this.dimensions.width}" height="${this.dimensions.height}" frameborder="0" allowfullscreen allow="geolocation" src="${iframeUrl}"></iframe>`
+    let code = `<iframe style="width: ${this.dimensions.width}; height: ${this.dimensions.height}; border: 0;" allowfullscreen allow="geolocation" src="${iframeUrl}"></iframe>`
     if (this.options.includeFullScreenLink) {
       const fullUrl = this.buildUrl({ scrollWheelZoom: true })
       code += `<p><a href="${fullUrl}">${translate('See full screen')}</a></p>`

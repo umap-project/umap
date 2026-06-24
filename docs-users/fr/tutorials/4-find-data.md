@@ -7,9 +7,11 @@
 
 ## L’open data (données ouvertes)
 
-Outre les données produites par ma communauté OpenStreetMap, accessibles sur [GeoDataMine](https://geodatamine.fr/) et dans [l’assistant d’import de données de uMap](6-one-click-data-import.md), les ressources d’open data sont nombreuses et variées. En effet, les collectivités de plus de 3 500 habitants et les services publics doivent placer leurs données en open data conformément à la [Loi pour une République numérique](https://www.vie-publique.fr/eclairage/20301-loi-republique-numerique-7-octobre-2016-loi-lemaire-quels-changements). Le service public de la donnée organise leur publication sur [data.gouv.fr](https://www.data.gouv.fr/fr/) qui est un portail généraliste.
+Outre les données produites par ma communauté OpenStreetMap, accessibles sur [GeoDataMine](https://geodatamine.fr/) et dans [l’assistant d’import de données de uMap](6-one-click-data-import.md), les ressources d’open data sont nombreuses et variées. En France, les collectivités de plus de 3 500 habitants et les services publics doivent placer leurs données en open data conformément à la [Loi pour une République numérique](https://www.vie-publique.fr/eclairage/20301-loi-republique-numerique-7-octobre-2016-loi-lemaire-quels-changements). Le service public de la donnée organise leur publication sur [data.gouv.fr](https://www.data.gouv.fr/fr/) qui est un portail généraliste.
 
 Il existe également des bases plus adaptées à des jeux de données, par exemple les archives, des données géographiques, socio-économiques… Les collectivités mettent parfois aussi directement leurs données à disposition sur leurs portails open data. Des éditeurs de solutions proposent également des bases de données.
+
+Au Québec, bien qu'il n'existe aucune obligation de publier des données ouvertes, plusieurs ministères, collectivités et organismes de la société civile participent au partenariat [Données Québec](https://www.donneesquebec.ca/) et publient des [jeux de données](https://www.donneesquebec.ca/recherche/dataset) par son portail Web.  Plusieurs autres provinces dont [l'Ontario](https://data.ontario.ca/fr/) et la [Colombie-Britannique](https://catalogue.data.gov.bc.ca) opèrent des portails similaires pour leurs données gouvernementales.  Pour des données du gouvernement fédéral il existe le [Portail du gouvernement ouvert](https://rechercher.ouvert.canada.ca/donneesouvertes/).
 
 
 ## 1. Formats de données utilisés par uMap

@@ -1,20 +1,16 @@
-import { DomEvent } from '../../../vendors/leaflet/leaflet-src.esm.js'
+import * as DOMUtils from '../domutils.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
 import { Positioned } from './base.js'
 
 export default class Tooltip extends Positioned {
-  constructor(parent) {
+  constructor() {
     super()
-    this.parent = parent
+    this.parent = document.body
     this.container = Utils.loadTemplate('<div class="umap-tooltip-container"></div>')
-    this.parent.appendChild(this.container)
-    DomEvent.disableClickPropagation(this.container)
-    this.container.addEventListener('contextmenu', (event) => event.stopPropagation()) // Do not activate our custom context menu.
+    // disableClickPropagation already stops contextmenu (used by our custom context menu).
+    DOMUtils.disableClickPropagation(this.container)
     this.container.addEventListener('wheel', (event) => event.stopPropagation())
-    this.container.addEventListener('MozMousePixelScroll', (event) =>
-      event.stopPropagation()
-    )
   }
 
   open(opts) {
@@ -25,10 +21,10 @@ export default class Tooltip extends Positioned {
       } else {
         this.container.innerHTML = Utils.escapeHTML(opts.content)
       }
-      this.parent.classList.add('umap-tooltip')
+      this.parent.appendChild(this.container)
       this.openAt(opts)
     }
-    this.TOOLTIP_ID = window.setTimeout(L.bind(showIt, this), opts.delay || 0)
+    this.TOOLTIP_ID = window.setTimeout(() => showIt(), opts.delay || 0)
     const id = this.TOOLTIP_ID
     const closeIt = () => {
       this.close(id)
@@ -49,6 +45,8 @@ export default class Tooltip extends Positioned {
     this.toggleClassPosition()
     this.container.innerHTML = ''
     this.setPosition({})
-    this.parent.classList.remove('umap-tooltip')
+    if (this.parent.contains(this.container)) {
+      this.parent.removeChild(this.container)
+    }
   }
 }

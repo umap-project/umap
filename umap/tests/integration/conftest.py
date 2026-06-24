@@ -24,23 +24,20 @@ def set_timeout(context):
     expect.set_options(timeout=timeout)
 
 
-@pytest.fixture(autouse=True)
-def mock_osm_tiles(page):
-    if not bool(os.environ.get("PWDEBUG", False)):
-        page.route(re.compile(r".*tile\..*"), mock_tiles)
-
-
 @pytest.fixture
 def new_page(context):
-    def make_page(prefix="console"):
-        page = context.new_page()
+    def make_page(prefix="console", custom_context=None):
+        _context = custom_context or context
+        page = _context.new_page()
         page.on(
             "console",
-            lambda msg: print(f"{prefix}: {msg.text}")
-            if msg.type != "warning"
-            else None,
+            lambda msg: (
+                print(f"{prefix}: {msg.text}") if msg.type != "warning" else None
+            ),
         )
         page.on("pageerror", lambda exc: print(f"{prefix} uncaught exception: {exc}"))
+        if not bool(os.environ.get("PWDEBUG", os.environ.get("FORCE_TILES", False))):
+            page.route(re.compile(r".*tile\..*"), mock_tiles)
         return page
 
     yield make_page
@@ -49,6 +46,14 @@ def new_page(context):
 @pytest.fixture
 def page(new_page):
     return new_page()
+
+
+@pytest.fixture
+def wait_for_loaded():
+    def _(page):
+        page.wait_for_function("() => U.MAP.dataloaded === true")
+
+    return _
 
 
 @pytest.fixture
@@ -68,9 +73,13 @@ def login(new_page, settings, live_server):
     return do_login
 
 
+def asig_application():
+    return ASGIStaticFilesHandler(application)
+
+
 @pytest.fixture(scope="function")
-def asgi_live_server(request, live_server):
-    server = DaphneProcess("localhost", lambda: ASGIStaticFilesHandler(application))
+def asgi_live_server(request, live_server, settings, db):
+    server = DaphneProcess("localhost", asig_application)
     server.start()
     server.ready.wait()
     port = server.port.value

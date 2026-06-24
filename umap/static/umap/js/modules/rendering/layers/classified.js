@@ -1,12 +1,13 @@
 import colorbrewer from '../../../../vendors/colorbrewer/colorbrewer.js'
-import { DomUtil, FeatureGroup } from '../../../../vendors/leaflet/leaflet-src.esm.js'
+import { FeatureGroup } from '../../../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from '../../i18n.js'
 import * as Utils from '../../utils.js'
+import * as DOMUtils from '../../domutils.js'
 import { CircleMarker } from '../ui.js'
 import { LayerMixin } from './base.js'
 
 // Layer where each feature color is relative to the others,
-// so we need all features before behing able to set one
+// so we need all features before being able to set one
 // feature layer
 const ClassifiedMixin = {
   initialize: function (datalayer) {
@@ -15,12 +16,11 @@ const ClassifiedMixin = {
       .filter((k) => k !== 'schemeGroups')
       .sort()
     const key = this.getType().toLowerCase()
-    if (!Utils.isObject(this.datalayer.options[key])) {
-      this.datalayer.options[key] = {}
+    if (!Utils.isObject(this.datalayer.properties[key])) {
+      this.datalayer.properties[key] = {}
     }
-    this.ensureOptions(this.datalayer.options[key])
-    FeatureGroup.prototype.initialize.call(this, [], this.datalayer.options[key])
-    LayerMixin.onInit.call(this, this.datalayer._leafletMap)
+    this.ensureOptions(this.datalayer.properties[key])
+    FeatureGroup.prototype.initialize.call(this, [], this.datalayer.properties[key])
   },
 
   ensureOptions: () => {},
@@ -67,7 +67,7 @@ const ClassifiedMixin = {
 
   getValues: function () {
     const values = []
-    this.datalayer.eachFeature((feature) => {
+    this.datalayer.features.forEach((feature) => {
       const value = this._getValue(feature)
       if (value !== undefined) values.push(value)
     })
@@ -76,15 +76,21 @@ const ClassifiedMixin = {
 
   renderLegend: function (container) {
     if (!this.datalayer.isLoaded()) return
-    const parent = DomUtil.create('ul', '', container)
+    const ul = Utils.loadTemplate('<ul></ul>')
     const items = this.getLegendItems()
     for (const [color, label] of items) {
-      const li = DomUtil.create('li', '', parent)
-      const colorEl = DomUtil.create('span', 'datalayer-color', li)
-      colorEl.style.backgroundColor = color
-      const labelEl = DomUtil.create('span', '', li)
-      labelEl.textContent = label
+      const rgbColor = DOMUtils.colorToRGB(color)
+      const opacity = this.datalayer.getOption('fillOpacity')
+      const bgColor = `rgba(${rgbColor.join(',')}, ${opacity})`
+      const li = Utils.loadTemplate(Utils.sanitizeVars`
+        <li>
+          <span class="datalayer-color" style="background-color: ${bgColor};"></span>
+          <span>${label}</span>
+        </li>
+      `)
+      ul.appendChild(li)
     }
+    container.appendChild(ul)
   },
 
   getColorSchemes: function (classes) {
@@ -117,7 +123,7 @@ export const Choropleth = FeatureGroup.extend({
   },
 
   _getValue: function (feature) {
-    const key = this.datalayer.options.choropleth?.property || 'value'
+    const key = this.datalayer.properties.choropleth?.property || 'value'
     const value = +feature.properties[key]
     if (!Number.isNaN(value)) return value
   },
@@ -130,12 +136,12 @@ export const Choropleth = FeatureGroup.extend({
       this.options.colors = []
       return
     }
-    const mode = this.datalayer.options.choropleth?.mode
-    let classes = +this.datalayer.options.choropleth?.classes || 5
+    const mode = this.datalayer.properties.choropleth?.mode
+    let classes = +this.datalayer.properties.choropleth?.classes || 5
     let breaks
     classes = Math.min(classes, values.length)
     if (mode === 'manual') {
-      const manualBreaks = this.datalayer.options.choropleth?.breaks
+      const manualBreaks = this.datalayer.properties.choropleth?.breaks
       if (manualBreaks) {
         breaks = manualBreaks
           .split(',')
@@ -154,10 +160,10 @@ export const Choropleth = FeatureGroup.extend({
       breaks.push(ss.max(values)) // Needed for computing the legend
     }
     this.options.breaks = breaks || []
-    this.datalayer.options.choropleth.breaks = this.options.breaks
+    this.datalayer.properties.choropleth.breaks = this.options.breaks
       .map((b) => +b.toFixed(2))
       .join(',')
-    let colorScheme = this.datalayer.options.choropleth.brewer
+    let colorScheme = this.datalayer.properties.choropleth.brewer
     if (!colorbrewer[colorScheme]) colorScheme = 'Blues'
     this.options.colors = colorbrewer[colorScheme][this.options.breaks.length - 1] || []
   },
@@ -175,32 +181,35 @@ export const Choropleth = FeatureGroup.extend({
 
   onEdit: function (field, builder) {
     // Only compute the breaks if we're dealing with choropleth
-    if (!field.startsWith('options.choropleth')) return
+    if (!field.startsWith('properties.choropleth')) return
     // If user touches the breaks, then force manual mode
-    if (field === 'options.choropleth.breaks') {
-      this.datalayer.options.choropleth.mode = 'manual'
-      if (builder) builder.helpers['options.choropleth.mode'].fetch()
+    if (field === 'properties.choropleth.breaks') {
+      this.datalayer.properties.choropleth.mode = 'manual'
+      if (builder) builder.helpers['properties.choropleth.mode'].fetch()
     }
     this.compute()
     // If user changes the mode or the number of classes,
     // then update the breaks input value
-    if (field === 'options.choropleth.mode' || field === 'options.choropleth.classes') {
-      if (builder) builder.helpers['options.choropleth.breaks'].fetch()
+    if (
+      field === 'properties.choropleth.mode' ||
+      field === 'properties.choropleth.classes'
+    ) {
+      if (builder) builder.helpers['properties.choropleth.breaks'].fetch()
     }
   },
 
-  getEditableOptions: function () {
+  getEditableProperties: function () {
     return [
       [
-        'options.choropleth.property',
+        'properties.choropleth.property',
         {
           handler: 'Select',
-          selectOptions: this.datalayer.allProperties(),
+          selectOptions: this.datalayer.fields.keys(),
           label: translate('Choropleth property value'),
         },
       ],
       [
-        'options.choropleth.brewer',
+        'properties.choropleth.brewer',
         {
           handler: 'Select',
           label: translate('Choropleth color palette'),
@@ -208,7 +217,7 @@ export const Choropleth = FeatureGroup.extend({
         },
       ],
       [
-        'options.choropleth.classes',
+        'properties.choropleth.classes',
         {
           handler: 'Range',
           min: 3,
@@ -219,7 +228,7 @@ export const Choropleth = FeatureGroup.extend({
         },
       ],
       [
-        'options.choropleth.breaks',
+        'properties.choropleth.breaks',
         {
           handler: 'BlurInput',
           label: translate('Choropleth breakpoints'),
@@ -229,7 +238,7 @@ export const Choropleth = FeatureGroup.extend({
         },
       ],
       [
-        'options.choropleth.mode',
+        'properties.choropleth.mode',
         {
           handler: 'MultiChoice',
           default: 'kmeans',
@@ -261,13 +270,13 @@ export const Circles = FeatureGroup.extend({
   },
 
   ensureOptions: function (options) {
-    if (!Utils.isObject(this.datalayer.options.circles.radius)) {
-      this.datalayer.options.circles.radius = {}
+    if (!Utils.isObject(this.datalayer.properties.circles.radius)) {
+      this.datalayer.properties.circles.radius = {}
     }
   },
 
   _getValue: function (feature) {
-    const key = this.datalayer.options.circles.property || 'value'
+    const key = this.datalayer.properties.circles.property || 'value'
     const value = +feature.properties[key]
     if (!Number.isNaN(value)) return value
   },
@@ -276,8 +285,8 @@ export const Circles = FeatureGroup.extend({
     const values = this.getValues()
     this.options.minValue = Math.sqrt(Math.min(...values))
     this.options.maxValue = Math.sqrt(Math.max(...values))
-    this.options.minPX = this.datalayer.options.circles.radius?.min || 2
-    this.options.maxPX = this.datalayer.options.circles.radius?.max || 50
+    this.options.minPX = this.datalayer.properties.circles.radius?.min || 2
+    this.options.maxPX = this.datalayer.properties.circles.radius?.max || 50
   },
 
   onEdit: function (field, builder) {
@@ -298,18 +307,18 @@ export const Circles = FeatureGroup.extend({
     return this._computeRadius(this._getValue(feature))
   },
 
-  getEditableOptions: function () {
+  getEditableProperties: function () {
     return [
       [
-        'options.circles.property',
+        'properties.circles.property',
         {
           handler: 'Select',
-          selectOptions: this.datalayer.allProperties(),
+          selectOptions: this.datalayer.fields.keys(),
           label: translate('Property name to compute circles'),
         },
       ],
       [
-        'options.circles.radius.min',
+        'properties.circles.radius.min',
         {
           handler: 'Range',
           label: translate('Min circle radius'),
@@ -319,7 +328,7 @@ export const Circles = FeatureGroup.extend({
         },
       ],
       [
-        'options.circles.radius.max',
+        'properties.circles.radius.max',
         {
           handler: 'Range',
           label: translate('Max circle radius'),
@@ -336,8 +345,9 @@ export const Circles = FeatureGroup.extend({
   },
 
   renderLegend: function (container) {
-    const parent = DomUtil.create('ul', 'circles-layer-legend', container)
-    const color = this.datalayer.getOption('color')
+    const parent = DOMUtils.loadTemplate('<ul class="circles-layer-legend"></ul>')
+    container.appendChild(parent)
+    const color = this.datalayer.getProperty('color')
     const values = this.getValues()
     if (!values.length) return
     values.sort((a, b) => a - b)
@@ -350,14 +360,18 @@ export const Circles = FeatureGroup.extend({
       [this.options.maxPX, maxValue],
     ]
     for (const [size, label] of items) {
-      const li = DomUtil.create('li', '', parent)
-      const circleEl = DomUtil.create('span', 'circle', li)
-      circleEl.style.backgroundColor = color
-      circleEl.style.height = `${size * 2}px`
-      circleEl.style.width = `${size * 2}px`
-      circleEl.style.opacity = this.datalayer.getOption('opacity')
-      const labelEl = DomUtil.create('span', 'label', li)
-      labelEl.textContent = label
+      parent.appendChild(
+        DOMUtils.loadTemplate(Utils.sanitizeVars`
+        <li>
+          <span class="circle"
+                style="background-color: ${color};
+                       height: ${size * 2}px;
+                       width: ${size * 2}px;
+                       opacity: ${this.datalayer.getProperty('fillOpacity')};"></span>
+          <span class="label">${label}</span>
+        </li>
+      `)
+      )
     }
   },
 })
@@ -381,7 +395,7 @@ export const Categorized = FeatureGroup.extend({
 
   _getValue: function (feature) {
     const key =
-      this.datalayer.options.categorized.property || this.datalayer.allProperties()[0]
+      this.datalayer.properties.categorized.property || this.datalayer.fields.keys()[0]
     return feature.properties[key]
   },
 
@@ -403,10 +417,10 @@ export const Categorized = FeatureGroup.extend({
       this.options.colors = []
       return
     }
-    const mode = this.datalayer.options.categorized.mode
+    const mode = this.datalayer.properties.categorized.mode
     let categories = []
     if (mode === 'manual') {
-      const manualCategories = this.datalayer.options.categorized.categories
+      const manualCategories = this.datalayer.properties.categorized.categories
       if (manualCategories) {
         categories = manualCategories.split(',')
       }
@@ -416,8 +430,8 @@ export const Categorized = FeatureGroup.extend({
         .sort(Utils.naturalSort)
     }
     this.options.categories = categories
-    this.datalayer.options.categorized.categories = this.options.categories.join(',')
-    const colorScheme = this.datalayer.options.categorized.brewer
+    this.datalayer.properties.categorized.categories = this.options.categories.join(',')
+    const colorScheme = this.datalayer.properties.categorized.brewer
     this._classes = this.options.categories.length
     if (colorbrewer[colorScheme]?.[this._classes]) {
       this.options.colors = colorbrewer[colorScheme][this._classes]
@@ -428,26 +442,26 @@ export const Categorized = FeatureGroup.extend({
     }
   },
 
-  getEditableOptions: function () {
+  getEditableProperties: function () {
     return [
       [
-        'options.categorized.property',
+        'properties.categorized.property',
         {
           handler: 'Select',
-          selectOptions: this.datalayer.allProperties(),
+          selectOptions: this.datalayer.fields.keys(),
           label: translate('Category property'),
         },
       ],
       [
-        'options.categorized.brewer',
+        'properties.categorized.brewer',
         {
           handler: 'Select',
           label: translate('Color palette'),
-          selectOptions: this.getColorSchemes(this._classes),
+          getOptions: () => this.getColorSchemes(this._classes),
         },
       ],
       [
-        'options.categorized.categories',
+        'properties.categorized.categories',
         {
           handler: 'BlurInput',
           label: translate('Categories'),
@@ -455,7 +469,7 @@ export const Categorized = FeatureGroup.extend({
         },
       ],
       [
-        'options.categorized.mode',
+        'properties.categorized.mode',
         {
           handler: 'MultiChoice',
           default: 'alpha',
@@ -468,17 +482,21 @@ export const Categorized = FeatureGroup.extend({
 
   onEdit: function (field, builder) {
     // Only compute the categories if we're dealing with categorized
-    if (!field.startsWith('options.categorized') && field !== 'options.type') return
+    if (!field.startsWith('properties.categorized') && field !== 'properties.type') {
+      return
+    }
     // If user touches the categories, then force manual mode
-    if (field === 'options.categorized.categories') {
-      this.datalayer.options.categorized.mode = 'manual'
-      if (builder) builder.helpers['options.categorized.mode'].fetch()
+    if (field === 'properties.categorized.categories') {
+      this.datalayer.properties.categorized.mode = 'manual'
+      if (builder) builder.helpers['properties.categorized.mode'].fetch()
     }
     this.compute()
+    // Rebuild list of color palettes when aggregation property changes.
+    builder?.helpers['properties.categorized.brewer']?.fetch()
     // If user changes the mode
     // then update the categories input value
-    if (field === 'options.categorized.mode') {
-      if (builder) builder.helpers['options.categorized.categories'].fetch()
+    if (field === 'properties.categorized.mode') {
+      if (builder) builder.helpers['properties.categorized.categories'].fetch()
     }
   },
 

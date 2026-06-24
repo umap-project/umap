@@ -2,35 +2,37 @@ import { uMapAlert as Alert } from '../components/alerts/alert.js'
 /* Uses globals for: csv2geojson, osmtogeojson (not available as ESM) */
 import { translate } from './i18n.js'
 
+const parseTextGeom = async (geom) => {
+  try {
+    return JSON.parse(geom)
+  } catch (e) {
+    try {
+      const betterknown = await import('../../vendors/betterknown/betterknown.mjs')
+      return betterknown.wktToGeoJSON(geom)
+    } catch {
+      return null
+    }
+  }
+}
+
 export const EXPORT_FORMATS = {
   geojson: {
-    formatter: async (umap) => JSON.stringify(umap.toGeoJSON(), null, 2),
     ext: '.geojson',
     filetype: 'application/json',
   },
   gpx: {
-    formatter: async (umap) => await umap.formatter.toGPX(umap.toGeoJSON()),
     ext: '.gpx',
     filetype: 'application/gpx+xml',
   },
   kml: {
-    formatter: async (umap) => await umap.formatter.toKML(umap.toGeoJSON()),
     ext: '.kml',
     filetype: 'application/vnd.google-earth.kml+xml',
   },
   csv: {
-    formatter: async (umap) => {
-      const table = []
-      umap.eachFeature((feature) => {
-        const row = feature.toGeoJSON().properties
-        const center = feature.center
-        delete row._umap_options
-        row.Latitude = center.lat
-        row.Longitude = center.lng
-        table.push(row)
-      })
-      return csv2geojson.dsv.csvFormat(table)
-    },
+    ext: '.csv',
+    filetype: 'text/csv',
+  },
+  wkt: {
     ext: '.csv',
     filetype: 'text/csv',
   },
@@ -69,7 +71,15 @@ export class Formatter {
     } catch (e) {
       src = this.toDom(str)
     }
-    return osmtogeojson(src, { flatProperties: true })
+    const data = osmtogeojson(src, { flatProperties: true })
+    // FIXME: make a PR to osmtogeojson when it's more active
+    // cf https://github.com/umap-project/umap/issues/3072
+    for (const feature of data.features || []) {
+      const [osm_type, osm_id] = feature.properties.id.split('/')
+      feature.properties.osm_id = osm_id
+      feature.properties.osm_type = osm_type
+    }
+    return data
   }
 
   fromCSV(str, callback) {
@@ -81,15 +91,35 @@ export class Formatter {
         sexagesimal: false,
         parseLatLon: (raw) => Number.parseFloat(raw.toString().replace(',', '.')),
       },
-      (err, result) => {
-        // csv2geojson fallback to null geometries when it cannot determine
-        // lat or lon columns. This is valid geojson, but unwanted from a user
-        // point of view.
+      async (err, result) => {
         if (result?.features.length) {
-          if (result.features[0].geometry === null) {
-            err = {
-              type: 'Error',
-              message: translate('Cannot determine latitude and longitude columns.'),
+          const first = result.features[0]
+          if (first.geometry === null) {
+            const geomFields = ['geom', 'geometry', 'wkt', 'geojson']
+            const availableFields = Object.keys(first.properties).reduce((acc, key) => {
+              acc[key.toLowerCase()] = key
+              return acc
+            }, {})
+            for (let field of geomFields) {
+              field = availableFields[field]
+              if (first.properties[field]) {
+                for (const feature of result.features) {
+                  feature.geometry = await parseTextGeom(feature.properties[field])
+                  delete feature.properties[field]
+                }
+                break
+              }
+            }
+            if (first.geometry === null) {
+              // csv2geojson fallback to null geometries when it cannot determine
+              // lat or lon columns. This is valid geojson, but unwanted from a user
+              // point of view.
+              err = {
+                type: 'Error',
+                message: translate(
+                  'No geo column found: must be either `lat(itude)` and `lon(gitude)` or `geom(etry)`.'
+                ),
+              }
             }
           }
         }
@@ -152,17 +182,68 @@ export class Formatter {
     }
   }
 
-  async toGPX(geojson) {
+  async stringify(features, format) {
+    switch (format) {
+      case 'csv':
+        return await this.toCSV(features)
+      case 'wkt':
+        return await this.toWKT(features)
+      case 'gpx':
+        return await this.toGPX(features)
+      case 'kml':
+        return await this.toKML(features)
+      case 'geojson':
+        return await this.toGeoJSON(features)
+    }
+  }
+
+  async toGPX(features) {
     const togpx = await import('../../vendors/geojson-to-gpx/index.js')
-    for (const feature of geojson.features) {
+    for (const feature of features) {
       feature.properties.desc = feature.properties.description
     }
-    const gpx = togpx.default(geojson)
+    const gpx = togpx.default(this.toFeatureCollection(features))
     return new XMLSerializer().serializeToString(gpx)
   }
 
-  async toKML(geojson) {
+  async toKML(features) {
     const tokml = await import('../../vendors/tokml/tokml.es.js')
-    return tokml.toKML(geojson)
+    return tokml.toKML(this.toFeatureCollection(features))
+  }
+
+  toFeatureCollection(features) {
+    return {
+      type: 'FeatureCollection',
+      features: features.map((f) => f.toGeoJSON()),
+    }
+  }
+
+  async toGeoJSON(features) {
+    return JSON.stringify(this.toFeatureCollection(features), null, 2)
+  }
+
+  async toCSV(features) {
+    const table = []
+    for (const feature of features) {
+      const row = feature.toGeoJSON().properties
+      const [lng, lat] = feature.center
+      delete row._umap_options
+      row.Latitude = lat
+      row.Longitude = lng
+      table.push(row)
+    }
+    return csv2geojson.dsv.csvFormat(table)
+  }
+
+  async toWKT(features) {
+    const table = []
+    const betterknown = await import('../../vendors/betterknown/betterknown.mjs')
+    for (const feature of features) {
+      const row = feature.toGeoJSON().properties
+      delete row._umap_options
+      row.geometry = betterknown.geoJSONToWkt(feature.geometry)
+      table.push(row)
+    }
+    return csv2geojson.dsv.csvFormat(table)
   }
 }

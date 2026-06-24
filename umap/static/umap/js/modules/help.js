@@ -1,7 +1,7 @@
-import { DomEvent, DomUtil } from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
 import Dialog from './ui/dialog.js'
 import * as Utils from './utils.js'
+import * as DOMUtils from './domutils.js'
 
 const SHORTCUTS = {
   DRAW_MARKER: {
@@ -15,6 +15,10 @@ const SHORTCUTS = {
   DRAW_POLYGON: {
     shortcut: 'Modifier+P',
     label: translate('Draw a polygon'),
+  },
+  DRAW_RECTANGLEPOLYGONAT: {
+    shortcut: 'Modifier+R',
+    label: translate('Draw a rectangular polygon at'),
   },
   TOGGLE_EDIT: {
     shortcut: 'Modifier+E',
@@ -92,8 +96,8 @@ const ENTRIES = {
   filterKey: translate(
     'Comma separated list of properties to use when filtering features by text input'
   ),
-  facetKey: translate(
-    'Comma separated list of properties to use for filters (eg.: mykey,otherkey). To control label, add it after a | (eg.: mykey|My Key,otherkey|Other Key). To control input field type, add it after another | (eg.: mykey|My Key|checkbox,otherkey|Other Key|datetime). Allowed values for the input field type are checkbox (default), radio, number, date and datetime.'
+  filters: translate(
+    'Filters will be displayed in the data browser to ease data selection.'
   ),
   interactive: translate(
     'If false, the polygon or line will act as a part of the underlying map.'
@@ -118,7 +122,7 @@ const ENTRIES = {
     <dt>KML</dt>
     <dd>${translate('Properties imported:')}name, description</dd>
     <dt>CSV</dt>
-    <dd>${translate('Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the begining of the header, case insensitive. All other column are imported as properties.')}</dd>
+    <dd>${translate('Comma, tab or semi-colon separated values. SRS WGS84 is implied. Only Point geometries are imported. The import will look at the column headers for any mention of «lat» and «lon» at the beginning of the header, case insensitive. All other column are imported as properties.')}</dd>
     <dt>uMap</dt>
     <dd>${translate('Imports all umap data, including layers and settings.')}</dd>
   </div>
@@ -170,6 +174,7 @@ const ENTRIES = {
       <li>${translate('key!=value (eg. building!=yes)')}</li>
       <li>${translate('key~value (eg. name~Grisy)')}</li>
       <li>${translate('key="value|value2" (eg. name="Paris|Berlin")')}</li>
+      <li>${translate('[key="value"][key2="value2"] (eg. [boundary="educational"][name="Académie de Lyon"])')}</li>
     </ul>
     <div>${translate('More info about Overpass syntax')}: <a href="https://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide">https://wiki.openstreetmap.org/wiki/Overpass_API/Language_Guide</a></div>
     <div>${translate('For more complex needs, see')} <a href="https://overpass-turbo.eu/">https://overpass-turbo.eu/</a></div>
@@ -208,25 +213,27 @@ export default class Help {
   }
 
   show(entries) {
-    const container = DomUtil.add('div')
-    DomUtil.createTitle(container, translate('Help'))
+    const container = DOMUtils.loadTemplate(`
+      <div>
+        <h3><i class="icon icon-16 icon-help"></i> ${translate('Help')}</h3>
+      </div>
+    `)
     for (const name of entries) {
-      DomUtil.element({
-        tagName: 'div',
-        className: 'umap-help-entry',
-        parent: container,
-        innerHTML: ENTRIES[name],
-      })
+      container.appendChild(
+        DOMUtils.loadTemplate(`<div class="umap-help-entry">${ENTRIES[name]}</div>`)
+      )
     }
     this.dialog.open({ template: container })
   }
 
   // Special dynamic case. Do we still think this dialog is useful?
   showGetStarted() {
-    const [container, { ul }] = Utils.loadTemplateWithRefs(`
+    const [container, { getstarted, links }] = Utils.loadTemplateWithRefs(`
       <div>
         <h3><i class="icon icon-16 icon-help"></i>${translate('Where do we go from here?')}</h3>
-        <ul data-ref=ul class="umap-getstarted"></ul>
+        <ul data-ref=getstarted class="umap-getstarted"></ul>
+        <h4>${translate('More help resources')}</h4>
+        <ul data-ref=links class="umap-help-links"></ul>
       </div>
     `)
     const elements = document.querySelectorAll('[data-getstarted]')
@@ -234,21 +241,26 @@ export default class Help {
       const [node, { button }] = Utils.loadTemplateWithRefs(
         `<li><button data-ref=button type="button" title="${el.title}">${el.innerHTML}${el.title}</button></li>`
       )
-      ul.appendChild(node)
+      getstarted.appendChild(node)
       button.addEventListener('click', () => {
         el.click()
         this.dialog.close()
       })
     }
+    for (const info of this.umap.properties.help_links) {
+      const [node, { button }] = Utils.loadTemplateWithRefs(
+        `<li><a href="${info.url}" target="_blank">${info.label} (${info.lang})</a><i class="icon icon-16 icon-external-link"></i></li>`
+      )
+      links.appendChild(node)
+    }
     this.dialog.open({ template: container })
   }
 
   button(container, entries) {
-    const button = DomUtil.createButton(
-      'umap-help-button',
-      container,
-      translate('Help')
+    const button = DOMUtils.loadTemplate(
+      `<button class="umap-help-button" type="button">${translate('Help')}</button>`
     )
+    container.appendChild(button)
     button.addEventListener('click', () => this.show(entries))
     return button
   }

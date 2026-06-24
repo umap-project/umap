@@ -1,305 +1,23 @@
-/* Used in view mode to define the current tilelayer */
-U.TileLayerControl = L.Control.IconLayers.extend({
-  initialize: function (map, options) {
-    this.map = map
-    this.maxShown = 9
-    L.Control.IconLayers.prototype.initialize.call(this, {
-      position: 'topleft',
-      manageLayers: false,
-    })
-    this.on('activelayerchange', (e) => map.selectTileLayer(e.layer))
-  },
-
-  setLayers: function (layers) {
-    if (!layers) {
-      layers = []
-      this.map.eachTileLayer((layer) => {
-        try {
-          // We'd like to use layer.getTileUrl, but this method will only work
-          // when the tilelayer is actually added to the map (needs this._tileZoom
-          // to be defined)
-          // Fixme when https://github.com/Leaflet/Leaflet/pull/9201 is released
-          const icon = U.Utils.template(
-            layer.options.url_template,
-            this.map.options.demoTileInfos
-          )
-          layers.push({
-            title: layer.options.name,
-            layer: layer,
-            icon: icon,
-          })
-        } catch (e) {
-          // Skip this tilelayer
-          console.error(e)
-        }
-      })
-    }
-    this._allLayers = layers
-    L.Control.IconLayers.prototype.setLayers.call(this, layers.slice(0, this.maxShown))
-    if (this.map.selected_tilelayer) this.setActiveLayer(this.map.selected_tilelayer)
-  },
-
-  _createLayerElements: function () {
-    L.Control.IconLayers.prototype._createLayerElements.call(this)
-    if (Object.keys(this._allLayers).length <= this.maxShown) return
-    const lastRow = this._container.querySelector(
-      '.leaflet-iconLayers-layersRow:last-child'
-    )
-    const button = L.DomUtil.element({
-      tagName: 'button',
-      className:
-        'leaflet-iconLayers-layerCell leaflet-iconLayers-layerCell-plus button',
-      textContent: '+',
-      parent: lastRow,
-    })
-    L.DomEvent.on(button, 'click', () =>
-      this.map._controls.tilelayersChooser.openSwitcher()
-    )
-  },
-})
-
-/*
- * Take control over L.Control.Locate to be able to
- * call start() before adding the control (and thus the button) to the map.
- */
-U.Locate = L.Control.Locate.extend({
-  initialize: function (map, options) {
-    // When calling start(), it will try to add a location marker
-    // on the layer, which is normally added in the addTo/onAdd method
-    this._layer = this.options.layer = new L.LayerGroup()
-    // When calling start(), it will call _activate(), which then adds
-    // location related event listeners on the map
-    this.map = map
-    L.Control.Locate.prototype.initialize.call(this, options)
-  },
-
-  onAdd: function (map) {
-    const active = this._active
-    const container = L.Control.Locate.prototype.onAdd.call(this, map)
-    this._active = active
-    return container
-  },
-
-  _activate: function () {
-    this._map = this.map
-    L.Control.Locate.prototype._activate.call(this)
-  },
-
-  remove: function () {
-    // Prevent to call remove if the control is not really added to the map
-    // This occurs because we do create the control and call its activate
-    // method before adding the control button itself to the map, in the
-    // case where the map defaultView is set to "location"
-    if (!this._container || !this._container.parentNode) return
-    return L.Control.Locate.prototype.remove.call(this)
-  },
-})
-
-U.Search = L.PhotonSearch.extend({
-  initialize: function (map, input, options) {
-    this.options.placeholder = L._('Type a place name or coordinates')
-    this.options.location_bias_scale = 0.5
-    L.PhotonSearch.prototype.initialize.call(this, map, input, options)
-    this.options.url = map.options.urls.search
-    if (map.options.maxBounds) this.options.bbox = map.options.maxBounds.toBBoxString()
-    this.reverse = new L.PhotonReverse({
-      handleResults: (geojson) => {
-        this.handleResultsWithReverse(geojson)
-      },
-    })
-  },
-
-  handleResultsWithReverse: function (geojson) {
-    const latlng = this.reverse.latlng
-    geojson.features.unshift({
-      type: 'Feature',
-      geometry: { type: 'Point', coordinates: [latlng.lng, latlng.lat] },
-      properties: {
-        name: L._('Go to "{coords}"', { coords: `${latlng.lat} ${latlng.lng}` }),
-      },
-    })
-
-    this.handleResults(geojson)
-  },
-
-  search: function () {
-    const pattern = /^(?<lat>[-+]?\d{1,2}[.,]\d+)\s*[ ,]\s*(?<lng>[-+]?\d{1,3}[.,]\d+)$/
-    if (pattern.test(this.input.value)) {
-      this.hide()
-      const { lat, lng } = pattern.exec(this.input.value).groups
-      const latlng = L.latLng(lat, lng)
-      if (latlng.isValid()) {
-        this.reverse.doReverse(latlng)
-      } else {
-        U.Alert.error(L._('Invalid latitude or longitude'))
-      }
-      return
-    }
-    // Only numbers, abort.
-    if (/^[\d .,]*$/.test(this.input.value)) return
-    // Do normal search
-    this.options.includePosition = this.map.getZoom() > 10
-    L.PhotonSearch.prototype.search.call(this)
-  },
-
-  onBlur: function (e) {
-    // Overrided because we don't want to hide the results on blur.
-    this.fire('blur')
-  },
-
-  formatResult: function (feature, el) {
-    const [tools, { point, geom }] = U.Utils.loadTemplateWithRefs(`
-      <span class="search-result-tools">
-        <button type="button" title="${L._('Add this geometry to my map')}" data-ref=geom><i class="icon icon-16 icon-polygon-plus"></i></button>
-        <button type="button" title="${L._('Add this place to my map')}" data-ref=point><i class="icon icon-16 icon-marker-plus"></i></button>
-      </span>
-    `)
-    geom.hidden = !['R', 'W'].includes(feature.properties.osm_type)
-    point.addEventListener('mousedown', (event) => {
-      event.stopPropagation()
-      const datalayer = this.map._umap.defaultEditDataLayer()
-      const marker = datalayer.makeFeature(feature)
-      marker.edit()
-    })
-    geom.addEventListener('mousedown', async (event) => {
-      event.stopPropagation()
-      const osm_id = feature.properties.osm_id
-      const types = {
-        R: 'relation',
-        W: 'way',
-        N: 'node',
-      }
-      const osm_type = types[feature.properties.osm_type]
-      if (!osm_type || !osm_id) return
-      const importer = this.map._umap.importer
-      importer.build()
-      importer.format = 'osm'
-      importer.url = `https://www.openstreetmap.org/api/0.6/${osm_type}/${osm_id}/full`
-      importer.submit()
-    })
-    el.appendChild(tools)
-    this._formatResult(feature, el)
-    const path = this.map._umap.getStaticPathFor('target.svg')
-    const icon = L.icon({
-      iconUrl: path,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-    })
-    const coords = feature.geometry.coordinates
-    const target = L.marker([coords[1], coords[0]], { icon })
-    el.addEventListener('mouseover', (event) => {
-      target.addTo(this.map)
-    })
-    el.addEventListener('mouseout', (event) => {
-      target.removeFrom(this.map)
-    })
-  },
-
-  setChoice: function (choice) {
-    choice = choice || this.RESULTS[this.CURRENT]
-    if (choice) {
-      const feature = choice.feature
-      const zoom = Math.max(this.map.getZoom(), 14) // Never unzoom.
-      this.map.setView(
-        [feature.geometry.coordinates[1], feature.geometry.coordinates[0]],
-        zoom
-      )
-    }
-  },
-})
-
-U.SearchControl = L.Control.extend({
-  options: {
-    position: 'topleft',
-  },
-
-  onAdd: function (map) {
-    this.map = map
-    const container = L.DomUtil.create('div', 'leaflet-control-search umap-control')
-    L.DomEvent.disableClickPropagation(container)
-    L.DomUtil.createButton(
-      '',
-      container,
-      L._('Search location'),
-      (e) => {
-        L.DomEvent.stop(e)
-        this.open()
-      },
-      this
-    )
-    return container
-  },
-
-  open: function () {
-    const options = {
-      limit: 10,
-      noResultLabel: L._('No results'),
-    }
-    if (this.map.options.photonUrl) options.url = this.map.options.photonUrl
-    const container = L.DomUtil.create('div', '')
-
-    L.DomUtil.createTitle(container, L._('Search location'), 'icon-search')
-    const input = L.DomUtil.create('input', 'photon-input', container)
-    const resultsContainer = L.DomUtil.create('div', 'photon-autocomplete', container)
-    this.search = new U.Search(this.map, input, options)
-    const id = Math.random()
-    this.search.on('ajax:send', () => {
-      this.map.fire('dataloading', { id: id })
-    })
-    this.search.on('ajax:return', () => {
-      this.map.fire('dataload', { id: id })
-    })
-    this.search.resultsContainer = resultsContainer
-    this.map._umap.panel.open({ content: container }).then(input.focus())
-  },
-})
-
-L.Control.MiniMap.include({
-  initialize: function (layer, options) {
-    L.Util.setOptions(this, options)
-    this._layer = this._cloneLayer(layer)
-  },
-
-  onMainMapBaseLayerChange: function (e) {
-    const layer = this._cloneLayer(e.layer)
-    if (this._miniMap.hasLayer(this._layer)) {
-      this._miniMap.removeLayer(this._layer)
-    }
-    this._layer = layer
-    this._miniMap.addLayer(this._layer)
-  },
-
-  _cloneLayer: (layer) => new L.TileLayer(layer._url, L.Util.extend({}, layer.options)),
-})
-
-L.Control.Loading.include({
-  onAdd: function (map) {
-    this._container = L.DomUtil.create('div', 'umap-loader', map._controlContainer)
-    map.on('baselayerchange', this._layerAdd, this)
-    this._addMapListeners(map)
-    this._map = map
-  },
-
-  _showIndicator: function () {
-    this._map._container.classList.add('umap-loading')
-  },
-
-  _hideIndicator: function () {
-    this._map._container.classList.remove('umap-loading')
-  },
-})
-
 U.Editable = L.Editable.extend({
   initialize: function (umap, options) {
     this._umap = umap
-    L.Editable.prototype.initialize.call(this, umap._leafletMap, options)
+    // TODO remove direct call to Leaflet map
+    L.Editable.prototype.initialize.call(this, umap.mapProxy.map, options)
     this.on('editable:drawing:click editable:drawing:move', this.drawingTooltip)
     // Layer for items added by users
     this.on('editable:drawing:cancel', (event) => {
-      if (event.layer instanceof U.LeafletMarker) event.layer.feature.del()
+      this.resetButtons()
     })
     this.on('editable:drawing:commit', function (event) {
-      if (this._umap.editedFeature !== event.layer) event.layer.feature.edit(event)
+      this.resetButtons()
+      if (this._umap.editedFeature !== event.layer) {
+        const promise = event.layer.feature.edit(event)
+        if (event.layer.feature.isRoute?.()) {
+          promise.then((panel) => {
+            panel.scrollTo('details#edit-route')
+          })
+        }
+      }
     })
     this.on('editable:vertex:ctrlclick', (event) => {
       const index = event.vertex.getIndex()
@@ -315,13 +33,31 @@ U.Editable = L.Editable.extend({
     this.on('editable:vertex:rawclick', this.onVertexRawClick)
   },
 
-  createPolyline: function (latlngs) {
+  resetButtons: () => {
+    const buttons = document.querySelectorAll('.umap-edit-bar .drawing-tool')
+    for (const button of buttons) {
+      button.classList.remove('on')
+    }
+  },
+
+  startRoute: function (latlng) {
+    const feature = this.createLineString()
+    feature.askForRouteSettings().then(async () => {
+      feature.ui.enableEdit(this.map).newShape(latlng)
+    })
+  },
+
+  createLineString: function () {
     const datalayer = this._umap.defaultEditDataLayer()
     const line = new U.LineString(this._umap, datalayer, {
       geometry: { type: 'LineString', coordinates: [] },
     })
     line._needs_upsert = true
-    return line.ui
+    return line
+  },
+
+  createPolyline: function (latlngs, properties = {}) {
+    return this.createLineString().ui
   },
 
   createPolygon: function (latlngs) {
@@ -332,6 +68,191 @@ U.Editable = L.Editable.extend({
     poly._needs_upsert = true
     return poly.ui
   },
+  createRectanglePolygonAt: function (coords) {
+    const datalayer = this._umap.defaultEditDataLayer()
+    const poly = new U.Polygon(this._umap, datalayer, {
+      geometry: { type: 'Polygon', coordinates: coords },
+    })
+    poly._needs_upsert = true
+    return poly
+  },
+
+  _finishShape: function (feature) {
+    const datalayer = this._umap.defaultEditDataLayer()
+    feature.pushGeometry()
+    datalayer.addFeature(feature)
+    feature.ui.enableEdit()
+    feature.ui.editor.commitDrawing()
+  },
+
+  _rectCoordsFromBounds: function (bounds) {
+    const sw = bounds.getSouthWest()
+    const ne = bounds.getNorthEast()
+    return [[
+      [sw.lng, sw.lat],
+      [ne.lng, sw.lat],
+      [ne.lng, ne.lat],
+      [sw.lng, ne.lat],
+      [sw.lng, sw.lat],
+    ]]
+  },
+
+  _circleCoords: function (center, radiusM, sides) {
+    sides = sides || 64
+    const mPerDegLat = 111320
+    const mPerDegLng = mPerDegLat * Math.cos(center.lat * Math.PI / 180)
+    const pts = []
+    for (let i = 0; i < sides; i++) {
+      const a = (2 * Math.PI * i) / sides
+      pts.push([center.lng + (radiusM * Math.cos(a)) / mPerDegLng,
+                center.lat + (radiusM * Math.sin(a)) / mPerDegLat])
+    }
+    pts.push(pts[0])
+    return [pts]
+  },
+
+  _startDragDraw: function (onDrag, onCommit) {
+    const map = this.map
+    const container = map._container
+    let active = false
+    let startLatLng = null
+    let preview = null
+
+    container.classList.add('leaflet-editable-drawing')
+
+    const toLatLng = (e) => {
+      const r = container.getBoundingClientRect()
+      return map.containerPointToLatLng(L.point(e.clientX - r.left, e.clientY - r.top))
+    }
+
+    const cleanup = () => {
+      container.removeEventListener('mousedown', onMouseDown)
+      document.removeEventListener('mousemove', onMouseMove)
+      document.removeEventListener('mouseup', onMouseUp)
+      document.removeEventListener('keydown', onKeyDown)
+      container.classList.remove('leaflet-editable-drawing')
+      map.dragging.enable()
+      if (preview) { map.removeLayer(preview); preview = null }
+    }
+
+    const onKeyDown = (e) => { if (e.key === 'Escape') cleanup() }
+
+    const onMouseDown = (e) => {
+      if (e.button !== 0) { cleanup(); return }
+      map.dragging.disable()
+      active = true
+      startLatLng = toLatLng(e)
+      preview = onDrag.create(map, startLatLng)
+      document.addEventListener('mousemove', onMouseMove)
+      document.addEventListener('mouseup', onMouseUp)
+    }
+
+    const onMouseMove = (e) => {
+      if (!active) return
+      onDrag.update(preview, startLatLng, toLatLng(e))
+    }
+
+    const onMouseUp = (e) => {
+      if (!active) return
+      active = false
+      const endLatLng = toLatLng(e)
+      cleanup()
+      onCommit(startLatLng, endLatLng)
+    }
+
+    container.addEventListener('mousedown', onMouseDown)
+    document.addEventListener('keydown', onKeyDown)
+  },
+
+  startRectangleDrag: function () {
+    this._startDragDraw(
+      {
+        create: (map, start) => L.rectangle([start, start], {
+          color: '#3388ff', weight: 2, fillOpacity: 0.15, interactive: false,
+        }).addTo(map),
+        update: (rect, start, current) => rect.setBounds(L.latLngBounds(start, current)),
+      },
+      (start, end) => {
+        const bounds = L.latLngBounds(start, end)
+        if (start.distanceTo(end) < 5) return
+        this._finishShape(this.createRectanglePolygonAt(this._rectCoordsFromBounds(bounds)))
+      }
+    )
+  },
+
+  startPlaceRectAt: function (widthM, heightM) {
+    const map = this.map
+    const container = map._container
+    container.classList.add('leaflet-editable-drawing')
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        map.off('click', onClick)
+        document.removeEventListener('keydown', onKey)
+        container.classList.remove('leaflet-editable-drawing')
+      }
+    }
+    const onClick = (e) => {
+      L.DomEvent.stop(e)
+      map.off('click', onClick)
+      document.removeEventListener('keydown', onKey)
+      container.classList.remove('leaflet-editable-drawing')
+      const c = e.latlng
+      const dLat = (heightM / 2) / 111320
+      const dLng = (widthM / 2) / (40075000 * Math.cos(c.lat * Math.PI / 180) / 360)
+      const coords = [[
+        [c.lng - dLng, c.lat - dLat],
+        [c.lng + dLng, c.lat - dLat],
+        [c.lng + dLng, c.lat + dLat],
+        [c.lng - dLng, c.lat + dLat],
+        [c.lng - dLng, c.lat - dLat],
+      ]]
+      this._finishShape(this.createRectanglePolygonAt(coords))
+    }
+    map.once('click', onClick)
+    document.addEventListener('keydown', onKey)
+  },
+
+  startCircleDrag: function () {
+    this._startDragDraw(
+      {
+        create: (map, start) => L.circle(start, {
+          radius: 1, color: '#3388ff', fillOpacity: 0.15, interactive: false,
+        }).addTo(map),
+        update: (circle, start, current) => circle.setRadius(start.distanceTo(current)),
+      },
+      (start, end) => {
+        const r = start.distanceTo(end)
+        if (r < 1) return
+        this._finishShape(this.createRectanglePolygonAt(this._circleCoords(start, r)))
+      }
+    )
+  },
+
+  startPlaceCircleAt: function (radiusM) {
+    const map = this.map
+    const container = map._container
+    container.classList.add('leaflet-editable-drawing')
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        map.off('click', onClick)
+        document.removeEventListener('keydown', onKey)
+        container.classList.remove('leaflet-editable-drawing')
+      }
+    }
+    const onClick = (e) => {
+      L.DomEvent.stop(e)
+      map.off('click', onClick)
+      document.removeEventListener('keydown', onKey)
+      container.classList.remove('leaflet-editable-drawing')
+      this._finishShape(this.createRectanglePolygonAt(this._circleCoords(e.latlng, radiusM)))
+    }
+    map.once('click', onClick)
+    document.addEventListener('keydown', onKey)
+  },
+
+  startRectanglePolygonAt: function () {
+    this.startRectangleDrag()
+  },
 
   createMarker: function (latlng) {
     const datalayer = this._umap.defaultEditDataLayer()
@@ -341,6 +262,7 @@ U.Editable = L.Editable.extend({
     point._needs_upsert = true
     return point.ui
   },
+  
 
   _getDefaultProperties: function () {
     const result = {}
@@ -365,7 +287,6 @@ U.Editable = L.Editable.extend({
       // only continue with Polylines and Polygons
       return
     }
-
     let content = L._('Drawing')
     let measure
     if (e.layer.editor._drawnLatLngs) {
@@ -415,8 +336,7 @@ U.Editable = L.Editable.extend({
   },
 
   onVertexRawClick: (e) => {
-    e.layer.onVertexRawClick(e)
-    L.DomEvent.stop(e)
+    // Do not delete the vertex on click (but on alt-click only)
     e.cancel()
   },
 
@@ -429,12 +349,15 @@ U.Editable = L.Editable.extend({
       // Leaflet.Editable will delete the drawn shape if invalid
       // (eg. line has only one drawn point)
       // So let's check if the layer has no more shape
-      event.layer.feature.pullGeometry(false)
-      if (!event.layer.feature.hasGeom()) {
-        event.layer.feature.del()
+      const feature = event.layer.feature
+      // Sync _geometry from the UI so hasGeom() sees what is actually left.
+      const geometry = event.layer.toGeometry()
+      feature._geometry = geometry
+      if (!feature.hasGeom() || event.layer instanceof U.LeafletMarker) {
+        feature.del()
       } else {
-        event.layer.feature.onCommit()
-        event.layer.feature.edit()
+        feature.onCommit(geometry)
+        feature.edit()
       }
     })
     this.stopDrawing()

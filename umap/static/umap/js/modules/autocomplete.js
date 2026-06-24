@@ -1,13 +1,8 @@
-import {
-  DomEvent,
-  DomUtil,
-  Util,
-  setOptions,
-} from '../../vendors/leaflet/leaflet-src.esm.js'
 import { translate } from './i18n.js'
 import { Request, ServerRequest } from './request.js'
 import { escapeHTML, generateId } from './utils.js'
 import * as Utils from './utils.js'
+import * as DOMUtils from './domutils.js'
 
 export class BaseAutocomplete {
   constructor(parent, options) {
@@ -23,7 +18,7 @@ export class BaseAutocomplete {
     this.cache = ''
     this.results = []
     this._current = null
-    setOptions(this, options)
+    this.options = Object.assign({}, options)
     this.createInput()
     this.createContainer()
     this.selectedContainer = this.initSelectedContainer()
@@ -41,26 +36,18 @@ export class BaseAutocomplete {
   }
 
   createInput() {
-    this.input = DomUtil.element({
-      tagName: 'input',
-      type: 'text',
-      parent: this.parent,
-      placeholder: this.options.placeholder,
-      autocomplete: 'off',
-      className: this.options.className,
-      name: this.options.name || 'autocomplete',
-    })
-    DomEvent.on(this.input, 'keydown', this.onKeyDown, this)
-    DomEvent.on(this.input, 'keyup', this.onKeyUp, this)
-    DomEvent.on(this.input, 'blur', this.onBlur, this)
+    this.input = DOMUtils.loadTemplate(`
+      <input type="text" placeholder="${this.options.placeholder}" autocomplete="off" class="${this.options.className}" name="${this.options.name || 'autocomplete'}">
+    `)
+    this.parent.appendChild(this.input)
+    this.input.addEventListener('keydown', (event) => this.onKeyDown(event))
+    this.input.addEventListener('keyup', (event) => this.onKeyUp(event))
+    this.input.addEventListener('blur', (event) => this.onBlur(event))
   }
 
   createContainer() {
-    this.container = DomUtil.element({
-      tagName: 'ul',
-      parent: document.body,
-      className: 'umap-autocomplete',
-    })
+    this.container = DOMUtils.loadTemplate('<ul class="umap-autocomplete"></ul>')
+    document.body.appendChild(this.container)
   }
 
   resizeContainer() {
@@ -72,18 +59,21 @@ export class BaseAutocomplete {
     this.container.style.width = `${width}px`
   }
 
-  onKeyDown(e) {
-    switch (e.key) {
+  onKeyDown(event) {
+    switch (event.key) {
       case 'Tab':
         if (this.current !== null) this.setChoice()
-        DomEvent.stop(e)
+        event.preventDefault()
+        event.stopPropagation()
         break
       case 'Enter':
-        DomEvent.stop(e)
+        event.preventDefault()
+        event.stopPropagation()
         this.setChoice()
         break
       case 'Escape':
-        DomEvent.stop(e)
+        event.preventDefault()
+        event.stopPropagation()
         this.hide()
         break
       case 'ArrowDown':
@@ -100,7 +90,8 @@ export class BaseAutocomplete {
         break
       case 'ArrowUp':
         if (this.current !== null) {
-          DomEvent.stop(e)
+          event.preventDefault()
+          event.stopPropagation()
         }
         if (this.results.length > 0) {
           if (this.current > 0) {
@@ -115,7 +106,7 @@ export class BaseAutocomplete {
     }
   }
 
-  onKeyUp(e) {
+  onKeyUp(event) {
     const special = [
       'Tab',
       'Enter',
@@ -128,7 +119,7 @@ export class BaseAutocomplete {
       'Alt',
       'Control',
     ]
-    if (!special.includes(e.key)) {
+    if (!special.includes(event.key)) {
       if (this._typing) window.clearTimeout(this._typing)
       this._typing = window.setTimeout(() => {
         this.search()
@@ -167,20 +158,17 @@ export class BaseAutocomplete {
   }
 
   createResult(item) {
-    const el = DomUtil.element({
-      tagName: 'li',
-      parent: this.container,
-      textContent: item.label,
-    })
+    const li = DOMUtils.loadTemplate(Utils.sanitizeVars`<li>${item.label}</li>`)
+    this.container.appendChild(li)
     const result = {
       item: item,
-      el: el,
+      el: li,
     }
-    DomEvent.on(el, 'mouseover', () => {
+    li.addEventListener('mouseover', () => {
       this.current = result
       this.highlight()
     })
-    DomEvent.on(el, 'mousedown', () => this.setChoice())
+    li.addEventListener('mousedown', () => this.setChoice())
     return result
   }
 
@@ -202,8 +190,7 @@ export class BaseAutocomplete {
 
   highlight() {
     this.results.forEach((result, index) => {
-      if (index === this.current) DomUtil.addClass(result.el, 'on')
-      else DomUtil.removeClass(result.el, 'on')
+      result.el.classList.toggle('on', index === this.current)
     })
   }
 
@@ -219,12 +206,8 @@ export class BaseAutocomplete {
 export class BaseAjax extends BaseAutocomplete {
   constructor(el, options) {
     super(el, options)
-    this.setUrl()
+    this.url = this.options.url
     this.initRequest()
-  }
-
-  setUrl() {
-    this.url = this.options?.url
   }
 
   initRequest() {
@@ -239,7 +222,7 @@ export class BaseAjax extends BaseAutocomplete {
   }
 
   buildUrl(value) {
-    return Util.template(this.url, { q: encodeURIComponent(value) })
+    return Utils.template(this.url, { q: encodeURIComponent(value) })
   }
 
   async search() {
@@ -266,14 +249,15 @@ export class BaseAjax extends BaseAutocomplete {
 class BaseServerAjax extends BaseAjax {
   setUrl() {
     if (this.options?.className === 'edit-teams') {
-      this.url = '/agnocomplete/AutocompleteTeam/?q={q}';
+      this.url = '/agnocomplete/AutocompleteTeam/?q={q}'
     } else {
-      this.url = '/agnocomplete/AutocompleteUser/?q={q}';
+      this.url = '/agnocomplete/AutocompleteUser/?q={q}'
     }
   }
 
   initRequest() {
     this.server = new ServerRequest()
+    if (!this.url) this.setUrl()
   }
   async _search(url) {
     const [{ data }, response] = await this.server.get(url)
@@ -290,19 +274,15 @@ export const SingleMixin = (Base) =>
     }
 
     displaySelected(result) {
-      const result_el = DomUtil.element({
-        tagName: 'div',
-        parent: this.selectedContainer,
-      })
-      result_el.textContent = result.item.label
-      const close = DomUtil.element({
-        tagName: 'span',
-        parent: result_el,
-        className: 'close',
-        textContent: '×',
-      })
+      const [root, { close }] = DOMUtils.loadTemplateWithRefs(Utils.sanitizeVars`
+        <div class="with-toolbox">
+          ${result.item.label}
+          <button type="button" class="icon icon-16 icon-close" title="${translate('Close')}" data-ref="close"></button>
+        </div>
+      `)
+      this.selectedContainer.appendChild(root)
       this.input.style.display = 'none'
-      DomEvent.on(close, 'click', () => {
+      close.addEventListener('click', () => {
         this.selectedContainer.innerHTML = ''
         this.input.style.display = 'block'
         this.options.on_unselect?.(result)
@@ -320,19 +300,12 @@ export const MultipleMixin = (Base) =>
     }
 
     displaySelected(result) {
-      const result_el = DomUtil.element({
-        tagName: 'li',
-        parent: this.selectedContainer,
-      })
-      result_el.textContent = result.item.label
-      const close = DomUtil.element({
-        tagName: 'span',
-        parent: result_el,
-        className: 'close',
-        textContent: '×',
-      })
-      DomEvent.on(close, 'click', () => {
-        this.selectedContainer.removeChild(result_el)
+      const [li, { close }] = DOMUtils.loadTemplateWithRefs(Utils.sanitizeVars`
+        <li class="with-toolbox">${result.item.label} <button class="icon icon-16 icon-close" type="button" data-ref="close"></button></li>
+      `)
+      this.selectedContainer.appendChild(li)
+      close.addEventListener('click', () => {
+        this.selectedContainer.removeChild(li)
         this.options.on_unselect?.(result)
       })
       this.hide()

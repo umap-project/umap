@@ -2,7 +2,8 @@
     /* Colors. */
     --color-darkBlue: #263B58;
     --color-lighterGray: #f6f6f6;
-    --color-lightGray: #ddd;
+    --color-veryLightGray: #ddd;
+    --color-lightGray: #d3d3d3;
     --color-mediumGray: #3e4444;
     --color-darkGray: #323737;
     --color-darkerGray: #2a2e30;
@@ -16,7 +17,11 @@
     --color-darkCyan: #009099;
     --color-veryDarkCyan: #046460;
     --color-red: #c60f13;
+    --color-darkOrange: #b36200;
     --color-darkRed: #5b2a2a;
+    --color-lightViolet: #c043ff;
+    --color-veryDarkerViolet: #472e54;
+    --color-veryDarkViolet: #562f6b;
 
     --background-color: var(--color-light);
     --color-accent: var(--color-brightCyan);
@@ -26,7 +31,7 @@
     /* Buttons. */
     --button-primary-background: var(--color-limeGreen);
     --button-primary-color: var(--color-darkBlue);
-    --button-neutral-background: var(--color-lightGray);
+    --button-neutral-background: var(--color-veryLightGray);
     --button-neutral-color: var(--color-darkGray);
     --button-padding: 8px 16px;
     --button-padding-small: 2px 8px;
@@ -44,26 +49,30 @@
     --control-size: 36px;
     --border-radius: 4px;
     --box-padding: 20px;
-    --small-box-padding: 4px;
+    --medium-box-padding: calc(var(--box-padding) / 2);
+    --small-box-padding: calc(var(--box-padding) / 4);
     --box-margin: 14px;
     --text-margin: 7px;
     --dialog-width: 40vw;
     --map-fragment-height: 210px;
 
     /* z-indexes (leaflet CSS sets the map at 400 by default) */
+    --zindex-tooltip: 510;
     --zindex-alert: 500;
     --zindex-loader: 490;
     --zindex-toolbar: 480;
     --zindex-autocomplete: 470;
     --zindex-dialog: 460;
-    --zindex-contextmenu: 455;
-    --zindex-tooltip: 445;
+    --zindex-contextmenu: 450;
     --zindex-panels: 440;
     --zindex-controls: 430;
     --zindex-dragover: 410;
+    --zindex-orphan-marker: 401;
 
     --block-shadow: 0 1px 7px var(--color-mediumGray);
+    --transition: 300ms;
 }
+
 .dark {
     --background-color: var(--color-darkGray);
     --text-color: #efefef;
@@ -74,5 +83,15 @@
     :root {
         --box-padding: 10px;
         --box-margin: 7px;
+    }
+}
+
+@media all and (max-width: 480px) {
+    :root {
+        --panel-gutter: 4px;
+    }
+
+    .umap-edit-enabled {
+        --header-height: 80px;
     }
 }

@@ -18,11 +18,17 @@ location / {
     proxy_set_header Connection $connection_upgrade;
     proxy_redirect off;
     proxy_buffering off;
-    proxy_pass http://umap/;
+    proxy_pass http://unix:/srv/umap/umap.sock:/;
 }
 ```
 
-Also add this mapping for the `$connection_upgrade` variable:
+The `proxy_pass` is a Unix domain socket here but may also be an IP
+address and port.  See
+https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass
+for more information.
+
+Also add this mapping for the `$connection_upgrade` variable,
+*outside* the `server` section, to enable WebSockets support:
 
 ```
 map $http_upgrade $connection_upgrade {
@@ -30,6 +36,9 @@ map $http_upgrade $connection_upgrade {
     ''      close;
 }
 ```
+
+See https://nginx.org/en/docs/http/websocket.html for more information
+about configuring WebSockets in nginx.
 
 ## Uvicorn
 
@@ -66,7 +75,7 @@ EnvironmentFile=/srv/umap/env
 
 ExecStart=/srv/umap/venv/bin/uvicorn \
     --proxy-headers \
-    --uds /srv/umap/uvicorn.sock \
+    --uds /srv/umap/umap.sock \
     --no-access-log \
     umap.asgi:application
 ExecReload=/bin/kill -HUP ${MAINPID}
@@ -90,3 +99,7 @@ for example to define the number of workers:
 ```env title="/srv/umap/env"
 UVICORN_WORKERS=4
 ```
+
+Don't forget to set the `UMAP_SETTINGS` environment variable to point
+to your `local_settings.py`, which you can also do in the the file
+named in `EnvironmentFile` or with `Environment` directives.
