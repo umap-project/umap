@@ -84,6 +84,11 @@ export class LeafletProxy {
     this.umap.on('draw:multipolygon', () =>
       this.umap.editedFeature.ui.editor.newShape()
     )
+    this.umap.on('draw:rectanglepolygonat', () => this.map.editTools.startRectangleDrag())
+    this.umap.on('draw:rect-drag', () => this.map.editTools.startRectangleDrag())
+    this.umap.on('draw:rect-at', (e) => this.map.editTools.startPlaceRectAt(e.detail.width, e.detail.height))
+    this.umap.on('draw:circle-drag', () => this.map.editTools.startCircleDrag())
+    this.umap.on('draw:circle-at', (e) => this.map.editTools.startPlaceCircleAt(e.detail.radius))
     this.umap.on('draw:route', () => this.map.editTools.startRoute())
     this.umap.on('map:resize', () => this.map.invalidateSize())
   }

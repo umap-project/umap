@@ -110,6 +110,7 @@ class Feature {
   makeUI() {
     const klass = this.getUIClass()
     this._ui = new klass(this, this.toLatLngs())
+    
   }
 
   getUIClass() {
@@ -899,6 +900,11 @@ class Path extends Feature {
         },
       })
     }
+    items.push({
+      title: translate('Transform/rotate shape'),
+      icon: 'icon-redo',
+      action: () => this.ui.startMyTransform(event),
+    })
     return items
   }
 

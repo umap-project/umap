@@ -257,6 +257,8 @@ USER_URL_FIELD = "username"
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
+TEAM_AUTOCOMPLETE_FIELDS = ['^name']
+
 # =============================================================================
 # Miscellaneous project settings
 # =============================================================================

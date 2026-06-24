@@ -437,26 +437,50 @@ export default class Umap extends Utils.WithEvents {
 
   getOwnContextMenu(event) {
     const items = []
-    if (this.editEnabled) {
-      items.push({
-        items: [
-          {
-            title: this.help.displayLabel('DRAW_MARKER', false),
-            icon: 'icon-marker',
+    if (this.hasEditMode()) {
+      if (this.editEnabled) {
+        if (!this.isDirty) {
+          items.push({
+            label: this.help.displayLabel('STOP_EDIT'),
+            action: () => this.disableEdit(),
+          })
+        }
+        if (this.properties.enableMarkerDraw) {
+          items.push({
+            label: this.help.displayLabel('DRAW_MARKER'),
             action: () => this.fire('draw:marker'),
-          },
-          {
-            title: this.help.displayLabel('DRAW_LINE', false),
-            icon: 'icon-polyline',
+          })
+        }
+        if (this.properties.enablePolylineDraw) {
+          items.push({
+            label: this.help.displayLabel('DRAW_LINE'),
             action: () => this.fire('draw:polyline'),
-          },
-          {
-            title: this.help.displayLabel('DRAW_POLYGON', false),
-            icon: 'icon-polygon',
+          })
+        }
+        if (this.properties.enablePolygonDraw) {
+          items.push({
+            label: this.help.displayLabel('DRAW_POLYGON'),
             action: () => this.fire('draw:polygon'),
-          },
-        ],
-      })
+          })
+          items.push({
+            label: this.help.displayLabel('DRAW_RECTANGLEPOLYGONAT'),
+            action: () => this.fire('draw:rectanglepolygonat'),
+          })
+        }
+        items.push('-')
+        items.push({
+          label: translate('Help'),
+          action: () => this.help.show('edit'),
+        })
+      } else {
+        items.push({
+          label: this.help.displayLabel('TOGGLE_EDIT'),
+          action: () => this.enableEdit(),
+        })
+      }
+    }
+    if (items.length) {
+      items.push('-')
     }
     items.push(
       {
@@ -636,6 +660,10 @@ export default class Umap extends Utils.WithEvents {
       'Ctrl+p': {
         if: () => this.editEnabled,
         do: () => this.fire('draw:polygon'),
+      },
+      'Ctrl+r': {
+        if: () => this.editEnabled,
+        do: () => this.fire('draw:rect-drag'),
       },
       'Ctrl+l': {
         if: () => this.editEnabled,

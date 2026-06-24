@@ -68,6 +68,191 @@ U.Editable = L.Editable.extend({
     poly._needs_upsert = true
     return poly.ui
   },
+  createRectanglePolygonAt: function (coords) {
+    const datalayer = this._umap.defaultEditDataLayer()
+    const poly = new U.Polygon(this._umap, datalayer, {
+      geometry: { type: 'Polygon', coordinates: coords },
+    })
+    poly._needs_upsert = true
+    return poly
+  },
+
+  _finishShape: function (feature) {
+    const datalayer = this._umap.defaultEditDataLayer()
+    feature.pushGeometry()
+    datalayer.addFeature(feature)
+    feature.ui.enableEdit()
+    feature.ui.editor.commitDrawing()
+  },
+
+  _rectCoordsFromBounds: function (bounds) {
+    const sw = bounds.getSouthWest()
+    const ne = bounds.getNorthEast()
+    return [[
+      [sw.lng, sw.lat],
+      [ne.lng, sw.lat],
+      [ne.lng, ne.lat],
+      [sw.lng, ne.lat],
+      [sw.lng, sw.lat],
+    ]]
+  },
+
+  _circleCoords: function (center, radiusM, sides) {
+    sides = sides || 64
+    const mPerDegLat = 111320
+    const mPerDegLng = mPerDegLat * Math.cos(center.lat * Math.PI / 180)
+    const pts = []
+    for (let i = 0; i < sides; i++) {
+      const a = (2 * Math.PI * i) / sides
+      pts.push([center.lng + (radiusM * Math.cos(a)) / mPerDegLng,
+                center.lat + (radiusM * Math.sin(a)) / mPerDegLat])
+    }
+    pts.push(pts[0])
+    return [pts]
+  },
+
+  _startDragDraw: function (onDrag, onCommit) {
+    const map = this.map
+    const container = map._container
+    let active = false
+    let startLatLng = null
+    let preview = null
+
+    container.classList.add('leaflet-editable-drawing')
+
+    const toLatLng = (e) => {
+      const r = container.getBoundingClientRect()
+      return map.containerPointToLatLng(L.point(e.clientX - r.left, e.clientY - r.top))
+    }
+
+    const cleanup = () => {
+      container.removeEventListener('mousedown', onMouseDown)
+      document.removeEventListener('mousemove', onMouseMove)
+      document.removeEventListener('mouseup', onMouseUp)
+      document.removeEventListener('keydown', onKeyDown)
+      container.classList.remove('leaflet-editable-drawing')
+      map.dragging.enable()
+      if (preview) { map.removeLayer(preview); preview = null }
+    }
+
+    const onKeyDown = (e) => { if (e.key === 'Escape') cleanup() }
+
+    const onMouseDown = (e) => {
+      if (e.button !== 0) { cleanup(); return }
+      map.dragging.disable()
+      active = true
+      startLatLng = toLatLng(e)
+      preview = onDrag.create(map, startLatLng)
+      document.addEventListener('mousemove', onMouseMove)
+      document.addEventListener('mouseup', onMouseUp)
+    }
+
+    const onMouseMove = (e) => {
+      if (!active) return
+      onDrag.update(preview, startLatLng, toLatLng(e))
+    }
+
+    const onMouseUp = (e) => {
+      if (!active) return
+      active = false
+      const endLatLng = toLatLng(e)
+      cleanup()
+      onCommit(startLatLng, endLatLng)
+    }
+
+    container.addEventListener('mousedown', onMouseDown)
+    document.addEventListener('keydown', onKeyDown)
+  },
+
+  startRectangleDrag: function () {
+    this._startDragDraw(
+      {
+        create: (map, start) => L.rectangle([start, start], {
+          color: '#3388ff', weight: 2, fillOpacity: 0.15, interactive: false,
+        }).addTo(map),
+        update: (rect, start, current) => rect.setBounds(L.latLngBounds(start, current)),
+      },
+      (start, end) => {
+        const bounds = L.latLngBounds(start, end)
+        if (start.distanceTo(end) < 5) return
+        this._finishShape(this.createRectanglePolygonAt(this._rectCoordsFromBounds(bounds)))
+      }
+    )
+  },
+
+  startPlaceRectAt: function (widthM, heightM) {
+    const map = this.map
+    const container = map._container
+    container.classList.add('leaflet-editable-drawing')
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        map.off('click', onClick)
+        document.removeEventListener('keydown', onKey)
+        container.classList.remove('leaflet-editable-drawing')
+      }
+    }
+    const onClick = (e) => {
+      L.DomEvent.stop(e)
+      map.off('click', onClick)
+      document.removeEventListener('keydown', onKey)
+      container.classList.remove('leaflet-editable-drawing')
+      const c = e.latlng
+      const dLat = (heightM / 2) / 111320
+      const dLng = (widthM / 2) / (40075000 * Math.cos(c.lat * Math.PI / 180) / 360)
+      const coords = [[
+        [c.lng - dLng, c.lat - dLat],
+        [c.lng + dLng, c.lat - dLat],
+        [c.lng + dLng, c.lat + dLat],
+        [c.lng - dLng, c.lat + dLat],
+        [c.lng - dLng, c.lat - dLat],
+      ]]
+      this._finishShape(this.createRectanglePolygonAt(coords))
+    }
+    map.once('click', onClick)
+    document.addEventListener('keydown', onKey)
+  },
+
+  startCircleDrag: function () {
+    this._startDragDraw(
+      {
+        create: (map, start) => L.circle(start, {
+          radius: 1, color: '#3388ff', fillOpacity: 0.15, interactive: false,
+        }).addTo(map),
+        update: (circle, start, current) => circle.setRadius(start.distanceTo(current)),
+      },
+      (start, end) => {
+        const r = start.distanceTo(end)
+        if (r < 1) return
+        this._finishShape(this.createRectanglePolygonAt(this._circleCoords(start, r)))
+      }
+    )
+  },
+
+  startPlaceCircleAt: function (radiusM) {
+    const map = this.map
+    const container = map._container
+    container.classList.add('leaflet-editable-drawing')
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        map.off('click', onClick)
+        document.removeEventListener('keydown', onKey)
+        container.classList.remove('leaflet-editable-drawing')
+      }
+    }
+    const onClick = (e) => {
+      L.DomEvent.stop(e)
+      map.off('click', onClick)
+      document.removeEventListener('keydown', onKey)
+      container.classList.remove('leaflet-editable-drawing')
+      this._finishShape(this.createRectanglePolygonAt(this._circleCoords(e.latlng, radiusM)))
+    }
+    map.once('click', onClick)
+    document.addEventListener('keydown', onKey)
+  },
+
+  startRectanglePolygonAt: function () {
+    this.startRectangleDrag()
+  },
 
   createMarker: function (latlng) {
     const datalayer = this._umap.defaultEditDataLayer()
@@ -77,6 +262,7 @@ U.Editable = L.Editable.extend({
     point._needs_upsert = true
     return point.ui
   },
+  
 
   _getDefaultProperties: function () {
     const result = {}

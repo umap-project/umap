@@ -12,6 +12,7 @@ import {
   Polyline,
   latLng,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
+import { Transform } from '../../../vendors/leaflet-path-transform/dist/index.mjs'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import * as GeoUtils from '../geoutils.js'
 import { translate } from '../i18n.js'
@@ -328,12 +329,43 @@ const PathMixin = {
     }
     this._map.once('moveend', this.makeGeometryEditable, this)
     if (this.shouldAllowGeometryEdit()) {
+      this.stopTransform()
       this.enableEdit()
     } else {
       this.feature._umap.tooltip.open({
         content: translate('Please zoom in to edit the geometry'),
       })
       this.disableEdit()
+    }
+  },
+
+  startMyTransform: function () {
+    if (this._transformHandler) {
+      this.stopTransform()
+      return
+    }
+    if (this.editEnabled()) this.disableEdit()
+    this.feature._umap.editPanel.close()
+    const handler = new Transform(this, { rotation: true, scaling: true, uniformScaling: false })
+    this._transformHandler = handler
+    handler.enable()
+    this.on('transformed', this._onTransformed, this)
+    this._stopTransformOnClick = () => this.stopTransform()
+    this._map.on('click', this._stopTransformOnClick)
+  },
+
+  _onTransformed: function () {
+    this.feature.onCommit(this.toGeometry())
+  },
+
+  stopTransform: function () {
+    if (!this._transformHandler) return
+    this._transformHandler.disable()
+    this._transformHandler = null
+    this.off('transformed', this._onTransformed, this)
+    if (this._stopTransformOnClick) {
+      this._map.off('click', this._stopTransformOnClick)
+      this._stopTransformOnClick = null
     }
   },
 
@@ -615,7 +647,7 @@ export const LeafletPolygon = Polygon.extend({
   startHole: function (event) {
     this.enableEdit().newHole(event.latlng)
   },
-
+  
   getMeasure: function (shape) {
     return TextUtils.readableArea(GeoUtils.area(this.toGeometry(shape)))
   },
