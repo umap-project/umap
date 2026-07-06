@@ -1,0 +1,68 @@
+{
+  "name": "leaflet-path-transform",
+  "version": "1.9.0",
+  "description": "Scale/rotate/move plugin for leaflet vector layers ",
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
+  "browser": "dist/index.js",
+  "unpkg": "dist/index.js",
+  "jsdelivr": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist/index.js",
+    "dist/index.mjs",
+    "dist/index.cjs"
+  ],
+  "scripts": {
+    "start": "vite dev",
+    "lint": "eslint ./src/*.mjs",
+    "build": "vite build",
+    "demo": "vite build -c example/vite.config.ts",
+    "release": "git push origin master && git checkout gh-pages && git merge master && git push origin gh-pages && npm publish"
+  },
+  "keywords": [
+    "leaflet",
+    "vector",
+    "scale",
+    "resize",
+    "rotate",
+    "move",
+    "geometry",
+    "edit"
+  ],
+  "author": "Alexander Milevski <info@w8r.name>",
+  "license": "MIT",
+  "dependencies": {
+    "leaflet-path-drag": "1.9.5"
+  },
+  "peerDependencies": {
+    "leaflet": ">=1.8.0 <1.10.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.1.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "prettier": "^3.2.5",
+    "vite": "^5.1.5"
+  },
+  "directories": {
+    "example": "example"
+  },
+  "prettier": {
+    "printWidth": 80,
+    "singleQuote": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/w8r/Leaflet.Path.Transform.git"
+  },
+  "bugs": {
+    "url": "https://github.com/w8r/Leaflet.Path.Transform/issues"
+  },
+  "homepage": "https://github.com/w8r/Leaflet.Path.Transform#readme"
+}

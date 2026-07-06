@@ -1,7 +1,7 @@
-var l = Object.defineProperty;
-var d = (t, n, e) => n in t ? l(t, n, { enumerable: !0, configurable: !0, writable: !0, value: e }) : t[n] = e;
-var p = (t, n, e) => (d(t, typeof n != "symbol" ? n + "" : n, e), e);
-const M = [
+var d = Object.defineProperty;
+var M = (t, e, n) => e in t ? d(t, e, { enumerable: !0, configurable: !0, writable: !0, value: n }) : t[e] = n;
+var u = (t, e, n) => (M(t, typeof e != "symbol" ? e + "" : e, n), n);
+const f = [
   "Point",
   "LineString",
   "Polygon",
@@ -9,42 +9,42 @@ const M = [
   "MultiLineString",
   "MultiPolygon",
   "GeometryCollection"
-], f = ["ZM", "Z", "M"], s = "EMPTY";
+], g = ["ZM", "Z", "M"], c = "EMPTY";
 class G {
-  constructor(n) {
-    p(this, "value");
-    p(this, "position");
-    this.value = n.toUpperCase(), this.position = 0;
+  constructor(e) {
+    u(this, "value");
+    u(this, "position");
+    this.value = e.toUpperCase(), this.position = 0;
   }
-  match(n) {
+  match(e) {
     this.skipWhitespaces();
-    for (const e of n) {
-      const r = e.toUpperCase();
+    for (const n of e) {
+      const r = n.toUpperCase();
       if (this.value.startsWith(r, this.position))
-        return this.position += r.length, e;
+        return this.position += r.length, n;
     }
     return null;
   }
-  matchRegex(n) {
+  matchRegex(e) {
     this.skipWhitespaces();
-    for (const e of n) {
-      const r = this.value.substring(this.position).match(e);
+    for (const n of e) {
+      const r = this.value.substring(this.position).match(n);
       if (r)
         return this.position += r[0].length, r;
     }
     return null;
   }
-  isMatch(n) {
-    return this.skipWhitespaces(), this.value.startsWith(n, this.position) ? (this.position += n.length, !0) : !1;
+  isMatch(e) {
+    return this.skipWhitespaces(), this.value.startsWith(e, this.position) ? (this.position += e.length, !0) : !1;
   }
   matchType() {
-    const n = this.match(M);
-    if (!n)
+    const e = this.match(f);
+    if (!e)
       throw new Error("Expected geometry type");
-    return n;
+    return e;
   }
   matchDimension() {
-    switch (this.match(f)) {
+    switch (this.match(g)) {
       case "ZM":
         return { hasZ: !0, hasM: !0 };
       case "Z":
@@ -63,121 +63,126 @@ class G {
     if (!this.isMatch(")"))
       throw new Error("Expected group end");
   }
-  matchCoordinate(n) {
-    let e;
-    if (n.hasZ && n.hasM ? e = this.matchRegex([/^(\S*)\s+(\S*)\s+(\S*)\s+([^\s,)]*)/i]) : n.hasZ || n.hasM ? e = this.matchRegex([/^(\S*)\s+(\S*)\s+([^\s,)]*)/i]) : e = this.matchRegex([/^(\S*)\s+([^\s,)]*)/i]), !e)
+  matchCoordinate(e) {
+    let n;
+    if (e.hasZ && e.hasM ? n = this.matchRegex([/^(\S*)\s+(\S*)\s+(\S*)\s+([^\s,)]*)/i]) : e.hasZ || e.hasM ? n = this.matchRegex([/^(\S*)\s+(\S*)\s+([^\s,)]*)/i]) : n = this.matchRegex([/^(\S*)\s+([^\s,)]*)/i]), !n)
       throw new Error("Expected coordinates");
-    const r = n.hasZ && n.hasM ? [
-      parseFloat(e[1]),
-      parseFloat(e[2]),
-      parseFloat(e[3]),
-      parseFloat(e[4])
-    ] : n.hasZ ? [parseFloat(e[1]), parseFloat(e[2]), parseFloat(e[3])] : n.hasM ? [
-      parseFloat(e[1]),
-      parseFloat(e[2])
-    ] : [parseFloat(e[1]), parseFloat(e[2])];
-    if (n.srid && n.srid !== 4326) {
-      if (n.proj)
-        return n.proj(`EPSG:${n.srid}`, "EPSG:4326", r);
+    const r = e.hasZ && e.hasM ? [
+      parseFloat(n[1]),
+      parseFloat(n[2]),
+      parseFloat(n[3]),
+      parseFloat(n[4])
+    ] : e.hasZ ? [parseFloat(n[1]), parseFloat(n[2]), parseFloat(n[3])] : e.hasM ? [
+      parseFloat(n[1]),
+      parseFloat(n[2])
+    ] : [parseFloat(n[1]), parseFloat(n[2])];
+    if (!e.srid || e.srid === 4326)
+      return r;
+    if (e.srid === "http://www.opengis.net/def/crs/epsg/0/4326")
+      return r.length === 3 ? [r[1], r[0], r[2]] : [r[1], r[0]];
+    if (!e.proj)
       throw new Error(
-        `EWKT data in an unknown SRID (${n.srid}) was provided, but a proj function was not`
+        `EWKT data in an unknown SRID (${e.srid}) was provided, but a proj function was not`
       );
-    }
-    return r;
+    return e.proj(
+      typeof e.srid == "string" ? e.srid : `EPSG:${e.srid}`,
+      "EPSG:4326",
+      r
+    );
   }
-  matchCoordinates(n) {
-    const e = [];
+  matchCoordinates(e) {
+    const n = [];
     do {
       const r = this.isMatch("(");
-      e.push(this.matchCoordinate(n)), r && this.expectGroupEnd();
+      n.push(this.matchCoordinate(e)), r && this.expectGroupEnd();
     } while (this.isMatch(","));
-    return e;
+    return n;
   }
   skipWhitespaces() {
     for (; this.position < this.value.length && this.value[this.position] === " "; )
       this.position++;
   }
 }
-const g = (t, n) => {
-  if (t.isMatch(s))
-    return n.emptyAsNull ? null : { type: "Point", coordinates: [] };
+const E = (t, e) => {
+  if (t.isMatch(c))
+    return e.emptyAsNull ? null : { type: "Point", coordinates: [] };
   t.expectGroupStart();
-  const e = t.matchCoordinate(n);
+  const n = t.matchCoordinate(e);
   return t.expectGroupEnd(), {
     type: "Point",
-    coordinates: e
+    coordinates: n
   };
-}, E = (t, n) => {
-  if (t.isMatch(s))
-    return n.emptyAsNull ? null : { type: "LineString", coordinates: [] };
+}, m = (t, e) => {
+  if (t.isMatch(c))
+    return e.emptyAsNull ? null : { type: "LineString", coordinates: [] };
   t.expectGroupStart();
-  const e = t.matchCoordinates(n);
+  const n = t.matchCoordinates(e);
   return t.expectGroupEnd(), {
     type: "LineString",
-    coordinates: e
+    coordinates: n
   };
-}, m = (t, n) => {
-  if (t.isMatch(s))
-    return n.emptyAsNull ? null : { type: "Polygon", coordinates: [] };
-  const e = [];
-  for (t.expectGroupStart(), t.expectGroupStart(), e.push(t.matchCoordinates(n)), t.expectGroupEnd(); t.isMatch(","); )
-    t.expectGroupStart(), e.push(t.matchCoordinates(n)), t.expectGroupEnd();
+}, y = (t, e) => {
+  if (t.isMatch(c))
+    return e.emptyAsNull ? null : { type: "Polygon", coordinates: [] };
+  const n = [];
+  for (t.expectGroupStart(), t.expectGroupStart(), n.push(t.matchCoordinates(e)), t.expectGroupEnd(); t.isMatch(","); )
+    t.expectGroupStart(), n.push(t.matchCoordinates(e)), t.expectGroupEnd();
   return t.expectGroupEnd(), {
     type: "Polygon",
-    coordinates: e
+    coordinates: n
   };
-}, S = (t, n) => {
-  if (t.isMatch(s))
-    return n.emptyAsNull ? null : { type: "MultiPoint", coordinates: [] };
+}, S = (t, e) => {
+  if (t.isMatch(c))
+    return e.emptyAsNull ? null : { type: "MultiPoint", coordinates: [] };
   t.expectGroupStart();
-  const e = t.matchCoordinates(n);
+  const n = t.matchCoordinates(e);
   return t.expectGroupEnd(), {
     type: "MultiPoint",
-    coordinates: e
+    coordinates: n
   };
-}, y = (t, n) => {
-  if (t.isMatch(s))
-    return n.emptyAsNull ? null : { type: "MultiLineString", coordinates: [] };
+}, x = (t, e) => {
+  if (t.isMatch(c))
+    return e.emptyAsNull ? null : { type: "MultiLineString", coordinates: [] };
   t.expectGroupStart();
-  const e = [];
+  const n = [];
   do
-    t.expectGroupStart(), e.push(t.matchCoordinates(n)), t.expectGroupEnd();
+    t.expectGroupStart(), n.push(t.matchCoordinates(e)), t.expectGroupEnd();
   while (t.isMatch(","));
   return t.expectGroupEnd(), {
     type: "MultiLineString",
-    coordinates: e
+    coordinates: n
   };
-}, x = (t, n) => {
-  if (t.isMatch(s))
-    return n.emptyAsNull ? null : { type: "MultiPolygon", coordinates: [] };
+}, P = (t, e) => {
+  if (t.isMatch(c))
+    return e.emptyAsNull ? null : { type: "MultiPolygon", coordinates: [] };
   t.expectGroupStart();
-  const e = [];
+  const n = [];
   do {
     t.expectGroupStart();
-    const r = [], o = [];
-    for (t.expectGroupStart(), r.push.apply(r, t.matchCoordinates(n)), t.expectGroupEnd(); t.isMatch(","); )
-      t.expectGroupStart(), o.push(t.matchCoordinates(n)), t.expectGroupEnd();
-    e.push([r, ...o]), t.expectGroupEnd();
+    const r = [], s = [];
+    for (t.expectGroupStart(), r.push.apply(r, t.matchCoordinates(e)), t.expectGroupEnd(); t.isMatch(","); )
+      t.expectGroupStart(), s.push(t.matchCoordinates(e)), t.expectGroupEnd();
+    n.push([r, ...s]), t.expectGroupEnd();
   } while (t.isMatch(","));
   return t.expectGroupEnd(), {
     type: "MultiPolygon",
-    coordinates: e
+    coordinates: n
   };
-}, P = (t, n) => {
-  if (t.isMatch(s))
-    return n.emptyAsNull ? null : { type: "GeometryCollection", geometries: [] };
+}, T = (t, e) => {
+  if (t.isMatch(c))
+    return e.emptyAsNull ? null : { type: "GeometryCollection", geometries: [] };
   t.expectGroupStart();
-  const e = [];
+  const n = [];
   do {
-    const r = u(t, n);
-    r && e.push(r);
+    const r = l(t, e);
+    r && n.push(r);
   } while (t.isMatch(","));
   return t.expectGroupEnd(), {
     type: "GeometryCollection",
-    geometries: e
+    geometries: n
   };
 };
-function c(t) {
+function o(t) {
   return t.join(" ");
 }
 function a(t) {
@@ -190,98 +195,105 @@ function a(t) {
       return " ";
   }
 }
-function T(t) {
-  return t.coordinates.length === 0 ? "POINT EMPTY" : `POINT${a(t.coordinates)}(${c(
+function L(t) {
+  return t.coordinates.length === 0 ? "POINT EMPTY" : `POINT${a(t.coordinates)}(${o(
     t.coordinates
   )})`;
 }
-function L(t) {
+function N(t, e) {
   return t.coordinates.length === 0 ? "MULTIPOINT EMPTY" : `MULTIPOINT${a(
     t.coordinates[0]
-  )}(${t.coordinates.map((n) => c(n)).join(",")})`;
-}
-function N(t) {
-  if (t.coordinates.length === 0)
-    return "LINESTRING EMPTY";
-  const n = `(${t.coordinates.map((e) => c(e)).join(",")})`;
-  return `LINESTRING${a(t.coordinates[0])}${n}`;
+  )}(${t.coordinates.map(
+    (n) => e.version === "1.2.0" ? `(${o(n)})` : o(n)
+  ).join(",")})`;
 }
 function C(t) {
-  return t.geometries.length === 0 ? "GEOMETRYCOLLECTION EMPTY" : `GEOMETRYCOLLECTION${`(${t.geometries.map((e) => O(e)).join(",")})`}`;
+  if (t.coordinates.length === 0)
+    return "LINESTRING EMPTY";
+  const e = `(${t.coordinates.map((n) => o(n)).join(",")})`;
+  return `LINESTRING${a(t.coordinates[0])}${e}`;
+}
+function $(t, e) {
+  return t.geometries.length === 0 ? "GEOMETRYCOLLECTION EMPTY" : `GEOMETRYCOLLECTION${`(${t.geometries.map((r) => w(r, e)).join(",")})`}`;
 }
 function I(t) {
   if (t.coordinates.length === 0)
     return "MULTILINESTRING EMPTY";
-  const n = `(${t.coordinates.map((e) => `(${e.map((r) => c(r))})`)})`;
-  return `MULTILINESTRING${a(t.coordinates[0][0])}${n}`;
+  const e = `(${t.coordinates.map((n) => `(${n.map((r) => o(r))})`)})`;
+  return `MULTILINESTRING${a(t.coordinates[0][0])}${e}`;
 }
 function W(t) {
-  var e;
+  var n;
   if (t.coordinates.length === 0)
     return "POLYGON EMPTY";
-  const n = `(${t.coordinates.map((r) => `(${r.map((o) => c(o))})`)})`;
-  return `POLYGON${a((e = t.coordinates[0]) == null ? void 0 : e[0])}${n}`;
+  const e = `(${t.coordinates.map((r) => `(${r.map((s) => o(s))})`)})`;
+  return `POLYGON${a((n = t.coordinates[0]) == null ? void 0 : n[0])}${e}`;
 }
-function $(t) {
-  var e, r;
+function O(t) {
+  var n, r;
   if (t.coordinates.length === 0)
     return "MULTIPOLYGON EMPTY";
-  const n = `(${t.coordinates.map((o) => `(${o.map((h) => `(${h.map((i) => c(i))})`)})`)})`;
+  const e = `(${t.coordinates.map((s) => `(${s.map((h) => `(${h.map((i) => o(i))})`)})`)})`;
   return `MULTIPOLYGON${a(
-    (r = (e = t.coordinates[0]) == null ? void 0 : e[0]) == null ? void 0 : r[0]
-  )}${n}`;
+    (r = (n = t.coordinates[0]) == null ? void 0 : n[0]) == null ? void 0 : r[0]
+  )}${e}`;
 }
-function u(t, n) {
-  let e = null;
+function l(t, e) {
+  let n = null;
   const r = t.matchRegex([/^SRID=(\d+);/i]);
-  r && (e = parseInt(r[1], 10));
-  const o = t.matchType(), h = t.matchDimension(), i = {
-    ...n,
-    srid: e,
+  if (r)
+    n = parseInt(r[1], 10);
+  else {
+    const p = t.matchRegex([/^<([^>]+)>/i]);
+    p && (n = p[1].toLowerCase());
+  }
+  const s = t.matchType(), h = t.matchDimension(), i = {
+    ...e,
+    srid: n,
     hasZ: h.hasZ,
     hasM: h.hasM
   };
-  switch (o) {
+  switch (s) {
     case "Point":
-      return g(t, i);
-    case "LineString":
       return E(t, i);
-    case "Polygon":
+    case "LineString":
       return m(t, i);
+    case "Polygon":
+      return y(t, i);
     case "MultiPoint":
       return S(t, i);
     case "MultiLineString":
-      return y(t, i);
-    case "MultiPolygon":
       return x(t, i);
-    case "GeometryCollection":
+    case "MultiPolygon":
       return P(t, i);
+    case "GeometryCollection":
+      return T(t, i);
   }
 }
-function O(t) {
+function w(t, e = { version: "1.1.0" }) {
   switch (t.type) {
     case "Point":
-      return T(t);
-    case "LineString":
-      return N(t);
-    case "MultiPoint":
       return L(t);
-    case "GeometryCollection":
+    case "LineString":
       return C(t);
+    case "MultiPoint":
+      return N(t, e);
+    case "GeometryCollection":
+      return $(t, e);
     case "Polygon":
       return W(t);
     case "MultiPolygon":
-      return $(t);
+      return O(t);
     case "MultiLineString":
       return I(t);
   }
 }
-function Z(t, n = {
+function R(t, e = {
   emptyAsNull: !0
 }) {
-  return u(new G(t), n);
+  return l(new G(t), e);
 }
 export {
-  O as geoJSONToWkt,
-  Z as wktToGeoJSON
+  w as geoJSONToWkt,
+  R as wktToGeoJSON
 };

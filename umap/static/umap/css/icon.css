@@ -276,6 +276,9 @@ html[dir="rtl"] .icon {
     background-position: calc(var(--tile) * 7) calc(var(--tile) * 4);
 }
 
+.icon-rectanglepolygonat {
+    background-position: calc(var(--tile) * 4) calc(var(--tile) * 7);
+}
 .icon-polygon-plus {
     background-position: calc(var(--tile) * 8) calc(var(--tile) * 4);
 }
@@ -391,4 +394,20 @@ details:not([open]) .icon-toggle {
 
 .off .icon-zoom {
     background-position: var(--tile) calc(var(--tile) * 2);
+}
+
+.icon-circle-draw {
+    background-position: var(--tile) 0;
+}
+
+.icon-circle-place {
+    background-position: calc(var(--tile) * 2) 0;
+}
+
+.icon-rect-draw {
+    background-position: calc(var(--tile) * 3) 0;
+}
+
+.icon-rect-place {
+    background-position: calc(var(--tile) * 4) 0;
 }

@@ -21,32 +21,32 @@
   }
 </script>
 <script type="module"
-        src="{% static 'umap/vendors/leaflet/leaflet-src.esm.js' %}"
-        defer></script>
+src="{% static 'umap/vendors/leaflet/leaflet-src.esm.js' %}"
+defer></script>
 <script type="module"
-        src="{% static 'umap/js/modules/leaflet-configure.js' %}"
-        defer></script>
+src="{% static 'umap/js/modules/leaflet-configure.js' %}"
+defer></script>
 <script src="{% static 'umap/vendors/heat/leaflet-heat.js' %}" defer></script>
 {% if locale %}
-  {% with "umap/locale/"|add:locale|add:".js" as path %}
-    <script src="{% static path %}" defer></script>
-  {% endwith %}
+{% with "umap/locale/"|add:locale|add:".js" as path %}
+<script src="{% static path %}" defer></script>
+{% endwith %}
 {% endif %}
 <script src="{% static 'umap/vendors/editable/Path.Drag.js' %}" defer></script>
 <script src="{% static 'umap/vendors/editable/Leaflet.Editable.js' %}" defer></script>
 <script type="module" src="{% static 'umap/js/modules/global.js' %}" defer></script>
 <script src="{% static 'umap/vendors/minimap/Control.MiniMap.min.js' %}"
-        defer></script>
+defer></script>
 <script src="{% static 'umap/vendors/csv2geojson/csv2geojson.js' %}" defer></script>
 <script src="{% static 'umap/vendors/osmtogeojson/osmtogeojson.js' %}" defer></script>
 <script src="{% static 'umap/vendors/fullscreen/Leaflet.fullscreen.min.js' %}"
-        defer></script>
+defer></script>
 <script src="{% static 'umap/vendors/measurable/Leaflet.Measurable.js' %}"
-        defer></script>
+defer></script>
 <script src="{% static 'umap/vendors/textpath/leaflet.textpath.js' %}"
-        defer></script>
+defer></script>
 <script src="{% static 'umap/vendors/simple-statistics/simple-statistics.min.js' %}"
-        defer></script>
+defer></script>
 <script src="{% static 'umap/js/umap.controls.js' %}" defer></script>
 <script type="module" src="{% static 'umap/js/components/fragment.js' %}" defer></script>
 <script type="module" src="{% static 'umap/js/components/modal.js' %}" defer></script>

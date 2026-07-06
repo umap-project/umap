@@ -16,6 +16,10 @@ const SHORTCUTS = {
     shortcut: 'Modifier+P',
     label: translate('Draw a polygon'),
   },
+  DRAW_RECTANGLEPOLYGONAT: {
+    shortcut: 'Modifier+R',
+    label: translate('Draw a rectangular polygon at'),
+  },
   TOGGLE_EDIT: {
     shortcut: 'Modifier+E',
     label: translate('Toggle edit mode'),
