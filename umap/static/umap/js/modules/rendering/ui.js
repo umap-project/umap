@@ -251,8 +251,7 @@ export const LeafletMarker = Marker.extend({
     // Override Leaflet default behaviour, which set the zIndex
     // according to feature's y coordinate, and group features
     // zIndex by their datalayer order
-    // FIXME pass in the geojson
-    // this._zIndex = this.feature.datalayer.getDOMOrder()
+    this._zIndex = this.geojson.zIndex
     this._updateZIndex(0)
   },
 })

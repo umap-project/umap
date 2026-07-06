@@ -1756,6 +1756,7 @@ export default class Umap extends Utils.WithEvents {
       if (layer.layers.count()) {
         layer.reorderDOM()
       }
+      layer.redraw()
     }
   }
 
