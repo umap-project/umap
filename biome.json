@@ -18,7 +18,8 @@
       },
       "complexity": {
         "noForEach": "off",
-        "noThisInStatic": "off"
+        "noThisInStatic": "off",
+        "noStaticOnlyClass": "off"
       },
       "performance": {
         "noDelete": "off"

@@ -184,18 +184,6 @@ export class LeafletProxy {
         ?.enableEdit()
         .newHole(this.latLng({ coordinates: coordinate }))
     })
-    // this.umap.on('feature:add', (event) => {
-    //   const { sourceId, geojson } = event.detail
-    //   const group = this.layers[sourceId]
-    //   group.addData(geojson)
-    // })
-    // this.umap.on('feature:remove', (event) => {
-    //   const { sourceId, geojson } = event.detail
-    //   const group = this.layers[sourceId]
-    //   const layer = this.getLayer(geojson.id)
-    //   if (!layer) return
-    //   group.removeLayer(layer)
-    // })
     this.umap.on('feature:reset', (event) => {
       const { sourceId, geojson } = event.detail
       const group = this.layers[sourceId]
@@ -227,10 +215,11 @@ export class LeafletProxy {
   }
 
   getFeatureById(id) {
-    const [datalayerId, featureId] = id.split('/')
-    // TODO: better index of datalayers.
-    const datalayer = this.umap.layers.tree.all().get(datalayerId)
-    return datalayer?.features.get(featureId)
+    for (const layer of this.umap.layers.tree) {
+      if (layer.features.has(id)) {
+        return layer.features.get(id)
+      }
+    }
   }
 
   attachUI(container) {
@@ -270,7 +259,6 @@ export class LeafletProxy {
     if (this.umap.properties.hash && window.location.hash) {
       // FIXME An invalid hash will cause the load to fail
       this.umap.hash.parse()
-      console.log('hash parsed')
     } else if (
       this.umap.properties.defaultView === 'locate' &&
       !this.umap.properties.noControl

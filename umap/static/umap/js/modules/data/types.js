@@ -139,7 +139,6 @@ class Choropleth extends DefaultType {
           break
         }
       }
-      console.log(feature.properties.nom, color)
       acc[feature.id] = { [feature.getMainColor()]: color }
       return acc
     }, {})

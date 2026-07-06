@@ -263,7 +263,7 @@ def test_kml_export(map, live_server, bootstrap, page):
     download.save_as(path)
     assert (
         path.read_text()
-        == """<kml xmlns="http://www.opengis.net/kml/2.2"><Document>\n<Placemark id="gyNzM">\n<name>name poly</name><ExtendedData></ExtendedData>\n  <Polygon>\n<outerBoundaryIs>\n  <LinearRing><coordinates>11.25,53.585984\n10.151367,52.975108\n12.689209,52.167194\n14.084473,53.199452\n12.634277,53.618579\n11.25,53.585984\n11.25,53.585984</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>\n<Placemark id="QwNjg">\n<name>test one</name><description>Some description</description><ExtendedData>\n  <Data name="_umap_options"><value>{"color":"OliveDrab"}</value></Data></ExtendedData>\n  <Point><coordinates>-0.274658,52.57635</coordinates></Point></Placemark>\n<Placemark id="YwMTM">\n<name>test two</name><ExtendedData>\n  <Data name="_umap_options"><value>{"fill":false,"opacity":0.6}</value></Data></ExtendedData>\n  <LineString><coordinates>-0.571289,54.476422\n0.439453,54.610255\n1.724854,53.448807\n4.163818,53.988395\n5.306396,53.533778\n6.591797,53.709714\n7.042236,53.350551</coordinates></LineString></Placemark></Document></kml>"""
+        == """<kml xmlns="http://www.opengis.net/kml/2.2"><Document>\n<Placemark>\n<name>name poly</name><ExtendedData></ExtendedData>\n  <Polygon>\n<outerBoundaryIs>\n  <LinearRing><coordinates>11.25,53.585984\n10.151367,52.975108\n12.689209,52.167194\n14.084473,53.199452\n12.634277,53.618579\n11.25,53.585984\n11.25,53.585984</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>\n<Placemark>\n<name>test one</name><description>Some description</description><ExtendedData>\n  <Data name="_umap_options"><value>{"color":"OliveDrab"}</value></Data></ExtendedData>\n  <Point><coordinates>-0.274658,52.57635</coordinates></Point></Placemark>\n<Placemark>\n<name>test two</name><ExtendedData>\n  <Data name="_umap_options"><value>{"fill":false,"opacity":0.6}</value></Data></ExtendedData>\n  <LineString><coordinates>-0.571289,54.476422\n0.439453,54.610255\n1.724854,53.448807\n4.163818,53.988395\n5.306396,53.533778\n6.591797,53.709714\n7.042236,53.350551</coordinates></LineString></Placemark></Document></kml>"""
     )
 
 
@@ -294,13 +294,11 @@ def test_geojson_export(map, live_server, bootstrap, page):
                     ],
                     "type": "Polygon",
                 },
-                "id": "gyNzM",
                 "properties": {"name": "name poly"},
                 "type": "Feature",
             },
             {
                 "geometry": {"coordinates": [-0.274658, 52.57635], "type": "Point"},
-                "id": "QwNjg",
                 "properties": {
                     "_umap_options": {"color": "OliveDrab"},
                     "name": "test one",
@@ -321,7 +319,6 @@ def test_geojson_export(map, live_server, bootstrap, page):
                     ],
                     "type": "LineString",
                 },
-                "id": "YwMTM",
                 "properties": {
                     "_umap_options": {"fill": False, "opacity": 0.6},
                     "name": "test two",
@@ -351,7 +348,6 @@ def test_export_should_respect_filters(map, live_server, bootstrap, page):
         "features": [
             {
                 "geometry": {"coordinates": [-0.274658, 52.57635], "type": "Point"},
-                "id": "QwNjg",
                 "properties": {
                     "_umap_options": {"color": "OliveDrab"},
                     "name": "test one",
@@ -372,7 +368,6 @@ def test_export_should_respect_filters(map, live_server, bootstrap, page):
                     ],
                     "type": "LineString",
                 },
-                "id": "YwMTM",
                 "properties": {
                     "_umap_options": {"fill": False, "opacity": 0.6},
                     "name": "test two",

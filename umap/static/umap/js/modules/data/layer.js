@@ -203,7 +203,6 @@ export class DataLayer {
   }
 
   showAtLoad() {
-    console.log('showAtLoad', this.autoVisibility, this.showAtZoom())
     return this.autoVisibility && this.showAtZoom()
   }
 
@@ -307,7 +306,6 @@ export class DataLayer {
   }
 
   onMoveEnd() {
-    console.log('onMoveEnd')
     if (this.hasDynamicData() && this.showAtZoom()) {
       this.fetchRemoteData()
     }
@@ -317,19 +315,15 @@ export class DataLayer {
     const from = Number.parseInt(this.properties.fromZoom, 10)
     const to = Number.parseInt(this.properties.toZoom, 10)
     const zoom = this._umap.mapProxy.zoom
-    console.log(zoom, from, to)
     return !((!Number.isNaN(from) && zoom < from) || (!Number.isNaN(to) && zoom > to))
   }
 
   onZoomEnd() {
-    console.log('onZoomEnd', this.autoVisibility, this.showAtZoom(), this.isVisible())
     if (this.isDeleted || !this.autoVisibility) return
     if (!this.showAtZoom() && this.isVisible()) {
-      console.log('hidding')
       this.hide()
     }
     if (this.showAtZoom() && !this.isVisible()) {
-      console.log('showing')
       this.show()
     }
   }

@@ -45,13 +45,6 @@ class Feature {
     }
   }
 
-  get ui() {
-    // Temporary bridge: resolve the live rendered layer from the proxy so
-    // Leaflet.Editable editing keeps working. To be removed once editing goes
-    // write-through (renderer-agnostic ops on the proxy).
-    return this._umap.mapProxy.getLayer(this.id)
-  }
-
   get center() {
     return GeoUtils.center(this.geometry)
   }
@@ -183,7 +176,6 @@ class Feature {
   }
 
   view({ center } = {}) {
-    console.log('we are in the view')
     const outlink = this.getOption('outlink')
     const target = this.getOption('outlinkTarget')
     if (outlink) {
@@ -205,7 +197,6 @@ class Feature {
     }
     this._umap.currentFeature = this
     this.buildCard().then((element) => {
-      console.log('card has been built')
       if (this.getOption('popupShape') === 'Panel') {
         this._umap.fire('panel:show', { id: this.id, content: element })
       } else {
@@ -586,7 +577,7 @@ class Feature {
 
   toRenderer() {
     const geojson = this.toGeoJSON()
-    geojson.id = `${this.datalayer.id}/${this.id}`
+    geojson.id = this.id
     geojson.style = this.getRenderProperties()
     geojson.readonly = this.isReadOnly()
     geojson.label = this.getLabel()

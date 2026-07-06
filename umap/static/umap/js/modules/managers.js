@@ -214,13 +214,15 @@ export class LayerManager {
   }
 }
 
+// Never use twice the same id.
+const UNIQUE_IDS = new Set()
+
 export class FeatureManager extends Map {
   add(feature) {
-    if (this.has(feature.id)) {
-      console.error('Duplicate id', feature, this.get(feature.id))
+    while (UNIQUE_IDS.has(feature.id)) {
       feature.id = Utils.generateId()
-      feature.datalayer._migrated = true
     }
+    UNIQUE_IDS.add(feature.id)
     this.set(feature.id, feature)
   }
 

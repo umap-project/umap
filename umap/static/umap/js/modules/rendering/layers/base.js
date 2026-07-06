@@ -9,7 +9,9 @@ export const Default = GeoJSON.extend({
       geometryToLayer: (latlngs, options, geojson) => {
         const Class = UI.layerClass(geojson)
         const layer = new Class(latlngs, geojson)
-        layer.options.pane = this.pane
+        if (Class !== UI.LeafletMarker) {
+          layer.options.pane = this.pane
+        }
         return layer
       },
       // The style is read straight from the feature's geojson `style` member
