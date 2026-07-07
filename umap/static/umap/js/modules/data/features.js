@@ -16,6 +16,7 @@ import * as DOMUtils from '../domutils.js'
 import * as Icon from '../icon.js'
 import * as GeoUtils from '../geoutils.js'
 import * as TextUtils from '../textutils.js'
+import loadTemplate from '../rendering/template.js'
 
 class Feature {
   constructor(umap, datalayer, geojson = {}, id = null) {
@@ -53,7 +54,7 @@ class Feature {
   }
 
   get ui() {
-    if (!this._ui) this.makeUI()
+    // if (!this._ui) this.makeUI()
     return this._ui
   }
 
@@ -171,7 +172,26 @@ class Feature {
       }`
   }
 
-  view({ latlng } = {}) {
+  async buildCard() {
+    const container = document.createElement('div')
+    container.classList.add('umap-popup')
+    const name = this.getOption('popupTemplate')
+    const content = await loadTemplate(name, this, container)
+    const elements = container.querySelectorAll('img,iframe')
+    // for (const element of elements) {
+    //   this.onElementLoaded(element)
+    // }
+    if (!elements.length && container.textContent.replace('\n', '') === '') {
+      container.innerHTML = ''
+      container.appendChild(
+        DOMUtils.loadTemplate(Utils.sanitizeVars`<h3>${this.getDisplayName()}</h3>`)
+      )
+    }
+    return container
+  }
+
+  view({ center } = {}) {
+    console.log('we are in the view')
     const outlink = this.getOption('outlink')
     const target = this.getOption('outlinkTarget')
     if (outlink) {
@@ -192,9 +212,20 @@ class Feature {
       this._umap.slideshow.current = this
     }
     this._umap.currentFeature = this
-    this.attachPopup().then(() => {
-      this.ui.openPopup(latlng || this.ui.getCenter())
+    this.buildCard().then((element) => {
+      console.log('card has been built')
+      if (this.getOption('popupShape') === 'Panel') {
+        this._umap.fire('panel:show', { content: element })
+      } else {
+        this._umap.fire('popup:show', {
+          content: element,
+          center: center || this.center,
+        })
+      }
     })
+    // this.attachPopup().then(() => {
+    //   this.ui.openPopup(latlng)
+    // })
   }
 
   render(fields) {
@@ -286,7 +317,8 @@ class Feature {
       builder.form.querySelector('input')?.focus()
     })
     this._umap.editedFeature = this
-    if (!this.isOnScreen()) this.zoomTo(event)
+    this._umap.fire('feature:show', { id: this.id })
+    // if (!this.isOnScreen()) this.zoomTo(event)
     return onPanelLoaded
   }
 
@@ -356,10 +388,6 @@ class Feature {
     ]
   }
 
-  endEdit() {
-    this.ui.disableEdit()
-  }
-
   getDisplayName() {
     const keys = U.LABEL_KEYS.slice() // Copy.
     const labelKey = this.getOption('labelKey')
@@ -390,13 +418,6 @@ class Feature {
   getPopupClass() {
     const old = this.getOption('popupTemplate') // Retrocompat.
     return loadPopup(this.getOption('popupShape') || old)
-  }
-
-  async attachPopup() {
-    const Class = this.getPopupClass()
-    const popup = new Class(this)
-    this.ui.bindPopup(popup)
-    return popup.loadContent()
   }
 
   del(sync) {
@@ -574,7 +595,7 @@ class Feature {
 
   extendedProperties() {
     // Include context properties
-    const properties = this._umap.getGeoContext()
+    const properties = this._umap.mapProxy.getGeoContext()
     const locale = getLocale()
     if (locale) properties.locale = locale
     if (U.lang) properties.lang = U.lang
@@ -597,15 +618,16 @@ class Feature {
   }
 
   redraw() {
-    if (this.datalayer?.isVisible() && this.ui?.isVisible()) {
-      if (this.getUIClass() !== this.ui.getClass()) {
-        this.datalayer.hideFeature(this)
-        this.makeUI()
-        this.datalayer.showFeature(this)
-      } else if (this.datalayer?.isBrowsable()) {
-        this.ui._redraw()
-      }
-    }
+    this._umap.fire('feature:reset', { feature: this })
+    // if (this.datalayer?.isVisible() && this.ui?.isVisible()) {
+    //   if (this.getUIClass() !== this.ui.getClass()) {
+    //     this.datalayer.hideFeature(this)
+    //     this.makeUI()
+    //     this.datalayer.showFeature(this)
+    //   } else if (this.datalayer?.isBrowsable()) {
+    //     this.ui._redraw()
+    //   }
+    // }
   }
 
   getContextMenu(event) {
@@ -789,25 +811,6 @@ class Path extends Feature {
 
   _setLatLngs(latlngs) {
     this.ui.setLatLngs(latlngs)
-  }
-
-  edit(event) {
-    if (this._umap.editEnabled) {
-      const promise = super.edit(event)
-      if (!this.ui.editEnabled()) this.ui.makeGeometryEditable()
-      return promise
-    }
-  }
-
-  toggleEditing() {
-    if (this._umap.editEnabled) {
-      if (this.ui.editEnabled()) {
-        this.endEdit()
-        this._umap.editPanel.close()
-      } else {
-        this.edit()
-      }
-    }
   }
 
   getShapeOptions() {

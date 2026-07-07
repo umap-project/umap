@@ -5,12 +5,27 @@ import View from 'ol/View.js'
 import GeoJSON from 'ol/format/GeoJSON.js'
 import VectorSource from 'ol/source/Vector.js'
 import VectorLayer from 'ol/layer/Vector.js'
-import { fromLonLat } from 'ol/proj.js'
+import { fromLonLat, transformExtent, toLonLat } from 'ol/proj.js'
 // import Draw from 'ol/interaction/Draw.js'
+import Overlay from 'ol/Overlay.js'
+import Style from 'ol/style/Style.js'
+import Stroke from 'ol/style/Stroke.js'
+import Fill from 'ol/style/Fill.js'
+import CircleStyle from 'ol/style/Circle.js'
+import { asArray } from 'ol/color.js'
+import Modify from 'ol/interaction/Modify.js'
+
+function rgba(color, opacity) {
+  const rgba = asArray(color).slice()
+  if (opacity != null) rgba[3] = opacity
+  return rgba
+}
 
 export class OLProxy {
   constructor(umap, element) {
     this.umap = umap
+    this.sources = {}
+    this.layers = {}
     this.map = map = new OLMap({
       target: element,
       controls: [],
@@ -21,19 +36,73 @@ export class OLProxy {
       ],
     })
     this.proxyOutgoingEvents()
+    this.proxyIncomingEvents()
+  }
+
+  proxyIncomingEvents() {
+    this.map.on('click', (event) => {
+      console.log(event)
+      const overlays = this.map.getOverlays().getArray()
+      for (const overlay of overlays) {
+        this.map.removeOverlay(overlay)
+      }
+      const { pixel, coordinate } = event
+      this.map.forEachFeatureAtPixel(pixel, (olFeature, layer) => {
+        const id = olFeature.getId()
+        const feature = this.umap.getFeatureById(id)
+        if (this.map.measureTools?.enabled()) return
+        layer._popupHandlersAdded = true // Prevent leaflet from managing event
+        if (event.originalEvent.shiftKey) {
+          if (event.originalEvent.ctrlKey || event.originalEvent.metaKey) {
+            feature.datalayer.edit(event)
+          } else if (!feature.isReadOnly()) {
+            // this.editLayer(id)
+            feature.edit()
+          }
+        } else if (!this.map.editTools?.drawing()) {
+          console.log('asking for feature.view')
+          feature.view({ center: coordinate })
+        }
+      })
+    })
   }
 
   proxyOutgoingEvents() {
     this.umap.on('map:view:set', (event) => {
       const { easing, zoom } = event.detail
-      const center =  event.detail.center
+      const center = event.detail.center
       if (easing) {
-        this.view.animate({zoom}, {center});
+        this.view.animate({ zoom }, { center })
       } else {
         console.log(center)
         this.view.setCenter(fromLonLat(center))
         this.view.setZoom(zoom)
       }
+    })
+    this.umap.on('panel:show', (event) => {
+      const { content } = event.detail
+      this.umap.panel.open({ content })
+    })
+    this.umap.on('popup:show', (event) => {
+      const { content, center } = event.detail
+      console.log('we are in the show')
+      const overlay = new Overlay({
+        element: content,
+        autoPan: {
+          animation: {
+            duration: 250,
+          },
+        },
+      })
+      overlay.setPosition(center)
+      this.map.addOverlay(overlay)
+    })
+    this.umap.on('feature:reset', (event) => {
+      const { feature } = event.detail
+      const source = this.sources[feature.datalayer.id]
+      const olFeature = source.getFeatureById(feature.id)
+      olFeature.setStyle(this.style(feature))
+      olFeature.changed()
     })
   }
 
@@ -47,6 +116,35 @@ export class OLProxy {
 
   get zoom() {
     return this.map.getView().getZoom()
+  }
+
+  get bounds() {
+    return transformExtent(this.view.calculateExtent(), 'EPSG:3857', 'EPSG:4326')
+  }
+
+  get center() {
+    return toLonLat(this.view.getCenter())
+  }
+
+  getGeoContext() {
+    const [west, south, east, north] = this.bounds
+    const [lon, lat] = this.center
+    return {
+      // southwest_lng,southwest_lat,northeast_lng,northeast_lat
+      bbox: `${west},${south},${east},${north}`,
+      north,
+      east,
+      south,
+      west,
+      lat,
+      lon,
+      lng: lon,
+      zoom: this.zoom,
+      left: west,
+      bottom: south,
+      right: east,
+      top: north,
+    }
   }
 
   position(a, b, c) {}
@@ -67,13 +165,25 @@ export class OLProxy {
       })
     )
   }
-  initEditTools() {
-    // const draw = new Draw({
-    //   source: this.source,
-    //   type: 'LineString',
-    // })
-    // this.map.addInteraction(draw)
+  initEditTools() {}
+  enableEdit() {
+    for (const source of Object.values(this.sources)) {
+      const modify = new Modify({ source })
+      modify.on('modifyend', (event) => {
+        event.features.forEach((olFeature) => {
+          const feature = this.umap.getFeatureById(olFeature.getId())
+          if (!feature) return
+          const { geometry } = new GeoJSON().writeFeatureObject(olFeature, {
+            dataProjection: 'EPSG:4326',
+            featureProjection: 'EPSG:3857',
+          })
+          feature.onCommit(geometry)
+        })
+      })
+      this.map.addInteraction(modify)
+    }
   }
+
   createOverlayPane() {
     const container = document.querySelector('#map')
     const pane = document.createElement('div')
@@ -83,24 +193,64 @@ export class OLProxy {
   hasLayer() {
     return true
   }
-  addLayer(geojson) {
-    console.log(geojson)
+  createLayer(datalayer) {
+    this.sources[datalayer.id] = new VectorSource()
+    this.layers[datalayer.id] = new VectorLayer({
+      source: this.sources[datalayer.id],
+      style: (olFeature) => {
+        console.log(olFeature, olFeature.getId())
+        const feature = datalayer.features.get(olFeature.getId())
+        console.log(feature)
+        return this.style(feature)
+      },
+    })
 
-    this.source = new VectorSource({
-      features: new GeoJSON().readFeatures(geojson, {
+    // this.source = new VectorSource({
+    //   features: new GeoJSON().readFeatures(geojson, {
+    //     dataProjection: 'EPSG:4326',
+    //     featureProjection: 'EPSG:3857',
+    //   }),
+    // })
+
+    this.map.addLayer(this.layers[datalayer.id])
+  }
+
+  addData(id, geojson) {
+    this.sources[id].addFeatures(
+      new GeoJSON().readFeatures(geojson, {
         dataProjection: 'EPSG:4326',
         featureProjection: 'EPSG:3857',
-      }),
-    })
-
-    const vectorLayer = new VectorLayer({
-      source: this.source,
-    })
-
-    this.map.addLayer(vectorLayer)
-    console.log(vectorLayer)
-    return vectorLayer
+      })
+    )
   }
+
+  style(feature) {
+    const stroke = new Stroke({
+      color: rgba(
+        feature.getDynamicOption('color'),
+        feature.getDynamicOption('opacity')
+      ),
+      width: feature.getDynamicOption('weight'),
+      lineDash: feature.getDynamicOption('dashArray')?.split(',').map(Number),
+    })
+    const fill =
+      feature.getDynamicOption('fill') === false
+        ? undefined
+        : new Fill({
+            color: rgba(
+              feature.getDynamicOption('fillColor') ||
+                feature.getDynamicOption('color'),
+              feature.getDynamicOption('fillOpacity')
+            ),
+          })
+
+    // Point → Circle (ou Icon si iconUrl), sinon Stroke/Fill pour ligne/polygone
+    if (feature.geometry.type === 'Point') {
+      return new Style({ image: new CircleStyle({ radius: 6, fill, stroke }) })
+    }
+    return new Style({ stroke, fill })
+  }
+
   get hasExtent() {
     return Boolean(this.map.getView().getUpdatedOptions_().extent)
   }

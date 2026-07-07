@@ -17,6 +17,7 @@ import { LayerManager } from './managers.js'
 import Orderable from './orderable.js'
 import { MapPermissions } from './permissions.js'
 import { OLProxy } from './rendering/openlayers.js'
+import { LeafletProxy } from './rendering/map.js'
 import { Request, ServerRequest } from './request.js'
 import Rules from './rules.js'
 import { SCHEMA } from './schema.js'
@@ -47,7 +48,6 @@ export default class Umap extends Utils.WithEvents {
   }
 
   async init(element, geojson) {
-    console.log(JSON.stringify(geojson))
     this.migrateLegacyProperties(geojson.properties)
     this.properties = Object.assign(
       {
@@ -436,6 +436,14 @@ export default class Umap extends Utils.WithEvents {
     return this.filters.isActive() || this.layers.tree.some((d) => d.filters.isActive())
   }
 
+  getFeatureById(id) {
+    for (const layer of this.layers.tree) {
+      if (layer.features.has(id)) {
+        return layer.features.get(id)
+      }
+    }
+  }
+
   getOwnContextMenu(event) {
     const items = []
     if (this.editEnabled) {
@@ -565,28 +573,8 @@ export default class Umap extends Utils.WithEvents {
     return this.getProperty(key, feature)
   }
 
-  getGeoContext() {
-    const bounds = this.mapProxy.bounds
-    const center = this.mapProxy.center
-    const context = {
-      bbox: bounds.toBBoxString(),
-      north: bounds.getNorthEast().lat,
-      east: bounds.getNorthEast().lng,
-      south: bounds.getSouthWest().lat,
-      west: bounds.getSouthWest().lng,
-      lat: center.lat,
-      lng: center.lng,
-      zoom: this.mapProxy.zoom,
-    }
-    context.left = context.west
-    context.bottom = context.south
-    context.right = context.east
-    context.top = context.north
-    return context
-  }
-
   renderUrl(url) {
-    return Utils.greedyTemplate(url, this.getGeoContext(), true)
+    return Utils.greedyTemplate(url, this.mapProxy.getGeoContext(), true)
   }
 
   initShortcuts() {
@@ -1422,6 +1410,7 @@ export default class Umap extends Utils.WithEvents {
     this.initJournal()
     this.checkForLegacy()
     this.checkForAnonymous()
+    this.mapProxy.enableEdit()
   }
 
   checkForAnonymous() {
