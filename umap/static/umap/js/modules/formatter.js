@@ -1,5 +1,4 @@
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
-/* Uses globals for: csv2geojson, osmtogeojson (not available as ESM) */
 import { translate } from './i18n.js'
 
 const parseTextGeom = async (geom) => {
@@ -65,13 +64,8 @@ export class Formatter {
   }
 
   async fromOSM(str) {
-    let src
-    try {
-      src = JSON.parse(str)
-    } catch (e) {
-      src = this.toDom(str)
-    }
-    const data = osmtogeojson(src, { flatProperties: true })
+    const osm2geojson = await import('osm2geojson')
+    const data = osm2geojson.default(str, { flatProperties: true })
     // FIXME: make a PR to osmtogeojson when it's more active
     // cf https://github.com/umap-project/umap/issues/3072
     for (const feature of data.features || []) {

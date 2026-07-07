@@ -63,7 +63,7 @@
     "leaflet.photon": "0.9.2",
     "ol": "^10.9.0",
     "openrouteservice-js": "^0.4.1",
-    "osmtogeojson": "^3.0.0-beta.5",
+    "osm2geojson-lite": "^2.0.1",
     "simple-elevation-chart": "^1.0.0",
     "simple-statistics": "7.8.5"
   },
