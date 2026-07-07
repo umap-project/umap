@@ -3,14 +3,10 @@ import {
   Control as LeafletControl,
   TileLayer,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
-import {
-  PhotonReverse,
-  PhotonSearch,
-} from '../../../vendors/photon/leaflet.photon.esm.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
+import { Geocoder } from '../autocomplete.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
-import { LocationIcon } from '../icon.js'
 
 export class Control {
   constructor(umap) {
@@ -388,37 +384,16 @@ export class SearchControl extends SimpleButton {
   title = translate('Search location')
   icon = 'icon-search'
 
-  onMount() {
-    this.photonOptions = {
-      limit: 10,
-      noResultLabel: translate('No results'),
-    }
-    if (this._umap.properties.photonUrl) {
-      this.photonOptions.url = this._umap.properties.photonUrl
-    }
-  }
-
   onClick() {
-    const [container, { input, resultsContainer }] = Utils.loadTemplateWithRefs(`
+    const [container, { search }] = Utils.loadTemplateWithRefs(`
       <div>
         <h3><i class="icon icon-16 icon-search"></i>${translate('Search location')}</h3>
-        <input class="photon-input" data-ref=input />
-        <div class="photon-autocomplete" data-ref=resultsContainer></div>
+        <div data-ref=search></div>
       </div>
     `)
-    // TODO remove direct call to leafletMap
-    const id = Math.random()
-    this.search = new Search(
-      this._umap,
-      this._umap.mapProxy.map,
-      input,
-      this.photonOptions
-    )
+    this.search = new Geocoder(this._umap, search)
     this._umap.panel.open({ content: container }).then(() => {
-      this.search.on('ajax:send', () => this._umap.loader.start(id))
-      this.search.on('ajax:return', () => this._umap.loader.stop(id))
-      this.search.resultsContainer = resultsContainer
-      input.focus()
+      this.search.input.focus()
     })
   }
 }
@@ -553,124 +528,6 @@ export class LocateControl extends SimpleButton {
   }
 }
 
-export const Search = PhotonSearch.extend({
-  initialize: function (umap, map, input, options) {
-    this._umap = umap
-    this.options.placeholder = translate('Type a place name or coordinates')
-    this.options.location_bias_scale = 0.5
-    PhotonSearch.prototype.initialize.call(this, map, input, options)
-    this.options.url = this._umap.properties.urls.search
-    if (umap.mapProxy.hasExtent) this.options.bbox = umap.mapProxy.getExtentBBoxString()
-    this.reverse = new PhotonReverse({
-      handleResults: (geojson) => {
-        this.handleResultsWithReverse(geojson)
-      },
-    })
-  },
-
-  handleResultsWithReverse: function (geojson) {
-    const latlng = this.reverse.latlng
-    geojson.features.unshift({
-      type: 'Feature',
-      geometry: { type: 'Point', coordinates: [latlng.lng, latlng.lat] },
-      properties: {
-        name: translate('Go to "{coords}"', { coords: `${latlng.lat} ${latlng.lng}` }),
-      },
-    })
-
-    this.handleResults(geojson)
-  },
-
-  search: function () {
-    const pattern = /^(?<lat>[-+]?\d{1,2}[.,]\d+)\s*[ ,]\s*(?<lng>[-+]?\d{1,3}[.,]\d+)$/
-    if (pattern.test(this.input.value)) {
-      this.hide()
-      const { lat, lng } = pattern.exec(this.input.value).groups
-      if (Utils.coordinateIsValid([+lng, +lat])) {
-        this.reverse.doReverse({ lat, lng })
-      } else {
-        Alert.error(translate('Invalid latitude or longitude'))
-      }
-      return
-    }
-    // Only numbers, abort.
-    if (/^[\d .,]*$/.test(this.input.value)) return
-    // Do normal search
-    this.options.includePosition = this._umap.mapProxy.zoom > 10
-    PhotonSearch.prototype.search.call(this)
-  },
-
-  onBlur: function (e) {
-    // Overrided because we don't want to hide the results on blur.
-    this.fire('blur')
-  },
-
-  formatResult: function (feature, el) {
-    const [tools, { point, geom }] = Utils.loadTemplateWithRefs(`
-      <span class="search-result-tools">
-        <button type="button" title="${translate('Add this geometry to my map')}" data-ref=geom><i class="icon icon-16 icon-polygon-plus"></i></button>
-        <button type="button" title="${translate('Add this place to my map')}" data-ref=point><i class="icon icon-16 icon-marker-plus"></i></button>
-      </span>
-    `)
-    geom.hidden = !['R', 'W'].includes(feature.properties.osm_type)
-    point.addEventListener('mousedown', (event) => {
-      event.stopPropagation()
-      const datalayer = this._umap.defaultEditDataLayer()
-      const marker = datalayer.makeFeature(feature)
-      marker.edit()
-    })
-    geom.addEventListener('mousedown', async (event) => {
-      event.stopPropagation()
-      const osm_id = feature.properties.osm_id
-      const types = {
-        R: 'relation',
-        W: 'way',
-        N: 'node',
-      }
-      const osm_type = types[feature.properties.osm_type]
-      if (!osm_type || !osm_id) return
-      await this._umap.loadImporter()
-      const importer = this._umap.importer
-      importer.build()
-      importer.format = 'geojson'
-      importer.raw = await this.getOSMObject(osm_type, osm_id)
-      importer.submit()
-    })
-    el.appendChild(tools)
-    this._formatResult(feature, el)
-    const id = 'location'
-    const coords = feature.geometry.coordinates
-    const latlng = [coords[1], coords[0]]
-    const icon = new LocationIcon()
-    el.addEventListener('mouseover', (event) => {
-      this._umap.fire('map:show:point', { id, latlng, icon })
-    })
-    el.addEventListener('mouseout', (event) => {
-      this._umap.fire('map:hide:point', id)
-    })
-  },
-
-  async getOSMObject(osm_type, osm_id) {
-    const url = `https://www.openstreetmap.org/api/0.6/${osm_type}/${osm_id}/full`
-    const response = await this._umap.request.get(url)
-    if (response?.ok) {
-      const data = await this._umap.formatter.fromOSM(await response.text())
-      data.features = data.features.filter(
-        (feature) => feature.properties.id === `${osm_type}/${osm_id}`
-      )
-      return JSON.stringify(data)
-    }
-  },
-
-  setChoice: function (choice) {
-    choice = choice || this.RESULTS[this.CURRENT]
-    if (choice) {
-      const feature = choice.feature
-      const zoom = Math.max(this._umap.mapProxy.zoom, 14) // Never unzoom.
-      this._umap.fire('map:view:set', { center: feature.geometry.coordinates, zoom })
-    }
-  },
-})
 
 class MiniMapControl extends Control {
   static position = 'bottomright'
