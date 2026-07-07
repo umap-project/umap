@@ -601,8 +601,6 @@ class TileLayerManager {
     if (!spec.url_template) return
     if (this.all.has(spec.url_template)) return this.all.get(spec.url_template)
     const layer = this.create(spec)
-    // TODO change order so the latest is first (specifically the custom layer (i.e not in the
-    // ones from the DB) must appear first in the list)
     this.all.set(spec.url_template, layer)
     return layer
   }
@@ -616,7 +614,7 @@ class TileLayerManager {
   selectDefault() {
     const custom = this.umap.properties.tilelayer
     if (custom?.url_template && custom.attribution) {
-      this.select(this.create(custom))
+      this.select(this.add({ ...custom, rank: 0 }))
     } else {
       this.select(this.default())
     }

@@ -472,7 +472,10 @@ export class TilelayersControl extends SimpleButton {
         <ul data-ref="tileContainer"></ul>
       </div>
     `)
-    for (const layer of this._umap.mapProxy.tilelayers.all.values()) {
+    const tilelayers = Array.from(this._umap.mapProxy.tilelayers.all.values()).sort(
+      (a, b) => a.options.rank - b.options.rank
+    )
+    for (const layer of tilelayers) {
       tileContainer.appendChild(this.addTileLayerElement(layer, options))
     }
     const panel = options.edit ? this._umap.editPanel : this._umap.panel
