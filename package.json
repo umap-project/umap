@@ -61,7 +61,7 @@
     "leaflet.markercluster": "^1.5.3",
     "leaflet.path.drag": "0.0.6",
     "openrouteservice-js": "^0.4.1",
-    "osmtogeojson": "^3.0.0-beta.5",
+    "osm2geojson-lite": "^2.0.1",
     "simple-elevation-chart": "^1.0.0",
     "simple-statistics": "7.8.5"
   },

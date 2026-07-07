@@ -16,7 +16,7 @@ mkdir -p umap/static/umap/vendors/togeojson/ && cp node_modules/@tmcw/togeojson/
 mkdir -p umap/static/umap/vendors/togeojson/ && cp node_modules/@tmcw/togeojson/dist/togeojson.es.mjs.map umap/static/umap/vendors/togeojson/togeojson.es.mjs.map
 mkdir -p umap/static/umap/vendors/tokml/ && cp node_modules/@placemarkio/tokml/dist/tokml.es.mjs umap/static/umap/vendors/tokml/tokml.es.js
 mkdir -p umap/static/umap/vendors/tokml/ && cp node_modules/@placemarkio/tokml/dist/tokml.es.mjs.map umap/static/umap/vendors/tokml/tokml.es.mjs.map
-mkdir -p umap/static/umap/vendors/osmtogeojson/ && cp -r node_modules/osmtogeojson/osmtogeojson.js umap/static/umap/vendors/osmtogeojson/
+mkdir -p umap/static/umap/vendors/osm2geojson/ && cp -r node_modules/osm2geojson-lite/dist/index.mjs umap/static/umap/vendors/osm2geojson/
 mkdir -p umap/static/umap/vendors/georsstogeojson/ && cp -r node_modules/georsstogeojson/GeoRSSToGeoJSON.js umap/static/umap/vendors/georsstogeojson/
 mkdir -p umap/static/umap/vendors/locatecontrol/ && cp -r node_modules/leaflet.locatecontrol/dist/L.Control.Locate.esm.js umap/static/umap/vendors/locatecontrol/
 # We changed an import path, so do not override for now
