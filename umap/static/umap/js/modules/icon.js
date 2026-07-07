@@ -84,46 +84,43 @@ export class Icon {
   }
 }
 
-class FeatureIcon extends Icon {
-  constructor(feature) {
+// Those icons needs the data to render
+class DataIcon extends Icon {
+  constructor(geojson) {
     super()
-    this.feature = feature
+    this.geojson = geojson
   }
 
   get color() {
-    return this.feature.getDynamicOption('color')
+    return this.geojson.style?.color
   }
 
   get opacity() {
-    return this.feature.getOption('iconOpacity')
+    return this.geojson.style?.iconOpacity
   }
 
   get iconUrl() {
-    let url
-    if (this.feature.iconUrl) {
-      url = this.feature.iconUrl
-      this._setRecent(url)
-    } else {
-      url = this.properties.iconUrl
-    }
-    return formatUrl(url, this.feature)
+    const url = this.geojson.style?.iconUrl
+    if (url) this._setRecent(url)
+    return formatUrl(url || this.properties.iconUrl, this.geojson.properties)
   }
 
   get className() {
     let className = super.className
-    if (this.feature.isReadOnly()) className += ' readonly'
-    if (this.feature.isActive()) className += ' umap-icon-active'
+    if (this.geojson.readonly) className += ' readonly'
+    // `umap-icon-active` is toggled on the icon element by the marker itself
+    // (transient interaction state, not baked).
     return className
   }
 
   render() {
     super.render()
-    this.root.dataset.feature = this.feature?.id
+    this.root.dataset.feature = this.geojson?.id
     return this.root
   }
 }
 
-export class DefaultIcon extends FeatureIcon {
+export class DefaultIcon extends DataIcon {
   static defaults = {
     ...Icon.defaults,
     iconSize: [32, 40],
@@ -151,7 +148,7 @@ export class DefaultIcon extends FeatureIcon {
   }
 }
 
-export class Circle extends FeatureIcon {
+export class Circle extends DataIcon {
   static defaults = {
     ...Icon.defaults,
     iconSize: [12, 12],
@@ -168,15 +165,15 @@ export class Circle extends FeatureIcon {
   }
 }
 
-export class LargeCircle extends FeatureIcon {
+export class LargeCircle extends DataIcon {
   static defaults = {
     ...Icon.defaults,
     className: 'umap-large-circle-icon',
   }
 
-  constructor(properties = {}) {
-    super(properties)
-    const size = this.feature?.getOption('iconSize') || SCHEMA.iconSize.default
+  constructor(geojson) {
+    super(geojson)
+    const size = this.geojson.style?.iconSize || SCHEMA.iconSize.default
     this.properties.popupAnchor = [0, -size / 2]
     this.properties.tooltipAnchor = [size / 2, 0]
     this.properties.iconAnchor = [size / 2, size / 2]
@@ -200,9 +197,9 @@ export class Raw extends DefaultIcon {
     className: 'umap-raw-icon',
   }
 
-  constructor(properties = {}) {
-    super(properties)
-    const size = this.feature?.getOption('iconSize') || SCHEMA.iconSize.default
+  constructor(geojson) {
+    super(geojson)
+    const size = this.geojson.style?.iconSize || SCHEMA.iconSize.default
     this.properties.popupAnchor = [0, -size / 2]
     this.properties.tooltipAnchor = [size / 2, 0]
     this.properties.iconAnchor = [size / 2, size / 2]
@@ -345,9 +342,9 @@ export function setContrast(icon, parent, src, bgcolor) {
   }
 }
 
-export function formatUrl(url, feature) {
+export function formatUrl(url, properties) {
   if (Utils.hasVar(url)) {
-    return Utils.greedyTemplate(url || '', feature ? feature.extendedProperties() : {})
+    return Utils.greedyTemplate(url || '', properties || {})
   }
   return url
 }

@@ -13,7 +13,7 @@ def test_basic_choropleth_map_with_default_color(map, live_server, page):
     path = Path(__file__).parent.parent / "fixtures/choropleth_region_chomage.geojson"
     data = json.loads(path.read_text())
     DataLayerFactory(data=data, map=map)
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/46.815099/-0.307617")
     # Hauts-de-France
     expect(page.locator("path[fill='#08519c']")).to_have_count(1)
     # Occitanie

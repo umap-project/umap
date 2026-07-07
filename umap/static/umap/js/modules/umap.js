@@ -6,6 +6,7 @@ import * as Clipboard from './clipboard.js'
 import { Fields } from './data/fields.js'
 import { DataLayer } from './data/layer.js'
 import * as DOMUtils from './domutils.js'
+import * as GeoUtils from './geoutils.js'
 import DropControl from './drop.js'
 import { Filters, migrateLegacyFilters } from './filters.js'
 import { MutatingForm } from './form/builder.js'
@@ -16,7 +17,8 @@ import * as Icon from './icon.js'
 import { LayerManager } from './managers.js'
 import Orderable from './orderable.js'
 import { MapPermissions } from './permissions.js'
-import { LeafletProxy } from './rendering/map.js'
+// import { OLProxy } from './rendering/openlayers.js'
+import { LeafletProxy } from './rendering/leaflet.js'
 import { Request, ServerRequest } from './request.js'
 import Rules from './rules.js'
 import { SCHEMA } from './schema.js'
@@ -81,13 +83,19 @@ export default class Umap extends Utils.WithEvents {
     // Prevent default creation of controls
     const zoomControl = this.properties.zoomControl
     const fullscreenControl = this.properties.fullscreenControl
-    const center = geojson.geometry
+    this.properties.center = geojson.geometry.coordinates
     this.properties.zoomControl = false
     this.properties.fullscreenControl = false
 
-    this.mapProxy = new LeafletProxy(this, element)
+    if (this.searchParams.has('openlayers')) {
+      console.log('So you wanna run OL')
+      this.mapProxy = new OLProxy(this, element)
+    } else {
+      console.log('You go Leaflet')
+      this.mapProxy = new LeafletProxy(this, element)
+    }
     this.uiContainer = Utils.loadTemplate('<div class="umap-ui-container"></div>')
-    this.mapProxy.container.appendChild(this.uiContainer)
+    this.mapProxy.attachUI(this.uiContainer)
     this.controlManager = new ControlManager(this)
     this.drop = new DropControl(this, this.mapProxy.container)
 
@@ -95,9 +103,9 @@ export default class Umap extends Utils.WithEvents {
     this.properties.fullscreenControl =
       fullscreenControl !== undefined ? fullscreenControl : true
 
-    if (center) {
-      this.properties.center = this.mapProxy.latLng(center)
-    }
+    // if (center) {
+    //   this.properties.center = this.mapProxy.position(center)
+    // }
 
     // Needed for permissions
     this.journalEngine = new Journal(this)
@@ -172,6 +180,20 @@ export default class Umap extends Utils.WithEvents {
 
     this.initDataLayers()
     this.on('datalayer:changed', () => this.onDataLayersChanged())
+    this.on('feature:endedit', (event) => {
+      if (this.editedFeature?.id === event.detail.id) {
+        this.editedFeature = null
+        this.editPanel.close()
+      }
+    })
+    this.on('panel:show', (event) => {
+      this.panel.setDefaultMode('expanded')
+      this.panel.open({
+        content: event.detail.content,
+        actions: [this.panelBackButton()],
+      })
+    })
+    this.on('panel:close', () => this.panel.close())
 
     if (this.properties.displayCaptionOnLoad) {
       // Retrocompat
@@ -232,19 +254,12 @@ export default class Umap extends Utils.WithEvents {
   }
 
   set editedFeature(feature) {
-    if (this._editedFeature && this._editedFeature !== feature) {
-      this._editedFeature.endEdit()
-    }
+    const previous = this._editedFeature
     this._editedFeature = feature
+    if (previous && previous.id !== feature?.id) {
+      this.fire('feature:endedit', { id: previous.id })
+    }
     this.fire('seteditedfeature')
-  }
-
-  get activeFeature() {
-    return this._activeFeature
-  }
-
-  set activeFeature(feature) {
-    this._activeFeature = feature
   }
 
   get modifiedAt() {
@@ -564,28 +579,8 @@ export default class Umap extends Utils.WithEvents {
     return this.getProperty(key, feature)
   }
 
-  getGeoContext() {
-    const bounds = this.mapProxy.bounds
-    const center = this.mapProxy.center
-    const context = {
-      bbox: bounds.toBBoxString(),
-      north: bounds.getNorthEast().lat,
-      east: bounds.getNorthEast().lng,
-      south: bounds.getSouthWest().lat,
-      west: bounds.getSouthWest().lng,
-      lat: center.lat,
-      lng: center.lng,
-      zoom: this.mapProxy.zoom,
-    }
-    context.left = context.west
-    context.bottom = context.south
-    context.right = context.east
-    context.top = context.north
-    return context
-  }
-
   renderUrl(url) {
-    return Utils.greedyTemplate(url, this.getGeoContext(), true)
+    return Utils.greedyTemplate(url, this.mapProxy.getGeoContext(), true)
   }
 
   initShortcuts() {
@@ -1133,12 +1128,12 @@ export default class Umap extends Utils.WithEvents {
     `)
     limitBounds.appendChild(boundsButtons)
     current.addEventListener('click', () => {
-      const bounds = this.mapProxy.bounds
+      const [west, south, east, north] = this.mapProxy.bounds
       const oldLimitBounds = { ...this.properties.limitBounds }
-      this.properties.limitBounds.south = bounds.getSouth().toFixed(6)
-      this.properties.limitBounds.west = bounds.getWest().toFixed(6)
-      this.properties.limitBounds.north = bounds.getNorth().toFixed(6)
-      this.properties.limitBounds.east = bounds.getEast().toFixed(6)
+      this.properties.limitBounds.south = south.toFixed(6)
+      this.properties.limitBounds.west = west.toFixed(6)
+      this.properties.limitBounds.north = north.toFixed(6)
+      this.properties.limitBounds.east = east.toFixed(6)
       boundsBuilder.fetchAll()
       this.journal.update(
         'properties.limitBounds',
@@ -1406,10 +1401,9 @@ export default class Umap extends Utils.WithEvents {
 
   geometry() {
     /* Return a GeoJSON geometry Object */
-    const latlng = this.mapProxy.latLng(this.properties.center || this.mapProxy.center)
     return {
       type: 'Point',
-      coordinates: [latlng.lng, latlng.lat],
+      coordinates: this.properties.center,
     }
   }
 
@@ -1422,6 +1416,7 @@ export default class Umap extends Utils.WithEvents {
     this.initJournal()
     this.checkForLegacy()
     this.checkForAnonymous()
+    this.mapProxy.enableEdit()
   }
 
   checkForAnonymous() {
@@ -1761,6 +1756,7 @@ export default class Umap extends Utils.WithEvents {
       if (layer.layers.count()) {
         layer.reorderDOM()
       }
+      layer.redraw()
     }
   }
 
@@ -1768,6 +1764,17 @@ export default class Umap extends Utils.WithEvents {
     this.onceDatalayersLoaded(() =>
       this.loadBrowser().then((browser) => browser.open(mode))
     )
+  }
+
+  panelBackButton() {
+    const button = Utils.loadTemplate(
+      `<button class="icon icon-16 icon-back" title="${translate('Back to browser')}"></button>`
+    )
+    // HOTFIX. Remove when this is released:
+    // https://github.com/Leaflet/Leaflet/pull/9052
+    DOMUtils.disableClickPropagation(button)
+    button.addEventListener('click', () => this.openBrowser())
+    return button
   }
 
   openCaption() {
@@ -1848,7 +1855,7 @@ export default class Umap extends Utils.WithEvents {
     this.setProperties(importedData.properties)
 
     if (importedData.geometry) {
-      this.properties.center = this.mapProxy.latLng(importedData.geometry)
+      this.properties.center = importedData.geometry.coordinates
     }
     for (const spec of importedData.layers) {
       // Never trust an id at this stage
@@ -1919,12 +1926,13 @@ export default class Umap extends Utils.WithEvents {
   }
 
   fitDataBounds() {
-    const layers = this.layers.tree
+    const allBounds = this.layers.tree
       .browsable()
       .visible()
-      .map((d) => d.layer)
-    const bounds = this.mapProxy.getLayersBounds(layers)
-    if (!this.hasData() || !bounds.isValid()) return false
+      .map((d) => d.bounds)
+    let bounds = null
+    for (const b of allBounds) bounds = GeoUtils.unionBbox(bounds, b)
+    if (!this.hasData() || !GeoUtils.isValidBbox(bounds)) return false
     this.fire('map:view:fit-bounds', { bounds })
   }
 

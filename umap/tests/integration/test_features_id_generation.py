@@ -1,8 +1,12 @@
 import json
+import re
 from pathlib import Path
 
+from umap.models import DataLayer
 
-def test_ids_generation(page, live_server, tilelayer):
+
+def test_ids_generation(page, live_server, tilelayer, settings):
+    settings.UMAP_ALLOW_ANONYMOUS = True
     page.goto(f"{live_server.url}/en/map/new/")
 
     # Click on the Draw a line button on a new map.
@@ -26,22 +30,14 @@ def test_ids_generation(page, live_server, tilelayer):
     # Click again to finish
     map.click(position={"x": 350, "y": 450})
 
-    download_panel = page.get_by_title("Share and download")
-    download_panel.click()
+    with page.expect_response(re.compile(r".*/datalayer/create/.*")):
+        page.get_by_role("button", name="Save draft", exact=True).click()
 
-    button = page.get_by_role("button", name="geojson")
+    datalayer = DataLayer.objects.last()
+    data = json.loads(Path(datalayer.geojson.path).read_text())
 
-    with page.expect_download() as download_info:
-        button.click()
-
-    download = download_info.value
-
-    path = Path("/tmp/") / download.suggested_filename
-    download.save_as(path)
-    downloaded = json.loads(path.read_text())
-
-    assert "features" in downloaded
-    features = downloaded["features"]
+    assert "features" in data
+    features = data["features"]
     assert len(features) == 2
     assert "id" in features[0]
     assert "id" in features[1]
