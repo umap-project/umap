@@ -47,7 +47,7 @@ dependencies = [
 dev = [
   "Django==5.2.15",
   "hatch==1.17.0",
-  "ruff==0.15.15",
+  "ruff==0.15.20",
   "djlint==1.39.2",
   "mkdocs==1.6.1",
   "mkdocs-material==9.7.6",
