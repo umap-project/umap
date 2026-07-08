@@ -1,16 +1,16 @@
-import colorbrewer from '../../../vendors/colorbrewer/colorbrewer.js'
-import { translate } from '../i18n.js'
+import ckmeans from 'simple-statistics/ckmeans.js'
 import equalIntervalBreaks from 'simple-statistics/equal_interval_breaks.js'
 import jenks from 'simple-statistics/jenks.js'
-import quantile from 'simple-statistics/quantile.js'
-import ckmeans from 'simple-statistics/ckmeans.js'
 import max from 'simple-statistics/max.js'
-import * as Utils from '../utils.js'
+import quantile from 'simple-statistics/quantile.js'
 import * as DOMUtils from '../domutils.js'
+import { translate } from '../i18n.js'
+import * as Utils from '../utils.js'
 
-const COLOR_SCHEMES = Object.keys(colorbrewer)
-  .filter((k) => k !== 'schemeGroups')
-  .sort()
+async function loadColors() {
+  const { schemeGroups, ...schemes } = (await import('colorbrewer')).default
+  return schemes
+}
 
 export function loadType(type) {
   switch (type) {
@@ -46,14 +46,6 @@ function buildCaption(items) {
 }
 
 class DefaultType {
-  // - type / getType (Circles)
-  // - name / human type (eg. Proportional Circles, translatable)
-  // - ensureConfig / getDefaultConfig
-  // - getEditableProperties
-  // - getProperty
-  // - getDefaultProperty
-  // - renderLegend
-  // - compute
   static type = 'Default'
   static name = translate('Default')
   static browsable = true
@@ -66,7 +58,7 @@ class DefaultType {
     if (this.key) properties[this.key] ??= {}
   }
 
-  static editableProperties() {
+  static async editableProperties() {
     return []
   }
 }
@@ -124,6 +116,7 @@ class Choropleth extends DefaultType {
     // TODO mv to form logic
     // breaks = breaks.map((b) => +b.toFixed(2)).join(',')
     let colorScheme = properties.choropleth?.brewer
+    const colorbrewer = await loadColors()
     if (!colorbrewer[colorScheme]) colorScheme = 'Blues'
     // First break is the bottom boundary of the data range,
     // so no feature value can be below it.
@@ -150,7 +143,7 @@ class Choropleth extends DefaultType {
     return { properties: featuresProperties, caption: buildCaption(items) }
   }
 
-  static editableProperties(fields, config) {
+  static async editableProperties(fields) {
     return [
       [
         'properties.choropleth.property',
@@ -165,7 +158,7 @@ class Choropleth extends DefaultType {
         {
           handler: 'Select',
           label: translate('Choropleth color palette'),
-          selectOptions: COLOR_SCHEMES,
+          selectOptions: Object.keys(await loadColors()).sort(),
         },
       ],
       [
@@ -236,6 +229,7 @@ class Categorized extends DefaultType {
     }
     const classes = categories.length
     const colorScheme = properties.categorized?.brewer
+    const colorbrewer = await loadColors()
     let colors
     if (colorbrewer[colorScheme]?.[classes]) {
       colors = colorbrewer[colorScheme][classes]
@@ -251,7 +245,7 @@ class Categorized extends DefaultType {
     return { properties: featuresProperties, caption: buildCaption(items) }
   }
 
-  static editableProperties(fields) {
+  static async editableProperties(fields) {
     return [
       [
         'properties.categorized.property',
@@ -266,7 +260,7 @@ class Categorized extends DefaultType {
         {
           handler: 'Select',
           label: translate('Color palette'),
-          selectOptions: COLOR_SCHEMES,
+          selectOptions: Object.keys(await loadColors()).sort(),
         },
       ],
       [
@@ -360,7 +354,7 @@ class Circles extends DefaultType {
     return ul
   }
 
-  static editableProperties(fields) {
+  static async editableProperties(fields) {
     return [
       [
         'properties.circles.property',
@@ -408,7 +402,7 @@ class Cluster extends DefaultType {
     }
   }
 
-  static editableProperties(fields) {
+  static async editableProperties(fields) {
     return [
       [
         'properties.cluster.radius',
@@ -448,7 +442,7 @@ class Heat extends DefaultType {
     }
   }
 
-  static editableProperties(fields) {
+  static async editableProperties(fields) {
     return [
       [
         'properties.heat.radius',
