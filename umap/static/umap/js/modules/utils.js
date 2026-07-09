@@ -26,7 +26,6 @@ export function checkId(string) {
   return /^[A-Za-z0-9]{5}$/.test(string)
 }
 
-
 /**
  * Import DOM purify, and initialize it.
  *

@@ -1,11 +1,6 @@
-// Export JSDOM to the global namespace, to be able to check for its presence
-// in the actual implementation. Avoiding monkeypatching the implementations here.
-import { JSDOM } from 'jsdom'
-global.JSDOM = JSDOM
-
+import pkg from 'chai'
 import { describe, it } from 'mocha'
 import * as Utils from '../js/modules/utils.js'
-import pkg from 'chai'
 const { assert, expect } = pkg
 
 describe('Utils', () => {
