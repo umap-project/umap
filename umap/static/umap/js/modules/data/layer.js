@@ -14,7 +14,6 @@ import { Cluster } from '../rendering/layers/cluster.js'
 import { Heat } from '../rendering/layers/heat.js'
 import Rules from '../rules.js'
 import * as Schema from '../schema.js'
-import TableEditor from '../tableeditor.js'
 import * as Utils from '../utils.js'
 import { LineString, Point, Polygon } from './features.js'
 import { Fields, getDefaultFields } from './fields.js'
@@ -1503,8 +1502,10 @@ export class DataLayer {
 
   tableEdit() {
     if (!this.isVisible()) return
-    const editor = new TableEditor(this._umap, this)
-    editor.open()
+    import('../tableeditor.js').then(({ default: TableEditor }) => {
+      const editor = new TableEditor(this._umap, this)
+      editor.open()
+    })
   }
 
   getFilterKeys() {
