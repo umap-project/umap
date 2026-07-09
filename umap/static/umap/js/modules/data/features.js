@@ -251,7 +251,7 @@ class Feature {
     ])
     // removeLayer step will close the edit panel, let's reopen it
     builder.on('set', () => this.edit(event))
-    container.appendChild(builder.build())
+    builder.build().then((form) => container.appendChild(form))
 
     const properties = []
     for (const field of this.fields) {
@@ -275,15 +275,16 @@ class Feature {
     builder = new MutatingForm(this, properties, {
       id: 'umap-feature-properties',
     })
-    const form = builder.build()
-    container.appendChild(form)
-    const button = Utils.loadTemplate(
-      `<button type="button"><i class="icon icon-16 icon-add"></i>${translate('Add a new field')}</button>`
-    )
-    button.addEventListener('click', () => {
-      this.datalayer.fields.editField().then(() => this.edit({ force: true }))
+    builder.build().then((form) => {
+      container.appendChild(form)
+      const button = Utils.loadTemplate(
+        `<button type="button"><i class="icon icon-16 icon-add"></i>${translate('Add a new field')}</button>`
+      )
+      button.addEventListener('click', () => {
+        this.datalayer.fields.editField().then(() => this.edit({ force: true }))
+      })
+      form.appendChild(button)
     })
-    form.appendChild(button)
     this.appendEditFieldsets(container)
     const [details, { fieldset }] = Utils.loadTemplateWithRefs(`
       <details>
@@ -338,7 +339,7 @@ class Feature {
       container,
       translate('Shape properties')
     )
-    shapeProperties.appendChild(builder.build())
+    builder.build().then((form) => shapeProperties.appendChild(form))
 
     this.addExtraEditFieldset(container)
 
@@ -350,7 +351,7 @@ class Feature {
       container,
       translate('Advanced properties')
     )
-    advancedProperties.appendChild(builder.build())
+    builder.build().then((form) => advancedProperties.appendChild(form))
 
     const interactionOptions = this.getInteractionOptions()
     builder = new MutatingForm(this, interactionOptions)
@@ -358,7 +359,7 @@ class Feature {
       container,
       translate('Interaction options')
     )
-    popupFieldset.appendChild(builder.build())
+    builder.build().then((form) => popupFieldset.appendChild(form))
   }
 
   getInteractionOptions() {
@@ -813,7 +814,7 @@ export class Point extends Feature {
       this.zoomTo({ easing: false })
     })
     const fieldset = DOMUtils.createFieldset(container, translate('Coordinates'))
-    fieldset.appendChild(builder.build())
+    builder.build().then((form) => fieldset.appendChild(form))
   }
 }
 
@@ -997,7 +998,7 @@ class Path extends Feature {
       id: 'umap-feature-line-decoration',
     })
     const fieldset = DOMUtils.createFieldset(container, translate('Line decoration'))
-    fieldset.appendChild(builder.build())
+    builder.build().then((form) => fieldset.appendChild(form))
   }
 }
 
@@ -1259,7 +1260,7 @@ export class LineString extends Path {
   }
 
   async routeForm() {
-    return this._ensureRoute().then(({ PROFILES, PREFERENCES }) => {
+    return this._ensureRoute().then(async ({ PROFILES, PREFERENCES }) => {
       const metadatas = [
         [
           'profile',
@@ -1288,7 +1289,7 @@ export class LineString extends Path {
       const form = new MutatingForm(this.properties._umap_options.route, metadatas, {
         umap: this._umap,
       })
-      return form.build()
+      return await form.build()
     })
   }
 

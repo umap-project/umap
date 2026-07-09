@@ -1,8 +1,3 @@
-import {
-  AjaxAutocomplete,
-  AjaxAutocompleteMultiple,
-  AutocompleteDatalist,
-} from '../autocomplete.js'
 import { TYPES as LAYER_TYPES } from '../data/types.js'
 import { translate } from '../i18n.js'
 import * as Icon from '../icon.js'
@@ -57,7 +52,7 @@ Fields.Base = class {
     return ''
   }
 
-  build() {
+  async build() {
     if (!this.elements.helpText) return
     if (this.properties.helpText) {
       this.elements.helpText.textContent = this.properties.helpText
@@ -148,8 +143,8 @@ Fields.Textarea = class extends Fields.Base {
     return Utils.sanitizeVars`<textarea placeholder="${this.properties.placeholder || ''}" name="${this.name}" id="${this.id}" data-ref=textarea></textarea>`
   }
 
-  build() {
-    super.build()
+  async build() {
+    await super.build()
     this.textarea = this.elements.textarea
     this.input = this.textarea
     this.fetch()
@@ -185,8 +180,8 @@ Fields.Input = class extends Fields.Base {
     return Utils.sanitizeVars`<input type="${this.type()}" name="${this.name}" placeholder="${this.properties.placeholder || ''}" data-ref=input id="${this.id}" />`
   }
 
-  build() {
-    super.build()
+  async build() {
+    await super.build()
     this.input = this.elements.input
     this.input._helper = this
     if (this.properties.className) {
@@ -242,9 +237,9 @@ Fields.BlurInput = class extends Fields.Input {
     return `<div class="blur-container">${super.getTemplate()}<button type="button" class="icon">✔</button></div>`
   }
 
-  build() {
+  async build() {
     this.properties.className = 'blur'
-    super.build()
+    await super.build()
     this.input.addEventListener('focus', () => this.fetch())
   }
 
@@ -342,7 +337,7 @@ Fields.CheckBox = class extends Fields.Base {
     return Utils.sanitizeVars`<input type=checkbox name="${this.name}" data-ref=input />`
   }
 
-  build() {
+  async build() {
     this.input = this.elements.input
     if (this.properties.disabled) {
       this.input.disabled = true
@@ -350,7 +345,7 @@ Fields.CheckBox = class extends Fields.Base {
     this.input._helper = this
     this.fetch()
     this.input.addEventListener('change', () => this.sync())
-    super.build()
+    await super.build()
   }
 
   fetch() {
@@ -376,7 +371,7 @@ Fields.CheckBoxes = class extends Fields.Base {
     return Utils.sanitizeVars`<label><input type=checkbox value="${value}" name="${this.name}" data-ref=input />${label}</label>`
   }
 
-  build() {
+  async build() {
     const initial = this.get() || []
     for (const [value, label] of this.properties.choices) {
       const [root, { input }] = Utils.loadTemplateWithRefs(
@@ -386,7 +381,7 @@ Fields.CheckBoxes = class extends Fields.Base {
       input.checked = initial.includes(value)
       input.addEventListener('change', () => this.sync())
     }
-    super.build()
+    await super.build()
   }
 
   value() {
@@ -399,7 +394,7 @@ Fields.Select = class extends Fields.Base {
     return Utils.sanitizeVars`<select name="${this.name}" data-ref=select id="${this.id}"></select>`
   }
 
-  build() {
+  async build() {
     this.select = this.elements.select
     if (this.properties.disabled) {
       this.select.disabled = true
@@ -407,7 +402,7 @@ Fields.Select = class extends Fields.Base {
     this.validValues = []
     this.buildOptions()
     this.select.addEventListener('change', () => this.sync())
-    super.build()
+    await super.build()
   }
 
   getOptions() {
@@ -485,7 +480,7 @@ Fields.EditableText = class extends Fields.Base {
     this.form.appendChild(this.input)
   }
 
-  build() {
+  async build() {
     this.fetch()
     this.input.addEventListener('input', () => this.sync())
     this.input.addEventListener('keypress', (event) => this.onKeyPress(event))
@@ -540,8 +535,8 @@ Fields.ColorPicker = class extends Fields.Input {
     return `${super.getTemplate()}<div class="umap-color-picker" hidden data-ref=colors></div>`
   }
 
-  build() {
-    super.build()
+  async build() {
+    await super.build()
     for (const color of this.getColors()) {
       this.addColor(color)
     }
@@ -715,8 +710,8 @@ Fields.FeatureDataLayerSwitcher = class extends BaseDataLayerSwitcher {
     `
   }
 
-  build() {
-    super.build()
+  async build() {
+    await super.build()
     this.elements.openEditPanel.addEventListener('click', () => {
       this.obj.datalayer.edit()
     })
@@ -790,8 +785,9 @@ Fields.NullableBoolean = class extends Fields.Select {
 
 // Adds an autocomplete using all available user defined properties
 Fields.PropertyInput = class extends Fields.BlurInput {
-  build() {
-    super.build()
+  async build() {
+    await super.build()
+    const { AutocompleteDatalist } = await import('../autocomplete.js')
     const autocomplete = new AutocompleteDatalist(this.input)
     // Will be used on Umap and DataLayer
     const properties = Array.from(this.builder.obj.fields.keys())
@@ -825,8 +821,8 @@ Fields.IconUrl = class extends Fields.BlurInput {
     `
   }
 
-  build() {
-    super.build()
+  async build() {
+    await super.build()
     this.tabs = this.elements.tabs
     this.body = this.elements.body
     this.footer = this.elements.footer
@@ -1100,8 +1096,8 @@ Fields.Switch = class extends Fields.CheckBox {
     return `${super.getTemplate()}<label for="${this.id}" data-ref=customLabel data-help="${help}">${label}</label>`
   }
 
-  build() {
-    super.build()
+  async build() {
+    await super.build()
     this.container.classList.add('with-switch')
     this.input.classList.add('switch')
     this.input.id = this.id
@@ -1152,13 +1148,13 @@ Fields.MultiChoice = class extends Fields.Base {
     return `<div class="${this.getClassName()} by${this.getChoices().length}" data-ref=wrapper></div>`
   }
 
-  build() {
+  async build() {
     const choices = this.getChoices()
     for (const [i, [value, label]] of choices.entries()) {
       this.addChoice(value, label, i)
     }
     this.fetch()
-    super.build()
+    await super.build()
   }
 
   addChoice(value, label, counter) {
@@ -1239,8 +1235,8 @@ Fields.Range = class extends Fields.FloatInput {
     return this.root.classList.contains('undefined') ? undefined : super.value()
   }
 
-  build() {
-    super.build()
+  async build() {
+    await super.build()
     let options = ''
     const step = this.properties.step || 1
     const digits = step < 1 ? 1 : 0
@@ -1261,8 +1257,9 @@ Fields.Range = class extends Fields.FloatInput {
 }
 
 Fields.ManageOwner = class extends Fields.Base {
-  build() {
-    super.build()
+  async build() {
+    const { AjaxAutocomplete } = await import('../autocomplete.js')
+    await super.build()
     const options = {
       className: 'edit-owner',
       on_select: (choice) => this.onSelect(choice),
@@ -1293,8 +1290,9 @@ Fields.ManageOwner = class extends Fields.Base {
 }
 
 Fields.ManageEditors = class extends Fields.Base {
-  build() {
-    super.build()
+  async build() {
+    const { AjaxAutocompleteMultiple } = await import('../autocomplete.js')
+    await super.build()
     const options = {
       className: 'edit-editors',
       on_select: (choice) => this.onSelect(choice),

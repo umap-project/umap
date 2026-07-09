@@ -9,7 +9,7 @@ def test_resetting_map_would_remove_from_save_queue(
     requests = []
 
     def register_request(request):
-        if request.url.endswith(".png"):
+        if request.url.endswith((".png", ".js")):
             return
         requests.append((request.method, request.url))
 

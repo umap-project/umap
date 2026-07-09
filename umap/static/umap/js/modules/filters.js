@@ -419,7 +419,7 @@ export class Filters {
         <button type="button" data-ref=editField><i class="icon icon-16 icon-edit"></i>${translate('Edit this field')}</button>
       </div>
     `)
-    body.appendChild(form.build())
+    form.build().then((el) => body.appendChild(el))
     editField.addEventListener('click', () => {
       this._umap.dialog.accept().then(() => {
         this._parent.fields.editField(fieldKey)
@@ -441,9 +441,9 @@ export class Filters {
     })
   }
 
-  buildForm(container) {
+  async buildForm(container) {
     const form = new FiltersForm(this, this.buildFormFields(), { className: 'formbox' })
-    container.appendChild(form.build())
+    container.appendChild(await form.build())
     return form
   }
 

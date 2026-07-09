@@ -156,7 +156,7 @@ export class DataLayer {
       }
     }
 
-    const impacts = Utils.getImpactsFromSchema(fields)
+    const impacts = Schema.getImpacts(fields)
 
     for (const impact of impacts) {
       switch (impact) {
@@ -827,7 +827,7 @@ export class DataLayer {
     return this.properties.inCaption
   }
 
-  _editMetadata(container) {
+  async _editMetadata(container) {
     const metadataFields = [
       [
         'parentId',
@@ -894,7 +894,7 @@ export class DataLayer {
         this.edit().then((panel) => panel.scrollTo('details#layer-properties'))
       }
     })
-    container.appendChild(builder.build())
+    container.appendChild(await builder.build())
   }
 
   async _editLayerProperties(container) {
@@ -910,11 +910,11 @@ export class DataLayer {
       `
       const [details, { fieldset }] = Utils.loadTemplateWithRefs(template)
       container.appendChild(details)
-      fieldset.appendChild(builder.build())
+      fieldset.appendChild(await builder.build())
     }
   }
 
-  _editShapeProperties(container) {
+  async _editShapeProperties(container) {
     const fields = [
       'properties.color',
       'properties.iconClass',
@@ -936,10 +936,10 @@ export class DataLayer {
       container,
       translate('Shape properties')
     )
-    shapeFieldset.appendChild(builder.build())
+    shapeFieldset.appendChild(await builder.build())
   }
 
-  _editAdvancedProperties(container) {
+  async _editAdvancedProperties(container) {
     const fields = [
       'properties.smoothFactor',
       'properties.dashArray',
@@ -961,10 +961,10 @@ export class DataLayer {
       container,
       translate('Advanced properties')
     )
-    advancedFieldset.appendChild(builder.build())
+    advancedFieldset.appendChild(await builder.build())
   }
 
-  _editInteractionProperties(container) {
+  async _editInteractionProperties(container) {
     const fields = [
       'properties.popupShape',
       'properties.popupTemplate',
@@ -980,10 +980,10 @@ export class DataLayer {
       container,
       translate('Interaction options')
     )
-    popupFieldset.appendChild(builder.build())
+    popupFieldset.appendChild(await builder.build())
   }
 
-  _editTextPathProperties(container) {
+  async _editTextPathProperties(container) {
     const fields = [
       'properties.textPath',
       'properties.textPathColor',
@@ -995,10 +995,10 @@ export class DataLayer {
     ]
     const builder = new MutatingForm(this, fields)
     const fieldset = DOMUtils.createFieldset(container, translate('Line decoration'))
-    fieldset.appendChild(builder.build())
+    fieldset.appendChild(await builder.build())
   }
 
-  _editRemoteDataProperties(container) {
+  async _editRemoteDataProperties(container) {
     // XXX I'm not sure **why** this is needed (as it's set during `this.initialize`)
     // but apparently it's needed.
     if (!Utils.isObject(this.properties.remoteData)) {
@@ -1049,7 +1049,7 @@ export class DataLayer {
       translate('Remote data')
     )
     const builder = new MutatingForm(this, fields)
-    remoteDataContainer.appendChild(builder.build())
+    remoteDataContainer.appendChild(await builder.build())
     const button = DOMUtils.loadTemplate(`
       <button class="umap-verify" type="button">${translate('Verify remote URL')}</button>
     `)
@@ -1057,7 +1057,7 @@ export class DataLayer {
     remoteDataContainer.appendChild(button)
   }
 
-  _buildAdvancedActions(container) {
+  async _buildAdvancedActions(container) {
     const advancedActions = DOMUtils.createFieldset(
       container,
       translate('Advanced actions')
@@ -1099,20 +1099,20 @@ export class DataLayer {
       return
     }
     const container = document.createElement('div')
-    this._editMetadata(container)
+    await this._editMetadata(container)
     await this._editLayerProperties(container)
-    this._editShapeProperties(container)
-    this._editAdvancedProperties(container)
-    this._editInteractionProperties(container)
-    this._editTextPathProperties(container)
+    await this._editShapeProperties(container)
+    await this._editAdvancedProperties(container)
+    await this._editInteractionProperties(container)
+    await this._editTextPathProperties(container)
     if (!this.layers.count()) {
-      this._editRemoteDataProperties(container)
+      await this._editRemoteDataProperties(container)
     }
     this.fields.edit(container)
     this.rules.edit(container)
 
     if (this._umap.properties.urls.datalayer_versions) {
-      this.buildVersionsFieldset(container)
+      await this.buildVersionsFieldset(container)
     }
 
     if (!this.layers.count()) {

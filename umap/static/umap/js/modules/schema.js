@@ -689,3 +689,40 @@ export const SCHEMA = {
     impacts: ['data'],
   },
 }
+
+function _getPropertyName(field) {
+  const filtered_field = ['options.', 'properties.'].reduce(
+    (acc, prefix) => acc.replace(prefix, ''),
+    field
+  )
+  return filtered_field.split('.')[0]
+}
+
+export function getImpacts(fields, schema) {
+  const current_schema = schema || SCHEMA
+  const impacted = fields
+    .map((field) => {
+      // remove the option prefix for fields
+      // And only keep the first part in case of a subfield
+      // (e.g "options.limitBounds.foobar" will just return "limitBounds")
+      return _getPropertyName(field)
+    })
+    .reduce((acc, field) => {
+      // retrieve the "impacts" field from the schema
+      // and merge them together using sets
+      const impacts = current_schema[field]?.impacts || []
+      for (const impact of impacts) {
+        acc.add(impact)
+      }
+      return acc
+    }, new Set())
+
+  return Array.from(impacted)
+}
+
+export function hasField(field, schema) {
+  const current_schema = schema || SCHEMA
+  if (typeof field !== 'string') return false
+  const field_name = _getPropertyName(field)
+  return current_schema[field_name] !== undefined
+}

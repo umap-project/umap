@@ -160,7 +160,7 @@ export default class TableEditor extends Utils.WithTemplate {
       id: `umap-feature-properties_${feature.id}`,
     })
     cell.innerHTML = ''
-    cell.appendChild(builder.build())
+    builder.build().then((form) => cell.appendChild(form))
     const input = builder.helpers[field].input
     input.focus()
     input.addEventListener('blur', () => {

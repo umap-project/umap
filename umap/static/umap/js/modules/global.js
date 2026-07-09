@@ -1,9 +1,4 @@
 import { uMapAlert as Alert } from '../components/alerts/alert.js'
-import {
-  AjaxAutocomplete,
-  AjaxAutocompleteMultiple,
-  AutocompleteDatalist,
-} from './autocomplete.js'
 import { LineString, Point, Polygon } from './data/features.js'
 import Help from './help.js'
 import * as Icon from './icon.js'
@@ -18,9 +13,6 @@ import * as Utils from './utils.js'
 // By alphabetic order
 window.U = {
   Alert,
-  AjaxAutocomplete,
-  AjaxAutocompleteMultiple,
-  AutocompleteDatalist,
   Help,
   Icon,
   LeafletMarker,

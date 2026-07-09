@@ -28,17 +28,17 @@ export class Form extends Utils.WithEvents {
     this.helpers = {}
   }
 
-  build() {
+  async build() {
     this.form.innerHTML = ''
     for (const definition of this.fields) {
-      this.buildField(this.makeField(definition))
+      await this.buildField(this.makeField(definition))
     }
     return this.form
   }
 
-  buildField(field) {
+  async buildField(field) {
     field.buildTemplate()
-    field.build()
+    await field.build()
   }
 
   makeField(field) {
@@ -222,8 +222,8 @@ export class MutatingForm extends Form {
     return template
   }
 
-  build() {
-    super.build()
+  async build() {
+    await super.build()
     this._umap.help.parse(this.form)
     return this.form
   }

@@ -1,6 +1,6 @@
 {% extends "umap/content.html" %}
 
-{% load i18n %}
+{% load i18n static %}
 
 {% block head_title %}
   {% translate "Create or edit a team" %} - {{ SITE_DESCRIPTION }}
@@ -30,6 +30,7 @@
     </div>
   </div>
   <script type="module" defer>
+    import { AjaxAutocompleteMultiple } from "{% static 'umap/js/modules/autocomplete.js' %}"
     const form = document.querySelector("#team_form")
     const select = form.querySelector('#id_members')
     if (select) {
@@ -51,7 +52,7 @@
         placeholder: "{% trans "Add user" %}",
         url: "{% url 'agnocomplete:agnocomplete' 'AutocompleteUser' %}?q={q}"
       }
-      const autocomplete = new U.AjaxAutocompleteMultiple(form, options)
+      const autocomplete = new AjaxAutocompleteMultiple(form, options)
       for (const option of select.options) {
         autocomplete.displaySelected({
           item: { value: option.value, label: option.textContent },

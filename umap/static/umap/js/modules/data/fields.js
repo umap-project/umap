@@ -372,7 +372,7 @@ export class Fields extends Map {
         <button type="button" data-ref=addFilter hidden><i class="icon icon-16 icon-filters"></i>${translate('Add filter for this field')}</button>
       </div>
     `)
-    body.appendChild(form.build())
+    form.build().then((el) => body.appendChild(el))
     if (this.parent.filters) {
       addFilter.addEventListener('click', () => {
         this.dialog.accept().then(() => {
