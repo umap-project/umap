@@ -1,12 +1,13 @@
-{% load i18n %}
+{% load i18n static %}
 
 {% include "umap/components/alerts/alert.html" %}
 {% for message in messages %}
-  <script type="module" defer>
+  <script type="module">
+    import { uMapAlert as Alert } from "{% static 'umap/js/components/alerts/alert.js' %}"
     {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-      U.Alert.error("{{ message }}")
+      Alert.error("{{ message }}")
     {% else %}
-      U.Alert.success("{{ message }}")
+      Alert.success("{{ message }}")
     {% endif %}
   </script>
 {% endfor %}
