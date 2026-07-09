@@ -2,21 +2,21 @@ import {
   uMapAlert as Alert,
   uMapAlertConflict as AlertConflict,
 } from '../../components/alerts/alert.js'
+import * as DOMUtils from '../domutils.js'
+import { Filters } from '../filters.js'
 import { MutatingForm } from '../form/builder.js'
+import * as GeoUtils from '../geoutils.js'
 import { translate } from '../i18n.js'
+import { FeatureManager, LayerManager } from '../managers.js'
 import { DataLayerPermissions } from '../permissions.js'
 import { Default as DefaultLayer } from '../rendering/layers/base.js'
 import { Cluster } from '../rendering/layers/cluster.js'
 import { Heat } from '../rendering/layers/heat.js'
+import Rules from '../rules.js'
 import * as Schema from '../schema.js'
 import TableEditor from '../tableeditor.js'
 import * as Utils from '../utils.js'
-import * as DOMUtils from '../domutils.js'
-import * as GeoUtils from '../geoutils.js'
 import { LineString, Point, Polygon } from './features.js'
-import Rules from '../rules.js'
-import { FeatureManager, LayerManager } from '../managers.js'
-import { Filters } from '../filters.js'
 import { Fields, getDefaultFields } from './fields.js'
 import { loadType } from './types.js'
 
@@ -897,8 +897,8 @@ export class DataLayer {
     container.appendChild(builder.build())
   }
 
-  _editLayerProperties(container) {
-    const layerFields = this.Type.editableProperties(this.fields)
+  async _editLayerProperties(container) {
+    const layerFields = await this.Type.editableProperties(this.fields)
 
     if (layerFields.length) {
       const builder = new MutatingForm(this, layerFields)
@@ -1094,13 +1094,13 @@ export class DataLayer {
     if (this.createdOnServer) download.hidden = false
   }
 
-  edit() {
+  async edit() {
     if (!this._umap.editEnabled) {
       return
     }
     const container = document.createElement('div')
     this._editMetadata(container)
-    this._editLayerProperties(container)
+    await this._editLayerProperties(container)
     this._editShapeProperties(container)
     this._editAdvancedProperties(container)
     this._editInteractionProperties(container)
