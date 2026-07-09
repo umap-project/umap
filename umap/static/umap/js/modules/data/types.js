@@ -1,8 +1,3 @@
-import ckmeans from 'simple-statistics/ckmeans.js'
-import equalIntervalBreaks from 'simple-statistics/equal_interval_breaks.js'
-import jenks from 'simple-statistics/jenks.js'
-import max from 'simple-statistics/max.js'
-import quantile from 'simple-statistics/quantile.js'
 import * as DOMUtils from '../domutils.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
@@ -103,13 +98,20 @@ class Choropleth extends DefaultType {
           .filter((b) => !Number.isNaN(b))
       }
     } else if (mode === 'equidistant') {
+      const equalIntervalBreaks = (
+        await import('simple-statistics/equal_interval_breaks.js')
+      ).default
       breaks = equalIntervalBreaks(values, classes)
     } else if (mode === 'jenks') {
+      const jenks = (await import('simple-statistics/jenks.js')).default
       breaks = jenks(values, classes)
     } else if (mode === 'quantiles') {
+      const quantile = (await import('simple-statistics/quantile.js')).default
       const quantiles = [...Array(classes)].map((e, i) => i / classes).concat(1)
       breaks = quantile(values, quantiles)
     } else {
+      const ckmeans = (await import('simple-statistics/ckmeans.js')).default
+      const max = (await import('simple-statistics/max.js')).default
       breaks = ckmeans(values, classes).map((cluster) => cluster[0])
       breaks.push(max(values)) // Needed for computing the legend
     }
