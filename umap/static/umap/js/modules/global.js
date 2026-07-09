@@ -1,27 +1,13 @@
-import { uMapAlert as Alert } from '../components/alerts/alert.js'
 import { LineString, Point, Polygon } from './data/features.js'
-import Help from './help.js'
-import * as Icon from './icon.js'
-import { LeafletMarker, LeafletPolygon, LeafletPolyline } from './rendering/ui.js'
-import { ServerRequest } from './request.js'
-import { SCHEMA } from './schema.js'
-import * as Utils from './utils.js'
+import { LeafletMarker } from './rendering/ui.js'
 
 // Import modules and export them to the global scope.
 // For the not yet module-compatible JS out there.
 
 // By alphabetic order
 window.U = {
-  Alert,
-  Help,
-  Icon,
   LeafletMarker,
-  LeafletPolygon,
-  LeafletPolyline,
   LineString,
   Point,
   Polygon,
-  SCHEMA,
-  ServerRequest,
-  Utils,
 }

@@ -1002,7 +1002,7 @@ Fields.IconUrl = class extends Fields.BlurInput {
 
   buildRecentList() {
     this.grid.innerHTML = ''
-    const items = U.Icon.RECENT.map((src) => ({
+    const items = Icon.RECENT.map((src) => ({
       src,
     }))
     this.addCategory(items, null, this.grid)
