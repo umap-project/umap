@@ -100,7 +100,7 @@ export default class Share {
       iframeOptionsWrapper,
       translate('Embed and link options')
     )
-    iframeOptions.appendChild(builder.build())
+    builder.build().then((form) => iframeOptions.appendChild(form))
   }
 
   open() {

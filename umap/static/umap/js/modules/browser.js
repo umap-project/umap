@@ -246,16 +246,16 @@ export default class Browser {
         window.setTimeout(form.syncAll.bind(form))
       })
     }
-    this.formContainer.appendChild(searchForm.build())
-    listenFormChanges(searchForm)
+    searchForm.build().then((form) => {
+      this.formContainer.appendChild(form)
+      listenFormChanges(searchForm)
+    })
     if (this._umap.filters.size) {
-      const filtersForm = this._umap.filters.buildForm(this.formContainer)
-      listenFormChanges(filtersForm)
+      this._umap.filters.buildForm(this.formContainer).then(listenFormChanges)
     }
     for (const datalayer of this._umap.layers.tree) {
       if (datalayer.filters.size) {
-        const filtersForm = datalayer.filters.buildForm(this.formContainer)
-        listenFormChanges(filtersForm)
+        datalayer.filters.buildForm(this.formContainer).then(listenFormChanges)
       }
     }
   }

@@ -72,7 +72,7 @@ export class Importer {
       api_key: this.umap.properties.ORSAPIKey,
       host: this.umap.properties.ORSHost,
     })
-    this.umap.dialog.open({ template: form.build() }).then(async () => {
+    this.umap.dialog.open({ template: await form.build() }).then(async () => {
       try {
         const params = {
           locations: [[latlng.lng, latlng.lat]],

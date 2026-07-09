@@ -96,8 +96,7 @@ export class MapPermissions {
         },
       ])
       const builder = new MutatingForm(this, fields)
-      const form = builder.build()
-      container.appendChild(form)
+      builder.build().then((form) => container.appendChild(form))
     }
   }
 
@@ -154,17 +153,17 @@ export class MapPermissions {
     ])
 
     const builder = new MutatingForm(this, topFields)
-    const form = builder.build()
-    container.appendChild(form)
-    if (collaboratorsFields.length) {
-      const fieldset = Utils.loadTemplate(
-        `<fieldset class="separator"><legend>${translate('Manage collaborators')}</legend></fieldset>`
-      )
-      container.appendChild(fieldset)
-      const builder = new MutatingForm(this, collaboratorsFields)
-      const form = builder.build()
+    const form = builder.build().then((form) => {
       container.appendChild(form)
-    }
+      if (collaboratorsFields.length) {
+        const fieldset = Utils.loadTemplate(
+          `<fieldset class="separator"><legend>${translate('Manage collaborators')}</legend></fieldset>`
+        )
+        container.appendChild(fieldset)
+        const builder = new MutatingForm(this, collaboratorsFields)
+        builder.build().then((form) => container.appendChild(form))
+      }
+    })
   }
 
   _editDatalayers(container) {
@@ -327,8 +326,7 @@ export class DataLayerPermissions {
     const builder = new MutatingForm(this, fields, {
       className: 'umap-form datalayer-permissions',
     })
-    const form = builder.build()
-    container.appendChild(form)
+    builder.build().then((form) => container.appendChild(form))
   }
 
   getUrl() {

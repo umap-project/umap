@@ -4,7 +4,6 @@ import {
   TileLayer,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
-import { Geocoder } from '../autocomplete.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
 
@@ -384,7 +383,8 @@ export class SearchControl extends SimpleButton {
   title = translate('Search location')
   icon = 'icon-search'
 
-  onClick() {
+  async onClick() {
+    const { Geocoder } = await import('../autocomplete.js')
     const [container, { search }] = Utils.loadTemplateWithRefs(`
       <div>
         <h3><i class="icon icon-16 icon-search"></i>${translate('Search location')}</h3>
@@ -527,7 +527,6 @@ export class LocateControl extends SimpleButton {
     else this.start()
   }
 }
-
 
 class MiniMapControl extends Control {
   static position = 'bottomright'

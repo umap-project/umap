@@ -21,7 +21,7 @@ import { MapPermissions } from './permissions.js'
 import { LeafletProxy } from './rendering/leaflet.js'
 import { Request, ServerRequest } from './request.js'
 import Rules from './rules.js'
-import { SCHEMA } from './schema.js'
+import * as Schema from './schema.js'
 import Slideshow from './slideshow.js'
 import { Journal } from './journal/engine.js'
 import { BottomBar, EditBar, TopBar } from './ui/bar.js'
@@ -118,8 +118,8 @@ export default class Umap extends Utils.WithEvents {
 
     if (geojson.properties.schema) this.overrideSchema(geojson.properties.schema)
     if (geojson.properties.ttl) {
-      SCHEMA.ttl.choices = Array.from(Object.entries(geojson.properties.ttl))
-      SCHEMA.ttl.default = geojson.properties.default_ttl
+      Schema.SCHEMA.ttl.choices = Array.from(Object.entries(geojson.properties.ttl))
+      Schema.SCHEMA.ttl.default = geojson.properties.default_ttl
     }
 
     // Do not display in an iframe.
@@ -318,7 +318,7 @@ export default class Umap extends Utils.WithEvents {
         }
       }
     }
-    for (const [key, schema] of Object.entries(SCHEMA)) {
+    for (const [key, schema] of Object.entries(Schema.SCHEMA)) {
       setKey(schema, key, this.searchParams.get(key))
       if (schema.legacy) {
         for (const oldKey of schema.legacy) {
@@ -548,7 +548,7 @@ export default class Umap extends Utils.WithEvents {
   // Missing keys inside the schema are merged with the default ones.
   overrideSchema(schema) {
     for (const [key, extra] of Object.entries(schema)) {
-      SCHEMA[key] = Object.assign({}, SCHEMA[key], extra)
+      Schema.SCHEMA[key] = Object.assign({}, Schema.SCHEMA[key], extra)
     }
   }
 
@@ -567,7 +567,7 @@ export default class Umap extends Utils.WithEvents {
       if (value !== undefined) return value
     }
     if (Utils.usableOption(this.properties, key)) return this.properties[key]
-    return SCHEMA[key]?.default
+    return Schema.SCHEMA[key]?.default
   }
 
   getColor() {
@@ -803,7 +803,7 @@ export default class Umap extends Utils.WithEvents {
 
   setProperties(newProperties) {
     this.migrateLegacyProperties(newProperties)
-    for (const key of Object.keys(SCHEMA)) {
+    for (const key of Object.keys(Schema.SCHEMA)) {
       if (newProperties[key] !== undefined) {
         this.properties[key] = newProperties[key]
         if (key === 'rules') this.rules.load()
@@ -850,15 +850,14 @@ export default class Umap extends Utils.WithEvents {
       className: 'map-metadata',
       umap: this,
     })
-    const form = builder.build()
-    container.appendChild(form)
+    builder.build().then((form) => container.appendChild(form))
 
     const tags = DOMUtils.createFieldset(container, translate('Tags'))
     const tagsFields = ['properties.tags']
     const tagsBuilder = new MutatingForm(this, tagsFields, {
       umap: this,
     })
-    tags.appendChild(tagsBuilder.build())
+    tagsBuilder.build().then((form) => tags.appendChild(form))
     const credits = DOMUtils.createFieldset(container, translate('Credits'))
     const creditsFields = [
       'properties.licence',
@@ -868,7 +867,7 @@ export default class Umap extends Utils.WithEvents {
       'properties.permanentCreditBackground',
     ]
     const creditsBuilder = new MutatingForm(this, creditsFields, { umap: this })
-    credits.appendChild(creditsBuilder.build())
+    creditsBuilder.build().then((form) => credits.appendChild(form))
     this.editPanel.open({ content: container, highlight: 'caption' })
   }
 
@@ -897,7 +896,7 @@ export default class Umap extends Utils.WithEvents {
       className: 'map-metadata',
       umap: this,
     })
-    const form = builder.build()
+    builder.build().then((form) => container.appendChild(form))
     const button = DOMUtils.loadTemplate(
       `<button type="button">${translate('Use current center and zoom')}</button>`
     )
@@ -905,7 +904,6 @@ export default class Umap extends Utils.WithEvents {
       this.setCenterAndZoom()
       builder.fetchAll()
     })
-    container.appendChild(form)
     container.appendChild(button)
     this.editPanel.open({ content: container, highlight: 'center' })
   }
@@ -931,7 +929,7 @@ export default class Umap extends Utils.WithEvents {
       container,
       translate('User interface options')
     )
-    controlsOptions.appendChild(builder.build())
+    builder.build().then((form) => controlsOptions.appendChild(form))
   }
 
   _editShapeProperties(container) {
@@ -955,7 +953,7 @@ export default class Umap extends Utils.WithEvents {
       container,
       translate('Default shape properties')
     )
-    defaultShapeProperties.appendChild(builder.build())
+    builder.build().then((form) => defaultShapeProperties.appendChild(form))
   }
 
   _editDefaultKeys(container) {
@@ -973,7 +971,7 @@ export default class Umap extends Utils.WithEvents {
       container,
       translate('Default properties')
     )
-    defaultShapeProperties.appendChild(builder.build())
+    builder.build().then((form) => defaultShapeProperties.appendChild(form))
   }
 
   _editInteractionsProperties(container) {
@@ -991,7 +989,7 @@ export default class Umap extends Utils.WithEvents {
       container,
       translate('Default interaction options')
     )
-    popupFieldset.appendChild(builder.build())
+    builder.build().then((form) => popupFieldset.appendChild(form))
   }
 
   _editTilelayer(container) {
@@ -1044,7 +1042,7 @@ export default class Umap extends Utils.WithEvents {
       translate('Custom background')
     )
     const builder = new MutatingForm(this, tilelayerFields, { umap: this })
-    customTilelayer.appendChild(builder.build())
+    builder.build().then((form) => customTilelayer.appendChild(form))
   }
 
   _editOverlay(container) {
@@ -1092,7 +1090,7 @@ export default class Umap extends Utils.WithEvents {
     ]
     const overlay = DOMUtils.createFieldset(container, translate('Custom overlay'))
     const builder = new MutatingForm(this, overlayFields, { umap: this })
-    overlay.appendChild(builder.build())
+    builder.build().then((form) => overlay.appendChild(form))
   }
 
   _editBounds(container) {
@@ -1119,7 +1117,7 @@ export default class Umap extends Utils.WithEvents {
       ],
     ]
     const boundsBuilder = new MutatingForm(this, boundsFields, { umap: this })
-    limitBounds.appendChild(boundsBuilder.build())
+    boundsBuilder.build().then((form) => limitBounds.appendChild(form))
     const [boundsButtons, { current, empty }] = DOMUtils.loadTemplateWithRefs(`
       <div class="button-bar half">
         <button type="button" data-ref="current">${translate('Use current bounds')}</button>
@@ -1188,7 +1186,7 @@ export default class Umap extends Utils.WithEvents {
     const slideshowBuilder = new MutatingForm(this, slideshowFields, {
       umap: this,
     })
-    slideshow.appendChild(slideshowBuilder.build())
+    slideshowBuilder.build().then((form) => slideshow.appendChild(form))
   }
 
   _editSync(container) {
@@ -1199,7 +1197,7 @@ export default class Umap extends Utils.WithEvents {
     const builder = new MutatingForm(this, ['properties.syncEnabled'], {
       umap: this,
     })
-    sync.appendChild(builder.build())
+    builder.build().then((form) => sync.appendChild(form))
   }
 
   _advancedActions(container) {
@@ -1379,7 +1377,7 @@ export default class Umap extends Utils.WithEvents {
 
   exportProperties() {
     const properties = {}
-    for (const key of Object.keys(SCHEMA)) {
+    for (const key of Object.keys(Schema.SCHEMA)) {
       if (this.properties[key] !== undefined) {
         properties[key] = this.properties[key]
       }
@@ -1502,7 +1500,7 @@ export default class Umap extends Utils.WithEvents {
       }
     }
 
-    const impacts = Utils.getImpactsFromSchema(fields)
+    const impacts = Schema.getImpacts(fields)
     for (const impact of impacts) {
       switch (impact) {
         case 'ui':
@@ -1684,7 +1682,7 @@ export default class Umap extends Utils.WithEvents {
       </div>
     `
     const [container, { ul }] = Utils.loadTemplateWithRefs(template)
-    const showLayer = (layer, container) => {
+    const showLayer = async (layer, container) => {
       const nochildren =
         !layer.isLoaded() || layer.features.count() || layer.isRemoteLayer()
           ? ' no-children'
@@ -1721,17 +1719,17 @@ export default class Umap extends Utils.WithEvents {
         [['properties.name', { handler: 'EditableText' }]],
         { className: 'umap-form-inline' }
       )
-      const form = builder.build()
+      const form = await builder.build()
       formbox.appendChild(form)
       li.dataset.id = layer.id
       container.appendChild(li)
       for (const child of layer.layers.tree.root()) {
-        showLayer(child, body)
+        await showLayer(child, body)
       }
     }
     const layers = this.layers.tree.root()
     for (const layer of layers) {
-      showLayer(layer, ul)
+      await showLayer(layer, ul)
     }
     new Orderable(ul, onReorder, { allowTree: true })
 
@@ -1998,7 +1996,7 @@ export default class Umap extends Utils.WithEvents {
   }
 
   getStaticPathFor(name) {
-    return SCHEMA.iconUrl.default.replace('marker.svg', name)
+    return Schema.SCHEMA.iconUrl.default.replace('marker.svg', name)
   }
 
   undo() {

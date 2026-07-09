@@ -1,4 +1,3 @@
-import { AutocompleteDatalist } from './autocomplete.js'
 import { MutatingForm } from './form/builder.js'
 import { translate } from './i18n.js'
 import Orderable from './orderable.js'
@@ -95,7 +94,9 @@ class Rule {
     return this.properties[option]
   }
 
-  edit() {
+  async edit() {
+    const { AutocompleteDatalist } = await import('./autocomplete.js')
+
     const options = [
       [
         'condition',
@@ -121,22 +122,29 @@ class Rule {
     ]
     const builder = new MutatingForm(this, options)
     const container = document.createElement('div')
-    container.appendChild(builder.build())
-    const autocomplete = new AutocompleteDatalist(builder.helpers.condition.input)
-    const properties = Array.from(this.parent.fields.keys())
-    autocomplete.suggestions = properties
-    autocomplete.input.addEventListener('input', (event) => {
-      const value = event.target.value
-      if (properties.includes(value)) {
-        autocomplete.suggestions = [`${value}=`, `${value}!=`, `${value}>`, `${value}<`]
-      } else if (value.endsWith('=')) {
-        const key = value.split('!')[0].split('=')[0]
-        if (key) {
-          autocomplete.suggestions = this.parent
-            .sortedValues(key)
-            .map((str) => `${value}${str ?? ''}`)
+    builder.build().then((form) => {
+      container.appendChild(form)
+      const autocomplete = new AutocompleteDatalist(builder.helpers.condition.input)
+      const properties = Array.from(this.parent.fields.keys())
+      autocomplete.suggestions = properties
+      autocomplete.input.addEventListener('input', (event) => {
+        const value = event.target.value
+        if (properties.includes(value)) {
+          autocomplete.suggestions = [
+            `${value}=`,
+            `${value}!=`,
+            `${value}>`,
+            `${value}<`,
+          ]
+        } else if (value.endsWith('=')) {
+          const key = value.split('!')[0].split('=')[0]
+          if (key) {
+            autocomplete.suggestions = this.parent
+              .sortedValues(key)
+              .map((str) => `${value}${str ?? ''}`)
+          }
         }
-      }
+      })
     })
     const backButton = Utils.loadTemplate(Utils.sanitizeVars`
       <button class="flat" type="button" data-ref="add">

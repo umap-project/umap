@@ -503,9 +503,6 @@ export class Geocoder extends BaseAjax {
     const response = await this._umap.request.get(url)
     if (response?.ok) {
       const data = await this._umap.formatter.fromOSM(await response.text())
-      data.features = data.features.filter(
-        (feature) => feature.properties.id === `${osm_type}/${osm_id}`
-      )
       return JSON.stringify(data)
     }
   }

@@ -1,4 +1,5 @@
 import * as Utils from '../utils.js'
+import * as Schema from '../schema.js'
 
 /**
  * Updaters are classes able to convert messages
@@ -24,7 +25,7 @@ class BaseUpdater {
 
 export class MapUpdater extends BaseUpdater {
   update({ key, value }) {
-    if (Utils.fieldInSchema(key)) {
+    if (Schema.hasField(key)) {
       Utils.setObjectValue(this._umap, key, value)
     }
 
@@ -60,7 +61,7 @@ export class DataLayerUpdater extends BaseUpdater {
     const datalayer = this.getDataLayerFromID(metadata.id)
     if (key === 'properties') {
       datalayer.setProperties(value)
-    } else if (Utils.fieldInSchema(key)) {
+    } else if (Schema.hasField(key)) {
       Utils.setObjectValue(datalayer, key, value)
     } else {
       console.debug(
@@ -137,7 +138,7 @@ export class FeatureUpdater extends BaseUpdater {
 
 export class MapPermissionsUpdater extends BaseUpdater {
   update({ key, value }) {
-    if (Utils.fieldInSchema(key)) {
+    if (Schema.hasField(key)) {
       Utils.setObjectValue(this._umap.permissions, key, value)
     }
   }
@@ -149,7 +150,7 @@ export class MapPermissionsUpdater extends BaseUpdater {
 
 export class DataLayerPermissionsUpdater extends BaseUpdater {
   update({ key, value, metadata }) {
-    if (Utils.fieldInSchema(key)) {
+    if (Schema.hasField(key)) {
       Utils.setObjectValue(this.getDataLayerFromID(metadata.id), key, value)
     }
   }
