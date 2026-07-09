@@ -23,7 +23,6 @@ import { Request, ServerRequest } from './request.js'
 import Rules from './rules.js'
 import * as Schema from './schema.js'
 import Slideshow from './slideshow.js'
-import { Journal } from './journal/engine.js'
 import { BottomBar, EditBar, TopBar } from './ui/bar.js'
 import ContextMenu from './ui/contextmenu.js'
 import { ControlManager } from './ui/controls.js'
@@ -102,14 +101,6 @@ export default class Umap extends Utils.WithEvents {
     this.properties.zoomControl = zoomControl !== undefined ? zoomControl : true
     this.properties.fullscreenControl =
       fullscreenControl !== undefined ? fullscreenControl : true
-
-    // if (center) {
-    //   this.properties.center = this.mapProxy.position(center)
-    // }
-
-    // Needed for permissions
-    this.journalEngine = new Journal(this)
-    this.journal = this.journalEngine.proxy(this)
 
     // Needed to render controls
     this.permissions = new MapPermissions(this)
@@ -222,7 +213,7 @@ export default class Umap extends Utils.WithEvents {
     // Creation mode
     if (!this.id) {
       if (!this.properties.preview) {
-        this.enableEdit()
+        await this.enableEdit()
       }
       this._defaultExtent = true
       this.properties.name = translate('Untitled map')
@@ -1405,13 +1396,13 @@ export default class Umap extends Utils.WithEvents {
     }
   }
 
-  enableEdit() {
-    this.editBar.redraw()
+  async enableEdit() {
     document.body.classList.add('umap-edit-enabled')
     this.editEnabled = true
+    await this.initJournal()
     this.drop.enable()
     this.fire('edit:enabled')
-    this.initJournal()
+    this.editBar.redraw()
     this.checkForLegacy()
     this.checkForAnonymous()
     this.mapProxy.enableEdit()
@@ -1473,6 +1464,13 @@ export default class Umap extends Utils.WithEvents {
   }
 
   async initJournal() {
+    if (!this.journal) {
+      const { Journal } = await import('./journal/engine.js')
+      // Needed for permissions
+      this.journalEngine = new Journal(this)
+      this.journal = this.journalEngine.proxy(this)
+    }
+
     // this.properties.websocketEnabled is set by the server admin
     if (this.properties.websocketEnabled === false) return
     // this.properties.syncEnabled is set by the user in the map settings
@@ -1574,12 +1572,12 @@ export default class Umap extends Utils.WithEvents {
       },
       numberOfConnectedPeers: () => {
         Utils.eachElement('.connected-peers span', (el) => {
-          if (this.journal.websocketConnected) {
+          if (this.journal?.websocketConnected) {
             el.textContent = Object.keys(this.journal.getPeers()).length
           } else {
             el.textContent = translate('Disconnected')
           }
-          el.parentElement.classList.toggle('off', !this.journal.websocketConnected)
+          el.parentElement.classList.toggle('off', !this.journal?.websocketConnected)
         })
       },
       'properties.starred': () => {

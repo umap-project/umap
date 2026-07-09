@@ -11,7 +11,13 @@ export class MapPermissions {
   constructor(umap) {
     this.setProperties(umap.properties.permissions)
     this._umap = umap
-    this.journal = umap.journalEngine.proxy(this)
+  }
+
+  get journal() {
+    if (!this._journal) {
+      this._journal = this._umap.journalEngine.proxy(this)
+    }
+    return this._journal
   }
 
   setProperties(properties) {
@@ -298,7 +304,13 @@ export class DataLayerPermissions {
     )
 
     this.datalayer = datalayer
-    this.journal = umap.journalEngine.proxy(this)
+  }
+
+  get journal() {
+    if (!this._journal) {
+      this._journal = this._umap.journalEngine.proxy(this)
+    }
+    return this._journal
   }
 
   getJournalMetadata() {

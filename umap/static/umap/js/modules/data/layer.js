@@ -22,7 +22,6 @@ import { loadType } from './types.js'
 export class DataLayer {
   constructor(umap, spec = {}) {
     this._umap = umap
-    this.journal = umap.journalEngine.proxy(this)
     this.features = new FeatureManager()
     this.layers = new LayerManager()
 
@@ -99,6 +98,13 @@ export class DataLayer {
 
   get id() {
     return this._id
+  }
+
+  get journal() {
+    if (!this._journal) {
+      this._journal = this._umap.journalEngine.proxy(this)
+    }
+    return this._journal
   }
 
   get createdOnServer() {
