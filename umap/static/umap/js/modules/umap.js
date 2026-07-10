@@ -352,7 +352,7 @@ export default class Umap extends Utils.WithEvents {
     }
     if (feature) feature.view()
     if (this.searchParams.has('edit')) {
-      if (this.hasEditMode()) this.enableEdit()
+      if (this.hasEditMode()) await this.enableEdit()
       // Sometimes users share the ?edit link by mistake, let's remove
       // this search parameter from URL to prevent this
       const url = new URL(window.location)
