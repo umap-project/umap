@@ -4,7 +4,6 @@ import { translate } from '../i18n.js'
 import { WithTemplate } from '../utils.js'
 import * as Utils from '../utils.js'
 import ContextMenu from './contextmenu.js'
-import TemplateImporter from '../templates.js'
 
 const TOP_BAR_TEMPLATE = `
 <div class="umap-main-edit-toolbox with-transition dark">
@@ -347,7 +346,6 @@ const EDIT_BAR_TEMPLATE = `
 export class EditBar extends WithTemplate {
   constructor(umap, parent) {
     super()
-    this.templateIimporter = new TemplateImporter(umap)
     this._umap = umap
     this.loadTemplate(EDIT_BAR_TEMPLATE)
     this.parent = parent
@@ -364,7 +362,12 @@ export class EditBar extends WithTemplate {
     this.addDrawListener('route')
     this.addClickListener('caption', () => this._umap.editCaption())
     this.addClickListener('import', () => this._umap.openImporter())
-    this.addClickListener('templates', () => this.templateIimporter.open())
+    this.addClickListener('templates', () => {
+      import('../templates.js').then(({ default: TemplateImporter }) => {
+        const templateImporter = new TemplateImporter(this._umap)
+        templateImporter.open()
+      })
+    })
     this.addClickListener('layers', () => this._umap.editDatalayers())
     this.addClickListener('tilelayers', () =>
       this._umap.controlManager.controls.tilelayers.openSwitcher({ edit: true })
