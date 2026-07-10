@@ -1,6 +1,5 @@
 import * as Utils from '../utils.js'
 import { translate } from '../i18n.js'
-import Orderable from '../orderable.js'
 import { uMapAlert as Alert } from '../../components/alerts/alert.js'
 import { Form } from '../form/builder.js'
 
@@ -338,7 +337,9 @@ export class Fields extends Map {
         oldFields
       )
     }
-    const orderable = new Orderable(ul, onReorder)
+    import('../orderable.js').then(
+      ({ default: Orderable }) => new Orderable(ul, onReorder)
+    )
   }
 
   async editField(name) {

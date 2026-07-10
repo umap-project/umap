@@ -15,7 +15,6 @@ import Help from './help.js'
 import { getLocale, setLocale, translate } from './i18n.js'
 import * as Icon from './icon.js'
 import { LayerManager } from './managers.js'
-import Orderable from './orderable.js'
 import { MapPermissions } from './permissions.js'
 // import { OLProxy } from './rendering/openlayers.js'
 import { LeafletProxy } from './rendering/leaflet.js'
@@ -1732,6 +1731,8 @@ export default class Umap extends Utils.WithEvents {
     for (const layer of layers) {
       await showLayer(layer, ul)
     }
+    const { default: Orderable } = await import('./orderable.js')
+
     new Orderable(ul, onReorder, { allowTree: true })
 
     const [bar, { addLayer, addGroup }] = DOMUtils.loadTemplateWithRefs(`
