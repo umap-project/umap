@@ -14,7 +14,6 @@ import loadTemplate from '../rendering/template.js'
 class Feature {
   constructor(umap, datalayer, geojson = {}, id = null) {
     this._umap = umap
-    this.journal = umap.journalEngine.proxy(this)
 
     // DataLayer the feature belongs to
     this.datalayer = datalayer
@@ -43,6 +42,13 @@ class Feature {
         this.id = Utils.generateId()
       }
     }
+  }
+
+  get journal() {
+    if (!this._journal) {
+      this._journal = this._umap.journalEngine.proxy(this)
+    }
+    return this._journal
   }
 
   get center() {

@@ -22,7 +22,6 @@ import { loadType } from './types.js'
 export class DataLayer {
   constructor(umap, spec = {}) {
     this._umap = umap
-    this.journal = umap.journalEngine.proxy(this)
     this.features = new FeatureManager()
     this.layers = new LayerManager()
 
@@ -101,6 +100,13 @@ export class DataLayer {
     return this._id
   }
 
+  get journal() {
+    if (!this._journal) {
+      this._journal = this._umap.journalEngine.proxy(this)
+    }
+    return this._journal
+  }
+
   get createdOnServer() {
     return Boolean(this.referenceVersion)
   }
@@ -113,7 +119,14 @@ export class DataLayer {
     if (value === this.rank) return
     const oldRank = this.rank
     this._rank = value
-    this.journal.update('rank', value, oldRank, { undo: false })
+    // Rank is reset at datalayer creation time, no need to journal
+    // in this case. Proper way would have been to call the journal
+    // explicitly when editing the rank (drag'n'drop), but the rank
+    // is actually managed in the managers, which is blind about the
+    // initial action.
+    if (this._umap.journalEngine) {
+      this.journal.update('rank', value, oldRank, { undo: false })
+    }
   }
 
   get group() {
