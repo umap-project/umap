@@ -494,7 +494,7 @@ Fields.EditableText = class extends Fields.Base {
       this.input.contentEditable = false
     })
     this.input.addEventListener('mouseover', () => {
-      this.builder._umap.tooltip.open({
+      this.builder.app.tooltip.open({
         content: translate('Double click to edit the name'),
         anchor: this.input,
         position: 'bottom',
@@ -630,7 +630,7 @@ const BaseDataLayerSwitcher = class extends Fields.Select {
   }
 
   getOptions() {
-    return this.builder._umap.layers.tree.browsable().reduce((acc, layer) => {
+    return this.builder.app.layers.tree.browsable().reduce((acc, layer) => {
       const disabled = this.isOptionDisabled(layer)
       acc.push([layer.id, layer.getName(true), disabled])
       return acc
@@ -642,7 +642,7 @@ const BaseDataLayerSwitcher = class extends Fields.Select {
   }
 
   toJS() {
-    return this.builder._umap.layers.tree.get(this.value())
+    return this.builder.app.layers.tree.get(this.value())
   }
 
   set() {
@@ -652,7 +652,7 @@ const BaseDataLayerSwitcher = class extends Fields.Select {
   }
 
   onSet(layerId) {
-    this.builder._umap.lastUsedDataLayer = this.builder._umap.layers.tree.get(layerId)
+    this.builder.app.lastUsedDataLayer = this.builder.app.layers.tree.get(layerId)
   }
 }
 
@@ -836,8 +836,8 @@ Fields.IconUrl = class extends Fields.BlurInput {
 
   async onDefine() {
     this.footer.innerHTML = ''
-    const [{ data }, response, error] = await this.builder._umap.server.get(
-      this.builder._umap.properties.urls.pictogram_list_json
+    const [{ data }, response, error] = await this.builder.app.server.get(
+      this.builder.app.properties.urls.pictogram_list_json
     )
     if (!error) this.pictogramCollections = data
     this.buildTabs()

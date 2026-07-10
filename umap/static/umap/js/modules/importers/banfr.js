@@ -24,8 +24,8 @@ const TEMPLATE = `
 `
 
 export class Importer {
-  constructor(umap, options) {
-    this._umap = umap
+  constructor(app, options) {
+    this.app = app
     this.name = options.name || 'Géocodage FR'
     this.id = 'banfr'
   }
@@ -71,7 +71,7 @@ export class Importer {
       for (const option of columns.querySelectorAll('input:checked')) {
         formData.append('columns', option.value)
       }
-      const response = await this._umap.request.post(
+      const response = await this.app.request.post(
         'https://api-adresse.data.gouv.fr/search/csv/',
         {},
         formData

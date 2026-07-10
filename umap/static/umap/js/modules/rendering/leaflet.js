@@ -24,8 +24,8 @@ import { Heat } from '../rendering/layers/heat.js'
 const LAYER_MAP = { Cluster, Heat }
 
 export class LeafletProxy {
-  constructor(umap, element) {
-    this.umap = umap
+  constructor(app, element) {
+    this.app = app
     this.points = {}
     this.layers = {}
     this.map = new LeafletMap(element, {
@@ -42,13 +42,13 @@ export class LeafletProxy {
     this.map.on(
       'locateactivate locatedeactivate moveend zoomend contextmenu popupclose zoomlevelschange',
       (event) => {
-        this.umap.fire(`map:${event.type}`, { event: event })
+        this.app.fire(`map:${event.type}`, { event: event })
       }
     )
     this.map.on('feature:mouseover', (event) => {
-      if (!this.umap.editEnabled) return
-      if (!this.umap.editedFeature) {
-        this.umap.tooltip.open({
+      if (!this.app.editEnabled) return
+      if (!this.app.editedFeature) {
+        this.app.tooltip.open({
           content: translate('Right-click to edit'),
         })
       }
@@ -59,7 +59,7 @@ export class LeafletProxy {
       }
     })
     this.map.on('feature:mouseout', (event) => {
-      if (!this.umap.editEnabled) return
+      if (!this.app.editEnabled) return
       const { layer } = event
       if (!layer.editor?.drawing) layer.disableEdit()
     })
@@ -103,14 +103,14 @@ export class LeafletProxy {
       if (!feature) return
       const items = feature
         .getContextMenu(event)
-        .concat(this.umap.getSharedContextMenu(event))
-      this.umap.contextmenu.open(event.originalEvent, items)
+        .concat(this.app.getSharedContextMenu(event))
+      this.app.contextmenu.open(event.originalEvent, items)
     })
   }
 
   proxyOutgoingEvents() {
     // For hash changes
-    this.umap.on('map:view:update', (event) => {
+    this.app.on('map:view:update', (event) => {
       let { zoom, coordinate } = event.detail
       if (!Utils.coordinateIsValid(coordinate)) return
       zoom = Math.min(zoom, this.map.getMaxZoom())
@@ -118,13 +118,13 @@ export class LeafletProxy {
       const [lng, lat] = coordinate
       this.map.setView([lat, lng], zoom, { animate: false })
     })
-    this.umap.on('map:show:point', (event) => {
+    this.app.on('map:show:point', (event) => {
       this.showPoint({ ...event.detail })
     })
-    this.umap.on('map:hide:point', (event) => {
+    this.app.on('map:hide:point', (event) => {
       this.hidePoint(event.detail.id)
     })
-    this.umap.on('map:view:fit-bounds', (event) => {
+    this.app.on('map:view:fit-bounds', (event) => {
       const { bounds, zoom, easing } = event.detail
       const latLngBounds = this.toLatLngBounds(bounds)
       if (easing) {
@@ -133,7 +133,7 @@ export class LeafletProxy {
         this.map.fitBounds(latLngBounds, zoom ?? this.zoom)
       }
     })
-    this.umap.on('map:view:set', (event) => {
+    this.app.on('map:view:set', (event) => {
       const { easing, zoom } = event.detail
       const center = this.latLng({ coordinates: event.detail.center })
       if (easing) {
@@ -142,24 +142,24 @@ export class LeafletProxy {
         this.map.setView(center, zoom ?? this.zoom)
       }
     })
-    this.umap.on('draw:marker', () => this.map.editTools.startMarker())
-    this.umap.on('draw:polyline', () => this.map.editTools.startPolyline())
-    this.umap.on('draw:multiline', () =>
-      this.getLayer(this.umap.editedFeature.id)?.editor.newShape()
+    this.app.on('draw:marker', () => this.map.editTools.startMarker())
+    this.app.on('draw:polyline', () => this.map.editTools.startPolyline())
+    this.app.on('draw:multiline', () =>
+      this.getLayer(this.app.editedFeature.id)?.editor.newShape()
     )
-    this.umap.on('draw:polygon', () => this.map.editTools.startPolygon())
-    this.umap.on('draw:multipolygon', () =>
-      this.getLayer(this.umap.editedFeature.id)?.editor.newShape()
+    this.app.on('draw:polygon', () => this.map.editTools.startPolygon())
+    this.app.on('draw:multipolygon', () =>
+      this.getLayer(this.app.editedFeature.id)?.editor.newShape()
     )
-    this.umap.on('draw:route', () => this.map.editTools.startRoute())
-    this.umap.on('map:resize', () => this.map.invalidateSize())
-    this.umap.on('panel:show', (event) => {
+    this.app.on('draw:route', () => this.map.editTools.startRoute())
+    this.app.on('map:resize', () => this.map.invalidateSize())
+    this.app.on('panel:show', (event) => {
       this.revealInCluster(this.getLayer(event.detail.id))
       // The panel popup isn't a Leaflet popup, so emulate its close lifecycle:
       // close on a map background click, or when another Leaflet popup opens.
-      this.map.once('click popupopen', () => this.umap.fire('panel:close'))
+      this.map.once('click popupopen', () => this.app.fire('panel:close'))
     })
-    this.umap.on('popup:show', (event) => {
+    this.app.on('popup:show', (event) => {
       const { id, content, center } = event.detail
       const [lon, lat] = center
       // The popup is map-level (not layer-bound), so highlight the matching
@@ -171,20 +171,20 @@ export class LeafletProxy {
       this.revealInCluster(layer)
       this.map.once('popupclose', () => layer?.unhighlight())
     })
-    this.umap.on('popup:close', () => this.map.closePopup())
-    this.umap.on('feature:edit', (event) => {
+    this.app.on('popup:close', () => this.map.closePopup())
+    this.app.on('feature:edit', (event) => {
       this.editLayer(event.detail.id)
     })
-    this.umap.on('feature:endedit', (event) => {
+    this.app.on('feature:endedit', (event) => {
       this.getLayer(event.detail.id)?.disableEdit()
     })
-    this.umap.on('feature:hole', (event) => {
+    this.app.on('feature:hole', (event) => {
       const { id, coordinate } = event.detail
       this.getLayer(id)
         ?.enableEdit()
         .newHole(this.latLng({ coordinates: coordinate }))
     })
-    this.umap.on('feature:reset', (event) => {
+    this.app.on('feature:reset', (event) => {
       const { sourceId, geojson } = event.detail
       const group = this.layers[sourceId]
       const layer = this.getLayer(geojson.id)
@@ -215,7 +215,7 @@ export class LeafletProxy {
   }
 
   getFeatureById(id) {
-    for (const layer of this.umap.layers.tree) {
+    for (const layer of this.app.layers.tree) {
       if (layer.features.has(id)) {
         return layer.features.get(id)
       }
@@ -235,47 +235,47 @@ export class LeafletProxy {
     // Wait for URL to have been parsed before modifying the hash
     const updateHash = () => {
       const center = this.map.getCenter()
-      this.umap.fire('map:view:updated', {
+      this.app.fire('map:view:updated', {
         zoom: this.map.getZoom(),
         coordinate: [center.lng.toFixed(6), center.lat.toFixed(6)],
       })
     }
     this.map.on('moveend', updateHash)
     updateHash()
-    this.tilelayers.init(this.umap.properties.tilelayers)
+    this.tilelayers.init(this.app.properties.tilelayers)
     this.tilelayers.selectDefault()
     this.updateUI()
   }
 
   setDefaultCenter() {
-    const [lon, lat] = this.umap.properties.center
-    // this.umap.properties.center = this.latLng()
-    this.map.setView([lat, lon], this.umap.properties.zoom)
+    const [lon, lat] = this.app.properties.center
+    // this.app.properties.center = this.latLng()
+    this.map.setView([lat, lon], this.app.properties.zoom)
   }
 
   async initCenter() {
     this.setDefaultCenter()
 
-    if (this.umap.properties.hash && window.location.hash) {
+    if (this.app.properties.hash && window.location.hash) {
       // FIXME An invalid hash will cause the load to fail
-      this.umap.hash.parse()
+      this.app.hash.parse()
     } else if (
-      this.umap.properties.defaultView === 'locate' &&
-      !this.umap.properties.noControl
+      this.app.properties.defaultView === 'locate' &&
+      !this.app.properties.noControl
     ) {
-      await this.umap.controlManager.controls.locate.start()
-    } else if (this.umap.properties.defaultView === 'data') {
-      this.umap.onceDataLoaded(() => this.umap.fitDataBounds())
-    } else if (this.umap.properties.defaultView === 'latest') {
-      this.umap.onceDataLoaded(() => {
-        if (!this.umap.hasData()) return
+      await this.app.controlManager.controls.locate.start()
+    } else if (this.app.properties.defaultView === 'data') {
+      this.app.onceDataLoaded(() => this.app.fitDataBounds())
+    } else if (this.app.properties.defaultView === 'latest') {
+      this.app.onceDataLoaded(() => {
+        if (!this.app.hasData()) return
         // TODO: uMap.latestFeature ?
-        const datalayer = this.umap.layers.tree.visible().first()
+        const datalayer = this.app.layers.tree.visible().first()
         if (datalayer) {
           const feature = datalayer.features.last()
           if (feature) {
             feature.zoomTo({
-              callback: this.umap.properties.noControl ? null : feature.view,
+              callback: this.app.properties.noControl ? null : feature.view,
             })
             return
           }
@@ -285,7 +285,7 @@ export class LeafletProxy {
   }
 
   updateUI() {
-    if (this.umap.getProperty('scrollWheelZoom')) {
+    if (this.app.getProperty('scrollWheelZoom')) {
       this.map.scrollWheelZoom.enable()
       this.map.dragging.enable()
     } else {
@@ -324,10 +324,10 @@ export class LeafletProxy {
   }
 
   handleLimitBounds() {
-    const south = Number.parseFloat(this.umap.properties.limitBounds?.south)
-    const west = Number.parseFloat(this.umap.properties.limitBounds?.west)
-    const north = Number.parseFloat(this.umap.properties.limitBounds?.north)
-    const east = Number.parseFloat(this.umap.properties.limitBounds?.east)
+    const south = Number.parseFloat(this.app.properties.limitBounds?.south)
+    const west = Number.parseFloat(this.app.properties.limitBounds?.west)
+    const north = Number.parseFloat(this.app.properties.limitBounds?.north)
+    const east = Number.parseFloat(this.app.properties.limitBounds?.east)
     if (
       !Number.isNaN(south) &&
       !Number.isNaN(west) &&
@@ -397,11 +397,11 @@ export class LeafletProxy {
   }
 
   initEditTools() {
-    this.map.editTools = new U.Editable(this.umap)
+    this.map.editTools = new U.Editable(this.app)
   }
   enableEdit() {}
   onEscape() {
-    if (this.umap.editEnabled && this.map.editTools.drawing()) {
+    if (this.app.editEnabled && this.map.editTools.drawing()) {
       this.map.editTools.onEscape()
       return true
     }
@@ -535,7 +535,7 @@ export class LeafletProxy {
   makeGeometryEditable(layer) {
     if (!layer._map) return
     // Re-evaluate as the viewport changes; stop once another feature is edited.
-    if (this.umap.editedFeature?.id !== layer.feature.id) {
+    if (this.app.editedFeature?.id !== layer.feature.id) {
       layer.disableEdit()
       return
     }
@@ -543,7 +543,7 @@ export class LeafletProxy {
     if (layer.shouldAllowGeometryEdit()) {
       layer.enableEdit()
     } else {
-      this.umap.tooltip.open({
+      this.app.tooltip.open({
         content: translate('Please zoom in to edit the geometry'),
       })
       layer.disableEdit()
@@ -575,8 +575,8 @@ class TileLayerManager {
     this.overlay = undefined
   }
 
-  get umap() {
-    return this.proxy.umap
+  get app() {
+    return this.proxy.app
   }
 
   get map() {
@@ -592,8 +592,8 @@ class TileLayerManager {
 
   create(spec) {
     const layer = new TileLayer(spec.url_template, spec)
-    layer.on('loading', () => this.umap.loader.start(stamp(layer)))
-    layer.on('load', () => this.umap.loader.stop(stamp(layer)))
+    layer.on('loading', () => this.app.loader.start(stamp(layer)))
+    layer.on('load', () => this.app.loader.stop(stamp(layer)))
     return layer
   }
 
@@ -612,7 +612,7 @@ class TileLayerManager {
   // Display the configured base layer: the custom one (`properties.tilelayer`)
   // if it is set, else the first of the registry.
   selectDefault() {
-    const custom = this.umap.properties.tilelayer
+    const custom = this.app.properties.tilelayer
     if (custom?.url_template && custom.attribution) {
       this.select(this.add({ ...custom, rank: 0 }))
     } else {
@@ -646,7 +646,7 @@ class TileLayerManager {
   }
 
   setOverlay() {
-    const spec = this.umap.properties.overlay
+    const spec = this.app.properties.overlay
     if (!spec?.url_template) return
     const overlay = this.create(spec)
     try {

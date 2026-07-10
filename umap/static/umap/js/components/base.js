@@ -35,7 +35,7 @@ export class uMapElement extends HTMLElement {
    */
   handleEvent(event) {
     event.preventDefault()
-    // From `umap:alert` to `alert`.
+    // From `app:alert` to `alert`.
     const eventName = event.type.replace(`${EVENT_PREFIX}:`, '')
     // From `alert` event type to `onAlert` call against that class.
     this[`on${eventName.charAt(0).toUpperCase() + eventName.slice(1)}`](event)

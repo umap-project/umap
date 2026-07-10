@@ -21,7 +21,7 @@ class Rule {
     this.parse()
   }
 
-  constructor(umap, parent, condition = '', name = '', properties = {}) {
+  constructor(app, parent, condition = '', name = '', properties = {}) {
     this.id = `rule-${Utils.generateId()}`
     // TODO make this public properties when browser coverage is ok
     // cf https://caniuse.com/?search=public%20class%20field
@@ -35,7 +35,7 @@ class Rule {
       ['=', 'equal'],
     ]
     this.parent = parent
-    this._umap = umap
+    this.app = app
     this.active = true
     this.properties = properties
     this.condition = condition
@@ -155,7 +155,7 @@ class Rule {
       })
     )
 
-    this._umap.editPanel.open({
+    this.app.editPanel.open({
       content: container,
       highlight: 'settings',
       actions: [backButton],
@@ -230,8 +230,8 @@ class Rule {
 }
 
 export default class Rules {
-  constructor(umap, parent) {
-    this._umap = umap
+  constructor(app, parent) {
+    this.app = app
     this.parent = parent
     this.load()
   }
@@ -243,7 +243,7 @@ export default class Rules {
       .rules) {
       if (!condition) continue
       const rule = new Rule(
-        this._umap,
+        this.app,
         this.parent,
         condition,
         name,
@@ -313,7 +313,7 @@ export default class Rules {
   }
 
   addRule() {
-    const rule = new Rule(this._umap, this.parent)
+    const rule = new Rule(this.app, this.parent)
     this.rules.push(rule)
     rule.edit(map)
   }

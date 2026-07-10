@@ -13,19 +13,19 @@ const TOOLBOX_TEMPLATE = `
 `
 
 export default class Slideshow extends WithTemplate {
-  constructor(umap, properties) {
+  constructor(app, properties) {
     super()
-    this._umap = umap
+    this.app = app
     this._id = null
     this.CLASSNAME = 'umap-slideshow-active'
-    this._umap.properties.slideshow ??= {}
+    this.app.properties.slideshow ??= {}
     this.load()
     this._current = null
 
     if (this.properties.autoplay) {
-      this._umap.onceDataLoaded(() => this.play())
+      this.app.onceDataLoaded(() => this.play())
     }
-    umap.on('edit:enabled', () => this.stop())
+    app.on('edit:enabled', () => this.stop())
   }
 
   set current(feature) {
@@ -48,7 +48,7 @@ export default class Slideshow extends WithTemplate {
   }
 
   load() {
-    this.setProperties(this._umap.properties.slideshow)
+    this.setProperties(this.app.properties.slideshow)
   }
 
   setProperties(properties = {}) {
@@ -62,7 +62,7 @@ export default class Slideshow extends WithTemplate {
   }
 
   defaultDatalayer() {
-    return this._umap.layers.tree.find((d) => d.canBrowse())
+    return this.app.layers.tree.find((d) => d.canBrowse())
   }
 
   startSpinner() {
@@ -84,7 +84,7 @@ export default class Slideshow extends WithTemplate {
 
   play() {
     if (this._id) return
-    if (this._umap.editEnabled || !this.isEnabled()) return
+    if (this.app.editEnabled || !this.isEnabled()) return
     document.body.classList.add(this.CLASSNAME)
     this._id = window.setInterval(() => this.loop(), this.properties.delay)
     this.startSpinner()

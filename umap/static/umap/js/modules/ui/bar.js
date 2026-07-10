@@ -48,9 +48,9 @@ const TOP_BAR_TEMPLATE = `
 </div>`
 
 export class TopBar extends WithTemplate {
-  constructor(umap, parent) {
+  constructor(app, parent) {
     super()
-    this._umap = umap
+    this.app = app
     this._menu = new ContextMenu({ className: 'dark', fixed: true })
     this.loadTemplate(TOP_BAR_TEMPLATE)
     this.parent = parent
@@ -58,9 +58,9 @@ export class TopBar extends WithTemplate {
 
   setup() {
     this.parent.appendChild(this.element)
-    this.elements.home.href = this._umap.urls.get('home')
+    this.elements.home.href = this.app.urls.get('home')
     this.elements.name.addEventListener('mouseover', () => {
-      this._umap.tooltip.open({
+      this.app.tooltip.open({
         content: translate('Edit the title of the map'),
         anchor: this.elements.name,
         position: 'bottom',
@@ -69,7 +69,7 @@ export class TopBar extends WithTemplate {
       })
     })
     this.elements.share.addEventListener('mouseover', () => {
-      this._umap.tooltip.open({
+      this.app.tooltip.open({
         content: translate('Update who can see and edit the map'),
         anchor: this.elements.share,
         position: 'bottom',
@@ -78,7 +78,7 @@ export class TopBar extends WithTemplate {
       })
     })
     this.elements.shareAnonymous.addEventListener('mouseover', () => {
-      this._umap.tooltip.open({
+      this.app.tooltip.open({
         content: translate('Anonymous map: update who can see and edit it'),
         anchor: this.elements.shareAnonymous,
         position: 'bottom',
@@ -86,58 +86,58 @@ export class TopBar extends WithTemplate {
         duration: 5000,
       })
     })
-    if (this._umap.properties.editMode === 'advanced') {
-      this.elements.name.addEventListener('click', () => this._umap.editCaption())
-      this.elements.share.addEventListener('click', () => this._umap.permissions.edit())
+    if (this.app.properties.editMode === 'advanced') {
+      this.elements.name.addEventListener('click', () => this.app.editCaption())
+      this.elements.share.addEventListener('click', () => this.app.permissions.edit())
       this.elements.shareAnonymous.addEventListener('click', () =>
-        this._umap.permissions.edit()
+        this.app.permissions.edit()
       )
     }
     this.elements.user.addEventListener('click', () => {
       const actions = [
         {
           label: translate('New map'),
-          action: this._umap.urls.get('map_new'),
+          action: this.app.urls.get('map_new'),
         },
       ]
-      if (this._umap.permissions.userIsAuth()) {
+      if (this.app.permissions.userIsAuth()) {
         actions.push(
           {
             label: translate('My maps'),
-            action: this._umap.urls.get('user_dashboard'),
+            action: this.app.urls.get('user_dashboard'),
           },
           {
             label: translate('My teams'),
-            action: this._umap.urls.get('user_teams'),
+            action: this.app.urls.get('user_teams'),
           }
         )
-        if (this._umap.urls.has('user_profile')) {
+        if (this.app.urls.has('user_profile')) {
           actions.push({
             label: translate('My profile'),
-            action: this._umap.urls.get('user_profile'),
+            action: this.app.urls.get('user_profile'),
           })
         }
       } else {
         actions.push({
           label: translate('Login'),
-          action: () => this._umap.askForLogin(),
+          action: () => this.app.askForLogin(),
         })
       }
       this._menu.openBelow(this.elements.user, actions)
     })
     this.elements.peers.addEventListener('mouseover', () => {
-      const connectedPeers = this._umap.journal?.getPeers()
+      const connectedPeers = this.app.journal?.getPeers()
       if (!connectedPeers || !Object.keys(connectedPeers).length) return
       const ul = Utils.loadTemplate(
         `<ul>${Object.entries(connectedPeers)
-          .sort((el) => el !== this._umap.user?.name)
+          .sort((el) => el !== this.app.user?.name)
           .map(
             ([id, name]) =>
               Utils.sanitizeVars`<li>${name || translate('Anonymous')}</li>`
           )
           .join('')}</ul>`
       )
-      this._umap.tooltip.open({
+      this.app.tooltip.open({
         content: ul,
         anchor: this.elements.peers,
         position: 'bottom',
@@ -147,12 +147,12 @@ export class TopBar extends WithTemplate {
       })
     })
 
-    this.elements.help.addEventListener('click', () => this._umap.help.showGetStarted())
-    this.elements.redo.addEventListener('click', () => this._umap.redo())
-    this.elements.undo.addEventListener('click', () => this._umap.undo())
+    this.elements.help.addEventListener('click', () => this.app.help.showGetStarted())
+    this.elements.redo.addEventListener('click', () => this.app.redo())
+    this.elements.undo.addEventListener('click', () => this.app.undo())
     this.elements.undo.addEventListener('mouseover', () => {
-      this._umap.tooltip.open({
-        content: this._umap.help.displayLabel('UNDO'),
+      this.app.tooltip.open({
+        content: this.app.help.displayLabel('UNDO'),
         anchor: this.elements.undo,
         position: 'bottom',
         delay: 500,
@@ -160,28 +160,28 @@ export class TopBar extends WithTemplate {
       })
     })
     this.elements.redo.addEventListener('mouseover', () => {
-      this._umap.tooltip.open({
-        content: this._umap.help.displayLabel('REDO'),
+      this.app.tooltip.open({
+        content: this.app.help.displayLabel('REDO'),
         anchor: this.elements.redo,
         position: 'bottom',
         delay: 500,
         duration: 5000,
       })
     })
-    this.elements.view.addEventListener('click', () => this._umap.disableEdit())
+    this.elements.view.addEventListener('click', () => this.app.disableEdit())
     this.elements.view.addEventListener('mouseover', () => {
-      this._umap.tooltip.open({
-        content: this._umap.help.displayLabel('PREVIEW'),
+      this.app.tooltip.open({
+        content: this.app.help.displayLabel('PREVIEW'),
         anchor: this.elements.view,
         position: 'bottom',
         delay: 500,
         duration: 5000,
       })
     })
-    this.elements.save.addEventListener('click', () => this._umap.saveAll())
+    this.elements.save.addEventListener('click', () => this.app.saveAll())
     this.elements.save.addEventListener('mouseover', () => {
-      this._umap.tooltip.open({
-        content: this._umap.help.displayLabel('SAVE'),
+      this.app.tooltip.open({
+        content: this.app.help.displayLabel('SAVE'),
         anchor: this.elements.save,
         position: 'bottom',
         delay: 500,
@@ -192,18 +192,18 @@ export class TopBar extends WithTemplate {
 
   redraw() {
     if (!document.body.classList.contains('umap-edit-enabled')) return
-    this.element.classList.toggle('draft', this._umap.permissions.isDraft())
-    const syncEnabled = this._umap.getProperty('syncEnabled')
+    this.element.classList.toggle('draft', this.app.permissions.isDraft())
+    const syncEnabled = this.app.getProperty('syncEnabled')
     this.elements.peers.hidden = !syncEnabled
-    this.elements.view.disabled = this._umap.journal._undoManager.isDirty()
-    const isDraft = this._umap.permissions.isDraft()
-    const isTemplate = this._umap.getProperty('is_template')
+    this.elements.view.disabled = this.app.journal._undoManager.isDirty()
+    const isDraft = this.app.permissions.isDraft()
+    const isTemplate = this.app.getProperty('is_template')
     this.elements.saveLabel.hidden = isDraft || isTemplate
     this.elements.saveDraftLabel.hidden = !isDraft || isTemplate
     this.elements.saveTemplateLabel.hidden = !isTemplate
-    this._umap.journal._undoManager.toggleState()
-    this.elements.share.hidden = this._umap.permissions.isAnonymousMap()
-    this.elements.shareAnonymous.hidden = !this._umap.permissions.isAnonymousMap()
+    this.app.journal._undoManager.toggleState()
+    this.elements.share.hidden = this.app.permissions.isAnonymousMap()
+    this.elements.shareAnonymous.hidden = !this.app.permissions.isAnonymousMap()
   }
 }
 
@@ -219,9 +219,9 @@ const BOTTOM_BAR_TEMPLATE = `
 `
 
 export class BottomBar extends WithTemplate {
-  constructor(umap, slideshow, parent) {
+  constructor(app, slideshow, parent) {
     super()
-    this._umap = umap
+    this.app = app
     this._slideshow = slideshow
     this.loadTemplate(BOTTOM_BAR_TEMPLATE)
     this.parent = parent
@@ -230,17 +230,17 @@ export class BottomBar extends WithTemplate {
 
   setup() {
     DOMUtils.disableClickPropagation(this.element)
-    this._umap.addAuthorLink(this.elements.author)
-    this.elements.caption.addEventListener('click', () => this._umap.openCaption())
-    this.elements.browse.addEventListener('click', () => this._umap.openBrowser('data'))
+    this.app.addAuthorLink(this.elements.author)
+    this.elements.caption.addEventListener('click', () => this.app.openCaption())
+    this.elements.browse.addEventListener('click', () => this.app.openBrowser('data'))
     this.elements.filter.addEventListener('click', () =>
-      this._umap.openBrowser('filters')
+      this.app.openBrowser('filters')
     )
     this._slideshow.renderToolbox(this.element)
     this.elements.layers.addEventListener('change', () => {
       const select = this.elements.layers
       const selected = select.options[select.selectedIndex].value
-      for (const layer of this._umap.layers.tree) {
+      for (const layer of this.app.layers.tree) {
         if (layer.inCaption !== false) {
           // No layer selected, back to default visibility.
           if (!selected) {
@@ -263,28 +263,28 @@ export class BottomBar extends WithTemplate {
   redraw() {
     if (!this.ready) return
     const hasSlideshow = this._slideshow.isEnabled()
-    const barEnabled = this._umap.properties.captionBar || hasSlideshow
+    const barEnabled = this.app.properties.captionBar || hasSlideshow
     document.body.classList.toggle('umap-caption-bar-enabled', barEnabled)
     document.body.classList.toggle('umap-slideshow-enabled', hasSlideshow)
     if (!barEnabled) return
-    const showMenus = this._umap.getProperty('captionMenus')
+    const showMenus = this.app.getProperty('captionMenus')
     this.elements.caption.hidden = !showMenus
     this.elements.browse.hidden = !showMenus
-    this.elements.filter.hidden = !showMenus || !this._umap.hasFilters()
+    this.elements.filter.hidden = !showMenus || !this.app.hasFilters()
     this.buildDataLayerSwitcher()
     this.parent.appendChild(this.element)
   }
 
   buildDataLayerSwitcher() {
     this.elements.layers.innerHTML = ''
-    const layers = this._umap.layers.tree.filter((d) => d.inCaption)
+    const layers = this.app.layers.tree.filter((d) => d.inCaption)
     if (layers.length < 2) {
       this.elements.layers.hidden = true
     } else {
       this.elements.layers.appendChild(
         Utils.loadTemplate(`<option value="">${translate('All layers')}</option>`)
       )
-      this.elements.layers.hidden = !this._umap.getProperty('layerSwitcher')
+      this.elements.layers.hidden = !this.app.getProperty('layerSwitcher')
       const visible = []
       // The select should reflect the map state:
       // - if only on layer is visible, this layer should be selected
@@ -344,9 +344,9 @@ const EDIT_BAR_TEMPLATE = `
 `
 
 export class EditBar extends WithTemplate {
-  constructor(umap, parent) {
+  constructor(app, parent) {
     super()
-    this._umap = umap
+    this.app = app
     this.loadTemplate(EDIT_BAR_TEMPLATE)
     this.parent = parent
   }
@@ -360,46 +360,46 @@ export class EditBar extends WithTemplate {
     this.addDrawListener('polygon')
     this.addDrawListener('multipolygon')
     this.addDrawListener('route')
-    this.addClickListener('caption', () => this._umap.editCaption())
-    this.addClickListener('import', () => this._umap.openImporter())
+    this.addClickListener('caption', () => this.app.editCaption())
+    this.addClickListener('import', () => this.app.openImporter())
     this.addClickListener('templates', () => {
       import('../templates.js').then(({ default: TemplateImporter }) => {
-        const templateImporter = new TemplateImporter(this._umap)
+        const templateImporter = new TemplateImporter(this.app)
         templateImporter.open()
       })
     })
-    this.addClickListener('layers', () => this._umap.editDatalayers())
+    this.addClickListener('layers', () => this.app.editDatalayers())
     this.addClickListener('tilelayers', () =>
-      this._umap.controlManager.controls.tilelayers.openSwitcher({ edit: true })
+      this.app.controlManager.controls.tilelayers.openSwitcher({ edit: true })
     )
-    this.addClickListener('center', () => this._umap.editCenter())
-    this.addClickListener('permissions', () => this._umap.permissions.edit())
-    this.addClickListener('settings', () => this._umap.edit())
+    this.addClickListener('center', () => this.app.editCenter())
+    this.addClickListener('permissions', () => this.app.permissions.edit())
+    this.addClickListener('settings', () => this.app.edit())
     this.addTitle('import', 'IMPORT_PANEL')
     this.addTitle('marker', 'DRAW_MARKER')
     this.addTitle('polyline', 'DRAW_LINE')
     this.addTitle('polygon', 'DRAW_POLYGON')
-    this._umap.on('seteditedfeature', () => this.redraw())
+    this.app.on('seteditedfeature', () => this.redraw())
   }
 
   redraw() {
-    const editedFeature = this._umap.editedFeature
+    const editedFeature = this.app.editedFeature
     this.elements.multiline.hidden = !(editedFeature instanceof LineString)
     this.elements.multipolygon.hidden = !(editedFeature instanceof Polygon)
-    this.elements.caption.hidden = this._umap.properties.editMode !== 'advanced'
-    this.elements.import.hidden = this._umap.properties.editMode !== 'advanced'
+    this.elements.caption.hidden = this.app.properties.editMode !== 'advanced'
+    this.elements.import.hidden = this.app.properties.editMode !== 'advanced'
     this.elements.templates.hidden =
-      this._umap.properties.editMode !== 'advanced' && !this._umap.layers.count()
-    this.elements.layers.hidden = this._umap.properties.editMode !== 'advanced'
-    this.elements.tilelayers.hidden = this._umap.properties.editMode !== 'advanced'
-    this.elements.center.hidden = this._umap.properties.editMode !== 'advanced'
-    this.elements.permissions.hidden = this._umap.properties.editMode !== 'advanced'
-    this.elements.settings.hidden = this._umap.properties.editMode !== 'advanced'
-    this.elements.route.hidden = !this._umap.properties.ORSAPIKey
+      this.app.properties.editMode !== 'advanced' && !this.app.layers.count()
+    this.elements.layers.hidden = this.app.properties.editMode !== 'advanced'
+    this.elements.tilelayers.hidden = this.app.properties.editMode !== 'advanced'
+    this.elements.center.hidden = this.app.properties.editMode !== 'advanced'
+    this.elements.permissions.hidden = this.app.properties.editMode !== 'advanced'
+    this.elements.settings.hidden = this.app.properties.editMode !== 'advanced'
+    this.elements.route.hidden = !this.app.properties.ORSAPIKey
   }
 
   addTitle(ref, label) {
-    this.elements[ref].querySelector('button').title = this._umap.help.displayLabel(
+    this.elements[ref].querySelector('button').title = this.app.help.displayLabel(
       label,
       false
     )
@@ -408,7 +408,7 @@ export class EditBar extends WithTemplate {
   addDrawListener(shape) {
     const action = (event) => {
       event.target.closest('button').classList.add('on')
-      this._umap.fire(`draw:${shape}`)
+      this.app.fire(`draw:${shape}`)
     }
     this.addClickListener(shape, action)
   }

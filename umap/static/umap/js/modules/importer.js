@@ -55,9 +55,9 @@ const GRID_TEMPLATE = `
 `
 
 export default class Importer extends Utils.WithTemplate {
-  constructor(umap) {
+  constructor(app) {
     super()
-    this._umap = umap
+    this.app = app
     this.TYPES = ['geojson', 'csv', 'gpx', 'kml', 'osm', 'georss', 'umap']
     this.IMPORTERS = []
     this.dialog = new Dialog({
@@ -68,10 +68,10 @@ export default class Importer extends Utils.WithTemplate {
 
   async loadImporters() {
     for (const [name, config] of Object.entries(
-      this._umap.properties.importers || {}
+      this.app.properties.importers || {}
     )) {
       const register = ({ Importer }) => {
-        this.IMPORTERS.push(new Importer(this._umap, config))
+        this.IMPORTERS.push(new Importer(this.app, config))
       }
       // We need to have explicit static paths for Django's collectstatic with hashes.
       switch (name) {
@@ -173,8 +173,8 @@ export default class Importer extends Utils.WithTemplate {
     const properties = { name: this.layerName }
     return (
       this._layer ||
-      this._umap.layers.tree.get(this.layerId) ||
-      this._umap.createDataLayer({ properties })
+      this.app.layers.tree.get(this.layerId) ||
+      this.app.createDataLayer({ properties })
     )
   }
 
@@ -198,7 +198,7 @@ export default class Importer extends Utils.WithTemplate {
         DOMUtils.loadTemplate(`<option value="${type}">${type}</option>`)
       )
     }
-    this._umap.help.parse(this.container)
+    this.app.help.parse(this.container)
     this.qs('[name=submit]').addEventListener('click', () => this.submit())
     this.qs('[type=file]').addEventListener('change', () => this.onFileChange())
     for (const element of this.container.querySelectorAll('[onchange]')) {
@@ -246,7 +246,7 @@ export default class Importer extends Utils.WithTemplate {
     this.raw = null
     const layerSelect = this.qs('[name="layer-id"]')
     layerSelect.innerHTML = ''
-    this._umap.layers.tree
+    this.app.layers.tree
       .filter(
         (datalayer) =>
           datalayer.isLoaded() &&
@@ -270,7 +270,7 @@ export default class Importer extends Utils.WithTemplate {
   async open() {
     if (!this.container) await this.build()
     this.onLoad()
-    this._umap.editPanel.open({
+    this.app.editPanel.open({
       content: this.container,
       highlight: 'import',
     })
@@ -306,12 +306,12 @@ export default class Importer extends Utils.WithTemplate {
     try {
       if (this.files.length) {
         for (const file of this.files) {
-          this._umap.processFileToImport(file, null, 'umap')
+          this.app.processFileToImport(file, null, 'umap')
         }
       } else if (this.raw) {
-        this._umap.importRaw(this.raw)
+        this.app.importRaw(this.raw)
       } else if (this.url) {
-        this._umap.importFromUrl(this.url, this.format)
+        this.app.importFromUrl(this.url, this.format)
       }
       this.onSuccess()
     } catch (e) {
@@ -334,7 +334,7 @@ export default class Importer extends Utils.WithTemplate {
       url: this.url,
       format: this.format,
     }
-    if (this._umap.properties.urls.ajax_proxy) {
+    if (this.app.properties.urls.ajax_proxy) {
       layer.properties.remoteData.proxy = true
       layer.properties.remoteData.ttl = SCHEMA.ttl.default
     }

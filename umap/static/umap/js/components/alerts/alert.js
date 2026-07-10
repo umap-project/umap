@@ -123,8 +123,8 @@ class uMapAlertCreation extends uMapAlert {
     for (const link of this.loginLinks) {
       link.addEventListener('click', (event) => {
         event.preventDefault()
-        umap.askForLogin().then(() => {
-          umap.permissions.attach()
+        app.askForLogin().then(() => {
+          app.permissions.attach()
           this._hide()
         })
       })

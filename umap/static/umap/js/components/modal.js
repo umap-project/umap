@@ -1,4 +1,4 @@
-import Umap from '../modules/umap.js'
+import App from '../modules/app.js'
 
 const CACHE = {}
 
@@ -9,7 +9,7 @@ class UmapModal extends HTMLElement {
       button.nextElementSibling.showModal()
       const mapId = `${this.dataset.mapId}_target`
       if (!CACHE[mapId]) {
-        const map = new Umap(mapId, JSON.parse(this.dataset.settings))
+        const map = new App(mapId, JSON.parse(this.dataset.settings))
         CACHE[mapId] = map
       } else {
         // TODO remove direct call to leafletMap

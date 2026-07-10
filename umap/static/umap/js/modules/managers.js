@@ -146,7 +146,7 @@ export class LayerManager {
   }
 
   add(layer) {
-    const previousParent = layer.parent || layer._umap
+    const previousParent = layer.parent || layer.app
     previousParent.layers.delete(layer)
     layer.rank = this._children.size
     this._children.set(layer.id, layer)

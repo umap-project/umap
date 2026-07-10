@@ -260,7 +260,7 @@ const PathMixin = {
   maxVertex: 100,
   onMouseOver: function () {
     if (this._map.measureTools?.enabled()) {
-      this.feature._umap.tooltip.open({ content: this.getMeasure(), anchor: this })
+      this.feature.app.tooltip.open({ content: this.getMeasure(), anchor: this })
     } else {
       FeatureMixin.onMouseOver.call(this)
     }

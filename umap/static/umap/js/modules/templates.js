@@ -24,19 +24,19 @@ const TEMPLATE = `
 `
 
 export default class TemplateImporter {
-  constructor(umap) {
-    this.umap = umap
+  constructor(app) {
+    this.app = app
   }
 
   async open() {
     const [root, { tabs, form, body, mine, confirm, confirmData }] =
       Utils.loadTemplateWithRefs(TEMPLATE)
-    const uri = this.umap.urls.get('template_list')
-    const defaultTab = this.umap.permissions.userIsAuth() ? 'mine' : 'staff'
-    mine.hidden = !this.umap.permissions.userIsAuth()
+    const uri = this.app.urls.get('template_list')
+    const defaultTab = this.app.permissions.userIsAuth() ? 'mine' : 'staff'
+    mine.hidden = !this.app.permissions.userIsAuth()
 
     const loadTemplates = async (source) => {
-      const [data, response, error] = await this.umap.server.get(
+      const [data, response, error] = await this.app.server.get(
         `${uri}?source=${source}`
       )
       if (!error) {
@@ -99,23 +99,23 @@ export default class TemplateImporter {
         Alert.error(translate('You must select a template.'))
         return false
       }
-      let url = this.umap.urls.get('map_download', {
+      let url = this.app.urls.get('map_download', {
         map_id: templateId,
       })
       if (!includeData) {
         url = `${url}?include_data=0`
       }
-      await this.umap.loadImporter()
-      this.umap.importer.build()
-      this.umap.importer.url = url
-      this.umap.importer.format = 'umap'
-      this.umap.importer.submit()
-      this.umap.editPanel.close()
+      await this.app.loadImporter()
+      this.app.importer.build()
+      this.app.importer.url = url
+      this.app.importer.format = 'umap'
+      this.app.importer.submit()
+      this.app.editPanel.close()
     }
     confirm.addEventListener('click', () => onConfirm(false))
     confirmData.addEventListener('click', () => onConfirm(true))
 
-    this.umap.editPanel.open({
+    this.app.editPanel.open({
       content: root,
       highlight: 'templates',
     })

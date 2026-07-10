@@ -20,8 +20,8 @@ import { Fields, getDefaultFields } from './fields.js'
 import { loadType } from './types.js'
 
 export class DataLayer {
-  constructor(umap, spec = {}) {
-    this._umap = umap
+  constructor(app, spec = {}) {
+    this.app = app
     this.features = new FeatureManager()
     this.layers = new LayerManager()
 
@@ -46,7 +46,7 @@ export class DataLayer {
     this.setProperties(spec.properties)
     this.properties.name = this.properties.name || this.defaultName()
 
-    this.parentPane = this._umap.mapProxy.overlayPane
+    this.parentPane = this.app.mapProxy.overlayPane
     if (spec.parent) {
       this.parentId = spec.parent
       if (!this.parent) {
@@ -54,9 +54,9 @@ export class DataLayer {
       }
       this.parentPane = this.parent.pane
     } else {
-      this._umap.layers.add(this)
+      this.app.layers.add(this)
     }
-    this.pane = this._umap.mapProxy.createOverlayPane(this.id, this.parentPane)
+    this.pane = this.app.mapProxy.createOverlayPane(this.id, this.parentPane)
     this.pane.dataset.id = this.id
 
     if (!Utils.isObject(this.properties.remoteData)) {
@@ -71,22 +71,22 @@ export class DataLayer {
       this.properties.toZoom = this.properties.remoteData.to
       delete this.properties.remoteData.to
     }
-    this.permissions = new DataLayerPermissions(this._umap, this, spec.permissions)
+    this.permissions = new DataLayerPermissions(this.app, this, spec.permissions)
 
     this._needsFetch = this.createdOnServer || this.isRemoteLayer()
-    this.fields = new Fields(this, this._umap.dialog)
-    this.filters = new Filters(this, this._umap)
-    this.rules = new Rules(umap, this)
-    this._umap.fire('datalayer:changed')
+    this.fields = new Fields(this, this.app.dialog)
+    this.filters = new Filters(this, this.app)
+    this.rules = new Rules(app, this)
+    this.app.fire('datalayer:changed')
 
     if (!this.createdOnServer) {
       if (this.showAtLoad()) this.show()
     }
     this.eventsController = new AbortController()
-    this._umap.on('map:zoomend', () => this.onZoomEnd(), {
+    this.app.on('map:zoomend', () => this.onZoomEnd(), {
       signal: this.eventsController.signal,
     })
-    this._umap.on('map:moveend', () => this.onMoveEnd(), {
+    this.app.on('map:moveend', () => this.onMoveEnd(), {
       signal: this.eventsController.signal,
     })
 
@@ -102,7 +102,7 @@ export class DataLayer {
 
   get journal() {
     if (!this._journal) {
-      this._journal = this._umap.journalEngine.proxy(this)
+      this._journal = this.app.journalEngine.proxy(this)
     }
     return this._journal
   }
@@ -124,7 +124,7 @@ export class DataLayer {
     // explicitly when editing the rank (drag'n'drop), but the rank
     // is actually managed in the managers, which is blind about the
     // initial action.
-    if (this._umap.journalEngine) {
+    if (this.app.journalEngine) {
       this.journal.update('rank', value, oldRank, { undo: false })
     }
   }
@@ -146,9 +146,9 @@ export class DataLayer {
 
   defaultName() {
     if (this.group) {
-      return `${translate('Group')} ${this._umap.layers.tree.filter((l) => l.group).count() + 1}`
+      return `${translate('Group')} ${this.app.layers.tree.filter((l) => l.group).count() + 1}`
     }
-    return `${translate('Layer')} ${this._umap.layers.tree.count() + 1}`
+    return `${translate('Layer')} ${this.app.layers.tree.count() + 1}`
   }
 
   async render(fields, builder) {
@@ -157,14 +157,14 @@ export class DataLayer {
     fields = this.propagate(fields)
     if (fields.includes('properties.fields')) {
       this.fields?.pull()
-      if (this._umap.browser?.isOpen()) {
-        this._umap.browser.buildFilters()
+      if (this.app.browser?.isOpen()) {
+        this.app.browser.buildFilters()
       }
     }
     if (fields.includes('properties.filters')) {
       this.filters.load()
-      if (this._umap.browser?.isOpen()) {
-        this._umap.browser.buildFilters()
+      if (this.app.browser?.isOpen()) {
+        this.app.browser.buildFilters()
       }
     }
 
@@ -173,7 +173,7 @@ export class DataLayer {
     for (const impact of impacts) {
       switch (impact) {
         case 'ui':
-          this._umap.fire('datalayer:changed')
+          this.app.fire('datalayer:changed')
           break
         case 'data':
           if (fields.includes('properties.type')) {
@@ -187,7 +187,7 @@ export class DataLayer {
           this.fetchRemoteData()
           break
         case 'datalayer-rank':
-          this._umap.reorderDOM()
+          this.app.reorderDOM()
           break
       }
     }
@@ -220,8 +220,8 @@ export class DataLayer {
 
   get autoVisibility() {
     if (this._autoVisibility === undefined) {
-      if (this._umap.datalayersFromQueryString) {
-        const datalayerIds = this._umap.datalayersFromQueryString
+      if (this.app.datalayersFromQueryString) {
+        const datalayerIds = this.app.datalayersFromQueryString
         this._autoVisibility = datalayerIds.includes(this.id.toString())
         if (this.old_id) {
           this._autoVisibility =
@@ -265,12 +265,12 @@ export class DataLayer {
       return
     }
     const visible = this.isVisible()
-    if (this.Type) this._umap.mapProxy.clear(this.id)
-    if (visible) this._umap.mapProxy.hideLayer(this.id)
+    if (this.Type) this.app.mapProxy.clear(this.id)
+    if (visible) this.app.mapProxy.hideLayer(this.id)
     // this.Type is needed by createLayer (for cluster/heat)
     this.Type = loadType(this.properties.type)
     this.Type.ensureProperties(this.properties)
-    this._umap.mapProxy.createLayer(this)
+    this.app.mapProxy.createLayer(this)
     if (visible) this.show()
   }
 
@@ -278,9 +278,9 @@ export class DataLayer {
     if (!this.createdOnServer) return
     if (this._loading) return
     this._loading = true
-    const [geojson, response, error] = await this._umap.server.get(this._dataUrl())
+    const [geojson, response, error] = await this.app.server.get(this._dataUrl())
     if (!error) {
-      this._umap.modifiedAt = response.headers.get('last-modified')
+      this.app.modifiedAt = response.headers.get('last-modified')
       this.setReferenceVersion({ response, journal: false })
       delete geojson._umap_options
       // In case of maps pre 1.0 still around
@@ -292,7 +292,7 @@ export class DataLayer {
 
   dataChanged() {
     if (!this.isLoaded() || this._batch) return
-    this._umap.fire('datalayer:changed')
+    this.app.fire('datalayer:changed')
     // TODO: reflect on rendering
     // this.layer.dataChanged()
   }
@@ -326,7 +326,7 @@ export class DataLayer {
   showAtZoom() {
     const from = Number.parseInt(this.properties.fromZoom, 10)
     const to = Number.parseInt(this.properties.toZoom, 10)
-    const zoom = this._umap.mapProxy.zoom
+    const zoom = this.app.mapProxy.zoom
     return !((!Number.isNaN(from) && zoom < from) || (!Number.isNaN(to) && zoom > to))
   }
 
@@ -345,15 +345,15 @@ export class DataLayer {
   }
 
   async getUrl(url, initialUrl) {
-    const response = await this._umap.request.get(url)
+    const response = await this.app.request.get(url)
     return new Promise(async (resolve) => {
       if (response?.ok) {
-        this._umap.modifiedAt = response.headers.get('last-modified')
+        this.app.modifiedAt = response.headers.get('last-modified')
         const id = Math.random()
-        this._umap.loader.start(id)
+        this.app.loader.start(id)
         const raw = await response.text()
         const promise = resolve(raw)
-        this._umap.loader.stop(id)
+        this.app.loader.stop(id)
         return promise
       }
       Alert.error(
@@ -370,10 +370,10 @@ export class DataLayer {
     if (!this.hasDynamicData() && this.isLoaded() && !force) return
     if (!this.isVisible()) return
     // Keep non proxied url for later use in Alert.
-    const remoteUrl = this._umap.renderUrl(this.properties.remoteData.url)
+    const remoteUrl = this.app.renderUrl(this.properties.remoteData.url)
     let url = remoteUrl
     if (this.properties.remoteData.proxy) {
-      url = this._umap.proxyUrl(
+      url = this.app.proxyUrl(
         url,
         this.properties.remoteData.ttl || SCHEMA.ttl.default
       )
@@ -381,7 +381,7 @@ export class DataLayer {
     return await this.getUrl(url, remoteUrl).then((raw) => {
       this.clear(false)
       this.dataChanged()
-      return this._umap.formatter
+      return this.app.formatter
         .parse(raw, this.properties.remoteData.format)
         .then(async (geojson) => await this.fromGeoJSON(geojson, false))
         .catch((error) => {
@@ -412,13 +412,13 @@ export class DataLayer {
   }
 
   _dataUrl() {
-    let url = this._umap.urls.get('datalayer_view', {
+    let url = this.app.urls.get('datalayer_view', {
       pk: this.id,
-      map_id: this._umap.id,
+      map_id: this.app.id,
     })
 
     // No browser cache for owners/editors.
-    if (this._umap.hasEditMode()) url = `${url}?${Date.now()}`
+    if (this.app.hasEditMode()) url = `${url}?${Date.now()}`
     return url
   }
 
@@ -436,7 +436,7 @@ export class DataLayer {
   // }
 
   // hideFeature(feature) {
-  //   this._umap.mapProxy.removeFeature(this.id, feature.id)
+  //   this.app.mapProxy.removeFeature(this.id, feature.id)
   // }
 
   addFeature(feature, sync = false) {
@@ -446,10 +446,10 @@ export class DataLayer {
     }
     feature.connectToDataLayer(this)
     this.features.add(feature)
-    this._umap.featuresIndex[feature.getSlug()] = feature
+    this.app.featuresIndex[feature.getSlug()] = feature
     // TODO: quid for remote data ?
     this.inferFields(feature)
-    if (!this.fields.size && !this._umap.fields.size) {
+    if (!this.fields.size && !this.app.fields.size) {
       this.properties.fields = getDefaultFields()
       this.fields.pull()
     }
@@ -469,8 +469,8 @@ export class DataLayer {
       const oldValue = feature.toJournal()
       feature.journal.delete(oldValue)
     }
-    this._umap.mapProxy.removeFeature(this.id, feature.id)
-    delete this._umap.featuresIndex[feature.getSlug()]
+    this.app.mapProxy.removeFeature(this.id, feature.id)
+    delete this.app.featuresIndex[feature.getSlug()]
     feature.disconnectFromDataLayer(this)
     this.features.del(feature)
     if (this.isVisible()) this.dataChanged()
@@ -514,7 +514,7 @@ export class DataLayer {
     const ancestorHasField = this.ancestors.some((ancestor) =>
       ancestor.fields.has(name)
     )
-    if (!ancestorHasField && !this.fields.has(name) && !this._umap.fields.has(name)) {
+    if (!ancestorHasField && !this.fields.has(name) && !this.app.fields.has(name)) {
       this.features.forEach((feature) => {
         feature.deleteField(name)
       })
@@ -526,7 +526,7 @@ export class DataLayer {
   }
 
   sortedValues(key) {
-    const field = this.fields.get(key) || this._umap.fields.get(key)
+    const field = this.fields.get(key) || this.app.fields.get(key)
     if (!field) return []
     return field.values(this.features.all()).sort(Utils.naturalSort)
   }
@@ -541,7 +541,7 @@ export class DataLayer {
 
   async addData(geojson, sync) {
     const id = Math.random()
-    this._umap.loader.start(id)
+    this.app.loader.start(id)
     let data = []
     this._batch = true
     try {
@@ -559,9 +559,9 @@ export class DataLayer {
     await this.compute()
     // toRenderer() returns the full (accumulated) model, so replace rather than
     // append, otherwise reimporting into the same layer duplicates features.
-    this._umap.mapProxy.clear(this.id)
-    this._umap.mapProxy.addData(this.id, this.toRenderer())
-    this._umap.loader.stop(id)
+    this.app.mapProxy.clear(this.id)
+    this.app.mapProxy.addData(this.id, this.toRenderer())
+    this.app.loader.stop(id)
     return data
   }
 
@@ -595,7 +595,7 @@ export class DataLayer {
 
   makeFeature(geojson = {}, sync = true, id = null) {
     const feature = this._buildFeature(geojson, sync, id)
-    if (feature) this._umap.mapProxy.addFeature(this.id, feature.toRenderer())
+    if (feature) this.app.mapProxy.addFeature(this.id, feature.toRenderer())
     return feature
   }
 
@@ -613,23 +613,23 @@ export class DataLayer {
         ) {
           geojson.geometry.coordinates = geojson.geometry.coordinates[0]
           geojson.geometry.type = 'Point'
-        } else if (geometry.type === 'MultiPoint' && this._umap.editEnabled) {
+        } else if (geometry.type === 'MultiPoint' && this.app.editEnabled) {
           Alert.error(translate('Cannot process MultiPoint'))
           break
         }
-        feature = new Point(this._umap, this, geojson, id)
+        feature = new Point(this.app, this, geojson, id)
         break
       case 'MultiLineString':
       case 'LineString':
-        feature = new LineString(this._umap, this, geojson, id)
+        feature = new LineString(this.app, this, geojson, id)
         break
       case 'MultiPolygon':
       case 'Polygon':
-        feature = new Polygon(this._umap, this, geojson, id)
+        feature = new Polygon(this.app, this, geojson, id)
         break
       default:
         console.debug(geojson)
-        if (this._umap.editEnabled) {
+        if (this.app.editEnabled) {
           Alert.error(
             translate('Skipping unknown geometry.type: {type}', {
               type: geometry.type || 'undefined',
@@ -643,7 +643,7 @@ export class DataLayer {
   }
 
   async importRaw(raw, format) {
-    return this._umap.formatter
+    return this.app.formatter
       .parse(raw, format)
       .then(async (geojson) => {
         this.journal.startBatch()
@@ -683,41 +683,41 @@ export class DataLayer {
   }
 
   async importFromUrl(uri, type) {
-    uri = this._umap.renderUrl(uri)
+    uri = this.app.renderUrl(uri)
     return await this.getUrl(uri).then((raw) => {
       return this.importRaw(raw, type)
     })
   }
 
   getColor() {
-    return this.properties.color || this._umap.getProperty('color')
+    return this.properties.color || this.app.getProperty('color')
   }
 
   getDeleteUrl() {
-    return this._umap.urls.get('datalayer_delete', {
+    return this.app.urls.get('datalayer_delete', {
       pk: this.id,
-      map_id: this._umap.id,
+      map_id: this.app.id,
     })
   }
 
   getVersionsUrl() {
-    return this._umap.urls.get('datalayer_versions', {
+    return this.app.urls.get('datalayer_versions', {
       pk: this.id,
-      map_id: this._umap.id,
+      map_id: this.app.id,
     })
   }
 
   getVersionUrl(ref) {
-    return this._umap.urls.get('datalayer_version', {
+    return this.app.urls.get('datalayer_version', {
       pk: this.id,
-      map_id: this._umap.id,
+      map_id: this.app.id,
       ref: ref,
     })
   }
 
   del(sync = true, root = true) {
     if (root) this.journal.startBatch()
-    const oldValue = Utils.CopyJSON(this.umapGeoJSON())
+    const oldValue = Utils.CopyJSON(this.appGeoJSON())
     // TODO merge datalayer del and features del in same
     // batch
     this.clear()
@@ -746,7 +746,7 @@ export class DataLayer {
   clear(sync = true) {
     this._batch = true
     this.features.forEach((feature) => feature.del(sync))
-    this._umap.mapProxy.clearLayer(this.id)
+    this.app.mapProxy.clearLayer(this.id)
     this._batch = false
   }
 
@@ -754,8 +754,8 @@ export class DataLayer {
     const properties = Utils.CopyJSON(this.properties)
     properties.name = translate('Clone of {name}', { name: this.properties.name })
     delete properties.id
-    const geojson = Utils.CopyJSON(this.umapGeoJSON())
-    const datalayer = this._umap.createDataLayer({ properties })
+    const geojson = Utils.CopyJSON(this.appGeoJSON())
+    const datalayer = this.app.createDataLayer({ properties })
     // TODO make it async
     datalayer.fromGeoJSON(geojson)
     return datalayer
@@ -768,8 +768,8 @@ export class DataLayer {
     }
     if (!this.isVisible()) return
     // TODO: Let's reset for now, and add a more gentle way to redraw later
-    this._umap.mapProxy.clear(this.id)
-    this._umap.mapProxy.addData(this.id, this.toRenderer())
+    this.app.mapProxy.clear(this.id)
+    this.app.mapProxy.addData(this.id, this.toRenderer())
   }
 
   reindex() {
@@ -793,7 +793,7 @@ export class DataLayer {
 
   get inheritedFields() {
     const fields = new Map(this.fields.entries())
-    const parent = this.parent || this._umap
+    const parent = this.parent || this.app
     const inheritedFields = parent.inheritedFields || parent.fields
     for (const [key, field] of inheritedFields.entries()) {
       if (!fields.has(key)) {
@@ -808,7 +808,7 @@ export class DataLayer {
   }
 
   get ancestry() {
-    return [this, ...this.ancestors, this._umap]
+    return [this, ...this.ancestors, this.app]
   }
 
   get ancestors() {
@@ -822,7 +822,7 @@ export class DataLayer {
 
   set parent(other) {
     if (other === this._parent) return
-    ;(other || this._umap).layers.add(this)
+    ;(other || this.app).layers.add(this)
     this._parent = other
   }
 
@@ -831,7 +831,7 @@ export class DataLayer {
   }
 
   set parentId(uuid) {
-    this.parent = this._umap.layers.tree.get(uuid)
+    this.parent = this.app.layers.tree.get(uuid)
   }
 
   get inCaption() {
@@ -901,7 +901,7 @@ export class DataLayer {
     }
     const builder = new MutatingForm(this, metadataFields)
     builder.on('set', ({ detail }) => {
-      this._umap.fire('datalayer:changed')
+      this.app.fire('datalayer:changed')
       if (detail.helper.field === 'properties.type') {
         this.edit().then((panel) => panel.scrollTo('details#layer-properties'))
       }
@@ -1044,7 +1044,7 @@ export class DataLayer {
         },
       ],
     ]
-    if (this._umap.properties.urls.ajax_proxy) {
+    if (this.app.properties.urls.ajax_proxy) {
       fields.push([
         'properties.remoteData.proxy',
         {
@@ -1095,7 +1095,7 @@ export class DataLayer {
     advancedActions.appendChild(bar)
     del.addEventListener('click', () => {
       this.del()
-      this._umap.editPanel.close()
+      this.app.editPanel.close()
     })
 
     if (!this.isRemoteLayer()) {
@@ -1107,7 +1107,7 @@ export class DataLayer {
   }
 
   async edit() {
-    if (!this._umap.editEnabled) {
+    if (!this.app.editEnabled) {
       return
     }
     const container = document.createElement('div')
@@ -1123,7 +1123,7 @@ export class DataLayer {
     this.fields.edit(container)
     this.rules.edit(container)
 
-    if (this._umap.properties.urls.datalayer_versions) {
+    if (this.app.properties.urls.datalayer_versions) {
       await this.buildVersionsFieldset(container)
     }
 
@@ -1137,9 +1137,9 @@ export class DataLayer {
     // Fixme: remove me when this is merged and released
     // https://github.com/Leaflet/Leaflet/pull/9052
     DOMUtils.disableClickPropagation(backButton)
-    backButton.addEventListener('click', () => this._umap.editDatalayers())
+    backButton.addEventListener('click', () => this.app.editDatalayers())
 
-    return this._umap.editPanel.open({
+    return this.app.editPanel.open({
       content: container,
       highlight: 'layers',
       actions: [backButton],
@@ -1164,7 +1164,7 @@ export class DataLayer {
     if (this.Type?.defaults?.[key]) {
       return this.Type.defaults[key]
     }
-    const parent = this.parent || this._umap
+    const parent = this.parent || this.app
     return parent.getProperty(key, feature)
   }
 
@@ -1191,7 +1191,7 @@ export class DataLayer {
     const versionsContainer = DOMUtils.createFieldset(container, translate('Versions'))
     versionsContainer.closest('details').addEventListener('toggle', async (event) => {
       if (event.target.open) {
-        const [{ versions }, response, error] = await this._umap.server.get(
+        const [{ versions }, response, error] = await this.app.server.get(
           this.getVersionsUrl()
         )
         if (!error) versions.forEach(appendVersion)
@@ -1200,11 +1200,11 @@ export class DataLayer {
   }
 
   async restore(version) {
-    if (!this._umap.editEnabled) return
-    this._umap.dialog
+    if (!this.app.editEnabled) return
+    this.app.dialog
       .confirm(translate('Are you sure you want to restore this version?'))
       .then(async () => {
-        const [geojson, response, error] = await this._umap.server.get(
+        const [geojson, response, error] = await this.app.server.get(
           this.getVersionUrl(version)
         )
         if (!error) {
@@ -1236,13 +1236,13 @@ export class DataLayer {
   }
 
   async show() {
-    this._umap.mapProxy.showLayer(this.id)
+    this.app.mapProxy.showLayer(this.id)
     if (!this.isLoaded()) await this.fetchData()
     this.propagateVisibility({ force: true })
   }
 
   hide() {
-    this._umap.mapProxy.hideLayer(this.id)
+    this.app.mapProxy.hideLayer(this.id)
     this.propagateVisibility({ force: false })
   }
 
@@ -1267,7 +1267,7 @@ export class DataLayer {
     } else {
       this.hide()
     }
-    this._umap.bottomBar.redraw()
+    this.app.bottomBar.redraw()
   }
 
   isFullVisible() {
@@ -1281,7 +1281,7 @@ export class DataLayer {
     if (this.layers.count()) {
       return this.layers.tree.some((child) => child.isVisible())
     }
-    return this._umap.mapProxy.hasLayer(this.id)
+    return this.app.mapProxy.hasLayer(this.id)
   }
 
   hasVisibleChild() {
@@ -1306,7 +1306,7 @@ export class DataLayer {
 
   zoomToBounds(bounds) {
     if (GeoUtils.isValidBbox(bounds)) {
-      this._umap.fire('map:view:fit-bounds', {
+      this.app.fire('map:view:fit-bounds', {
         bounds,
         zoom: this.getProperty('zoomTo'),
       })
@@ -1348,11 +1348,11 @@ export class DataLayer {
   }
 
   getPreviousBrowsable() {
-    return this._umap.layers.prev(this)
+    return this.app.layers.prev(this)
   }
 
   getNextBrowsable() {
-    return this._umap.layers.next(this)
+    return this.app.layers.next(this)
   }
 
   umapGeoJSON() {
@@ -1423,12 +1423,12 @@ export class DataLayer {
     formData.append('display_on_load', !!this.properties.displayOnLoad)
     formData.append('rank', this.rank)
     formData.append('settings', this.prepareProperties())
-    const geojson = this.umapGeoJSON()
+    const geojson = this.appGeoJSON()
     // Filename support is shaky, don't do it for now.
     const blob = new Blob([JSON.stringify(geojson)], { type: 'application/json' })
     formData.append('geojson', blob)
-    const saveURL = this._umap.urls.get('datalayer_save', {
-      map_id: this._umap.id,
+    const saveURL = this.app.urls.get('datalayer_save', {
+      map_id: this.app.id,
       pk: this.id,
       created: this.createdOnServer,
     })
@@ -1444,7 +1444,7 @@ export class DataLayer {
       headers = {}
       this._forceSave = false
     }
-    const [data, response, error] = await this._umap.server.post(url, headers, formData)
+    const [data, response, error] = await this.app.server.post(url, headers, formData)
     if (error) {
       if (response && response.status === 412) {
         AlertConflict.error(
@@ -1454,7 +1454,7 @@ export class DataLayer {
           ),
           async () => {
             this._forceSave = true
-            await this._umap.saveAll()
+            await this.app.saveAll()
           }
         )
       } else {
@@ -1475,7 +1475,7 @@ export class DataLayer {
 
       this.setReferenceVersion({ response, journal: true })
 
-      this._umap.fire('datalayer:changed')
+      this.app.fire('datalayer:changed')
       this.redraw() // Needed for reordering features
       return true
     }
@@ -1483,14 +1483,14 @@ export class DataLayer {
 
   async saveDelete() {
     if (this.createdOnServer) {
-      await this._umap.server.post(this.getDeleteUrl())
+      await this.app.server.post(this.getDeleteUrl())
     }
     this.commitDelete()
     return true
   }
 
   commitDelete() {
-    const parent = this.parent || this._umap
+    const parent = this.parent || this.app
     parent.layers.delete(this.id)
     this.eventsController.abort()
   }
@@ -1516,7 +1516,7 @@ export class DataLayer {
   tableEdit() {
     if (!this.isVisible()) return
     import('../tableeditor.js').then(({ default: TableEditor }) => {
-      const editor = new TableEditor(this._umap, this)
+      const editor = new TableEditor(this.app, this)
       editor.open()
     })
   }
@@ -1525,9 +1525,9 @@ export class DataLayer {
     // This keys will be used to filter feature from the browser text input.
     // By default, it will we use the "name" property, which is also the one used as label in the features list.
     // When map owner has configured another label or sort key, we try to be smart and search in the same keys.
-    if (this._umap.properties.filterKey) return this._umap.properties.filterKey
+    if (this.app.properties.filterKey) return this.app.properties.filterKey
     if (this.getProperty('labelKey')) return this.getProperty('labelKey')
-    if (this._umap.properties.sortKey) return this._umap.properties.sortKey
+    if (this.app.properties.sortKey) return this.app.properties.sortKey
     return 'displayName'
   }
 
@@ -1544,10 +1544,10 @@ export class DataLayer {
       for (const rule of this.rules) {
         rules.set(rule.condition, rule)
       }
-      for (const rule of this._umap.rules) {
+      for (const rule of this.app.rules) {
         if (
           !rules.has(rule.condition) &&
-          (this.fields.has(rule.field.key) || this._umap.fields.has(rule.field.key))
+          (this.fields.has(rule.field.key) || this.app.fields.has(rule.field.key))
         ) {
           rules.set(rule.condition, rule)
         }

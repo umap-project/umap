@@ -6,13 +6,13 @@ import * as Utils from './utils.js'
 import * as DOMUtils from './domutils.js'
 
 export default class Share {
-  constructor(umap) {
-    this._umap = umap
+  constructor(app) {
+    this.app = app
   }
 
   build() {
-    const downloadUrl = this._umap.urls.get('map_download', {
-      map_id: this._umap.id,
+    const downloadUrl = this.app.urls.get('map_download', {
+      map_id: this.app.id,
     })
     const [container, { shortUrl, list, customLink, textarea, iframeOptionsWrapper }] =
       DOMUtils.loadTemplateWithRefs(`
@@ -20,7 +20,7 @@ export default class Share {
         <h3><i class="icon icon-16 icon-share"></i> ${translate('Share and download')}</h3>
         <h4>${translate('Share')}</h4>
         <copiable-input data-label="${translate('Link to view the map')}" data-value="${window.location.protocol + Utils.getBaseUrl()}"></copiable-input>
-        <copiable-input data-label="${translate('Short link')}" data-value="${this._umap.properties.shortUrl}" data-ref="shortUrl" hidden></copiable-input>
+        <copiable-input data-label="${translate('Short link')}" data-value="${this.app.properties.shortUrl}" data-ref="shortUrl" hidden></copiable-input>
         <copiable-textarea data-label="${translate('Customized link')}" data-ref="customLink"></copiable-textarea>
         <copiable-textarea data-label="${translate('Iframe')}" data-ref="textarea"></copiable-textarea>
         <div data-ref="iframeOptionsWrapper"></div>
@@ -37,7 +37,7 @@ export default class Share {
       </div>
     `)
     this.container = container
-    if (this._umap.properties.shortUrl) {
+    if (this.app.properties.shortUrl) {
       shortUrl.hidden = false
     }
     for (const format of Object.keys(EXPORT_FORMATS).concat('jpg', 'png')) {
@@ -85,7 +85,7 @@ export default class Share {
     for (const name of ControlManager.MOREABLE_CONTROLS) {
       UIFields.push(`queryString.${name}Control`)
     }
-    const iframeExporter = new IframeExporter(this._umap)
+    const iframeExporter = new IframeExporter(this.app)
     const buildIframeCode = () => {
       textarea.setAttribute('value', iframeExporter.build())
       customLink.setAttribute(
@@ -105,22 +105,22 @@ export default class Share {
 
   open() {
     if (!this.container) this.build()
-    this._umap.panel.open({ content: this.container })
+    this.app.panel.open({ content: this.container })
   }
 
   async format(mode) {
     const type = EXPORT_FORMATS[mode]
-    const features = this._umap.layers.tree
+    const features = this.app.layers.tree
       .visible()
       .reduce((acc, dl) => acc.concat(dl.features.visible()), [])
-    const content = await this._umap.formatter.stringify(features, mode)
-    const filename = Utils.slugify(this._umap.properties.name) + type.ext
+    const content = await this.app.formatter.stringify(features, mode)
+    const filename = Utils.slugify(this.app.properties.name) + type.ext
     return { content, filetype: type.filetype, filename }
   }
 
   async download(mode) {
     if (!(mode in EXPORT_FORMATS)) {
-      this._umap.openPrinter(mode)
+      this.app.openPrinter(mode)
     } else {
       const { content, filetype, filename } = await this.format(mode)
       const blob = new Blob([content], { type: filetype })
@@ -137,8 +137,8 @@ export default class Share {
 }
 
 class IframeExporter {
-  constructor(umap) {
-    this._umap = umap
+  constructor(app) {
+    this.app = app
     this.baseUrl = Utils.getBaseUrl()
     this.options = {
       includeFullScreenLink: true,
@@ -168,18 +168,18 @@ class IframeExporter {
       height: '300px',
     }
     // Use map default, not generic default
-    this.queryString.onLoadPanel = this._umap.getProperty('onLoadPanel')
+    this.queryString.onLoadPanel = this.app.getProperty('onLoadPanel')
   }
 
   buildUrl(options) {
     const datalayers = []
-    if (this.options.viewCurrentFeature && this._umap.currentFeature) {
-      this.queryString.feature = this._umap.currentFeature.getSlug()
+    if (this.options.viewCurrentFeature && this.app.currentFeature) {
+      this.queryString.feature = this.app.currentFeature.getSlug()
     } else {
       delete this.queryString.feature
     }
     if (this.options.keepCurrentDatalayers) {
-      this._umap.layers.tree
+      this.app.layers.tree
         .visible()
         .filter((d) => d.createdOnServer)
         .map((datalayer) => {

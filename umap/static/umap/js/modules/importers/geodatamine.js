@@ -41,8 +41,8 @@ class Autocomplete extends SingleMixin(BaseAjax) {
 }
 
 export class Importer {
-  constructor(umap, options = {}) {
-    this.umap = umap
+  constructor(app, options = {}) {
+    this.app = app
     this.name = options.name || 'GeoDataMine'
     this.baseUrl = options?.url || 'https://geodatamine.fr'
     this.id = 'geodatamine'
@@ -52,7 +52,7 @@ export class Importer {
     let boundary = null
     let boundaryName = null
     const [container, { select }] = DOMUtils.loadTemplateWithRefs(TEMPLATE)
-    const response = await this.umap.request.get(`${this.baseUrl}/themes`)
+    const response = await this.app.request.get(`${this.baseUrl}/themes`)
     if (response?.ok) {
       const { themes } = await response.json()
       themes.sort((a, b) => Utils.naturalSort(a['name:fr'], b['name:fr']))

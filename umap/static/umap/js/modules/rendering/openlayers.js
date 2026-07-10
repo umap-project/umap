@@ -22,8 +22,8 @@ function rgba(color, opacity) {
 }
 
 export class OLProxy {
-  constructor(umap, element) {
-    this.umap = umap
+  constructor(app, element) {
+    this.app = app
     this.sources = {}
     this.layers = {}
     this.map = map = new OLMap({
@@ -68,7 +68,7 @@ export class OLProxy {
   }
 
   proxyOutgoingEvents() {
-    this.umap.on('map:view:set', (event) => {
+    this.app.on('map:view:set', (event) => {
       const { easing, zoom } = event.detail
       const center = event.detail.center
       if (easing) {
@@ -79,11 +79,11 @@ export class OLProxy {
         this.view.setZoom(zoom)
       }
     })
-    this.umap.on('panel:show', (event) => {
+    this.app.on('panel:show', (event) => {
       const { content } = event.detail
-      this.umap.panel.open({ content })
+      this.app.panel.open({ content })
     })
-    this.umap.on('popup:show', (event) => {
+    this.app.on('popup:show', (event) => {
       const { content, center } = event.detail
       console.log('we are in the show')
       const overlay = new Overlay({
@@ -97,7 +97,7 @@ export class OLProxy {
       overlay.setPosition(center)
       this.map.addOverlay(overlay)
     })
-    this.umap.on('feature:reset', (event) => {
+    this.app.on('feature:reset', (event) => {
       const { sourceId, geojson } = event.detail
       const olFeature = this.sources[sourceId]?.getFeatureById(geojson.id)
       if (!olFeature) return
@@ -154,7 +154,7 @@ export class OLProxy {
   getFeatureById(id) {
     const [datalayerId, featureId] = id.split('/')
     // TODO: better index of datalayers.
-    const datalayer = this.umap.layers.tree.all().get(datalayerId)
+    const datalayer = this.app.layers.tree.all().get(datalayerId)
     return datalayer?.features.get(featureId)
   }
 
@@ -166,8 +166,8 @@ export class OLProxy {
   render() {
     this.map.setView(
       new View({
-        center: fromLonLat(this.umap.properties.center),
-        zoom: this.umap.getProperty('zoom'),
+        center: fromLonLat(this.app.properties.center),
+        zoom: this.app.getProperty('zoom'),
         // extent: [ 142018.18294748594, 4635148.893696092, 2945116.88422147, 7347746.153480427 ]
       })
     )

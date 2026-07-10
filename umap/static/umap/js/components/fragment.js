@@ -1,4 +1,4 @@
-import Umap from '../modules/umap.js'
+import Umap from '../modules/app.js'
 
 class UmapFragment extends HTMLElement {
   connectedCallback() {

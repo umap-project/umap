@@ -33,13 +33,13 @@ const TEMPLATE = `
 </div>`
 
 export default class Caption extends Utils.WithTemplate {
-  constructor(umap) {
+  constructor(app) {
     super()
-    this._umap = umap
+    this.app = app
     this.loadTemplate(TEMPLATE)
     this.elements.star.addEventListener('click', async () => {
-      if (this._umap.permissions.userIsAuth()) {
-        await this._umap.star()
+      if (this.app.permissions.userIsAuth()) {
+        await this.app.star()
         this.refresh()
       } else {
         Alert.error(translate('You must be logged in'))
@@ -57,36 +57,36 @@ export default class Caption extends Utils.WithTemplate {
   }
 
   open() {
-    this.elements.name.textContent = this._umap.getDisplayName()
+    this.elements.name.textContent = this.app.getDisplayName()
     this.elements.author.innerHTML = ''
-    this._umap.addAuthorLink(this.elements.author)
-    if (this._umap.properties.description) {
+    this.app.addAuthorLink(this.elements.author)
+    if (this.app.properties.description) {
       this.elements.description.innerHTML = Utils.toHTML(
-        this._umap.properties.description
+        this.app.properties.description
       )
     } else {
       this.elements.description.hidden = true
     }
     this.elements.datalayersContainer.innerHTML = ''
-    for (const layer of this._umap.layers.root) {
+    for (const layer of this.app.layers.root) {
       this.addDataLayer(layer, this.elements.datalayersContainer)
     }
     this.addCredits()
-    if (this._umap.properties.created_at) {
+    if (this.app.properties.created_at) {
       const created_at = translate('created at {date}', {
-        date: this._umap.createdAt.toLocaleDateString(),
+        date: this.app.createdAt.toLocaleDateString(),
       })
       const modified_at = translate('modified at {date}', {
-        date: this._umap.modifiedAt.toLocaleDateString(),
+        date: this.app.modifiedAt.toLocaleDateString(),
       })
       this.elements.dates.textContent = `${created_at} - ${modified_at}`
     } else {
       this.elements.dates.hidden = true
     }
-    this._umap.panel.open({ content: this.element }).then(() => {
+    this.app.panel.open({ content: this.element }).then(() => {
       // Create the legend when the panel is actually on the DOM
-      this._umap.layers.tree.map((datalayer) => datalayer.renderLegend())
-      this._umap.propagate()
+      this.app.layers.tree.map((datalayer) => datalayer.renderLegend())
+      this.app.propagate()
     })
   }
 
@@ -125,21 +125,21 @@ export default class Caption extends Utils.WithTemplate {
   }
 
   addCredits() {
-    if (this._umap.properties.shortCredit || this._umap.properties.longCredit) {
+    if (this.app.properties.shortCredit || this.app.properties.longCredit) {
       this.elements.userCredits.innerHTML = Utils.toHTML(
-        this._umap.properties.longCredit || this._umap.properties.shortCredit
+        this.app.properties.longCredit || this.app.properties.shortCredit
       )
     } else {
       this.elements.userCredits.hidden = true
     }
-    if (this._umap.properties.licence) {
-      this.elements.licenceLink.href = this._umap.properties.licence.url
-      this.elements.licenceLink.textContent = this._umap.properties.licence.name
+    if (this.app.properties.licence) {
+      this.elements.licenceLink.href = this.app.properties.licence.url
+      this.elements.licenceLink.textContent = this.app.properties.licence.name
       this.elements.noLicence.hidden = true
     } else {
       this.elements.licence.hidden = true
     }
-    const tilelayer = this._umap.mapProxy.tilelayers.current
+    const tilelayer = this.app.mapProxy.tilelayers.current
     if (tilelayer) {
       this.elements.bgName.textContent = tilelayer.options.name
       this.elements.bgAttribution.innerHTML = Utils.escapeHTML(
@@ -151,7 +151,7 @@ export default class Caption extends Utils.WithTemplate {
       django: 'https://www.djangoproject.com',
       umap: 'https://umap-project.org/',
       changelog: 'https://docs.umap-project.org/en/master/changelog/',
-      version: this._umap.properties.umap_version,
+      version: this.app.properties.umap_version,
     }
     this.elements.poweredBy.innerHTML = translate(
       `
@@ -162,7 +162,7 @@ export default class Caption extends Utils.WithTemplate {
       `,
       urls
     )
-    if (this._umap.properties.ORSAPIKey) {
+    if (this.app.properties.ORSAPIKey) {
       this.elements.routing.innerHTML = translate(
         `Routing, isochrone and elevation, thanks to <a href="{url}">OpenRouteService</a>.`,
         { url: 'https://openrouteservice.org/' }

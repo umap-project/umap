@@ -183,8 +183,8 @@ const ENTRIES = {
 }
 
 export default class Help {
-  constructor(umap) {
-    this.umap = umap
+  constructor(app) {
+    this.app = app
     this.dialog = new Dialog({ className: 'dark', accept: false, cancel: false })
     this.isMacOS = /mac/i.test(
       // eslint-disable-next-line compat/compat -- Fallback available.
@@ -243,7 +243,7 @@ export default class Help {
         this.dialog.close()
       })
     }
-    for (const info of this.umap.properties.help_links) {
+    for (const info of this.app.properties.help_links) {
       const [node, { button }] = Utils.loadTemplateWithRefs(
         `<li><a href="${info.url}" target="_blank">${info.label} (${info.lang})</a><i class="icon icon-16 icon-external-link"></i></li>`
       )
