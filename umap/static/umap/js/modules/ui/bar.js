@@ -127,8 +127,8 @@ export class TopBar extends WithTemplate {
       this._menu.openBelow(this.elements.user, actions)
     })
     this.elements.peers.addEventListener('mouseover', () => {
-      const connectedPeers = this._umap.journal.getPeers()
-      if (!Object.keys(connectedPeers).length) return
+      const connectedPeers = this._umap.journal?.getPeers()
+      if (!connectedPeers || !Object.keys(connectedPeers).length) return
       const ul = Utils.loadTemplate(
         `<ul>${Object.entries(connectedPeers)
           .sort((el) => el !== this._umap.user?.name)

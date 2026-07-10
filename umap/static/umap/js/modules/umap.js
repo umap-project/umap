@@ -413,6 +413,9 @@ export default class Umap extends Utils.WithEvents {
   }
 
   async loadDataFromQueryString() {
+    // Data injected from the URL may be edited and saved, so it must be
+    // journaled: bring the journal up before creating the layer.
+    await this.initJournal()
     let data = this.searchParams.get('data')
     const dataUrls = this.searchParams.getAll('dataUrl')
     const dataFormat = this.searchParams.get('dataFormat') || 'geojson'
@@ -1398,11 +1401,12 @@ export default class Umap extends Utils.WithEvents {
 
   async enableEdit() {
     document.body.classList.add('umap-edit-enabled')
-    this.editEnabled = true
     await this.initJournal()
+    this.editEnabled = true
     this.drop.enable()
     this.fire('edit:enabled')
     this.editBar.redraw()
+    this.topBar.redraw()
     this.checkForLegacy()
     this.checkForAnonymous()
     this.mapProxy.enableEdit()
@@ -1466,7 +1470,6 @@ export default class Umap extends Utils.WithEvents {
   async initJournal() {
     if (!this.journal) {
       const { Journal } = await import('./journal/engine.js')
-      // Needed for permissions
       this.journalEngine = new Journal(this)
       this.journal = this.journalEngine.proxy(this)
     }

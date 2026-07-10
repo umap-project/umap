@@ -119,7 +119,14 @@ export class DataLayer {
     if (value === this.rank) return
     const oldRank = this.rank
     this._rank = value
-    this.journal.update('rank', value, oldRank, { undo: false })
+    // Rank is reset at datalayer creation time, no need to journal
+    // in this case. Proper way would have been to call the journal
+    // explicitly when editing the rank (drag'n'drop), but the rank
+    // is actually managed in the managers, which is blind about the
+    // initial action.
+    if (this._umap.journalEngine) {
+      this.journal.update('rank', value, oldRank, { undo: false })
+    }
   }
 
   get group() {
