@@ -1,7 +1,6 @@
 import { translate } from './i18n.js'
 import { Form } from './form/builder.js'
 import * as Utils from './utils.js'
-import Orderable from './orderable.js'
 import { Fields } from './form/fields.js'
 
 const EMPTY_VALUE = translate('[empty value]')
@@ -347,8 +346,10 @@ export class Filters {
         oldValue
       )
     }
-    const orderable = new Orderable(ul, onReorder)
     container.appendChild(body)
+    import('./orderable.js').then(
+      ({ default: Orderable }) => new Orderable(ul, onReorder)
+    )
   }
 
   createFilterForm(fieldKey) {

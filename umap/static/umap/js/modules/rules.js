@@ -1,6 +1,5 @@
 import { MutatingForm } from './form/builder.js'
 import { translate } from './i18n.js'
-import Orderable from './orderable.js'
 import * as Utils from './utils.js'
 import * as Icon from './icon.js'
 import { SCHEMA } from './schema.js'
@@ -292,7 +291,9 @@ export default class Rules {
       for (const rule of this.rules) {
         rule.renderToolbox(ul)
       }
-      const orderable = new Orderable(ul, this.onReorder.bind(this))
+      import('./orderable.js').then(({ default: Orderable }) => {
+        new Orderable(ul, this.onReorder.bind(this))
+      })
     }
     add.addEventListener('click', () => this.addRule())
     container.appendChild(body)
