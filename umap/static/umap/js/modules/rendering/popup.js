@@ -3,7 +3,6 @@ import {
   DomEvent,
   Path,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
-import loadTemplate from './template.js'
 import * as DOMUtils from '../domutils.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
@@ -29,6 +28,7 @@ const Popup = BasePopup.extend({
     const container = document.createElement('div')
     container.classList.add('umap-popup')
     const name = this.feature.getOption('popupTemplate')
+    const { default: loadTemplate } = await import('./template.js')
     this.content = await loadTemplate(name, this.feature, container)
     const elements = container.querySelectorAll('img,iframe')
     for (const element of elements) {

@@ -9,7 +9,6 @@ import * as DOMUtils from '../domutils.js'
 import * as Icon from '../icon.js'
 import * as GeoUtils from '../geoutils.js'
 import * as TextUtils from '../textutils.js'
-import loadTemplate from '../rendering/template.js'
 
 class Feature {
   constructor(umap, datalayer, geojson = {}, id = null) {
@@ -167,11 +166,9 @@ class Feature {
     const container = document.createElement('div')
     container.classList.add('umap-popup')
     const name = this.getOption('popupTemplate')
+    const { default: loadTemplate } = await import('../rendering/template.js')
     const content = await loadTemplate(name, this, container)
     const elements = container.querySelectorAll('img,iframe')
-    // for (const element of elements) {
-    //   this.onElementLoaded(element)
-    // }
     if (!elements.length && container.textContent.replace('\n', '') === '') {
       container.innerHTML = ''
       container.appendChild(
