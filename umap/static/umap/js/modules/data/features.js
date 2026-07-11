@@ -1,4 +1,4 @@
-import { uMapAlert as Alert } from '../../components/alerts/alert.js'
+import { Alert } from '../../components/alerts/alert.js'
 import { MutatingForm } from '../form/builder.js'
 import { translate, getLocale } from '../i18n.js'
 import loadPopup from '../rendering/popup.js'
@@ -149,9 +149,7 @@ class Feature {
   }
 
   getSlug() {
-    return (
-      this.properties[this.app.getProperty('slugKey') || U.DEFAULT_LABEL_KEY] || ''
-    )
+    return this.properties[this.app.getProperty('slugKey') || U.DEFAULT_LABEL_KEY] || ''
   }
 
   getPermalink() {
@@ -972,10 +970,7 @@ class Path extends Feature {
         }
       )
     }
-    if (
-      this.app?.editedFeature !== this &&
-      this.isSameClass(this.app.editedFeature)
-    ) {
+    if (this.app?.editedFeature !== this && this.isSameClass(this.app.editedFeature)) {
       items.push({
         title: translate('Transfer shape to edited feature'),
         icon: 'icon-transfer-shape',

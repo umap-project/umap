@@ -1,7 +1,4 @@
-import {
-  uMapAlert as Alert,
-  uMapAlertConflict as AlertConflict,
-} from '../../components/alerts/alert.js'
+import { Alert, AlertConflict } from '../../components/alerts/alert.js'
 import * as DOMUtils from '../domutils.js'
 import { Filters } from '../filters.js'
 import { MutatingForm } from '../form/builder.js'
@@ -373,10 +370,7 @@ export class DataLayer {
     const remoteUrl = this.app.renderUrl(this.properties.remoteData.url)
     let url = remoteUrl
     if (this.properties.remoteData.proxy) {
-      url = this.app.proxyUrl(
-        url,
-        this.properties.remoteData.ttl || SCHEMA.ttl.default
-      )
+      url = this.app.proxyUrl(url, this.properties.remoteData.ttl || SCHEMA.ttl.default)
     }
     return await this.getUrl(url, remoteUrl).then((raw) => {
       this.clear(false)
@@ -717,7 +711,7 @@ export class DataLayer {
 
   del(sync = true, root = true) {
     if (root) this.journal.startBatch()
-    const oldValue = Utils.CopyJSON(this.appGeoJSON())
+    const oldValue = Utils.CopyJSON(this.umapGeoJSON())
     // TODO merge datalayer del and features del in same
     // batch
     this.clear()
@@ -754,7 +748,7 @@ export class DataLayer {
     const properties = Utils.CopyJSON(this.properties)
     properties.name = translate('Clone of {name}', { name: this.properties.name })
     delete properties.id
-    const geojson = Utils.CopyJSON(this.appGeoJSON())
+    const geojson = Utils.CopyJSON(this.umapGeoJSON())
     const datalayer = this.app.createDataLayer({ properties })
     // TODO make it async
     datalayer.fromGeoJSON(geojson)
@@ -1423,7 +1417,7 @@ export class DataLayer {
     formData.append('display_on_load', !!this.properties.displayOnLoad)
     formData.append('rank', this.rank)
     formData.append('settings', this.prepareProperties())
-    const geojson = this.appGeoJSON()
+    const geojson = this.umapGeoJSON()
     // Filename support is shaky, don't do it for now.
     const blob = new Blob([JSON.stringify(geojson)], { type: 'application/json' })
     formData.append('geojson', blob)

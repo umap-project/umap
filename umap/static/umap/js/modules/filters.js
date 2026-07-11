@@ -681,7 +681,7 @@ Fields.FilterTargetSelect = class extends Fields.Select {
     const options = []
     if (this.builder.properties.app.fields.size) {
       if (!this.obj.target) {
-        this.obj.target = this.builder.properties.umap
+        this.obj.target = this.builder.properties.app
       }
       options.push([
         `map:${this.builder.properties.app.id}`,
@@ -715,7 +715,7 @@ Fields.FilterTargetSelect = class extends Fields.Select {
     if (!value) return null
     const [type, id] = value.split(':')
     if (type === 'map') {
-      return this.builder.properties.umap
+      return this.builder.properties.app
     }
     return this.builder.properties.app.layers.tree.get(id)
   }

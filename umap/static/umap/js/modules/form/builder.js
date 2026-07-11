@@ -129,7 +129,7 @@ export class MutatingForm extends Form {
   constructor(obj, fields, properties) {
     super(obj, fields, properties)
     this.debounce = true
-    this.app = obj.app || properties.umap
+    this.app = obj.app || properties.app
     this.computeDefaultProperties()
   }
 

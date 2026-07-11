@@ -1,8 +1,8 @@
-import Umap from '../modules/app.js'
+import App from '../modules/app.js'
 
 class UmapFragment extends HTMLElement {
   connectedCallback() {
-    new Umap(this.firstElementChild.id, JSON.parse(this.dataset.settings))
+    new App(this.firstElementChild.id, JSON.parse(this.dataset.settings))
   }
 }
 

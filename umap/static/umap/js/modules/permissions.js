@@ -1,4 +1,4 @@
-import { uMapAlert as Alert } from '../components/alerts/alert.js'
+import { Alert } from '../components/alerts/alert.js'
 import * as Clipboard from './clipboard.js'
 import { MutatingForm } from './form/builder.js'
 import { translate } from './i18n.js'

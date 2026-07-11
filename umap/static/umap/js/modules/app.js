@@ -1,19 +1,15 @@
-import {
-  uMapAlert as Alert,
-  uMapAlertCreation as AlertCreation,
-} from '../components/alerts/alert.js'
+import { Alert, AlertCreation } from '../components/alerts/alert.js'
 import * as Clipboard from './clipboard.js'
 import { Fields } from './data/fields.js'
 import { DataLayer } from './data/layer.js'
 import * as DOMUtils from './domutils.js'
-import * as GeoUtils from './geoutils.js'
 import DropControl from './drop.js'
 import { Filters, migrateLegacyFilters } from './filters.js'
 import { MutatingForm } from './form/builder.js'
 import { Formatter } from './formatter.js'
+import * as GeoUtils from './geoutils.js'
 import Help from './help.js'
 import { getLocale, setLocale, translate } from './i18n.js'
-import * as Icon from './icon.js'
 import { LayerManager } from './managers.js'
 import { MapPermissions } from './permissions.js'
 // import { OLProxy } from './rendering/openlayers.js'
@@ -530,7 +526,7 @@ export default class App extends Utils.WithEvents {
   }
 
   onContextMenu(appEvent) {
-    const mapEvent = umapEvent.detail.event
+    const mapEvent = appEvent.detail.event
     const items = this.getOwnContextMenu(mapEvent).concat(
       this.getSharedContextMenu(mapEvent)
     )

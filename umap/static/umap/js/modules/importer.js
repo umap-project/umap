@@ -1,4 +1,4 @@
-import { uMapAlert as Alert } from '../components/alerts/alert.js'
+import { Alert } from '../components/alerts/alert.js'
 import { translate } from './i18n.js'
 import { SCHEMA } from './schema.js'
 import Dialog from './ui/dialog.js'
@@ -67,9 +67,7 @@ export default class Importer extends Utils.WithTemplate {
   }
 
   async loadImporters() {
-    for (const [name, config] of Object.entries(
-      this.app.properties.importers || {}
-    )) {
+    for (const [name, config] of Object.entries(this.app.properties.importers || {})) {
       const register = ({ Importer }) => {
         this.IMPORTERS.push(new Importer(this.app, config))
       }

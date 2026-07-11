@@ -79,7 +79,7 @@ const Panel = Popup.extend({
   },
 
   onAdd: function (leafletMap) {
-    const umap = this.feature.app
+    const app = this.feature.app
     app.panel.setDefaultMode('expanded')
     app.panel.open({
       content: this._content,

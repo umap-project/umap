@@ -2,7 +2,7 @@ import { translate } from '../../modules/i18n.js'
 import { uMapElement } from '../base.js'
 import * as Clipboard from '../../modules/clipboard.js'
 
-class uMapAlert extends uMapElement {
+class Alert extends uMapElement {
   static get observedAttributes() {
     return ['open']
   }
@@ -16,21 +16,21 @@ class uMapAlert extends uMapElement {
   }
 
   static info(message, duration = 5000) {
-    uMapAlert.emit('alert', { message, duration })
+    Alert.emit('alert', { message, duration })
   }
 
   static success(message, duration = 5000) {
-    uMapAlert.emit('alert', { level: 'success', message, duration })
+    Alert.emit('alert', { level: 'success', message, duration })
   }
 
   // biome-ignore lint/style/useNumberNamespace: Number.Infinity returns undefined by default
   static warning(message, duration = Infinity) {
-    uMapAlert.emit('alert', { level: 'warning', message, duration })
+    Alert.emit('alert', { level: 'warning', message, duration })
   }
 
   // biome-ignore lint/style/useNumberNamespace: Number.Infinity returns undefined by default
   static error(message, duration = Infinity) {
-    uMapAlert.emit('alert', { level: 'error', message, duration })
+    Alert.emit('alert', { level: 'error', message, duration })
   }
 
   constructor() {
@@ -79,17 +79,17 @@ class uMapAlert extends uMapElement {
   }
 }
 
-class uMapAlertCreation extends uMapAlert {
+class AlertCreation extends Alert {
   static info(
-    umap,
+    app,
     message,
     // biome-ignore lint/style/useNumberNamespace: Number.Infinity returns undefined by default
     duration = Infinity,
     editLink = undefined,
     sendCallback = undefined
   ) {
-    uMapAlertCreation.emit('alertCreation', {
-      umap,
+    AlertCreation.emit('alertCreation', {
+      app,
       message,
       duration,
       editLink,
@@ -106,14 +106,14 @@ class uMapAlertCreation extends uMapAlert {
 
   onAlertCreation(event) {
     const {
-      umap,
+      app,
       level = 'info',
       duration = 5000,
       message = '',
       editLink = undefined,
       sendCallback = undefined,
     } = event.detail
-    uMapAlert.prototype.onAlert.call(this, { detail: { level, duration, message } })
+    Alert.prototype.onAlert.call(this, { detail: { level, duration, message } })
     this.linkWrapper.querySelector('input[type="url"]').value = editLink
     const button = this.linkWrapper.querySelector('input[type="button"]')
     button.addEventListener('click', (event) => {
@@ -147,9 +147,9 @@ class uMapAlertCreation extends uMapAlert {
   }
 }
 
-class uMapAlertConflict extends uMapAlert {
+class AlertConflict extends Alert {
   static error(message, forceCallback) {
-    uMapAlertConflict.emit('alertConflict', { level: 'error', message, forceCallback })
+    AlertConflict.emit('alertConflict', { level: 'error', message, forceCallback })
   }
 
   constructor() {
@@ -164,7 +164,7 @@ class uMapAlertConflict extends uMapAlert {
       message = '',
       forceCallback = undefined,
     } = event.detail
-    uMapAlert.prototype.onAlert.call(this, { detail: { level, duration, message } })
+    Alert.prototype.onAlert.call(this, { detail: { level, duration, message } })
     const form = this.conflictWrapper.querySelector('form')
     form.addEventListener('submit', (event) => {
       event.preventDefault()
@@ -186,4 +186,4 @@ class uMapAlertConflict extends uMapAlert {
   }
 }
 
-export { uMapAlert, uMapAlertCreation, uMapAlertConflict }
+export { Alert, AlertCreation, AlertConflict }

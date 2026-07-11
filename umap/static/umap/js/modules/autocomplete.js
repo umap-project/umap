@@ -1,4 +1,4 @@
-import { uMapAlert as Alert } from '../components/alerts/alert.js'
+import { Alert } from '../components/alerts/alert.js'
 import * as DOMUtils from './domutils.js'
 import { translate } from './i18n.js'
 import { LocationIcon } from './icon.js'

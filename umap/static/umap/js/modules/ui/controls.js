@@ -3,7 +3,7 @@ import {
   Control as LeafletControl,
   TileLayer,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
-import { uMapAlert as Alert } from '../../components/alerts/alert.js'
+import { Alert } from '../../components/alerts/alert.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
 

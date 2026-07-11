@@ -12,7 +12,7 @@ import {
   Polyline,
   latLng,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
-import { uMapAlert as Alert } from '../../components/alerts/alert.js'
+import { Alert } from '../../components/alerts/alert.js'
 import * as GeoUtils from '../geoutils.js'
 import { translate } from '../i18n.js'
 import * as Icon from '../icon.js'

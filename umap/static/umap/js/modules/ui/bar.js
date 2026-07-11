@@ -191,7 +191,7 @@ export class TopBar extends WithTemplate {
   }
 
   redraw() {
-    if (!document.body.classList.contains('umap-edit-enabled')) return
+    if (!this.app.editEnabled) return
     this.element.classList.toggle('draft', this.app.permissions.isDraft())
     const syncEnabled = this.app.getProperty('syncEnabled')
     this.elements.peers.hidden = !syncEnabled
