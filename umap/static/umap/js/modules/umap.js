@@ -285,8 +285,10 @@ export default class Umap extends Utils.WithEvents {
       }
     }
     const asNumber = (key, value) => {
-      value = +value
-      if (!Number.isNaN(value)) this.properties[name] = value
+      if (this.searchParams.has(key)) {
+        value = +value
+        if (!Number.isNaN(value)) this.properties[key] = value
+      }
     }
     // FIXME retrocompat
     asBoolean('displayDataBrowserOnLoad')
