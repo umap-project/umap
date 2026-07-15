@@ -47,7 +47,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
   "Django==6.0.7",
-  "hatch==1.17.0",
+  "hatch==1.17.1",
   "ruff==0.15.20",
   "djlint==1.39.2",
   "mkdocs==1.6.1",
