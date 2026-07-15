@@ -5,10 +5,6 @@ export default class Loader {
     this.parent = parent
     this.element = loadTemplate('<div class="umap-loader"></div>')
     this.parent.appendChild(this.element)
-    document.body.addEventListener('dataloading', (event) =>
-      this.start(event.detail.id)
-    )
-    document.body.addEventListener('dataload', (event) => this.stop(event.detail.id))
     this._counter = new Set()
   }
 
