@@ -276,7 +276,8 @@ class Feature {
     builder = new MutatingForm(this, properties, {
       id: 'umap-feature-properties',
     })
-    builder.build().then((form) => {
+    const onFormCreated = builder.build()
+    onFormCreated.then((form) => {
       container.appendChild(form)
       const button = Utils.loadTemplate(
         `<button type="button"><i class="icon icon-16 icon-add"></i>${translate('Add a new field')}</button>`
@@ -294,7 +295,7 @@ class Feature {
     })
     this.app.editedFeature = this
     this.app.fire('feature:edit', { id: this.id })
-    return onPanelLoaded
+    return Promise.all([onFormCreated, onPanelLoaded]).then(([form, panel]) => panel)
   }
 
   addAdvancedActions(container) {
