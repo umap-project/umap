@@ -43,9 +43,12 @@ def test_can_edit_on_shift_click(
     expect(page.locator("dialog").get_by_role("heading", name="Help")).to_be_visible()
 
 
-def test_can_edit_on_ctrl_shift_click(live_server, openmap, page, datalayer):
+def test_can_edit_on_ctrl_shift_click(
+    live_server, openmap, page, datalayer, wait_for_edit_mode
+):
     modifier = "Meta" if platform.system() == "Darwin" else "Control"
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    wait_for_edit_mode(page)
     page.locator(".leaflet-marker-icon").click(modifiers=[modifier, "Shift"])
     expect(page.get_by_text("Layer properties")).to_be_visible()
 
@@ -86,8 +89,11 @@ def test_marker_style_should_have_precedence(live_server, openmap, page, bootstr
     )
 
 
-def test_should_open_an_edit_toolbar_on_click(live_server, openmap, page, bootstrap):
+def test_should_open_an_edit_toolbar_on_click(
+    live_server, openmap, page, bootstrap, wait_for_edit_mode
+):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    wait_for_edit_mode(page)
     page.locator(".leaflet-marker-icon").click(button="right")
     expect(page.get_by_role("button", name="Toggle edit mode")).to_be_visible()
     expect(page.get_by_role("button", name="Delete this feature")).to_be_visible()
@@ -110,7 +116,7 @@ def test_should_update_open_popup_on_edit(
 
 
 def test_should_follow_datalayer_style_when_changing_datalayer(
-    live_server, openmap, page
+    live_server, openmap, page, wait_for_edit_mode
 ):
     data = deepcopy(DATALAYER_DATA)
     data["properties"] = {"color": "DarkCyan"}
@@ -125,6 +131,7 @@ def test_should_follow_datalayer_style_when_changing_datalayer(
         },
     )
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    wait_for_edit_mode(page)
     marker = page.locator(".leaflet-marker-icon .icon-container")
     expect(marker).to_have_css("background-color", "rgb(0, 139, 139)")
     # Change datalayer
@@ -135,9 +142,10 @@ def test_should_follow_datalayer_style_when_changing_datalayer(
 
 
 def test_add_property_from_feature_properties_panel(
-    live_server, openmap, page, datalayer
+    live_server, openmap, page, datalayer, wait_for_edit_mode
 ):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    wait_for_edit_mode(page)
     page.locator(".leaflet-marker-icon").click(modifiers=["Shift"])
     page.get_by_role("button", name="Add a new field").click()
     page.locator('input[name="key"]').fill("newprop")
