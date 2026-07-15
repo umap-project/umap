@@ -370,7 +370,8 @@ export class DataLayer {
     const remoteUrl = this.app.renderUrl(this.properties.remoteData.url)
     let url = remoteUrl
     if (this.properties.remoteData.proxy) {
-      url = this.app.proxyUrl(url, this.properties.remoteData.ttl || SCHEMA.ttl.default)
+      const ttl = this.properties.remoteData.ttl || Schema.SCHEMA.ttl.default
+      url = this.app.proxyUrl(url, ttl)
     }
     return await this.getUrl(url, remoteUrl).then((raw) => {
       this.clear(false)
