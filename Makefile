@@ -2,16 +2,14 @@
 
 .PHONY: install
 install: ## Install the dependencies
-	uv sync
+	uv sync --extra dev,test,sync,s3
 
 .PHONY: develop
-develop: ## Install the test and dev dependencies
-	uv sync --extra dev,test,sync
+develop: install ## Install the test and dev dependencies
 	uv run playwright install
 
 .PHONY: ci
-ci: ## Install the test and dev dependencies for ci
-	uv sync --extra dev,test,sync,s3
+ci: install ## Install the test and dev dependencies for ci
 	uv run playwright install chromium-headless-shell
 
 .PHONY: format
