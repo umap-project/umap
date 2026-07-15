@@ -32,8 +32,11 @@ def bootstrap(map, live_server):
     DataLayerFactory(map=map, data=DATALAYER_DATA)
 
 
-def test_can_edit_on_shift_click(live_server, openmap, page, datalayer):
+def test_can_edit_on_shift_click(
+    live_server, openmap, page, datalayer, wait_for_edit_mode
+):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    wait_for_edit_mode(page)
     page.locator(".leaflet-marker-icon").click(modifiers=["Shift"])
     expect(page.get_by_text("Feature properties")).to_be_visible()
     page.locator(".umap-field-description").get_by_role("button", name="Help").click()
