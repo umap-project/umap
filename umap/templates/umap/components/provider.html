@@ -1,8 +1,10 @@
 {% load static %}
-<a href="{% url "social:begin" name %}"
-   class="umap-login-popup"
-   title="{{ name|title }}">
+ <form method="post" action="{% url 'social:begin' name %}">
+    {% csrf_token %}
     {% with "umap/img/providers/"|add:name|add:".png" as path %}
-     <img src="{% static path %}" width="92px" height="92px" alt="{{ name }}" />
+    <button type="submit">
+      <img src="{% static path %}" width="92px" height="92px" alt="{{ name }}" />
+    </button>
     {% endwith %}
- </a>
+</form>
+
