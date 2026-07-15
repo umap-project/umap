@@ -59,11 +59,11 @@ helm: ## Build the helm chart and publish it
 
 .PHONY: build
 build: ## Build the Python package before release
-	@hatch build --clean
+	@uv run hatch build --clean
 
 .PHONY: publish
 publish: ## Publish the Python package to Pypi
-	@hatch publish
+	@uv run hatch publish
 	make clean
 
 test: test-unit test-integration testjs
