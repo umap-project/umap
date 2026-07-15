@@ -2,37 +2,36 @@
 
 .PHONY: install
 install: ## Install the dependencies
-	python3 -m pip install --upgrade pip
-	python3 -m pip install -e .
+	uv sync
 
 .PHONY: develop
 develop: ## Install the test and dev dependencies
-	python3 -m pip install -e .[test,dev,sync,s3]
-	playwright install
+	uv sync --extra dev,test,sync
+	uv run playwright install
 
 .PHONY: ci
 ci: ## Install the test and dev dependencies for ci
-	python3 -m pip install -e .[test,dev,sync,s3]
-	playwright install chromium-headless-shell
+	uv sync --extra dev,test,sync,s3
+	uv run playwright install chromium-headless-shell
 
 .PHONY: format
 format: ## Format the code and templates files
-	-djlint umap/templates --reformat
-	-isort --profile black umap/
-	-ruff format --target-version=py310 umap/
+	-uv run djlint umap/templates --reformat
+	-uv run isort --profile black umap/
+	-uv run ruff format --target-version=py310 umap/
 
 .PHONY: lint
 lint: ## Lint the code and template files
 	npx eslint umap/static/umap/js/
-	djlint umap/templates --lint
-	isort --check --profile black umap/
-	ruff format --check --target-version=py310 umap/
+	uv run djlint umap/templates --lint
+	uv run isort --check --profile black umap/
+	uv run ruff format --check --target-version=py310 umap/
 	# vermin fails strangely, let's skip it for a while
 	# hopping that this will get fixed upstream
 	#vermin --no-tips --violations -t=3.10- umap/
 
 docs: ## Compile the docs
-	mkdocs build
+	uv run mkdocs build
 
 .PHONY: version
 version: ## Display the current version
@@ -72,10 +71,10 @@ publish: ## Publish the Python package to Pypi
 test: test-unit test-integration testjs
 
 test-unit:
-	pytest -vv umap/tests/ --ignore=umap/tests/integration
+	uv run pytest -vv umap/tests/ --ignore=umap/tests/integration
 
 test-integration:
-	pytest -vv umap/tests/integration/ --dist=loadgroup --reruns 1 --maxfail 3
+	uv run pytest -vv umap/tests/integration/ --dist=loadgroup --reruns 1 --maxfail 3
 
 clean:
 	rm -f dist/*
