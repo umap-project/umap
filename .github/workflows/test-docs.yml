@@ -35,17 +35,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: 'pip'
-          cache-dependency-path: '**/pyproject.toml'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+
+      - name: Set up Python
+        run: uv python install
+
       - name: Install dependencies
         run: |
           sudo apt update
           sudo apt install libgdal-dev
-          python -m pip install --upgrade pip
           make ci
           npm install mocha
       - name: run tests
@@ -60,13 +60,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+
       - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
+        run: uv python install
+
       - name: Install dependencies
         run: |
-          python3 -m pip install -e .[test,dev]
+          make ci
           npm install eslint
 
       - name: Run Lint
