@@ -128,6 +128,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.admin",
+    "django.contrib.postgres",
     "django.contrib.gis",
     "django_probes",
     "umap",
