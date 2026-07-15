@@ -135,6 +135,11 @@ export default class App extends Utils.WithEvents {
     this.filters = new Filters(this, this)
     this.rules = new Rules(this, this)
 
+    this.request.on('dataloading', (event) => this.loader.start(event.detail.id))
+    this.request.on('dataload', (event) => this.loader.stop(event.detail.id))
+    this.server.on('dataloading', (event) => this.loader.start(event.detail.id))
+    this.server.on('dataload', (event) => this.loader.stop(event.detail.id))
+
     if (this.hasEditMode()) {
       this.editPanel = new EditPanel(this)
       this.fullPanel = new FullPanel(this)

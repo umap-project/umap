@@ -1,5 +1,6 @@
 import { Alert } from '../components/alerts/alert.js'
 import { translate } from './i18n.js'
+import * as Utils from './utils.js'
 
 export class RequestError extends Error {}
 
@@ -19,7 +20,7 @@ export class NOKError extends RequestError {
   }
 }
 
-class BaseRequest {
+class BaseRequest extends Utils.WithEvents {
   async _fetch(method, uri, headers, data) {
     let response
 
@@ -47,10 +48,6 @@ class BaseRequest {
 // In case of error, an alert is sent, but non 20X status are not handled
 // The consumer must check the response status by hand
 export class Request extends BaseRequest {
-  fire(name, detail) {
-    document.body.dispatchEvent(new CustomEvent(name, { detail }))
-  }
-
   async _fetch(method, uri, headers, data) {
     const id = Math.random()
     this.fire('dataloading', { id: id })
@@ -105,7 +102,7 @@ export class ServerRequest extends Request {
 
   async post(uri, headers, data) {
     const token = document.cookie.replace(
-      /(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/,
+      /(?:(?:^|.*;\s*)csrftoken\s*=\s*([^;]*).*$)|^.*$/,
       '$1'
     )
     if (token) {
