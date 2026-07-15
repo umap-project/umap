@@ -10,7 +10,7 @@ export default class Hash {
 
   update({ zoom, coordinate }) {
     const [lng, lat] = coordinate
-    window.location.hash = `#${zoom}/${lat}/${lng}`
+    history.replaceState(null, '', `#${zoom}/${lat}/${lng}`)
   }
 
   parse() {
