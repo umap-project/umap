@@ -903,7 +903,6 @@ export default class App extends Utils.WithEvents {
       UIFields.push(`properties.${name}Control`)
     }
     UIFields = UIFields.concat([
-      'properties.moreControl',
       'properties.scrollWheelZoom',
       'properties.miniMapControl',
       'properties.scaleControl',
