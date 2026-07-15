@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Luke Eros, 2026
 # Yaron Shahrabani <sh.yaron@gmail.com>, 2020
 msgid ""
 msgstr ""
@@ -10,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-02 15:00+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>, 2020\n"
+"Last-Translator: Luke Eros, 2026\n"
 "Language-Team: Hebrew (http://app.transifex.com/openstreetmap/umap/language/he/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,11 +21,11 @@ msgstr ""
 
 #: admin.py:21
 msgid "CSV Export"
-msgstr ""
+msgstr "ייצוא CSV"
 
 #: decorators.py:60
 msgid "This map is not publicly available"
-msgstr ""
+msgstr "מפה זו אינה זמינה לציבור"
 
 #: middleware.py:19
 msgid "Site is readonly for maintenance"
@@ -36,7 +37,7 @@ msgid ""
 "Using “%(name)s” to authenticate is deprecated and will be removed soon. "
 "Please configure another provider below before losing access to your account"
 " and maps. Then, please logout and login again with the new provider."
-msgstr ""
+msgstr "השימוש ב-\"%(name)s\" לצורך אימות הוצא משימוש ויוסר בקרוב. אנא הגדר ספק אחר למטה לפני שתאבד גישה לחשבונך ולמפות שלך. לאחר מכן, אנא התנתק והתחבר שוב עם הספק החדש."
 
 #: models.py:61 models.py:80
 msgid "name"
@@ -72,35 +73,35 @@ msgstr "לכולם יש הרשאות לערוך"
 
 #: models.py:180 models.py:497
 msgid "Everyone"
-msgstr ""
+msgstr "כולם"
 
 #: models.py:181 models.py:190 models.py:498
 msgid "Editors and team only"
-msgstr ""
+msgstr "עורכים וצוות בלבד"
 
 #: models.py:182 models.py:499
 msgid "Owner only"
-msgstr ""
+msgstr "בעלים בלבד"
 
 #: models.py:185
 msgid "Draft (private)"
-msgstr ""
+msgstr "טיוטה (פרטית)"
 
 #: models.py:186
 msgid "Everyone (public)"
-msgstr ""
+msgstr "כולם (ציבורי)"
 
 #: models.py:189
 msgid "Anyone with link"
-msgstr ""
+msgstr "כל מי שיש לו קישור"
 
 #: models.py:191
 msgid "Blocked"
-msgstr ""
+msgstr "חסום"
 
 #: models.py:192 models.py:493
 msgid "Deleted"
-msgstr ""
+msgstr "נמחק"
 
 #: models.py:195
 msgid "center"
@@ -136,7 +137,7 @@ msgstr "עורכים"
 
 #: models.py:224
 msgid "team"
-msgstr ""
+msgstr "צוות"
 
 #: models.py:230 models.py:526
 msgid "edit status"
@@ -152,11 +153,11 @@ msgstr "הגדרות"
 
 #: models.py:243
 msgid "save as template"
-msgstr ""
+msgstr "שמור כתבנית"
 
 #: models.py:244
 msgid "This map is a template map."
-msgstr ""
+msgstr "מפה זו היא מפת תבנית."
 
 #: models.py:422
 msgid "Clone of"
@@ -164,7 +165,7 @@ msgstr "עותק של"
 
 #: models.py:492 models.py:496 models.py:502
 msgid "Inherit"
-msgstr ""
+msgstr "יירושה"
 
 #: models.py:516
 msgid "display on load"
@@ -176,107 +177,107 @@ msgstr "הצגת השכבה הזאת עם הטעינה."
 
 #: settings/base.py:285
 msgid "uMap user documentation"
-msgstr ""
+msgstr "מדריך משתמש של uMap"
 
 #: settings/base.py:290
 msgid "Video tutorials"
-msgstr ""
+msgstr "סרטוני הדרכה"
 
 #: settings/base.py:295
 msgid "OpenStreetMap.org forum"
-msgstr ""
+msgstr "פורום OpenStreetMap.org"
 
 #: settings/base.py:300
 msgid "OpenStreetMap France forum"
-msgstr ""
+msgstr "פורום OpenStreetMap צרפת"
 
 #: settings/base.py:320
 msgid "Art and Culture"
-msgstr ""
+msgstr "אמנות ותרבות"
 
 #: settings/base.py:321
 msgid "Cycling"
-msgstr ""
+msgstr "רכיבה על אופניים"
 
 #: settings/base.py:322
 msgid "Business"
-msgstr ""
+msgstr "מסחר"
 
 #: settings/base.py:323
 msgid "Environment"
-msgstr ""
+msgstr "סביבה"
 
 #: settings/base.py:324
 msgid "Education"
-msgstr ""
+msgstr "השכלה"
 
 #: settings/base.py:325
 msgid "Food and Agriculture"
-msgstr ""
+msgstr "מזון וחקלאות"
 
 #: settings/base.py:326
 msgid "Geopolitics"
-msgstr ""
+msgstr "גיאופוליטיקה"
 
 #: settings/base.py:327
 msgid "Health"
-msgstr ""
+msgstr "בריאות"
 
 #: settings/base.py:328
 msgid "Hiking"
-msgstr ""
+msgstr "טיול הרים"
 
 #: settings/base.py:329
 msgid "History"
-msgstr ""
+msgstr "היסטוריה"
 
 #: settings/base.py:330
 msgid "Public sector"
-msgstr ""
+msgstr "מגזר ציבורי"
 
 #: settings/base.py:331
 msgid "Science"
-msgstr ""
+msgstr "מדע"
 
 #: settings/base.py:332
 msgid "Shopping"
-msgstr ""
+msgstr "קניות"
 
 #: settings/base.py:333
 msgid "Sport and Leisure"
-msgstr ""
+msgstr "ספורט ופנאי"
 
 #: settings/base.py:334
 msgid "Travel"
-msgstr ""
+msgstr "מסע"
 
 #: settings/base.py:335
 msgid "Transports"
-msgstr ""
+msgstr "תחבורה"
 
 #: settings/base.py:336
 msgid "Tourism"
-msgstr ""
+msgstr "תיירות"
 
 #: templates/403.html:8
 msgid ""
 "<a href=\"https://discover.umap-project.org/support/faq/#map-statuses\" "
 "target=\"_blank\">Find out here the documentation</a> on how to manage map’s"
 " permissions."
-msgstr ""
+msgstr "<a href=\"https://discover.umap-project.org/support/faq/#map-statuses\" target=\"_blank\">מצא כאן את מדריך המשתמש</a> כיצד לנהל את הרשאות המפה."
 
 #: templates/403.html:10 templates/404.html:8
 msgid "← Go to the homepage"
-msgstr ""
+msgstr "עבור אל עמוד הבית ←"
 
 #: templates/404.html:7
 msgid "404 Page Not Found"
-msgstr ""
+msgstr "404 העמוד לא נמצא"
 
 #: templates/auth/user_detail.html:6
 #, python-format
 msgid "%(current_user)s’s maps"
-msgstr ""
+msgstr "המפות של %(current_user)s"
 
 #: templates/auth/user_detail.html:12
 #, python-format
@@ -290,46 +291,46 @@ msgstr "למשתמש %(current_user)s אין מפות."
 
 #: templates/auth/user_form.html:6
 msgid "My Profile"
-msgstr ""
+msgstr "הפרופיל שלי"
 
 #: templates/auth/user_form.html:24 templates/umap/team_form.html:25
 msgid "Save"
-msgstr ""
+msgstr "שמור"
 
 #: templates/auth/user_form.html:30
 msgid "Your current providers"
-msgstr ""
+msgstr "הספקים הנוכחיים שלך"
 
 #: templates/auth/user_form.html:44
 msgid "Connect to another provider"
-msgstr ""
+msgstr "התחבר לספק אחר"
 
 #: templates/auth/user_form.html:47
 msgid ""
 "It's a good habit to connect your account to more than one provider, in case"
 " one provider becomes unavailable, temporarily or even permanently."
-msgstr ""
+msgstr "זהו הרגל טוב לחבר חשבון ליותר מספק אחד, במקרה שספק אחד הופך ללא זמין, באופן זמני או אפילו לצמיתות."
 
 #: templates/auth/user_stars.html:6
 #, python-format
 msgid "%(current_user)s’s starred maps"
-msgstr ""
+msgstr "מפות מועדפות של %(current_user)s"
 
 #: templates/auth/user_stars.html:12
 #, python-format
 msgid "Browse %(current_user)s's starred maps"
-msgstr ""
+msgstr "דפדף מפות מועדפות של %(current_user)s"
 
 #: templates/auth/user_stars.html:21
 #, python-format
 msgid "%(current_user)s has no starred maps yet."
-msgstr ""
+msgstr "ל %(current_user)s אין מפות מועדפות עדיין."
 
 #: templates/base.html:16
 msgid ""
 "uMap lets you create maps with OpenStreetMap layers in a minute and embed "
 "them in your site."
-msgstr ""
+msgstr "uMap מאפשר לך ליצור מפות עם שכבות של OpenStreetMap תוך דקה ולהטמיע אותן באתר שלך."
 
 #: templates/registration/login.html:6 templates/registration/login.html:46
 msgid "Login"
@@ -337,11 +338,11 @@ msgstr "כניסה"
 
 #: templates/registration/login.html:22
 msgid "To save and easily find your maps, identify yourself."
-msgstr ""
+msgstr "כדי לשמור ולמצוא בקלות את המפות שלך, זהה את עצמך."
 
 #: templates/registration/login.html:25
 msgid "Please log in with your account:"
-msgstr ""
+msgstr "אנא התחבר באמצעות חשבונך:"
 
 #: templates/registration/login.html:42
 msgid "Username"
@@ -353,7 +354,7 @@ msgstr "ססמה"
 
 #: templates/registration/login.html:52
 msgid "Please choose a provider:"
-msgstr ""
+msgstr "אנא בחר ספק:"
 
 #: templates/umap/about.html:5 templates/umap/navigation.html:22
 msgid "About"
@@ -412,7 +413,7 @@ msgstr "משחק עם ההדגמה"
 #: templates/umap/components/alerts/alert.html:68
 #: templates/umap/components/alerts/alert.html:96
 msgid "Close"
-msgstr ""
+msgstr "סגור"
 
 #: templates/umap/components/alerts/alert.html:31
 #, python-format
@@ -420,51 +421,51 @@ msgid ""
 "Oops, I didn't mean it, I want to <a href=\"%(LOGIN_URL)s\" "
 "class=\"login\">create an account</a> or <a href=\"%(LOGIN_URL)s\" "
 "class=\"login\">log in</a> (no worry, we'll attach the map to your account)."
-msgstr ""
+msgstr "אופס, לא התכוונתי, אני רוצה <a href=\"%(LOGIN_URL)s\" class=\"login\"> ליצור חשבון משתמש</a> או <a href=\"%(LOGIN_URL)s\" class=\"login\"> להתחבר</a>(אל דאגה, אנו נצרף את המפה לחשבונך)."
 
 #: templates/umap/components/alerts/alert.html:34
 msgid ""
 "Yes, I want to continue editing anonymously, I will save the secret edit "
 "link to be able to edit this map later or on another device"
-msgstr ""
+msgstr "כן, אני רוצה להמשיך לערוך באופן אנונימי, אשמור את קישור העריכה הסודי כדי שאוכל לערוך את המפה הזו מאוחר יותר או במכשיר אחר."
 
 #: templates/umap/components/alerts/alert.html:38
 msgid "Here is your secret link to edit the map, please keep it safe:"
-msgstr ""
+msgstr "הנה הקישור הסודי שלך לעריכת המפה, אנא שמור עליו:"
 
 #: templates/umap/components/alerts/alert.html:42
 msgid "Copy link"
-msgstr ""
+msgstr "העתק קישור"
 
 #: templates/umap/components/alerts/alert.html:49
 msgid "Enter your email address to receive the secret link:"
-msgstr ""
+msgstr "הקלד את כתובת דוא\"ל שלך לקבלת הקישור הסודי:"
 
 #: templates/umap/components/alerts/alert.html:55
 msgid "Email"
-msgstr ""
+msgstr "דוא\"ל"
 
 #: templates/umap/components/alerts/alert.html:58
 msgid "Send me the link"
-msgstr ""
+msgstr "שלח לי את הקישור"
 
 #: templates/umap/components/alerts/alert.html:83
 msgid "See their edits in another tab"
-msgstr ""
+msgstr "ראה את העריכות שלהם בכרטיסייה אחרת"
 
 #: templates/umap/components/alerts/alert.html:86
 msgid "Keep your changes and loose theirs"
-msgstr ""
+msgstr "שמור את השינויים שלך ואבד את שלהם"
 
 #: templates/umap/components/alerts/alert.html:89
 msgid "Keep their changes and loose yours"
-msgstr ""
+msgstr "שמור את השינויים שלהם ותאבד את שלך"
 
 #: templates/umap/content.html:26
 msgid ""
 "This instance of uMap is currently in read only mode, no creation/edit is "
 "allowed."
-msgstr ""
+msgstr "מופע זה של uMap נמצא כעת במצב קריאה בלבד, לא ניתן ליצור/לערוך."
 
 #: templates/umap/content.html:34
 #, python-format
@@ -477,53 +478,53 @@ msgstr "זה עותק לדוגמה, משמש לבדיקות ולמהדורות �
 
 #: templates/umap/content_footer.html:5
 msgid "An OpenStreetMap project"
-msgstr ""
+msgstr "פרוייקט של OpenStreetMap"
 
 #: templates/umap/content_footer.html:6
 msgid "version"
-msgstr ""
+msgstr "גרסה"
 
 #: templates/umap/content_footer.html:7
 msgid "Hosted by"
-msgstr ""
+msgstr "מאוחסן אצל"
 
 #: templates/umap/content_footer.html:8
 msgid "Contact"
-msgstr ""
+msgstr "צור קשר"
 
 #: templates/umap/content_footer.html:9 templates/umap/navigation.html:25
 msgid "Help"
-msgstr ""
+msgstr "עזרה"
 
 #: templates/umap/content_footer.html:10
 msgid "Terms of Service"
-msgstr ""
+msgstr "תנאי השירות"
 
 #: templates/umap/dashboard_menu.html:6
 #, python-format
 msgid "My Maps (%(count)s)"
-msgstr ""
+msgstr "המפות שלי (%(count)s)"
 
 #: templates/umap/dashboard_menu.html:8
 msgid "My Maps"
-msgstr ""
+msgstr "המפות שלי"
 
 #: templates/umap/dashboard_menu.html:11
 #, python-format
 msgid "My Templates (%(count)s)"
-msgstr ""
+msgstr "התבניות שלי (%(count)s)"
 
 #: templates/umap/dashboard_menu.html:13 templates/umap/user_templates.html:6
 msgid "My Templates"
-msgstr ""
+msgstr "התבניות שלי"
 
 #: templates/umap/dashboard_menu.html:17
 msgid "My profile"
-msgstr ""
+msgstr "הפרופיל שלי"
 
 #: templates/umap/dashboard_menu.html:20
 msgid "My teams"
-msgstr ""
+msgstr "הצוותים שלי"
 
 #: templates/umap/home.html:15
 msgid "Get inspired, browse maps"
@@ -535,7 +536,7 @@ msgstr "נכנסת למערכת. ממשיכים הלאה…"
 
 #: templates/umap/map_list.html:15
 msgid "template"
-msgstr ""
+msgstr "תבנית"
 
 #: templates/umap/map_list.html:18
 msgid "by"
@@ -543,11 +544,11 @@ msgstr "מאת"
 
 #: templates/umap/map_list.html:22
 msgid "See the template"
-msgstr ""
+msgstr "צפה בתבנית"
 
 #: templates/umap/map_list.html:22
 msgid "See the map"
-msgstr ""
+msgstr "צפה במפה"
 
 #: templates/umap/map_list.html:28
 msgid "More"
@@ -555,95 +556,95 @@ msgstr "עוד"
 
 #: templates/umap/map_table.html:8 templates/umap/user_teams.html:18
 msgid "Name"
-msgstr ""
+msgstr "שם"
 
 #: templates/umap/map_table.html:11
 msgid "Preview"
-msgstr ""
+msgstr "תצוגה מקדימה"
 
 #: templates/umap/map_table.html:14
 msgid "Who can see"
-msgstr ""
+msgstr "מי יכול לראות"
 
 #: templates/umap/map_table.html:17
 msgid "Who can edit"
-msgstr ""
+msgstr "מי יכול לערוך"
 
 #: templates/umap/map_table.html:20
 msgid "Last save"
-msgstr ""
+msgstr "שמירה אחרונה"
 
 #: templates/umap/map_table.html:23
 msgid "Owner"
-msgstr ""
+msgstr "בעלים"
 
 #: templates/umap/map_table.html:26 templates/umap/user_teams.html:24
 msgid "Actions"
-msgstr ""
+msgstr "פעולות"
 
 #: templates/umap/map_table.html:40 templates/umap/map_table.html:42
 msgid "Open preview"
-msgstr ""
+msgstr "פתח תצוגה מקדימה"
 
 #: templates/umap/map_table.html:72 templates/umap/map_table.html:74
 msgid "Share"
-msgstr ""
+msgstr "שתף"
 
 #: templates/umap/map_table.html:78 templates/umap/map_table.html:80
 #: templates/umap/user_teams.html:42 templates/umap/user_teams.html:44
 msgid "Edit"
-msgstr ""
+msgstr "ערוך"
 
 #: templates/umap/map_table.html:84 templates/umap/map_table.html:86
 msgid "Download"
-msgstr ""
+msgstr "הורד"
 
 #: templates/umap/map_table.html:90 templates/umap/map_table.html:92
 msgid "Clone"
-msgstr ""
+msgstr "שכפל"
 
 #: templates/umap/map_table.html:100 templates/umap/map_table.html:102
 msgid "Delete"
-msgstr ""
+msgstr "מחק"
 
 #: templates/umap/map_table.html:116
 msgid "first"
-msgstr ""
+msgstr "ראשון"
 
 #: templates/umap/map_table.html:117
 msgid "previous"
-msgstr ""
+msgstr "הקודם"
 
 #: templates/umap/map_table.html:125
 #, python-format
 msgid "Page %(maps_number)s of %(num_pages)s"
-msgstr ""
+msgstr "עמוד %(maps_number)s מתוך %(num_pages)s"
 
 #: templates/umap/map_table.html:130
 msgid "next"
-msgstr ""
+msgstr "הבא"
 
 #: templates/umap/map_table.html:131
 msgid "last"
-msgstr ""
+msgstr "אחרון"
 
 #: templates/umap/map_table.html:139
 #, python-format
 msgid "Lines per page: %(per_page)s"
-msgstr ""
+msgstr "שורות לעמוד: %(per_page)s"
 
 #: templates/umap/map_table.html:144
 #, python-format
 msgid "%(count)s maps"
-msgstr ""
+msgstr "%(count)s מפות"
 
 #: templates/umap/navigation.html:11 templates/umap/user_dashboard.html:6
 msgid "My Dashboard"
-msgstr ""
+msgstr "לוח בקרה שלי"
 
 #: templates/umap/navigation.html:14
 msgid "Starred maps"
-msgstr ""
+msgstr "מפות מועדפות"
 
 #: templates/umap/navigation.html:18
 msgid "Log in"
@@ -699,27 +700,27 @@ msgstr "הססמה שלך הוחלפה."
 
 #: templates/umap/search.html:6
 msgid "Explore maps"
-msgstr ""
+msgstr "סיור במפות"
 
 #: templates/umap/search.html:19
 #, python-format
 msgid "%(count)s map found:"
 msgid_plural "%(count)s maps found:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "מפה %(count)s נמצאה:"
+msgstr[1] "%(count)s מפות נמצאו:"
+msgstr[2] "%(count)s מפות נמצאו:"
 
 #: templates/umap/search.html:30 templates/umap/user_dashboard.html:17
 msgid "No map found."
-msgstr ""
+msgstr "לא נמצאה מפה."
 
 #: templates/umap/search.html:36
 msgid "Latest created maps in category"
-msgstr ""
+msgstr "המפות האחרונות שנוצרו בקטגוריה"
 
 #: templates/umap/search.html:43
 msgid "Latest created maps"
-msgstr ""
+msgstr "המפות האחרונות שנוצרו"
 
 #: templates/umap/search_bar.html:4
 msgid "Search maps"
@@ -727,7 +728,7 @@ msgstr "חיפוש במפות"
 
 #: templates/umap/search_bar.html:14 templates/umap/user_map_table.html:15
 msgid "Any category"
-msgstr ""
+msgstr "כל קטגוריה"
 
 #: templates/umap/search_bar.html:19
 msgid "Search"
@@ -735,101 +736,101 @@ msgstr "חיפוש"
 
 #: templates/umap/team_confirm_delete.html:6
 msgid "Team deletion"
-msgstr ""
+msgstr "מחיקת צוות"
 
 #: templates/umap/team_detail.html:6
 #, python-format
 msgid "%(current_team)s’s maps"
-msgstr ""
+msgstr "המפות של %(current_team)s"
 
 #: templates/umap/team_detail.html:14
 #, python-format
 msgid "Browse %(current_team)s's maps"
-msgstr ""
+msgstr "סייר במפות שלי %(current_team)s"
 
 #: templates/umap/team_detail.html:26
 #, python-format
 msgid "%(current_team)s has no public maps."
-msgstr ""
+msgstr "ל %(current_team)s אין מפות ציבוריות"
 
 #: templates/umap/team_form.html:6
 msgid "Create or edit a team"
-msgstr ""
+msgstr "צור או ערוך צוות"
 
 #: templates/umap/team_form.html:28
 msgid "Delete this team"
-msgstr ""
+msgstr "מחק צוות זה"
 
 #: templates/umap/team_form.html:51
 msgid "Add user"
-msgstr ""
+msgstr "הוסף משתמש"
 
 #: templates/umap/user_dashboard.html:10
 msgid "Search my maps"
-msgstr ""
+msgstr "חיפוש במפות שלי"
 
 #: templates/umap/user_dashboard.html:11
 msgid "Map’s name"
-msgstr ""
+msgstr "שם המפה"
 
 #: templates/umap/user_dashboard.html:12
 #, python-format
 msgid "Download %(count)s maps"
-msgstr ""
+msgstr "הורד %(count)s מפות"
 
 #: templates/umap/user_dashboard.html:15
 msgid "You have no map yet."
-msgstr ""
+msgstr "אין לך מפה עדיין."
 
 #: templates/umap/user_teams.html:6
 msgid "My Teams"
-msgstr ""
+msgstr "הצוותים שלי"
 
 #: templates/umap/user_teams.html:21
 msgid "Users"
-msgstr ""
+msgstr "משתמשים"
 
 #: templates/umap/user_teams.html:52
 msgid "New team"
-msgstr ""
+msgstr "צוות חדש"
 
 #: templates/umap/user_templates.html:10
 msgid "Search my templates"
-msgstr ""
+msgstr "חיפוש בתבניות שלי"
 
 #: templates/umap/user_templates.html:11
 msgid "Template’s name"
-msgstr ""
+msgstr "שם התבנית"
 
 #: templates/umap/user_templates.html:12
 #, python-format
 msgid "Download %(count)s templates"
-msgstr ""
+msgstr "הורד %(count)s תבניות"
 
 #: templates/umap/user_templates.html:15
 msgid "You have no template yet."
-msgstr ""
+msgstr "אין לך תבנית עדיין."
 
 #: templates/umap/user_templates.html:16
 msgid "Create a template"
-msgstr ""
+msgstr "צור תבנית"
 
 #: templates/umap/user_templates.html:17
 msgid "No template found."
-msgstr ""
+msgstr "לא נמצאה תבנית."
 
 #: views.py:226
 msgid "Cannot delete a team with more than one member"
-msgstr ""
+msgstr "לא ניתן למחוק צוות עם יותר מחבר אחד"
 
 #: views.py:230
 #, python-format
 msgid "Team “%(name)s” has been deleted"
-msgstr ""
+msgstr "הצוות \"%(name)s\" נמחק"
 
 #: views.py:809
 msgid "See full screen"
-msgstr ""
+msgstr "ראה במסך מלא"
 
 #: views.py:952
 msgid "Map editors updated with success!"
@@ -838,22 +839,22 @@ msgstr "עורכי המפה עודכנו בהצלחה!"
 #: views.py:977
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
-msgstr ""
+msgstr "קישור עריכת uMap עבור המפה שלך: %(map_name)s"
 
 #: views.py:980
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
-msgstr ""
+msgstr "להלן קישור העריכה הסודי שלך: %(link)s"
 
 #: views.py:987
 #, python-format
 msgid "Can't send email to %(email)s"
-msgstr ""
+msgstr "לא ניתן לשלוח דוא\"ל ל %(email)s"
 
 #: views.py:990
 #, python-format
 msgid "Email sent to %(email)s"
-msgstr ""
+msgstr "דוא\"ל נשלח ל %(email)s"
 
 #: views.py:1001
 msgid "Only its owner can delete the map."
@@ -861,7 +862,7 @@ msgstr "רק לבעלים יש אפשרות למחוק את המפה."
 
 #: views.py:1007
 msgid "Map successfully deleted."
-msgstr ""
+msgstr "המפה נמחקה בהצלחה."
 
 #: views.py:1033
 #, python-format
@@ -880,8 +881,8 @@ msgstr "השכבה נמחקה בהצלחה."
 
 #: views.py:1320
 msgid "Permissions updated with success!"
-msgstr ""
+msgstr "ההרשאות עודכנו בהצלחה!"
 
 #: views.py:1337
 msgid "Generic"
-msgstr ""
+msgstr "כללי"
