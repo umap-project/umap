@@ -6,7 +6,7 @@ import * as GeoUtils from '../geoutils.js'
 import { getLocale, translate } from '../i18n.js'
 import * as Icon from '../icon.js'
 import loadPopup from '../rendering/popup.js'
-import { SCHEMA } from '../schema.js'
+import * as Schema from '../schema.js'
 import * as TextUtils from '../textutils.js'
 import * as Utils from '../utils.js'
 
@@ -467,7 +467,7 @@ class Feature {
     let value = fallback
     if (typeof this.staticOptions[option] !== 'undefined') {
       value = this.staticOptions[option]
-    } else if (Utils.usableOption(this.properties._umap_options, option)) {
+    } else if (Schema.isValidValue(this.properties._umap_options[option], option)) {
       value = this.properties._umap_options[option]
     } else if (this.datalayer) {
       value = this.datalayer.getProperty(option, this)
@@ -482,7 +482,7 @@ class Feature {
     // There is a variable inside.
     if (Utils.hasVar(value)) {
       value = Utils.greedyTemplate(value, this.properties, true)
-      if (Utils.hasVar(value)) value = SCHEMA[key]?.default
+      if (Utils.hasVar(value)) value = Schema.SCHEMA[key]?.default
     }
     return value
   }
@@ -755,7 +755,7 @@ class Feature {
     const symbol = Icon.formatUrl(this.iconUrl, this.extendedProperties())
     const bgcolor = this.getPreviewColor()
     element.style.backgroundColor = bgcolor
-    if (symbol && symbol !== SCHEMA.iconUrl.default) {
+    if (symbol && symbol !== Schema.SCHEMA.iconUrl.default) {
       const icon = Icon.makeElement(symbol, element)
       Icon.setContrast(icon, element, symbol, bgcolor)
     } else if (DOMUtils.contrastedColor(element, bgcolor)) {
@@ -1402,7 +1402,7 @@ export class Polygon extends Path {
     // If user set a fillColor, use it, otherwise default to color
     // which is usually the only one set
     const color = this.getDynamicOption(this.staticOptions.mainColor)
-    if (color && color !== SCHEMA.color.default) return color
+    if (color && color !== Schema.SCHEMA.color.default) return color
     return this.getDynamicOption('color')
   }
 

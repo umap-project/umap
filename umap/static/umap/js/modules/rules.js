@@ -1,9 +1,9 @@
+import { Registry as Fields } from './data/fields.js'
 import { MutatingForm } from './form/builder.js'
 import { translate } from './i18n.js'
-import * as Utils from './utils.js'
 import * as Icon from './icon.js'
-import { SCHEMA } from './schema.js'
-import { Registry as Fields } from './data/fields.js'
+import * as Schema from './schema.js'
+import * as Utils from './utils.js'
 
 const EMPTY_VALUES = ['', undefined, null]
 
@@ -50,7 +50,7 @@ class Rule {
     let vars = []
     this.cast = (v) => v
     this.operator = undefined
-    let operator = undefined
+    let operator
     for (const [sign, funcName] of this.OPERATORS) {
       if (this.condition.includes(sign)) {
         operator = funcName
@@ -221,7 +221,7 @@ class Rule {
       this.properties.fillColor || this.properties.color || this.parent.getColor()
     const symbol = this.properties.iconUrl
     colorBox.style.backgroundColor = bgcolor
-    if (symbol && symbol !== SCHEMA.iconUrl.default) {
+    if (symbol && symbol !== Schema.SCHEMA.iconUrl.default) {
       const icon = Icon.makeElement(symbol, colorBox)
       Icon.setContrast(icon, colorBox, symbol, bgcolor)
     }
@@ -328,10 +328,11 @@ export default class Rules {
     })
   }
 
-  getOption(name, feature) {
+  getOption(key, feature) {
     for (const rule of this.rules) {
       if (rule.match(feature.properties)) {
-        if (Utils.usableOption(rule.properties, name)) return rule.properties[name]
+        const value = rule.properties[key]
+        if (Schema.isValidValue(value, key)) return value
       }
     }
   }

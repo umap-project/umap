@@ -1141,8 +1141,9 @@ export class DataLayer {
     })
   }
 
-  getOwnProperty(option) {
-    if (Utils.usableOption(this.properties, option)) return this.properties[option]
+  getOwnProperty(key) {
+    const value = this.properties[key]
+    if (Schema.isValidValue(value, key)) return value
   }
 
   getProperty(key, feature) {

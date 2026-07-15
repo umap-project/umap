@@ -726,3 +726,18 @@ export function hasField(field, schema) {
   const field_name = _getPropertyName(field)
   return current_schema[field_name] !== undefined
 }
+
+export function isValidValue(value, field, schema) {
+  if (value === undefined || value === '') return false
+  const spec = (schema || SCHEMA)[field]
+  const choices = spec?.choices
+  const type = spec?.type
+  if (choices) {
+    return choices.map(([key, value]) => key).includes(value)
+  } else if (spec?.nullable && value === null) {
+    return true
+  } else if (typeof type === 'function') {
+    return value?.constructor === type
+  }
+  return true
+}
