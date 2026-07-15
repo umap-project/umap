@@ -7,9 +7,6 @@
     "**double star for bold**": "**bintang berganda untuk tulisan tebal**",
     "*single star for italic*": "*bintang tunggal untuk tulisan condong*",
     "--- for a horizontal rule": "--- untuk garis melintang",
-    "1 day": "1 hari",
-    "1 hour": "1 jam",
-    "5 min": "5 minit",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Senarai berpisahkan koma bagi nombor yang menentukan corak sengkang lejang. Cth.: \"5, 10, 15\".",
     "About": "Perihalan",
     "Action not allowed :(": "Tindakan tidak dibenarkan :(",
@@ -230,7 +227,6 @@
     "new window": "tetingkap baharu",
     "next": "seterusnya",
     "NM": "NM",
-    "No cache": "Tiada cache",
     "No licence has been set": "Tiada lesen ditetapkan",
     "No results": "Tiada hasil",
     "no": "tidak",
@@ -592,7 +588,6 @@
     "Altitude:": "Altitude:",
     "Right-click to edit": "Right-click to edit",
     "Draw along routes": "Draw along routes",
-    "Skipping invalid geometry": "Skipping invalid geometry",
     "Add filter": "Add filter",
     "Min/Max": "Min/Max",
     "Multiple choices": "Multiple choices",
@@ -659,5 +654,6 @@
     "Group": "Group",
     "Parent group": "Parent group",
     "Group properties": "Group properties",
-    "Choose a group": "Choose a group"
+    "Choose a group": "Choose a group",
+    "Change map background": "Change map background"
 }

@@ -81,7 +81,7 @@ compilemessages:
 	uv run umap compilemessages
 	uv run umap generate_js_locale
 messages:
-	cd umap && umap makemessages -l en
+	cd umap && uv run umap makemessages -l en
 	node node_modules/leaflet-i18n/bin/i18n.js --dir_path=umap/static/umap/js/ --dir_path=umap/static/umap/vendors/measurable/ --locale_dir_path=umap/static/umap/locale/ --locale_codes=en --mode=json --clean --default_values --expressions=_,translate
 vendors:
 	npm run vendors

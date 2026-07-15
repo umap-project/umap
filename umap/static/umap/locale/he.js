@@ -7,9 +7,6 @@ const locale = {
     "**double star for bold**": "**כוכבית כפולה להדגשה**",
     "*single star for italic*": "*כוכבית אחת לטקסט נטוי*",
     "--- for a horizontal rule": "--- לכלל אופקי",
-    "1 day": "יום 1",
-    "1 hour": "שעה 1",
-    "5 min": "5 דקות",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "רשימה מופרדת בפסיקים של מספרים שמגדירים את תבנית הלוכסנים והמקפים. למשל: „5, 10, 15”.",
     "About": "אודות",
     "Action not allowed :(": "פעולה אסורה :(",
@@ -230,7 +227,6 @@ const locale = {
     "new window": "חלון חדש",
     "next": "הבא",
     "NM": "NM",
-    "No cache": "אין מטמון",
     "No licence has been set": "לא הוגדר רישיון",
     "No results": "אין תוצאות",
     "no": "לא",
@@ -592,7 +588,6 @@ const locale = {
     "Altitude:": "גובה:",
     "Right-click to edit": "לחיצה ימנית לעריכה",
     "Draw along routes": "צייר לאורך מסלולים",
-    "Skipping invalid geometry": "מדלג על גיאומטריה לא חוקית",
     "Add filter": "הוסף מסנן",
     "Min/Max": "מזערי/מרבי",
     "Multiple choices": "בחירות מרובות",
@@ -659,7 +654,8 @@ const locale = {
     "Group": "קבוצה",
     "Parent group": "קבוצת אב",
     "Group properties": "מאפייני קבוצה",
-    "Choose a group": "בחר קבוצה"
+    "Choose a group": "בחר קבוצה",
+    "Change map background": "Change map background"
 }
 L.registerLocale("he", locale)
 L.setLocale("he")

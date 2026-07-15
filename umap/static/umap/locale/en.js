@@ -7,9 +7,6 @@ const locale = {
     "**double star for bold**": "**double star for bold**",
     "*single star for italic*": "*single star for italic*",
     "--- for a horizontal rule": "--- for a horizontal rule",
-    "1 day": "1 day",
-    "1 hour": "1 hour",
-    "5 min": "5 min",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".",
     "About": "About",
     "Action not allowed :(": "Action not allowed :(",
@@ -230,7 +227,6 @@ const locale = {
     "new window": "new window",
     "next": "next",
     "NM": "NM",
-    "No cache": "No cache",
     "No licence has been set": "No licence has been set",
     "No results": "No results",
     "no": "no",
@@ -592,7 +588,6 @@ const locale = {
     "Altitude:": "Altitude:",
     "Right-click to edit": "Right-click to edit",
     "Draw along routes": "Draw along routes",
-    "Skipping invalid geometry": "Skipping invalid geometry",
     "Add filter": "Add filter",
     "Min/Max": "Min/Max",
     "Multiple choices": "Multiple choices",
@@ -659,7 +654,8 @@ const locale = {
     "Group": "Group",
     "Parent group": "Parent group",
     "Group properties": "Group properties",
-    "Choose a group": "Choose a group"
+    "Choose a group": "Choose a group",
+    "Change map background": "Change map background"
 }
 L.registerLocale("en", locale)
 L.setLocale("en")

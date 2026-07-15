@@ -7,9 +7,6 @@
     "**double star for bold**": "** 重複兩次星號代表粗體 **",
     "*single star for italic*": "*一個星代表斜體*",
     "--- for a horizontal rule": "--- 代表水平線",
-    "1 day": "1日",
-    "1 hour": "1小時",
-    "5 min": "5分",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "用逗號來分隔一列列的虛線模式，例如：\"5, 10, 15\"。",
     "About": "關於",
     "Action not allowed :(": "未被允許的動作 :(",
@@ -230,7 +227,6 @@
     "new window": "新視窗",
     "next": "下一個",
     "NM": "NM",
-    "No cache": "沒有快取内容",
     "No licence has been set": "尚未設定授權條例",
     "No results": "沒有結果",
     "no": "否",
@@ -592,7 +588,6 @@
     "Altitude:": "海拔：",
     "Right-click to edit": "按右鍵來編輯",
     "Draw along routes": "沿著路線繪製",
-    "Skipping invalid geometry": "略過無效的地理空間",
     "Add filter": "新增篩選",
     "Min/Max": "最小/最大",
     "Multiple choices": "多重選擇",
@@ -659,5 +654,6 @@
     "Group": "群組",
     "Parent group": "父群組",
     "Group properties": "群組屬性",
-    "Choose a group": "選擇群組"
+    "Choose a group": "選擇群組",
+    "Change map background": "Change map background"
 }

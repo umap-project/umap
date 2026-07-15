@@ -7,9 +7,6 @@
     "**double star for bold**": "**due asterischi per il testo marcato**",
     "*single star for italic*": "*un solo asterisco per il corsivo*",
     "--- for a horizontal rule": "--- per una linea orizzontale",
-    "1 day": "1 giorno",
-    "1 hour": "1 ora",
-    "5 min": "5 min",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Una lista di numeri separati da virgola che definisce lo schema del tratto e del trattino. Es.: \"5, 10, 15\".",
     "About": "Informazioni",
     "Action not allowed :(": "Azione non permessa :(",
@@ -230,7 +227,6 @@
     "new window": "nuova finestra",
     "next": "prossimo",
     "NM": "NM",
-    "No cache": "Nessuna cache",
     "No licence has been set": "Non è ancora stata impostata una licenza",
     "No results": "Nessun risultato",
     "no": "non",
@@ -592,7 +588,6 @@
     "Altitude:": "Altitude:",
     "Right-click to edit": "Right-click to edit",
     "Draw along routes": "Draw along routes",
-    "Skipping invalid geometry": "Skipping invalid geometry",
     "Add filter": "Add filter",
     "Min/Max": "Min/Max",
     "Multiple choices": "Multiple choices",
@@ -659,5 +654,6 @@
     "Group": "Group",
     "Parent group": "Parent group",
     "Group properties": "Group properties",
-    "Choose a group": "Choose a group"
+    "Choose a group": "Choose a group",
+    "Change map background": "Change map background"
 }

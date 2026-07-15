@@ -7,9 +7,6 @@ const locale = {
     "**double star for bold**": "**διπλό αστερίσκο για έντονα**",
     "*single star for italic*": "*μονό αστερίσκο για πλάγια*",
     "--- for a horizontal rule": "--- για οριζόντιο χάρακα",
-    "1 day": "1 μέρα",
-    "1 hour": "1 ώρα",
-    "5 min": "5 λεπτά",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Μια λίστα αριθμών διαχωρισμένων με κόμμα που καθορίζει το μοτίβο της παύλας. Π.χ.: \"5, 10, 15\".",
     "About": "Σχετικά",
     "Action not allowed :(": "Μη επιτρεπόμενη ενέργεια :(",
@@ -230,7 +227,6 @@ const locale = {
     "new window": "Νέο Παράθυρο",
     "next": "Επόμενο",
     "NM": "ΝΜ",
-    "No cache": "Δεν υπάρχει προσωρινή μνήμη",
     "No licence has been set": "Δεν έχει οριστεί άδεια χρήσης",
     "No results": "Δεν υπάρχουν αποτελέσματα",
     "no": "όχι",
@@ -592,7 +588,6 @@ const locale = {
     "Altitude:": "Υψόμετρο:",
     "Right-click to edit": "Δεξί κλικ για επεξεργασία",
     "Draw along routes": "Σχεδιάστε κατά μήκος διαδρομών",
-    "Skipping invalid geometry": "Παράλειψη μη έγκυρης γεωμετρίας",
     "Add filter": "Προσθήκη φίλτρου",
     "Min/Max": "Ελάχιστο/Μέγιστο",
     "Multiple choices": "Πολλαπλές επιλογές",
@@ -659,7 +654,8 @@ const locale = {
     "Group": "Group",
     "Parent group": "Parent group",
     "Group properties": "Group properties",
-    "Choose a group": "Choose a group"
+    "Choose a group": "Choose a group",
+    "Change map background": "Change map background"
 }
 L.registerLocale("el", locale)
 L.setLocale("el")

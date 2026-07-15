@@ -7,9 +7,6 @@ const locale = {
     "**double star for bold**": "**dobbeltstjerne for fed skrift**",
     "*single star for italic*": "*enkeltstjerne for kursiv*",
     "--- for a horizontal rule": "--- for en vandret streg",
-    "1 day": "1 dag",
-    "1 hour": "1 time",
-    "5 min": "5 min",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "En kommasepareret liste af tal, der definerer mønstret for stiplet streg. F.eks.: \"5, 10, 15\".",
     "About": "Om",
     "Action not allowed :(": "Handling ikke tilladt :(",
@@ -230,7 +227,6 @@ const locale = {
     "new window": "nyt vindue",
     "next": "næste",
     "NM": "NM",
-    "No cache": "Ingen cache",
     "No licence has been set": "Ingen licens angivet",
     "No results": "Ingen resultater",
     "no": "nej",
@@ -592,7 +588,6 @@ const locale = {
     "Altitude:": "Højde:",
     "Right-click to edit": "Højreklik for at redigere",
     "Draw along routes": "Tegn langs ruter",
-    "Skipping invalid geometry": "Springer ugyldig geometri over",
     "Add filter": "Tilføj filter",
     "Min/Max": "Min/Maks",
     "Multiple choices": "Flere valgmuligheder",
@@ -659,7 +654,8 @@ const locale = {
     "Group": "Gruppe",
     "Parent group": "Overordnet gruppe",
     "Group properties": "Gruppegenskaber",
-    "Choose a group": "Vælg en gruppe"
+    "Choose a group": "Vælg en gruppe",
+    "Change map background": "Change map background"
 }
 L.registerLocale("da", locale)
 L.setLocale("da")

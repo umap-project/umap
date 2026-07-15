@@ -7,9 +7,6 @@
     "**double star for bold**": "**két csillag: félkövér**",
     "*single star for italic*": "*egy csillag: dőlt*",
     "--- for a horizontal rule": "--- vízszintes vonal",
-    "1 day": "1 nap",
-    "1 hour": "1 óra",
-    "5 min": "5 perc",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Vesszővel tagolt számsor, amely meghatározza a szaggatott vonalak mintázatát. Például 5,10,15 Ha nem világos, próbálkozz!",
     "About": "Térkép névjegye",
     "Action not allowed :(": "Nem engedélyezett művelet :(",
@@ -230,7 +227,6 @@
     "new window": "új ablak",
     "next": "következő",
     "NM": "tengeri mérföld",
-    "No cache": "Nincs gyorsítótár",
     "No licence has been set": "Licenc még nincs megadva",
     "No results": "Nincs eredmény",
     "no": "nincs",
@@ -592,7 +588,6 @@
     "Altitude:": "Magasság:",
     "Right-click to edit": "Szerkesztéshez kattintson a jobb gombbal",
     "Draw along routes": "Rajzolás útvonal mentén",
-    "Skipping invalid geometry": "Érvénytelen geometria kihagyása",
     "Add filter": "Szűrő hozzáadása",
     "Min/Max": "min. / max.",
     "Multiple choices": "Többszörös választás",
@@ -659,5 +654,6 @@
     "Group": "Csoport",
     "Parent group": "Felettes csoport",
     "Group properties": "Csoport tulajdonságai",
-    "Choose a group": "Csoport kiválasztása"
+    "Choose a group": "Csoport kiválasztása",
+    "Change map background": "Change map background"
 }

@@ -7,9 +7,6 @@ const locale = {
     "**double star for bold**": "** Twee sterretjes voor vet **",
     "*single star for italic*": "*één ster voor italic*",
     "--- for a horizontal rule": "--- voor een horizontale lijn",
-    "1 day": "1 dag",
-    "1 hour": "1 uur",
-    "5 min": "5 minuten",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Een lijst getallen, gescheiden door komma's, die het streepjespatroon definiëren. Vb: \"5, 10, 15\".",
     "About": "Over",
     "Action not allowed :(": "Handeling niet toegelaten :(",
@@ -230,7 +227,6 @@ const locale = {
     "new window": "nieuw venster",
     "next": "volgende",
     "NM": "NM",
-    "No cache": "Geen cache",
     "No licence has been set": "Er is geen licentie ingesteld",
     "No results": "Geen resultaten",
     "no": "neen",
@@ -592,7 +588,6 @@ const locale = {
     "Altitude:": "Hoogte:",
     "Right-click to edit": "Rechtermuisklik om te editeren",
     "Draw along routes": "Teken langs routes",
-    "Skipping invalid geometry": "Skipping invalid geometry",
     "Add filter": "Add filter",
     "Min/Max": "Min/Max",
     "Multiple choices": "Multiple choices",
@@ -659,7 +654,8 @@ const locale = {
     "Group": "Group",
     "Parent group": "Parent group",
     "Group properties": "Group properties",
-    "Choose a group": "Choose a group"
+    "Choose a group": "Choose a group",
+    "Change map background": "Change map background"
 }
 L.registerLocale("nl", locale)
 L.setLocale("nl")

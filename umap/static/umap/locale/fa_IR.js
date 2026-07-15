@@ -7,9 +7,6 @@ const locale = {
     "**double star for bold**": "**ستاره‌های دوتایی برای ضخیم**",
     "*single star for italic*": "*ستاره‌های تکی برای مورب*",
     "--- for a horizontal rule": "--- برای یک خط افقی",
-    "1 day": "1 روز",
-    "1 hour": "1 ساعت",
-    "5 min": "5 دقیقه",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "فهرستی از اعداد که الگوی خط‌چین را تعریف می‌کنند (جداشده با کاما) مثال: \"5, 10, 15\".",
     "About": "درباره",
     "Action not allowed :(": "کنش غیرمجاز :(",
@@ -230,7 +227,6 @@ const locale = {
     "new window": "پنجرهٔ جدید",
     "next": "بعدی",
     "NM": "NM",
-    "No cache": "بدون حافظهٔ موقت",
     "No licence has been set": "مجوزی تنظیم نشده است",
     "No results": "بی‌نتیجه",
     "no": "نه",
@@ -592,7 +588,6 @@ const locale = {
     "Altitude:": "Altitude:",
     "Right-click to edit": "Right-click to edit",
     "Draw along routes": "Draw along routes",
-    "Skipping invalid geometry": "Skipping invalid geometry",
     "Add filter": "Add filter",
     "Min/Max": "Min/Max",
     "Multiple choices": "Multiple choices",
@@ -659,7 +654,8 @@ const locale = {
     "Group": "Group",
     "Parent group": "Parent group",
     "Group properties": "Group properties",
-    "Choose a group": "Choose a group"
+    "Choose a group": "Choose a group",
+    "Change map background": "Change map background"
 }
 L.registerLocale("fa_IR", locale)
 L.setLocale("fa_IR")

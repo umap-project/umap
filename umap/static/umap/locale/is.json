@@ -7,9 +7,6 @@
     "**double star for bold**": "**tvöföld stjarna/margföldun fyrir feitletrað**",
     "*single star for italic*": "*einföld stjarna/margföldun fyrir skáletrað*",
     "--- for a horizontal rule": "--- gefur lárétt þverstrik",
-    "1 day": "1 dagur",
-    "1 hour": "1 klukkustund",
-    "5 min": "5 mín",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Kommu-aðgreindur listi með tölum sem skilgreina strikamynstur. Til dæmis: '5, 10, 15'.",
     "About": "Um hugbúnaðinn",
     "Action not allowed :(": "Þessi aðgerð er ekki leyfð :(",
@@ -230,7 +227,6 @@
     "new window": "nýr gluggi",
     "next": "næsta",
     "NM": "Sjómílur",
-    "No cache": "Ekkert biðminni",
     "No licence has been set": "Ekkert notkunarleyfi hefur verið sett",
     "No results": "Engar niðurstöður",
     "no": "nei",
@@ -592,7 +588,6 @@
     "Altitude:": "Altitude:",
     "Right-click to edit": "Right-click to edit",
     "Draw along routes": "Draw along routes",
-    "Skipping invalid geometry": "Skipping invalid geometry",
     "Add filter": "Add filter",
     "Min/Max": "Min/Max",
     "Multiple choices": "Multiple choices",
@@ -659,5 +654,6 @@
     "Group": "Group",
     "Parent group": "Parent group",
     "Group properties": "Group properties",
-    "Choose a group": "Choose a group"
+    "Choose a group": "Choose a group",
+    "Change map background": "Change map background"
 }

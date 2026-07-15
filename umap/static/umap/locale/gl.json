@@ -7,9 +7,6 @@
     "**double star for bold**": "**dous asteriscos para pór letra grosa**",
     "*single star for italic*": "*un único asterisco para pór letra itálica*",
     "--- for a horizontal rule": "--- para pór unha liña horizontal",
-    "1 day": "1 día",
-    "1 hour": "1 hora",
-    "5 min": "5 min",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "Unha listaxe separada por comas que define o patrón de trazos de guión. ex.: «5, 10, 15».",
     "About": "Sobre",
     "Action not allowed :(": "Acción non permitida :(",
@@ -230,7 +227,6 @@
     "new window": "nova xanela",
     "next": "seguinte",
     "NM": "M",
-    "No cache": "Sen memoria tobo",
     "No licence has been set": "Non foi definida ningunha licenza",
     "No results": "Sen resultados",
     "no": "non",
@@ -592,7 +588,6 @@
     "Altitude:": "Altitude:",
     "Right-click to edit": "Prema co botón dereito para editar",
     "Draw along routes": "Debuxar ao longo de rutas",
-    "Skipping invalid geometry": "Omitir a xeometría non válida",
     "Add filter": "Engadir filtro",
     "Min/Max": "Mín/Máx",
     "Multiple choices": "Escolla múltiple",
@@ -659,5 +654,6 @@
     "Group": "Group",
     "Parent group": "Parent group",
     "Group properties": "Group properties",
-    "Choose a group": "Choose a group"
+    "Choose a group": "Choose a group",
+    "Change map background": "Change map background"
 }

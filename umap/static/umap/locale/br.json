@@ -7,9 +7,6 @@
     "**double star for bold**": "**div steredennig evit tevaat**",
     "*single star for italic*": "*ur steredennig simpl evit italek*",
     "--- for a horizontal rule": "--- evit ul linenn-disparti a-blaen",
-    "1 day": "1 deiz",
-    "1 hour": "1 eur",
-    "5 min": "5 min",
     "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".": "A comma separated list of numbers that defines the stroke dash pattern. Ex.: \"5, 10, 15\".",
     "About": "Diwar-benn",
     "Action not allowed :(": "N'oc'h ket aotreet d'ober kement-se :(",
@@ -230,7 +227,6 @@
     "new window": "prenestr nevez",
     "next": "war-lerc'h",
     "NM": "NM",
-    "No cache": "Krubuilh ebet",
     "No licence has been set": "Aotre-implijout ebet bet termenet",
     "No results": "Disoc'h ebet",
     "no": "ket",
@@ -592,7 +588,6 @@
     "Altitude:": "Uhelder:",
     "Right-click to edit": "Klik-dehoù evit kemmañ",
     "Draw along routes": "Draw along routes",
-    "Skipping invalid geometry": "Skipping invalid geometry",
     "Add filter": "Ouzhpennañ ur sil",
     "Min/Max": "Bihanañ/Uhelañ",
     "Multiple choices": "Meur a zibab",
@@ -659,5 +654,6 @@
     "Group": "Strollad",
     "Parent group": "Strollad kar",
     "Group properties": "Perzhioù ar strollad",
-    "Choose a group": "Diuzañ ur strollad"
+    "Choose a group": "Diuzañ ur strollad",
+    "Change map background": "Change map background"
 }
