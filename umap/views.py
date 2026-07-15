@@ -1458,6 +1458,7 @@ def stats(request):
         **{
             "version": VERSION,
             "realtime_enabled": settings.REALTIME_ENABLED,
+            "routing_enabled": bool(settings.OPENROUTESERVICE_APIKEY),
             "anonymous_allowed": settings.UMAP_ALLOW_ANONYMOUS,
             "importers": list(settings.UMAP_IMPORTERS.keys()),
             "teams_count": Team.objects.count(),
