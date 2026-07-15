@@ -1,7 +1,7 @@
-import { translate } from './i18n.js'
 import { Form } from './form/builder.js'
-import * as Utils from './utils.js'
 import { Fields } from './form/fields.js'
+import { translate } from './i18n.js'
+import * as Utils from './utils.js'
 
 const EMPTY_VALUE = translate('[empty value]')
 
@@ -672,7 +672,11 @@ Fields.FilterByDateTime = class extends Fields.FilterByDate {
   prepareForHTML(value) {
     // Value must be in local time
     if (Number.isNaN(value)) return
-    return this.toLocaleDateTime(value).toISOString().slice(0, -1)
+    try {
+      return this.toLocaleDateTime(value).toISOString().slice(0, -1)
+    } catch {
+      return undefined
+    }
   }
 }
 
