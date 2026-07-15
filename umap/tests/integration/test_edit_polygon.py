@@ -88,15 +88,19 @@ def test_marker_style_should_have_precedence(live_server, openmap, page, bootstr
     )
 
 
-def test_should_open_an_edit_toolbar_on_click(live_server, openmap, page, bootstrap):
+def test_should_open_an_edit_toolbar_on_click(
+    live_server, openmap, page, bootstrap, wait_for_edit_mode
+):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    wait_for_edit_mode(page)
     page.locator("path").click(button="right")
     expect(page.get_by_role("button", name="Toggle edit mode")).to_be_visible()
     expect(page.get_by_role("button", name="Delete this feature")).to_be_visible()
 
 
-def test_can_remove_stroke(live_server, openmap, page, bootstrap):
+def test_can_remove_stroke(live_server, openmap, page, bootstrap, wait_for_edit_mode):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    wait_for_edit_mode(page)
     expect(page.locator(".leaflet-overlay-pane path[stroke='DarkBlue']")).to_have_count(
         1
     )
