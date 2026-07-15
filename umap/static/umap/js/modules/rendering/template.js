@@ -362,7 +362,7 @@ class Route extends TitleMixin(PopupTemplate) {
           ${translate('Altitude:')} <span data-ref="altitude">—</span> m
         </p>
         <object width="100%"
-          data="${feature._umap.getStaticPathFor('../vendors/simple-elevation-chart/elevation.svg')}"
+          data="${feature.app.getStaticPathFor('../vendors/simple-elevation-chart/elevation.svg')}"
           data-elevation="${JSON.stringify(data)}"
           data-ref="chart"
           type="image/svg+xml">
@@ -372,11 +372,11 @@ class Route extends TitleMixin(PopupTemplate) {
     let icon
     const removeIcon = () => {
       if (icon) {
-        feature._umap.fire('map:hide:point', { id })
+        feature.app.fire('map:hide:point', { id })
       }
     }
     chart.addEventListener('mouseout', removeIcon)
-    feature._umap.on('map:popupclose', removeIcon)
+    feature.app.on('map:popupclose', removeIcon)
     chart.addEventListener('chart:over', (event) => {
       const dataset = event.detail.element.dataset
       if (dataset.ele) {
@@ -385,7 +385,7 @@ class Route extends TitleMixin(PopupTemplate) {
       icon = new Icon.RouteIcon()
       const position = feature.geometry.coordinates[dataset.index]
       if (!position) return
-      feature._umap.fire('map:show:point', { id, position, icon })
+      feature.app.fire('map:show:point', { id, position, icon })
     })
     if (feature.properties.description) {
       const content = this.toHTML(feature, feature.properties.description)

@@ -1,19 +1,15 @@
-import {
-  uMapAlert as Alert,
-  uMapAlertCreation as AlertCreation,
-} from '../components/alerts/alert.js'
+import { Alert, AlertCreation } from '../components/alerts/alert.js'
 import * as Clipboard from './clipboard.js'
 import { Fields } from './data/fields.js'
 import { DataLayer } from './data/layer.js'
 import * as DOMUtils from './domutils.js'
-import * as GeoUtils from './geoutils.js'
 import DropControl from './drop.js'
 import { Filters, migrateLegacyFilters } from './filters.js'
 import { MutatingForm } from './form/builder.js'
 import { Formatter } from './formatter.js'
+import * as GeoUtils from './geoutils.js'
 import Help from './help.js'
 import { getLocale, setLocale, translate } from './i18n.js'
-import * as Icon from './icon.js'
 import { LayerManager } from './managers.js'
 import { MapPermissions } from './permissions.js'
 // import { OLProxy } from './rendering/openlayers.js'
@@ -33,7 +29,7 @@ import Tooltip from './ui/tooltip.js'
 import URLs from './urls.js'
 import * as Utils from './utils.js'
 
-export default class Umap extends Utils.WithEvents {
+export default class App extends Utils.WithEvents {
   constructor(element, geojson) {
     super()
     // We need to call async function in the init process,
@@ -327,7 +323,7 @@ export default class Umap extends Utils.WithEvents {
 
   async setViewFromQueryString() {
     if (this.properties.noControl) return
-    // If a feature in the query string opens in umap.panel (popupShape === 'Panel'),
+    // If a feature in the query string opens in app.panel (popupShape === 'Panel'),
     // skip the default panel: it would race with the feature in the lazy era.
     // Other popup shapes coexist fine.
     const slug = this.searchParams.get('feature')
@@ -529,8 +525,8 @@ export default class Umap extends Utils.WithEvents {
     return items
   }
 
-  onContextMenu(umapEvent) {
-    const mapEvent = umapEvent.detail.event
+  onContextMenu(appEvent) {
+    const mapEvent = appEvent.detail.event
     const items = this.getOwnContextMenu(mapEvent).concat(
       this.getSharedContextMenu(mapEvent)
     )
@@ -841,14 +837,14 @@ export default class Umap extends Utils.WithEvents {
     ]
     const builder = new MutatingForm(this, metadataFields, {
       className: 'map-metadata',
-      umap: this,
+      app: this,
     })
     builder.build().then((form) => container.appendChild(form))
 
     const tags = DOMUtils.createFieldset(container, translate('Tags'))
     const tagsFields = ['properties.tags']
     const tagsBuilder = new MutatingForm(this, tagsFields, {
-      umap: this,
+      app: this,
     })
     tagsBuilder.build().then((form) => tags.appendChild(form))
     const credits = DOMUtils.createFieldset(container, translate('Credits'))
@@ -859,7 +855,7 @@ export default class Umap extends Utils.WithEvents {
       'properties.permanentCredit',
       'properties.permanentCreditBackground',
     ]
-    const creditsBuilder = new MutatingForm(this, creditsFields, { umap: this })
+    const creditsBuilder = new MutatingForm(this, creditsFields, { app: this })
     creditsBuilder.build().then((form) => credits.appendChild(form))
     this.editPanel.open({ content: container, highlight: 'caption' })
   }
@@ -887,7 +883,7 @@ export default class Umap extends Utils.WithEvents {
 
     const builder = new MutatingForm(this, metadataFields, {
       className: 'map-metadata',
-      umap: this,
+      app: this,
     })
     builder.build().then((form) => container.appendChild(form))
     const button = DOMUtils.loadTemplate(
@@ -917,7 +913,7 @@ export default class Umap extends Utils.WithEvents {
       'properties.captionMenus',
       'properties.layerSwitcher',
     ])
-    const builder = new MutatingForm(this, UIFields, { umap: this })
+    const builder = new MutatingForm(this, UIFields, { app: this })
     const controlsOptions = DOMUtils.createFieldset(
       container,
       translate('User interface options')
@@ -941,7 +937,7 @@ export default class Umap extends Utils.WithEvents {
       'properties.dashArray',
     ]
 
-    const builder = new MutatingForm(this, shapeOptions, { umap: this })
+    const builder = new MutatingForm(this, shapeOptions, { app: this })
     const defaultShapeProperties = DOMUtils.createFieldset(
       container,
       translate('Default shape properties')
@@ -959,7 +955,7 @@ export default class Umap extends Utils.WithEvents {
       'properties.slugKey',
     ]
 
-    const builder = new MutatingForm(this, shapeOptions, { umap: this })
+    const builder = new MutatingForm(this, shapeOptions, { app: this })
     const defaultShapeProperties = DOMUtils.createFieldset(
       container,
       translate('Default properties')
@@ -977,7 +973,7 @@ export default class Umap extends Utils.WithEvents {
       'properties.labelInteractive',
       'properties.outlinkTarget',
     ]
-    const builder = new MutatingForm(this, popupFields, { umap: this })
+    const builder = new MutatingForm(this, popupFields, { app: this })
     const popupFieldset = DOMUtils.createFieldset(
       container,
       translate('Default interaction options')
@@ -1034,7 +1030,7 @@ export default class Umap extends Utils.WithEvents {
       container,
       translate('Custom background')
     )
-    const builder = new MutatingForm(this, tilelayerFields, { umap: this })
+    const builder = new MutatingForm(this, tilelayerFields, { app: this })
     builder.build().then((form) => customTilelayer.appendChild(form))
   }
 
@@ -1082,7 +1078,7 @@ export default class Umap extends Utils.WithEvents {
       ['properties.overlay.tms', { handler: 'Switch', label: translate('TMS format') }],
     ]
     const overlay = DOMUtils.createFieldset(container, translate('Custom overlay'))
-    const builder = new MutatingForm(this, overlayFields, { umap: this })
+    const builder = new MutatingForm(this, overlayFields, { app: this })
     builder.build().then((form) => overlay.appendChild(form))
   }
 
@@ -1109,7 +1105,7 @@ export default class Umap extends Utils.WithEvents {
         { handler: 'BlurFloatInput', placeholder: translate('max East') },
       ],
     ]
-    const boundsBuilder = new MutatingForm(this, boundsFields, { umap: this })
+    const boundsBuilder = new MutatingForm(this, boundsFields, { app: this })
     boundsBuilder.build().then((form) => limitBounds.appendChild(form))
     const [boundsButtons, { current, empty }] = DOMUtils.loadTemplateWithRefs(`
       <div class="button-bar half">
@@ -1177,7 +1173,7 @@ export default class Umap extends Utils.WithEvents {
       ],
     ]
     const slideshowBuilder = new MutatingForm(this, slideshowFields, {
-      umap: this,
+      app: this,
     })
     slideshowBuilder.build().then((form) => slideshow.appendChild(form))
   }
@@ -1188,7 +1184,7 @@ export default class Umap extends Utils.WithEvents {
       translate('Real-time collaboration')
     )
     const builder = new MutatingForm(this, ['properties.syncEnabled'], {
-      umap: this,
+      app: this,
     })
     builder.build().then((form) => sync.appendChild(form))
   }

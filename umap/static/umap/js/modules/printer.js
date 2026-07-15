@@ -2,9 +2,9 @@ import { translate } from './i18n.js'
 import * as Utils from './utils.js'
 
 export default class Printer {
-  constructor(umap) {
-    this.umap = umap
-    this.dialog = this.umap.dialog
+  constructor(app) {
+    this.app = app
+    this.dialog = this.app.dialog
   }
 
   build() {
@@ -36,25 +36,25 @@ export default class Printer {
   }
 
   resetSize() {
-    const container = this.umap.mapProxy.container
+    const container = this.app.mapProxy.container
     for (const name of Array.from(container.classList)) {
       if (name.startsWith('print-')) {
         container.classList.remove(name)
       }
     }
     container.removeAttribute('style')
-    this.umap.fire('map:resize')
+    this.app.fire('map:resize')
   }
 
   resizeMap() {
     const form = this.dialog.collectFormData()
     this.resetSize()
-    const container = this.umap.mapProxy.container
+    const container = this.app.mapProxy.container
     if (form.format && form.mode) {
       container.classList.add(`print-${form.format}`)
       container.classList.add(`print-${form.mode}`)
       container.style.width = `${form.scale}%`
-      this.umap.fire('map:resize')
+      this.app.fire('map:resize')
     }
   }
 
@@ -78,7 +78,7 @@ export default class Printer {
   }
 
   async onSubmit(form) {
-    this.umap.fire('dataloading', { id: 'screenshot' })
+    this.app.fire('dataloading', { id: 'screenshot' })
     if (this.action === 'print') {
       const win = window.open('', '_blank')
       // Using document.body.appendChild here will end with black font
@@ -86,7 +86,7 @@ export default class Printer {
       win.document.write(`<span>${translate('Preparing the print…')}</span>`)
       // screenshot must be called after window.open, no idea why,
       // otherwise window.open sometimes fails and returns null.
-      const screenshot = await this.umap.screenshot()
+      const screenshot = await this.app.screenshot()
       const img = await screenshot.toPng()
       img.addEventListener('load', () => {
         win.print()
@@ -96,13 +96,13 @@ export default class Printer {
       win.document.body.appendChild(img)
       win.focus()
     } else {
-      const screenshot = await this.umap.screenshot()
+      const screenshot = await this.app.screenshot()
       await screenshot.download({
         format: this.action,
-        filename: Utils.slugify(this.umap.properties.name),
+        filename: Utils.slugify(this.app.properties.name),
       })
     }
     this.resetSize()
-    this.umap.fire('dataload', { id: 'screenshot' })
+    this.app.fire('dataload', { id: 'screenshot' })
   }
 }

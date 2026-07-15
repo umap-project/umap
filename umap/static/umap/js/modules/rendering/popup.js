@@ -67,23 +67,23 @@ const Panel = Popup.extend({
     zoomAnimation: false,
   },
 
-  backButton: function (umap) {
+  backButton: function (app) {
     const button = Utils.loadTemplate(
       `<button class="icon icon-16 icon-back" title="${translate('Back to browser')}"></button>`
     )
     // Fixme: remove me when this is merged and released
     // https://github.com/Leaflet/Leaflet/pull/9052
     DOMUtils.disableClickPropagation(button)
-    button.addEventListener('click', () => umap.openBrowser())
+    button.addEventListener('click', () => app.openBrowser())
     return button
   },
 
   onAdd: function (leafletMap) {
-    const umap = this.feature._umap
-    umap.panel.setDefaultMode('expanded')
-    umap.panel.open({
+    const app = this.feature.app
+    app.panel.setDefaultMode('expanded')
+    app.panel.open({
       content: this._content,
-      actions: [this.backButton(umap)],
+      actions: [this.backButton(app)],
     })
 
     // fire events as in base class Popup.js:onAdd
@@ -97,7 +97,7 @@ const Panel = Popup.extend({
   },
 
   onRemove: function (leafletMap) {
-    this.feature._umap.panel.close()
+    this.feature.app.panel.close()
 
     // fire events as in base class Popup.js:onRemove
     leafletMap.fire('popupclose', { popup: this })

@@ -3,18 +3,18 @@ import {
   Control as LeafletControl,
   TileLayer,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
-import { uMapAlert as Alert } from '../../components/alerts/alert.js'
+import { Alert } from '../../components/alerts/alert.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
 
 export class Control {
-  constructor(umap) {
-    this._umap = umap
+  constructor(app) {
+    this.app = app
   }
 
   mount() {
     this.container = this.render()
-    this._umap.controlManager.corners[this.constructor.position].appendChild(
+    this.app.controlManager.corners[this.constructor.position].appendChild(
       this.container
     )
     this.onMount()
@@ -40,7 +40,7 @@ export class Control {
   }
 
   get status() {
-    return this._umap.getProperty(`${this.constructor.slug}Control`)
+    return this.app.getProperty(`${this.constructor.slug}Control`)
   }
 
   get visible() {
@@ -102,18 +102,18 @@ export class ZoomControl extends MoreableControl {
   }
 
   onMount() {
-    this._umap.on('map:zoomend', () => this._update())
-    this._umap.on('map:zoomlevelschange', () => this._update())
+    this.app.on('map:zoomend', () => this._update())
+    this.app.on('map:zoomlevelschange', () => this._update())
   }
 
   zoom(event, direction) {
     event.preventDefault()
     event.stopPropagation()
-    this._umap.mapProxy.zoom += direction * (event.shiftKey ? 3 : 1)
+    this.app.mapProxy.zoom += direction * (event.shiftKey ? 3 : 1)
   }
 
   _update() {
-    const map = this._umap.mapProxy.map
+    const map = this.app.mapProxy.map
     const zoom = map.getZoom()
     const atMax = zoom >= map.getMaxZoom()
     const atMin = zoom <= map.getMinZoom()
@@ -129,7 +129,7 @@ export class MeasureControl extends MoreableControl {
 
   render() {
     // TODO remove direct call to leafletMap => turf
-    const defaultUnit = this._umap.mapProxy.map.measureTools?.options.defaultUnit
+    const defaultUnit = this.app.mapProxy.map.measureTools?.options.defaultUnit
     const checked = (unit) => (unit === defaultUnit ? 'checked' : '')
     const [container, { toggle }] = Utils.loadTemplateWithRefs(`
       <div class="umap-control umap-control-measure">
@@ -145,7 +145,7 @@ export class MeasureControl extends MoreableControl {
     toggle.addEventListener('click', (event) => {
       event.preventDefault()
       event.stopPropagation()
-      this._umap.mapProxy.map.measureTools.toggle()
+      this.app.mapProxy.map.measureTools.toggle()
     })
     return container
   }
@@ -166,7 +166,7 @@ export class FullscreenControl extends MoreableControl {
     const toggle = (event) => {
       event.preventDefault()
       event.stopPropagation()
-      this._umap.mapProxy.toggleFullscreen()
+      this.app.mapProxy.toggleFullscreen()
     }
     enterButton.addEventListener('click', toggle)
     exitButton.addEventListener('click', toggle)
@@ -178,8 +178,8 @@ export class HomeControl extends MoreableControl {
   static position = 'topleft'
 
   render() {
-    const path = this._umap.getStaticPathFor('home.svg')
-    const homeURL = this._umap.urls.get('home')
+    const path = this.app.getStaticPathFor('home.svg')
+    const homeURL = this.app.urls.get('home')
     return Utils.loadTemplate(
       `<a href="${homeURL}" class="home-button" title="${translate('Back to home')}"><img src="${path}" alt="${translate('Home logo')}" width="38px" height="38px" /></a>`
     )
@@ -190,7 +190,7 @@ export class EditControl extends Control {
   static position = 'topright'
 
   get visible() {
-    return this._umap.hasEditMode()
+    return this.app.hasEditMode()
   }
 
   render() {
@@ -199,10 +199,10 @@ export class EditControl extends Control {
         <button type="button" data-ref="button" class="round"><i class="icon icon-16 icon-edit"></i> ${translate('Edit')}</button>
       </div>
     `)
-    button.addEventListener('click', () => this._umap.enableEdit())
+    button.addEventListener('click', () => this.app.enableEdit())
     button.addEventListener('mouseover', () => {
-      this._umap.tooltip.open({
-        content: this._umap.help.displayLabel('TOGGLE_EDIT'),
+      this.app.tooltip.open({
+        content: this.app.help.displayLabel('TOGGLE_EDIT'),
         anchor: button,
         position: 'bottom',
         delay: 750,
@@ -217,7 +217,7 @@ export class LoadTemplateControl extends Control {
   static position = 'topright'
 
   get visible() {
-    return this._umap.properties.is_template
+    return this.app.properties.is_template
   }
 
   render() {
@@ -227,14 +227,14 @@ export class LoadTemplateControl extends Control {
       </div>
     `)
     button.addEventListener('click', () => {
-      const downloadUrl = this._umap.urls.get('map_download', {
-        map_id: this._umap.id,
+      const downloadUrl = this.app.urls.get('map_download', {
+        map_id: this.app.id,
       })
-      const targetUrl = `${this._umap.urls.get('map_new')}?templateUrl=${downloadUrl}`
+      const targetUrl = `${this.app.urls.get('map_new')}?templateUrl=${downloadUrl}`
       window.open(targetUrl)
     })
     button.addEventListener('mouseover', () => {
-      this._umap.tooltip.open({
+      this.app.tooltip.open({
         content: translate('Create a new map using this template'),
         anchor: button,
         position: 'bottom',
@@ -250,7 +250,7 @@ export class MoreControl extends MoreableControl {
   static position = 'topleft'
 
   render() {
-    const corner = this._umap.controlManager.corners.topleft
+    const corner = this.app.controlManager.corners.topleft
     const className = 'umap-more-controls'
     const [container, { button }] = Utils.loadTemplateWithRefs(`
       <div class="umap-control umap-control-text">
@@ -260,7 +260,7 @@ export class MoreControl extends MoreableControl {
     button.addEventListener('click', () => corner.classList.toggle(className))
     button.addEventListener('mouseover', () => {
       const extended = corner.classList.contains(className)
-      this._umap.tooltip.open({
+      this.app.tooltip.open({
         content: extended ? translate('Hide controls') : translate('More controls'),
         anchor: button,
         position: 'right',
@@ -275,7 +275,7 @@ class ScaleControl extends Control {
   static position = 'bottomleft'
   render() {
     this._scaleControl = new LeafletControl.Scale()
-    return this._scaleControl.addTo(this._umap.mapProxy.map)._container
+    return this._scaleControl.addTo(this.app.mapProxy.map)._container
   }
 }
 
@@ -289,14 +289,14 @@ export class PermanentCreditControl extends Control {
   }
 
   get status() {
-    return Boolean(this._umap.getProperty('permanentCredit'))
+    return Boolean(this.app.getProperty('permanentCredit'))
   }
 
   show() {
     // Re-read the property each time the control becomes visible so user edits
     // in the settings panel are reflected.
-    this.container.innerHTML = Utils.toHTML(this._umap.getProperty('permanentCredit'))
-    this.container.style.backgroundColor = this._umap.getProperty(
+    this.container.innerHTML = Utils.toHTML(this.app.getProperty('permanentCredit'))
+    this.container.style.backgroundColor = this.app.getProperty(
       'permanentCreditBackground'
     )
       ? '#FFFFFFB0'
@@ -337,11 +337,11 @@ export class DatalayersControl extends SimpleButton {
   icon = 'icon-layers'
 
   onMount() {
-    Utils.toggleBadge(this.container, this._umap.browser?.hasActiveFilters())
+    Utils.toggleBadge(this.container, this.app.browser?.hasActiveFilters())
   }
 
   onClick() {
-    this._umap.openBrowser()
+    this.app.openBrowser()
   }
 }
 
@@ -352,7 +352,7 @@ export class CaptionControl extends SimpleButton {
   icon = 'icon-info'
 
   onClick() {
-    this._umap.openCaption()
+    this.app.openCaption()
   }
 }
 
@@ -363,7 +363,7 @@ export class EmbedControl extends SimpleButton {
   icon = 'icon-share'
 
   onClick() {
-    this._umap.loadShare().then((share) => share.open())
+    this.app.loadShare().then((share) => share.open())
   }
 }
 
@@ -373,7 +373,7 @@ export class PrintControl extends SimpleButton {
   icon = 'icon-print'
 
   onClick() {
-    this._umap.openPrinter('print')
+    this.app.openPrinter('print')
   }
 }
 
@@ -391,8 +391,8 @@ export class SearchControl extends SimpleButton {
         <div data-ref=search></div>
       </div>
     `)
-    this.search = new Geocoder(this._umap, search)
-    this._umap.panel.open({ content: container }).then(() => {
+    this.search = new Geocoder(this.app, search)
+    this.app.panel.open({ content: container }).then(() => {
       this.search.input.focus()
     })
   }
@@ -406,9 +406,9 @@ export class AttributionControl extends Control {
   }
 
   render() {
-    const shortCredit = this._umap.getProperty('shortCredit')
-    const captionMenus = this._umap.getProperty('captionMenus')
-    const tilelayer = this._umap.mapProxy.tilelayers?.current
+    const shortCredit = this.app.getProperty('shortCredit')
+    const captionMenus = this.app.getProperty('captionMenus')
+    const tilelayer = this.app.mapProxy.tilelayers?.current
     const template = Utils.sanitizeVars`
       <div class="umap-control-attribution">
         <div class="attribution-container">
@@ -424,7 +424,7 @@ export class AttributionControl extends Control {
     short.hidden = !shortCredit
     caption.hidden = !captionMenus
     site.hidden = !captionMenus
-    caption.addEventListener('click', () => this._umap.openCaption())
+    caption.addEventListener('click', () => this.app.openCaption())
     return container
   }
 }
@@ -447,13 +447,13 @@ export class TilelayersControl extends SimpleButton {
         <ul data-ref="tileContainer"></ul>
       </div>
     `)
-    const tilelayers = Array.from(this._umap.mapProxy.tilelayers.all.values()).sort(
+    const tilelayers = Array.from(this.app.mapProxy.tilelayers.all.values()).sort(
       (a, b) => a.options.rank - b.options.rank
     )
     for (const layer of tilelayers) {
       tileContainer.appendChild(this.addTileLayerElement(layer, options))
     }
-    const panel = options.edit ? this._umap.editPanel : this._umap.panel
+    const panel = options.edit ? this.app.editPanel : this.app.panel
     panel.open({ content: container, highlight: 'tilelayers' })
   }
 
@@ -469,13 +469,13 @@ export class TilelayersControl extends SimpleButton {
       </li>
     `)
     li.addEventListener('click', () => {
-      const oldTileLayer = this._umap.properties.tilelayer
-      this._umap.mapProxy.tilelayers.select(tilelayer)
+      const oldTileLayer = this.app.properties.tilelayer
+      this.app.mapProxy.tilelayers.select(tilelayer)
       if (options?.edit) {
-        this._umap.properties.tilelayer = tilelayer.toJSON()
-        this._umap.journal.update(
+        this.app.properties.tilelayer = tilelayer.toJSON()
+        this.app.journal.update(
           'properties.tilelayer',
-          this._umap.properties.tilelayer,
+          this.app.properties.tilelayer,
           oldTileLayer
         )
       }
@@ -490,10 +490,10 @@ export class LocateControl extends SimpleButton {
   icon = 'icon-locate'
 
   onMount() {
-    this._umap.on('map:locateactivate', () => {
+    this.app.on('map:locateactivate', () => {
       this.container.classList.add('active')
     })
-    this._umap.on('map:locatedeactivate', () => {
+    this.app.on('map:locatedeactivate', () => {
       this.container.classList.remove('active')
     })
   }
@@ -518,8 +518,8 @@ export class LocateControl extends SimpleButton {
       onLocationError: (err) => Alert.error(err.message),
     })
     // TODO remove direct call to leafletMap
-    this._locate._map = this._umap.mapProxy.map
-    this._locate.onAdd(this._umap.mapProxy.map)
+    this._locate._map = this.app.mapProxy.map
+    this._locate.onAdd(this.app.mapProxy.map)
   }
 
   async onClick() {
@@ -531,20 +531,20 @@ export class LocateControl extends SimpleButton {
 class MiniMapControl extends Control {
   static position = 'bottomright'
   render() {
-    const layer = this._cloneLayer(this._umap.mapProxy.tilelayers.current)
+    const layer = this._cloneLayer(this.app.mapProxy.tilelayers.current)
     this._miniMap = new LeafletControl.MiniMap(layer, {
       aimingRectOptions: {
-        color: this._umap.getProperty('color'),
-        fillColor: this._umap.getProperty('fillColor'),
-        stroke: this._umap.getProperty('stroke'),
-        fill: this._umap.getProperty('fill'),
-        weight: this._umap.getProperty('weight'),
-        opacity: this._umap.getProperty('opacity'),
-        fillOpacity: this._umap.getProperty('fillOpacity'),
+        color: this.app.getProperty('color'),
+        fillColor: this.app.getProperty('fillColor'),
+        stroke: this.app.getProperty('stroke'),
+        fill: this.app.getProperty('fill'),
+        weight: this.app.getProperty('weight'),
+        opacity: this.app.getProperty('opacity'),
+        fillOpacity: this.app.getProperty('fillOpacity'),
       },
     })
     // TODO remove direct call to leafletMap
-    return this._miniMap.addTo(this._umap.mapProxy.map)._container
+    return this._miniMap.addTo(this.app.mapProxy.map)._container
   }
 
   _cloneLayer(layer) {
@@ -582,27 +582,27 @@ export class ControlManager {
     ScaleControl,
   ]
 
-  constructor(umap) {
-    this._umap = umap
+  constructor(app) {
+    this.app = app
     this.controls = {}
     this.corners = {}
     for (const position of ControlManager.POSITIONS) {
       const corner = Utils.loadTemplate(
         `<div class="umap-controls umap-controls-${position}"></div>`
       )
-      umap.uiContainer.appendChild(corner)
+      app.uiContainer.appendChild(corner)
       this.corners[position] = corner
     }
   }
 
   init() {
     for (const Class of ControlManager.CLASSES) {
-      this.controls[Class.slug] = new Class(this._umap)
+      this.controls[Class.slug] = new Class(this.app)
     }
   }
 
   update() {
-    if (this._umap.properties.noControl) {
+    if (this.app.properties.noControl) {
       for (const control of Object.values(this.controls)) {
         control.hide()
       }

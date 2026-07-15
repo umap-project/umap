@@ -2,9 +2,9 @@ import { translate } from '../i18n.js'
 import * as DOMUtils from '../domutils.js'
 
 export class Panel {
-  constructor(umap) {
-    this.parent = umap.uiContainer
-    this._umap = umap
+  constructor(app) {
+    this.parent = app.uiContainer
+    this.app = app
     this.container = document.createElement('div')
     this.parent.appendChild(this.container)
     // This will be set once according to the panel configured at load
@@ -126,20 +126,20 @@ export class Panel {
 }
 
 export class EditPanel extends Panel {
-  constructor(umap) {
-    super(umap)
+  constructor(app) {
+    super(app)
     this.className = 'right dark'
   }
 
   onClose() {
     super.onClose()
-    this._umap.editedFeature = null
+    this.app.editedFeature = null
   }
 }
 
 export class FullPanel extends Panel {
-  constructor(umap) {
-    super(umap)
+  constructor(app) {
+    super(app)
     this.className = 'full dark'
     this.mode = 'expanded'
   }

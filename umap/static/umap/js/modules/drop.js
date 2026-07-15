@@ -1,6 +1,6 @@
 export default class DropControl {
-  constructor(umap, dropzone) {
-    this._umap = umap
+  constructor(app, dropzone) {
+    this.app = app
     this.dropzone = dropzone
   }
 
@@ -43,7 +43,7 @@ export default class DropControl {
     event.preventDefault()
     // dataTransfer must be consumed before async context
     const files = event.dataTransfer.files
-    this._umap.loadImporter().then((importer) => {
+    this.app.loadImporter().then((importer) => {
       importer.build()
       importer.files = files
       importer.submit()

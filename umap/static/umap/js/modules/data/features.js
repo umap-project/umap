@@ -1,4 +1,4 @@
-import { uMapAlert as Alert } from '../../components/alerts/alert.js'
+import { Alert } from '../../components/alerts/alert.js'
 import { MutatingForm } from '../form/builder.js'
 import { translate, getLocale } from '../i18n.js'
 import loadPopup from '../rendering/popup.js'
@@ -11,8 +11,8 @@ import * as GeoUtils from '../geoutils.js'
 import * as TextUtils from '../textutils.js'
 
 class Feature {
-  constructor(umap, datalayer, geojson = {}, id = null) {
-    this._umap = umap
+  constructor(app, datalayer, geojson = {}, id = null) {
+    this.app = app
 
     // DataLayer the feature belongs to
     this.datalayer = datalayer
@@ -45,7 +45,7 @@ class Feature {
 
   get journal() {
     if (!this._journal) {
-      this._journal = this._umap.journalEngine.proxy(this)
+      this._journal = this.app.journalEngine.proxy(this)
     }
     return this._journal
   }
@@ -90,13 +90,13 @@ class Feature {
   }
 
   isOnScreen(bounds) {
-    bounds = bounds || this._umap.mapProxy.bounds
+    bounds = bounds || this.app.mapProxy.bounds
     if (!this.bounds) return false
     return GeoUtils.bboxIntersects(bounds, this.bounds)
   }
 
   pushGeometry() {
-    this._umap.mapProxy.pushGeometry(this.datalayer.id, this.id, this.geometry)
+    this.app.mapProxy.pushGeometry(this.datalayer.id, this.id, this.geometry)
   }
 
   toLatLngs() {
@@ -149,9 +149,7 @@ class Feature {
   }
 
   getSlug() {
-    return (
-      this.properties[this._umap.getProperty('slugKey') || U.DEFAULT_LABEL_KEY] || ''
-    )
+    return this.properties[this.app.getProperty('slugKey') || U.DEFAULT_LABEL_KEY] || ''
   }
 
   getPermalink() {
@@ -195,15 +193,15 @@ class Feature {
       return
     }
     // TODO deal with an event instead?
-    if (this._umap.slideshow) {
-      this._umap.slideshow.current = this
+    if (this.app.slideshow) {
+      this.app.slideshow.current = this
     }
-    this._umap.currentFeature = this
+    this.app.currentFeature = this
     this.buildCard().then((element) => {
       if (this.getOption('popupShape') === 'Panel') {
-        this._umap.fire('panel:show', { id: this.id, content: element })
+        this.app.fire('panel:show', { id: this.id, content: element })
       } else {
-        this._umap.fire('popup:show', {
+        this.app.fire('popup:show', {
           id: this.id,
           content: element,
           center: center || this.center,
@@ -221,7 +219,7 @@ class Feature {
         el.textContent = this.getDisplayName()
         el.title = this.getDisplayName()
       })
-      if (this._umap.currentFeature === this) {
+      if (this.app.currentFeature === this) {
         this.view()
       }
     }
@@ -237,8 +235,8 @@ class Feature {
   }
 
   edit(event) {
-    if (!this._umap.editEnabled || this.isReadOnly()) return
-    if (this._umap.editedFeature === this && !event?.force) return
+    if (!this.app.editEnabled || this.isReadOnly()) return
+    if (this.app.editedFeature === this && !event?.force) return
     // If this feature is active (popup open), let's close it.
     this.deactivate()
     const container = DOMUtils.loadTemplate(`
@@ -297,26 +295,26 @@ class Feature {
     `)
     container.appendChild(details)
     this.getAdvancedEditActions(fieldset)
-    const onPanelLoaded = this._umap.editPanel.open({ content: container })
+    const onPanelLoaded = this.app.editPanel.open({ content: container })
     onPanelLoaded.then(() => {
       builder.form.querySelector('input')?.focus()
     })
-    this._umap.editedFeature = this
-    this._umap.fire('feature:edit', { id: this.id })
+    this.app.editedFeature = this
+    this.app.fire('feature:edit', { id: this.id })
     // if (!this.isOnScreen()) this.zoomTo(event)
     return onPanelLoaded
   }
 
   toggleEditing() {
-    if (this._umap.editedFeature === this) {
-      this._umap.editPanel.close()
+    if (this.app.editedFeature === this) {
+      this.app.editPanel.close()
     } else {
       this.edit()
     }
   }
 
   endEdit() {
-    this._umap.fire('feature:endedit', { id: this.id })
+    this.app.fire('feature:endedit', { id: this.id })
   }
 
   getAdvancedEditActions(container) {
@@ -326,7 +324,7 @@ class Feature {
       </button>`)
     button.addEventListener('click', () => {
       this.del()
-      this._umap.editPanel.close()
+      this.app.editPanel.close()
     })
     container.appendChild(button)
   }
@@ -401,7 +399,7 @@ class Feature {
     ) {
       return false
     }
-    return this._umap.getProperty('displayPopupFooter')
+    return this.app.getProperty('displayPopupFooter')
   }
 
   getPopupClass() {
@@ -470,7 +468,7 @@ class Feature {
     } else if (this.datalayer) {
       value = this.datalayer.getProperty(option, this)
     } else {
-      value = this._umap.getProperty(option)
+      value = this.app.getProperty(option)
     }
     return value
   }
@@ -486,9 +484,9 @@ class Feature {
   }
 
   zoomTo({ easing, latlng, callback } = {}) {
-    if (easing === undefined) easing = this._umap.getProperty('easing')
-    if (callback) this._umap.once('map:moveend', (event) => callback.call(this, event))
-    this._umap.fire('map:view:set', {
+    if (easing === undefined) easing = this.app.getProperty('easing')
+    if (callback) this.app.once('map:moveend', (event) => callback.call(this, event))
+    this.app.fire('map:view:set', {
       center: latlng || this.center,
       zoom: this.getBestZoom(),
       easing,
@@ -601,7 +599,7 @@ class Feature {
 
   isFiltered() {
     const filterKeys = this.datalayer.getFilterKeys()
-    const filter = this._umap.browser?.options.filter
+    const filter = this.app.browser?.options.filter
     if (filter && !this.matchFullTextFilter(filter, filterKeys)) return true
     for (const ancestor of this.datalayer.ancestry) {
       if (ancestor.filters.matchFeature(this)) return true
@@ -645,7 +643,7 @@ class Feature {
 
   extendedProperties() {
     // Include context properties
-    const properties = this._umap.mapProxy.getGeoContext()
+    const properties = this.app.mapProxy.getGeoContext()
     const locale = getLocale()
     if (locale) properties.locale = locale
     if (U.lang) properties.lang = U.lang
@@ -668,7 +666,7 @@ class Feature {
   }
 
   redraw() {
-    this._umap.fire('feature:reset', {
+    this.app.fire('feature:reset', {
       sourceId: this.datalayer.id,
       geojson: this.toRenderer(),
     })
@@ -677,7 +675,7 @@ class Feature {
   getContextMenu(event) {
     const permalink = this.getPermalink()
     const items = []
-    if (this._umap.editEnabled && !this.isReadOnly()) {
+    if (this.app.editEnabled && !this.isReadOnly()) {
       items.push({
         items: this.getEditContextMenu(event),
       })
@@ -726,7 +724,7 @@ class Feature {
     items.push(
       '-',
       {
-        title: this._umap.help.displayLabel('EDIT_FEATURE_LAYER', false),
+        title: this.app.help.displayLabel('EDIT_FEATURE_LAYER', false),
         icon: 'icon-layers',
         action: () => this.datalayer.edit(),
       },
@@ -745,7 +743,7 @@ class Feature {
   }
 
   deactivate() {
-    this._umap.fire('popup:close')
+    this.app.fire('popup:close')
   }
 
   makePreview(element) {
@@ -763,8 +761,8 @@ class Feature {
 }
 
 export class Point extends Feature {
-  constructor(umap, datalayer, geojson, id) {
-    super(umap, datalayer, geojson, id)
+  constructor(app, datalayer, geojson, id) {
+    super(app, datalayer, geojson, id)
     this.staticOptions = {
       mainColor: 'color',
       className: 'marker',
@@ -805,7 +803,7 @@ export class Point extends Feature {
       ['lat', { handler: 'FloatInput', label: translate('Latitude') }],
       ['lng', { handler: 'FloatInput', label: translate('Longitude') }],
     ]
-    const builder = new MutatingForm(latlng, coordinatesOptions, { umap: this._umap })
+    const builder = new MutatingForm(latlng, coordinatesOptions, { app: this.app })
     builder.on('set', () => {
       const coordinates = [latlng.lng, latlng.lat]
       if (!Utils.coordinateIsValid(coordinates)) {
@@ -844,7 +842,7 @@ class Path extends Feature {
 
   getBestZoom() {
     return (
-      this.getOption('zoomTo') || this._umap.mapProxy.getBoundsZoom(this.bounds, true)
+      this.getOption('zoomTo') || this.app.mapProxy.getBoundsZoom(this.bounds, true)
     )
   }
 
@@ -929,9 +927,9 @@ class Path extends Feature {
 
   zoomTo({ easing, callback }) {
     // Use bounds instead of centroid for paths.
-    easing = easing || this._umap.getProperty('easing')
+    easing = easing || this.app.getProperty('easing')
     const zoom = this.getBestZoom()
-    this._umap.fire('map:view:fit-bounds', { bounds: this.bounds, zoom, easing })
+    this.app.fire('map:view:fit-bounds', { bounds: this.bounds, zoom, easing })
     if (callback) callback.call(this)
   }
 
@@ -972,15 +970,12 @@ class Path extends Feature {
         }
       )
     }
-    if (
-      this._umap?.editedFeature !== this &&
-      this.isSameClass(this._umap.editedFeature)
-    ) {
+    if (this.app?.editedFeature !== this && this.isSameClass(this.app.editedFeature)) {
       items.push({
         title: translate('Transfer shape to edited feature'),
         icon: 'icon-transfer-shape',
         action: () => {
-          this.transferShape(event.coordinate, this._umap.editedFeature)
+          this.transferShape(event.coordinate, this.app.editedFeature)
         },
       })
     }
@@ -1006,8 +1001,8 @@ class Path extends Feature {
 }
 
 export class LineString extends Path {
-  constructor(umap, datalayer, geojson, id) {
-    super(umap, datalayer, geojson, id)
+  constructor(app, datalayer, geojson, id) {
+    super(app, datalayer, geojson, id)
     this.staticOptions = {
       stroke: true,
       fill: false,
@@ -1069,7 +1064,7 @@ export class LineString extends Path {
       `<div><h3>${translate('Route settings')}</h3></div>`
     )
     container.appendChild(await this.routeForm())
-    return this._umap.dialog.open({ template: container })
+    return this.app.dialog.open({ template: container })
   }
 
   toPolygon() {
@@ -1121,7 +1116,7 @@ export class LineString extends Path {
       container.appendChild(button)
       button.addEventListener('click', () => this.restoreRoute())
     }
-    if (this._umap.properties.ORSAPIKey) {
+    if (this.app.properties.ORSAPIKey) {
       const button = Utils.loadTemplate(`
         <button class="button" type="button"><i class="icon icon-24 icon-mountain"></i>${translate('Compute elevations')}</button>
       `)
@@ -1189,7 +1184,7 @@ export class LineString extends Path {
       })
     } else if (index === 0 || index === event.vertex.getLastIndex()) {
       items.push({
-        title: this._umap.help.displayLabel('CONTINUE_LINE', false),
+        title: this.app.help.displayLabel('CONTINUE_LINE', false),
         icon: 'icon-continue-line',
         action: () => event.vertex.continue(),
       })
@@ -1290,7 +1285,7 @@ export class LineString extends Path {
         ],
       ]
       const form = new MutatingForm(this.properties._umap_options.route, metadatas, {
-        umap: this._umap,
+        app: this.app,
       })
       return await form.build()
     })
@@ -1314,13 +1309,13 @@ export class LineString extends Path {
   }
 
   computeElevation() {
-    if (!this._umap.properties.ORSAPIKey) return
+    if (!this.app.properties.ORSAPIKey) return
     const oldGeometry = Utils.CopyJSON(this._geometry)
     this.journal.update(
       'geometry',
       async () => {
         const { Importer } = await this.loadORS()
-        const importer = new Importer(this._umap)
+        const importer = new Importer(this.app)
         const geometry = await importer.elevation(this.geometry)
         if (!geometry?.type) return
         this.geometry = geometry
@@ -1338,13 +1333,13 @@ export class LineString extends Path {
   }
 
   computeRoute() {
-    if (!this._umap.properties.ORSAPIKey) return
+    if (!this.app.properties.ORSAPIKey) return
     const oldGeometry = Utils.CopyJSON(this._geometry)
     this.journal.update(
       'geometry',
       async () => {
         const { Importer } = await this.loadORS()
-        const importer = new Importer(this._umap)
+        const importer = new Importer(this.app)
         const geometry = await importer.directions(this.properties._umap_options.route)
         if (!geometry?.type) return
         this.geometry = geometry
@@ -1357,15 +1352,15 @@ export class LineString extends Path {
 
   addExtraEditFieldset(container) {
     super.addExtraEditFieldset(container)
-    if (this._umap.properties.ORSAPIKey && this.isRoute()) {
+    if (this.app.properties.ORSAPIKey && this.isRoute()) {
       this._editRoute(container)
     }
   }
 }
 
 export class Polygon extends Path {
-  constructor(umap, datalayer, geojson, id) {
-    super(umap, datalayer, geojson, id)
+  constructor(app, datalayer, geojson, id) {
+    super(app, datalayer, geojson, id)
     this.staticOptions = {
       mainColor: 'fillColor',
       className: 'polygon',
@@ -1468,6 +1463,6 @@ export class Polygon extends Path {
   }
 
   startHole(coordinate) {
-    this._umap.fire('feature:hole', { id: this.id, coordinate })
+    this.app.fire('feature:hole', { id: this.id, coordinate })
   }
 }

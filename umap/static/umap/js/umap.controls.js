@@ -1,8 +1,8 @@
 U.Editable = L.Editable.extend({
-  initialize: function (umap, options) {
-    this._umap = umap
+  initialize: function (app, options) {
+    this.app = app
     // TODO remove direct call to Leaflet map
-    L.Editable.prototype.initialize.call(this, umap.mapProxy.map, options)
+    L.Editable.prototype.initialize.call(this, app.mapProxy.map, options)
     this.on('editable:drawing:click editable:drawing:move', this.drawingTooltip)
     // Layer for items added by users
     this.on('editable:drawing:cancel', (event) => {
@@ -10,8 +10,8 @@ U.Editable = L.Editable.extend({
     })
     this.on('editable:drawing:commit', function (event) {
       this.resetButtons()
-      const feature = this._umap.mapProxy.getFeatureById(event.layer.geojson.id)
-      if (this._umap.editedFeature !== feature) {
+      const feature = this.app.mapProxy.getFeatureById(event.layer.geojson.id)
+      if (this.app.editedFeature !== feature) {
         const promise = feature.edit(event)
         if (feature.isRoute?.()) {
           promise.then((panel) => {
@@ -50,8 +50,8 @@ U.Editable = L.Editable.extend({
   },
 
   createLineString: function () {
-    const datalayer = this._umap.defaultEditDataLayer()
-    const line = new U.LineString(this._umap, datalayer, {
+    const datalayer = this.app.defaultEditDataLayer()
+    const line = new U.LineString(this.app, datalayer, {
       geometry: { type: 'LineString', coordinates: [] },
     })
     line._needs_upsert = true
@@ -63,8 +63,8 @@ U.Editable = L.Editable.extend({
   },
 
   createPolygon: function () {
-    const datalayer = this._umap.defaultEditDataLayer()
-    const poly = new U.Polygon(this._umap, datalayer, {
+    const datalayer = this.app.defaultEditDataLayer()
+    const poly = new U.Polygon(this.app, datalayer, {
       geometry: { type: 'Polygon', coordinates: [] },
     })
     poly._needs_upsert = true
@@ -72,8 +72,8 @@ U.Editable = L.Editable.extend({
   },
 
   createMarker: function (latlng) {
-    const datalayer = this._umap.defaultEditDataLayer()
-    const point = new U.Point(this._umap, datalayer, {
+    const datalayer = this.app.defaultEditDataLayer()
+    const point = new U.Point(this.app, datalayer, {
       geometry: { type: 'Point', coordinates: [latlng.lng, latlng.lat] },
     })
     point._needs_upsert = true
@@ -82,24 +82,24 @@ U.Editable = L.Editable.extend({
 
   drawNewFeature: function (feature) {
     feature.datalayer.addFeature(feature)
-    return this._umap.mapProxy.startDrawing(feature.datalayer.id, feature.toRenderer())
+    return this.app.mapProxy.startDrawing(feature.datalayer.id, feature.toRenderer())
   },
 
   _getDefaultProperties: function () {
     const result = {}
-    if (this._umap.properties.featuresHaveOwner?.user) {
-      result.geojson = { properties: { owner: this._umap.properties.user.id } }
+    if (this.app.properties.featuresHaveOwner?.user) {
+      result.geojson = { properties: { owner: this.app.properties.user.id } }
     }
     return result
   },
 
   connectCreatedToMap: function (layer) {
-    return this._umap.mapProxy.connectDrawing(layer)
+    return this.app.mapProxy.connectDrawing(layer)
   },
 
   drawingTooltip: function (e) {
     if (e.layer instanceof L.Marker && e.type === 'editable:drawing:start') {
-      this._umap.tooltip.open({ content: L._('Click to add a marker') })
+      this.app.tooltip.open({ content: L._('Click to add a marker') })
     }
     if (!(e.layer instanceof L.Polyline)) {
       // only continue with Polylines and Polygons
@@ -145,12 +145,12 @@ U.Editable = L.Editable.extend({
       }
     }
     if (content) {
-      this._umap.tooltip.open({ content: content })
+      this.app.tooltip.open({ content: content })
     }
   },
 
   closeTooltip: function () {
-    this._umap.closeTooltip()
+    this.app.closeTooltip()
   },
 
   onVertexRawClick: (e) => {
@@ -160,8 +160,8 @@ U.Editable = L.Editable.extend({
 
   onEscape: function () {
     this.once('editable:drawing:end', (event) => {
-      this._umap.tooltip.close()
-      const feature = this._umap.mapProxy.getFeatureById(event.layer.geojson.id)
+      this.app.tooltip.close()
+      const feature = this.app.mapProxy.getFeatureById(event.layer.geojson.id)
       if (!feature) return
       // Leaflet.Editable will delete the drawn shape if invalid
       // (eg. line has only one drawn point)

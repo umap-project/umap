@@ -1,4 +1,4 @@
-import { uMapAlert as Alert } from '../../components/alerts/alert.js'
+import { Alert } from '../../components/alerts/alert.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
 import { Form } from '../form/builder.js'
@@ -18,8 +18,8 @@ export const PREFERENCES = [
 ]
 
 export class Importer {
-  constructor(umap) {
-    this.umap = umap
+  constructor(app) {
+    this.app = app
     this.id = 'openrouteservice'
   }
 
@@ -64,15 +64,15 @@ export class Importer {
         },
       ],
     ]
-    const form = new Form(properties, metadatas, { umap: this.umap })
+    const form = new Form(properties, metadatas, { app: this.app })
     // Needed for DataLayerSwitcher (which expects to be used with MutatingForm)
-    form._umap = this.umap
+    form.app = this.app
 
     const Isochrones = new ORS.Isochrones({
-      api_key: this.umap.properties.ORSAPIKey,
-      host: this.umap.properties.ORSHost,
+      api_key: this.app.properties.ORSAPIKey,
+      host: this.app.properties.ORSHost,
     })
-    this.umap.dialog.open({ template: await form.build() }).then(async () => {
+    this.app.dialog.open({ template: await form.build() }).then(async () => {
       try {
         const params = {
           locations: [[latlng.lng, latlng.lat]],
@@ -88,11 +88,11 @@ export class Importer {
           feature.properties.duration = Number(feature.properties.value) / 60
           feature.properties.profile = properties.profile
         }
-        this.umap.importer.build()
-        this.umap.importer.raw = JSON.stringify(data)
-        this.umap.importer.format = 'geojson'
-        this.umap.importer.layer = properties.datalayer
-        this.umap.importer.submit()
+        this.app.importer.build()
+        this.app.importer.raw = JSON.stringify(data)
+        this.app.importer.format = 'geojson'
+        this.app.importer.layer = properties.datalayer
+        this.app.importer.submit()
       } catch (err) {
         console.error(err)
       }
@@ -103,8 +103,8 @@ export class Importer {
     const ORS = await this.loadORS()
 
     const Elevation = new ORS.Elevation({
-      api_key: this.umap.properties.ORSAPIKey,
-      host: this.umap.properties.ORSHost,
+      api_key: this.app.properties.ORSAPIKey,
+      host: this.app.properties.ORSHost,
     })
 
     try {
@@ -127,8 +127,8 @@ export class Importer {
     }
     const ORS = await this.loadORS()
     const Directions = new ORS.Directions({
-      api_key: this.umap.properties.ORSAPIKey,
-      host: this.umap.properties.ORSHost,
+      api_key: this.app.properties.ORSAPIKey,
+      host: this.app.properties.ORSHost,
     })
     try {
       const featuresCollection = await Directions.calculate({

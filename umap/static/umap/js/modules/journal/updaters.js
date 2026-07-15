@@ -7,12 +7,12 @@ import * as Schema from '../schema.js'
  */
 
 class BaseUpdater {
-  constructor(umap) {
-    this._umap = umap
+  constructor(app) {
+    this.app = app
   }
 
   getDataLayerFromID(layerId) {
-    const datalayer = this._umap.layers.tree.all().get(layerId)
+    const datalayer = this.app.layers.tree.all().get(layerId)
     if (!datalayer) throw new Error(`Can't find datalayer with id ${layerId}`)
     return datalayer
   }
@@ -26,14 +26,14 @@ class BaseUpdater {
 export class MapUpdater extends BaseUpdater {
   update({ key, value }) {
     if (Schema.hasField(key)) {
-      Utils.setObjectValue(this._umap, key, value)
+      Utils.setObjectValue(this.app, key, value)
     }
 
-    this._umap.render([key])
+    this.app.render([key])
   }
 
   getStoredObject() {
-    return this._umap
+    return this.app
   }
 }
 
@@ -48,7 +48,7 @@ export class DataLayerUpdater extends BaseUpdater {
       datalayer.show()
       datalayer.dataChanged()
     } catch {
-      const datalayer = this._umap.createDataLayer(value, false)
+      const datalayer = this.app.createDataLayer(value, false)
       if (value.features) {
         // FIXME: this will create new stages in the undoStack, thus this will empty
         // the redoStack
@@ -139,12 +139,12 @@ export class FeatureUpdater extends BaseUpdater {
 export class MapPermissionsUpdater extends BaseUpdater {
   update({ key, value }) {
     if (Schema.hasField(key)) {
-      Utils.setObjectValue(this._umap.permissions, key, value)
+      Utils.setObjectValue(this.app.permissions, key, value)
     }
   }
 
   getStoredObject(metadata) {
-    return this._umap.permissions
+    return this.app.permissions
   }
 }
 

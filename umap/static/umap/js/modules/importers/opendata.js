@@ -1,4 +1,4 @@
-import { uMapAlert as Alert } from '../../components/alerts/alert.js'
+import { Alert } from '../../components/alerts/alert.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
 
@@ -103,8 +103,8 @@ const TEMPLATE = `
 `
 
 class Connector {
-  constructor(umap, baseUrl) {
-    this.umap = umap
+  constructor(app, baseUrl) {
+    this.app = app
     this.baseUrl = baseUrl
   }
 }
@@ -112,11 +112,11 @@ class Connector {
 class Prodige extends Connector {
   async datasets() {
     const datasets = []
-    const endpoint = this.umap.proxyUrl(
+    const endpoint = this.app.proxyUrl(
       `${this.baseUrl}/api/ogc-features/collections.json`,
       3600
     )
-    const response = await this.umap.request.get(endpoint)
+    const response = await this.app.request.get(endpoint)
     if (!response?.ok) return datasets
     const data = await response.json()
     for (const dataset of data.collections) {
@@ -127,7 +127,7 @@ class Prodige extends Connector {
       if (!url) continue
       datasets.push({
         label: dataset.title,
-        url: this.umap.proxyUrl(url, 3600),
+        url: this.app.proxyUrl(url, 3600),
       })
     }
     return datasets.sort((a, b) => Utils.naturalSort(a.label, b.label, U.lang))
@@ -141,7 +141,7 @@ class OpenDataSoft extends Connector {
     const hardLimit = 500
     while (total === null || results.length < total) {
       const offset = results.length
-      const response = await this.umap.request.get(
+      const response = await this.app.request.get(
         `${this.baseUrl}/api/explore/v2.1/catalog/datasets?where=features%20in%20%28%22geo%22%29&limit=100&offset=${offset}&order_by=title asc`
       )
       if (!response?.ok) break
@@ -176,8 +176,8 @@ class OpenDataSoft extends Connector {
 }
 
 export class Importer {
-  constructor(umap, options = {}) {
-    this.umap = umap
+  constructor(app, options = {}) {
+    this.app = app
     this.name = options.name || 'Open Data'
     this.id = 'opendata'
     this.portals = options.choices || PORTALS
@@ -209,9 +209,9 @@ export class Importer {
       const platform = selected.dataset.platform
       let connector
       if (platform === 'opendatasoft') {
-        connector = new OpenDataSoft(this.umap, selected.value)
+        connector = new OpenDataSoft(this.app, selected.value)
       } else if (platform === 'prodige') {
-        connector = new Prodige(this.umap, selected.value)
+        connector = new Prodige(this.app, selected.value)
       } else {
         console.error('Unknown platform', platform)
         return

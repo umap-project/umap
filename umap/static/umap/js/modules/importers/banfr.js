@@ -1,4 +1,4 @@
-import { uMapAlert as Alert } from '../../components/alerts/alert.js'
+import { Alert } from '../../components/alerts/alert.js'
 import { BaseAjax, SingleMixin } from '../autocomplete.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
@@ -24,8 +24,8 @@ const TEMPLATE = `
 `
 
 export class Importer {
-  constructor(umap, options) {
-    this._umap = umap
+  constructor(app, options) {
+    this.app = app
     this.name = options.name || 'Géocodage FR'
     this.id = 'banfr'
   }
@@ -71,7 +71,7 @@ export class Importer {
       for (const option of columns.querySelectorAll('input:checked')) {
         formData.append('columns', option.value)
       }
-      const response = await this._umap.request.post(
+      const response = await this.app.request.post(
         'https://api-adresse.data.gouv.fr/search/csv/',
         {},
         formData

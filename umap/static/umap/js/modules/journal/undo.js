@@ -2,8 +2,8 @@ import * as Utils from '../utils.js'
 import { DataLayerUpdater, FeatureUpdater, MapUpdater } from './updaters.js'
 
 export class UndoManager {
-  constructor(umap, updaters, journal) {
-    this._umap = umap
+  constructor(app, updaters, journal) {
+    this.app = app
     this._journal = journal
     this.updaters = updaters
     this._undoStack = []
@@ -29,7 +29,7 @@ export class UndoManager {
   }
 
   isDirty() {
-    if (!this._umap.id) return true
+    if (!this.app.id) return true
     for (const stage of this._undoStack) {
       if (stage.operation.dirty) return true
     }

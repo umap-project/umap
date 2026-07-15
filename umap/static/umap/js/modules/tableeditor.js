@@ -14,10 +14,10 @@ const TEMPLATE = `
 `
 
 export default class TableEditor extends Utils.WithTemplate {
-  constructor(umap, datalayer) {
+  constructor(app, datalayer) {
     super()
     this.datalayer = datalayer
-    this._umap = umap
+    this.app = app
     this.contextmenu = new ContextMenu({ className: 'dark' })
     this.table = this.loadTemplate(TEMPLATE)
     if (!this.datalayer.isRemoteLayer()) {
@@ -34,7 +34,7 @@ export default class TableEditor extends Utils.WithTemplate {
   }
 
   openHeaderMenu(name) {
-    const parent = [this.datalayer, ...this.datalayer.ancestors, this._umap].find(
+    const parent = [this.datalayer, ...this.datalayer.ancestors, this.app].find(
       (parent) => parent.fields.has(name)
     )
     let actionLabel
@@ -48,7 +48,7 @@ export default class TableEditor extends Utils.WithTemplate {
         label: actionLabel,
         action: () => {
           parent.filters.createFilterForm(name)
-          this._umap.loadBrowser().then((browser) => browser.open('filters'))
+          this.app.loadBrowser().then((browser) => browser.open('filters'))
         },
       },
       {
@@ -89,7 +89,7 @@ export default class TableEditor extends Utils.WithTemplate {
   }
 
   renderBody() {
-    const inBbox = this._umap.browser?.options.inBbox
+    const inBbox = this.app.browser?.options.inBbox
     this.elements.body.innerHTML = ''
     this.datalayer.features.forEach((feature) => {
       if (feature.isFiltered()) return
@@ -138,11 +138,11 @@ export default class TableEditor extends Utils.WithTemplate {
         <i class="icon icon-16 icon-filters"></i>${translate('Filter data')}
       </button>`)
     filterButton.addEventListener('click', () =>
-      this._umap.loadBrowser().then((browser) => browser.open('filters'))
+      this.app.loadBrowser().then((browser) => browser.open('filters'))
     )
     actions.push(filterButton)
 
-    this._umap.fullPanel.open({
+    this.app.fullPanel.open({
       content: this.table,
       className: 'umap-table-editor',
       actions: actions,
@@ -256,7 +256,7 @@ export default class TableEditor extends Utils.WithTemplate {
   deleteRows() {
     const selectedRows = this.getSelectedRows()
     if (!selectedRows.length) return
-    this._umap.dialog
+    this.app.dialog
       .confirm(
         translate('Found {count} rows. Are you sure you want to delete all?', {
           count: selectedRows.length,
@@ -272,9 +272,9 @@ export default class TableEditor extends Utils.WithTemplate {
         this.datalayer.show()
         this.datalayer.dataChanged()
         this.renderBody()
-        if (this._umap.browser?.isOpen()) {
-          this._umap.browser.resetFilters()
-          this._umap.browser.open('filters')
+        if (this.app.browser?.isOpen()) {
+          this.app.browser.resetFilters()
+          this.app.browser.open('filters')
         }
       })
   }

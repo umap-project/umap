@@ -1,4 +1,4 @@
-import { uMapAlert as Alert } from '../components/alerts/alert.js'
+import { Alert } from '../components/alerts/alert.js'
 import * as DOMUtils from './domutils.js'
 import { translate } from './i18n.js'
 import { LocationIcon } from './icon.js'
@@ -341,9 +341,9 @@ const COORDS_PATTERN =
 const REVERSE_URL = 'https://photon.komoot.io/reverse/?'
 
 export class Geocoder extends BaseAjax {
-  constructor(umap, parent) {
+  constructor(app, parent) {
     super(parent, {
-      url: umap.properties.urls.search,
+      url: app.properties.urls.search,
       placeholder: translate('Type a place name or coordinates'),
       emptyMessage: translate('No results'),
       className: 'umap-search-input',
@@ -351,7 +351,7 @@ export class Geocoder extends BaseAjax {
       limit: 10,
       throttling: 300,
     })
-    this._umap = umap
+    this.app = app
   }
 
   get type() {
@@ -374,13 +374,13 @@ export class Geocoder extends BaseAjax {
   buildParams(value) {
     const params = { q: value, limit: this.options.limit }
     // Bias results towards the current view, but only when zoomed in enough.
-    if (this._umap.mapProxy.zoom > 10) {
-      const [lng, lat] = this._umap.mapProxy.center
+    if (this.app.mapProxy.zoom > 10) {
+      const [lng, lat] = this.app.mapProxy.center
       params.lat = lat
       params.lon = lng
       params.location_bias_scale = 0.5
     }
-    const bbox = this._umap.mapProxy.getExtentBBoxString()
+    const bbox = this.app.mapProxy.getExtentBBoxString()
     if (bbox) params.bbox = bbox
     return params
   }
@@ -470,14 +470,14 @@ export class Geocoder extends BaseAjax {
     geom.hidden = !['R', 'W'].includes(properties.osm_type)
     point.addEventListener('mousedown', (event) => {
       event.stopPropagation()
-      this._umap.defaultEditDataLayer().makeFeature(feature).edit()
+      this.app.defaultEditDataLayer().makeFeature(feature).edit()
     })
     geom.addEventListener('mousedown', async (event) => {
       event.stopPropagation()
       const osm_type = { R: 'relation', W: 'way', N: 'node' }[properties.osm_type]
       if (!osm_type || !properties.osm_id) return
-      await this._umap.loadImporter()
-      const importer = this._umap.importer
+      await this.app.loadImporter()
+      const importer = this.app.importer
       importer.build()
       importer.format = 'geojson'
       importer.raw = await this.getOSMObject(osm_type, properties.osm_id)
@@ -486,23 +486,23 @@ export class Geocoder extends BaseAjax {
     const id = 'location'
     const icon = new LocationIcon()
     li.addEventListener('mouseover', () => {
-      this._umap.fire('map:show:point', {
+      this.app.fire('map:show:point', {
         id,
         position: feature.geometry.coordinates,
         icon,
       })
     })
     li.addEventListener('mouseout', () => {
-      this._umap.fire('map:hide:point', { id })
+      this.app.fire('map:hide:point', { id })
     })
     return li
   }
 
   async getOSMObject(osm_type, osm_id) {
     const url = `https://www.openstreetmap.org/api/0.6/${osm_type}/${osm_id}/full`
-    const response = await this._umap.request.get(url)
+    const response = await this.app.request.get(url)
     if (response?.ok) {
-      const data = await this._umap.formatter.fromOSM(await response.text())
+      const data = await this.app.formatter.fromOSM(await response.text())
       return JSON.stringify(data)
     }
   }
@@ -510,8 +510,8 @@ export class Geocoder extends BaseAjax {
   select() {
     const result = this.results[this.current]
     if (result) {
-      const zoom = Math.max(this._umap.mapProxy.zoom, 14) // Never unzoom.
-      this._umap.fire('map:view:set', {
+      const zoom = Math.max(this.app.mapProxy.zoom, 14) // Never unzoom.
+      this.app.fire('map:view:set', {
         center: result.feature.geometry.coordinates,
         zoom,
       })

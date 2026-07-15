@@ -147,9 +147,9 @@ const loadWidget = (key) => {
 }
 
 export class Filters {
-  constructor(parent, umap) {
+  constructor(parent, app) {
     this._parent = parent
-    this._umap = umap
+    this.app = app
     this.available = new Map()
     this.userData = {}
     this.load()
@@ -268,8 +268,8 @@ export class Filters {
       </div>
     `
     const body = Utils.loadTemplate(template)
-    this._listFilters(this._umap, body, translate('Map (all layers)'))
-    this._umap.dialog.open({ template: body })
+    this._listFilters(this.app, body, translate('Map (all layers)'))
+    this.app.dialog.open({ template: body })
   }
 
   _listFilters(layer, container, title) {
@@ -404,7 +404,7 @@ export class Filters {
         },
       ],
     ]
-    const form = new Form(properties, metadata, { umap: this._umap })
+    const form = new Form(properties, metadata, { app: this.app })
     let label
     if (fieldKey) {
       label = translate('Edit filter')
@@ -422,12 +422,12 @@ export class Filters {
     `)
     form.build().then((el) => body.appendChild(el))
     editField.addEventListener('click', () => {
-      this._umap.dialog.accept().then(() => {
+      this.app.dialog.accept().then(() => {
         this._parent.fields.editField(fieldKey)
       })
     })
 
-    return this._umap.dialog.open({ template: container }).then(() => {
+    return this.app.dialog.open({ template: container }).then(() => {
       const target = properties.target
       if (!target) return
       if (!properties.fieldKey) return
@@ -679,16 +679,16 @@ Fields.FilterByDateTime = class extends Fields.FilterByDate {
 Fields.FilterTargetSelect = class extends Fields.Select {
   getOptions() {
     const options = []
-    if (this.builder.properties.umap.fields.size) {
+    if (this.builder.properties.app.fields.size) {
       if (!this.obj.target) {
-        this.obj.target = this.builder.properties.umap
+        this.obj.target = this.builder.properties.app
       }
       options.push([
-        `map:${this.builder.properties.umap.id}`,
-        `${this.builder.properties.umap.properties.name} (${translate('all layers')})`,
+        `map:${this.builder.properties.app.id}`,
+        `${this.builder.properties.app.properties.name} (${translate('all layers')})`,
       ])
     }
-    this.builder.properties.umap.layers.tree.map((datalayer) => {
+    this.builder.properties.app.layers.tree.map((datalayer) => {
       if (datalayer.isBrowsable() && datalayer.fields.size) {
         if (!this.obj.target) {
           this.obj.target = datalayer
@@ -706,7 +706,7 @@ Fields.FilterTargetSelect = class extends Fields.Select {
     if (!this.obj.target) return null
     // TODO: better way to check for class
     // Importing DataLayer will end in circular import
-    const type = this.obj.target._umap ? 'layer' : 'map'
+    const type = this.obj.target.app ? 'layer' : 'map'
     return `${type}:${this.obj.target?.id}`
   }
 
@@ -715,9 +715,9 @@ Fields.FilterTargetSelect = class extends Fields.Select {
     if (!value) return null
     const [type, id] = value.split(':')
     if (type === 'map') {
-      return this.builder.properties.umap
+      return this.builder.properties.app
     }
-    return this.builder.properties.umap.layers.tree.get(id)
+    return this.builder.properties.app.layers.tree.get(id)
   }
 }
 

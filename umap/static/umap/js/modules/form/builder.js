@@ -129,7 +129,7 @@ export class MutatingForm extends Form {
   constructor(obj, fields, properties) {
     super(obj, fields, properties)
     this.debounce = true
-    this._umap = obj._umap || properties.umap
+    this.app = obj.app || properties.app
     this.computeDefaultProperties()
   }
 
@@ -224,7 +224,7 @@ export class MutatingForm extends Form {
 
   async build() {
     await super.build()
-    this._umap.help.parse(this.form)
+    this.app.help.parse(this.form)
     return this.form
   }
 

@@ -1,7 +1,7 @@
 export default class Hash {
-  constructor(umap) {
-    this.umap = umap
-    this.umap.on('map:view:updated', (event) => {
+  constructor(app) {
+    this.app = app
+    this.app.on('map:view:updated', (event) => {
       this._updating = true
       this.update(event.detail)
     })
@@ -30,6 +30,6 @@ export default class Hash {
     const lat = parseFloat(args[1])
     const lng = parseFloat(args[2])
     if (isNaN(zoom) || isNaN(lat) || isNaN(lng)) return
-    this.umap.fire('map:view:update', { zoom, coordinate: [lng, lat] })
+    this.app.fire('map:view:update', { zoom, coordinate: [lng, lat] })
   }
 }

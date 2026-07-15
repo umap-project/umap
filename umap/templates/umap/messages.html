@@ -3,7 +3,7 @@
 {% include "umap/components/alerts/alert.html" %}
 {% for message in messages %}
   <script type="module">
-    import { uMapAlert as Alert } from "{% static 'umap/js/components/alerts/alert.js' %}"
+    import { Alert } from "{% static 'umap/js/components/alerts/alert.js' %}"
     {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
       Alert.error("{{ message }}")
     {% else %}

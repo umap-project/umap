@@ -57,14 +57,14 @@ const MAX_RECONNECT_DELAY = 32000
  * ```
  */
 export class Journal {
-  constructor(umap) {
-    this._umap = umap
+  constructor(app) {
+    this.app = app
     this.updaters = {
-      map: new MapUpdater(umap),
-      feature: new FeatureUpdater(umap),
-      datalayer: new DataLayerUpdater(umap),
-      mappermissions: new MapPermissionsUpdater(umap),
-      datalayerpermissions: new DataLayerPermissionsUpdater(umap),
+      map: new MapUpdater(app),
+      feature: new FeatureUpdater(app),
+      datalayer: new DataLayerUpdater(app),
+      mappermissions: new MapPermissionsUpdater(app),
+      datalayerpermissions: new DataLayerPermissionsUpdater(app),
     }
     this.transport = undefined
     this._operations = new Operations()
@@ -75,7 +75,7 @@ export class Journal {
     this.closeRequested = false
     this.peerId = Utils.generateId()
     this._pendingActions = new Set()
-    this._undoManager = new UndoManager(umap, this.updaters, this)
+    this._undoManager = new UndoManager(app, this.updaters, this)
   }
 
   // Track an in-flight user-action so save() can await it and undo/redo
@@ -100,11 +100,11 @@ export class Journal {
 
   async authenticate() {
     if (this.isOpen) return
-    const websocketTokenURI = this._umap.urls.get('map_websocket_auth_token', {
-      map_id: this._umap.id,
+    const websocketTokenURI = this.app.urls.get('map_websocket_auth_token', {
+      map_id: this.app.id,
     })
 
-    const [response, _, error] = await this._umap.server.get(websocketTokenURI)
+    const [response, _, error] = await this.app.server.get(websocketTokenURI)
     if (error) {
       this.reconnect()
       return
@@ -113,14 +113,14 @@ export class Journal {
   }
 
   async start(authToken) {
-    const path = this._umap.urls.get('ws_sync', { map_id: this._umap.id })
+    const path = this.app.urls.get('ws_sync', { map_id: this.app.id })
     const protocol = window.location.protocol === 'http:' ? 'ws:' : 'wss:'
     this.transport = new WebSocketTransport(this)
     await this.transport.connect(
       `${protocol}//${window.location.host}${path}`,
       authToken,
       this.peerId,
-      this._umap.properties.user?.name
+      this.app.properties.user?.name
     )
     this.onConnection()
   }
@@ -238,9 +238,9 @@ export class Journal {
 
   _getDirtyObjects() {
     const dirty = new Map()
-    if (!this._umap.id) {
+    if (!this.app.id) {
       // There is no operation for first map save
-      dirty.set(this._umap, [])
+      dirty.set(this.app, [])
     }
     const addDirtyObject = (operation) => {
       const updater = this._getUpdater(operation.subject)

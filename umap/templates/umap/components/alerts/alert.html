@@ -105,12 +105,12 @@
 <script type="module">
   import { register } from '{% static 'umap/js/components/base.js' %}'
   import {
-    uMapAlert,
-    uMapAlertCreation,
-    uMapAlertConflict
+    Alert,
+    AlertCreation,
+    AlertConflict
   } from '{% static 'umap/js/components/alerts/alert.js' %}'
-  register(uMapAlert, 'umap-alert')
-  register(uMapAlertCreation, 'umap-alert-creation')
-  register(uMapAlertConflict, 'umap-alert-conflict')
+  register(Alert, 'umap-alert')
+  register(AlertCreation, 'umap-alert-creation')
+  register(AlertConflict, 'umap-alert-conflict')
 </script>
 {% endautoescape %}

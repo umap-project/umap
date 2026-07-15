@@ -7,9 +7,9 @@ import * as Utils from './utils.js'
 import { SCHEMA } from './schema.js'
 
 export default class Browser {
-  constructor(umap) {
-    this._umap = umap
-    this._umap.on('map:moveend', () => this.onMoveEnd())
+  constructor(app) {
+    this.app = app
+    this.app.on('map:moveend', () => this.onMoveEnd())
     this.options = {
       filter: '',
       inBbox: false,
@@ -87,7 +87,7 @@ export default class Browser {
 
   updateFeaturesList(datalayer) {
     // Compute once, but use it for each feature later.
-    this.bounds = this._umap.mapProxy.bounds
+    this.bounds = this.app.mapProxy.bounds
     const details = document.querySelector(`details[data-id="${datalayer.id}"]`)
     // Browser is not open
     if (!details) return
@@ -118,10 +118,10 @@ export default class Browser {
   }
 
   onFormChange() {
-    this._umap.layers.tree.browsable().map((datalayer) => {
+    this.app.layers.tree.browsable().map((datalayer) => {
       datalayer.redraw()
       this.updateFeaturesList(datalayer)
-      if (this._umap.fullPanel?.isOpen()) datalayer.tableEdit()
+      if (this.app.fullPanel?.isOpen()) datalayer.tableEdit()
     })
     this.toggleBadge()
   }
@@ -135,12 +135,12 @@ export default class Browser {
   }
 
   hasActiveFilters() {
-    return !!this.options.filter || this._umap.hasActiveFilters()
+    return !!this.options.filter || this.app.hasActiveFilters()
   }
 
   onMoveEnd() {
     if (!this.isOpen()) return
-    this._umap.layers.tree.browsable().map((datalayer) => {
+    this.app.layers.tree.browsable().map((datalayer) => {
       if (!this.options.inBbox && !datalayer.hasDynamicData()) return
       this.updateFeaturesList(datalayer)
     })
@@ -149,7 +149,7 @@ export default class Browser {
   update() {
     if (!this.isOpen()) return
     this.dataContainer.innerHTML = ''
-    const layers = this._umap.layers.root.browsable()
+    const layers = this.app.layers.root.browsable()
     for (const layer of layers) {
       this.addDataLayer(layer, this.dataContainer)
     }
@@ -202,14 +202,14 @@ export default class Browser {
     // https://github.com/Leaflet/Leaflet/pull/9052
     DOMUtils.disableClickPropagation(container)
     details.open = this.mode === 'filters'
-    toggle.addEventListener('click', () => Utils.toggleLayers(this._umap.layers))
-    fitBounds.addEventListener('click', () => this._umap.fitDataBounds())
+    toggle.addEventListener('click', () => Utils.toggleLayers(this.app.layers))
+    fitBounds.addEventListener('click', () => this.app.fitDataBounds())
     download.addEventListener('click', () => this.downloadVisible(download))
-    download.hidden = this._umap.getProperty('embedControl') === false
+    download.hidden = this.app.getProperty('embedControl') === false
     reset.addEventListener('click', () => this.resetFilters())
     manageFilters.addEventListener('click', () => {
-      this._umap.edit().then((panel) => panel.scrollTo('details#fields-management'))
-      this._umap.filters.edit()
+      this.app.edit().then((panel) => panel.scrollTo('details#fields-management'))
+      this.app.filters.edit()
     })
 
     this.filtersTitle = filtersTitle
@@ -217,7 +217,7 @@ export default class Browser {
     this.formContainer = formContainer
     this.toggleBadge()
     this.buildFilters()
-    this._umap.panel.open({
+    this.app.panel.open({
       content: container,
       className: 'umap-browser',
     })
@@ -250,10 +250,10 @@ export default class Browser {
       this.formContainer.appendChild(form)
       listenFormChanges(searchForm)
     })
-    if (this._umap.filters.size) {
-      this._umap.filters.buildForm(this.formContainer).then(listenFormChanges)
+    if (this.app.filters.size) {
+      this.app.filters.buildForm(this.formContainer).then(listenFormChanges)
     }
-    for (const datalayer of this._umap.layers.tree) {
+    for (const datalayer of this.app.layers.tree) {
       if (datalayer.filters.size) {
         datalayer.filters.buildForm(this.formContainer).then(listenFormChanges)
       }
@@ -272,7 +272,7 @@ export default class Browser {
     for (const format of Object.keys(EXPORT_FORMATS)) {
       items.push({
         label: format,
-        action: () => this._umap.loadShare().then((share) => share.download(format)),
+        action: () => this.app.loadShare().then((share) => share.download(format)),
       })
     }
     menu.openBelow(element, items)

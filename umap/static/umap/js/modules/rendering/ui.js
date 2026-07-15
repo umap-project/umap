@@ -12,7 +12,7 @@ import {
   Polyline,
   latLng,
 } from '../../../vendors/leaflet/leaflet-src.esm.js'
-import { uMapAlert as Alert } from '../../components/alerts/alert.js'
+import { Alert } from '../../components/alerts/alert.js'
 import * as GeoUtils from '../geoutils.js'
 import { translate } from '../i18n.js'
 import * as Icon from '../icon.js'
@@ -260,7 +260,7 @@ const PathMixin = {
   maxVertex: 100,
   onMouseOver: function () {
     if (this._map.measureTools?.enabled()) {
-      this.feature._umap.tooltip.open({ content: this.getMeasure(), anchor: this })
+      this.feature.app.tooltip.open({ content: this.getMeasure(), anchor: this })
     } else {
       FeatureMixin.onMouseOver.call(this)
     }
