@@ -1,5 +1,42 @@
 # Changelog
 
+## 3.8.0a0 - 2026-07-15
+
+This release is mainly about preparing the switch from Leaflet to OpenLayers.
+
+### Bug fixes
+* read OPENROUTESERVICE_HOST from env by @rapenne-s in #3309
+* never force panel mode in portrait/mobile screens by @yohanboniface in #3332
+* do not crash when datalayer file is missing by @yohanboniface in #3363
+* fix crash when tilelayer is an int by @yohanboniface in #3362
+* workaround memory leak in GeoDjango/GEOS by @yohanboniface in #3360
+* do not crash when map settings are NULL by @yohanboniface in #3361
+* reintegrate the proxy in python by @yohanboniface in #3330
+
+### Internal changes
+* update deprecated OAuth backends in local.py.sample by @AlexVplle in #3290
+* docs: mention data sources in Québec / Canada by @dhdaines in #3285
+* docs: update local settings and ASGI docs by @dhdaines in #3283
+* docs: minimally document the administration site by @dhdaines in #3297
+* fix build and document ors host variable by @rapenne-s in #3310
+* allow testing without postgres superuser by @dhdaines in #3295
+* more decoupling from Leaflet: introduce MapProxy, remove direct calls umap<=>leafletMap, use our events… in #3343, #3336, #3338, #3339, #3369, #3381, #3334, #3335
+* lazy load some modules (importers, share, browser, caption) by @yohanboniface in #3370, #3396, #3398, #3397, #3399, #3400, #3401, #3404, #3405, #3406
+* rename SyncEngine to Journal, and deal with async UI actions by @yohanboniface in #3368
+* replace Leaflet.Photon by an internal autocomplete class by @yohanboniface in #3377
+* set global.JSDOM before actually running the js tests by @yohanboniface in #3403
+* upgrade Django to 6.0.x by @yohanboniface in #3411
+* rename uMap to App by @yohanboniface in #3407
+* use uv for dev and ci by @yohanboniface in #3412
+* upgrade python-social-auth and social-auth-app-django by @yohanboniface in #3415
+* add routing in the /stats endpoint by @yohanboniface in #3416
+
+
+### New Contributors
+* @AlexVplle made their first contribution in #3290
+* @dhdaines made their first contribution in #3285
+* @rapenne-s made their first contribution in #3309
+
 ## 3.7.3 - 2026-04-08
 
 * cloning a map should adapt layer parents by @yohanboniface in #3282

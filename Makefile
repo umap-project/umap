@@ -33,15 +33,15 @@ docs: ## Compile the docs
 
 .PHONY: version
 version: ## Display the current version
-	@hatch version
+	@uv run hatch version
 
 .PHONY: patch
 patch: ## Bump the current version to a new patch one
-	@hatch version fix
+	@uv run hatch version fix
 
 .PHONY: minor
 minor: ## Bump the current version to a new minor one
-	@hatch version minor
+	@uv run hatch version minor
 
 .PHONY: docker
 docker: ## Create a new Docker image and publish it
@@ -95,7 +95,7 @@ tx_push:
 tx_pull:
 	tx pull
 changelog:
-	$(eval VERSION=$(shell hatch version))
+	$(eval VERSION=$(shell uv run hatch version))
 	@# Bearer token is readonly
 	@printf $(shell curl -sL -X POST -H "Authorization: Bearer ${GITHUB_TOKEN}" https://api.github.com/repos/umap-project/umap/releases/generate-notes  -d '{"target_commitish":"master","previous_tag_name":"", "tag_name": "${VERSION}"}' | jq .body | sed 's/https:\/\/github.com\/umap-project\/umap\/pull\//#/g' | sed 's/`/\\`/g')
 
