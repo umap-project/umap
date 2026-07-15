@@ -316,6 +316,7 @@ def test_stats_empty(client):
         "owners_count": 0,
         "anonymous_allowed": False,
         "realtime_enabled": True,
+        "routing_enabled": False,
         "importers": [],
     }
 
@@ -341,6 +342,7 @@ def test_stats_basic(client, map, datalayer, user2):
         "owners_count": 1,
         "anonymous_allowed": False,
         "realtime_enabled": True,
+        "routing_enabled": False,
         "importers": [],
     }
 
