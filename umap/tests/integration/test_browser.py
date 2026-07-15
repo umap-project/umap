@@ -354,9 +354,10 @@ def test_should_redraw_list_on_feature_delete(live_server, openmap, page, bootst
 
 
 def test_should_change_feature_title_and_color_on_edit(
-    live_server, openmap, page, bootstrap
+    live_server, openmap, page, bootstrap, wait_for_edit_mode
 ):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#2/19/-2")
+    wait_for_edit_mode(page)
     expect(page.locator(".umap-browser .feature.marker")).to_contain_text(
         "one point in france"
     )

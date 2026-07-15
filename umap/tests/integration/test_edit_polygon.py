@@ -56,8 +56,11 @@ def test_can_edit_on_ctrl_shift_click(
     expect(page.get_by_text("Layer properties")).to_be_visible()
 
 
-def test_marker_style_should_have_precedence(live_server, openmap, page, bootstrap):
+def test_marker_style_should_have_precedence(
+    live_server, openmap, page, bootstrap, wait_for_edit_mode
+):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    wait_for_edit_mode(page)
 
     # Change colour at layer level
     page.get_by_role("button", name="Manage layers").click()
@@ -131,11 +134,14 @@ def test_should_reset_style_on_cancel(
     expect(page.locator(".leaflet-overlay-pane path[fill='DarkBlue']")).to_have_count(1)
 
 
-def test_can_change_datalayer(live_server, openmap, page, bootstrap):
+def test_can_change_datalayer(
+    live_server, openmap, page, bootstrap, wait_for_edit_mode
+):
     other = DataLayerFactory(
         name="Layer 2", map=openmap, settings={"color": "GoldenRod"}
     )
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    wait_for_edit_mode(page)
     expect(page.locator("path[fill='DarkBlue']")).to_have_count(1)
     page.locator("path").click(modifiers=["Shift"])
     page.get_by_role("combobox").select_option(other.name)
