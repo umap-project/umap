@@ -111,8 +111,11 @@ def test_can_remove_stroke(live_server, openmap, page, bootstrap):
     expect(page.locator(".leaflet-overlay-pane path[stroke='none']")).to_have_count(1)
 
 
-def test_should_reset_style_on_cancel(live_server, openmap, page, bootstrap):
+def test_should_reset_style_on_cancel(
+    live_server, openmap, page, bootstrap, wait_for_edit_mode
+):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    wait_for_edit_mode(page)
     page.locator("path").click(modifiers=["Shift"])
     page.get_by_text("Shape properties").click()
     page.locator("#umap-feature-shape-properties").get_by_text("define").first.click()
