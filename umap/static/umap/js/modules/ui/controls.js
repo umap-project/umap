@@ -246,8 +246,20 @@ export class LoadTemplateControl extends Control {
   }
 }
 
-export class MoreControl extends MoreableControl {
+class MoreControl extends Control {
   static position = 'topleft'
+
+  get status() {
+    // Show the more button only if at least one control is in hidden mode
+    // Status values are:
+    // - true => show the control
+    // - false => do not show the control
+    // - null/undefined => control is hidden and shown on "more" button click
+    return ControlManager.MOREABLE_CONTROLS.reduce((needed, name) => {
+      const status = this.app.getProperty(`${name}Control`)
+      return needed || [null, undefined].includes(status)
+    }, false)
+  }
 
   render() {
     const corner = this.app.controlManager.corners.topleft
