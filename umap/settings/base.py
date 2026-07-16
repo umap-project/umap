@@ -138,6 +138,9 @@ INSTALLED_APPS = [
     # so the "autodiscover" is not run.
     "agnocomplete.app.AgnocompleteConfig",
 ]
+if DEBUG:
+    INSTALLED_APPS += ["debug_toolbar"]
+
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
@@ -241,6 +244,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "umap.middleware.deprecated_auth_backend",
 ]
+if DEBUG:
+    MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
 
 
 # =============================================================================
