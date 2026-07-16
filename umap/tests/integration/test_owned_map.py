@@ -218,9 +218,10 @@ def test_can_change_perms_after_create(tilelayer, live_server, login, user):
     expect(page.get_by_role("button", name="Save", exact=True)).to_be_visible()
 
 
-def test_can_change_owner(map, live_server, login, user):
+def test_can_change_owner(map, live_server, login, user, wait_for_edit_mode):
     page = login(map.owner)
     page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+    wait_for_edit_mode(page)
     edit_permissions = page.get_by_title("Update permissions and editors")
     edit_permissions.click()
     close = page.locator(".umap-field-owner .icon-close")
