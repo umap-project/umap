@@ -71,6 +71,7 @@ from .models import DataLayer, Licence, Map, Pictogram, Star, Team, TileLayer
 from .utils import (
     ConflictError,
     _urls_for_js,
+    assert_public_ip,
     collect_pictograms,
     gzip_file,
     is_ajax,
@@ -533,7 +534,9 @@ class AjaxProxy(View):
                 async with httpx.AsyncClient(
                     timeout=self.HTTP_TIMEOUT,
                     follow_redirects=True,
+                    max_redirects=3,
                     headers={"User-Agent": self.USER_AGENT},
+                    event_hooks={"request": [self._reject_private_target]},
                 ) as client:
                     async with client.stream("GET", url) as resp:
                         if resp.status_code >= 400:
@@ -561,6 +564,8 @@ class AjaxProxy(View):
                 raise ValueError("Timeout")
             except httpx.InvalidURL:
                 raise ValueError("Invalid URL")
+            except httpx.TooManyRedirects:
+                raise ValueError("Too many redirects")
             except httpx.RequestError:
                 raise ValueError("URL error")
             tmp_path.replace(cache_file)
@@ -568,6 +573,12 @@ class AjaxProxy(View):
         finally:
             if tmp_path is not None:
                 tmp_path.unlink(missing_ok=True)
+
+    async def _reject_private_target(self, request):
+        # Fires before the initial request and before every redirect hop, so a
+        # redirect to an internal address (which validate_url never sees) is
+        # rejected before we open the connection.
+        await asyncio.to_thread(assert_public_ip, request.url.host)
 
 
 ajax_proxy = AjaxProxy.as_view()

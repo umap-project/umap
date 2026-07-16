@@ -274,6 +274,32 @@ async def test_proxy_does_not_cache_upstream_error(
     assert b"recovered" in b"".join(r2.streaming_content)
 
 
+async def test_proxy_rejects_redirect_to_private_ip(
+    async_client, proxy_cache_dir, proxy_headers, httpx_handler
+):
+    # An attacker controls a public upstream that 302-redirects to a private
+    # address (cloud metadata, internal service...). validate_url() approves the
+    # public initial URL, so the redirect target must be revalidated before we
+    # connect, otherwise the internal response would leak back to the caller.
+    def handler(request):
+        if request.url.host == "example.org":
+            return httpx.Response(
+                302, headers={"location": "http://169.254.169.254/latest/meta-data/"}
+            )
+        # Reached only if the redirect to the private IP is followed.
+        return httpx.Response(
+            200, content=b"SECRET-METADATA", headers={"content-type": "text/plain"}
+        )
+
+    httpx_handler.handler = handler
+
+    response = await async_client.get(
+        proxy_url(), {"url": "http://example.org"}, headers=proxy_headers
+    )
+    assert response.status_code == 400
+    assert b"SECRET-METADATA" not in response.content
+
+
 @pytest.mark.django_db
 def test_login_does_not_contain_form_if_not_enabled(client, settings):
     settings.ENABLE_ACCOUNT_LOGIN = False
