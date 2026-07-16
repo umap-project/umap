@@ -17,6 +17,7 @@ package-lock.json
 __pycache__/
 
 # Distribution / packaging
+uv.lock
 build/
 dist/
 *.egg-info/
