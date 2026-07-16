@@ -60,7 +60,7 @@ export class MapPermissions {
     return Boolean(this.app.properties.user?.id)
   }
 
-  _editAnonymous(container) {
+  async _editAnonymous(container) {
     if (this.isOwner()) {
       // We have a user, and this user has come through here, so they can edit the map, so let's allow to own the map.
       // Note: real check is made on the back office anyway.
@@ -102,11 +102,12 @@ export class MapPermissions {
         },
       ])
       const builder = new MutatingForm(this, fields)
-      builder.build().then((form) => container.appendChild(form))
+      const form = await builder.build()
+      container.appendChild(form)
     }
   }
 
-  _editWithOwner(container) {
+  async _editWithOwner(container) {
     const topFields = []
     const collaboratorsFields = []
     const fieldset = Utils.loadTemplate(
@@ -159,26 +160,26 @@ export class MapPermissions {
     ])
 
     const builder = new MutatingForm(this, topFields)
-    const form = builder.build().then((form) => {
+    const form = await builder.build()
+    container.appendChild(form)
+    if (collaboratorsFields.length) {
+      const fieldset = Utils.loadTemplate(
+        `<fieldset class="separator"><legend>${translate('Manage collaborators')}</legend></fieldset>`
+      )
+      container.appendChild(fieldset)
+      const builder = new MutatingForm(this, collaboratorsFields)
+      const form = await builder.build()
       container.appendChild(form)
-      if (collaboratorsFields.length) {
-        const fieldset = Utils.loadTemplate(
-          `<fieldset class="separator"><legend>${translate('Manage collaborators')}</legend></fieldset>`
-        )
-        container.appendChild(fieldset)
-        const builder = new MutatingForm(this, collaboratorsFields)
-        builder.build().then((form) => container.appendChild(form))
-      }
-    })
+    }
   }
 
-  _editDatalayers(container) {
+  async _editDatalayers(container) {
     if (this.app.hasLayers()) {
       const fieldset = Utils.loadTemplate(
         `<fieldset class="separator"><legend>${translate('Datalayers’ permissions')}</legend></fieldset>`
       )
       container.appendChild(fieldset)
-      const appendLayer = (layer, parentContainer) => {
+      const appendLayer = async (layer, parentContainer) => {
         const [details, { body, icon }] = Utils.loadTemplateWithRefs(
           `<details open class="layer-group">
             <summary><i class="icon icon-16" data-ref="icon"></i>${layer.getName()}</summary>
@@ -191,7 +192,7 @@ export class MapPermissions {
           icon.hidden = true
         }
         parentContainer.appendChild(details)
-        layer.permissions.edit(body)
+        await layer.permissions.edit(body)
         for (const child of layer.layers) {
           appendLayer(child, body)
         }
@@ -202,7 +203,7 @@ export class MapPermissions {
     }
   }
 
-  edit() {
+  async edit() {
     if (this.app.properties.editMode !== 'advanced') return
     if (!this.app.id) {
       Alert.info(translate('Please save the map first'))
@@ -213,9 +214,9 @@ export class MapPermissions {
         <h3><i class="icon icon-16 icon-key"></i> ${translate('Update permissions')}</h3>
       </div>
     `)
-    if (this.isAnonymousMap()) this._editAnonymous(container)
-    else this._editWithOwner(container)
-    this._editDatalayers(container)
+    if (this.isAnonymousMap()) await this._editAnonymous(container)
+    else await this._editWithOwner(container)
+    await this._editDatalayers(container)
     this.app.editPanel.open({
       content: container,
       className: 'dark',
@@ -320,7 +321,7 @@ export class DataLayerPermissions {
     }
   }
 
-  edit(container) {
+  async edit(container) {
     const label = this.datalayer.group
       ? translate('Group’s permissions')
       : translate('Layer’s permissions')
@@ -338,7 +339,8 @@ export class DataLayerPermissions {
     const builder = new MutatingForm(this, fields, {
       className: 'umap-form datalayer-permissions',
     })
-    builder.build().then((form) => container.appendChild(form))
+    const form = await builder.build()
+    container.appendChild(form)
   }
 
   getUrl() {
