@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.8.0a4 - 2026-07-16
+
+* reduce database queries for map detail view by @davidbgk in #3430
+* restore original forms/fields order in permissions panel by @yohanboniface in #3429
+* fix browser form order by @yohanboniface in #3431
+* also show show/total counter in browser when filtering by bbox
+* expose TTL and DEFAULT_TTL in map fragment
+
 ## 3.8.0a3 - 2026-07-16
 
 * truncate the cache file name not to hit Linux limit by @yohanboniface in #3428
