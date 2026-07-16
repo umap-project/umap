@@ -65,6 +65,7 @@ span.popup-icon {
 
 .leaflet-popup-content-wrapper {
     border-radius: 4px;
+    text-align: start;
 }
 
 .umap-popup-content {
