@@ -330,6 +330,28 @@ async def test_proxy_sets_nosniff(
     assert response["X-Content-Type-Options"] == "nosniff"
 
 
+async def test_proxy_long_url_does_not_exceed_filename_limit(
+    async_client, proxy_cache_dir, proxy_headers, httpx_handler
+):
+    httpx_handler.handler = lambda request: httpx.Response(
+        200, content=b"OK", headers={"content-type": "text/plain"}
+    )
+    long_url = "http://example.org/?q=" + "a" * 500
+    r1 = await async_client.get(proxy_url(), {"url": long_url}, headers=proxy_headers)
+    assert r1.status_code == 200
+    assert r1["X-CACHE"] == "MISS"
+    assert b"OK" in b"".join(r1.streaming_content)
+    expected_name = f"{_cache_basename(long_url)[:240]}.cache"
+    assert len(expected_name) <= 255
+    assert (proxy_cache_dir / expected_name).exists()
+
+    # Should reuse the same cache file.
+    r2 = await async_client.get(proxy_url(), {"url": long_url}, headers=proxy_headers)
+    assert r2.status_code == 200
+    assert r2["X-CACHE"] == "HIT"
+    assert [f.name for f in proxy_cache_dir.glob("*.cache")] == [expected_name]
+
+
 @pytest.mark.django_db
 def test_login_does_not_contain_form_if_not_enabled(client, settings):
     settings.ENABLE_ACCOUNT_LOGIN = False
