@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.8.0a1 - 2026-07-15
+
+### Bug fixes
+* SCHEMA is now imported as Schema by @yohanboniface in #3417
+* do not share loader event between maps by @yohanboniface in #3418
+* only show the more button if at least one control is in hidden by @yohanboniface in #3419
+* be more defensive for invalid datetime by @yohanboniface in #3420
+* do not register a new url on each hash change by @davidbgk in #3422
+* restore correct order for forms and fieldsets in feature edit by @yohanboniface in #3421
+* use schema to validate a value for a given property by @yohanboniface in #3423
+
 ## 3.8.0a0 - 2026-07-15
 
 This release is mainly about preparing the switch from Leaflet to OpenLayers.
