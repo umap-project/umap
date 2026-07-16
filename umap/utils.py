@@ -277,16 +277,25 @@ def validate_url(request):
         raise ValueError("Invalid localhost target")
     if target.netloc == site_url.netloc:
         raise ValueError("Invalid netloc")
+    assert_public_ip(target.hostname)
+    return url
+
+
+def assert_public_ip(hostname):
+    """Resolve `hostname` and reject it if any address is a private IP.
+
+    Used both to validate the initial proxied URL and to re-check every hop
+    while following redirects, so an open redirect to an internal address
+    (loopback, cloud metadata...) cannot be reached.
+    """
     try:
-        results = socket.getaddrinfo(target.hostname, None)
+        results = socket.getaddrinfo(hostname, None)
     except socket.gaierror as err:
         raise ValueError(err)
-    else:
-        all_ips = list(set(r[4][0] for r in results))
-        for ip in all_ips:
-            if ipaddress.ip_address(ip).is_private:
-                raise ValueError("Private IP")
-    return url
+    all_ips = set(r[4][0] for r in results)
+    for ip in all_ips:
+        if ipaddress.ip_address(ip).is_private:
+            raise ValueError(f"Private IP: {ip}")
 
 
 def layers_tree(layers, keep_ids=True):

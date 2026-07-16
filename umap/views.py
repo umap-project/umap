@@ -71,6 +71,7 @@ from .models import DataLayer, Licence, Map, Pictogram, Star, Team, TileLayer
 from .utils import (
     ConflictError,
     _urls_for_js,
+    assert_public_ip,
     collect_pictograms,
     gzip_file,
     is_ajax,
@@ -452,6 +453,7 @@ class AjaxProxy(View):
     HTTP_TIMEOUT = 10.0
     SEMAPHORE_TIMEOUT = 30  # Generous buffer over HTTP_TIMEOUT.
     USER_AGENT = "uMapProxy +https://umap-project.org"
+    MAX_BYTES = 25 * 1024 * 1024  # Cap proxied responses to keep the cache sane.
 
     async def get(self, request, ttl, *args, **kwargs):
         try:
@@ -521,6 +523,9 @@ class AjaxProxy(View):
             request.session.accessed = False
         response = FileResponse(fileobj, content_type=content_type)
         response.headers["X-CACHE"] = status
+        # The body is attacker-controlled and served from uMap's own origin;
+        # forbid MIME-sniffing so it can't be coerced into executing as HTML/JS.
+        response.headers["X-Content-Type-Options"] = "nosniff"
         return response
 
     async def _fetch(self, url, cache_file, cache_dir):
@@ -533,7 +538,9 @@ class AjaxProxy(View):
                 async with httpx.AsyncClient(
                     timeout=self.HTTP_TIMEOUT,
                     follow_redirects=True,
+                    max_redirects=3,
                     headers={"User-Agent": self.USER_AGENT},
+                    event_hooks={"request": [self._reject_private_target]},
                 ) as client:
                     async with client.stream("GET", url) as resp:
                         if resp.status_code >= 400:
@@ -555,12 +562,18 @@ class AjaxProxy(View):
                             tmp.write(
                                 f"{content_type}\n".encode("ascii", errors="replace")
                             )
+                            size = 0
                             async for chunk in resp.aiter_bytes():
+                                size += len(chunk)
+                                if size > self.MAX_BYTES:
+                                    raise ValueError("Response too large")
                                 tmp.write(chunk)
             except httpx.TimeoutException:
                 raise ValueError("Timeout")
             except httpx.InvalidURL:
                 raise ValueError("Invalid URL")
+            except httpx.TooManyRedirects:
+                raise ValueError("Too many redirects")
             except httpx.RequestError:
                 raise ValueError("URL error")
             tmp_path.replace(cache_file)
@@ -568,6 +581,12 @@ class AjaxProxy(View):
         finally:
             if tmp_path is not None:
                 tmp_path.unlink(missing_ok=True)
+
+    async def _reject_private_target(self, request):
+        # Fires before the initial request and before every redirect hop, so a
+        # redirect to an internal address (which validate_url never sees) is
+        # rejected before we open the connection.
+        await asyncio.to_thread(assert_public_ip, request.url.host)
 
 
 ajax_proxy = AjaxProxy.as_view()
