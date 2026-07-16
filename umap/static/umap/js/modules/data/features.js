@@ -1,14 +1,14 @@
 import { Alert } from '../../components/alerts/alert.js'
-import { MutatingForm } from '../form/builder.js'
-import { translate, getLocale } from '../i18n.js'
-import loadPopup from '../rendering/popup.js'
-import { SCHEMA } from '../schema.js'
-import * as Utils from '../utils.js'
 import * as Clipboard from '../clipboard.js'
 import * as DOMUtils from '../domutils.js'
-import * as Icon from '../icon.js'
+import { MutatingForm } from '../form/builder.js'
 import * as GeoUtils from '../geoutils.js'
+import { getLocale, translate } from '../i18n.js'
+import * as Icon from '../icon.js'
+import loadPopup from '../rendering/popup.js'
+import { SCHEMA } from '../schema.js'
 import * as TextUtils from '../textutils.js'
+import * as Utils from '../utils.js'
 
 class Feature {
   constructor(app, datalayer, geojson = {}, id = null) {
@@ -276,7 +276,8 @@ class Feature {
     builder = new MutatingForm(this, properties, {
       id: 'umap-feature-properties',
     })
-    builder.build().then((form) => {
+    const onFormCreated = builder.build()
+    onFormCreated.then((form) => {
       container.appendChild(form)
       const button = Utils.loadTemplate(
         `<button type="button"><i class="icon icon-16 icon-add"></i>${translate('Add a new field')}</button>`
@@ -285,8 +286,19 @@ class Feature {
         this.datalayer.fields.editField().then(() => this.edit({ force: true }))
       })
       form.appendChild(button)
+      this.appendEditFieldsets(container)
+      this.addAdvancedActions(container)
     })
-    this.appendEditFieldsets(container)
+    const onPanelLoaded = this.app.editPanel.open({ content: container })
+    onPanelLoaded.then(() => {
+      builder.form.querySelector('input')?.focus()
+    })
+    this.app.editedFeature = this
+    this.app.fire('feature:edit', { id: this.id })
+    return Promise.all([onFormCreated, onPanelLoaded]).then(([form, panel]) => panel)
+  }
+
+  addAdvancedActions(container) {
     const [details, { fieldset }] = Utils.loadTemplateWithRefs(`
       <details>
         <summary><h4>${translate('Advanced actions')}</h4></summary>
@@ -295,14 +307,6 @@ class Feature {
     `)
     container.appendChild(details)
     this.getAdvancedEditActions(fieldset)
-    const onPanelLoaded = this.app.editPanel.open({ content: container })
-    onPanelLoaded.then(() => {
-      builder.form.querySelector('input')?.focus()
-    })
-    this.app.editedFeature = this
-    this.app.fire('feature:edit', { id: this.id })
-    // if (!this.isOnScreen()) this.zoomTo(event)
-    return onPanelLoaded
   }
 
   toggleEditing() {
