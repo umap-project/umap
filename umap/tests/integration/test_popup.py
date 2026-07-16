@@ -73,3 +73,26 @@ def test_table_popup(live_server, map, page):
     expect(page.get_by_role("cell", name="with bold").locator("strong")).to_have_text(
         "bold"
     )
+
+
+def test_popup_alignment_in_rtl_language(live_server, map, page):
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "geometry": {"type": "Point", "coordinates": [2.49, 48.79]},
+                "properties": {"name": "מסעדה"},
+                "id": "AzMjk",
+            },
+        ],
+    }
+    DataLayerFactory(map=map, data=data)
+    path = map.get_absolute_url().replace("/en/", "/he/")
+    page.goto(f"{live_server.url}{path}#18/48.79/2.49")
+    page.locator(".leaflet-marker-icon").click()
+
+    expect(page.locator("html")).to_have_attribute("dir", "rtl")
+    expect(page.locator(".leaflet-popup-content-wrapper")).to_have_css(
+        "text-align", "start"
+    )
