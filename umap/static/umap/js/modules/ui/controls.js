@@ -427,7 +427,7 @@ export class AttributionControl extends Control {
           ${Utils.toHTML(tilelayer?.options.attribution)}
           <span data-ref="short"> — ${Utils.toHTML(shortCredit)}</span>
           <a  href="#" data-ref="caption"> — ${translate('Open caption')}</a>
-          <a href="https://umap-project.org/" data-ref="site"> — ${translate('Powered by uMap')}</a>
+           — <a href="https://umap-project.org/" data-ref="site">${translate('Powered by uMap')}</a>
         </div>
         <a href="#" class="attribution-toggle"></a>
       </div>
