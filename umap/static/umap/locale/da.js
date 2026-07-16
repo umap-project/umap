@@ -655,7 +655,7 @@ const locale = {
     "Parent group": "Overordnet gruppe",
     "Group properties": "Gruppegenskaber",
     "Choose a group": "Vælg en gruppe",
-    "Change map background": "Change map background"
+    "Change map background": "Skift kortbaggrund"
 }
 L.registerLocale("da", locale)
 L.setLocale("da")

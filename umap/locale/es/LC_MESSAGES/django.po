@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-02 15:00+0000\n"
+"POT-Creation-Date: 2026-07-15 11:51+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Ignacio L'Episcopo, 2024-2026\n"
 "Language-Team: Spanish (http://app.transifex.com/openstreetmap/umap/language/es/)\n"
@@ -31,15 +31,15 @@ msgstr ""
 msgid "CSV Export"
 msgstr "Exportar CSV"
 
-#: decorators.py:60
+#: decorators.py:70
 msgid "This map is not publicly available"
 msgstr "Este mapa no está disponible públicamente"
 
-#: middleware.py:19
+#: middleware.py:42
 msgid "Site is readonly for maintenance"
 msgstr "Sitio en modo solo lectura por mantenimiento"
 
-#: middleware.py:34
+#: middleware.py:57
 #, python-format
 msgid ""
 "Using “%(name)s” to authenticate is deprecated and will be removed soon. "
@@ -51,7 +51,7 @@ msgstr "El uso de “%(name)s” para autenticar está obsoleto y se eliminará 
 msgid "name"
 msgstr "nombre"
 
-#: models.py:63 models.py:510
+#: models.py:63 models.py:534
 msgid "description"
 msgstr "descripción"
 
@@ -71,23 +71,23 @@ msgstr "Plantilla de URL usando el formato de teselas OSM"
 msgid "Order of the tilelayers in the edit box"
 msgstr "Orden de las capas de teselas en el cuadro de edición"
 
-#: models.py:176 models.py:503
+#: models.py:176 models.py:527
 msgid "Only editable with secret edit link"
 msgstr "Solo editable con enlace secreto de edición"
 
-#: models.py:177 models.py:504
+#: models.py:177 models.py:528
 msgid "Everyone can edit"
 msgstr "Todos pueden editar"
 
-#: models.py:180 models.py:497
+#: models.py:180 models.py:521
 msgid "Everyone"
 msgstr "Todos"
 
-#: models.py:181 models.py:190 models.py:498
+#: models.py:181 models.py:190 models.py:522
 msgid "Editors and team only"
 msgstr "Solo editores y equipo"
 
-#: models.py:182 models.py:499
+#: models.py:182 models.py:523
 msgid "Owner only"
 msgstr "Solo el propietario"
 
@@ -107,7 +107,7 @@ msgstr "Cualquiera con el enlace"
 msgid "Blocked"
 msgstr "Bloqueado"
 
-#: models.py:192 models.py:493
+#: models.py:192 models.py:517
 msgid "Deleted"
 msgstr "Eliminado"
 
@@ -147,15 +147,15 @@ msgstr "editores"
 msgid "team"
 msgstr "equipo"
 
-#: models.py:230 models.py:526
+#: models.py:230 models.py:550
 msgid "edit status"
 msgstr "estado de edición"
 
-#: models.py:235 models.py:531
+#: models.py:235 models.py:555
 msgid "share status"
 msgstr "estado de compartir"
 
-#: models.py:238 models.py:521
+#: models.py:238 models.py:545
 msgid "settings"
 msgstr "ajustes"
 
@@ -167,103 +167,103 @@ msgstr "guardar como plantilla"
 msgid "This map is a template map."
 msgstr "Este mapa es una plantilla."
 
-#: models.py:422
+#: models.py:435
 msgid "Clone of"
 msgstr "Clon de"
 
-#: models.py:492 models.py:496 models.py:502
+#: models.py:516 models.py:520 models.py:526
 msgid "Inherit"
 msgstr "Heredar"
 
-#: models.py:516
+#: models.py:540
 msgid "display on load"
 msgstr "mostrar al cargar"
 
-#: models.py:517
+#: models.py:541
 msgid "Display this layer on load."
 msgstr "Mostrar esta capa al cargar."
 
-#: settings/base.py:285
+#: settings/base.py:287
 msgid "uMap user documentation"
 msgstr "Documentación para usuarios de uMap"
 
-#: settings/base.py:290
+#: settings/base.py:292
 msgid "Video tutorials"
 msgstr "Tutoriales en video"
 
-#: settings/base.py:295
+#: settings/base.py:297
 msgid "OpenStreetMap.org forum"
 msgstr "Foro de OpenStreetMap.org"
 
-#: settings/base.py:300
+#: settings/base.py:302
 msgid "OpenStreetMap France forum"
 msgstr "Foro de OpenStreetMap Francia"
 
-#: settings/base.py:320
+#: settings/base.py:322
 msgid "Art and Culture"
 msgstr "Arte y cultura"
 
-#: settings/base.py:321
+#: settings/base.py:323
 msgid "Cycling"
 msgstr "Ciclismo"
 
-#: settings/base.py:322
+#: settings/base.py:324
 msgid "Business"
 msgstr "Negocios"
 
-#: settings/base.py:323
+#: settings/base.py:325
 msgid "Environment"
 msgstr "Medio ambiente"
 
-#: settings/base.py:324
+#: settings/base.py:326
 msgid "Education"
 msgstr "Educación"
 
-#: settings/base.py:325
+#: settings/base.py:327
 msgid "Food and Agriculture"
 msgstr "Alimentos y agricultura"
 
-#: settings/base.py:326
+#: settings/base.py:328
 msgid "Geopolitics"
 msgstr "Geopolítica"
 
-#: settings/base.py:327
+#: settings/base.py:329
 msgid "Health"
 msgstr "Salud"
 
-#: settings/base.py:328
+#: settings/base.py:330
 msgid "Hiking"
 msgstr "Senderismo"
 
-#: settings/base.py:329
+#: settings/base.py:331
 msgid "History"
 msgstr "Historia"
 
-#: settings/base.py:330
+#: settings/base.py:332
 msgid "Public sector"
 msgstr "Sector público"
 
-#: settings/base.py:331
+#: settings/base.py:333
 msgid "Science"
 msgstr "Ciencia"
 
-#: settings/base.py:332
+#: settings/base.py:334
 msgid "Shopping"
 msgstr "Compras"
 
-#: settings/base.py:333
+#: settings/base.py:335
 msgid "Sport and Leisure"
 msgstr "Deporte y ocio"
 
-#: settings/base.py:334
+#: settings/base.py:336
 msgid "Travel"
 msgstr "Viajes"
 
-#: settings/base.py:335
+#: settings/base.py:337
 msgid "Transports"
 msgstr "Transporte"
 
-#: settings/base.py:336
+#: settings/base.py:338
 msgid "Tourism"
 msgstr "Turismo"
 
@@ -769,7 +769,7 @@ msgstr "Crear o editar un equipo"
 msgid "Delete this team"
 msgstr "Eliminar este equipo"
 
-#: templates/umap/team_form.html:51
+#: templates/umap/team_form.html:52
 msgid "Add user"
 msgstr "Añadir usuario"
 
@@ -827,70 +827,82 @@ msgstr "Crear una plantilla"
 msgid "No template found."
 msgstr "No se encontró ninguna plantilla."
 
-#: views.py:226
+#: views.py:98
+msgid "5 min"
+msgstr "5 min"
+
+#: views.py:99
+msgid "1 hour"
+msgstr "1 hora"
+
+#: views.py:100
+msgid "1 day"
+msgstr "1 día"
+
+#: views.py:237
 msgid "Cannot delete a team with more than one member"
 msgstr "No se puede eliminar un equipo con más de un miembro"
 
-#: views.py:230
+#: views.py:241
 #, python-format
 msgid "Team “%(name)s” has been deleted"
 msgstr "El equipo “%(name)s” ha sido eliminado"
 
-#: views.py:809
+#: views.py:895
 msgid "See full screen"
 msgstr "Ver en pantalla completa"
 
-#: views.py:952
+#: views.py:1038
 msgid "Map editors updated with success!"
 msgstr "¡Los editores del mapas han sido actualizados con éxito!"
 
-#: views.py:977
+#: views.py:1063
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "El enlace de edición de uMap para tu mapa: %(map_name)s"
 
-#: views.py:980
+#: views.py:1066
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Aquí está tu enlace secreto de edición: %(link)s"
 
-#: views.py:987
+#: views.py:1073
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "No se puede enviar correo electrónico a %(email)s"
 
-#: views.py:990
+#: views.py:1076
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Correo electrónico enviado a %(email)s"
 
-#: views.py:1001
+#: views.py:1087
 msgid "Only its owner can delete the map."
 msgstr "Sólo el propietario puede borrar el mapa."
 
-#: views.py:1007
+#: views.py:1093
 msgid "Map successfully deleted."
 msgstr "Mapa eliminado correctamente."
 
-#: views.py:1033
+#: views.py:1119
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "¡Tu mapa ha sido clonado! Si quieres editar este mapa desde otro ordenador, usa este enlace: %(anonymous_url)s"
 
-#: views.py:1038
+#: views.py:1124
 msgid "Congratulations, your map has been cloned!"
 msgstr "¡Enhorabuena! ¡Tu mapa ha sido clonado!"
 
-#: views.py:1298
+#: views.py:1392
 msgid "Layer successfully deleted."
 msgstr "Se eliminó la capa con éxito."
 
-#: views.py:1320
+#: views.py:1414
 msgid "Permissions updated with success!"
 msgstr "¡Permisos actualizados con éxito!"
 
-#: views.py:1337
+#: views.py:1431
 msgid "Generic"
 msgstr "Genérico"
