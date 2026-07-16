@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.8.0a2 - 2026-07-16
+
+* review ajax proxy by @yohanboniface in #3425
+* redraw cluster on moveend, and pass correct zoom arg to flyTo by @yohanboniface in #3427
+* add back background-color of attribution control by @yohanboniface in #3426
+* add uv.lock to gitignore by @davidbgk in #3424
+
 ## 3.8.0a1 - 2026-07-15
 
 ### Bug fixes
@@ -14,6 +21,8 @@
 ## 3.8.0a0 - 2026-07-15
 
 This release is mainly about preparing the switch from Leaflet to OpenLayers.
+New mandatory setting: AJAX_PROXY_CACHE_DIR (used for caching proxied request, now done
+in python instead of via Nginx).
 
 ### Bug fixes
 * read OPENROUTESERVICE_HOST from env by @rapenne-s in #3309
