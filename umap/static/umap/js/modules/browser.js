@@ -135,7 +135,7 @@ export default class Browser {
   }
 
   hasActiveFilters() {
-    return !!this.options.filter || this.app.hasActiveFilters()
+    return !!this.options.filter || !!this.options.inBbox || this.app.hasActiveFilters()
   }
 
   onMoveEnd() {
