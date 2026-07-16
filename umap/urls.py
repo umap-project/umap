@@ -227,7 +227,11 @@ urlpatterns += (
 )
 
 if settings.DEBUG and settings.MEDIA_ROOT:
+    from debug_toolbar.toolbar import debug_toolbar_urls
+
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += debug_toolbar_urls()
+
 urlpatterns += staticfiles_urlpatterns()
 for urlpath, lookup_view, name in settings.EXTRA_URL_PATTERNS:
     view = get_callable(lookup_view)

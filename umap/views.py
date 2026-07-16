@@ -793,14 +793,17 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
         )
         return context
 
+    def get_object(self, queryset=None):
+        return self.kwargs["map_inst"]
+
     def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
+        # Keep at the top to be able to access self.object.
+        response = super(MapView, self).get(request, *args, **kwargs)
         canonical = self.get_canonical_url()
         if not request.path == canonical:
             if request.META.get("QUERY_STRING"):
                 canonical = "?".join([canonical, request.META["QUERY_STRING"]])
             return HttpResponsePermanentRedirect(canonical)
-        response = super(MapView, self).get(request, *args, **kwargs)
         response["Access-Control-Allow-Origin"] = "*"
         return response
 
@@ -808,7 +811,10 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
         return self.object.get_absolute_url()
 
     def get_datalayers(self):
-        layers = [l.metadata(self.request) for l in self.object.datalayers]
+        datalayers = self.object.datalayers.select_related(
+            "map", "map__owner", "parent", "parent__map", "parent__map__owner"
+        )
+        layers = [layer.metadata(self.request) for layer in datalayers]
         return layers_tree(layers)
 
     @property
