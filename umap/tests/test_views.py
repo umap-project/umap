@@ -300,6 +300,36 @@ async def test_proxy_rejects_redirect_to_private_ip(
     assert b"SECRET-METADATA" not in response.content
 
 
+async def test_proxy_rejects_oversized_response(
+    async_client, proxy_cache_dir, proxy_headers, httpx_handler, monkeypatch
+):
+    from umap.views import AjaxProxy
+
+    monkeypatch.setattr(AjaxProxy, "MAX_BYTES", 8)
+    httpx_handler.handler = lambda request: httpx.Response(
+        200, content=b"way more than eight bytes", headers={"content-type": "text/csv"}
+    )
+    response = await async_client.get(
+        proxy_url(), {"url": "http://example.org"}, headers=proxy_headers
+    )
+    assert response.status_code == 400
+    # The oversized body must not have been cached.
+    assert not list(proxy_cache_dir.glob("*.cache"))
+
+
+async def test_proxy_sets_nosniff(
+    async_client, proxy_cache_dir, proxy_headers, httpx_handler
+):
+    httpx_handler.handler = lambda request: httpx.Response(
+        200, content=b"<script>", headers={"content-type": "text/html"}
+    )
+    response = await async_client.get(
+        proxy_url(), {"url": "http://example.org"}, headers=proxy_headers
+    )
+    assert response.status_code == 200
+    assert response["X-Content-Type-Options"] == "nosniff"
+
+
 @pytest.mark.django_db
 def test_login_does_not_contain_form_if_not_enabled(client, settings):
     settings.ENABLE_ACCOUNT_LOGIN = False

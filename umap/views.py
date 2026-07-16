@@ -453,6 +453,7 @@ class AjaxProxy(View):
     HTTP_TIMEOUT = 10.0
     SEMAPHORE_TIMEOUT = 30  # Generous buffer over HTTP_TIMEOUT.
     USER_AGENT = "uMapProxy +https://umap-project.org"
+    MAX_BYTES = 25 * 1024 * 1024  # Cap proxied responses to keep the cache sane.
 
     async def get(self, request, ttl, *args, **kwargs):
         try:
@@ -522,6 +523,9 @@ class AjaxProxy(View):
             request.session.accessed = False
         response = FileResponse(fileobj, content_type=content_type)
         response.headers["X-CACHE"] = status
+        # The body is attacker-controlled and served from uMap's own origin;
+        # forbid MIME-sniffing so it can't be coerced into executing as HTML/JS.
+        response.headers["X-Content-Type-Options"] = "nosniff"
         return response
 
     async def _fetch(self, url, cache_file, cache_dir):
@@ -558,7 +562,11 @@ class AjaxProxy(View):
                             tmp.write(
                                 f"{content_type}\n".encode("ascii", errors="replace")
                             )
+                            size = 0
                             async for chunk in resp.aiter_bytes():
+                                size += len(chunk)
+                                if size > self.MAX_BYTES:
+                                    raise ValueError("Response too large")
                                 tmp.write(chunk)
             except httpx.TimeoutException:
                 raise ValueError("Timeout")
