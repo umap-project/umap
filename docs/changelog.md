@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.8.0a3 - 2026-07-16
+
+* truncate the cache file name not to hit Linux limit by @yohanboniface in #3428
+
 ## 3.8.0a2 - 2026-07-16
 
 * review ajax proxy by @yohanboniface in #3425
