@@ -811,12 +811,10 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
         return self.object.get_absolute_url()
 
     def get_datalayers(self):
-        layers = [
-            l.metadata(self.request)
-            for l in self.object.datalayers.select_related(
-                "map", "parent", "parent__map"
-            )
-        ]
+        datalayers = self.object.datalayers.select_related(
+            "map", "map__owner", "parent", "parent__map", "parent__map__owner"
+        )
+        layers = [layer.metadata(self.request) for layer in datalayers]
         return layers_tree(layers)
 
     @property
