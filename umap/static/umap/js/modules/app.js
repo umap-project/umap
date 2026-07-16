@@ -556,11 +556,13 @@ export default class App extends Utils.WithEvents {
   }
 
   getProperty(key, feature) {
+    let value
     if (feature) {
-      const value = this.rules.getOption(key, feature)
+      value = this.rules.getOption(key, feature)
       if (value !== undefined) return value
     }
-    if (Utils.usableOption(this.properties, key)) return this.properties[key]
+    value = this.properties[key]
+    if (Schema.isValidValue(value, key)) return value
     return Schema.SCHEMA[key]?.default
   }
 

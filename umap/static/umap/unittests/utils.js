@@ -1,6 +1,7 @@
 import pkg from 'chai'
 import { describe, it } from 'mocha'
 import * as Utils from '../js/modules/utils.js'
+
 const { assert, expect } = pkg
 
 describe('Utils', () => {
@@ -510,28 +511,6 @@ describe('Utils', () => {
     })
   })
 
-  describe('#usableOption()', () => {
-    it('should consider false', () => {
-      assert.ok(Utils.usableOption({ key: false }, 'key'))
-    })
-
-    it('should consider 0', () => {
-      assert.ok(Utils.usableOption({ key: 0 }, 'key'))
-    })
-
-    it('should not consider undefined', () => {
-      assert.notOk(Utils.usableOption({}, 'key'))
-    })
-
-    it('should not consider empty string', () => {
-      assert.notOk(Utils.usableOption({ key: '' }, 'key'))
-    })
-
-    it('should consider null', () => {
-      assert.ok(Utils.usableOption({ key: null }, 'key'))
-    })
-  })
-
   describe('#normalize()', () => {
     it('should remove accents', () => {
       // French é
@@ -575,7 +554,7 @@ describe('Utils', () => {
       feat1.properties.mykey = '13. foo'
       feat2.properties.mykey = '7. foo'
       feat3.properties.mykey = '111. foo'
-      let features = Utils.sortFeatures([feat1, feat2, feat3], '-mykey')
+      const features = Utils.sortFeatures([feat1, feat2, feat3], '-mykey')
       assert.equal(features[0], feat3)
       assert.equal(features[1], feat1)
       assert.equal(features[2], feat2)

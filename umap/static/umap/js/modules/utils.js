@@ -85,7 +85,7 @@ export function escapeHTML(s = '') {
     // The base RegExp comes from:
     // https://github.com/cure53/DOMPurify/blob/main/src/regexp.js#L10
     ALLOWED_URI_REGEXP:
-      /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp|geo):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
+      /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp|geo):|[^a-z]|[a-z+.-]+(?:[^a-z+.\-:]|$))/i,
   })
   if (
     DOMPurify.removed?.length > 1 ||
@@ -130,7 +130,7 @@ export function toHTML(r, options) {
 
   // links
   r = r.replace(
-    /(^|\s|>|\()(https?:[^ \<)\n]*)/g,
+    /(^|\s|>|\()(https?:[^ <)\n]*)/g,
     `$1<a target="_${target}" href="$2">$2</a>`
   )
   r = r.replace(/\[\[(https?:[^\]|]*?)\]\]/g, `<a target="_${target}" href="$1">$1</a>`)
@@ -195,10 +195,6 @@ export function detectFileType(f) {
   if (ext('.umap')) return 'umap'
 }
 
-export function usableOption(options, option) {
-  return options[option] !== undefined && options[option] !== ''
-}
-
 /**
  * Processes a template string by replacing placeholders with corresponding
  * data values.
@@ -225,7 +221,7 @@ export function greedyTemplate(str, data, ignore) {
   if (typeof str !== 'string') return ''
 
   return str.replace(
-    /\{ *([^\{\}/\-]+)(?:\|("[^"]*"))? *\}/g,
+    /\{ *([^{}/-]+)(?:\|("[^"]*"))? *\}/g,
     (str, key, staticFallback) => {
       const vars = key.split('|')
       let value
@@ -365,9 +361,9 @@ export function template(str, data) {
 
 const DATE_REGEX = [
   // Format 1: "YYYY-MM-DD"
-  /^(?<year>\d{4})[\-\/](?<month>\d{2})[\-\/](?<day>\d{2})$/,
+  /^(?<year>\d{4})[-/](?<month>\d{2})[-/](?<day>\d{2})$/,
   // Format2 : "DD-MM-YYYY"
-  /^(?<day>0[1-9]|[12][0-9]|3[01])[\-\/](?<month>0[1-9]|1[0-2])[\-\/](?<year>\d{4})/,
+  /^(?<day>0[1-9]|[12][0-9]|3[01])[-/](?<month>0[1-9]|1[0-2])[-/](?<year>\d{4})/,
 ]
 
 export function parseNaiveDate(value) {
