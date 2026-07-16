@@ -1497,9 +1497,6 @@ export default class App extends Utils.WithEvents {
     fields = this.propagate(fields)
     if (fields.includes('properties.filters')) {
       this.filters.load()
-      if (this.browser?.isOpen()) {
-        this.browser.buildFilters()
-      }
     }
 
     const impacts = Schema.getImpacts(fields)
