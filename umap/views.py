@@ -94,12 +94,6 @@ PRIVATE_IP = re.compile(
     r"|(^192\.168\.))"
 )
 ANONYMOUS_COOKIE_MAX_AGE = 60 * 60 * 24 * 30  # One month
-DEFAULT_TTL = 300
-TTL = {
-    DEFAULT_TTL: _("5 min"),
-    3600: _("1 hour"),
-    86400: _("1 day"),
-}
 
 
 class PaginatorMixin:
@@ -680,8 +674,8 @@ class MapDetailMixin(SessionMixin):
             "importers": settings.UMAP_IMPORTERS,
             "defaultLabelKeys": settings.UMAP_LABEL_KEYS,
             "help_links": settings.UMAP_HELP_LINKS,
-            "ttl": TTL,
-            "default_ttl": DEFAULT_TTL,
+            "ttl": settings.TTL,
+            "default_ttl": settings.DEFAULT_TTL,
         }
         if settings.OPENROUTESERVICE_APIKEY:
             properties["ORSAPIKey"] = settings.OPENROUTESERVICE_APIKEY

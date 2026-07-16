@@ -348,6 +348,12 @@ LEAFLET_ZOOM = env.int("LEAFLET_ZOOM", default=6)
 UMAP_PICTOGRAMS_COLLECTIONS = {}
 EXTRA_URL_PATTERNS = []
 AJAX_PROXY_CACHE_DIR = env("AJAX_PROXY_CACHE_DIR", default=None)
+DEFAULT_TTL = 300
+TTL = {
+    DEFAULT_TTL: _("5 min"),
+    3600: _("1 hour"),
+    86400: _("1 day"),
+}
 
 
 # =============================================================================

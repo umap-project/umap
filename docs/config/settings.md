@@ -210,6 +210,21 @@ See [Django documentation for STATIC_ROOT](https://docs.djangoproject.com/en/sta
 See [storage](storage.md).
 
 
+#### TTL
+
+List of TTL (number in seconds, label) to allow in the ajax proxy.
+There is also DEFAULT_TTL, to set the default value.
+
+Default:
+```python title="local_settings.py"
+DEFAULT_TTL = 300
+TTL = {
+    DEFAULT_TTL: "5 min",
+    3600: "1 hour",
+    86400: "1 day",
+}
+```
+
 #### USE_I18N
 
 Default is True. Set it to False if you don't want uMap to localize the app.

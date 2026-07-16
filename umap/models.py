@@ -279,6 +279,8 @@ class Map(NamedModel):
                 "schema": self.extra_schema,
                 "slideshow": {},
                 "defaultLabelKeys": settings.UMAP_LABEL_KEYS,
+                "ttl": settings.TTL,
+                "default_ttl": settings.DEFAULT_TTL,
             }
         )
         return map_settings
