@@ -134,10 +134,10 @@ export class LeafletProxy {
       }
     })
     this.app.on('map:view:set', (event) => {
-      const { easing, zoom } = event.detail
-      const center = this.latLng({ coordinates: event.detail.center })
+      const { easing, zoom, coordinates } = event.detail
+      const center = this.latLng({ coordinates })
       if (easing) {
-        this.map.flyTo(center, { maxZoom: zoom ?? this.zoom })
+        this.map.flyTo(center, zoom ?? this.zoom)
       } else {
         this.map.setView(center, zoom ?? this.zoom)
       }

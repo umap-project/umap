@@ -512,7 +512,7 @@ export class Geocoder extends BaseAjax {
     if (result) {
       const zoom = Math.max(this.app.mapProxy.zoom, 14) // Never unzoom.
       this.app.fire('map:view:set', {
-        center: result.feature.geometry.coordinates,
+        coordinates: result.feature.geometry.coordinates,
         zoom,
       })
     }
