@@ -174,6 +174,7 @@ export const Cluster = DefaultLayer.extend({
     this.on('click', this.onClick)
     this.on('mouseover', this.onMouseOver)
     this.on('mouseout', this.onMouseOut)
+    map.on('moveend', this.redraw, this)
     map.addLayer(this._group)
     this.redraw()
     return DefaultLayer.prototype.onAdd.call(this, map)
@@ -183,6 +184,7 @@ export const Cluster = DefaultLayer.extend({
     this.off('click', this.onClick)
     this.off('mouseover', this.onMouseOver)
     this.off('mouseout', this.onMouseOut)
+    map.off('moveend', this.redraw, this)
     this.removeClusters()
     map.removeLayer(this._group)
     return DefaultLayer.prototype.onRemove.call(this, map)
@@ -191,13 +193,6 @@ export const Cluster = DefaultLayer.extend({
   onZoomEnd: function () {
     DefaultLayer.prototype.onZoomEnd.call(this)
     this.removeClusters()
-  },
-
-  onMoveEnd: function () {
-    DefaultLayer.prototype.onMoveEnd.call(this)
-    // For dynamic data, onMoveEnd fetches, which re-feeds addData (and thus
-    // redraws); otherwise we re-cluster for the new viewport here.
-    if (!this.datalayer.hasDynamicData()) this.redraw()
   },
 
   showCoverage(cluster) {

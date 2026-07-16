@@ -70,12 +70,11 @@ export class OLProxy {
   proxyOutgoingEvents() {
     this.app.on('map:view:set', (event) => {
       const { easing, zoom } = event.detail
-      const center = event.detail.center
+      const coordinates = event.detail.coordinates
       if (easing) {
-        this.view.animate({ zoom }, { center })
+        this.view.animate({ zoom }, { coordinates })
       } else {
-        console.log(center)
-        this.view.setCenter(fromLonLat(center))
+        this.view.setCenter(fromLonLat(coordinates))
         this.view.setZoom(zoom)
       }
     })

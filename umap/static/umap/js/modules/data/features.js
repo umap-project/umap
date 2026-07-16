@@ -491,7 +491,7 @@ class Feature {
     if (easing === undefined) easing = this.app.getProperty('easing')
     if (callback) this.app.once('map:moveend', (event) => callback.call(this, event))
     this.app.fire('map:view:set', {
-      center: latlng || this.center,
+      coordinates: latlng || this.center,
       zoom: this.getBestZoom(),
       easing,
     })
