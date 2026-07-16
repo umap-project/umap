@@ -171,8 +171,9 @@ def test_can_create_new_datalayer(live_server, openmap, page, datalayer):
     expect(page.locator(".umap-is-dirty")).to_be_hidden()
 
 
-def test_can_restore_version(live_server, openmap, page, datalayer):
+def test_can_restore_version(live_server, openmap, page, datalayer, wait_for_edit_mode):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    wait_for_edit_mode(page)
     marker = page.locator(".leaflet-marker-icon")
     expect(marker).to_contain_class("umap-ball-icon")
     marker.click(modifiers=["Shift"])
