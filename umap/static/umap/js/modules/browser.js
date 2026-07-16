@@ -249,15 +249,15 @@ export default class Browser {
     searchForm.build().then((form) => {
       this.formContainer.appendChild(form)
       listenFormChanges(searchForm)
-    })
-    if (this.app.filters.size) {
-      this.app.filters.buildForm(this.formContainer).then(listenFormChanges)
-    }
-    for (const datalayer of this.app.layers.tree) {
-      if (datalayer.filters.size) {
-        datalayer.filters.buildForm(this.formContainer).then(listenFormChanges)
+      if (this.app.filters.size) {
+        this.app.filters.buildForm(this.formContainer).then(listenFormChanges)
       }
-    }
+      for (const datalayer of this.app.layers.tree) {
+        if (datalayer.filters.size) {
+          datalayer.filters.buildForm(this.formContainer).then(listenFormChanges)
+        }
+      }
+    })
   }
 
   resetFilters() {
