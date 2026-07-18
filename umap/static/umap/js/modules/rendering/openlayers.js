@@ -50,15 +50,12 @@ function spiderfyLatLng(center, index, layerCount, zoom, resolution) {
 // head centered `symbolOffset` px above it; the viewBox is padded so the shadow isn't
 // clipped (which shifts the anchor by the padding).
 const DEFAULT_URL = SCHEMA.iconUrl.default
-// The browser drops SVG <filter>s when the icon <img> is drawImage'd onto OL's canvas, so
-// the shadow can't be a filter. Fake a soft one with a few dim, offset copies of the path.
-function shadowPaths(d) {
-  return (
-    `<path d="${d}" fill="#000" opacity="0.08" transform="translate(1 3)"/>` +
-    `<path d="${d}" fill="#000" opacity="0.08" transform="translate(0.6 2)"/>` +
-    `<path d="${d}" fill="#000" opacity="0.08" transform="translate(0.3 1)"/>`
-  )
-}
+// A real SVG drop shadow: it survives being drawImage'd onto OL's canvas because we bake the
+// color into the SVG (no ol/style/Icon `color` tint), so OL rasterizes the data-URI as-is,
+// filter included. The viewBox is padded so the blur isn't clipped (which would shift the anchor).
+const SHADOW_FILTER =
+  '<filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">' +
+  '<feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.5"/></filter>'
 const SHAPES = {
   // paths drawn in an unpadded box; the `-4` viewBox origin adds a 4px shadow margin,
   // and the extra width/height leaves room for the shadow falling to the bottom-right.
@@ -78,6 +75,23 @@ const SHAPES = {
     anchor: [20, 48],
     symbolOffset: 28,
   },
+  // A shiny ball (radial gradient) on a thin stick — uMap's "Ball". No symbol (matches Leaflet).
+  Ball: {
+    viewBox: '2 -4 28 44',
+    width: 28,
+    height: 44,
+    anchor: [14, 38],
+    body: (color, opacity) =>
+      `<defs><radialGradient id="ball" gradientUnits="userSpaceOnUse" cx="13" cy="5" r="14">` +
+      `<stop offset="0" stop-color="#fff"/>` +
+      `<stop offset="0.55" stop-color="${color}"/>` +
+      `<stop offset="1" stop-color="${color}"/>` +
+      `</radialGradient></defs>` +
+      `<g filter="url(#shadow)" opacity="${opacity}">` +
+      `<line x1="16" y1="12" x2="16" y2="34" stroke="#000" stroke-width="2"/>` +
+      `<circle cx="16" cy="8" r="8" fill="url(#ball)"/>` +
+      `</g>`,
+  },
 }
 const pinCache = new Map()
 
@@ -89,10 +103,15 @@ function pinIcon(
   const key = `${shapeName}|${color}|${opacity}`
   if (!pinCache.has(key)) {
     const shape = SHAPES[shapeName]
+    // Simple shapes are a single colored path; richer ones (Ball) build their own body.
+    const body = shape.body
+      ? shape.body(color, opacity)
+      : `<path d="${shape.path}" fill="${color}" opacity="${opacity}" filter="url(#shadow)"/>`
     const svg =
       `<svg xmlns="http://www.w3.org/2000/svg" width="${shape.width}" height="${shape.height}" viewBox="${shape.viewBox}">` +
-      shadowPaths(shape.path) +
-      `<path d="${shape.path}" fill="${color}" opacity="${opacity}"/></svg>`
+      `<defs>${SHADOW_FILTER}</defs>` +
+      body +
+      `</svg>`
     pinCache.set(
       key,
       new Icon({
@@ -110,39 +129,45 @@ function isImg(url) {
   return isPath(url) || isRemoteUrl(url) || isDataImage(url)
 }
 
-function symbolStyle(url, offset) {
+function symbolStyle(url, offset, size) {
   if (isImg(url)) {
     const options = { src: url, displacement: [0, offset], crossOrigin: 'anonymous' }
-    // The default marker keeps its own small size; other symbols are scaled to fit the
-    // head (width-based, so aspect is preserved — a very tall symbol can still overflow).
-    console.log(url, DEFAULT_URL)
-    // if (url !== DEFAULT_URL) options.width = 24
+    // The default marker keeps its intrinsic size; any other symbol is scaled to `size`
+    // (width-based, so aspect is preserved — a very tall symbol can still overflow).
+    if (size && url !== DEFAULT_URL) options.width = size
     return new Style({ image: new Icon(options) })
   }
-  // A glyph / short text.
+  // A glyph / short text, sized from `size` when given (else the pin-head default).
   return new Style({
     text: new TextStyle({
       text: url,
       offsetY: -offset,
-      font: 'bold 14px sans-serif',
+      font: `bold ${size ? Math.round(size * 0.72) : 14}px sans-serif`,
       fill: new Fill({ color: '#fff' }),
     }),
   })
 }
 
+// Mirror Leaflet's global markerPane (above overlayPane): every datalayer renders points in
+// a high zIndex band, paths in a low one, so all markers stay above all paths across layers.
+// These are OL layer sort keys, not CSS z-index, so they never compete with the controls.
+const POINT_ZINDEX_OFFSET = 10000
+const SPIDER_ZINDEX = 1e6
+
 export class OLProxy {
   constructor(app, element) {
     this.app = app
+    // Per datalayer id: { paths, points } sources and layers (two zIndex bands, see above).
     this.sources = {}
     this.layers = {}
-    this.map = map = new OLMap({
+    this.map = new OLMap({
       target: element,
       controls: [],
     })
     // Overlay holding the spiderfied cluster members (kept above the data layers). Cleared
     // on any view move — a resolution change reclusters, so the spread is stale anyway.
     this.spiderSource = new VectorSource()
-    this.map.addLayer(new VectorLayer({ source: this.spiderSource, zIndex: 1000 }))
+    this.map.addLayer(new VectorLayer({ source: this.spiderSource, zIndex: SPIDER_ZINDEX }))
     this.map.on('moveend', () => this.spiderSource.clear())
     this.tilelayers = new TileLayerManager(this)
     this.proxyOutgoingEvents()
@@ -199,7 +224,8 @@ export class OLProxy {
       const { sourceId, geojson } = event.detail
       const olFeature = this.sources[sourceId]?.getFeatureById(geojson.id)
       if (!olFeature) return
-      olFeature.setStyle(this.style(geojson.style, olFeature.getGeometry().getType()))
+      olFeature.set('umapStyle', this.style(geojson.style, olFeature.getGeometry().getType()))
+      olFeature.changed() // set() alone won't re-render; force it (setStyle used to).
     })
   }
 
@@ -343,25 +369,36 @@ export class OLProxy {
     }
   }
 
-  createOverlayPane() {
-    const container = document.querySelector('#map')
-    const pane = document.createElement('div')
-    container.appendChild(pane)
-    return pane
-  }
   hasLayer(id) {
-    const layer = this.layers[id]
-    return Boolean(layer) && this.map.getLayers().getArray().includes(layer)
+    const layers = this.layers[id]
+    // Both bands are added/removed together, so testing one is enough.
+    return Boolean(layers) && this.map.getLayers().getArray().includes(layers.points)
   }
 
   showLayer(id) {
-    const layer = this.layers[id]
-    if (layer) this.map.addLayer(layer)
+    const layers = this.layers[id]
+    if (!layers) return
+    this.map.addLayer(layers.paths)
+    this.map.addLayer(layers.points)
   }
 
   hideLayer(id) {
-    const layer = this.layers[id]
-    if (layer) this.map.removeLayer(layer)
+    const layers = this.layers[id]
+    if (!layers) return
+    this.map.removeLayer(layers.paths)
+    this.map.removeLayer(layers.points)
+  }
+
+  deleteLayer(id) {
+    this.hideLayer(id)
+    delete this.layers[id]
+    delete this.sources[id]
+  }
+
+  reorderLayers() {
+    for (const datalayer of this.app.layers.tree) {
+      this.applyZIndex(datalayer)
+    }
   }
 
   clear(id) {
@@ -438,70 +475,82 @@ export class OLProxy {
   }
 
   createLayer(datalayer) {
-    let source = new VectorSource()
+    // One source, two layers sharing it: paths render in the low zIndex band, points in the
+    // high one (POINT_ZINDEX_OFFSET). Each layer's style fn returns null for the geometry it
+    // doesn't own, so a feature shows in exactly one band. Styles are stored per feature
+    // (`umapStyle`) rather than via setStyle, which would bypass these style fns.
+    const source = new VectorSource()
     this.sources[datalayer.id] = source
     const cluster = datalayer.getProperty('cluster') || {}
-    if (datalayer.Type?.type === 'Cluster') {
-      source = new Cluster({
-        source,
-        distance: cluster.radius || 80,
-        geometryFunction: (feature) => {
-          const geometry = feature.getGeometry()
-          if (geometry.getType() !== 'Point') return null
-          return geometry
-        },
-      })
-    }
-    let layer
+    const isPoint = (feature) => this.isPointGeometry(feature.getGeometry().getType())
+
+    let pointLayer
     if (datalayer.Type?.type === 'Heat') {
-      console.log('we are in da heat', datalayer.properties.heat)
-      layer = new HeatmapLayer({
+      pointLayer = new HeatmapLayer({
         source,
-        // radius: 8,
-        // blur: 15,
         blur: datalayer.properties.heat?.blur,
         radius: datalayer.properties.heat?.radius / 3,
         weight: datalayer.properties.heat?.intensityProperty,
       })
-    } else {
-      layer = new VectorLayer({
+    } else if (datalayer.Type?.type === 'Cluster') {
+      const clustered = new Cluster({
         source,
-        style: function (feature) {
+        distance: cluster.radius || 80,
+        geometryFunction: (feature) =>
+          feature.getGeometry().getType() === 'Point' ? feature.getGeometry() : null,
+      })
+      pointLayer = new VectorLayer({
+        source: clustered,
+        style: (feature) => {
           const features = feature.get('features')
-          const size = features.length
-          if (size === 1) return features[0].getStyle()
+          if (features.length === 1) return features[0].get('umapStyle')
           return new Style({
             image: new CircleStyle({
               radius: 20,
-              stroke: new Stroke({
-                color: '#fff',
-              }),
-              fill: new Fill({
-                color: datalayer.getProperty('color'),
-              }),
+              stroke: new Stroke({ color: '#fff' }),
+              fill: new Fill({ color: datalayer.getProperty('color') }),
             }),
             text: new TextStyle({
-              text: size.toString(),
-              fill: new Fill({
-                color: cluster.textColor || '#fff',
-              }),
+              text: features.length.toString(),
+              fill: new Fill({ color: cluster.textColor || '#fff' }),
             }),
           })
         },
       })
+    } else {
+      pointLayer = new VectorLayer({
+        source,
+        style: (feature) => (isPoint(feature) ? feature.get('umapStyle') : null),
+      })
     }
-    this.layers[datalayer.id] = layer
+    const pathLayer = new VectorLayer({
+      source,
+      style: (feature) => (isPoint(feature) ? null : feature.get('umapStyle')),
+    })
+    this.layers[datalayer.id] = { points: pointLayer, paths: pathLayer }
+    this.applyZIndex(datalayer)
+  }
+
+  // Points ride the high zIndex band so all markers stay above all paths, across layers.
+  applyZIndex(datalayer) {
+    const layers = this.layers[datalayer.id]
+    if (!layers) return
+    layers.paths.setZIndex(datalayer.rank)
+    layers.points.setZIndex(POINT_ZINDEX_OFFSET + datalayer.rank)
+  }
+
+  isPointGeometry(type) {
+    return type === 'Point' || type === 'MultiPoint'
   }
 
   addData(id, geojson) {
-    console.log('add data')
     const format = new GeoJSON()
     const options = { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' }
-    // OL drops the top-level `style` member on read, so read each feature and
-    // set its native OL style in the same pass.
+    // OL drops the top-level `style` member on read, so read each feature and stash its OL
+    // style as `umapStyle` (the layer style fns read it — see createLayer).
     const olFeatures = geojson.features.map((feature) => {
       const olFeature = format.readFeature(feature, options)
-      olFeature.setStyle(this.style(feature.style, olFeature.getGeometry().getType()))
+      olFeature.set('umapStyle', this.style(feature.style, olFeature.getGeometry().getType()))
       return olFeature
     })
     this.sources[id].addFeatures(olFeatures)
@@ -510,7 +559,7 @@ export class OLProxy {
   addFeature(id, geojson) {
     const options = { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' }
     const olFeature = new GeoJSON().readFeature(geojson, options)
-    olFeature.setStyle(this.style(geojson.style, olFeature.getGeometry().getType()))
+    olFeature.set('umapStyle', this.style(geojson.style, olFeature.getGeometry().getType()))
     this.sources[id].addFeature(olFeature)
   }
 
@@ -528,14 +577,56 @@ export class OLProxy {
           })
 
     if (geometryType === 'Point') {
+      // uMap "Circles" datalayer type: a proportional native circle.
       if (style.shape === 'circle') {
         return new Style({ image: new CircleStyle({ radius: 6, fill, stroke }) })
       }
-      const shapeName = SHAPES[style.iconClass] ? style.iconClass : 'Default'
-      return [
-        new Style({ image: pinIcon(shapeName, style.color, style.iconOpacity) }),
-        symbolStyle(style.iconUrl || DEFAULT_URL, SHAPES[shapeName].symbolOffset),
+      const iconClass = style.iconClass
+      const opacity = style.iconOpacity
+
+      // Circle / LargeCircle are plain circles → native CircleStyle, no rasterization.
+      if (iconClass === 'Circle') {
+        return new Style({
+          image: new CircleStyle({
+            radius: 5,
+            fill: new Fill({ color: rgba(style.color, opacity) }),
+            stroke: new Stroke({ color: '#fff', width: 2 }),
+          }),
+        })
+      }
+      if (iconClass === 'LargeCircle') {
+        // iconSize is a dynamic diameter; the 2px ring straddles the edge (radius = size/2 - 1).
+        const iconSize = style.iconSize || SCHEMA.iconSize.default
+        return [
+          new Style({
+            image: new CircleStyle({
+              radius: iconSize / 2 - 1,
+              fill: new Fill({ color: rgba('#fff', opacity) }),
+              stroke: new Stroke({ color: rgba(style.color, opacity), width: 2 }),
+            }),
+          }),
+          // Fit the symbol inside the disk, not edge-to-edge.
+          symbolStyle(style.iconUrl || DEFAULT_URL, 0, Math.round(iconSize * 0.7)),
+        ]
+      }
+
+      // Raw ("None"): no pin, just the symbol sized to iconSize, centered on the point.
+      if (iconClass === 'Raw') {
+        const iconSize = style.iconSize || SCHEMA.iconSize.default
+        return symbolStyle(style.iconUrl || DEFAULT_URL, 0, iconSize)
+      }
+
+      // Default / Drop / Ball: an SVG pin, plus an optional symbol on top.
+      const shapeName = SHAPES[iconClass] ? iconClass : 'Default'
+      const shape = SHAPES[shapeName]
+      const styles = [
+        new Style({ image: pinIcon(shapeName, style.color, opacity) }),
       ]
+      // Shapes with a `symbolOffset` host a symbol; others (Ball) are self-contained.
+      if (shape.symbolOffset !== undefined) {
+        styles.push(symbolStyle(style.iconUrl || DEFAULT_URL, shape.symbolOffset, 24))
+      }
+      return styles
     }
     return new Style({ stroke, fill })
   }
@@ -567,7 +658,7 @@ export class OLProxy {
         resolution
       )
       const marker = new Feature({ features: [member], geometry: new Point(spread) })
-      marker.setStyle(member.getStyle())
+      marker.setStyle(member.get('umapStyle'))
       revealed.push(marker)
       // A link line: no data id, so a click on it resolves to no feature and exits cleanly.
       revealed.push(new Feature({ geometry: new LineString([center, spread]) }))
