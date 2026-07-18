@@ -237,6 +237,40 @@ def test_hover_tooltip_setting_should_be_persistent(live_server, map, page):
     expect(page.locator(".umap-field-showLabel input[value=null]")).to_be_checked()
 
 
+def test_can_edit_map_default_view(live_server, map, page):
+    # settings.geometry.coordinates is a GeoJSON [lon, lat] array.
+    map.settings["geometry"]["coordinates"] = [13.447265624999998, 48.94415123418794]
+    map.edit_status = Map.ANONYMOUS
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
+
+    # Open the "Edit map default view" panel.
+    page.locator(".umap-edit-bar li[data-ref=center] button").click()
+
+    latitude = page.get_by_label("Default latitude")
+    longitude = page.get_by_label("Default longitude")
+
+    # Fields should be prefilled with the map's current center.
+    expect(latitude).to_have_value("48.94415123418794")
+    expect(longitude).to_have_value("13.447265624999998")
+
+    # Change the latitude.
+    latitude.click()
+    latitude.press("Control+a")
+    latitude.fill("42.5")
+    # The field syncs on a debounced input event.
+    page.wait_for_timeout(500)
+
+    with page.expect_response(re.compile("./update/settings/.*")):
+        page.get_by_role("button", name="Save").click()
+
+    saved = Map.objects.get(pk=map.pk)
+    # PointField is (x=lon, y=lat): only the latitude changed.
+    assert saved.center.y == 42.5
+    assert saved.center.x == 13.447265624999998
+    assert saved.settings["geometry"]["coordinates"] == [13.447265624999998, 42.5]
+
+
 def test_can_edit_map_tags(live_server, map, page):
     map.settings["properties"]["tags"] = ["arts"]
     map.edit_status = Map.ANONYMOUS
