@@ -6,6 +6,7 @@ import {
 import { Alert } from '../../components/alerts/alert.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
+import ScaleLine from 'ol/control/ScaleLine.js'
 
 export class Control {
   constructor(app) {
@@ -286,8 +287,10 @@ class MoreControl extends Control {
 class ScaleControl extends Control {
   static position = 'bottomleft'
   render() {
-    this._scaleControl = new LeafletControl.Scale()
-    return this._scaleControl.addTo(this.app.mapProxy.map)._container
+    const scaleControl = new ScaleLine()
+    // this.app.mapProxy.map.addControl(scaleControl)
+    console.log(scaleControl)
+    return scaleControl.element
   }
 }
 
@@ -424,7 +427,7 @@ export class AttributionControl extends Control {
     const template = Utils.sanitizeVars`
       <div class="umap-control-attribution">
         <div class="attribution-container">
-          ${Utils.toHTML(tilelayer?.options.attribution)}
+          ${Utils.toHTML(tilelayer?.getAttributions()[0])}
           <span data-ref="short"> — ${Utils.toHTML(shortCredit)}</span>
           <a  href="#" data-ref="caption"> — ${translate('Open caption')}</a>
            — <a href="https://umap-project.org/" data-ref="site">${translate('Powered by uMap')}</a>
@@ -442,7 +445,7 @@ export class AttributionControl extends Control {
 }
 
 export class TilelayersControl extends SimpleButton {
-  static DEMO_TILES_OPTIONS = { s: 'a', z: 9, x: 265, y: 181, '-y': 181, r: '' }
+  static DEMO_TILES_OPTIONS = { 'a-c': 'a', z: 9, x: 265, y: 181, '-y': 181, r: '' }
   static position = 'topleft'
   className = 'umap-tilelayer-control'
   title = translate('Change map background')
@@ -460,7 +463,7 @@ export class TilelayersControl extends SimpleButton {
       </div>
     `)
     const tilelayers = Array.from(this.app.mapProxy.tilelayers.all.values()).sort(
-      (a, b) => a.options.rank - b.options.rank
+      (a, b) => a.get('rank') - b.get('rank')
     )
     for (const layer of tilelayers) {
       tileContainer.appendChild(this.addTileLayerElement(layer, options))
@@ -471,13 +474,13 @@ export class TilelayersControl extends SimpleButton {
 
   addTileLayerElement(tilelayer, options) {
     const src = Utils.template(
-      tilelayer.options.url_template,
+      tilelayer.get('url'),
       TilelayersControl.DEMO_TILES_OPTIONS
     )
     const li = Utils.loadTemplate(Utils.sanitizeVars`
       <li>
         <img src="${src}" loading="lazy" />
-        <div>${tilelayer.options.name}</div>
+        <div>${tilelayer.get('name')}</div>
       </li>
     `)
     li.addEventListener('click', () => {
