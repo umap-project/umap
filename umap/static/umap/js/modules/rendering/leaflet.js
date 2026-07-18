@@ -160,13 +160,19 @@ export class LeafletProxy {
       this.map.once('click popupopen', () => this.app.fire('panel:close'))
     })
     this.app.on('popup:show', (event) => {
-      const { id, content, center } = event.detail
+      const { id, content, center, mode } = event.detail
       const [lon, lat] = center
       // The popup is map-level (not layer-bound), so highlight the matching
       // feature's layer here, and undo it once this popup closes.
       const layer = this.getLayer(id)
       const offset = layer?._getPopupAnchor?.()
-      this.map.openPopup(content, [lat, lon], offset ? { offset } : undefined)
+      const options = {}
+      if (offset) options.offset = offset
+      if (mode === 'large') {
+        options.className = 'umap-popup-large'
+        options.maxWidth = 500
+      }
+      this.map.openPopup(content, [lat, lon], options)
       layer?.highlight()
       this.revealInCluster(layer)
       this.map.once('popupclose', () => layer?.unhighlight())
