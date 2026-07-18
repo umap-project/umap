@@ -5,7 +5,6 @@ import { MutatingForm } from '../form/builder.js'
 import * as GeoUtils from '../geoutils.js'
 import { getLocale, translate } from '../i18n.js'
 import * as Icon from '../icon.js'
-import loadPopup from '../rendering/popup.js'
 import * as Schema from '../schema.js'
 import * as TextUtils from '../textutils.js'
 import * as Utils from '../utils.js'
@@ -198,13 +197,15 @@ class Feature {
     }
     this.app.currentFeature = this
     this.buildCard().then((element) => {
-      if (this.getOption('popupShape') === 'Panel') {
+      const popupShape = this.getOption('popupShape')
+      if (popupShape === 'Panel') {
         this.app.fire('panel:show', { id: this.id, content: element })
       } else {
         this.app.fire('popup:show', {
           id: this.id,
           content: element,
           center: center || this.center,
+          mode: popupShape === 'Large' ? 'large' : 'normal',
         })
       }
     })
@@ -404,11 +405,6 @@ class Feature {
       return false
     }
     return this.app.getProperty('displayPopupFooter')
-  }
-
-  getPopupClass() {
-    const old = this.getOption('popupTemplate') // Retrocompat.
-    return loadPopup(this.getOption('popupShape') || old)
   }
 
   del(sync) {

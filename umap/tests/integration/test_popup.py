@@ -96,3 +96,33 @@ def test_popup_alignment_in_rtl_language(live_server, map, page):
     expect(page.locator(".leaflet-popup-content-wrapper")).to_have_css(
         "text-align", "start"
     )
+
+
+def test_should_open_large_popup(live_server, map, page):
+    data = {
+        "type": "FeatureCollection",
+        "properties": {"popupShape": "Large"},
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "test marker",
+                    "description": "Some description",
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [14.6889, 48.5529, 241],
+                },
+            },
+        ],
+    }
+    DataLayerFactory(map=map, data=data)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page.locator(".umap-popup-large")).to_be_hidden()
+    page.locator(".leaflet-marker-icon").click()
+    expect(page.locator(".umap-popup-large")).to_be_visible()
+    expect(page.get_by_role("heading", name="test marker")).to_be_visible()
+    expect(page.get_by_text("Some description")).to_be_visible()
+    # Close popup, clicking on the map, but outside of the popup.
+    page.locator("#map").click(position={"x": 50, "y": 50})
+    expect(page.locator(".umap-popup-large")).to_be_hidden()
