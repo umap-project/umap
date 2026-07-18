@@ -324,6 +324,12 @@ export class LeafletProxy {
   }
 
   handleLimitBounds() {
+    // The base tilelayer's own minZoom is already enforced natively by Leaflet
+    // (_layersMinZoom), as long as we leave options.minZoom undefined. So only
+    // override it when the bounds require a stricter floor, and hand control back
+    // with setMinZoom(undefined) otherwise — else a previously set options.minZoom
+    // would shadow the tilelayer's minZoom forever.
+    const baseMinZoom = Number(this.tilelayers.current?.options.minZoom) || 0
     const south = Number.parseFloat(this.app.properties.limitBounds?.south)
     const west = Number.parseFloat(this.app.properties.limitBounds?.west)
     const north = Number.parseFloat(this.app.properties.limitBounds?.north)
@@ -338,7 +344,12 @@ export class LeafletProxy {
         [south, west],
         [north, east],
       ])
-      this.map.setMinZoom(this.map.getBoundsZoom(bounds, false))
+      // Reset first: getBoundsZoom clamps its result to the current getMinZoom(),
+      // so a previously set (now stale) options.minZoom would prevent it from ever
+      // measuring a looser value. Cleared, it falls back to the tilelayer floor.
+      this.map.setMinZoom(undefined)
+      const boundsMinZoom = this.map.getBoundsZoom(bounds, false)
+      if (boundsMinZoom > baseMinZoom) this.map.setMinZoom(boundsMinZoom)
       try {
         this.map.setMaxBounds(bounds)
       } catch (e) {
@@ -346,7 +357,7 @@ export class LeafletProxy {
         console.error('Error limiting bounds', e)
       }
     } else {
-      this.map.setMinZoom(0)
+      this.map.setMinZoom(undefined)
       this.map.setMaxBounds()
     }
   }
