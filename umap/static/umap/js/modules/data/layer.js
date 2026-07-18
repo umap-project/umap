@@ -40,21 +40,20 @@ export class DataLayer {
     delete spec.properties?.rank
     delete spec.properties?.id
     delete spec.properties?.editMode
-    this.setProperties(spec.properties)
-    this.properties.name = this.properties.name || this.defaultName()
 
-    this.parentPane = this.app.mapProxy.overlayPane
+    // Resolve parent/rank before setProperties: it triggers resetLayer → createLayer,
+    // which needs parentId (Leaflet pane parent) and rank (OL zIndex) already set.
     if (spec.parent) {
       this.parentId = spec.parent
       if (!this.parent) {
         console.error(`Parent defined but not found: ${spec.parent} (self: ${this.id})`)
       }
-      this.parentPane = this.parent.pane
     } else {
       this.app.layers.add(this)
     }
-    this.pane = this.app.mapProxy.createOverlayPane(this.id, this.parentPane)
-    this.pane.dataset.id = this.id
+
+    this.setProperties(spec.properties)
+    this.properties.name = this.properties.name || this.defaultName()
 
     if (!Utils.isObject(this.properties.remoteData)) {
       this.properties.remoteData = {}
@@ -185,7 +184,7 @@ export class DataLayer {
           this.fetchRemoteData()
           break
         case 'datalayer-rank':
-          this.app.reorderDOM()
+          this.app.reorderLayers()
           break
       }
     }
@@ -243,15 +242,6 @@ export class DataLayer {
     this._autoVisibility = value
   }
 
-  reorderDOM() {
-    for (const layer of this.layers.root.reverse()) {
-      this.parentPane.appendChild(layer.pane)
-    }
-  }
-
-  bringToTop() {
-    this.parentPane.appendChild(this.pane)
-  }
 
   resetLayer(force) {
     // Only reset if type is defined (undefined is the default) and different from current type
@@ -726,7 +716,7 @@ export class DataLayer {
     }
     if (root) this.journal.commitBatch()
     this.hide()
-    this.parentPane.removeChild(this.pane)
+    this.app.mapProxy.deleteLayer(this.id)
     if (root) this.dataChanged()
     this.propagateDelete()
   }
@@ -1382,9 +1372,6 @@ export class DataLayer {
     }
   }
 
-  getDOMOrder() {
-    return Array.from(this.parentPane.children).indexOf(this.pane)
-  }
 
   isReadOnly() {
     // isReadOnly must return true if unset

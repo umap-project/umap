@@ -81,12 +81,12 @@ export default class App extends Utils.WithEvents {
     this.properties.zoomControl = false
     this.properties.fullscreenControl = false
 
-    if (this.searchParams.has('openlayers')) {
+    if (this.searchParams.has('leaflet')) {
+      console.log('You still go Leaflet bro')
+      this.mapProxy = new LeafletProxy(this, element)
+    } else {
       console.log('So you wanna run OL')
       this.mapProxy = new OLProxy(this, element)
-    } else {
-      console.log('You go Leaflet')
-      this.mapProxy = new LeafletProxy(this, element)
     }
     this.uiContainer = Utils.loadTemplate('<div class="umap-ui-container"></div>')
     this.mapProxy.attachUI(this.uiContainer)
@@ -1536,7 +1536,7 @@ export default class App extends Utils.WithEvents {
           // this get called once per datalayers.
           // (and same for undo/redo of the action)
           // TODO: call only once
-          this.reorderDOM()
+          this.reorderLayers()
           break
         case 'background':
           this.mapProxy.tilelayers.init(this.properties.tilelayers)
@@ -1682,7 +1682,7 @@ export default class App extends Utils.WithEvents {
         setParent(targetLayer)
       }
       this.journal.commitBatch()
-      this.reorderDOM()
+      this.reorderLayers()
       this.fire('datalayer:changed')
     }
 
@@ -1759,14 +1759,9 @@ export default class App extends Utils.WithEvents {
     this.editPanel.open({ content: container, highlight: 'layers' })
   }
 
-  reorderDOM() {
-    for (const layer of this.layers.root.reverse()) {
-      this.mapProxy.overlayPane.appendChild(layer.pane)
-    }
+  reorderLayers() {
+    this.mapProxy.reorderLayers()
     for (const layer of this.layers.tree) {
-      if (layer.layers.count()) {
-        layer.reorderDOM()
-      }
       layer.redraw()
     }
   }
