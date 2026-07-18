@@ -44,6 +44,7 @@ done
 cp -r node_modules/ol umap/static/umap/vendors/
 mkdir -p umap/static/umap/vendors/rbush/ && cp node_modules/rbush/index.js umap/static/umap/vendors/rbush/
 mkdir -p umap/static/umap/vendors/quickselect/ && cp node_modules/quickselect/index.js umap/static/umap/vendors/quickselect/
+mkdir -p umap/static/umap/vendors/earcut/ && cp node_modules/earcut/src/earcut.js umap/static/umap/vendors/earcut/
 
 
 echo 'Done!'

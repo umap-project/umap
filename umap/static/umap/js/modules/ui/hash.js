@@ -26,7 +26,7 @@ export default class Hash {
     }
     const args = hash.split('/')
     if (args.length !== 3) return
-    const zoom = parseInt(args[0], 10)
+    const zoom = parseFloat(args[0])
     const lat = parseFloat(args[1])
     const lng = parseFloat(args[2])
     if (isNaN(zoom) || isNaN(lat) || isNaN(lng)) return
