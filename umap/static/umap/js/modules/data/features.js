@@ -583,7 +583,7 @@ class Feature {
     geojson.style = this.getRenderProperties()
     geojson.readonly = this.isReadOnly()
     geojson.label = this.getLabel()
-    geojson.zIndex = this.datalayer.getDOMOrder()
+    // geojson.zIndex = this.datalayer.getDOMOrder()
     return geojson
   }
 

@@ -458,6 +458,17 @@ class Heat extends DefaultType {
         },
       ],
       [
+        'properties.heat.blur',
+        {
+          handler: 'Range',
+          min: 5,
+          max: 50,
+          step: 5,
+          label: translate('Heatmap blur'),
+          helpText: translate('Override heatmap blur (default 15)'),
+        },
+      ],
+      [
         'properties.heat.intensityProperty',
         {
           handler: 'Select',
