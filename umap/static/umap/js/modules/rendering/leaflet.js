@@ -448,10 +448,6 @@ export class LeafletProxy {
     return this.map.getPane('overlayPane')
   }
 
-  createOverlayPane(id, container) {
-    return this.map.createPane(`pane-${id}`, container || this.overlayPane)
-  }
-
   hideLayer(id) {
     const layer = this.layers[id]
     if (layer) this.map.removeLayer(layer)
@@ -467,8 +463,36 @@ export class LeafletProxy {
     const layer = new Class(datalayer)
     // Paths render into the datalayer's own pane, so they stack by datalayer
     // order; Leaflet lazily creates one renderer per pane.
+    const parent = datalayer.parentId
+      ? this.map.getPane(`pane-${datalayer.parentId}`)
+      : this.overlayPane
+    const pane = this.map.createPane(`pane-${datalayer.id}`, parent)
+    pane.dataset.id = datalayer.id
     layer.pane = `pane-${datalayer.id}`
     this.layers[datalayer.id] = layer
+  }
+
+  deleteLayer(id) {
+    this.hideLayer(id)
+    this.map.getPane(`pane-${id}`)?.remove()
+    delete this.layers[id]
+  }
+
+  // Restack panes to match the datalayers' rank: lower rank first (appended =
+  // lower in the DOM = drawn below), so higher rank ends up on top.
+  reorderLayers() {
+    for (const datalayer of this.app.layers.root.reverse()) {
+      this.overlayPane.appendChild(this.map.getPane(`pane-${datalayer.id}`))
+    }
+    for (const datalayer of this.app.layers.tree) {
+      if (!datalayer.layers.count()) continue
+      const parent = datalayer.parentId
+        ? this.map.getPane(`pane-${datalayer.parentId}`)
+        : this.overlayPane
+      for (const child of datalayer.layers.root.reverse()) {
+        parent.appendChild(this.map.getPane(`pane-${child.id}`))
+      }
+    }
   }
 
   showLayer(id) {
