@@ -173,6 +173,7 @@ export class DataLayer {
           this.app.fire('datalayer:changed')
           break
         case 'data':
+          console.log('render data')
           if (fields.includes('properties.type')) {
             this.resetLayer()
           }
@@ -761,6 +762,7 @@ export class DataLayer {
       this.layers.tree.map((datalayer) => datalayer.redraw())
       return
     }
+    console.log('this.isVisible', this.isVisible())
     if (!this.isVisible()) return
     // TODO: Let's reset for now, and add a more gentle way to redraw later
     this.app.mapProxy.clear(this.id)
