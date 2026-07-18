@@ -1080,7 +1080,18 @@ export default class App extends Utils.WithEvents {
       ],
       [
         'properties.overlay.opacity',
-        { handler: 'Range', min: 0, max: 1, step: 0.1, label: translate('Opacity') },
+        {
+          handler: 'Range',
+          min: 0,
+          max: 1,
+          step: 0.1,
+          label: translate('Opacity'),
+          // Without this, the field name ("opacity") collides with the
+          // inheritable SCHEMA.opacity, so the initial value is read from
+          // app.getOption('opacity') instead of properties.overlay.opacity.
+          // TODO: remove me when schema is per-model instead of one global.
+          inheritable: false,
+        },
       ],
       ['properties.overlay.tms', { handler: 'Switch', label: translate('TMS format') }],
     ]
