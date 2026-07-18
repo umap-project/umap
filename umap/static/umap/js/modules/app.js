@@ -826,7 +826,7 @@ export default class App extends Utils.WithEvents {
       .sort(Utils.naturalSort)
   }
 
-  editCaption() {
+  async editCaption() {
     if (!this.editEnabled) return
     if (this.properties.editMode !== 'advanced') return
     const container = DOMUtils.loadTemplate(`
@@ -846,14 +846,14 @@ export default class App extends Utils.WithEvents {
       className: 'map-metadata',
       app: this,
     })
-    builder.build().then((form) => container.appendChild(form))
+    container.appendChild(await builder.build())
 
     const tags = DOMUtils.createFieldset(container, translate('Tags'))
     const tagsFields = ['properties.tags']
     const tagsBuilder = new MutatingForm(this, tagsFields, {
       app: this,
     })
-    tagsBuilder.build().then((form) => tags.appendChild(form))
+    tags.appendChild(await tagsBuilder.build())
     const credits = DOMUtils.createFieldset(container, translate('Credits'))
     const creditsFields = [
       'properties.licence',
@@ -863,7 +863,7 @@ export default class App extends Utils.WithEvents {
       'properties.permanentCreditBackground',
     ]
     const creditsBuilder = new MutatingForm(this, creditsFields, { app: this })
-    creditsBuilder.build().then((form) => credits.appendChild(form))
+    credits.appendChild(await creditsBuilder.build())
     this.editPanel.open({ content: container, highlight: 'caption' })
   }
 
