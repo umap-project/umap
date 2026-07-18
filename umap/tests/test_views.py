@@ -1,4 +1,4 @@
-import base64
+import hashlib
 import json
 import os
 import time
@@ -62,7 +62,7 @@ def proxy_url(ttl=300):
 
 
 def _cache_basename(url):
-    return f"umap_{base64.urlsafe_b64encode(url.encode()).decode()}"
+    return f"umap_{hashlib.sha256(url.encode()).hexdigest()}"
 
 
 async def test_valid_proxy_request(async_client, proxy_cache_dir, proxy_headers):
@@ -341,7 +341,7 @@ async def test_proxy_long_url_does_not_exceed_filename_limit(
     assert r1.status_code == 200
     assert r1["X-CACHE"] == "MISS"
     assert b"OK" in b"".join(r1.streaming_content)
-    expected_name = f"{_cache_basename(long_url)[:240]}.cache"
+    expected_name = f"{_cache_basename(long_url)}.cache"
     assert len(expected_name) <= 255
     assert (proxy_cache_dir / expected_name).exists()
 
@@ -350,6 +350,33 @@ async def test_proxy_long_url_does_not_exceed_filename_limit(
     assert r2.status_code == 200
     assert r2["X-CACHE"] == "HIT"
     assert [f.name for f in proxy_cache_dir.glob("*.cache")] == [expected_name]
+
+
+async def test_proxy_long_urls_with_common_prefix_do_not_collide(
+    async_client, proxy_cache_dir, proxy_headers, httpx_handler
+):
+    # Two distinct URLs sharing a long common prefix must map to distinct cache
+    # files. Truncating the (base64) URL to a fixed length used to make them
+    # collide, so the second URL was served the first one's cached body.
+    def handler(request):
+        marker = request.url.query.decode() if request.url.query else ""
+        return httpx.Response(
+            200, content=marker.encode(), headers={"content-type": "text/plain"}
+        )
+
+    httpx_handler.handler = handler
+
+    prefix = "http://example.org/?q=" + "a" * 300
+    r1 = await async_client.get(
+        proxy_url(), {"url": f"{prefix}FIRST"}, headers=proxy_headers
+    )
+    r2 = await async_client.get(
+        proxy_url(), {"url": f"{prefix}SECOND"}, headers=proxy_headers
+    )
+    assert b"FIRST" in b"".join(r1.streaming_content)
+    assert r2["X-CACHE"] == "MISS"
+    assert b"SECOND" in b"".join(r2.streaming_content)
+    assert len(list(proxy_cache_dir.glob("*.cache"))) == 2
 
 
 @pytest.mark.django_db

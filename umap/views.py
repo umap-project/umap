@@ -1,5 +1,5 @@
 import asyncio
-import base64
+import hashlib
 import io
 import json
 import logging
@@ -457,8 +457,7 @@ class AjaxProxy(View):
             return HttpResponseBadRequest()
 
         cache_dir = Path(settings.AJAX_PROXY_CACHE_DIR)
-        # Max file name length in Linux is 255 (including the extension)
-        basename = f"umap_{base64.urlsafe_b64encode(url.encode()).decode()}"[:240]
+        basename = f"umap_{hashlib.sha256(url.encode()).hexdigest()}"
         cache_file = cache_dir / f"{basename}.cache"
         semaphore = cache_dir / f"{basename}.tmp"
 
