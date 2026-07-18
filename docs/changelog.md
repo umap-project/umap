@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.8.0a4 - 2026-07-18
+
+* align popup content for RTL languages by @ergs0204 in #3432
+* restore popup large mode by @yohanboniface in #3439
+* fix edit center form not showing lat/lng by @yohanboniface in #3438
+* restore form order in edit caption panel by @yohanboniface in #3435
+* use sha256 instead of base64 for ajax proxy cache file names by @yohanboniface in #3437
+* fix overlay opacity initial value by @yohanboniface in #3436
+* fix conflict between limitBounds and tilelayer minZoom by @yohanboniface in #3440
+
 ## 3.8.0a4 - 2026-07-16
 
 * reduce database queries for map detail view by @davidbgk in #3430
@@ -68,6 +78,7 @@ in python instead of via Nginx).
 * @AlexVplle made their first contribution in #3290
 * @dhdaines made their first contribution in #3285
 * @rapenne-s made their first contribution in #3309
+* @ergs0204 made their first contribution in #3432
 
 ## 3.7.3 - 2026-04-08
 
