@@ -877,12 +877,13 @@ export default class App extends Utils.WithEvents {
     `)
     const metadataFields = [
       ['properties.zoom', { handler: 'IntInput', label: translate('Default zoom') }],
+      // center is a GeoJSON [lon, lat] array, so address it by index, not by key.
       [
-        'properties.center.lat',
+        'properties.center.1',
         { handler: 'FloatInput', label: translate('Default latitude') },
       ],
       [
-        'properties.center.lng',
+        'properties.center.0',
         { handler: 'FloatInput', label: translate('Default longitude') },
       ],
       'properties.defaultView',
