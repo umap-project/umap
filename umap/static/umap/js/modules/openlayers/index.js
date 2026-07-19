@@ -20,7 +20,6 @@ import { SCHEMA } from '../schema.js'
 import { isDataImage, isPath, isRemoteUrl } from '../utils.js'
 import * as Utils from '../utils.js'
 import { textColorFromColor } from '../domutils.js'
-import HeatmapLayer from 'ol/layer/Heatmap.js'
 
 function rgba(color, opacity) {
   const rgba = asArray(color).slice()
@@ -469,15 +468,8 @@ export class OLProxy {
     const isPoint = (feature) => this.isPointGeometry(feature.getGeometry().getType())
 
     if (datalayer.Type?.type === 'Heat') {
-      const heat = new HeatmapLayer({ source })
-      source.on('change:umapConfig', () => {
-        const config = source.get('umapConfig')?.heat || {}
-        if (config.blur !== undefined) heat.setBlur(config.blur)
-        // OL's absolute-density heatmap needs ~1/3 of Leaflet's radius to match visually.
-        heat.setRadius((config.radius || 25) / 3)
-        heat.setWeight(config.intensityProperty || 'weight')
-      })
-      layers['heat'] = heat
+      const { createHeatmapLayer } = await import('./heat.js')
+      layers['heat'] = createHeatmapLayer(source)
     } else if (datalayer.Type?.type === 'Cluster') {
       const { createClusterLayer } = await import('./cluster.js')
       layers['cluster'] = createClusterLayer(source, POINT_ZINDEX_OFFSET)

@@ -435,11 +435,29 @@ class Heat extends DefaultType {
   static key = 'heat'
   static browsable = false
 
+  // OL's heatmap clamps the weight to [0,1], so normalize the intensity to that range.
+  static async compute(properties, features) {
+    const key = properties[this.key]?.intensityProperty
+    if (!key) return { properties: {} }
+    let max = 0
+    for (const feature of features) {
+      const value = Number.parseFloat(feature.properties?.[key])
+      if (Number.isFinite(value) && value > max) max = value
+    }
+    if (!max) return { properties: {} }
+    const attributes = {}
+    for (const feature of features) {
+      const value = Number.parseFloat(feature.properties?.[key])
+      attributes[feature.id] = { weight: Number.isFinite(value) ? value / max : 0 }
+    }
+    return { properties: {}, attributes }
+  }
+
   static renderConfig(properties) {
     return {
       [this.key]: {
-        radius: properties.heat?.radius,
-        blur: properties.heat?.blur,
+        radius: properties.heat?.radius || 25,
+        blur: properties.heat?.blur || 15,
         intensityProperty: properties.heat?.intensityProperty,
       },
     }
