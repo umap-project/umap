@@ -41,8 +41,8 @@ export class DataLayer {
     delete spec.properties?.id
     delete spec.properties?.editMode
 
-    // Resolve parent/rank before setProperties: it triggers resetLayer → createLayer,
-    // which needs parentId (Leaflet pane parent) and rank (OL zIndex) already set.
+    // Resolve parent/rank before the first render: the layer is built lazily (show/addData),
+    // and createLayer needs parentId (Leaflet pane parent) and rank (OL zIndex) already set.
     if (spec.parent) {
       this.parentId = spec.parent
       if (!this.parent) {
@@ -172,9 +172,8 @@ export class DataLayer {
           this.app.fire('datalayer:changed')
           break
         case 'data':
-          console.log('render data')
           if (fields.includes('properties.type')) {
-            this.resetLayer()
+            await this.resetLayer()
           }
           await this.compute()
           this.redraw()
@@ -242,23 +241,24 @@ export class DataLayer {
     this._autoVisibility = value
   }
 
+  async ensureLayer() {
+    if (this.Type) return
+    this.Type = loadType(this.properties.type)
+    this.Type.ensureProperties(this.properties)
+    await this.app.mapProxy.createLayer(this)
+  }
 
-  resetLayer(force) {
-    // Only reset if type is defined (undefined is the default) and different from current type
-    if (
-      this.Type &&
-      (!this.properties.type || this.properties.type === this.Type.type) &&
-      !force
-    ) {
+  async resetLayer(force) {
+    // Nothing to reset before the first build (lazy). `this.Type` is the type the layer was
+    // built for, so a differing properties.type means we must rebuild.
+    if (!this.Type) return
+    if ((!this.properties.type || this.properties.type === this.Type.type) && !force) {
       return
     }
     const visible = this.isVisible()
-    if (this.Type) this.app.mapProxy.clear(this.id)
-    if (visible) this.app.mapProxy.hideLayer(this.id)
-    // this.Type is needed by createLayer (for cluster/heat)
-    this.Type = loadType(this.properties.type)
-    this.Type.ensureProperties(this.properties)
-    this.app.mapProxy.createLayer(this)
+    this.app.mapProxy.deleteLayer(this.id)
+    this.Type = null
+    await this.ensureLayer()
     if (visible) this.show()
   }
 
@@ -526,6 +526,7 @@ export class DataLayer {
   }
 
   async addData(geojson, sync) {
+    await this.ensureLayer()
     const id = Math.random()
     this.app.loader.start(id)
     let data = []
@@ -752,17 +753,14 @@ export class DataLayer {
       this.layers.tree.map((datalayer) => datalayer.redraw())
       return
     }
-    console.log('this.isVisible', this.isVisible())
     if (!this.isVisible()) return
-    // TODO: Let's reset for now, and add a more gentle way to redraw later
-    this.app.mapProxy.clear(this.id)
-    this.app.mapProxy.addData(this.id, this.toRenderer())
+    this.app.mapProxy.redraw(this.id, this.toRenderer())
   }
 
-  reindex() {
+  async reindex() {
     this.features.sort(this.sortKey)
     if (this.isBrowsable()) {
-      this.resetLayer(true)
+      await this.resetLayer(true)
     }
   }
 
@@ -1224,6 +1222,7 @@ export class DataLayer {
   }
 
   async show() {
+    await this.ensureLayer()
     this.app.mapProxy.showLayer(this.id)
     if (!this.isLoaded()) await this.fetchData()
     this.propagateVisibility({ force: true })
@@ -1371,7 +1370,6 @@ export class DataLayer {
         .map((feature) => feature.toRenderer()),
     }
   }
-
 
   isReadOnly() {
     // isReadOnly must return true if unset
