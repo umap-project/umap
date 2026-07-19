@@ -1,6 +1,6 @@
 import { default as OLMap } from 'ol/Map.js'
 import TileLayer from 'ol/layer/Tile.js'
-import ImageTile from 'ol/source/ImageTile.js'
+import XYZ from 'ol/source/XYZ.js'
 import View from 'ol/View.js'
 import GeoJSON from 'ol/format/GeoJSON.js'
 import VectorSource from 'ol/source/Vector.js'
@@ -665,10 +665,11 @@ class TileLayerManager {
     const url = spec.url_template
       .replace('{s}', '{a-c}')
       .replace('{r}', retina ? '@2x' : '')
-    const source = new ImageTile({
+    const source = new XYZ({
       url,
       tilePixelRatio: retina ? 2 : 1,
       attributions: spec.attribution,
+      crossOrigin: 'anonymous',
     })
     return new TileLayer({
       source,
