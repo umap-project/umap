@@ -8,9 +8,9 @@ import VectorLayer from 'ol/layer/Vector.js'
 import { fromLonLat, transformExtent, toLonLat } from 'ol/proj.js'
 // import Draw from 'ol/interaction/Draw.js'
 import Overlay from 'ol/Overlay.js'
-import Style from 'ol/style/Style.js'
 import Stroke from 'ol/style/Stroke.js'
 import Fill from 'ol/style/Fill.js'
+import Style from 'ol/style/Style.js'
 import CircleStyle from 'ol/style/Circle.js'
 import Icon from 'ol/style/Icon.js'
 import TextStyle from 'ol/style/Text.js'
@@ -18,30 +18,14 @@ import { asArray } from 'ol/color.js'
 import Modify from 'ol/interaction/Modify.js'
 import { SCHEMA } from '../schema.js'
 import { isDataImage, isPath, isRemoteUrl } from '../utils.js'
-import Cluster from 'ol/source/Cluster.js'
-import { boundingExtent } from 'ol/extent.js'
-import LineString from 'ol/geom/LineString.js'
-import Point from 'ol/geom/Point.js'
-import Feature from 'ol/Feature.js'
 import * as Utils from '../utils.js'
+import { textColorFromColor } from '../domutils.js'
 import HeatmapLayer from 'ol/layer/Heatmap.js'
 
 function rgba(color, opacity) {
   const rgba = asArray(color).slice()
   if (opacity != null) rgba[3] = opacity
   return rgba
-}
-
-function spiderfyLatLng(center, index, layerCount, zoom, resolution) {
-  const step = 20
-  const maxRadius = 150
-  const angle = (index * step * Math.PI) / 180
-  const progress = index / layerCount
-  const radius = maxRadius * (1 - progress) ** 0.4
-  const x = radius * Math.cos(angle)
-  const y = radius * Math.sin(angle)
-  const [lng, lat] = center
-  return [lng + x * resolution, lat + y * resolution]
 }
 
 // uMap markers as native OL styles: a colored pin Icon (with a drop shadow) plus the
@@ -129,7 +113,9 @@ function isImg(url) {
   return isPath(url) || isRemoteUrl(url) || isDataImage(url)
 }
 
-function symbolStyle(url, offset, size) {
+// `bgColor` is the color the glyph sits on: the text is auto-contrasted against it (black on a
+// light background, white on a dark one). Defaults to white (the colored pins carry white glyphs).
+function symbolStyle(url, offset, size, bgColor) {
   if (isImg(url)) {
     const options = { src: url, displacement: [0, offset], crossOrigin: 'anonymous' }
     // The default marker keeps its intrinsic size; any other symbol is scaled to `size`
@@ -143,33 +129,30 @@ function symbolStyle(url, offset, size) {
       text: url,
       offsetY: -offset,
       font: `bold ${size ? Math.round(size * 0.72) : 14}px sans-serif`,
-      fill: new Fill({ color: '#fff' }),
+      fill: new Fill({ color: bgColor ? textColorFromColor(bgColor) : '#fff' }),
     }),
   })
 }
 
-// Mirror Leaflet's global markerPane (above overlayPane): every datalayer renders points in
-// a high zIndex band, paths in a low one, so all markers stay above all paths across layers.
-// These are OL layer sort keys, not CSS z-index, so they never compete with the controls.
 const POINT_ZINDEX_OFFSET = 10000
-const SPIDER_ZINDEX = 1e6
 
 export class OLProxy {
   constructor(app, element) {
     this.app = app
-    // Per datalayer id: { paths, points } sources and layers (two zIndex bands, see above).
     this.sources = {}
     this.layers = {}
     this.map = new OLMap({
       target: element,
       controls: [],
     })
-    // Overlay holding the spiderfied cluster members (kept above the data layers). Cleared
-    // on any view move — a resolution change reclusters, so the spread is stale anyway.
-    this.spiderSource = new VectorSource()
-    this.map.addLayer(new VectorLayer({ source: this.spiderSource, zIndex: SPIDER_ZINDEX }))
-    this.map.on('moveend', () => this.spiderSource.clear())
     this.tilelayers = new TileLayerManager(this)
+
+    this.map.on('pointermove', (event) => {
+      this.map.getTargetElement().style.cursor = this.map.hasFeatureAtPixel(event.pixel)
+        ? 'pointer'
+        : ''
+    })
+
     this.proxyOutgoingEvents()
     this.proxyIncomingEvents()
   }
@@ -224,8 +207,8 @@ export class OLProxy {
       const { sourceId, geojson } = event.detail
       const olFeature = this.sources[sourceId]?.getFeatureById(geojson.id)
       if (!olFeature) return
-      olFeature.set('umapStyle', this.style(geojson.style, olFeature.getGeometry().getType()))
-      olFeature.changed() // set() alone won't re-render; force it (setStyle used to).
+      this.setFeatureStyle(olFeature, geojson)
+      olFeature.changed()
     })
   }
 
@@ -239,6 +222,10 @@ export class OLProxy {
 
   get zoom() {
     return this.map.getView().getZoom()
+  }
+
+  get resolution() {
+    return this.map.getView().getResolution()
   }
 
   get bounds() {
@@ -284,8 +271,13 @@ export class OLProxy {
   }
 
   attachUI(container) {
-    // this.map.overlayContainer.appendChild(container)
     this.container.appendChild(container)
+    // A UI interaction (slider drag, wheel over a panel) bubbles to the viewport where the map
+    // listens, and pans/zooms it. Stop the events the map acts on — the same ones OL checks to
+    // skip its stopevent overlay.
+    for (const type of ['pointerdown', 'wheel', 'keydown']) {
+      container.addEventListener(type, (event) => event.stopPropagation())
+    }
   }
 
   render() {
@@ -370,23 +362,26 @@ export class OLProxy {
   }
 
   hasLayer(id) {
-    const layers = this.layers[id]
-    // Both bands are added/removed together, so testing one is enough.
-    return Boolean(layers) && this.map.getLayers().getArray().includes(layers.points)
+    const layers = Object.values(this.layers[id] || {})
+    if (!layers.length) return false
+    // All layers added/removed together, so testing one is enough.
+    return this.map.getLayers().getArray().includes(layers[0])
   }
 
   showLayer(id) {
-    const layers = this.layers[id]
-    if (!layers) return
-    this.map.addLayer(layers.paths)
-    this.map.addLayer(layers.points)
+    const layers = Object.values(this.layers[id] || {})
+    if (!layers.length) return
+    for (const layer of layers) {
+      this.map.addLayer(layer)
+    }
   }
 
   hideLayer(id) {
-    const layers = this.layers[id]
-    if (!layers) return
-    this.map.removeLayer(layers.paths)
-    this.map.removeLayer(layers.points)
+    const layers = Object.values(this.layers[id] || {})
+    if (!layers.length) return
+    for (const layer of layers) {
+      this.map.removeLayer(layer)
+    }
   }
 
   deleteLayer(id) {
@@ -402,7 +397,6 @@ export class OLProxy {
   }
 
   clear(id) {
-    console.log('clear layer')
     this.sources[id]?.clear()
   }
 
@@ -427,41 +421,35 @@ export class OLProxy {
     for (const overlay of overlays) {
       this.map.removeOverlay(overlay)
     }
-    const { pixel, coordinate } = event
-    this.map.forEachFeatureAtPixel(pixel, (olFeature) => {
-      let id = olFeature.getId()
-      const features = olFeature.get('features')
-      if (features) {
-        if (features.length > 1) {
-          if (this.zoom === this.map.getView().getMaxZoom()) {
-            this.spiderfy(olFeature)
-          } else {
-            // Zoom to coverage
-            const extent = boundingExtent(
-              features.map((r) => r.getGeometry().getCoordinates())
-            )
-            map.getView().fit(extent, { duration: 1000, padding: [50, 50, 50, 50] })
-          }
-          return true
-        }
-        // A spiderfied member (or a size-1 cluster) resolves to its original feature.
-        id = features[0].getId()
+    // getFeaturesAtPixel returns features top-to-bottom; we act on the topmost.
+    const olFeature = this.map.getFeaturesAtPixel(event.pixel)[0]
+    if (!olFeature) return
+    const isCluster = Boolean(olFeature.get('features')?.length)
+    if (isCluster) {
+      // A cluster resolves to a member id, or nothing, when it spiderfies/zooms
+      import('./cluster.js').then(({ onClusterClick }) => {
+        this.onFeatureClick(onClusterClick(olFeature, this.map), event)
+      })
+    } else {
+      this.onFeatureClick(olFeature.getId(), event)
+    }
+  }
+
+  onFeatureClick(id, event) {
+    if (!id) return
+    const uFeature = this.getFeatureById(id)
+    if (!uFeature) return
+    if (this.map.measureTools?.enabled()) return
+    if (event.originalEvent.shiftKey) {
+      if (event.originalEvent.ctrlKey || event.originalEvent.metaKey) {
+        uFeature.datalayer.edit(event)
+      } else if (!uFeature.isReadOnly()) {
+        uFeature.edit()
       }
-      const feature = this.getFeatureById(id)
-      if (!feature) return true
-      if (this.map.measureTools?.enabled()) return true
-      if (event.originalEvent.shiftKey) {
-        if (event.originalEvent.ctrlKey || event.originalEvent.metaKey) {
-          feature.datalayer.edit(event)
-        } else if (!feature.isReadOnly()) {
-          feature.edit()
-        }
-      } else if (!this.map.editTools?.drawing()) {
-        // Events carry geographic lon/lat; the proxy converts to/from its projection.
-        feature.view({ center: toLonLat(coordinate) })
-      }
-      return true
-    })
+    } else if (!this.map.editTools?.drawing()) {
+      // Events carry geographic lon/lat; the proxy converts to/from its projection.
+      uFeature.view({ center: toLonLat(event.coordinate) })
+    }
   }
 
   removeFeature(id, featureId) {
@@ -474,69 +462,47 @@ export class OLProxy {
     if (source) source.clear()
   }
 
-  createLayer(datalayer) {
-    // One source, two layers sharing it: paths render in the low zIndex band, points in the
-    // high one (POINT_ZINDEX_OFFSET). Each layer's style fn returns null for the geometry it
-    // doesn't own, so a feature shows in exactly one band. Styles are stored per feature
-    // (`umapStyle`) rather than via setStyle, which would bypass these style fns.
+  async createLayer(datalayer) {
     const source = new VectorSource()
     this.sources[datalayer.id] = source
-    const cluster = datalayer.getProperty('cluster') || {}
+    const layers = {}
     const isPoint = (feature) => this.isPointGeometry(feature.getGeometry().getType())
 
-    let pointLayer
     if (datalayer.Type?.type === 'Heat') {
-      pointLayer = new HeatmapLayer({
-        source,
-        blur: datalayer.properties.heat?.blur,
-        radius: datalayer.properties.heat?.radius / 3,
-        weight: datalayer.properties.heat?.intensityProperty,
+      const heat = new HeatmapLayer({ source })
+      source.on('change:umapConfig', () => {
+        const config = source.get('umapConfig')?.heat || {}
+        if (config.blur !== undefined) heat.setBlur(config.blur)
+        // OL's absolute-density heatmap needs ~1/3 of Leaflet's radius to match visually.
+        heat.setRadius((config.radius || 25) / 3)
+        heat.setWeight(config.intensityProperty || 'weight')
       })
+      layers['heat'] = heat
     } else if (datalayer.Type?.type === 'Cluster') {
-      const clustered = new Cluster({
-        source,
-        distance: cluster.radius || 80,
-        geometryFunction: (feature) =>
-          feature.getGeometry().getType() === 'Point' ? feature.getGeometry() : null,
-      })
-      pointLayer = new VectorLayer({
-        source: clustered,
-        style: (feature) => {
-          const features = feature.get('features')
-          if (features.length === 1) return features[0].get('umapStyle')
-          return new Style({
-            image: new CircleStyle({
-              radius: 20,
-              stroke: new Stroke({ color: '#fff' }),
-              fill: new Fill({ color: datalayer.getProperty('color') }),
-            }),
-            text: new TextStyle({
-              text: features.length.toString(),
-              fill: new Fill({ color: cluster.textColor || '#fff' }),
-            }),
-          })
-        },
-      })
+      const { createClusterLayer } = await import('./cluster.js')
+      layers['cluster'] = createClusterLayer(source, POINT_ZINDEX_OFFSET)
     } else {
-      pointLayer = new VectorLayer({
+      layers['point'] = new VectorLayer({
         source,
         style: (feature) => (isPoint(feature) ? feature.get('umapStyle') : null),
+        zIndexOffset: POINT_ZINDEX_OFFSET,
+      })
+      layers['path'] = new VectorLayer({
+        source,
+        style: (feature) => (isPoint(feature) ? null : feature.get('umapStyle')),
       })
     }
-    const pathLayer = new VectorLayer({
-      source,
-      style: (feature) => (isPoint(feature) ? null : feature.get('umapStyle')),
-    })
-    this.layers[datalayer.id] = { points: pointLayer, paths: pathLayer }
+    this.layers[datalayer.id] = layers
     this.applyZIndex(datalayer)
   }
 
   // Points ride the high zIndex band so all markers stay above all paths, across layers.
   applyZIndex(datalayer) {
-    const layers = this.layers[datalayer.id]
-    if (!layers) return
-    layers.paths.setZIndex(datalayer.rank)
-    layers.points.setZIndex(POINT_ZINDEX_OFFSET + datalayer.rank)
+    const layers = Object.values(this.layers[datalayer.id] || {})
+    if (!layers.length) return
+    for (const layer of layers) {
+      layer.setZIndex(datalayer.rank + (layer.get('zIndexOffset') || 0))
+    }
   }
 
   isPointGeometry(type) {
@@ -550,16 +516,43 @@ export class OLProxy {
     // style as `umapStyle` (the layer style fns read it — see createLayer).
     const olFeatures = geojson.features.map((feature) => {
       const olFeature = format.readFeature(feature, options)
-      olFeature.set('umapStyle', this.style(feature.style, olFeature.getGeometry().getType()))
+      olFeature.set(
+        'umapStyle',
+        this.style(feature.style, olFeature.getGeometry().getType())
+      )
       return olFeature
     })
+    // Before addFeatures, so a (re)cluster uses the new config. Cluster/heat subscribe to the
+    // source for it; the others ignore it.
+    this.sources[id].set('umapConfig', geojson.style)
     this.sources[id].addFeatures(olFeatures)
+  }
+
+  redraw(id, geojson) {
+    const source = this.sources[id]
+    if (!source) return
+    source.set('umapConfig', geojson.style)
+    for (const feature of geojson.features) {
+      const olFeature = source.getFeatureById(feature.id)
+      if (olFeature) this.setFeatureStyle(olFeature, feature)
+    }
+    source.changed()
+  }
+
+  setFeatureStyle(olFeature, geojson) {
+    olFeature.set(
+      'umapStyle',
+      this.style(geojson.style, olFeature.getGeometry().getType())
+    )
   }
 
   addFeature(id, geojson) {
     const options = { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' }
     const olFeature = new GeoJSON().readFeature(geojson, options)
-    olFeature.set('umapStyle', this.style(geojson.style, olFeature.getGeometry().getType()))
+    olFeature.set(
+      'umapStyle',
+      this.style(geojson.style, olFeature.getGeometry().getType())
+    )
     this.sources[id].addFeature(olFeature)
   }
 
@@ -605,8 +598,13 @@ export class OLProxy {
               stroke: new Stroke({ color: rgba(style.color, opacity), width: 2 }),
             }),
           }),
-          // Fit the symbol inside the disk, not edge-to-edge.
-          symbolStyle(style.iconUrl || DEFAULT_URL, 0, Math.round(iconSize * 0.7)),
+          // Fit the symbol inside the disk, not edge-to-edge; glyph contrasts with the white disk.
+          symbolStyle(
+            style.iconUrl || DEFAULT_URL,
+            0,
+            Math.round(iconSize * 0.7),
+            '#fff'
+          ),
         ]
       }
 
@@ -619,9 +617,7 @@ export class OLProxy {
       // Default / Drop / Ball: an SVG pin, plus an optional symbol on top.
       const shapeName = SHAPES[iconClass] ? iconClass : 'Default'
       const shape = SHAPES[shapeName]
-      const styles = [
-        new Style({ image: pinIcon(shapeName, style.color, opacity) }),
-      ]
+      const styles = [new Style({ image: pinIcon(shapeName, style.color, opacity) })]
       // Shapes with a `symbolOffset` host a symbol; others (Ball) are self-contained.
       if (shape.symbolOffset !== undefined) {
         styles.push(symbolStyle(style.iconUrl || DEFAULT_URL, shape.symbolOffset, 24))
@@ -638,32 +634,6 @@ export class OLProxy {
   getExtentBBoxString() {
     // southwest_lng,southwest_lat,northeast_lng,northeast_lat'
     return this.map.options.maxBounds?.toBBoxString()
-  }
-
-  // Reveal a cluster's members as real features in the overlay (geometry = the spread
-  // point, so each is clickable there), plus a link line each. Mirrors ol-ext SelectCluster:
-  // clicking a revealed feature (which carries `features: [member]`) resolves to the member.
-  spiderfy(clusterFeature) {
-    this.spiderSource.clear()
-    const members = clusterFeature.get('features')
-    const center = clusterFeature.getGeometry().getCoordinates()
-    const resolution = this.map.getView().getResolution()
-    const revealed = []
-    members.forEach((member, index) => {
-      const spread = spiderfyLatLng(
-        center,
-        index,
-        members.length,
-        this.zoom,
-        resolution
-      )
-      const marker = new Feature({ features: [member], geometry: new Point(spread) })
-      marker.setStyle(member.get('umapStyle'))
-      revealed.push(marker)
-      // A link line: no data id, so a click on it resolves to no feature and exits cleanly.
-      revealed.push(new Feature({ geometry: new LineString([center, spread]) }))
-    })
-    this.spiderSource.addFeatures(revealed)
   }
 }
 
@@ -708,7 +678,15 @@ class TileLayerManager {
       tilePixelRatio: retina ? 2 : 1,
       attributions: spec.attribution,
     })
-    return new TileLayer({ source, rank: spec.rank, name: spec.name, url, zIndex: -1 })
+    return new TileLayer({
+      source,
+      rank: spec.rank,
+      name: spec.name,
+      url,
+      zIndex: -1,
+      minZoom: spec.minZoom,
+      maxZoom: spec.maxZoom,
+    })
   }
 
   add(spec) {
@@ -735,16 +713,11 @@ class TileLayerManager {
   }
 
   select(tilelayer) {
-    // this.map.fire('baselayerchange', { layer: tilelayer })
-    console.log('tilelayer', tilelayer)
+    const view = this.map.getView()
     const minZoom = tilelayer.getMinZoom()
     const maxZoom = tilelayer.getMaxZoom()
-    if (!Number.isNaN(minZoom) && this.proxy.zoom < minZoom) {
-      this.map.setZoom(minZoom)
-    }
-    if (!Number.isNaN(maxZoom) && this.proxy.zoom > maxZoom) {
-      this.map.setZoom(maxZoom)
-    }
+    if (Number.isFinite(minZoom)) view.setMinZoom(minZoom)
+    if (Number.isFinite(maxZoom)) view.setMaxZoom(maxZoom)
     try {
       this.map.addLayer(tilelayer)
       if (this.current) {

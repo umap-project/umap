@@ -439,6 +439,7 @@ class Heat extends DefaultType {
     return {
       [this.key]: {
         radius: properties.heat?.radius,
+        blur: properties.heat?.blur,
         intensityProperty: properties.heat?.intensityProperty,
       },
     }

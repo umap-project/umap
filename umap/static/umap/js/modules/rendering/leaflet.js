@@ -504,6 +504,11 @@ export class LeafletProxy {
     this.layers[id].addData(geojson)
   }
 
+  redraw(id, geojson) {
+    this.clear(id)
+    this.addData(id, geojson)
+  }
+
   addFeature(id, geojson) {
     this.layers[id]?.addData(geojson)
   }

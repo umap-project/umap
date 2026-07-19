@@ -427,7 +427,7 @@ export class AttributionControl extends Control {
     const template = Utils.sanitizeVars`
       <div class="umap-control-attribution">
         <div class="attribution-container">
-          ${Utils.toHTML(tilelayer?.getAttributions()[0])}
+          ${Utils.toHTML(tilelayer?.getAttributions?.()[0])}
           <span data-ref="short"> — ${Utils.toHTML(shortCredit)}</span>
           <a  href="#" data-ref="caption"> — ${translate('Open caption')}</a>
            — <a href="https://umap-project.org/" data-ref="site">${translate('Powered by uMap')}</a>
