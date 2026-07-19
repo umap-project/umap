@@ -583,6 +583,9 @@ class Feature {
     geojson.style = this.getRenderProperties()
     geojson.readonly = this.isReadOnly()
     geojson.label = this.getLabel()
+    // Per-feature values a Type computes as feature attributes (vs style), e.g. the heat weight.
+    const attributes = this.datalayer.computed?.attributes?.[this.id]
+    if (attributes) geojson.properties = { ...geojson.properties, ...attributes }
     // geojson.zIndex = this.datalayer.getDOMOrder()
     return geojson
   }
