@@ -292,7 +292,7 @@ class Circles extends DefaultType {
   static key = 'circles'
   static defaults = {
     weight: 1,
-    shape: 'circle',
+    iconClass: 'ProportionalCircle',
   }
 
   static ensureProperties(properties) {

@@ -523,7 +523,7 @@ export class DataLayer {
     this.computed = await this.Type.compute(
       this.properties,
       this.features.all(),
-      this.fields.keys()
+      Array.from(this.fields.keys())
     )
   }
 
