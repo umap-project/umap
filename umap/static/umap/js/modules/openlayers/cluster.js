@@ -10,7 +10,7 @@ import CircleStyle from 'ol/style/Circle.js'
 import TextStyle from 'ol/style/Text.js'
 import Stroke from 'ol/style/Stroke.js'
 import Fill from 'ol/style/Fill.js'
-import { textColorFromColor } from '../domutils.js'
+import { blackOrWhite } from '../domutils.js'
 
 const SPIDER_ZINDEX = 1e6
 const SPIDER_LINE_STYLE = new Style({ stroke: new Stroke({ color: '#000', width: 1 }) })
@@ -93,13 +93,13 @@ function clusterStyle(clusterFeature, config = {}) {
   return new Style({
     image: new CircleStyle({
       radius: 20,
-      stroke: new Stroke({ color: '#fff', width: 4 }),
+      stroke: new Stroke({ color: '#fff', width: 2 }),
       fill: new Fill({ color }),
     }),
     text: new TextStyle({
       text: members.length.toString(),
       font: 'bold 12px sans-serif',
-      fill: new Fill({ color: config.cluster?.textColor || textColorFromColor(color) }),
+      fill: new Fill({ color: config.cluster?.textColor || blackOrWhite(color) }),
     }),
   })
 }

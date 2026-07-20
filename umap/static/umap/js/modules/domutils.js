@@ -62,7 +62,7 @@ export const contrastedColorFromColor = (bgcolor) => {
   return CACHE_CONTRAST[bgcolor]
 }
 
-export const textColorFromColor = (bgcolor) =>
+export const blackOrWhite = (bgcolor) =>
   contrastedColorFromColor(bgcolor) ? '#ffffff' : '#000000'
 
 const rgbFromComputedStyle = (el) => {
