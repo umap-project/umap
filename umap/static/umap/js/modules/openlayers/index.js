@@ -11,127 +11,10 @@ import Overlay from 'ol/Overlay.js'
 import Stroke from 'ol/style/Stroke.js'
 import Fill from 'ol/style/Fill.js'
 import Style from 'ol/style/Style.js'
-import CircleStyle from 'ol/style/Circle.js'
-import Icon from 'ol/style/Icon.js'
-import TextStyle from 'ol/style/Text.js'
-import { asArray } from 'ol/color.js'
 import Modify from 'ol/interaction/Modify.js'
-import { SCHEMA } from '../schema.js'
-import { isDataImage, isPath, isRemoteUrl } from '../utils.js'
 import * as Utils from '../utils.js'
-import { textColorFromColor } from '../domutils.js'
-
-function rgba(color, opacity) {
-  const rgba = asArray(color).slice()
-  if (opacity != null) rgba[3] = opacity
-  return rgba
-}
-
-// uMap markers as native OL styles: a colored pin Icon (with a drop shadow) plus the
-// symbol as a SEPARATE style — an Icon for images (OL loads the URL itself; same-origin
-// stays untainted) or a Text for glyphs. Each shape puts its tip at the anchor and its
-// head centered `symbolOffset` px above it; the viewBox is padded so the shadow isn't
-// clipped (which shifts the anchor by the padding).
-const DEFAULT_URL = SCHEMA.iconUrl.default
-// A real SVG drop shadow: it survives being drawImage'd onto OL's canvas because we bake the
-// color into the SVG (no ol/style/Icon `color` tint), so OL rasterizes the data-URI as-is,
-// filter included. The viewBox is padded so the blur isn't clipped (which would shift the anchor).
-const SHADOW_FILTER =
-  '<filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">' +
-  '<feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.5"/></filter>'
-const SHAPES = {
-  // paths drawn in an unpadded box; the `-4` viewBox origin adds a 4px shadow margin,
-  // and the extra width/height leaves room for the shadow falling to the bottom-right.
-  Default: {
-    path: 'M4,0 H28 A4,4 0 0 1 32,4 V28 A4,4 0 0 1 28,32 H24 L16,40 L8,32 H4 A4,4 0 0 1 0,28 V4 A4,4 0 0 1 4,0 Z',
-    viewBox: '-4 -4 44 52',
-    width: 44,
-    height: 52,
-    anchor: [20, 44],
-    symbolOffset: 24,
-  },
-  Drop: {
-    path: 'M16,44 C4,30 0,24 0,16 A16,16 0 0 1 32,16 C32,24 28,30 16,44 Z',
-    viewBox: '-4 -4 44 56',
-    width: 44,
-    height: 56,
-    anchor: [20, 48],
-    symbolOffset: 28,
-  },
-  // A shiny ball (radial gradient) on a thin stick — uMap's "Ball". No symbol (matches Leaflet).
-  Ball: {
-    viewBox: '2 -4 28 44',
-    width: 28,
-    height: 44,
-    anchor: [14, 38],
-    body: (color, opacity) =>
-      `<defs><radialGradient id="ball" gradientUnits="userSpaceOnUse" cx="13" cy="5" r="14">` +
-      `<stop offset="0" stop-color="#fff"/>` +
-      `<stop offset="0.55" stop-color="${color}"/>` +
-      `<stop offset="1" stop-color="${color}"/>` +
-      `</radialGradient></defs>` +
-      `<g filter="url(#shadow)" opacity="${opacity}">` +
-      `<line x1="16" y1="12" x2="16" y2="34" stroke="#000" stroke-width="2"/>` +
-      `<circle cx="16" cy="8" r="8" fill="url(#ball)"/>` +
-      `</g>`,
-  },
-}
-const pinCache = new Map()
-
-function pinIcon(
-  shapeName,
-  color = SCHEMA.color.default,
-  opacity = SCHEMA.iconOpacity.default
-) {
-  const key = `${shapeName}|${color}|${opacity}`
-  if (!pinCache.has(key)) {
-    const shape = SHAPES[shapeName]
-    // Simple shapes are a single colored path; richer ones (Ball) build their own body.
-    const body = shape.body
-      ? shape.body(color, opacity)
-      : `<path d="${shape.path}" fill="${color}" opacity="${opacity}" filter="url(#shadow)"/>`
-    const svg =
-      `<svg xmlns="http://www.w3.org/2000/svg" width="${shape.width}" height="${shape.height}" viewBox="${shape.viewBox}">` +
-      `<defs>${SHADOW_FILTER}</defs>` +
-      body +
-      `</svg>`
-    pinCache.set(
-      key,
-      new Icon({
-        src: `data:image/svg+xml,${encodeURIComponent(svg)}`,
-        anchor: shape.anchor,
-        anchorXUnits: 'pixels',
-        anchorYUnits: 'pixels',
-      })
-    )
-  }
-  return pinCache.get(key)
-}
-
-function isImg(url) {
-  return isPath(url) || isRemoteUrl(url) || isDataImage(url)
-}
-
-// `bgColor` is the color the glyph sits on: the text is auto-contrasted against it (black on a
-// light background, white on a dark one). Defaults to white (the colored pins carry white glyphs).
-function symbolStyle(url, offset, size, bgColor) {
-  if (isImg(url)) {
-    const options = { src: url, displacement: [0, offset], crossOrigin: 'anonymous' }
-    // The default marker keeps its intrinsic size; any other symbol is scaled to `size`
-    // (width-based, so aspect is preserved — a very tall symbol can still overflow).
-    if (size && url !== DEFAULT_URL) options.width = size
-    return new Style({ image: new Icon(options) })
-  }
-  // A glyph / short text, sized from `size` when given (else the pin-head default).
-  return new Style({
-    text: new TextStyle({
-      text: url,
-      offsetY: -offset,
-      font: `bold ${size ? Math.round(size * 0.72) : 14}px sans-serif`,
-      fill: new Fill({ color: bgColor ? textColorFromColor(bgColor) : '#fff' }),
-    }),
-  })
-}
+import { makeIcon } from './icon.js'
+import { rgba } from './utils.js'
 
 const POINT_ZINDEX_OFFSET = 10000
 
@@ -548,74 +431,24 @@ export class OLProxy {
     this.sources[id].addFeature(olFeature)
   }
 
-  style(style = {}, geometryType) {
+  style(properties = {}, geometryType) {
+    if (geometryType === 'Point') {
+      return makeIcon(properties)
+    }
     const stroke = new Stroke({
-      color: rgba(style.color, style.opacity),
-      width: style.weight,
-      lineDash: style.dashArray?.split(',').map(Number),
+      color: rgba(properties.color, properties.opacity),
+      width: properties.weight,
+      lineDash: properties.dashArray?.split(',').map(Number),
     })
     const fill =
-      style.fill === false
+      properties.fill === false
         ? undefined
         : new Fill({
-            color: rgba(style.fillColor || style.color, style.fillOpacity),
+            color: rgba(
+              properties.fillColor || properties.color,
+              properties.fillOpacity
+            ),
           })
-
-    if (geometryType === 'Point') {
-      // uMap "Circles" datalayer type: a proportional native circle.
-      if (style.shape === 'circle') {
-        return new Style({ image: new CircleStyle({ radius: 6, fill, stroke }) })
-      }
-      const iconClass = style.iconClass
-      const opacity = style.iconOpacity
-
-      // Circle / LargeCircle are plain circles → native CircleStyle, no rasterization.
-      if (iconClass === 'Circle') {
-        return new Style({
-          image: new CircleStyle({
-            radius: 5,
-            fill: new Fill({ color: rgba(style.color, opacity) }),
-            stroke: new Stroke({ color: '#fff', width: 2 }),
-          }),
-        })
-      }
-      if (iconClass === 'LargeCircle') {
-        // iconSize is a dynamic diameter; the 2px ring straddles the edge (radius = size/2 - 1).
-        const iconSize = style.iconSize || SCHEMA.iconSize.default
-        return [
-          new Style({
-            image: new CircleStyle({
-              radius: iconSize / 2 - 1,
-              fill: new Fill({ color: rgba('#fff', opacity) }),
-              stroke: new Stroke({ color: rgba(style.color, opacity), width: 2 }),
-            }),
-          }),
-          // Fit the symbol inside the disk, not edge-to-edge; glyph contrasts with the white disk.
-          symbolStyle(
-            style.iconUrl || DEFAULT_URL,
-            0,
-            Math.round(iconSize * 0.7),
-            '#fff'
-          ),
-        ]
-      }
-
-      // Raw ("None"): no pin, just the symbol sized to iconSize, centered on the point.
-      if (iconClass === 'Raw') {
-        const iconSize = style.iconSize || SCHEMA.iconSize.default
-        return symbolStyle(style.iconUrl || DEFAULT_URL, 0, iconSize)
-      }
-
-      // Default / Drop / Ball: an SVG pin, plus an optional symbol on top.
-      const shapeName = SHAPES[iconClass] ? iconClass : 'Default'
-      const shape = SHAPES[shapeName]
-      const styles = [new Style({ image: pinIcon(shapeName, style.color, opacity) })]
-      // Shapes with a `symbolOffset` host a symbol; others (Ball) are self-contained.
-      if (shape.symbolOffset !== undefined) {
-        styles.push(symbolStyle(style.iconUrl || DEFAULT_URL, shape.symbolOffset, 24))
-      }
-      return styles
-    }
     return new Style({ stroke, fill })
   }
 
