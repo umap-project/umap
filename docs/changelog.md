@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.0 - work in progress
+
+### Breaking changes:
+- heat maps render differently (different algorithms)
+
 ## 3.8.0 - 2026-08-18
 
 This release is mainly about preparing the switch [from Leaflet to OpenLayers](https://www.openstreetmap.org/user/David%20Larlet/diary/409079).
