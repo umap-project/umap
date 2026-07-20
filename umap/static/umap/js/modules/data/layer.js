@@ -173,7 +173,7 @@ export class DataLayer {
           break
         case 'data':
           if (fields.includes('properties.type')) {
-            await this.resetLayer()
+            await this.resetLayer(true)
           }
           await this.compute()
           this.redraw()
@@ -259,6 +259,8 @@ export class DataLayer {
     this.app.mapProxy.deleteLayer(this.id)
     this.Type = null
     await this.ensureLayer()
+    // deleteLayer dropped the source; repopulate it.
+    this.app.mapProxy.addData(this.id, this.toRenderer())
     if (visible) this.show()
   }
 
