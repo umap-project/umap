@@ -96,9 +96,10 @@ const SHAPE_CACHE = new Map()
 function makeShape(
   shapeName,
   color = SCHEMA.color.default,
-  opacity = SCHEMA.iconOpacity.default
+  opacity = SCHEMA.iconOpacity.default,
+  scale = 1
 ) {
-  const key = `${shapeName}|${color}|${opacity}`
+  const key = `${shapeName}|${color}|${opacity}|${scale}`
   if (!SHAPE_CACHE.has(key)) {
     const shape = SHAPES[shapeName]
     const svg =
@@ -113,6 +114,7 @@ function makeShape(
         anchor: shape.anchor,
         anchorXUnits: 'pixels',
         anchorYUnits: 'pixels',
+        scale,
       })
     )
   }
@@ -181,17 +183,18 @@ function makeSymbol(src, offset, size, bgColor, maxWidth, zIndex) {
 // An icon is an optional shape (Ball, Drop, Circle…) + an optional symbol (say a star, a tree, an emoji, some short text)
 export function makeIcon(properties, zIndex) {
   const iconClass = properties.iconClass
+  const scale = properties.scale ?? 1
   const opacity = properties.iconOpacity
 
   // Circle / LargeCircle are plain circles → native CircleStyle, no rasterization.
   if (['Circle', 'ProportionalCircle'].includes(iconClass)) {
     const circleOpacity =
-      iconClass === 'Circle' ? 0.5 : properties.fillOpacity || opacity
+      iconClass === 'Circle' ? 0.5 : properties.fillOpacity || properties.iconOpacity
     const strokeColor =
       iconClass === 'Circle'
         ? '#fff'
         : rgba(properties.fillColor || properties.color, circleOpacity)
-    const radius = properties.radius || 6
+    const radius = (properties.radius || 6) * scale
     return new Style({
       image: new CircleStyle({
         radius: radius,
@@ -209,7 +212,7 @@ export function makeIcon(properties, zIndex) {
     return [
       new Style({
         image: new CircleStyle({
-          radius: iconSize / 2 - 1,
+          radius: (iconSize / 2 - 1) * scale,
           fill: new Fill({ color: rgba('#fff', opacity) }),
           stroke: new Stroke({ color: rgba(properties.color, opacity), width: 2 }),
         }),
@@ -219,9 +222,9 @@ export function makeIcon(properties, zIndex) {
       makeSymbol(
         properties.iconUrl || SCHEMA.iconUrl.default,
         0,
-        iconSize,
+        iconSize * scale,
         '#fff',
-        iconSize / 2,
+        (iconSize / 2) * scale,
         zIndex
       ),
     ]
@@ -233,7 +236,7 @@ export function makeIcon(properties, zIndex) {
     return makeSymbol(
       properties.iconUrl || SCHEMA.iconUrl.default,
       0,
-      iconSize,
+      iconSize * scale,
       undefined,
       undefined,
       zIndex
@@ -245,17 +248,20 @@ export function makeIcon(properties, zIndex) {
   const shapeName = SHAPES[iconClass] ? iconClass : 'Default'
   const shape = SHAPES[shapeName]
   const styles = [
-    new Style({ image: makeShape(shapeName, properties.color, opacity), zIndex }),
+    new Style({
+      image: makeShape(shapeName, properties.color, opacity, scale),
+      zIndex,
+    }),
   ]
   // Shapes with a `symbolOffset` host a symbol; others (Ball) are self-contained.
   if (shape.symbolOffset !== undefined) {
     styles.push(
       makeSymbol(
         properties.iconUrl || SCHEMA.iconUrl.default,
-        shape.symbolOffset,
-        24,
+        shape.symbolOffset * scale,
+        24 * scale,
         properties.color,
-        24,
+        24 * scale,
         zIndex
       )
     )
