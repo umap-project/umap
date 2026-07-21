@@ -292,7 +292,7 @@ class ScaleControl extends Control {
       return document.createElement('div')
     }
     const container = document.createElement('div')
-    const scaleControl = new ScaleLine({target: container})
+    const scaleControl = new ScaleLine({ target: container })
     scaleControl.setMap(this.app.mapProxy.map)
     return container
   }

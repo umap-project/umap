@@ -146,7 +146,7 @@ function wrapText(text, font, maxWidth) {
   return lines.join('\n')
 }
 
-function makeSymbol(src, offset, size, bgColor, maxWidth) {
+function makeSymbol(src, offset, size, bgColor, maxWidth, zIndex) {
   if (isImg(src)) {
     const options = {
       src,
@@ -160,7 +160,7 @@ function makeSymbol(src, offset, size, bgColor, maxWidth) {
     if (size && src !== SCHEMA.iconUrl.default) {
       options.width = maxWidth ? Math.min(size, maxWidth) : size
     }
-    return new Style({ image: new Icon(options) })
+    return new Style({ image: new Icon(options), zIndex })
   }
   const font = `bold ${size ? Math.round(size * 0.72) : 12}px sans-serif`
   const label = maxWidth ? wrapText(src, font, maxWidth) : src
@@ -175,11 +175,11 @@ function makeSymbol(src, offset, size, bgColor, maxWidth) {
     const widest = Math.max(...label.split('\n').map((line) => textWidth(line, font)))
     if (widest > maxWidth) text.setScale(maxWidth / widest)
   }
-  return new Style({ text })
+  return new Style({ text, zIndex })
 }
 
 // An icon is an optional shape (Ball, Drop, Circle…) + an optional symbol (say a star, a tree, an emoji, some short text)
-export function makeIcon(properties) {
+export function makeIcon(properties, zIndex) {
   const iconClass = properties.iconClass
   const opacity = properties.iconOpacity
 
@@ -200,6 +200,7 @@ export function makeIcon(properties) {
         }),
         stroke: new Stroke({ color: strokeColor, width: 1 }),
       }),
+      zIndex,
     })
   }
   if (iconClass === 'LargeCircle') {
@@ -212,6 +213,7 @@ export function makeIcon(properties) {
           fill: new Fill({ color: rgba('#fff', opacity) }),
           stroke: new Stroke({ color: rgba(properties.color, opacity), width: 2 }),
         }),
+        zIndex,
       }),
       // Symbol contrasts with the white disk; wrapped/scaled to stay inside the ring.
       makeSymbol(
@@ -219,7 +221,8 @@ export function makeIcon(properties) {
         0,
         iconSize,
         '#fff',
-        iconSize / 2
+        iconSize / 2,
+        zIndex
       ),
     ]
   }
@@ -227,14 +230,23 @@ export function makeIcon(properties) {
   // Raw ("None"): no pin, just the symbol sized to iconSize, centered on the point.
   if (iconClass === 'Raw') {
     const iconSize = properties.iconSize || SCHEMA.iconSize.default
-    return makeSymbol(properties.iconUrl || SCHEMA.iconUrl.default, 0, iconSize)
+    return makeSymbol(
+      properties.iconUrl || SCHEMA.iconUrl.default,
+      0,
+      iconSize,
+      undefined,
+      undefined,
+      zIndex
+    )
   }
 
   // Non native shapes
   // Default / Drop / Ball: an SVG pin, plus an optional symbol on top.
   const shapeName = SHAPES[iconClass] ? iconClass : 'Default'
   const shape = SHAPES[shapeName]
-  const styles = [new Style({ image: makeShape(shapeName, properties.color, opacity) })]
+  const styles = [
+    new Style({ image: makeShape(shapeName, properties.color, opacity), zIndex }),
+  ]
   // Shapes with a `symbolOffset` host a symbol; others (Ball) are self-contained.
   if (shape.symbolOffset !== undefined) {
     styles.push(
@@ -243,7 +255,8 @@ export function makeIcon(properties) {
         shape.symbolOffset,
         24,
         properties.color,
-        24
+        24,
+        zIndex
       )
     )
   }
