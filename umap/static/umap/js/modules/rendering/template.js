@@ -50,7 +50,7 @@ class PopupTemplate {
   renderBody(feature) {
     const template = feature.getOption('popupContentTemplate')
     return Utils.loadTemplate(
-      `<div class="umap-popup-container text">${this.toHTML(feature, template)}</div>`
+      `<div class="text">${this.toHTML(feature, template)}</div>`
     )
   }
 
@@ -94,9 +94,7 @@ class PopupTemplate {
     if (title) container.appendChild(title)
     const body = await this.renderBody(feature)
     if (body) {
-      const div = DOMUtils.loadTemplate('<div class="umap-popup-content"></div>')
-      div.appendChild(body)
-      container.appendChild(div)
+      container.appendChild(body)
     }
     const footer = this.renderFooter(feature)
     if (footer) container.appendChild(footer)
