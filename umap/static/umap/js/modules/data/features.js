@@ -948,9 +948,10 @@ class Path extends Feature {
 
   getContextMenu(event) {
     const items = super.getContextMenu(event)
+    const measure = this.measure
     items.push({
-      label: translate('Display measure'),
-      action: () => Alert.info(this.measure),
+      label: this.getMeasureLabel(measure),
+      action: () => Clipboard.copy(measure),
     })
     return items
   }
@@ -1051,6 +1052,10 @@ export class LineString extends Path {
     return TextUtils.readableDistance(
       GeoUtils.length(this.geometry, { units: 'meters' })
     )
+  }
+
+  getMeasureLabel(measure) {
+    return translate('Length: {measure}', { measure })
   }
 
   isSameClass(other) {
@@ -1405,6 +1410,10 @@ export class Polygon extends Path {
 
   get measure() {
     return TextUtils.readableArea(GeoUtils.area(this.geometry))
+  }
+
+  getMeasureLabel(measure) {
+    return translate('Area: {measure}', { measure })
   }
 
   isEmpty() {

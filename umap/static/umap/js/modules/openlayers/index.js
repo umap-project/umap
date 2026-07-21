@@ -509,6 +509,14 @@ export class OLProxy {
     const { toggle } = await import('./geolocation.js')
     await toggle(this.map, this.app)
   }
+
+  async toggleMeasure(type) {
+    if (!this.measureTool) {
+      const { MeasureTool } = await import('./measure.js')
+      this.measureTool = new MeasureTool(this.map)
+    }
+    this.measureTool.toggle(type)
+  }
 }
 
 class TileLayerManager {
