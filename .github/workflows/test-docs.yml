@@ -10,6 +10,7 @@ on:
 
 jobs:
   tests:
+    if: github.event.pull_request.draft == false
     timeout-minutes: 60
     runs-on: ubuntu-latest
     services:
