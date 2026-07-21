@@ -17,12 +17,14 @@ import { makeIcon } from './icon.js'
 import { rgba } from './utils.js'
 
 const POINT_ZINDEX_OFFSET = 10000
+const HIGHLIGHT_ZINDEX = 1e6
 
 export class OLProxy {
   constructor(app, element) {
     this.app = app
     this.sources = {}
     this.layers = {}
+    this.highlighted = null
     this.map = new OLMap({
       target: element,
       controls: [],
@@ -74,7 +76,7 @@ export class OLProxy {
       this.app.panel.open({ content })
     })
     this.app.on('popup:show', (event) => {
-      const { content, center } = event.detail
+      const { sourceId, id, content, center } = event.detail
       const overlay = new Overlay({
         element: content,
         autoPan: {
@@ -85,7 +87,9 @@ export class OLProxy {
       })
       overlay.setPosition(fromLonLat(center))
       this.map.addOverlay(overlay)
+      this.highlight(sourceId, id)
     })
+    this.app.on('popup:close', () => this.closePopup())
     this.app.on('feature:reset', (event) => {
       const { sourceId, geojson } = event.detail
       const olFeature = this.sources[sourceId]?.getFeatureById(geojson.id)
@@ -164,13 +168,6 @@ export class OLProxy {
   }
 
   render() {
-    //   this.map.setView(
-    //     new View({
-    //       center: fromLonLat(this.app.properties.center),
-    //       zoom: this.app.getProperty('zoom'),
-    //       // extent: [ 142018.18294748594, 4635148.893696092, 2945116.88422147, 7347746.153480427 ]
-    //     })
-    //   )
     this.initCenter()
     const updateHash = () => {
       const [lng, lat] = this.center
@@ -300,10 +297,7 @@ export class OLProxy {
   }
 
   onClick(event) {
-    const overlays = this.map.getOverlays().getArray()
-    for (const overlay of overlays) {
-      this.map.removeOverlay(overlay)
-    }
+    this.closePopup()
     // getFeaturesAtPixel returns features top-to-bottom; we act on the topmost.
     const olFeature = this.map.getFeaturesAtPixel(event.pixel)[0]
     if (!olFeature) return
@@ -427,7 +421,39 @@ export class OLProxy {
   }
 
   setFeatureStyle(olFeature, geojson) {
-    olFeature.set('umapStyle', this.style(geojson))
+    olFeature.set('umapBaseStyle', this.style(geojson))
+    olFeature.set('umapHighlightStyle', this.style(geojson, true))
+    olFeature.set(
+      'umapStyle',
+      olFeature.get(
+        olFeature === this.highlighted ? 'umapHighlightStyle' : 'umapBaseStyle'
+      )
+    )
+  }
+
+  closePopup() {
+    for (const overlay of this.map.getOverlays().getArray().slice()) {
+      this.map.removeOverlay(overlay)
+    }
+    this.unhighlight()
+  }
+
+  highlight(sourceId, id) {
+    const olFeature = this.sources[sourceId]?.getFeatureById(id)
+    if (olFeature === this.highlighted) return
+    this.unhighlight()
+    if (!olFeature) return
+    this.highlighted = olFeature
+    olFeature.set('umapStyle', olFeature.get('umapHighlightStyle'))
+    this.map.dispatchEvent('umap:highlight')
+  }
+
+  unhighlight() {
+    if (!this.highlighted) return
+    const olFeature = this.highlighted
+    this.highlighted = null
+    olFeature.set('umapStyle', olFeature.get('umapBaseStyle'))
+    this.map.dispatchEvent('umap:highlight')
   }
 
   addFeature(id, geojson) {
@@ -437,9 +463,10 @@ export class OLProxy {
     this.sources[id].addFeature(olFeature)
   }
 
-  style(geojson) {
-    const properties = geojson.style || {}
-    const zIndex = geojson.zIndex
+  style(geojson, highlight = false) {
+    const base = geojson.style || {}
+    const properties = highlight ? { ...base, ...geojson.highlight } : base
+    const zIndex = highlight ? HIGHLIGHT_ZINDEX : geojson.zIndex
     if (geojson.geometry.type === 'Point') {
       return makeIcon(properties, zIndex)
     }

@@ -289,7 +289,7 @@ const PathMixin = {
   },
 
   highlight: function () {
-    this.parentClass.prototype.setStyle.call(this, this.geojson.style.highlight)
+    this.parentClass.prototype.setStyle.call(this, this.geojson.highlight)
   },
 
   _onDrag: function () {

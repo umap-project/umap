@@ -30,11 +30,15 @@ function spiderfyLatLng(center, index, layerCount, resolution) {
 function spiderLayer(map) {
   let layer = map.get('spiderLayer')
   if (!layer) {
-    layer = new VectorLayer({ source: new VectorSource(), zIndex: SPIDER_ZINDEX })
+    layer = new VectorLayer({
+      source: new VectorSource(),
+      zIndex: SPIDER_ZINDEX,
+      style: (feature) => feature.get('features')[0].get('umapStyle'),
+    })
     map.set('spiderLayer', layer)
     map.addLayer(layer)
+    map.on('umap:highlight', () => layer.changed())
     const collapse = () => layer.getSource().clear()
-    // The spread goes stale when the view moves → always collapse.
     map.on('moveend', collapse)
     // A click dismisses the spider — unless it landed on one of its own features (member or
     // link line), so a member's popup stays anchored to its still-visible marker.
@@ -58,7 +62,6 @@ function spiderfy(members, center, map) {
     const line = new Feature({ geometry: new LineString([center, spread]) })
     line.setStyle(SPIDER_LINE_STYLE)
     const marker = new Feature({ features: [member], geometry: new Point(spread) })
-    marker.setStyle(member.get('umapStyle'))
     revealed.push(line, marker)
   })
   source.addFeatures(revealed)
