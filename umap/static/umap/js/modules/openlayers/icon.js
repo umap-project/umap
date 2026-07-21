@@ -185,7 +185,8 @@ export function makeIcon(properties) {
 
   // Circle / LargeCircle are plain circles → native CircleStyle, no rasterization.
   if (['Circle', 'ProportionalCircle'].includes(iconClass)) {
-    const circleOpacity = iconClass === 'Circle' ? 0.5 : properties.fillOpacity || opacity
+    const circleOpacity =
+      iconClass === 'Circle' ? 0.5 : properties.fillOpacity || opacity
     const strokeColor =
       iconClass === 'Circle'
         ? '#fff'
