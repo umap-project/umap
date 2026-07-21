@@ -7,6 +7,7 @@ import { Alert } from '../../components/alerts/alert.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
 import ScaleLine from 'ol/control/ScaleLine.js'
+import OverviewMap from 'ol/control/OverviewMap.js'
 
 export class Control {
   constructor(app) {
@@ -546,24 +547,24 @@ export class LocateControl extends SimpleButton {
 class MiniMapControl extends Control {
   static position = 'bottomright'
   render() {
-    const layer = this._cloneLayer(this.app.mapProxy.tilelayers.current)
-    this._miniMap = new LeafletControl.MiniMap(layer, {
-      aimingRectOptions: {
-        color: this.app.getProperty('color'),
-        fillColor: this.app.getProperty('fillColor'),
-        stroke: this.app.getProperty('stroke'),
-        fill: this.app.getProperty('fill'),
-        weight: this.app.getProperty('weight'),
-        opacity: this.app.getProperty('opacity'),
-        fillOpacity: this.app.getProperty('fillOpacity'),
-      },
+    if (this.app.mapProxy.constructor.name === 'LeafletProxy') {
+      return document.createElement('div')
+    }
+    const container = document.createElement('div')
+    const proxy = this.app.mapProxy
+    const overviewMap = new OverviewMap({
+      layers: [proxy.tilelayers.cloneLayer?.(proxy.tilelayers.current)],
+      collapseLabel: '»',
+      label: '«',
+      collapsed: false,
+      target: container,
     })
-    // TODO remove direct call to leafletMap
-    return this._miniMap.addTo(this.app.mapProxy.map)._container
-  }
-
-  _cloneLayer(layer) {
-    return new TileLayer(layer._url, Object.assign({}, layer.options))
+    overviewMap.setMap(proxy.map)
+    this.app.on('map:baselayerchange', (event) => {
+      const map = overviewMap.getOverviewMap()
+      map.setLayers([proxy.tilelayers.cloneLayer(event.detail.layer)])
+    })
+    return container
   }
 }
 
