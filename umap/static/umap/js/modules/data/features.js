@@ -203,6 +203,7 @@ class Feature {
       } else {
         this.app.fire('popup:show', {
           id: this.id,
+          sourceId: this.datalayer.id,
           content: element,
           center: center || this.center,
           mode: popupShape === 'Large' ? 'large' : 'normal',
@@ -569,11 +570,6 @@ class Feature {
     for (const option of this.getStyleProperties()) {
       style[option] = this.getDynamicOption(option)
     }
-    style.highlight = {
-      opacity: 1,
-      fillOpacity: Math.sqrt(style.fillOpacity ?? 1),
-      weight: 1.3 * style.weight,
-    }
     return style
   }
 
@@ -581,6 +577,13 @@ class Feature {
     const geojson = this.toGeoJSON()
     geojson.id = this.id
     geojson.style = this.getRenderProperties()
+    geojson.highlight = {
+      opacity: 1,
+      fillOpacity: Math.sqrt(geojson.style.fillOpacity ?? 1),
+      weight: 1.3 * geojson.style.weight,
+      iconOpacity: 1,
+      scale: 1.2,
+    }
     geojson.readonly = this.isReadOnly()
     geojson.label = this.getLabel()
     // Per-feature values a Type computes as feature attributes (vs style), e.g. the heat weight.
