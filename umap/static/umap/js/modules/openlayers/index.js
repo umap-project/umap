@@ -1,3 +1,5 @@
+import { translate } from '../i18n.js'
+import * as Utils from '../utils.js'
 import { default as OLMap } from 'ol/Map.js'
 import TileLayer from 'ol/layer/Tile.js'
 import XYZ from 'ol/source/XYZ.js'
@@ -6,18 +8,28 @@ import GeoJSON from 'ol/format/GeoJSON.js'
 import VectorSource from 'ol/source/Vector.js'
 import VectorLayer from 'ol/layer/Vector.js'
 import { fromLonLat, transformExtent, toLonLat } from 'ol/proj.js'
+import { getWidth, getHeight } from 'ol/extent.js'
 // import Draw from 'ol/interaction/Draw.js'
 import Overlay from 'ol/Overlay.js'
 import Stroke from 'ol/style/Stroke.js'
 import Fill from 'ol/style/Fill.js'
 import Style from 'ol/style/Style.js'
 import Modify from 'ol/interaction/Modify.js'
-import * as Utils from '../utils.js'
 import { makeIcon } from './icon.js'
 import { rgba } from './utils.js'
 
 const POINT_ZINDEX_OFFSET = 10000
 const HIGHLIGHT_ZINDEX = 1e6
+
+const popupTemplate = `
+  <div class="umap-popup window">
+    <ul class="buttons">
+        <li><button class="icon icon-16 icon-close" data-close=""></button><span class="sr-only">${translate('Close')}</span></li>
+    </ul>
+    <aside data-ref=body>
+    </aside>
+  </div>
+`
 
 export class OLProxy {
   constructor(app, element) {
@@ -36,7 +48,22 @@ export class OLProxy {
         ? 'pointer'
         : ''
     })
-
+    const [container, { body }] = Utils.loadTemplateWithRefs(popupTemplate)
+    this.popup = new Overlay({
+      element: container,
+      positioning: 'bottom-center',
+      offset: [0, -12],
+      autoPan: {
+        animation: {
+          duration: 250,
+        },
+      },
+    })
+    this.popup.set('body', body)
+    this.map.addOverlay(this.popup)
+    container.addEventListener('click', (event) => {
+      if (event.target.closest('[data-close]')) this.app.fire('popup:close')
+    })
     this.proxyOutgoingEvents()
     this.proxyIncomingEvents()
   }
@@ -76,17 +103,12 @@ export class OLProxy {
       this.app.panel.open({ content })
     })
     this.app.on('popup:show', (event) => {
-      const { sourceId, id, content, center } = event.detail
-      const overlay = new Overlay({
-        element: content,
-        autoPan: {
-          animation: {
-            duration: 250,
-          },
-        },
-      })
-      overlay.setPosition(fromLonLat(center))
-      this.map.addOverlay(overlay)
+      const { sourceId, id, content, center, mode } = event.detail
+      this.popup.setPosition(fromLonLat(center))
+      const body = this.popup.get('body')
+      body.innerHTML = ''
+      body.appendChild(content)
+      this.popup.element.classList.toggle('umap-popup-large', mode === 'large')
       this.highlight(sourceId, id)
     })
     this.app.on('popup:close', () => this.closePopup())
@@ -121,6 +143,13 @@ export class OLProxy {
 
   get center() {
     return toLonLat(this.view.getCenter())
+  }
+
+  getBoundsZoom(bounds) {
+    const extent = transformExtent(bounds, 'EPSG:4326', 'EPSG:3857')
+    const [width, height] = this.map.getSize()
+    const resolution = Math.min(getWidth(extent) / width, getHeight(extent) / height)
+    return this.view.getZoomForResolution(resolution)
   }
 
   getGeoContext() {
@@ -432,9 +461,7 @@ export class OLProxy {
   }
 
   closePopup() {
-    for (const overlay of this.map.getOverlays().getArray().slice()) {
-      this.map.removeOverlay(overlay)
-    }
+    this.popup.setPosition(undefined)
     this.unhighlight()
   }
 
