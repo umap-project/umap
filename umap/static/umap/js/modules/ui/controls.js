@@ -509,41 +509,17 @@ export class LocateControl extends SimpleButton {
   icon = 'icon-locate'
 
   onMount() {
-    this.app.on('map:locateactivate', () => {
+    this.app.on('map:locate:activate', () => {
       this.container.classList.add('active')
     })
-    this.app.on('map:locatedeactivate', () => {
+    this.app.on('map:locate:deactivate', () => {
       this.container.classList.remove('active')
     })
   }
 
-  async start() {
-    await this.loadPlugin()
-    this._locate.start()
-  }
-
-  stop() {
-    this._locate?.stop()
-  }
-
-  async loadPlugin() {
-    if (this._locate) return
-    const { LocateControl: LeafletLocate } = await import(
-      '../../../vendors/locatecontrol/L.Control.Locate.esm.js'
-    )
-    this._locate = new LeafletLocate({
-      strings: { title: translate('Center map on your location') },
-      showPopup: false,
-      onLocationError: (err) => Alert.error(err.message),
-    })
-    // TODO remove direct call to leafletMap
-    this._locate._map = this.app.mapProxy.map
-    this._locate.onAdd(this.app.mapProxy.map)
-  }
 
   async onClick() {
-    if (this._locate?._active) this.stop()
-    else this.start()
+    this.app.mapProxy.toggleLocate()
   }
 }
 
