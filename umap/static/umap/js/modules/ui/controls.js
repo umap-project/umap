@@ -130,26 +130,27 @@ export class MeasureControl extends MoreableControl {
   static position = 'topleft'
 
   render() {
-    // TODO remove direct call to leafletMap => turf
-    const defaultUnit = this.app.mapProxy.map.measureTools?.options.defaultUnit
-    const checked = (unit) => (unit === defaultUnit ? 'checked' : '')
-    const [container, { toggle }] = Utils.loadTemplateWithRefs(`
-      <div class="umap-control umap-control-measure">
-        <a class="umap-control-measure-toggle" href="#" role="button" title="${translate('Measure distances')}" data-ref="toggle"></a>
-        <input type="radio" id="km" name="unit" value="km" ${checked('km')}>
-        <label for="km" title="${translate('kilometers')}">${translate('km')}</label>
-        <input type="radio" id="mi" name="unit" value="mi" ${checked('mi')}>
-        <label for="mi" title="${translate('miles')}">${translate('mi')}</label>
-        <input type="radio" id="nm" name="unit" value="nm" ${checked('nm')}>
-        <label for="nm" title="${translate('nautical miles')}">${translate('NM')}</label>
-      </div>
+    const [form, { toggle }] = Utils.loadTemplateWithRefs(`
+      <form class="umap-control umap-control-measure">
+        <a class="umap-control-measure-toggle" href="#" role="button" title="${translate('Measure')}" data-ref="toggle"></a>
+        <input type="radio" id="distance" name="type" value="LineString" checked>
+        <label for="distance" title="${translate('Measure distances')}"><i class="icon icon-16 icon-polyline"></i><span class="sr-only">${translate('Measure distances')}</span></label>
+        <input type="radio" id="area" name="type" value="Polygon">
+        <label for="area" title="${translate('Measure areas')}"><i class="icon icon-16 icon-polygon"></i><span class="sr-only">${translate('Measure areas')}</span></label>
+      </form>
     `)
     toggle.addEventListener('click', (event) => {
       event.preventDefault()
       event.stopPropagation()
-      this.app.mapProxy.map.measureTools.toggle()
+      form.classList.toggle('on')
+      const data = new FormData(form)
+      this.app.mapProxy.toggleMeasure(data.get('type'))
     })
-    return container
+    form.addEventListener('change', (event) => {
+      const data = new FormData(form)
+      this.app.mapProxy.toggleMeasure(data.get('type'))
+    })
+    return form
   }
 }
 
@@ -516,7 +517,6 @@ export class LocateControl extends SimpleButton {
       this.container.classList.remove('active')
     })
   }
-
 
   async onClick() {
     this.app.mapProxy.toggleLocate()
