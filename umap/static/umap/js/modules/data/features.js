@@ -675,6 +675,13 @@ class Feature {
     })
   }
 
+  onContextMenu({ lat, lng, pixel, vertex }) {
+    const items = this.getContextMenu({ vertex }).concat(
+      this.app.getSharedContextMenu({ lat, lng })
+    )
+    this.app.contextmenu.openAt(pixel, items)
+  }
+
   getContextMenu(event) {
     const permalink = this.getPermalink()
     const items = []

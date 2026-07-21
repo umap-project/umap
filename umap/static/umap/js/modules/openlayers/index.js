@@ -41,6 +41,7 @@ export class OLProxy {
 
   proxyIncomingEvents() {
     this.map.on('click', (event) => this.onClick(event))
+    this.map.on('contextmenu', (event) => this.onContextMenu(event))
   }
 
   proxyOutgoingEvents() {
@@ -332,6 +333,20 @@ export class OLProxy {
       // Events carry geographic lon/lat; the proxy converts to/from its projection.
       uFeature.view({ center: toLonLat(event.coordinate) })
     }
+  }
+
+  onContextMenu(event) {
+    event.originalEvent.preventDefault()
+    const [lng, lat] = toLonLat(event.coordinate)
+    const appEvent = {
+      lat,
+      lng,
+      pixel: [event.originalEvent.clientX, event.originalEvent.clientY],
+    }
+    const olFeature = this.map.getFeaturesAtPixel(event.pixel)[0]
+    const feature = olFeature && this.getFeatureById(olFeature.getId())
+    if (feature) feature.onContextMenu(appEvent)
+    else this.app.onContextMenu(appEvent)
   }
 
   removeFeature(id, featureId) {
