@@ -288,10 +288,13 @@ class MoreControl extends Control {
 class ScaleControl extends Control {
   static position = 'bottomleft'
   render() {
-    const scaleControl = new ScaleLine()
-    // this.app.mapProxy.map.addControl(scaleControl)
-    console.log(scaleControl)
-    return scaleControl.element
+    if (this.app.mapProxy.constructor.name === 'LeafletProxy') {
+      return document.createElement('div')
+    }
+    const container = document.createElement('div')
+    const scaleControl = new ScaleLine({target: container})
+    scaleControl.setMap(this.app.mapProxy.map)
+    return container
   }
 }
 
