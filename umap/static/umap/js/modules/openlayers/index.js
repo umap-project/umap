@@ -475,6 +475,15 @@ export class OLProxy {
     // southwest_lng,southwest_lat,northeast_lng,northeast_lat'
     return this.map.options.maxBounds?.toBBoxString()
   }
+
+  toggleFullscreen() {
+    const doc = this.map.getOwnerDocument()
+    if (doc.fullscreenElement) {
+      doc.exitFullscreen()
+    } else {
+      this.map.getTargetElement().requestFullscreen()
+    }
+  }
 }
 
 class TileLayerManager {
