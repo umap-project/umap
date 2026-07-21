@@ -504,6 +504,11 @@ export class OLProxy {
       this.map.getTargetElement().requestFullscreen()
     }
   }
+
+  async toggleLocate() {
+    const { toggle } = await import('./geolocation.js')
+    await toggle(this.map, this.app)
+  }
 }
 
 class TileLayerManager {
