@@ -161,7 +161,6 @@ class Feature {
 
   async buildCard() {
     const container = document.createElement('div')
-    container.classList.add('umap-popup')
     const name = this.getOption('popupTemplate')
     const { default: loadTemplate } = await import('../rendering/template.js')
     const content = await loadTemplate(name, this, container)
