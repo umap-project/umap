@@ -40,11 +40,18 @@ export class LeafletProxy {
 
   proxyIncomingEvents() {
     this.map.on(
-      'locateactivate locatedeactivate moveend zoomend contextmenu popupclose zoomlevelschange',
+      'locateactivate locatedeactivate moveend zoomend popupclose zoomlevelschange',
       (event) => {
         this.app.fire(`map:${event.type}`, { event: event })
       }
     )
+    this.map.on('contextmenu', (event) => {
+      this.app.onContextMenu({
+        lat: event.latlng.lat,
+        lng: event.latlng.lng,
+        pixel: [event.originalEvent.clientX, event.originalEvent.clientY],
+      })
+    })
     this.map.on('feature:mouseover', (event) => {
       if (!this.app.editEnabled) return
       if (!this.app.editedFeature) {
@@ -101,10 +108,12 @@ export class LeafletProxy {
     this.map.on('feature:contextmenu', (event) => {
       const feature = this.getFeatureById(event.id)
       if (!feature) return
-      const items = feature
-        .getContextMenu(event)
-        .concat(this.app.getSharedContextMenu(event))
-      this.app.contextmenu.open(event.originalEvent, items)
+      feature.onContextMenu({
+        lat: event.latlng.lat,
+        lng: event.latlng.lng,
+        pixel: [event.originalEvent.clientX, event.originalEvent.clientY],
+        vertex: event.vertex,
+      })
     })
   }
 
