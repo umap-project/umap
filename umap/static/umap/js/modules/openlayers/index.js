@@ -573,6 +573,7 @@ class TileLayerManager {
       // Leaflet throw an error, and then the map is no more editable
     }
     this.setOverlay()
+    this.app.fire('map:baselayerchange', { layer: this.current })
   }
 
   setOverlay() {
@@ -588,5 +589,11 @@ class TileLayerManager {
       console.error(e)
       Alert.error(`${translate('Error in the overlay URL')}: ${overlay._url}`)
     }
+  }
+
+  cloneLayer(layer) {
+    return new TileLayer({
+      source: layer.getSource(),
+    })
   }
 }

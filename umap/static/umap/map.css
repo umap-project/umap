@@ -1018,10 +1018,17 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
 /* ********* */
 /*     OL    */
 /* ********* */
-.ol-overlay-container {
+.umap-popup {
     background-color: var(--background-color);
     padding: var(--box-padding);
 }
+.ol-overviewmap {
+    position: relative;
+}
+.ol-overviewmap .ol-overviewmap-box {
+    border: 2px dashed darkorange;
+}
+
 /* ********* */
 /* Orderable */
 /* ********* */
