@@ -406,10 +406,7 @@ export class OLProxy {
     // style as `umapStyle` (the layer style fns read it — see createLayer).
     const olFeatures = geojson.features.map((feature) => {
       const olFeature = format.readFeature(feature, options)
-      olFeature.set(
-        'umapStyle',
-        this.style(feature.style, olFeature.getGeometry().getType())
-      )
+      this.setFeatureStyle(olFeature, feature)
       return olFeature
     })
     // Before addFeatures, so a (re)cluster uses the new config. Cluster/heat subscribe to the
@@ -430,25 +427,21 @@ export class OLProxy {
   }
 
   setFeatureStyle(olFeature, geojson) {
-    olFeature.set(
-      'umapStyle',
-      this.style(geojson.style, olFeature.getGeometry().getType())
-    )
+    olFeature.set('umapStyle', this.style(geojson))
   }
 
   addFeature(id, geojson) {
     const options = { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' }
     const olFeature = new GeoJSON().readFeature(geojson, options)
-    olFeature.set(
-      'umapStyle',
-      this.style(geojson.style, olFeature.getGeometry().getType())
-    )
+    this.setFeatureStyle(olFeature, geojson)
     this.sources[id].addFeature(olFeature)
   }
 
-  style(properties = {}, geometryType) {
-    if (geometryType === 'Point') {
-      return makeIcon(properties)
+  style(geojson) {
+    const properties = geojson.style || {}
+    const zIndex = geojson.zIndex
+    if (geojson.geometry.type === 'Point') {
+      return makeIcon(properties, zIndex)
     }
     const stroke = new Stroke({
       color: rgba(properties.color, properties.opacity),
@@ -464,7 +457,7 @@ export class OLProxy {
               properties.fillOpacity
             ),
           })
-    return new Style({ stroke, fill })
+    return new Style({ stroke, fill, zIndex })
   }
 
   get hasExtent() {
