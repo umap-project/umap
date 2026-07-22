@@ -320,7 +320,7 @@ const EDIT_BAR_TEMPLATE = `
   <div class="umap-edit-bar dark with-transition">
     <ul>
       <li data-ref="marker"><button class="drawing-tool" type="button" data-getstarted><i class="icon icon-24 icon-marker"></i></button></li>
-      <li data-ref="polyline"><button class="drawing-tool" type="button" data-getstarted><i class="icon icon-24 icon-polyline"></i></button></li>
+      <li data-ref="linestring"><button class="drawing-tool" type="button" data-getstarted><i class="icon icon-24 icon-polyline"></i></button></li>
       <li data-ref="multiline" hidden>
         <button class="drawing-tool" type="button" title="${translate('Add a line to the current multi')}"><i class="icon icon-24 icon-multiline"></i></button>
       </li>
@@ -355,7 +355,7 @@ export class EditBar extends WithTemplate {
     this.parent.appendChild(this.element)
     DOMUtils.disableClickPropagation(this.element)
     this.addDrawListener('marker')
-    this.addDrawListener('polyline')
+    this.addDrawListener('linestring')
     this.addDrawListener('multiline')
     this.addDrawListener('polygon')
     this.addDrawListener('multipolygon')
@@ -377,7 +377,7 @@ export class EditBar extends WithTemplate {
     this.addClickListener('settings', () => this.app.edit())
     this.addTitle('import', 'IMPORT_PANEL')
     this.addTitle('marker', 'DRAW_MARKER')
-    this.addTitle('polyline', 'DRAW_LINE')
+    this.addTitle('linestring', 'DRAW_LINE')
     this.addTitle('polygon', 'DRAW_POLYGON')
     this.app.on('seteditedfeature', () => this.redraw())
   }
