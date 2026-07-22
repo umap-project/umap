@@ -1514,6 +1514,7 @@ export default class App extends Utils.WithEvents {
       switch (impact) {
         case 'ui':
           this.controlManager.update()
+          this.mapProxy.updateUI()
           this.browser?.redraw()
           this.topBar.redraw()
           this.bottomBar.redraw()

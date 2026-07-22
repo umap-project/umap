@@ -15,6 +15,7 @@ import Stroke from 'ol/style/Stroke.js'
 import Fill from 'ol/style/Fill.js'
 import Style from 'ol/style/Style.js'
 import Modify from 'ol/interaction/Modify.js'
+import MouseWheelZoom from 'ol/interaction/MouseWheelZoom.js'
 import { makeIcon } from './icon.js'
 import { rgba } from './utils.js'
 
@@ -44,6 +45,10 @@ export class OLProxy {
       target: element,
       controls: [],
     })
+    this.mouseWheelZoom = this.map
+      .getInteractions()
+      .getArray()
+      .find((interaction) => interaction instanceof MouseWheelZoom)
     this.tilelayers = new TileLayerManager(this)
 
     this.map.on('pointermove', (event) => {
@@ -252,6 +257,11 @@ export class OLProxy {
     })
     this.tilelayers.init(this.app.properties.tilelayers)
     this.tilelayers.selectDefault()
+    this.updateUI()
+  }
+
+  updateUI() {
+    this.mouseWheelZoom.setActive(this.app.getProperty('scrollWheelZoom'))
   }
 
   setDefaultCenter() {
