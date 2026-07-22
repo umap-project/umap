@@ -14,7 +14,6 @@ import {
 import { Alert } from '../../components/alerts/alert.js'
 import { translate } from '../i18n.js'
 import * as GeoUtils from '../geoutils.js'
-import * as Utils from '../utils.js'
 import { LeafletIcon, layerClass } from './ui.js'
 import { Default as DefaultLayer } from '../rendering/layers/base.js'
 import { Cluster } from '../rendering/layers/cluster.js'
@@ -119,14 +118,6 @@ export class LeafletProxy {
 
   proxyOutgoingEvents() {
     // For hash changes
-    this.app.on('map:view:update', (event) => {
-      let { zoom, coordinate } = event.detail
-      if (!Utils.coordinateIsValid(coordinate)) return
-      zoom = Math.min(zoom, this.map.getMaxZoom())
-      zoom = Math.max(zoom, this.map.getMinZoom())
-      const [lng, lat] = coordinate
-      this.map.setView([lat, lng], zoom, { animate: false })
-    })
     this.app.on('map:show:point', (event) => {
       this.showPoint({ ...event.detail })
     })
