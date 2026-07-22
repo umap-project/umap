@@ -181,7 +181,7 @@ function makeSymbol(src, offset, size, bgColor, maxWidth, zIndex) {
 }
 
 // An icon is an optional shape (Ball, Drop, Circle…) + an optional symbol (say a star, a tree, an emoji, some short text)
-export function makeIcon(properties, zIndex) {
+export function makeIcon(olFeature, properties, zIndex) {
   const iconClass = properties.iconClass
   const scale = properties.scale ?? 1
   const opacity = properties.iconOpacity
@@ -195,6 +195,7 @@ export function makeIcon(properties, zIndex) {
         ? '#fff'
         : rgba(properties.fillColor || properties.color, circleOpacity)
     const radius = (properties.radius || 6) * scale
+    olFeature.set('popupOffsetY', -radius)
     return new Style({
       image: new CircleStyle({
         radius: radius,
@@ -209,10 +210,12 @@ export function makeIcon(properties, zIndex) {
   if (iconClass === 'LargeCircle') {
     // iconSize is a dynamic diameter; the 2px ring straddles the edge (radius = size/2 - 1).
     const iconSize = properties.iconSize || SCHEMA.iconSize.default
+    const radius = (iconSize / 2 - 1) * scale
+    olFeature.set('popupOffsetY', -radius)
     return [
       new Style({
         image: new CircleStyle({
-          radius: (iconSize / 2 - 1) * scale,
+          radius,
           fill: new Fill({ color: rgba('#fff', opacity) }),
           stroke: new Stroke({ color: rgba(properties.color, opacity), width: 2 }),
         }),
@@ -233,6 +236,7 @@ export function makeIcon(properties, zIndex) {
   // Raw ("None"): no pin, just the symbol sized to iconSize, centered on the point.
   if (iconClass === 'Raw') {
     const iconSize = properties.iconSize || SCHEMA.iconSize.default
+    olFeature.set('popupOffsetY', -iconSize / 2)
     return makeSymbol(
       properties.iconUrl || SCHEMA.iconUrl.default,
       0,
@@ -247,6 +251,8 @@ export function makeIcon(properties, zIndex) {
   // Default / Drop / Ball: an SVG pin, plus an optional symbol on top.
   const shapeName = SHAPES[iconClass] ? iconClass : 'Default'
   const shape = SHAPES[shapeName]
+  const [anchorX, anchorY] = shape.anchor
+  olFeature.set('popupOffsetY', -anchorY)
   const styles = [
     new Style({
       image: makeShape(shapeName, properties.color, opacity, scale),
