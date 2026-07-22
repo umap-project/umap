@@ -484,7 +484,6 @@ class Feature {
   }
 
   zoomTo({ easing, latlng, callback } = {}) {
-    if (easing === undefined) easing = this.app.getProperty('easing')
     if (callback) this.app.once('map:moveend', (event) => callback.call(this, event))
     this.app.fire('map:view:set', {
       coordinates: latlng || this.center,
@@ -939,7 +938,6 @@ class Path extends Feature {
 
   zoomTo({ easing, callback }) {
     // Use bounds instead of centroid for paths.
-    easing = easing || this.app.getProperty('easing')
     const zoom = this.getBestZoom()
     this.app.fire('map:view:fit-bounds', { bounds: this.bounds, zoom, easing })
     if (callback) callback.call(this)
