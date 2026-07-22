@@ -9,12 +9,10 @@ import VectorSource from 'ol/source/Vector.js'
 import VectorLayer from 'ol/layer/Vector.js'
 import { fromLonLat, transformExtent, toLonLat } from 'ol/proj.js'
 import { getWidth, getHeight } from 'ol/extent.js'
-// import Draw from 'ol/interaction/Draw.js'
 import Overlay from 'ol/Overlay.js'
 import Stroke from 'ol/style/Stroke.js'
 import Fill from 'ol/style/Fill.js'
 import Style from 'ol/style/Style.js'
-import Modify from 'ol/interaction/Modify.js'
 import MouseWheelZoom from 'ol/interaction/MouseWheelZoom.js'
 import { makeIcon } from './icon.js'
 import { rgba } from './utils.js'
@@ -40,6 +38,7 @@ export class OLProxy {
     this.app = app
     this.sources = {}
     this.layers = {}
+    this.editInteractions = []
     this.highlighted = null
     this.map = new OLMap({
       target: element,
@@ -82,6 +81,9 @@ export class OLProxy {
   }
 
   proxyOutgoingEvents() {
+    this.app.on('draw:marker', async () => await this.startDrawing('Point'))
+    this.app.on('draw:linestring', async () => await this.startDrawing('LineString'))
+    this.app.on('draw:polygon', async () => await this.startDrawing('Polygon'))
     this.app.on('map:view:set', (event) => {
       const { easing, zoom, coordinates } = event.detail
       this.setView({ coordinates, zoom, easing })
@@ -304,22 +306,98 @@ export class OLProxy {
   }
 
   initEditTools() {}
-  enableEdit() {
+  async enableEdit() {
+    const { default: Select } = await import('ol/interaction/Select.js')
+    const { default: Translate } = await import('ol/interaction/Translate.js')
+    const select = new Select({ style: (feature) => feature.get('umapHighlightStyle') })
+    this.editInteractions.push(select)
+    this.map.addInteraction(select)
+    select.on('select', () => {
+      if (select.getFeatures().getArray().length) {
+        this.pauseEditInteractions('Modify')
+      } else {
+        this.resumeEditInteractions('Modify')
+      }
+    })
+
+    const translateFeature = new Translate({
+      features: select.getFeatures(),
+    })
+    this.map.addInteraction(translateFeature)
+    translateFeature.on('translateend', (event) => {
+      for (const olFeature of event.features.getArray()) {
+        this.pullGeometry(olFeature)
+      }
+    })
+    this.editInteractions.push(translateFeature)
+
     for (const source of Object.values(this.sources)) {
-      const modify = new Modify({ source })
-      modify.on('modifyend', (event) => {
-        event.features.forEach((olFeature) => {
-          const feature = this.getFeatureById(olFeature.getId())
-          if (!feature) return
-          const { geometry } = new GeoJSON().writeFeatureObject(olFeature, {
-            dataProjection: 'EPSG:4326',
-            featureProjection: 'EPSG:3857',
-          })
-          feature.onCommit(geometry)
-        })
-      })
-      this.map.addInteraction(modify)
+      await this.registerSourceForEdit(source)
     }
+  }
+
+  async registerSourceForEdit(source) {
+    const { default: Modify } = await import('ol/interaction/Modify.js')
+    const { default: Snap } = await import('ol/interaction/Snap.js')
+    const modify = new Modify({ source })
+    const snap = new Snap({ source })
+    this.editInteractions.push(modify)
+    this.editInteractions.push(snap)
+    modify.on('modifyend', (event) => {
+      event.features.forEach((olFeature) => {
+        this.pullGeometry(olFeature)
+      })
+    })
+    this.map.addInteraction(modify)
+    this.map.addInteraction(snap)
+  }
+
+  disableEdit() {
+    for (const interaction of this.editInteractions) {
+      this.map.removeInteraction(interaction)
+    }
+  }
+
+  pauseEditInteractions(type) {
+    for (const interaction of this.editInteractions) {
+      if (type && type !== interaction.constructor.name) continue
+      if (interaction.constructor.name === 'Snap') continue
+      interaction.setActive(false)
+    }
+  }
+
+  resumeEditInteractions(type) {
+    for (const interaction of this.editInteractions) {
+      if (type && type !== interaction.constructor.name) continue
+      interaction.setActive(true)
+    }
+  }
+
+  async startDrawing(type) {
+    const { default: Draw } = await import('ol/interaction/Draw.js')
+    if (!this.drawingSource) {
+      this.drawingSource = new VectorSource()
+      this.drawingSource.on('addfeature', (event) => {
+        const geojson = this.OLFeatureToGeojson(event.feature)
+        const datalayer = this.app.defaultEditDataLayer()
+        datalayer.makeFeature(geojson).edit()
+      })
+    }
+    this.pauseEditInteractions()
+    const draw = new Draw({ source: this.drawingSource, type })
+    this.map.addInteraction(draw)
+    // Snap must be the last interactions to work.
+    for (const snap of this.editInteractions.filter(
+      (i) => i.constructor.name === 'Snap'
+    )) {
+      this.map.removeInteraction(snap)
+      this.map.addInteraction(snap)
+    }
+    draw.on('drawend', () => {
+      this.map.removeInteraction(draw)
+      document.querySelector('.umap-edit-bar .drawing-tool.on')?.classList.remove('on')
+      this.resumeEditInteractions()
+    })
   }
 
   hasLayer(id) {
@@ -359,6 +437,20 @@ export class OLProxy {
 
   clear(id) {
     this.sources[id]?.clear()
+  }
+
+  OLFeatureToGeojson(olFeature) {
+    return new GeoJSON().writeFeatureObject(olFeature, {
+      dataProjection: 'EPSG:4326',
+      featureProjection: 'EPSG:3857',
+    })
+  }
+
+  pullGeometry(olFeature) {
+    const feature = this.getFeatureById(olFeature.getId())
+    if (!feature) return
+    const { geometry } = this.OLFeatureToGeojson(olFeature)
+    feature.onCommit(geometry)
   }
 
   pushGeometry(layerId, featureId, geometry) {
@@ -437,6 +529,9 @@ export class OLProxy {
   async createLayer(datalayer) {
     const source = new VectorSource()
     this.sources[datalayer.id] = source
+    if (this.app.editEnabled) {
+      await this.registerSourceForEdit(source)
+    }
     const layers = {}
     const isPoint = (feature) => this.isPointGeometry(feature.getGeometry().getType())
 
