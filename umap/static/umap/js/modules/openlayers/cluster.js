@@ -2,6 +2,7 @@ import Feature from 'ol/Feature.js'
 import LineString from 'ol/geom/LineString.js'
 import Point from 'ol/geom/Point.js'
 import { boundingExtent } from 'ol/extent.js'
+import { transformExtent } from 'ol/proj.js'
 import Cluster from 'ol/source/Cluster.js'
 import VectorSource from 'ol/source/Vector.js'
 import VectorLayer from 'ol/layer/Vector.js'
@@ -67,7 +68,7 @@ function spiderfy(members, center, map) {
   source.addFeatures(revealed)
 }
 
-export function onClusterClick(clusterFeature, map) {
+export function onClusterClick(clusterFeature, map, app) {
   const members = clusterFeature.get('features')
   const center = clusterFeature.getGeometry().getCoordinates()
   if (members.length > 1) {
@@ -77,10 +78,9 @@ export function onClusterClick(clusterFeature, map) {
     if (sameSpot || view.getZoom() === view.getMaxZoom()) {
       spiderfy(members, center, map)
     } else {
-      view.fit(extent, {
-        duration: 1000,
-        padding: [50, 50, 50, 50],
-        maxZoom: view.getMaxZoom(),
+      app.fire('map:view:fit-bounds', {
+        bounds: transformExtent(extent, 'EPSG:3857', 'EPSG:4326'),
+        zoom: view.getMaxZoom(),
       })
     }
     return true
