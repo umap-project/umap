@@ -73,7 +73,6 @@ export class OLProxy {
   proxyIncomingEvents() {
     this.map.on('click', (event) => this.onClick(event))
     this.map.on('contextmenu', (event) => this.onContextMenu(event))
-    this.view.on('change:resolution', () => this.app.fire('map:zoomend'))
   }
 
   proxyOutgoingEvents() {
@@ -93,7 +92,7 @@ export class OLProxy {
         this.view.animate({ zoom }, { coordinates })
       } else {
         this.view.setCenter(fromLonLat(coordinates))
-        if (zoom) this.view.setZoom(zoom)
+        if (zoom !== undefined) this.view.setZoom(zoom)
       }
     })
     this.app.on('panel:show', (event) => {
@@ -103,8 +102,8 @@ export class OLProxy {
     this.app.on('popup:show', (event) => {
       const { sourceId, id, content, center, mode } = event.detail
       const olFeature = this.sources[sourceId]?.getFeatureById(id)
-      const popupOffsetY = olFeature.get('popupOffsetY')
-      if (popupOffsetY) this.popup.setOffset([0, popupOffsetY - POPUP_ARROW_HEIGHT])
+      const popupOffsetY = olFeature?.get('popupOffsetY') || 0
+      this.popup.setOffset([0, popupOffsetY - POPUP_ARROW_HEIGHT])
       this.popup.setPosition(fromLonLat(center))
       const body = this.popup.get('body')
       body.innerHTML = ''
@@ -206,9 +205,16 @@ export class OLProxy {
         coordinate: [lng.toFixed(6), lat.toFixed(6)],
       })
     }
+    // OL has no zoomend, and we want only round zoom events.
+    let lastZoom = Math.round(this.zoom)
     this.map.on('moveend', () => {
       updateHash()
       this.app.fire('map:moveend')
+      const zoom = Math.round(this.zoom)
+      if (zoom !== lastZoom) {
+        lastZoom = zoom
+        this.app.fire('map:zoomend')
+      }
     })
     this.tilelayers.init(this.app.properties.tilelayers)
     this.tilelayers.selectDefault()
@@ -450,8 +456,10 @@ export class OLProxy {
   }
 
   setFeatureStyle(olFeature, geojson) {
-    olFeature.set('umapBaseStyle', this.style(olFeature, geojson))
-    olFeature.set('umapHighlightStyle', this.style(olFeature, geojson, true))
+    const base = this.style(geojson)
+    olFeature.set('umapBaseStyle', base.style)
+    olFeature.set('umapHighlightStyle', this.style(geojson, true).style)
+    olFeature.set('popupOffsetY', base.popupOffsetY)
     olFeature.set(
       'umapStyle',
       olFeature.get(
@@ -490,12 +498,12 @@ export class OLProxy {
     this.sources[id].addFeature(olFeature)
   }
 
-  style(olFeature, geojson, highlight = false) {
+  style(geojson, highlight = false) {
     const base = geojson.style || {}
     const properties = highlight ? { ...base, ...geojson.highlight } : base
     const zIndex = highlight ? HIGHLIGHT_ZINDEX : geojson.zIndex
     if (geojson.geometry.type === 'Point') {
-      return makeIcon(olFeature, properties, zIndex)
+      return makeIcon(properties, zIndex)
     }
     const stroke = new Stroke({
       color: rgba(properties.color, properties.opacity),
@@ -511,7 +519,7 @@ export class OLProxy {
               properties.fillOpacity
             ),
           })
-    return new Style({ stroke, fill, zIndex })
+    return { style: new Style({ stroke, fill, zIndex }), popupOffsetY: 0 }
   }
 
   get hasExtent() {
