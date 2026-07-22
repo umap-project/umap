@@ -58,7 +58,7 @@ async function init(map, app) {
         const coordinates = geolocation.getPosition()
         const view = map.getView()
         view.setCenter(coordinates)
-        view.setZoom(Math.max(map.getView().getZoom(), 10))
+        view.setZoom(Math.max(view.getZoom(), 10))
       })
       app.fire('map:locate:activate')
     } else {
