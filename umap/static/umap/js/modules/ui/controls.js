@@ -115,10 +115,10 @@ export class ZoomControl extends MoreableControl {
   }
 
   _update() {
-    const map = this.app.mapProxy.map
-    const zoom = map.getZoom()
-    const atMax = zoom >= map.getMaxZoom()
-    const atMin = zoom <= map.getMinZoom()
+    const view = this.app.mapProxy.view
+    const zoom = view.getZoom()
+    const atMax = zoom >= view.getMaxZoom()
+    const atMin = zoom <= view.getMinZoom()
     this._zoomInButton.classList.toggle('disabled', atMax)
     this._zoomOutButton.classList.toggle('disabled', atMin)
     this._zoomInButton.setAttribute('aria-disabled', atMax ? 'true' : 'false')

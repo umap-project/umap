@@ -56,12 +56,9 @@ async function init(map, app) {
       map.addLayer(geolocateLayer)
       geolocation.once('change:position', () => {
         const coordinates = geolocation.getPosition()
-        map.setView(
-          new View({
-            center: coordinates,
-            zoom: Math.max(map.getView().getZoom(), 10),
-          })
-        )
+        const view = map.getView()
+        view.setCenter(coordinates)
+        view.setZoom(Math.max(map.getView().getZoom(), 10))
       })
       app.fire('map:locate:activate')
     } else {
