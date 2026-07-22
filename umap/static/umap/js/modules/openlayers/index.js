@@ -22,6 +22,7 @@ const POINT_ZINDEX_OFFSET = 10000
 const HIGHLIGHT_ZINDEX = 1e6
 
 const POPUP_ARROW_HEIGHT = 12
+const FIT_PADDING = [50, 50, 50, 50]
 
 const popupTemplate = `
   <div class="umap-popup window">
@@ -76,24 +77,13 @@ export class OLProxy {
   }
 
   proxyOutgoingEvents() {
-    // For hash changes
-    this.app.on('map:view:update', (event) => {
-      let { zoom, coordinate } = event.detail
-      if (!Utils.coordinateIsValid(coordinate)) return
-      zoom = Math.min(zoom, this.map.getView().getMaxZoom())
-      zoom = Math.max(zoom, this.map.getView().getMinZoom())
-      this.view.setCenter(fromLonLat(coordinate))
-      this.view.setZoom(zoom)
-    })
-
     this.app.on('map:view:set', (event) => {
       const { easing, zoom, coordinates } = event.detail
-      if (easing) {
-        this.view.animate({ zoom }, { coordinates })
-      } else {
-        this.view.setCenter(fromLonLat(coordinates))
-        if (zoom !== undefined) this.view.setZoom(zoom)
-      }
+      this.setView({ coordinates, zoom, easing })
+    })
+    this.app.on('map:view:fit-bounds', (event) => {
+      const { easing, zoom, bounds } = event.detail
+      this.setView({ bounds, zoom, easing })
     })
     this.app.on('panel:show', (event) => {
       const { content } = event.detail
@@ -150,6 +140,20 @@ export class OLProxy {
     const [width, height] = this.map.getSize()
     const resolution = Math.min(getWidth(extent) / width, getHeight(extent) / height)
     return this.view.getZoomForResolution(resolution)
+  }
+
+  setView({ coordinates, bounds, zoom, easing }) {
+    if (easing === undefined) easing = this.app.getProperty('easing')
+    const duration = easing ? 500 : 0
+    if (bounds) {
+      const extent = transformExtent(bounds, 'EPSG:4326', 'EPSG:3857')
+      this.view.fit(extent, { duration, maxZoom: zoom ?? this.zoom, padding: FIT_PADDING })
+    } else if (easing) {
+      this.view.animate({ center: fromLonLat(coordinates), zoom, duration })
+    } else {
+      this.view.setCenter(fromLonLat(coordinates))
+      if (zoom !== undefined) this.view.setZoom(zoom)
+    }
   }
 
   getGeoContext() {
@@ -221,9 +225,11 @@ export class OLProxy {
   }
 
   setDefaultCenter() {
-    // Never replace the view, as we have event listeners on it!
-    this.view.setCenter(fromLonLat(this.app.properties.center))
-    this.view.setZoom(this.app.getProperty('zoom'))
+    this.setView({
+      coordinates: this.app.properties.center,
+      zoom: this.app.getProperty('zoom'),
+      easing: false,
+    })
   }
 
   async initCenter() {
@@ -340,7 +346,7 @@ export class OLProxy {
     if (isCluster) {
       // A cluster resolves to a member id, or nothing, when it spiderfies/zooms
       import('./cluster.js').then(({ onClusterClick }) => {
-        this.onFeatureClick(onClusterClick(olFeature, this.map), event)
+        this.onFeatureClick(onClusterClick(olFeature, this.map, this.app), event)
       })
     } else {
       this.onFeatureClick(olFeature.getId(), event)

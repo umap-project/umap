@@ -7,7 +7,7 @@ import Fill from 'ol/style/Fill.js'
 import Stroke from 'ol/style/Stroke.js'
 import VectorSource from 'ol/source/Vector.js'
 import VectorLayer from 'ol/layer/Vector.js'
-import View from 'ol/View.js'
+import { toLonLat } from 'ol/proj.js'
 
 let geolocation
 
@@ -55,10 +55,9 @@ async function init(map, app) {
     if (geolocation.getTracking()) {
       map.addLayer(geolocateLayer)
       geolocation.once('change:position', () => {
-        const coordinates = geolocation.getPosition()
-        const view = map.getView()
-        view.setCenter(coordinates)
-        view.setZoom(Math.max(view.getZoom(), 10))
+        const coordinates = toLonLat(geolocation.getPosition())
+        const zoom = Math.max(map.getView().getZoom(), 10)
+        app.fire('map:view:set', { coordinates, zoom })
       })
       app.fire('map:locate:activate')
     } else {
