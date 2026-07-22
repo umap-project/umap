@@ -143,7 +143,7 @@ export class LeafletProxy {
       }
     })
     this.app.on('draw:marker', () => this.map.editTools.startMarker())
-    this.app.on('draw:polyline', () => this.map.editTools.startPolyline())
+    this.app.on('draw:linestring', () => this.map.editTools.startPolyline())
     this.app.on('draw:multiline', () =>
       this.getLayer(this.app.editedFeature.id)?.editor.newShape()
     )

@@ -1420,7 +1420,7 @@ export default class App extends Utils.WithEvents {
     this.topBar.redraw()
     this.checkForLegacy()
     this.checkForAnonymous()
-    this.mapProxy.enableEdit()
+    await this.mapProxy.enableEdit()
   }
 
   checkForAnonymous() {
@@ -1476,6 +1476,7 @@ export default class App extends Utils.WithEvents {
     this.editPanel.close()
     this.fullPanel.close()
     this.journal.stop()
+    this.mapProxy.disableEdit?.()
   }
 
   async initJournal() {

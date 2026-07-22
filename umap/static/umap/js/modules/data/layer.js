@@ -418,15 +418,6 @@ export class DataLayer {
     return this.properties.type === 'Cluster'
   }
 
-  // showFeature(feature) {
-  //   if (feature.isFiltered()) return
-  //   // this.layer.addLayer(feature.ui)
-  // }
-
-  // hideFeature(feature) {
-  //   this.app.mapProxy.removeFeature(this.id, feature.id)
-  // }
-
   addFeature(feature, sync = false) {
     if (this.group) {
       console.error('Adding feature to a group', feature, this.datalayer)
