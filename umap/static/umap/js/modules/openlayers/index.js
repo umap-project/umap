@@ -147,13 +147,43 @@ export class OLProxy {
     const duration = easing ? 500 : 0
     if (bounds) {
       const extent = transformExtent(bounds, 'EPSG:4326', 'EPSG:3857')
-      this.view.fit(extent, { duration, maxZoom: zoom ?? this.zoom, padding: FIT_PADDING })
+      this.view.fit(extent, {
+        duration,
+        maxZoom: zoom ?? this.zoom,
+        padding: FIT_PADDING,
+      })
     } else if (easing) {
       this.view.animate({ center: fromLonLat(coordinates), zoom, duration })
     } else {
       this.view.setCenter(fromLonLat(coordinates))
       if (zoom !== undefined) this.view.setZoom(zoom)
     }
+  }
+
+  handleLimitBounds() {
+    const limit = this.app.properties.limitBounds || {}
+    const bbox = [limit.west, limit.south, limit.east, limit.north].map(
+      Number.parseFloat
+    )
+    const base = this.tilelayers.current?.getMinZoom()
+    const options = {
+      center: this.view.getCenter(),
+      zoom: this.view.getZoom(),
+      minZoom: Number.isFinite(base) ? base : 0,
+      maxZoom: this.view.getMaxZoom(),
+      projection: this.view.getProjection(),
+    }
+    if (!bbox.some(Number.isNaN)) {
+      const extent = transformExtent(bbox, 'EPSG:4326', 'EPSG:3857')
+      options.extent = extent
+      const resolution = this.view.getResolutionForExtent(extent, this.map.getSize())
+      options.minZoom = Math.max(
+        options.minZoom,
+        this.view.getZoomForResolution(resolution)
+      )
+    }
+    // OL View does not have a setExtent, so need to recreate a new one…
+    this.map.setView(new View(options))
   }
 
   getGeoContext() {
@@ -533,8 +563,10 @@ export class OLProxy {
   }
 
   getExtentBBoxString() {
-    // southwest_lng,southwest_lat,northeast_lng,northeast_lat'
-    return this.map.options.maxBounds?.toBBoxString()
+    // southwest_lng,southwest_lat,northeast_lng,northeast_lat
+    const extent = this.view.getUpdatedOptions_().extent
+    if (!extent) return
+    return transformExtent(extent, 'EPSG:3857', 'EPSG:4326').join(',')
   }
 
   toggleFullscreen() {
