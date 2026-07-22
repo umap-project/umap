@@ -21,6 +21,8 @@ import { rgba } from './utils.js'
 const POINT_ZINDEX_OFFSET = 10000
 const HIGHLIGHT_ZINDEX = 1e6
 
+const POPUP_ARROW_HEIGHT = 12
+
 const popupTemplate = `
   <div class="umap-popup window">
     <ul class="buttons">
@@ -52,7 +54,7 @@ export class OLProxy {
     this.popup = new Overlay({
       element: container,
       positioning: 'bottom-center',
-      offset: [0, -12],
+      offset: [0, -POPUP_ARROW_HEIGHT],
       autoPan: {
         animation: {
           duration: 250,
@@ -71,6 +73,7 @@ export class OLProxy {
   proxyIncomingEvents() {
     this.map.on('click', (event) => this.onClick(event))
     this.map.on('contextmenu', (event) => this.onContextMenu(event))
+    this.view.on('change:resolution', () => this.app.fire('map:zoomend'))
   }
 
   proxyOutgoingEvents() {
@@ -80,22 +83,17 @@ export class OLProxy {
       if (!Utils.coordinateIsValid(coordinate)) return
       zoom = Math.min(zoom, this.map.getView().getMaxZoom())
       zoom = Math.max(zoom, this.map.getView().getMinZoom())
-      this.map.setView(
-        new View({
-          center: fromLonLat(coordinate),
-          zoom,
-        })
-      )
+      this.view.setCenter(fromLonLat(coordinate))
+      this.view.setZoom(zoom)
     })
 
     this.app.on('map:view:set', (event) => {
-      const { easing, zoom } = event.detail
-      const coordinates = event.detail.coordinates
+      const { easing, zoom, coordinates } = event.detail
       if (easing) {
         this.view.animate({ zoom }, { coordinates })
       } else {
         this.view.setCenter(fromLonLat(coordinates))
-        this.view.setZoom(zoom)
+        if (zoom) this.view.setZoom(zoom)
       }
     })
     this.app.on('panel:show', (event) => {
@@ -104,6 +102,9 @@ export class OLProxy {
     })
     this.app.on('popup:show', (event) => {
       const { sourceId, id, content, center, mode } = event.detail
+      const olFeature = this.sources[sourceId]?.getFeatureById(id)
+      const popupOffsetY = olFeature.get('popupOffsetY')
+      if (popupOffsetY) this.popup.setOffset([0, popupOffsetY - POPUP_ARROW_HEIGHT])
       this.popup.setPosition(fromLonLat(center))
       const body = this.popup.get('body')
       body.innerHTML = ''
@@ -205,19 +206,18 @@ export class OLProxy {
         coordinate: [lng.toFixed(6), lat.toFixed(6)],
       })
     }
-    this.map.on('moveend', updateHash)
-    // updateHash()
+    this.map.on('moveend', () => {
+      updateHash()
+      this.app.fire('map:moveend')
+    })
     this.tilelayers.init(this.app.properties.tilelayers)
     this.tilelayers.selectDefault()
   }
 
   setDefaultCenter() {
-    this.map.setView(
-      new View({
-        center: fromLonLat(this.app.properties.center),
-        zoom: this.app.getProperty('zoom'),
-      })
-    )
+    // Never replace the view, as we have event listeners on it!
+    this.view.setCenter(fromLonLat(this.app.properties.center))
+    this.view.setZoom(this.app.getProperty('zoom'))
   }
 
   async initCenter() {
@@ -450,8 +450,8 @@ export class OLProxy {
   }
 
   setFeatureStyle(olFeature, geojson) {
-    olFeature.set('umapBaseStyle', this.style(geojson))
-    olFeature.set('umapHighlightStyle', this.style(geojson, true))
+    olFeature.set('umapBaseStyle', this.style(olFeature, geojson))
+    olFeature.set('umapHighlightStyle', this.style(olFeature, geojson, true))
     olFeature.set(
       'umapStyle',
       olFeature.get(
@@ -490,12 +490,12 @@ export class OLProxy {
     this.sources[id].addFeature(olFeature)
   }
 
-  style(geojson, highlight = false) {
+  style(olFeature, geojson, highlight = false) {
     const base = geojson.style || {}
     const properties = highlight ? { ...base, ...geojson.highlight } : base
     const zIndex = highlight ? HIGHLIGHT_ZINDEX : geojson.zIndex
     if (geojson.geometry.type === 'Point') {
-      return makeIcon(properties, zIndex)
+      return makeIcon(olFeature, properties, zIndex)
     }
     const stroke = new Stroke({
       color: rgba(properties.color, properties.opacity),
@@ -554,7 +554,6 @@ class TileLayerManager {
     this.overlay = undefined
 
     proxy.map.on('loadstart', (event) => {
-      console.log(event)
       this.app.loader.start('tiles')
     })
     proxy.map.on('loadend', () => {
