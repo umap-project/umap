@@ -19,16 +19,16 @@ export default class ContinueLine {
     // Draw#extend grows from the last vertex and wants a plain LineString; feed it
     // the ring, reversed when we continue from its first vertex.
     this.feature.setGeometry(new LineString(this.atStart ? [...ring].reverse() : ring))
-    const draw = new Draw({ type: 'LineString', stopClick: true })
-    this.map.addInteraction(draw)
-    draw.extend(this.feature)
+    this.draw = new Draw({ type: 'LineString', stopClick: true })
+    this.map.addInteraction(this.draw)
+    this.draw.extend(this.feature)
     return new Promise((resolve) => {
-      draw.on('drawend', () => {
-        this.map.removeInteraction(draw)
+      this.draw.on('drawend', () => {
+        this.map.removeInteraction(this.draw)
         resolve(this.commit())
       })
-      draw.on('drawabort', () => {
-        this.map.removeInteraction(draw)
+      this.draw.on('drawabort', () => {
+        this.map.removeInteraction(this.draw)
         this.feature.setGeometry(this.originalGeometry)
         resolve(null)
       })
