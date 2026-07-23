@@ -1,7 +1,8 @@
 {% load umap_tags static %}
 
 {% include "umap/messages.html" %}
-<div id="map">
+{# tabindex allows to programmatically focus on the map element (eg. to listen for key events while drawing) #}
+<div id="map" tabindex="0">
 </div>
 <!-- djlint:off -->
 <script id="map-settings" data-settings="{{ map_settings|escape }}"></script>

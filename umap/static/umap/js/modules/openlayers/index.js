@@ -40,6 +40,7 @@ export class OLProxy {
     this.layers = {}
     this.editInteractions = []
     this.highlighted = null
+    this.activeDrawing = null
     this.map = new OLMap({
       target: element,
       controls: [],
@@ -384,16 +385,21 @@ export class OLProxy {
   }
 
   async startHole({ featureId, sourceId }) {
-    console.log(featureId, sourceId)
     const olFeature = this.sources[sourceId].getFeatureById(featureId)
     const { default: DrawHole } = await import('./hole.js')
     const drawHole = new DrawHole(this.map, olFeature)
-    drawHole.start().then((geometry) => {
+    const promise = drawHole.start()
+    this.activeDrawing = drawHole.draw
+    promise.then((geometry) => {
+      this.activeDrawing = null
       if (geometry) this.pullGeometry(olFeature)
     })
   }
 
   async startDrawing(type) {
+    if (this.activeDrawing) return
+    // Allow for escape to be catched by the app listener.
+    this.map.getTargetElement().focus()
     const { default: Draw } = await import('ol/interaction/Draw.js')
     if (!this.drawingSource) {
       this.drawingSource = new VectorSource()
@@ -405,13 +411,18 @@ export class OLProxy {
     }
     this.pauseEditInteractions()
     const draw = new Draw({ source: this.drawingSource, type })
+    this.activeDrawing = draw
     this.map.addInteraction(draw)
     this._moveSnapToTop()
-    draw.on('drawend', () => {
-      this.map.removeInteraction(draw)
+    draw.on('drawend', () => this.endDrawing())
+    draw.on('drawabort', () => this.endDrawing())
+  }
+
+  endDrawing() {
+      this.map.removeInteraction(this.activeDrawing)
       document.querySelector('.umap-edit-bar .drawing-tool.on')?.classList.remove('on')
       this.resumeEditInteractions()
-    })
+      this.activeDrawing = null
   }
 
   async startContinueLine(feature, sourceId, index, atStart) {
@@ -420,11 +431,20 @@ export class OLProxy {
     this.pauseEditInteractions()
     const continueLine = new ContinueLine(this.map, olFeature, index, atStart)
     const promise = continueLine.start()
+    this.activeDrawing = continueLine.draw
     this._moveSnapToTop()
     promise.then((geometry) => {
+      this.activeDrawing = null
       this.resumeEditInteractions()
       if (geometry) this.pullGeometry(olFeature)
     })
+  }
+
+  onEscape() {
+    if (!this.activeDrawing) return false
+    this.activeDrawing.abortDrawing()
+    this.endDrawing()
+    return true
   }
 
   // Snap must be the last interaction to intercept coordinates before Draw/Modify.

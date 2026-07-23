@@ -14,23 +14,23 @@ export default class DrawHole {
   start() {
     // onDrawStart mutates this.feature live; keep the original to restore on abort.
     this.originalGeometry = this.feature.getGeometry().clone()
-    const draw = new Draw({
+    this.draw = new Draw({
       type: 'Polygon',
       stopClick: true,
       // TODO add style to remove fill for hole drawing.
     })
-    draw.on('drawstart', (event) => this.onDrawStart(event))
-    this.map.addInteraction(draw)
+    this.draw.on('drawstart', (event) => this.onDrawStart(event))
+    this.map.addInteraction(this.draw)
     return new Promise((resolve) => {
       const cleanup = () => {
-        this.map.removeInteraction(draw)
+        this.map.removeInteraction(this.draw)
         if (this.changeKey) unByKey(this.changeKey)
       }
-      draw.on('drawend', () => {
+      this.draw.on('drawend', () => {
         cleanup()
         resolve(this.feature.getGeometry())
       })
-      draw.on('drawabort', () => {
+      this.draw.on('drawabort', () => {
         cleanup()
         this.feature.setGeometry(this.originalGeometry)
         resolve(null)
