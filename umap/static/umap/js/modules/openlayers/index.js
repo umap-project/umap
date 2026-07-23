@@ -84,6 +84,7 @@ export class OLProxy {
     this.app.on('draw:marker', async () => await this.startDrawing('Point'))
     this.app.on('draw:linestring', async () => await this.startDrawing('LineString'))
     this.app.on('draw:polygon', async () => await this.startDrawing('Polygon'))
+    this.app.on('draw:hole', async (event) => await this.startHole(event.detail))
     this.app.on('map:view:set', (event) => {
       const { easing, zoom, coordinates } = event.detail
       this.setView({ coordinates, zoom, easing })
@@ -382,8 +383,9 @@ export class OLProxy {
     }
   }
 
-  async startHole(feature, sourceId) {
-    const olFeature = this.sources[sourceId].getFeatureById(feature.id)
+  async startHole({ featureId, sourceId }) {
+    console.log(featureId, sourceId)
+    const olFeature = this.sources[sourceId].getFeatureById(featureId)
     const { default: DrawHole } = await import('./hole.js')
     const drawHole = new DrawHole(this.map, olFeature)
     drawHole.start().then((geometry) => {
@@ -404,18 +406,35 @@ export class OLProxy {
     this.pauseEditInteractions()
     const draw = new Draw({ source: this.drawingSource, type })
     this.map.addInteraction(draw)
-    // Snap must be the last interactions to work.
+    this._moveSnapToTop()
+    draw.on('drawend', () => {
+      this.map.removeInteraction(draw)
+      document.querySelector('.umap-edit-bar .drawing-tool.on')?.classList.remove('on')
+      this.resumeEditInteractions()
+    })
+  }
+
+  async startContinueLine(feature, sourceId, index, atStart) {
+    const olFeature = this.sources[sourceId].getFeatureById(feature.id)
+    const { default: ContinueLine } = await import('./continueline.js')
+    this.pauseEditInteractions()
+    const continueLine = new ContinueLine(this.map, olFeature, index, atStart)
+    const promise = continueLine.start()
+    this._moveSnapToTop()
+    promise.then((geometry) => {
+      this.resumeEditInteractions()
+      if (geometry) this.pullGeometry(olFeature)
+    })
+  }
+
+  // Snap must be the last interaction to intercept coordinates before Draw/Modify.
+  _moveSnapToTop() {
     for (const snap of this.editInteractions.filter(
       (i) => i.constructor.name === 'Snap'
     )) {
       this.map.removeInteraction(snap)
       this.map.addInteraction(snap)
     }
-    draw.on('drawend', () => {
-      this.map.removeInteraction(draw)
-      document.querySelector('.umap-edit-bar .drawing-tool.on')?.classList.remove('on')
-      this.resumeEditInteractions()
-    })
   }
 
   hasSelection() {
@@ -539,7 +558,10 @@ export class OLProxy {
       lng,
       pixel: [event.originalEvent.clientX, event.originalEvent.clientY],
     }
-    const olFeature = this.map.getFeaturesAtPixel(event.pixel)[0]
+    // Restrict hit-testing to our data layers, else Modify's vertex overlay wins.
+    const olFeature = this.map.getFeaturesAtPixel(event.pixel, {
+      layerFilter: (layer) => Object.values(this.sources).includes(layer.getSource()),
+    })[0]
     const feature = olFeature && this.getFeatureById(olFeature.getId())
     if (feature) feature.onContextMenu(appEvent)
     else this.app.onContextMenu(appEvent)
@@ -547,7 +569,9 @@ export class OLProxy {
 
   removeFeature(id, featureId) {
     const olFeature = this.sources[id]?.getFeatureById(featureId)
-    if (olFeature) this.sources[id].removeFeature(olFeature)
+    if (!olFeature) return
+    this.select?.getFeatures().remove(olFeature)
+    this.sources[id].removeFeature(olFeature)
   }
 
   clearLayer(id) {
