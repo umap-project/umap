@@ -71,7 +71,6 @@ class Feature {
   }
 
   set geometry(value) {
-    this._geometry_bk = Utils.CopyJSON(this._geometry)
     this._geometry = value
     this.pushGeometry()
   }
@@ -130,8 +129,18 @@ class Feature {
   }
 
   onCommit(geometry) {
-    this._geometry_bk = Utils.CopyJSON(this._geometry)
+    const oldGeometry = Utils.CopyJSON(this._geometry)
     this._geometry = geometry
+    this.journalGeometry(oldGeometry)
+  }
+
+  commitGeometry(geometry) {
+    const oldGeometry = Utils.CopyJSON(this._geometry)
+    this.geometry = geometry
+    this.journalGeometry(oldGeometry)
+  }
+
+  journalGeometry(oldGeometry) {
     // When the layer is a remote layer, we don't want to sync the creation of the
     // points via the websocket, as the other peers will get them themselves.
     if (this.datalayer?.isRemoteLayer()) return
@@ -139,7 +148,7 @@ class Feature {
       this.journal.upsert(this.toJournal(), null)
       this._needs_upsert = false
     } else {
-      this.journal.update('geometry', this.geometry, this._geometry_bk)
+      this.journal.update('geometry', this.geometry, oldGeometry)
     }
   }
 
@@ -677,7 +686,7 @@ class Feature {
   }
 
   onContextMenu({ lat, lng, pixel, vertex }) {
-    const items = this.getContextMenu({ vertex }).concat(
+    const items = this.getContextMenu({ lat, lng, vertex }).concat(
       this.app.getSharedContextMenu({ lat, lng })
     )
     this.app.contextmenu.openAt(pixel, items)
@@ -821,8 +830,7 @@ export class Point extends Feature {
         Alert.error(translate('Invalid latitude or longitude'))
         return
       }
-      this.onCommit({ type: 'Point', coordinates })
-      this.pushGeometry()
+      this.commitGeometry({ type: 'Point', coordinates })
       this.zoomTo({ easing: false })
     })
     const fieldset = DOMUtils.createFieldset(container, translate('Coordinates'))
@@ -971,19 +979,20 @@ class Path extends Feature {
           title: translate('Extract shape to separate feature'),
           icon: 'icon-extract-shape',
           action: () => {
-            this.isolateShape(event.coordinate)
+            console.log(event)
+            this.isolateShape([event.lng, event.lat])
           },
         },
         {
           title: translate('Delete this shape'),
           icon: 'icon-delete-shape',
-          action: () => this.deleteShape(event.coordinate),
+          action: () => this.deleteShape([event.lng, event.lat]),
         }
       )
     }
     if (this.app?.editedFeature !== this && this.isSameClass(this.app.editedFeature)) {
       items.push({
-        title: translate('Transfer shape to edited feature'),
+        title: translate('Combine features'),
         icon: 'icon-transfer-shape',
         action: () => {
           this.transferShape(event.coordinate, this.app.editedFeature)
@@ -1475,9 +1484,38 @@ export class Polygon extends Path {
     }
     items.push({
       title: translate('Start a hole here'),
-      action: () => this.startHole(event.coordinate),
+      // action: () => this.startHole(event.coordinate),
+      action: () => this.app.mapProxy.startHole(this, this.datalayer.id),
       icon: 'icon-hole',
     })
+    if (this.app.mapProxy.hasSelection()) {
+      const selection = this.app.mapProxy.selection
+      const others = selection.filter((feature) => feature !== this)
+      const mergeable =
+        others.length &&
+        selection.every(
+          (feature) =>
+            feature instanceof Polygon && feature.datalayer === this.datalayer
+        )
+      if (mergeable) {
+        items.push({
+          title: translate('Merge selected polygons'),
+          icon: 'icon-transfer-shape',
+          action: async () => {
+            const { union } = await import('../geoutils.js')
+            const merged = await union(
+              [this, ...others].map((feature) => feature.toGeoJSON())
+            )
+            if (!merged) return
+            this.journal.startBatch()
+            this.commitGeometry(merged.geometry)
+            for (const feature of others) feature.del()
+            this.journal.commitBatch()
+          },
+        })
+      }
+    }
+
     return items
   }
 
