@@ -309,11 +309,15 @@ export class OLProxy {
   async enableEdit() {
     const { default: Select } = await import('ol/interaction/Select.js')
     const { default: Translate } = await import('ol/interaction/Translate.js')
-    const select = new Select({ style: (feature) => feature.get('umapHighlightStyle') })
-    this.editInteractions.push(select)
-    this.map.addInteraction(select)
-    select.on('select', () => {
-      if (select.getFeatures().getArray().length) {
+    // Don't let select duplicate the highlighted style.
+    this.select = new Select({ style: null })
+    this.editInteractions.push(this.select)
+    this.map.addInteraction(this.select)
+    this.select.on('select', (event) => {
+      for (const olFeature of [...event.selected, ...event.deselected]) {
+        this.applyStyle(olFeature)
+      }
+      if (this.select.getFeatures().getLength()) {
         this.pauseEditInteractions('Modify')
       } else {
         this.resumeEditInteractions('Modify')
@@ -321,10 +325,15 @@ export class OLProxy {
     })
 
     const translateFeature = new Translate({
-      features: select.getFeatures(),
+      features: this.select.getFeatures(),
     })
     this.map.addInteraction(translateFeature)
     translateFeature.on('translateend', (event) => {
+      if (
+        event.startCoordinate[0] === event.coordinate[0] &&
+        event.startCoordinate[1] === event.coordinate[1]
+      )
+        return
       for (const olFeature of event.features.getArray()) {
         this.pullGeometry(olFeature)
       }
@@ -373,6 +382,15 @@ export class OLProxy {
     }
   }
 
+  async startHole(feature, sourceId) {
+    const olFeature = this.sources[sourceId].getFeatureById(feature.id)
+    const { default: DrawHole } = await import('./hole.js')
+    const drawHole = new DrawHole(this.map, olFeature)
+    drawHole.start().then((geometry) => {
+      if (geometry) this.pullGeometry(olFeature)
+    })
+  }
+
   async startDrawing(type) {
     const { default: Draw } = await import('ol/interaction/Draw.js')
     if (!this.drawingSource) {
@@ -398,6 +416,17 @@ export class OLProxy {
       document.querySelector('.umap-edit-bar .drawing-tool.on')?.classList.remove('on')
       this.resumeEditInteractions()
     })
+  }
+
+  hasSelection() {
+    return Boolean(this.select.getFeatures().getLength())
+  }
+
+  get selection() {
+    return this.select
+      .getFeatures()
+      .getArray()
+      .map((olFeature) => this.getFeatureById(olFeature.getId()))
   }
 
   hasLayer(id) {
@@ -601,12 +630,20 @@ export class OLProxy {
     olFeature.set('umapBaseStyle', base.style)
     olFeature.set('umapHighlightStyle', this.style(geojson, true).style)
     olFeature.set('popupOffsetY', base.popupOffsetY)
-    olFeature.set(
-      'umapStyle',
-      olFeature.get(
-        olFeature === this.highlighted ? 'umapHighlightStyle' : 'umapBaseStyle'
-      )
+    this.applyStyle(olFeature)
+  }
+
+  // A feature renders highlighted when its popup is open or it is selected in edit.
+  isHighlighted(olFeature) {
+    return (
+      olFeature === this.highlighted ||
+      Boolean(this.select?.getFeatures().getArray().includes(olFeature))
     )
+  }
+
+  applyStyle(olFeature) {
+    const key = this.isHighlighted(olFeature) ? 'umapHighlightStyle' : 'umapBaseStyle'
+    olFeature.set('umapStyle', olFeature.get(key))
   }
 
   closePopup() {
@@ -617,10 +654,11 @@ export class OLProxy {
   highlight(sourceId, id) {
     const olFeature = this.sources[sourceId]?.getFeatureById(id)
     if (olFeature === this.highlighted) return
-    this.unhighlight()
-    if (!olFeature) return
+    const previous = this.highlighted
     this.highlighted = olFeature
-    olFeature.set('umapStyle', olFeature.get('umapHighlightStyle'))
+    if (previous) this.applyStyle(previous)
+    if (!olFeature) return
+    this.applyStyle(olFeature)
     this.map.dispatchEvent('umap:highlight')
   }
 
@@ -628,7 +666,7 @@ export class OLProxy {
     if (!this.highlighted) return
     const olFeature = this.highlighted
     this.highlighted = null
-    olFeature.set('umapStyle', olFeature.get('umapBaseStyle'))
+    this.applyStyle(olFeature)
     this.map.dispatchEvent('umap:highlight')
   }
 
