@@ -1,3 +1,5 @@
+import * as Utils from '../utils.js'
+
 export default class Hash {
   constructor(app) {
     this.app = app
@@ -26,10 +28,9 @@ export default class Hash {
     }
     const args = hash.split('/')
     if (args.length !== 3) return
-    const zoom = parseInt(args[0], 10)
-    const lat = parseFloat(args[1])
-    const lng = parseFloat(args[2])
-    if (isNaN(zoom) || isNaN(lat) || isNaN(lng)) return
-    this.app.fire('map:view:update', { zoom, coordinate: [lng, lat] })
+    const zoom = parseFloat(args[0])
+    const coordinates = [parseFloat(args[2]), parseFloat(args[1])]
+    if (isNaN(zoom) || !Utils.coordinateIsValid(coordinates)) return
+    this.app.fire('map:view:set', { zoom, coordinates, easing: false })
   }
 }

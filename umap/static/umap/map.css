@@ -82,11 +82,8 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     bottom: 0;
     left: 0;
     right: 0;
-    /*
-    * Same as leaflet background, to work around screen blincking
-    * between DOM is loaded and JS is read to render the map.
-    */
     background-color: var(--color-veryLightGray);
+    cursor: grab;
 }
 
 .print-portrait,
@@ -261,12 +258,12 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     font-size: 12px;
 }
 
-.measure-enabled .umap-control-measure label {
+.umap-control-measure.on label {
     display: inline-block;
 }
 
-.umap-control-measure input:checked + label::before {
-    content: '✓ ';
+.umap-control-measure input:checked + label {
+    background-color: var(--color-accent);
 }
 
 .umap-controls > .display-on-more {
@@ -1016,6 +1013,17 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
 /* But not in controls  */
 .umap-control a {
     color: black;
+}
+
+/* ********* */
+/*     OL    */
+/* ********* */
+
+.ol-overviewmap {
+    position: relative;
+}
+.ol-overviewmap .ol-overviewmap-box {
+    border: 2px dashed darkorange;
 }
 
 /* ********* */

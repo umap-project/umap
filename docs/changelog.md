@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.0 - work in progress
+
+### Breaking changes:
+- heat maps render differently (different algorithms)
+
 ## 3.8.0a4 - 2026-07-18
 
 * align popup content for RTL languages by @ergs0204 in #3432

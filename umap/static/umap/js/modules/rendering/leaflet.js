@@ -14,7 +14,6 @@ import {
 import { Alert } from '../../components/alerts/alert.js'
 import { translate } from '../i18n.js'
 import * as GeoUtils from '../geoutils.js'
-import * as Utils from '../utils.js'
 import { LeafletIcon, layerClass } from './ui.js'
 import { Default as DefaultLayer } from '../rendering/layers/base.js'
 import { Cluster } from '../rendering/layers/cluster.js'
@@ -40,11 +39,18 @@ export class LeafletProxy {
 
   proxyIncomingEvents() {
     this.map.on(
-      'locateactivate locatedeactivate moveend zoomend contextmenu popupclose zoomlevelschange',
+      'locateactivate locatedeactivate moveend zoomend popupclose zoomlevelschange',
       (event) => {
         this.app.fire(`map:${event.type}`, { event: event })
       }
     )
+    this.map.on('contextmenu', (event) => {
+      this.app.onContextMenu({
+        lat: event.latlng.lat,
+        lng: event.latlng.lng,
+        pixel: [event.originalEvent.clientX, event.originalEvent.clientY],
+      })
+    })
     this.map.on('feature:mouseover', (event) => {
       if (!this.app.editEnabled) return
       if (!this.app.editedFeature) {
@@ -101,23 +107,17 @@ export class LeafletProxy {
     this.map.on('feature:contextmenu', (event) => {
       const feature = this.getFeatureById(event.id)
       if (!feature) return
-      const items = feature
-        .getContextMenu(event)
-        .concat(this.app.getSharedContextMenu(event))
-      this.app.contextmenu.open(event.originalEvent, items)
+      feature.onContextMenu({
+        lat: event.latlng.lat,
+        lng: event.latlng.lng,
+        pixel: [event.originalEvent.clientX, event.originalEvent.clientY],
+        vertex: event.vertex,
+      })
     })
   }
 
   proxyOutgoingEvents() {
     // For hash changes
-    this.app.on('map:view:update', (event) => {
-      let { zoom, coordinate } = event.detail
-      if (!Utils.coordinateIsValid(coordinate)) return
-      zoom = Math.min(zoom, this.map.getMaxZoom())
-      zoom = Math.max(zoom, this.map.getMinZoom())
-      const [lng, lat] = coordinate
-      this.map.setView([lat, lng], zoom, { animate: false })
-    })
     this.app.on('map:show:point', (event) => {
       this.showPoint({ ...event.detail })
     })
@@ -143,7 +143,7 @@ export class LeafletProxy {
       }
     })
     this.app.on('draw:marker', () => this.map.editTools.startMarker())
-    this.app.on('draw:polyline', () => this.map.editTools.startPolyline())
+    this.app.on('draw:linestring', () => this.map.editTools.startPolyline())
     this.app.on('draw:multiline', () =>
       this.getLayer(this.app.editedFeature.id)?.editor.newShape()
     )
@@ -448,10 +448,6 @@ export class LeafletProxy {
     return this.map.getPane('overlayPane')
   }
 
-  createOverlayPane(id, container) {
-    return this.map.createPane(`pane-${id}`, container || this.overlayPane)
-  }
-
   hideLayer(id) {
     const layer = this.layers[id]
     if (layer) this.map.removeLayer(layer)
@@ -467,8 +463,36 @@ export class LeafletProxy {
     const layer = new Class(datalayer)
     // Paths render into the datalayer's own pane, so they stack by datalayer
     // order; Leaflet lazily creates one renderer per pane.
+    const parent = datalayer.parentId
+      ? this.map.getPane(`pane-${datalayer.parentId}`)
+      : this.overlayPane
+    const pane = this.map.createPane(`pane-${datalayer.id}`, parent)
+    pane.dataset.id = datalayer.id
     layer.pane = `pane-${datalayer.id}`
     this.layers[datalayer.id] = layer
+  }
+
+  deleteLayer(id) {
+    this.hideLayer(id)
+    this.map.getPane(`pane-${id}`)?.remove()
+    delete this.layers[id]
+  }
+
+  // Restack panes to match the datalayers' rank: lower rank first (appended =
+  // lower in the DOM = drawn below), so higher rank ends up on top.
+  reorderLayers() {
+    for (const datalayer of this.app.layers.root.reverse()) {
+      this.overlayPane.appendChild(this.map.getPane(`pane-${datalayer.id}`))
+    }
+    for (const datalayer of this.app.layers.tree) {
+      if (!datalayer.layers.count()) continue
+      const parent = datalayer.parentId
+        ? this.map.getPane(`pane-${datalayer.parentId}`)
+        : this.overlayPane
+      for (const child of datalayer.layers.root.reverse()) {
+        parent.appendChild(this.map.getPane(`pane-${child.id}`))
+      }
+    }
   }
 
   showLayer(id) {
@@ -478,6 +502,11 @@ export class LeafletProxy {
 
   addData(id, geojson) {
     this.layers[id].addData(geojson)
+  }
+
+  redraw(id, geojson) {
+    this.clear(id)
+    this.addData(id, geojson)
   }
 
   addFeature(id, geojson) {

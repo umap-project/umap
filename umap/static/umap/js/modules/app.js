@@ -12,7 +12,7 @@ import Help from './help.js'
 import { getLocale, setLocale, translate } from './i18n.js'
 import { LayerManager } from './managers.js'
 import { MapPermissions } from './permissions.js'
-// import { OLProxy } from './rendering/openlayers.js'
+import { OLProxy } from './openlayers/index.js'
 import { LeafletProxy } from './rendering/leaflet.js'
 import { Request, ServerRequest } from './request.js'
 import Rules from './rules.js'
@@ -81,12 +81,12 @@ export default class App extends Utils.WithEvents {
     this.properties.zoomControl = false
     this.properties.fullscreenControl = false
 
-    if (this.searchParams.has('openlayers')) {
+    if (this.searchParams.has('leaflet')) {
+      console.log('You still go Leaflet bro')
+      this.mapProxy = new LeafletProxy(this, element)
+    } else {
       console.log('So you wanna run OL')
       this.mapProxy = new OLProxy(this, element)
-    } else {
-      console.log('You go Leaflet')
-      this.mapProxy = new LeafletProxy(this, element)
     }
     this.uiContainer = Utils.loadTemplate('<div class="umap-ui-container"></div>')
     this.mapProxy.attachUI(this.uiContainer)
@@ -223,7 +223,6 @@ export default class App extends Utils.WithEvents {
 
     if (!this.properties.noControl) {
       this.initShortcuts()
-      this.on('map:contextmenu', (event) => this.onContextMenu(event))
       this.onceDataLoaded(() => this.setViewFromQueryString())
       this.bottomBar.setup()
       this.propagate()
@@ -444,7 +443,7 @@ export default class App extends Utils.WithEvents {
     return this.filters.isActive() || this.layers.tree.some((d) => d.filters.isActive())
   }
 
-  getOwnContextMenu(event) {
+  getOwnContextMenu() {
     const items = []
     if (this.editEnabled) {
       items.push({
@@ -496,8 +495,8 @@ export default class App extends Utils.WithEvents {
     return items
   }
 
-  getSharedContextMenu(event) {
-    const latlng = `${event.latlng.lat.toFixed(6)},${event.latlng.lng.toFixed(6)}`
+  getSharedContextMenu({ lat, lng }) {
+    const latlng = `${lat.toFixed(6)},${lng.toFixed(6)}`
     const items = [
       {
         label: latlng,
@@ -507,35 +506,34 @@ export default class App extends Utils.WithEvents {
     if (this.properties.urls.routing) {
       items.push({
         label: translate('Directions from here'),
-        action: () => this.openExternalRouting(event),
+        action: () => this.openExternalRouting({ lat, lng }),
       })
     }
     if (this.properties.ORSAPIKey) {
       items.push({
         label: translate('Compute isochrone from here'),
-        action: () => this.askForIsochrone(event),
+        action: () => this.askForIsochrone({ lat, lng }),
       })
     }
     if (this.properties.urls.edit_in_osm) {
       items.push({
         label: translate('Edit in OpenStreetMap'),
-        action: () => this.editInOSM(event),
+        action: () => this.editInOSM({ lat, lng }),
       })
     }
     items.push({
       label: translate('Open in OpenStreetMap'),
-      action: () => this.openInOSM(event),
+      action: () => this.openInOSM({ lat, lng }),
     })
     if (items.length) items.unshift('-')
     return items
   }
 
-  onContextMenu(appEvent) {
-    const mapEvent = appEvent.detail.event
-    const items = this.getOwnContextMenu(mapEvent).concat(
-      this.getSharedContextMenu(mapEvent)
+  onContextMenu({ lat, lng, pixel }) {
+    const items = this.getOwnContextMenu().concat(
+      this.getSharedContextMenu({ lat, lng })
     )
-    this.contextmenu.open(mapEvent.originalEvent, items)
+    this.contextmenu.openAt(pixel, items)
   }
 
   // Merge the given schema with the default one
@@ -1422,7 +1420,7 @@ export default class App extends Utils.WithEvents {
     this.topBar.redraw()
     this.checkForLegacy()
     this.checkForAnonymous()
-    this.mapProxy.enableEdit()
+    await this.mapProxy.enableEdit()
   }
 
   checkForAnonymous() {
@@ -1478,6 +1476,7 @@ export default class App extends Utils.WithEvents {
     this.editPanel.close()
     this.fullPanel.close()
     this.journal.stop()
+    this.mapProxy.disableEdit?.()
   }
 
   async initJournal() {
@@ -1516,6 +1515,7 @@ export default class App extends Utils.WithEvents {
       switch (impact) {
         case 'ui':
           this.controlManager.update()
+          this.mapProxy.updateUI()
           this.browser?.redraw()
           this.topBar.redraw()
           this.bottomBar.redraw()
@@ -1536,7 +1536,7 @@ export default class App extends Utils.WithEvents {
           // this get called once per datalayers.
           // (and same for undo/redo of the action)
           // TODO: call only once
-          this.reorderDOM()
+          this.reorderLayers()
           break
         case 'background':
           this.mapProxy.tilelayers.init(this.properties.tilelayers)
@@ -1682,7 +1682,7 @@ export default class App extends Utils.WithEvents {
         setParent(targetLayer)
       }
       this.journal.commitBatch()
-      this.reorderDOM()
+      this.reorderLayers()
       this.fire('datalayer:changed')
     }
 
@@ -1759,14 +1759,9 @@ export default class App extends Utils.WithEvents {
     this.editPanel.open({ content: container, highlight: 'layers' })
   }
 
-  reorderDOM() {
-    for (const layer of this.layers.root.reverse()) {
-      this.mapProxy.overlayPane.appendChild(layer.pane)
-    }
+  reorderLayers() {
+    this.mapProxy.reorderLayers()
     for (const layer of this.layers.tree) {
-      if (layer.layers.count()) {
-        layer.reorderDOM()
-      }
       layer.redraw()
     }
   }
@@ -1957,36 +1952,34 @@ export default class App extends Utils.WithEvents {
     return url
   }
 
-  openExternalRouting(event) {
+  openExternalRouting({ lat, lng }) {
     const url = this.urls.get('routing', {
-      lat: event.latlng.lat,
-      lng: event.latlng.lng,
+      lat,
+      lng,
       locale: getLocale(),
       zoom: this.mapProxy.zoom,
     })
     if (url) window.open(url)
   }
 
-  editInOSM(event) {
+  editInOSM({ lat, lng }) {
     const url = this.urls.get('edit_in_osm', {
-      lat: event.latlng.lat,
-      lng: event.latlng.lng,
+      lat,
+      lng,
       zoom: Math.max(this.mapProxy.zoom, 16),
     })
     if (url) window.open(url)
   }
 
-  openInOSM(event) {
-    window.open(
-      `https://www.openstreetmap.org/query?lat=${event.latlng.lat}&lon=${event.latlng.lng}`
-    )
+  openInOSM({ lat, lng }) {
+    window.open(`https://www.openstreetmap.org/query?lat=${lat}&lon=${lng}`)
   }
 
-  async askForIsochrone(event) {
+  async askForIsochrone({ lat, lng }) {
     if (!this.properties.ORSAPIKey) return
     await this.loadImporter()
     const { Importer } = await import('./importers/openrouteservice.js')
-    new Importer(this).isochrone(event.latlng)
+    new Importer(this).isochrone({ lat, lng })
   }
 
   setCenterAndZoom() {

@@ -292,7 +292,7 @@ class Circles extends DefaultType {
   static key = 'circles'
   static defaults = {
     weight: 1,
-    shape: 'circle',
+    iconClass: 'ProportionalCircle',
   }
 
   static ensureProperties(properties) {
@@ -435,10 +435,29 @@ class Heat extends DefaultType {
   static key = 'heat'
   static browsable = false
 
+  // OL's heatmap clamps the weight to [0,1], so normalize the intensity to that range.
+  static async compute(properties, features) {
+    const key = properties[this.key]?.intensityProperty
+    if (!key) return { properties: {} }
+    let max = 0
+    for (const feature of features) {
+      const value = Number.parseFloat(feature.properties?.[key])
+      if (Number.isFinite(value) && value > max) max = value
+    }
+    if (!max) return { properties: {} }
+    const attributes = {}
+    for (const feature of features) {
+      const value = Number.parseFloat(feature.properties?.[key])
+      attributes[feature.id] = { weight: Number.isFinite(value) ? value / max : 0 }
+    }
+    return { properties: {}, attributes }
+  }
+
   static renderConfig(properties) {
     return {
       [this.key]: {
-        radius: properties.heat?.radius,
+        radius: properties.heat?.radius || 25,
+        blur: properties.heat?.blur || 15,
         intensityProperty: properties.heat?.intensityProperty,
       },
     }
@@ -455,6 +474,17 @@ class Heat extends DefaultType {
           step: 5,
           label: translate('Heatmap radius'),
           helpText: translate('Override heatmap radius (default 25)'),
+        },
+      ],
+      [
+        'properties.heat.blur',
+        {
+          handler: 'Range',
+          min: 5,
+          max: 50,
+          step: 5,
+          label: translate('Heatmap blur'),
+          helpText: translate('Override heatmap blur (default 15)'),
         },
       ],
       [
