@@ -51,6 +51,56 @@ export async function shapeAt(geometry, point) {
   return -1
 }
 
+// Join two lines (each a flat [[lng, lat], ...]) into one, chaining them by their
+// closest endpoints and reversing whichever is needed.
+export async function mergeLines(a, b) {
+  if (!a?.length) return b
+  const aStart = a[0]
+  const aEnd = a[a.length - 1]
+  const bStart = b[0]
+  const bEnd = b[b.length - 1]
+  const ss = await distance(aStart, bStart)
+  const se = await distance(aStart, bEnd)
+  const ee = await distance(aEnd, bEnd)
+  const es = await distance(aEnd, bStart)
+  const shortest = Math.min(ss, ee, es, se)
+  switch (shortest) {
+    case se:
+      return [...b, ...a]
+    case es:
+      return [...a, ...b]
+    case ee:
+      return [...a, ...[...b].reverse()]
+    case ss:
+      return [...[...b].reverse(), ...a]
+    default:
+      throw new Error('Cannot merge lines (invalid coordinates?)')
+  }
+}
+
+// Index of the vertex of `coordinates` (a flat [[lng, lat], ...] ring) nearest to
+// `point` ([lng, lat]), by planar squared distance. With { ends: true }, only the
+// first and last vertices are considered.
+export function closestVertexIndex(coordinates, [lng, lat], { ends = false } = {}) {
+  const squaredDistance = ([x, y]) => (x - lng) ** 2 + (y - lat) ** 2
+  const last = coordinates.length - 1
+  if (ends) {
+    return squaredDistance(coordinates[0]) <= squaredDistance(coordinates[last])
+      ? 0
+      : last
+  }
+  let best = 0
+  let min = squaredDistance(coordinates[0])
+  for (let index = 1; index <= last; index++) {
+    const squared = squaredDistance(coordinates[index])
+    if (squared < min) {
+      min = squared
+      best = index
+    }
+  }
+  return best
+}
+
 // True if `arr` is a flat array of positions ([[lng, lat], ...] or [LatLng, ...]),
 // false if it has an extra nesting level (Multi/Polygon-like).
 export function isFlat(arr) {

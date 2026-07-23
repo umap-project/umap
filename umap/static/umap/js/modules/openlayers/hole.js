@@ -8,7 +8,7 @@ export default class DrawHole {
   constructor(map, feature) {
     this.map = map
     this.feature = feature
-    this.type = this.feature.getGeometry().getType()
+    this.isMulti = this.feature.getGeometry().getType() === 'MultiPolygon'
   }
 
   start() {
@@ -41,7 +41,7 @@ export default class DrawHole {
   onDrawStart(event) {
     const hole = event.feature
     const firstPoint = hole.getGeometry().getCoordinates()[0][0]
-    if (this.type === 'MultiPolygon') {
+    if (this.isMulti) {
       for (const [idx, polygon] of this.feature.getGeometry().getPolygons().entries()) {
         if (polygon.intersectsCoordinate(firstPoint)) {
           this.idx = idx
@@ -60,11 +60,7 @@ export default class DrawHole {
     const drawnHole = new LinearRing(event.target.getCoordinates()[0])
 
     let geom
-    if (this.type === 'Polygon') {
-      let coordinates = this.feature.getGeometry().getCoordinates()
-      geom = new Polygon(coordinates.slice(0, this.initialLength))
-      geom.appendLinearRing(drawnHole)
-    } else {
+    if (this.isMulti) {
       geom = new MultiPolygon([])
       for (let [idx, polygon] of this.feature.getGeometry().getPolygons().entries()) {
         if (idx === this.idx) {
@@ -74,6 +70,10 @@ export default class DrawHole {
         }
         geom.appendPolygon(polygon)
       }
+    } else {
+      let coordinates = this.feature.getGeometry().getCoordinates()
+      geom = new Polygon(coordinates.slice(0, this.initialLength))
+      geom.appendLinearRing(drawnHole)
     }
     this.feature.setGeometry(geom)
   }
