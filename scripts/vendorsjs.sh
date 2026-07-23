@@ -29,8 +29,11 @@ mkdir -p umap/static/umap/vendors/betterknown/ && cp node_modules/betterknown/di
 mkdir -p umap/static/umap/vendors/openrouteservice/ && cp node_modules/openrouteservice-js/dist/ors-js-client.js* umap/static/umap/vendors/openrouteservice/
 mkdir -p umap/static/umap/vendors/snapdom/ && cp node_modules/@zumer/snapdom/dist/snapdom.min.mjs umap/static/umap/vendors/snapdom/
 mkdir -p umap/static/umap/vendors/simple-elevation-chart/ && cp node_modules/simple-elevation-chart/src/elevation.* umap/static/umap/vendors/simple-elevation-chart/
+mkdir -p umap/static/umap/vendors/polyclip-ts/ && cp node_modules/polyclip-ts/dist/esm/index.js umap/static/umap/vendors/polyclip-ts/
+mkdir -p umap/static/umap/vendors/splaytree-ts/ && cp node_modules/splaytree-ts/dist/esm/index.js umap/static/umap/vendors/splaytree-ts/
+mkdir -p umap/static/umap/vendors/bignumber.js/ && cp node_modules/bignumber.js/bignumber.mjs umap/static/umap/vendors/bignumber.js/
 # Turf
-for mod in meta helpers flatten distance invariant clean-coords boolean-point-on-line boolean-point-in-polygon point-to-line-distance nearest-point-on-line rhumb-distance flip clone area centroid length bbox; do
+for mod in meta helpers flatten distance invariant clean-coords boolean-point-on-line boolean-point-in-polygon point-to-line-distance nearest-point-on-line rhumb-distance flip clone area centroid length bbox union; do
   mkdir -p umap/static/umap/vendors/turf/$mod && cp node_modules/@turf/$mod/dist/esm/index.js* umap/static/umap/vendors/turf/$mod/
 done
 # Deps of @turf/boolean-point-in-polygon (not @turf packages)

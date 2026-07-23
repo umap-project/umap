@@ -11,6 +11,11 @@ export async function distance(from, to, options) {
   return distance(from, to, options)
 }
 
+export async function union(features) {
+  const { union } = await import('@turf/union')
+  return union({ type: 'FeatureCollection', features })
+}
+
 export function center(geometry) {
   return centroid(geometry).geometry.coordinates
 }
