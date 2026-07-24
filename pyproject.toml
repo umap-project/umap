@@ -61,6 +61,7 @@ dev = [
 test = [
   "daphne==4.2.2",
   "factory-boy==3.3.3",
+  "pixelmatch>=0.4.0",
   "playwright>=1.39",
   "pytest==9.1.1",
   "pytest-asyncio==1.4.0",

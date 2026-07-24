@@ -8,6 +8,14 @@ from ..base import DataLayerFactory
 pytestmark = pytest.mark.django_db
 
 
+def test_map_shows(
+    live_server, page, tilelayer, map, wait_for_loaded, screenshot_matches
+):
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    wait_for_loaded(page)
+    screenshot_matches(page.locator("#map"))
+
+
 def test_preconnect_for_tilelayer(map, page, live_server, tilelayer):
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     meta = page.locator('link[rel="preconnect"]')
