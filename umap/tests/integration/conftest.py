@@ -1,9 +1,12 @@
 import os
 import re
+from pathlib import Path
 
 import pytest
 from daphne.testing import DaphneProcess
 from django.contrib.staticfiles.handlers import ASGIStaticFilesHandler
+from PIL import Image
+from pixelmatch.contrib.PIL import pixelmatch
 from playwright.sync_api import expect
 
 from umap.asgi import application
@@ -54,7 +57,9 @@ def page(new_page):
 @pytest.fixture
 def wait_for_loaded():
     def _(page):
-        page.wait_for_function("() => U.MAP.dataloaded === true")
+        page.wait_for_function(
+            "() => U.MAP.dataloaded === true && !document.querySelector('.umap-ui-container').classList.contains('umap-loading')"
+        )
 
     return _
 
@@ -100,3 +105,37 @@ def asgi_live_server(request, live_server, settings, db):
 
     server.terminate()
     server.join()
+
+
+@pytest.fixture(scope="function")
+def screenshot_matches(request):
+    counter = 1
+
+    def assert_(locator):
+        nonlocal counter
+        dirname = Path(__file__).parent.parent / "screenshots"
+        basename = f"{request.module.__name__}.{request.function.__name__}.{counter}"
+        actual_filename = dirname / f"{basename}.actual.png"
+        expected_filename = dirname / f"{basename}.expected.png"
+        diff_filename = dirname / f"{basename}.diff.png"
+        if not expected_filename.exists():
+            print(f"Expected screenshot not found, writing it: {expected_filename}")
+            locator.screenshot(path=expected_filename)
+        locator.screenshot(path=actual_filename)
+        expected = Image.open(expected_filename)
+        actual = Image.open(actual_filename)
+        img_diff = Image.new("RGBA", expected.size)
+        mismatch = pixelmatch(
+            expected, actual, img_diff, includeAA=False, threshold=0.1
+        )
+        counter += 1
+        if mismatch:
+            img_diff.save(diff_filename)
+            raise AssertionError(
+                f"Screenshot mismatch: {mismatch} pixels differ.\n"
+                f"  expected: {expected_filename}\n"
+                f"  actual:   {actual_filename}\n"
+                f"  diff:     {diff_filename}"
+            )
+
+    return assert_
