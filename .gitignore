@@ -11,6 +11,8 @@ umap.conf
 /data
 /static
 package-lock.json
+*.actual.png
+*.diff.png
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
