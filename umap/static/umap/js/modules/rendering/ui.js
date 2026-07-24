@@ -299,7 +299,6 @@ const PathMixin = {
   onAdd: function (map) {
     this._container = null
     FeatureMixin.onAdd.call(this, map)
-    this.setStyle()
     if (this.editor?.enabled()) this.editor.addHooks()
     this.resetTooltip()
     this._path.dataset.feature = this.geojson.id
@@ -310,36 +309,12 @@ const PathMixin = {
     FeatureMixin.onRemove.call(this, map)
   },
 
-  getStyle: function (feature) {
-    const options = {}
-    for (const option of this.getStyleOptions()) {
-      options[option] = feature.getDynamicOption(option)
-    }
-    options.pointerEvents = options.interactive ? 'visiblePainted' : 'stroke'
-    // this.parentClass.prototype.setStyle.call(this, options)
-    // TODO remove me when this gets merged and released:
-    // https://github.com/Leaflet/Leaflet/pull/9475
-
-    this._path.classList.toggle('leaflet-interactive', options.interactive)
-
+  setStyle: function (style) {
+    this.parentClass.prototype.setStyle.call(this, style)
     // Text decoration
     this.setText(null) // Reset.
-    const textPath = feature.getDynamicOption('textPath')
-    if (textPath) {
-      const color =
-        feature.getOption('textPathColor') || feature.getDynamicOption('color')
-      const textPathOptions = {
-        repeat: feature.getOption('textPathRepeat'),
-        offset: feature.getOption('textPathOffset') || undefined,
-        position: feature.getOption('textPathPosition'),
-        attributes: {
-          fill: color,
-          opacity: feature.getDynamicOption('opacity'),
-          rotate: feature.getOption('textPathRotate'),
-          'font-size': feature.getOption('textPathSize'),
-        },
-      }
-      this.setText(textPath, textPathOptions)
+    if (style.textPath) {
+      this.setText(style.textPath, style.textPathOptions)
     }
   },
 
@@ -347,19 +322,6 @@ const PathMixin = {
     this.parentClass.prototype.setStyle.call(this, this.geojson.style)
     this.resetTooltip()
   },
-
-  getStyleOptions: () => [
-    'smoothFactor',
-    'color',
-    'opacity',
-    'stroke',
-    'weight',
-    'fill',
-    'fillColor',
-    'fillOpacity',
-    'dashArray',
-    'interactive',
-  ],
 
   _setLatLngs: function (latlngs) {
     this.parentClass.prototype._setLatLngs.call(this, latlngs)
@@ -530,11 +492,6 @@ export const CircleMarker = BaseCircleMarker.extend({
     FeatureMixin.initialize.call(this, latlng, geojson)
   },
   getClass: () => CircleMarker,
-  getStyleOptions: function () {
-    const options = PathMixin.getStyleOptions.call(this)
-    options.push('radius')
-    return options
-  },
   getCenter: function () {
     return this._latlng
   },
