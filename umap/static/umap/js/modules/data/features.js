@@ -998,6 +998,29 @@ class Path extends Feature {
     const fieldset = DOMUtils.createFieldset(container, translate('Line decoration'))
     builder.build().then((form) => fieldset.appendChild(form))
   }
+
+  getRenderProperties() {
+    const properties = super.getRenderProperties()
+    const textPath = this.getDynamicOption('textPath')
+    let textPathOptions = {}
+    if (textPath) {
+      const color = this.getOption('textPathColor') || this.getDynamicOption('color')
+      textPathOptions = {
+        repeat: this.getOption('textPathRepeat'),
+        offset: this.getOption('textPathOffset') || undefined,
+        position: this.getOption('textPathPosition'),
+        attributes: {
+          fill: color,
+          opacity: this.getDynamicOption('opacity'),
+          rotate: this.getOption('textPathRotate'),
+          'font-size': this.getOption('textPathSize'),
+        },
+      }
+      properties.textPath = textPath
+      properties.textPathOptions = textPathOptions
+    }
+    return properties
+  }
 }
 
 export class LineString extends Path {
