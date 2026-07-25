@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.gis import admin
 from django.http import HttpResponse
 from django.urls import reverse
-from django.utils.html import format_html
+from django.utils.html import format_html, format_html_join
 from django.utils.translation import gettext_lazy as _
 
 from .models import DataLayer, Licence, Map, Pictogram, Team, TileLayer
@@ -136,14 +136,17 @@ class UserAdmin(CSVExportMixin, UserAdminBase):
 
     def last_maps(self, obj):
         maps = obj.owned_maps.order_by("-modified_at")[:10]
-        output = []
-        for map in maps:
-            url = reverse("admin:umap_map_change", args=(map.pk,))
-            output.append(f'<a href="{url}">{map.name}</a>')
-        output = ", ".join(output)
+        output = format_html_join(
+            ", ",
+            '<a href="{}">{}</a>',
+            (
+                (reverse("admin:umap_map_change", args=(map.pk,)), map.name)
+                for map in maps
+            ),
+        )
         if len(maps) == 10:
             output += "…"
-        return format_html(output)
+        return output
 
     last_maps.allow_tags = True
 
