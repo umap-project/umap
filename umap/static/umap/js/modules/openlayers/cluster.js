@@ -78,7 +78,7 @@ export function onClusterClick(clusterFeature, map, app) {
     if (sameSpot || view.getZoom() === view.getMaxZoom()) {
       spiderfy(members, center, map)
     } else {
-      app.fire('map:view:fit-bounds', {
+      app.fire('map:view:fit', {
         bounds: transformExtent(extent, 'EPSG:3857', 'EPSG:4326'),
         zoom: view.getMaxZoom(),
       })

@@ -90,7 +90,7 @@ export class OLProxy {
       const { easing, zoom, coordinates } = event.detail
       this.setView({ coordinates, zoom, easing })
     })
-    this.app.on('map:view:fit-bounds', (event) => {
+    this.app.on('map:view:fit', (event) => {
       const { easing, zoom, bounds } = event.detail
       this.setView({ bounds, zoom, easing })
     })
@@ -244,7 +244,8 @@ export class OLProxy {
     const updateHash = () => {
       const [lng, lat] = this.center
       this.app.fire('map:view:updated', {
-        zoom: this.zoom.toFixed(2),
+        // parseFloat drops trailing zeros so a round zoom stays `7`, not `7.00`.
+        zoom: parseFloat(this.zoom.toFixed(2)),
         coordinate: [lng.toFixed(6), lat.toFixed(6)],
       })
     }
@@ -261,6 +262,7 @@ export class OLProxy {
     })
     this.tilelayers.init(this.app.properties.tilelayers)
     this.tilelayers.selectDefault()
+    this.handleLimitBounds()
     this.updateUI()
   }
 
@@ -286,7 +288,7 @@ export class OLProxy {
       this.app.properties.defaultView === 'locate' &&
       !this.app.properties.noControl
     ) {
-      await this.app.controlManager.controls.locate.start()
+      await this.toggleLocate()
     } else if (this.app.properties.defaultView === 'data') {
       this.app.onceDataLoaded(() => this.app.fitDataBounds())
     } else if (this.app.properties.defaultView === 'latest') {
@@ -404,9 +406,9 @@ export class OLProxy {
     if (!this.drawingSource) {
       this.drawingSource = new VectorSource()
       this.drawingSource.on('addfeature', (event) => {
-        const geojson = this.OLFeatureToGeojson(event.feature)
-        const datalayer = this.app.defaultEditDataLayer()
-        datalayer.makeFeature(geojson).edit()
+        this.app.fire('feature:create', {
+          geojson: this.OLFeatureToGeojson(event.feature),
+        })
       })
     }
     this.pauseEditInteractions()

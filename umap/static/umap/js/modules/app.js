@@ -185,6 +185,10 @@ export default class App extends Utils.WithEvents {
       })
     })
     this.on('panel:close', () => this.panel.close())
+    this.on('feature:create', async (event) => {
+      const datalayer = await this.defaultEditDataLayer()
+      datalayer.makeFeature(event.detail.geojson).edit()
+    })
 
     if (this.properties.displayCaptionOnLoad) {
       // Retrocompat
@@ -1615,7 +1619,7 @@ export default class App extends Utils.WithEvents {
   // TODO: allow to control the default datalayer
   // (edit and viewing)
   // cf https://github.com/umap-project/umap/issues/585
-  defaultEditDataLayer() {
+  async defaultEditDataLayer() {
     let layer = this.lastUsedDataLayer
     if (layer && layer.allowFeatures() && layer.isVisible()) {
       return layer
@@ -1625,13 +1629,11 @@ export default class App extends Utils.WithEvents {
       .filter((layer) => layer.allowFeatures())
       .first()
     if (layer) return layer
+    // No visible layer accepts features; force an existing one visible, or create one.
     layer = this.layers.tree.filter((layer) => layer.allowFeatures()).first()
-    if (layer) {
-      // No layer visible, let's force one
-      layer.show()
-      return layer
-    }
-    return this.createDataLayer()
+    if (!layer) layer = this.createDataLayer()
+    await layer.show()
+    return layer
   }
 
   eachFeature(callback) {
@@ -1939,7 +1941,7 @@ export default class App extends Utils.WithEvents {
     let bounds = null
     for (const b of allBounds) bounds = GeoUtils.unionBbox(bounds, b)
     if (!this.hasData() || !GeoUtils.isValidBbox(bounds)) return false
-    this.fire('map:view:fit-bounds', { bounds })
+    this.fire('map:view:fit', { bounds })
   }
 
   proxyUrl(url, ttl) {

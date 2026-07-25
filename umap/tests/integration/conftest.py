@@ -1,5 +1,6 @@
 import os
 import re
+from io import BytesIO
 from pathlib import Path
 
 import pytest
@@ -14,9 +15,25 @@ from umap.asgi import application
 from ..base import mock_tiles
 
 
+def tiles_are_mocked():
+    # PWDEBUG/FORCE_TILES load real tiles, so map content is non-deterministic.
+    return not bool(os.environ.get("PWDEBUG", os.environ.get("FORCE_TILES", False)))
+
+
 @pytest.fixture(scope="session")
 def browser_context_args(browser_context_args):
-    return {**browser_context_args, "locale": "en-GB", "timezone_id": "Europe/Paris"}
+    return {
+        **browser_context_args,
+        "locale": "en-GB",
+        "timezone_id": "Europe/Paris",
+        # Pin everything that shifts pixels across machines/CI so screenshots are
+        # reproducible: fixed window, no Retina scaling, light theme, no motion.
+        "viewport": {"width": 1280, "height": 720},
+        "device_scale_factor": 1,
+        "color_scheme": "light",
+        "reduced_motion": "reduce",
+        "forced_colors": "none",
+    }
 
 
 @pytest.fixture(autouse=True)
@@ -42,7 +59,7 @@ def new_page(context):
             "pageerror",
             lambda exc: print(f"{prefix} uncaught exception:\n{exc.stack}"),
         )
-        if not bool(os.environ.get("PWDEBUG", os.environ.get("FORCE_TILES", False))):
+        if tiles_are_mocked():
             page.route(re.compile(r".*\btile\..*"), mock_tiles)
         return page
 
@@ -107,29 +124,42 @@ def asgi_live_server(request, live_server, settings, db):
     server.join()
 
 
-@pytest.fixture(scope="function")
-def screenshot_matches(request):
-    counter = 1
+@pytest.fixture
+def assert_screenshot(request):
+    update = request.config.getoption("--update-screenshots")
 
-    def assert_(locator):
-        nonlocal counter
+    def assert_(locator, suffix=""):
+        # Hide this helper's frame so a failure points at the calling test line.
+        __tracebackhide__ = True
+        # expected screenshots are run without tiles, so in DEBUG mode trying to
+        # compare screenshots will always fail.
+        if not tiles_are_mocked():
+            return
         dirname = Path(__file__).parent.parent / "screenshots"
-        basename = f"{request.module.__name__}.{request.function.__name__}.{counter}"
-        actual_filename = dirname / f"{basename}.actual.png"
+        suffix = f"-{suffix}" if suffix else ""
+        basename = f"{request.module.__name__}.{request.function.__name__}{suffix}"
         expected_filename = dirname / f"{basename}.expected.png"
-        diff_filename = dirname / f"{basename}.diff.png"
+        # Freeze CSS animations/transitions (e.g. the edit bar sliding in) to their
+        # final state, else the capture races the animation and flakes.
+        screenshot = locator.screenshot(animations="disabled")
+        if update:
+            expected_filename.write_bytes(screenshot)
+            return
         if not expected_filename.exists():
-            print(f"Expected screenshot not found, writing it: {expected_filename}")
-            locator.screenshot(path=expected_filename)
-        locator.screenshot(path=actual_filename)
+            raise AssertionError(
+                f"Missing screenshot baseline: {expected_filename}\n"
+                "Run the tests with --update-screenshots to create it."
+            )
         expected = Image.open(expected_filename)
-        actual = Image.open(actual_filename)
+        actual = Image.open(BytesIO(screenshot))
         img_diff = Image.new("RGBA", expected.size)
         mismatch = pixelmatch(
             expected, actual, img_diff, includeAA=False, threshold=0.1
         )
-        counter += 1
         if mismatch:
+            actual_filename = dirname / f"{basename}.actual.png"
+            diff_filename = dirname / f"{basename}.diff.png"
+            actual_filename.write_bytes(screenshot)
             img_diff.save(diff_filename)
             raise AssertionError(
                 f"Screenshot mismatch: {mismatch} pixels differ.\n"

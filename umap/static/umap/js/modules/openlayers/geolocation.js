@@ -7,7 +7,7 @@ import Fill from 'ol/style/Fill.js'
 import Stroke from 'ol/style/Stroke.js'
 import VectorSource from 'ol/source/Vector.js'
 import VectorLayer from 'ol/layer/Vector.js'
-import { toLonLat } from 'ol/proj.js'
+import { transformExtent } from 'ol/proj.js'
 
 let geolocation
 
@@ -54,10 +54,13 @@ async function init(map, app) {
   geolocation.on('change:tracking', () => {
     if (geolocation.getTracking()) {
       map.addLayer(geolocateLayer)
-      geolocation.once('change:position', () => {
-        const coordinates = toLonLat(geolocation.getPosition())
-        const zoom = Math.max(map.getView().getZoom(), 10)
-        app.fire('map:view:set', { coordinates, zoom })
+      // OL emits change:position before accuracyGeometry is computed.
+      geolocation.once('change:accuracyGeometry', () => {
+        const view = map.getView()
+        // Adapt the view to the accuracy.
+        const extent = geolocation.getAccuracyGeometry().getExtent()
+        const bounds = transformExtent(extent, view.getProjection(), 'EPSG:4326')
+        app.fire('map:view:fit', { bounds, zoom: view.getMaxZoom() })
       })
       app.fire('map:locate:activate')
     } else {

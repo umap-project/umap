@@ -470,7 +470,7 @@ export class Geocoder extends BaseAjax {
     geom.hidden = !['R', 'W'].includes(properties.osm_type)
     point.addEventListener('mousedown', (event) => {
       event.stopPropagation()
-      this.app.defaultEditDataLayer().makeFeature(feature).edit()
+      this.app.fire('feature:create', { geojson: feature })
     })
     geom.addEventListener('mousedown', async (event) => {
       event.stopPropagation()
