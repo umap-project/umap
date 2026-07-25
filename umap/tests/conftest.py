@@ -20,6 +20,15 @@ from .base import (
 TMP_ROOT = tempfile.mkdtemp()
 
 
+def pytest_addoption(parser):
+    parser.addoption(
+        "--update-screenshots",
+        action="store_true",
+        default=False,
+        help="Write screenshot baselines instead of comparing against them.",
+    )
+
+
 def pytest_configure(config):
     # Ugly but make asgi_live_server work, otherwise Daphne will use a spawn process
     # (since python 3.14) and thus start a fresh Django without default settings

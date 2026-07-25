@@ -253,6 +253,9 @@ export class FeatureManager extends Map {
 
   getIndex(feature) {
     const entries = Array.from(this)
+    // TODO this does not scale, and toRenderer calls getRank
+    // which calls this for each feature in the map, and this can
+    // be a lot.
     return entries.findIndex(([id]) => id === feature.id)
   }
 

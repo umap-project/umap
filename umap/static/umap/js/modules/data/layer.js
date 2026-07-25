@@ -69,7 +69,10 @@ export class DataLayer {
     }
     this.permissions = new DataLayerPermissions(this.app, this, spec.permissions)
 
+    this.setType()
+
     this._needsFetch = this.createdOnServer || this.isRemoteLayer()
+    this._needsRenderer = true
     this.fields = new Fields(this, this.app.dialog)
     this.filters = new Filters(this, this.app)
     this.rules = new Rules(app, this)
@@ -241,23 +244,29 @@ export class DataLayer {
     this._autoVisibility = value
   }
 
-  async ensureLayer() {
-    if (this.Type) return
+  setType() {
     this.Type = loadType(this.properties.type)
     this.Type.ensureProperties(this.properties)
+  }
+
+  async ensureLayer() {
+    if (!this._needsRenderer) return
     await this.app.mapProxy.createLayer(this)
+    this._needsRenderer = false
   }
 
   async resetLayer(force) {
-    // Nothing to reset before the first build (lazy). `this.Type` is the type the layer was
-    // built for, so a differing properties.type means we must rebuild.
-    if (!this.Type) return
+    // Nothing to reset before the renderer's first build; it will pick up the
+    // current type when it is eventually built. `this.Type` is the type the layer
+    // was built for, so a differing properties.type means we must rebuild.
+    if (this._needsRenderer) return
     if ((!this.properties.type || this.properties.type === this.Type.type) && !force) {
       return
     }
     const visible = this.isVisible()
     this.app.mapProxy.deleteLayer(this.id)
-    this.Type = null
+    this.setType()
+    this._needsRenderer = true
     await this.ensureLayer()
     // deleteLayer dropped the source; repopulate it.
     this.app.mapProxy.addData(this.id, this.toRenderer())
@@ -1286,7 +1295,7 @@ export class DataLayer {
 
   zoomToBounds(bounds) {
     if (GeoUtils.isValidBbox(bounds)) {
-      this.app.fire('map:view:fit-bounds', {
+      this.app.fire('map:view:fit', {
         bounds,
         zoom: this.getProperty('zoomTo'),
       })
