@@ -124,7 +124,7 @@ export class LeafletProxy {
     this.app.on('map:hide:point', (event) => {
       this.hidePoint(event.detail.id)
     })
-    this.app.on('map:view:fit-bounds', (event) => {
+    this.app.on('map:view:fit', (event) => {
       const { bounds, zoom, easing } = event.detail
       const latLngBounds = this.toLatLngBounds(bounds)
       if (easing) {

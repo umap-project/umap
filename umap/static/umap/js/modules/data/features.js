@@ -921,7 +921,7 @@ class Path extends Feature {
   zoomTo({ easing, callback }) {
     // Use bounds instead of centroid for paths.
     const zoom = this.getBestZoom()
-    this.app.fire('map:view:fit-bounds', { bounds: this.bounds, zoom, easing })
+    this.app.fire('map:view:fit', { bounds: this.bounds, zoom, easing })
     if (callback) callback.call(this)
   }
 
