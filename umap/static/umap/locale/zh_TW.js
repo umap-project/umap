@@ -655,7 +655,7 @@ const locale = {
     "Parent group": "父群組",
     "Group properties": "群組屬性",
     "Choose a group": "選擇群組",
-    "Change map background": "Change map background"
+    "Change map background": "改變背景地圖"
 }
 L.registerLocale("zh_TW", locale)
 L.setLocale("zh_TW")
