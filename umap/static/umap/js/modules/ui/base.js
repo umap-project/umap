@@ -1,14 +1,31 @@
 export class Positioned {
-  openAt({ anchor, position }) {
-    if (anchor && position === 'top') {
-      this.anchorTop(anchor)
-    } else if (anchor && position === 'bottom') {
-      this.anchorBottom(anchor)
-    } else if (anchor && position === 'right') {
-      this.anchorRight(anchor)
-    } else {
-      this.anchorAbsolute()
+  openAt({ anchor, position, at }) {
+    if (at) return this.anchorAt(at, position)
+    const point = anchor && this.anchorPoint(anchor, position)
+    if (point) this.anchorAt(point, position)
+    else this.anchorAbsolute()
+  }
+
+  anchorPoint(el, position) {
+    const rect = this.getPosition(el)
+    switch (position) {
+      case 'top':
+        return [rect.left + rect.width / 2, rect.top]
+      case 'bottom':
+        return [rect.left + rect.width / 2, rect.bottom]
+      case 'left':
+        return [rect.left, rect.top + rect.height / 2]
+      case 'right':
+        return [rect.right, rect.top + rect.height / 2]
+      default:
+        return null
     }
+  }
+
+  anchorAt([x, y], position) {
+    if (!position || position === 'auto') return this.computePosition([x, y])
+    this.toggleClassPosition(position)
+    this.setPosition({ left: x, top: y })
   }
 
   toggleClassPosition(position) {
@@ -25,34 +42,6 @@ export class Positioned {
     for (const known of positions) {
       this.container.classList.toggle(`tooltip-${known}`, position === known)
     }
-  }
-
-  anchorTop(el) {
-    this.toggleClassPosition('top')
-    const coords = this.getPosition(el)
-    this.setPosition({
-      left: coords.left - 10,
-      bottom: this.getDocHeight() - coords.top + 11,
-    })
-  }
-
-  anchorBottom(el) {
-    this.toggleClassPosition('bottom')
-    const coords = this.getPosition(el)
-    const selfCoords = this.getPosition(this.container)
-    this.setPosition({
-      left: coords.left + coords.width / 2 - selfCoords.width / 2,
-      top: coords.bottom + 11,
-    })
-  }
-
-  anchorRight(el) {
-    this.toggleClassPosition('right')
-    const coords = this.getPosition(el)
-    this.setPosition({
-      left: coords.right + 11,
-      top: coords.top,
-    })
   }
 
   anchorAbsolute() {
@@ -99,17 +88,5 @@ export class Positioned {
     }
     this.toggleClassPosition(tooltip)
     this.setPosition({ left, top })
-  }
-
-  getDocHeight() {
-    const D = document
-    return Math.max(
-      D.body.scrollHeight,
-      D.documentElement.scrollHeight,
-      D.body.offsetHeight,
-      D.documentElement.offsetHeight,
-      D.body.clientHeight,
-      D.documentElement.clientHeight
-    )
   }
 }
