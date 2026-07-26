@@ -610,6 +610,8 @@ export class DataLayer {
         break
       case 'MultiLineString':
       case 'LineString':
+        // In case of mixed 2D/3D coordinates, OL will fail.
+        GeoUtils.normalizeCoords(geometry)
         feature = new LineString(this.app, this, geojson, id)
         break
       case 'MultiPolygon':
