@@ -82,7 +82,9 @@ export class OLProxy {
 
   onPointerMove(event) {
     if (event.dragging) return
-    const olFeature = this.map.forEachFeatureAtPixel(event.pixel, (feature) => feature)
+    const olFeature = this.map.forEachFeatureAtPixel(event.pixel, (feature) =>
+      feature.get('interactive') ? feature : undefined
+    )
     this.map.getTargetElement().style.cursor = olFeature ? 'pointer' : ''
     this.toggleTooltip(olFeature, event.originalEvent)
   }
@@ -571,8 +573,10 @@ export class OLProxy {
 
   onClick(event) {
     this.closePopup()
-    // getFeaturesAtPixel returns features top-to-bottom; we act on the topmost.
-    const olFeature = this.map.getFeaturesAtPixel(event.pixel)[0]
+    // Topmost interactive feature (or a cluster), skipping non-interactive ones.
+    const olFeature = this.map.forEachFeatureAtPixel(event.pixel, (feature) =>
+      feature.get('features') || feature.get('interactive') ? feature : undefined
+    )
     if (!olFeature) return
     const isCluster = Boolean(olFeature.get('features')?.length)
     if (isCluster) {
@@ -611,9 +615,11 @@ export class OLProxy {
       pixel: [event.originalEvent.clientX, event.originalEvent.clientY],
     }
     // Restrict hit-testing to our data layers, else Modify's vertex overlay wins.
-    const olFeature = this.map.getFeaturesAtPixel(event.pixel, {
-      layerFilter: (layer) => Object.values(this.sources).includes(layer.getSource()),
-    })[0]
+    const olFeature = this.map.forEachFeatureAtPixel(
+      event.pixel,
+      (feature) => (feature.get('interactive') ? feature : undefined),
+      { layerFilter: (layer) => Object.values(this.sources).includes(layer.getSource()) }
+    )
     const feature = olFeature && this.getFeatureById(olFeature.getId())
     if (feature) feature.onContextMenu(appEvent)
     else this.app.onContextMenu(appEvent)
@@ -713,6 +719,7 @@ export class OLProxy {
     olFeature.set('umapText', base.texts)
     olFeature.set('popupOffsetY', base.popupOffsetY)
     olFeature.set('umapLabel', geojson.label)
+    olFeature.set('interactive', geojson.style?.interactive !== false)
     this.applyStyle(olFeature)
   }
 
