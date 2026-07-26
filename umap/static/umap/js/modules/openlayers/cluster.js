@@ -104,6 +104,9 @@ function clusterStyle(clusterFeature, config = {}) {
       font: 'bold 12px sans-serif',
       fill: new Fill({ color: config.cluster?.textColor || blackOrWhite(color) }),
     }),
+    // A distinct zIndex per cluster, else OL draws every count above every circle.
+    // Southernmost on top.
+    zIndex: Math.round(-clusterFeature.getGeometry().getCoordinates()[1]),
   })
 }
 
