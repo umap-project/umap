@@ -773,11 +773,14 @@ export class OLProxy {
       anchorTexts(texts, icon.textAnchor, geojson.label?.direction)
       return { style: icon.style, texts, popupOffsetY: icon.popupOffsetY }
     }
-    const stroke = new Stroke({
-      color: rgba(properties.color, properties.opacity),
-      width: properties.weight,
-      lineDash: properties.dashArray?.split(',').map(Number),
-    })
+    const stroke =
+      properties.stroke === false
+        ? undefined
+        : new Stroke({
+            color: rgba(properties.color, properties.opacity),
+            width: properties.weight,
+            lineDash: properties.dashArray?.split(',').map(Number),
+          })
     const fill =
       properties.fill === false
         ? undefined
