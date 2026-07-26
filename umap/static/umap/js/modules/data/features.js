@@ -577,6 +577,24 @@ class Feature {
     for (const option of this.getStyleProperties()) {
       style[option] = this.getDynamicOption(option)
     }
+    const defaultPlacement = this instanceof LineString ? 'line' : 'point'
+    const text = this.getDynamicOption('textPath')
+    if (text) {
+      const color = this.getOption('textPathColor') || this.getDynamicOption('color')
+      const textPath = {
+        text,
+        repeat: this.getOption('textPathRepeat'),
+        offset: this.getOption('textPathOffset') || undefined,
+        align: this.getOption('textPathPosition'),
+        placement: this.getOption('textPathPlacement') || defaultPlacement,
+        fill: color,
+        stroke: this instanceof Path ? DOMUtils.blackOrWhite(color) : '#fff',
+        opacity: this.getDynamicOption('opacity'),
+        rotate: this.getOption('textPathRotate'),
+        fontSize: this.getOption('textPathSize'),
+      }
+      style.textPath = textPath
+    }
     return style
   }
 
@@ -771,6 +789,24 @@ class Feature {
     } else if (DOMUtils.contrastedColor(element, bgcolor)) {
       element.classList.add('icon-white')
     }
+  }
+
+  addExtraEditFieldset(container) {
+    const options = [
+      'properties._umap_options.textPath',
+      'properties._umap_options.textPathColor',
+      'properties._umap_options.textPathRepeat',
+      'properties._umap_options.textPathRotate',
+      'properties._umap_options.textPathSize',
+      'properties._umap_options.textPathOffset',
+      'properties._umap_options.textPathPlacement',
+      'properties._umap_options.textPathPosition',
+    ]
+    const builder = new MutatingForm(this, options, {
+      id: 'umap-feature-text-decoration',
+    })
+    const fieldset = DOMUtils.createFieldset(container, translate('Text decoration'))
+    builder.build().then((form) => fieldset.appendChild(form))
   }
 }
 
@@ -967,46 +1003,6 @@ class Path extends Feature {
       }
     }
     return items
-  }
-
-  addExtraEditFieldset(container) {
-    const options = [
-      'properties._umap_options.textPath',
-      'properties._umap_options.textPathColor',
-      'properties._umap_options.textPathRepeat',
-      'properties._umap_options.textPathRotate',
-      'properties._umap_options.textPathSize',
-      'properties._umap_options.textPathOffset',
-      'properties._umap_options.textPathPosition',
-    ]
-    const builder = new MutatingForm(this, options, {
-      id: 'umap-feature-line-decoration',
-    })
-    const fieldset = DOMUtils.createFieldset(container, translate('Line decoration'))
-    builder.build().then((form) => fieldset.appendChild(form))
-  }
-
-  getRenderProperties() {
-    const properties = super.getRenderProperties()
-    const textPath = this.getDynamicOption('textPath')
-    let textPathOptions = {}
-    if (textPath) {
-      const color = this.getOption('textPathColor') || this.getDynamicOption('color')
-      textPathOptions = {
-        repeat: this.getOption('textPathRepeat'),
-        offset: this.getOption('textPathOffset') || undefined,
-        position: this.getOption('textPathPosition'),
-        attributes: {
-          fill: color,
-          opacity: this.getDynamicOption('opacity'),
-          rotate: this.getOption('textPathRotate'),
-          'font-size': this.getOption('textPathSize'),
-        },
-      }
-      properties.textPath = textPath
-      properties.textPathOptions = textPathOptions
-    }
-    return properties
   }
 }
 

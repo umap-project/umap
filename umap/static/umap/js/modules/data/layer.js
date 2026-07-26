@@ -260,7 +260,7 @@ export class DataLayer {
     // current type when it is eventually built. `this.Type` is the type the layer
     // was built for, so a differing properties.type means we must rebuild.
     if (this._needsRenderer) return
-    if ((!this.properties.type || this.properties.type === this.Type.type) && !force) {
+    if ((!this.properties.type || this.properties.type === this.Type?.type) && !force) {
       return
     }
     const visible = this.isVisible()
@@ -990,10 +990,11 @@ export class DataLayer {
       'properties.textPathRotate',
       'properties.textPathSize',
       'properties.textPathOffset',
+      'properties.textPathPlacement',
       'properties.textPathPosition',
     ]
     const builder = new MutatingForm(this, fields)
-    const fieldset = DOMUtils.createFieldset(container, translate('Line decoration'))
+    const fieldset = DOMUtils.createFieldset(container, translate('Text decoration'))
     fieldset.appendChild(await builder.build())
   }
 
