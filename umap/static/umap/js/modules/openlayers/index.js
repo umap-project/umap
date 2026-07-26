@@ -15,8 +15,8 @@ import Fill from 'ol/style/Fill.js'
 import Style from 'ol/style/Style.js'
 import MouseWheelZoom from 'ol/interaction/MouseWheelZoom.js'
 import { makeIcon } from './icon.js'
-import { rgba, textWidth } from './utils.js'
-import TextStyle from 'ol/style/Text.js'
+import { anchorTexts, makeLabel, makeTextPath } from './label.js'
+import { rgba } from './utils.js'
 import { Alert } from '../../components/alerts/alert.js'
 
 const POINT_ZINDEX_OFFSET = 10000
@@ -24,7 +24,6 @@ const HIGHLIGHT_ZINDEX = 1e6
 
 const POPUP_ARROW_HEIGHT = 12
 const FIT_PADDING = [50, 50, 50, 50]
-const TEXT_REPEAT_GAP = 20
 
 const popupTemplate = `
   <div class="umap-popup window">
@@ -653,9 +652,14 @@ export class OLProxy {
         style: (feature) => (isPoint(feature) ? feature.get('umapStyle') : null),
         zIndexOffset: POINT_ZINDEX_OFFSET,
       })
+      // Labels and text above the paths but below the markers.
       layers['path'] = new VectorLayer({
         source,
-        style: (feature) => (isPoint(feature) ? null : feature.get('umapStyle')),
+        style: (feature) => {
+          const texts = feature.get('umapText') || []
+          if (isPoint(feature)) return texts
+          return [].concat(feature.get('umapStyle') || [], texts)
+        },
       })
     }
     this.layers[datalayer.id] = layers
@@ -706,6 +710,7 @@ export class OLProxy {
     const base = this.style(geojson)
     olFeature.set('umapBaseStyle', base.style)
     olFeature.set('umapHighlightStyle', this.style(geojson, true).style)
+    olFeature.set('umapText', base.texts)
     olFeature.set('popupOffsetY', base.popupOffsetY)
     olFeature.set('umapLabel', geojson.label)
     this.applyStyle(olFeature)
@@ -759,34 +764,14 @@ export class OLProxy {
     const base = geojson.style || {}
     const properties = highlight ? { ...base, ...geojson.highlight } : base
     const zIndex = highlight ? HIGHLIGHT_ZINDEX : geojson.zIndex
-    let text
-    if (base.textPath?.text) {
-      const options = base.textPath
-      const fontSize = options.fontSize
-      const font = `${fontSize}px sans-serif`
-      text = new TextStyle({
-        text: options.text,
-        textAlign: options.align === 'auto' ? undefined : options.align,
-        textBaseline: 'middle',
-        font,
-        repeat: options.repeat ? textWidth(options.text, font) + TEXT_REPEAT_GAP : null,
-        fill: new Fill({ color: rgba(options.fill, options.opacity) }),
-        stroke: new Stroke({ color: rgba(options.stroke, options.opacity), width: 3 }),
-        offsetY: options.offset,
-        keepUpright: false,
-        placement: options.placement,
-        overflow: true,
-        rotation: (options.rotate * Math.PI) / 180,
-      })
-    }
+    const texts = [
+      makeTextPath(base.textPath, zIndex),
+      makeLabel(geojson.label, zIndex),
+    ].filter(Boolean)
     if (geojson.geometry.type === 'Point') {
       const icon = makeIcon(properties, zIndex)
-      if (text) {
-        text.setOffsetY(text.getOffsetY() + icon.labelOffsetY)
-        // A dedicated style, so it never clobbers a text-based symbol (e.g. Raw).
-        icon.style = [].concat(icon.style, new Style({ text, zIndex }))
-      }
-      return icon
+      anchorTexts(texts, icon.textAnchor, geojson.label?.direction)
+      return { style: icon.style, texts, popupOffsetY: icon.popupOffsetY }
     }
     const stroke = new Stroke({
       color: rgba(properties.color, properties.opacity),
@@ -802,7 +787,7 @@ export class OLProxy {
               properties.fillOpacity
             ),
           })
-    return { style: new Style({ stroke, fill, zIndex, text }), popupOffsetY: 0 }
+    return { style: [new Style({ stroke, fill, zIndex })], texts, popupOffsetY: 0 }
   }
 
   get hasExtent() {
@@ -878,7 +863,7 @@ class TileLayerManager {
       url,
       tilePixelRatio: retina ? 2 : 1,
       attributions: spec.attribution,
-      crossOrigin: 'anonymous',
+      crossOrigin: null,
     })
     return new TileLayer({
       source,
@@ -888,6 +873,8 @@ class TileLayerManager {
       zIndex: -1,
       minZoom: spec.minZoom,
       maxZoom: spec.maxZoom,
+      // Keep it to serialize back to JSON for saving it to the back.
+      spec: { ...spec },
     })
   }
 

@@ -492,7 +492,7 @@ export class TilelayersControl extends SimpleButton {
       const oldTileLayer = this.app.properties.tilelayer
       this.app.mapProxy.tilelayers.select(tilelayer)
       if (options?.edit) {
-        this.app.properties.tilelayer = tilelayer.toJSON()
+        this.app.properties.tilelayer = { ...tilelayer.get('spec') }
         this.app.journal.update(
           'properties.tilelayer',
           this.app.properties.tilelayer,
