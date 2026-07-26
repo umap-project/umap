@@ -58,6 +58,7 @@ const SHAPES = {
     height: 52,
     anchor: [20, 44],
     symbolOffset: 24,
+    textAnchor: [16, -44, 0],
     shadow: SHADOW_FILTER,
   },
   Drop: {
@@ -68,14 +69,16 @@ const SHAPES = {
     height: 56,
     anchor: [20, 48],
     symbolOffset: 28,
+    textAnchor: [16, -48, 0],
     shadow: SHADOW_FILTER,
   },
-  // A shiny ball (radial gradient) on a thin stick — uMap's "Ball". No symbol.
+  // A shiny ball (radial gradient) on a thin stick. No symbol.
   Ball: {
     viewBox: '2 -4 28 52',
     width: 28,
     height: 44,
     anchor: [14, 30],
+    textAnchor: [8, -30, 0],
     body: (color, opacity) =>
       `<defs><radialGradient id="ball" gradientUnits="userSpaceOnUse" cx="13" cy="5" r="12">` +
       `<stop offset="0" stop-color="#fff"/>` +
@@ -173,11 +176,7 @@ function makeSymbol(src, offset, size, bgColor, maxWidth, zIndex) {
   return new Style({ text, zIndex })
 }
 
-// Gap between an icon's bottom edge and its label.
-const LABEL_GAP = 12
-
 // An icon is an optional shape (Ball, Drop, Circle…) + an optional symbol (say a star, a tree, an emoji, some short text)
-// `labelOffsetY` is how far below the anchor a label sits (icon reach + gap); the caller builds the text.
 export function makeIcon(properties, zIndex) {
   const iconClass = properties.iconClass
   const scale = properties.scale ?? 1
@@ -204,7 +203,7 @@ export function makeIcon(properties, zIndex) {
         zIndex,
       }),
       popupOffsetY: -radius,
-      labelOffsetY: radius + LABEL_GAP,
+      textAnchor: [radius, -radius, radius],
     }
   }
   if (iconClass === 'LargeCircle') {
@@ -232,13 +231,14 @@ export function makeIcon(properties, zIndex) {
         ),
       ],
       popupOffsetY: -radius,
-      labelOffsetY: radius + LABEL_GAP,
+      textAnchor: [radius, -radius, radius],
     }
   }
 
   // Raw ("None"): no pin, just the symbol sized to iconSize, centered on the point.
   if (iconClass === 'Raw') {
     const iconSize = properties.iconSize || SCHEMA.iconSize.default
+    const radius = (iconSize / 2) * scale
     return {
       style: makeSymbol(
         properties.iconUrl || SCHEMA.iconUrl.default,
@@ -248,8 +248,8 @@ export function makeIcon(properties, zIndex) {
         undefined,
         zIndex
       ),
-      popupOffsetY: (-iconSize / 2) * scale,
-      labelOffsetY: (iconSize / 2) * scale + LABEL_GAP,
+      popupOffsetY: -radius,
+      textAnchor: [radius, -radius, radius],
     }
   }
 
@@ -279,6 +279,6 @@ export function makeIcon(properties, zIndex) {
   return {
     style: styles,
     popupOffsetY: -shape.anchor[1] * scale,
-    labelOffsetY: LABEL_GAP,
+    textAnchor: shape.textAnchor.map((v) => v * scale),
   }
 }
