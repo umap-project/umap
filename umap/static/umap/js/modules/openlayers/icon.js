@@ -7,7 +7,7 @@ import CircleStyle from 'ol/style/Circle.js'
 import Style from 'ol/style/Style.js'
 import Stroke from 'ol/style/Stroke.js'
 import Fill from 'ol/style/Fill.js'
-import { rgba } from './utils.js'
+import { rgba, textWidth } from './utils.js'
 import IconImage from 'ol/style/IconImage.js'
 import ImageState from 'ol/ImageState.js'
 import { createCanvasContext2D } from 'ol/dom.js'
@@ -125,13 +125,6 @@ function isImg(url) {
   return isPath(url) || isRemoteUrl(url) || isDataImage(url)
 }
 
-let measureContext
-function textWidth(text, font) {
-  measureContext ??= document.createElement('canvas').getContext('2d')
-  measureContext.font = font
-  return measureContext.measureText(text).width
-}
-
 function wrapText(text, font, maxWidth) {
   const lines = []
   let line = ''
@@ -180,7 +173,11 @@ function makeSymbol(src, offset, size, bgColor, maxWidth, zIndex) {
   return new Style({ text, zIndex })
 }
 
+// Gap between an icon's bottom edge and its label.
+const LABEL_GAP = 12
+
 // An icon is an optional shape (Ball, Drop, Circle…) + an optional symbol (say a star, a tree, an emoji, some short text)
+// `labelOffsetY` is how far below the anchor a label sits (icon reach + gap); the caller builds the text.
 export function makeIcon(properties, zIndex) {
   const iconClass = properties.iconClass
   const scale = properties.scale ?? 1
@@ -207,6 +204,7 @@ export function makeIcon(properties, zIndex) {
         zIndex,
       }),
       popupOffsetY: -radius,
+      labelOffsetY: radius + LABEL_GAP,
     }
   }
   if (iconClass === 'LargeCircle') {
@@ -234,6 +232,7 @@ export function makeIcon(properties, zIndex) {
         ),
       ],
       popupOffsetY: -radius,
+      labelOffsetY: radius + LABEL_GAP,
     }
   }
 
@@ -250,6 +249,7 @@ export function makeIcon(properties, zIndex) {
         zIndex
       ),
       popupOffsetY: (-iconSize / 2) * scale,
+      labelOffsetY: (iconSize / 2) * scale + LABEL_GAP,
     }
   }
 
@@ -276,5 +276,5 @@ export function makeIcon(properties, zIndex) {
       )
     )
   }
-  return { style: styles, popupOffsetY: -shape.anchor[1] * scale }
+  return { style: styles, popupOffsetY: -shape.anchor[1] * scale, labelOffsetY: LABEL_GAP }
 }

@@ -578,12 +578,14 @@ export const SCHEMA = {
   textPath: {
     type: String,
     impacts: ['data'],
-    label: translate('Add text along path'),
+    label: translate('Add text'),
+    inheritable: true,
   },
   textPathColor: {
     type: String,
     impacts: ['data'],
     label: translate('Text color'),
+    inheritable: true,
   },
   textPathOffset: {
     type: Number,
@@ -593,23 +595,37 @@ export const SCHEMA = {
     min: -20,
     max: 20,
     step: 1,
+    inheritable: true,
   },
   textPathPosition: {
     type: String,
     impacts: ['data'],
-    label: translate('Text position'),
+    label: translate('Text position along path'),
     default: 'center',
     choices: [
+      ['auto', translate('auto')],
       ['start', translate('start')],
       ['center', translate('center')],
       ['end', translate('end')],
     ],
+    inheritable: true,
+  },
+  textPathPlacement: {
+    type: String,
+    impacts: ['data'],
+    label: translate('Text placement'),
+    choices: [
+      ['point', translate('centered')],
+      ['line', translate('along path')],
+    ],
+    inheritable: true,
   },
   textPathRepeat: {
     type: Boolean,
     label: translate('Text repeat'),
     impacts: ['data'],
     default: true,
+    inheritable: true,
   },
   textPathRotate: {
     type: Number,
@@ -619,15 +635,17 @@ export const SCHEMA = {
     min: 0,
     max: 360,
     step: 1,
+    inheritable: true,
   },
   textPathSize: {
     type: Number,
     label: translate('Text size'),
     impacts: ['data'],
-    default: 20,
+    default: 16,
     min: 10,
     max: 30,
     step: 1,
+    inheritable: true,
   },
   tilelayer: {
     type: Object,
