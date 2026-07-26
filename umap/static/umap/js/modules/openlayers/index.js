@@ -15,13 +15,15 @@ import Fill from 'ol/style/Fill.js'
 import Style from 'ol/style/Style.js'
 import MouseWheelZoom from 'ol/interaction/MouseWheelZoom.js'
 import { makeIcon } from './icon.js'
-import { rgba } from './utils.js'
+import { rgba, textWidth } from './utils.js'
+import TextStyle from 'ol/style/Text.js'
 
 const POINT_ZINDEX_OFFSET = 10000
 const HIGHLIGHT_ZINDEX = 1e6
 
 const POPUP_ARROW_HEIGHT = 12
 const FIT_PADDING = [50, 50, 50, 50]
+const TEXT_REPEAT_GAP = 20
 
 const popupTemplate = `
   <div class="umap-popup window">
@@ -478,8 +480,8 @@ export class OLProxy {
   }
 
   showLayer(id) {
+    if (this.hasLayer(id)) return
     const layers = Object.values(this.layers[id] || {})
-    if (!layers.length) return
     for (const layer of layers) {
       this.map.addLayer(layer)
     }
@@ -727,8 +729,34 @@ export class OLProxy {
     const base = geojson.style || {}
     const properties = highlight ? { ...base, ...geojson.highlight } : base
     const zIndex = highlight ? HIGHLIGHT_ZINDEX : geojson.zIndex
+    let text
+    if (base.textPath?.text) {
+      const options = base.textPath
+      const fontSize = options.fontSize
+      const font = `${fontSize}px sans-serif`
+      text = new TextStyle({
+        text: options.text,
+        textAlign: options.align === 'auto' ? undefined : options.align,
+        textBaseline: 'middle',
+        font,
+        repeat: options.repeat ? textWidth(options.text, font) + TEXT_REPEAT_GAP : null,
+        fill: new Fill({color: rgba(options.fill, options.opacity)}),
+        stroke: new Stroke({color: rgba(options.stroke, options.opacity), width: 3}),
+        offsetY: options.offset,
+        keepUpright: false,
+        placement: options.placement,
+        overflow: true,
+        rotation: options.rotate * Math.PI / 180,
+      })
+    }
     if (geojson.geometry.type === 'Point') {
-      return makeIcon(properties, zIndex)
+      const icon = makeIcon(properties, zIndex)
+      if (text) {
+        text.setOffsetY(text.getOffsetY() + icon.labelOffsetY)
+        // A dedicated style, so it never clobbers a text-based symbol (e.g. Raw).
+        icon.style = [].concat(icon.style, new Style({ text, zIndex }))
+      }
+      return icon
     }
     const stroke = new Stroke({
       color: rgba(properties.color, properties.opacity),
@@ -744,7 +772,7 @@ export class OLProxy {
               properties.fillOpacity
             ),
           })
-    return { style: new Style({ stroke, fill, zIndex }), popupOffsetY: 0 }
+    return { style: new Style({ stroke, fill, zIndex, text }), popupOffsetY: 0 }
   }
 
   get hasExtent() {
