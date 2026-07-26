@@ -5,6 +5,7 @@ import { centroid } from '@turf/centroid' // deps: meta, helpers — +0.5 KB
 import { flip } from '@turf/flip' // deps: clone, meta, helpers — +3.3 KB (clone)
 import { length } from '@turf/length' // deps: distance (→invariant), meta — +4.7 KB
 import { bbox } from '@turf/bbox' // deps: meta, helpers — +0.7 KB
+import { coordEach } from '@turf/meta' // already a shared dep — +0 KB
 
 export async function distance(from, to, options) {
   const { distance } = await import('@turf/distance')
@@ -99,6 +100,20 @@ export function closestVertexIndex(coordinates, [lng, lat], { ends = false } = {
     }
   }
   return best
+}
+
+// Don't let 2D and 3D coordinates in the geometry, otherwise OL will
+// mix them up.
+export function normalizeCoords(geometry) {
+  if (!geometry?.coordinates) return geometry
+  let maxDim = 0
+  coordEach(geometry, (position) => {
+    maxDim = Math.max(maxDim, position.length)
+  })
+  coordEach(geometry, (position) => {
+    for (let k = position.length; k < maxDim; k++) position[k] = undefined
+  })
+  return geometry
 }
 
 // True if `arr` is a flat array of positions ([[lng, lat], ...] or [LatLng, ...]),
