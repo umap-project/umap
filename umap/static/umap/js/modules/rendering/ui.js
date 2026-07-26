@@ -68,15 +68,13 @@ const FeatureMixin = {
   },
 
   resetTooltip: function () {
-    const { text, show, hover, direction, interactive } = this.geojson.label
-    let showLabel = show
-    if (hover && showLabel) showLabel = null // Retrocompat.
+    const { text, show, direction, interactive } = this.geojson.label
     this.unbindTooltip()
-    if ((showLabel === true || showLabel === null) && text) {
+    if ((show === true || show === null) && text) {
       this.bindTooltip(Utils.escapeHTML(text), {
         direction,
         interactive,
-        permanent: showLabel === true,
+        permanent: show === true,
       })
     }
   },

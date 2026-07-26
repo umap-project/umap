@@ -619,10 +619,12 @@ class Feature {
   }
 
   getLabel() {
+    let show = this.getOption('showLabel')
+    // Retrocompat
+    if (this.getOption('labelHover') && show) show = null
     return {
       text: this.getDisplayName(),
-      show: this.getOption('showLabel'),
-      hover: this.getOption('labelHover'),
+      show,
       direction: this.getOption('labelDirection'),
       interactive: this.getOption('labelInteractive'),
     }

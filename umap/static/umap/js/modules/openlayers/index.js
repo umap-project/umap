@@ -17,6 +17,7 @@ import MouseWheelZoom from 'ol/interaction/MouseWheelZoom.js'
 import { makeIcon } from './icon.js'
 import { rgba, textWidth } from './utils.js'
 import TextStyle from 'ol/style/Text.js'
+import { Alert } from '../../components/alerts/alert.js'
 
 const POINT_ZINDEX_OFFSET = 10000
 const HIGHLIGHT_ZINDEX = 1e6
@@ -53,11 +54,8 @@ export class OLProxy {
       .find((interaction) => interaction instanceof MouseWheelZoom)
     this.tilelayers = new TileLayerManager(this)
 
-    this.map.on('pointermove', (event) => {
-      this.map.getTargetElement().style.cursor = this.map.hasFeatureAtPixel(event.pixel)
-        ? 'pointer'
-        : ''
-    })
+    this.map.on('pointermove', (event) => this.onPointerMove(event))
+
     const [container, { body }] = Utils.loadTemplateWithRefs(popupTemplate)
     this.popup = new Overlay({
       element: container,
@@ -81,6 +79,37 @@ export class OLProxy {
   proxyIncomingEvents() {
     this.map.on('click', (event) => this.onClick(event))
     this.map.on('contextmenu', (event) => this.onContextMenu(event))
+  }
+
+  onPointerMove(event) {
+    if (event.dragging) return
+    const olFeature = this.map.forEachFeatureAtPixel(event.pixel, (feature) => feature)
+    this.map.getTargetElement().style.cursor = olFeature ? 'pointer' : ''
+    this.toggleTooltip(olFeature, event.originalEvent)
+  }
+
+  toggleTooltip(olFeature, originalEvent) {
+    const label = olFeature?.get('umapLabel')
+    if (!label?.text || label.show !== null) {
+      if (this.hovered) {
+        this.app.tooltip.close()
+        this.hovered = null
+      }
+      return
+    }
+    const at = [originalEvent.clientX, originalEvent.clientY]
+    if (this.hovered === olFeature) {
+      this.app.tooltip.anchorAt(at, label.direction)
+    } else {
+      this.hovered = olFeature
+      this.app.tooltip.open({
+        content: label.text,
+        at,
+        position: label.direction,
+        white: true,
+        duration: Number.POSITIVE_INFINITY,
+      })
+    }
   }
 
   proxyOutgoingEvents() {
@@ -423,10 +452,10 @@ export class OLProxy {
   }
 
   endDrawing() {
-      this.map.removeInteraction(this.activeDrawing)
-      document.querySelector('.umap-edit-bar .drawing-tool.on')?.classList.remove('on')
-      this.resumeEditInteractions()
-      this.activeDrawing = null
+    this.map.removeInteraction(this.activeDrawing)
+    document.querySelector('.umap-edit-bar .drawing-tool.on')?.classList.remove('on')
+    this.resumeEditInteractions()
+    this.activeDrawing = null
   }
 
   async startContinueLine(feature, sourceId, index, atStart) {
@@ -678,6 +707,7 @@ export class OLProxy {
     olFeature.set('umapBaseStyle', base.style)
     olFeature.set('umapHighlightStyle', this.style(geojson, true).style)
     olFeature.set('popupOffsetY', base.popupOffsetY)
+    olFeature.set('umapLabel', geojson.label)
     this.applyStyle(olFeature)
   }
 
@@ -740,13 +770,13 @@ export class OLProxy {
         textBaseline: 'middle',
         font,
         repeat: options.repeat ? textWidth(options.text, font) + TEXT_REPEAT_GAP : null,
-        fill: new Fill({color: rgba(options.fill, options.opacity)}),
-        stroke: new Stroke({color: rgba(options.stroke, options.opacity), width: 3}),
+        fill: new Fill({ color: rgba(options.fill, options.opacity) }),
+        stroke: new Stroke({ color: rgba(options.stroke, options.opacity), width: 3 }),
         offsetY: options.offset,
         keepUpright: false,
         placement: options.placement,
         overflow: true,
-        rotation: options.rotate * Math.PI / 180,
+        rotation: (options.rotate * Math.PI) / 180,
       })
     }
     if (geojson.geometry.type === 'Point') {
@@ -885,6 +915,7 @@ class TileLayerManager {
   }
 
   select(tilelayer) {
+    if (tilelayer === this.current) return
     const view = this.map.getView()
     const minZoom = tilelayer.getMinZoom()
     const maxZoom = tilelayer.getMaxZoom()
