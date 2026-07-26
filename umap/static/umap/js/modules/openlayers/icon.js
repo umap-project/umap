@@ -276,5 +276,9 @@ export function makeIcon(properties, zIndex) {
       )
     )
   }
-  return { style: styles, popupOffsetY: -shape.anchor[1] * scale, labelOffsetY: LABEL_GAP }
+  return {
+    style: styles,
+    popupOffsetY: -shape.anchor[1] * scale,
+    labelOffsetY: LABEL_GAP,
+  }
 }
