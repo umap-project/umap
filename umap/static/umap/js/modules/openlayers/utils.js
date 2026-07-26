@@ -5,3 +5,10 @@ export function rgba(color, opacity) {
   if (opacity != null) rgba[3] = opacity
   return rgba
 }
+
+let measureContext
+export function textWidth(text, font) {
+  measureContext ??= document.createElement('canvas').getContext('2d')
+  measureContext.font = font
+  return measureContext.measureText(text).width
+}
