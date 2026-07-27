@@ -1,25 +1,29 @@
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
 import { default as OLMap } from 'ol/Map.js'
-import TileLayer from 'ol/layer/Tile.js'
-import XYZ from 'ol/source/XYZ.js'
 import View from 'ol/View.js'
 import VectorSource from 'ol/source/Vector.js'
 import VectorLayer from 'ol/layer/Vector.js'
-import { fromLonLat, transformExtent, toLonLat } from 'ol/proj.js'
+import { fromLonLat, toLonLat } from 'ol/proj.js'
 import { getWidth, getHeight } from 'ol/extent.js'
 import Overlay from 'ol/Overlay.js'
 import Stroke from 'ol/style/Stroke.js'
 import Fill from 'ol/style/Fill.js'
 import Style from 'ol/style/Style.js'
 import MouseWheelZoom from 'ol/interaction/MouseWheelZoom.js'
-import DoubleClickZoom from 'ol/interaction/DoubleClickZoom.js'
 import { makeIcon } from './icon.js'
 import { anchorTexts, makeLabel, makeTextPath } from './label.js'
-import { rgba, readGeometry, readFeature, writeFeature } from './utils.js'
-import { Alert } from '../../components/alerts/alert.js'
+import {
+  rgba,
+  readGeometry,
+  readFeature,
+  writeFeature,
+  fromOLExtent,
+  toOLExtent,
+} from './utils.js'
 import CircleStyle from 'ol/style/Circle.js'
 import MultiPoint from 'ol/geom/MultiPoint.js'
+import TileLayerManager from './tilelayer.js'
 
 const POINT_ZINDEX_OFFSET = 10000
 const HIGHLIGHT_ZINDEX = 1e6
@@ -42,9 +46,7 @@ export class OLProxy {
     this.app = app
     this.sources = {}
     this.layers = {}
-    this.editInteractions = []
     this.highlighted = null
-    this._activeDrawing = null
     this.map = new OLMap({
       target: element,
       controls: [],
@@ -53,10 +55,6 @@ export class OLProxy {
       .getInteractions()
       .getArray()
       .find((interaction) => interaction instanceof MouseWheelZoom)
-    this.doubleClickZoom = this.map
-      .getInteractions()
-      .getArray()
-      .find((interaction) => interaction instanceof DoubleClickZoom)
     this.tilelayers = new TileLayerManager(this)
 
     this.map.on('pointermove', (event) => this.onPointerMove(event))
@@ -95,36 +93,18 @@ export class OLProxy {
     this.toggleTooltip(olFeature, event.originalEvent)
   }
 
-  toggleTooltip(olFeature, originalEvent) {
-    const label = olFeature?.get('umapLabel')
-    if (!label?.text || label.show !== null) {
-      if (this.hovered) {
-        this.app.tooltip.close()
-        this.hovered = null
-      }
-      return
-    }
-    const at = [originalEvent.clientX, originalEvent.clientY]
-    if (this.hovered === olFeature) {
-      this.app.tooltip.anchorAt(at, label.direction)
-    } else {
-      this.hovered = olFeature
-      this.app.tooltip.open({
-        content: label.text,
-        at,
-        position: label.direction,
-        white: true,
-        duration: Number.POSITIVE_INFINITY,
-      })
-    }
-  }
-
   proxyOutgoingEvents() {
-    this.app.on('draw:marker', async () => await this.startDrawing('Point'))
-    this.app.on('draw:linestring', async () => await this.startDrawing('LineString'))
-    this.app.on('draw:polygon', async () => await this.startDrawing('Polygon'))
-    this.app.on('draw:hole', async (event) => await this.startHole(event.detail))
-    this.app.on('draw:route', async () => await this.startRoute())
+    this.app.on('draw:marker', async () => await this.editor?.startDrawing('Point'))
+    this.app.on(
+      'draw:linestring',
+      async () => await this.editor?.startDrawing('LineString')
+    )
+    this.app.on('draw:polygon', async () => await this.editor?.startDrawing('Polygon'))
+    this.app.on(
+      'draw:hole',
+      async (event) => await this.editor?.startHole(event.detail)
+    )
+    this.app.on('draw:route', async () => await this.editor?.startRoute())
     this.app.on('map:view:set', (event) => {
       const { easing, zoom, coordinates } = event.detail
       this.setView({ coordinates, zoom, easing })
@@ -159,35 +139,24 @@ export class OLProxy {
     })
   }
 
-  get activeDrawing() {
-    return this._activeDrawing
-  }
-
-  set activeDrawing(interaction) {
-    this._activeDrawing = interaction
-    this.doubleClickZoom?.setActive(!interaction)
-    if (interaction) this.pauseEditInteractions()
-    else this.resumeEditInteractions()
-  }
-
   get view() {
     return this.map.getView()
   }
 
   set zoom(value) {
-    this.map.getView().setZoom(value)
+    this.view.setZoom(value)
   }
 
   get zoom() {
-    return this.map.getView().getZoom()
+    return this.view.getZoom()
   }
 
   get resolution() {
-    return this.map.getView().getResolution()
+    return this.view.getResolution()
   }
 
   get bounds() {
-    return transformExtent(this.view.calculateExtent(), 'EPSG:3857', 'EPSG:4326')
+    return fromOLExtent(this.view.calculateExtent())
   }
 
   get center() {
@@ -195,7 +164,7 @@ export class OLProxy {
   }
 
   getBoundsZoom(bounds) {
-    const extent = transformExtent(bounds, 'EPSG:4326', 'EPSG:3857')
+    const extent = toOLExtent(bounds)
     const [width, height] = this.map.getSize()
     const resolution = Math.min(getWidth(extent) / width, getHeight(extent) / height)
     return this.view.getZoomForResolution(resolution)
@@ -205,7 +174,7 @@ export class OLProxy {
     if (easing === undefined) easing = this.app.getProperty('easing')
     const duration = easing ? 500 : 0
     if (bounds) {
-      const extent = transformExtent(bounds, 'EPSG:4326', 'EPSG:3857')
+      const extent = toOLExtent(bounds)
       this.view.fit(extent, {
         duration,
         maxZoom: zoom ?? this.zoom,
@@ -233,7 +202,7 @@ export class OLProxy {
       projection: this.view.getProjection(),
     }
     if (!bbox.some(Number.isNaN)) {
-      const extent = transformExtent(bbox, 'EPSG:4326', 'EPSG:3857')
+      const extent = toOLExtent(bbox)
       options.extent = extent
       const resolution = this.view.getResolutionForExtent(extent, this.map.getSize())
       options.minZoom = Math.max(
@@ -361,153 +330,13 @@ export class OLProxy {
 
   initEditTools() {}
   async enableEdit() {
-    const { default: Select } = await import('ol/interaction/Select.js')
-    const { default: Translate } = await import('ol/interaction/Translate.js')
-    // Don't let select duplicate the highlighted style.
-    this.select = new Select({ style: null })
-    this.editInteractions.push(this.select)
-    this.map.addInteraction(this.select)
-    this.select.on('select', (event) => {
-      for (const olFeature of [...event.selected, ...event.deselected]) {
-        this.applyStyle(olFeature)
-      }
-      if (this.select.getFeatures().getLength()) {
-        this.pauseEditInteractions('Modify')
-      } else {
-        this.resumeEditInteractions('Modify')
-      }
-    })
-
-    const translateFeature = new Translate({
-      features: this.select.getFeatures(),
-    })
-    this.map.addInteraction(translateFeature)
-    translateFeature.on('translateend', (event) => {
-      if (
-        event.startCoordinate[0] === event.coordinate[0] &&
-        event.startCoordinate[1] === event.coordinate[1]
-      )
-        return
-      for (const olFeature of event.features.getArray()) {
-        this.pullGeometry(olFeature)
-      }
-    })
-    this.editInteractions.push(translateFeature)
-
-    for (const source of Object.values(this.sources)) {
-      await this.registerSourceForEdit(source)
-    }
-  }
-
-  async registerSourceForEdit(source) {
-    const { default: Modify } = await import('ol/interaction/Modify.js')
-    const { default: Snap } = await import('ol/interaction/Snap.js')
-    const modify = new Modify({ source })
-    const snap = new Snap({ source })
-    this.editInteractions.push(modify)
-    this.editInteractions.push(snap)
-    modify.on('modifyend', (event) => {
-      event.features.forEach((olFeature) => {
-        if (olFeature.get('route')) {
-          const uFeature = this.getFeatureById(olFeature.getId())
-          const geojson = this.OLFeatureToGeojson(olFeature)
-          uFeature.setRoute(geojson.geometry.coordinates)
-        } else {
-          this.pullGeometry(olFeature)
-        }
-      })
-    })
-    this.map.addInteraction(modify)
-    this.map.addInteraction(snap)
+    const { default: Editor } = await import('./edit.js')
+    this.editor = new Editor(this.map, this)
+    await this.editor.enable()
   }
 
   disableEdit() {
-    for (const interaction of this.editInteractions) {
-      this.map.removeInteraction(interaction)
-    }
-  }
-
-  pauseEditInteractions(type) {
-    for (const interaction of this.editInteractions) {
-      if (type && type !== interaction.constructor.name) continue
-      if (interaction.constructor.name === 'Snap') continue
-      interaction.setActive(false)
-    }
-  }
-
-  resumeEditInteractions(type) {
-    for (const interaction of this.editInteractions) {
-      if (type && type !== interaction.constructor.name) continue
-      interaction.setActive(true)
-    }
-  }
-
-  async startRoute() {
-    if (this.activeDrawing) return
-    const { default: DrawRoute } = await import('./route.js')
-    const drawRoute = new DrawRoute(this.map)
-    const datalayer = await this.app.defaultEditDataLayer()
-    const route = datalayer.makeRoute()
-    if (!(await route.askForRouteSettings())) return route.del(false)
-    const onFinished = drawRoute.start(route)
-    this.activeDrawing = drawRoute.draw
-    const finished = await onFinished
-    this.endDrawing()
-    if (route.isDraft()) route.del(false)
-    else if (finished) route.edit()
-  }
-
-  async startHole({ featureId, sourceId }) {
-    const olFeature = this.sources[sourceId].getFeatureById(featureId)
-    const { default: DrawHole } = await import('./hole.js')
-    const drawHole = new DrawHole(this.map, olFeature)
-    const promise = drawHole.start()
-    this.activeDrawing = drawHole.draw
-    promise.then((geometry) => {
-      this.activeDrawing = null
-      if (geometry) this.pullGeometry(olFeature)
-    })
-  }
-
-  async startDrawing(type) {
-    if (this.activeDrawing) return
-    // Allow for escape to be catched by the app listener.
-    this.map.getTargetElement().focus()
-    const { default: Draw } = await import('ol/interaction/Draw.js')
-    if (!this.drawingSource) {
-      this.drawingSource = new VectorSource()
-      this.drawingSource.on('addfeature', (event) => {
-        this.app.fire('feature:create', {
-          geojson: this.OLFeatureToGeojson(event.feature),
-        })
-      })
-    }
-    const draw = new Draw({ source: this.drawingSource, type })
-    this.activeDrawing = draw
-    this.map.addInteraction(draw)
-    this._moveSnapToTop()
-    draw.on('drawend', () => this.endDrawing())
-    draw.on('drawabort', () => this.endDrawing())
-  }
-
-  endDrawing() {
-    if (!this.activeDrawing) return
-    this.map.removeInteraction(this.activeDrawing)
-    document.querySelector('.umap-edit-bar .drawing-tool.on')?.classList.remove('on')
-    this.activeDrawing = null
-  }
-
-  async startContinueLine(feature, sourceId, index, atStart) {
-    const olFeature = this.sources[sourceId].getFeatureById(feature.id)
-    const { default: ContinueLine } = await import('./continueline.js')
-    const continueLine = new ContinueLine(this.map, olFeature, index, atStart)
-    const promise = continueLine.start()
-    this.activeDrawing = continueLine.draw
-    this._moveSnapToTop()
-    promise.then((geometry) => {
-      this.activeDrawing = null
-      if (geometry) this.pullGeometry(olFeature)
-    })
+    this.editor.disable()
   }
 
   onEscape() {
@@ -517,22 +346,12 @@ export class OLProxy {
     return true
   }
 
-  // Snap must be the last interaction to intercept coordinates before Draw/Modify.
-  _moveSnapToTop() {
-    for (const snap of this.editInteractions.filter(
-      (i) => i.constructor.name === 'Snap'
-    )) {
-      this.map.removeInteraction(snap)
-      this.map.addInteraction(snap)
-    }
-  }
-
   hasSelection() {
-    return Boolean(this.select.getFeatures().getLength())
+    return Boolean(this.editor?.select.getFeatures().getLength())
   }
 
   get selection() {
-    return this.select
+    return this.editor?.select
       .getFeatures()
       .getArray()
       .map((olFeature) => this.getFeatureById(olFeature.getId()))
@@ -658,7 +477,7 @@ export class OLProxy {
   removeFeature(id, featureId) {
     const olFeature = this.sources[id]?.getFeatureById(featureId)
     if (!olFeature) return
-    this.select?.getFeatures().remove(olFeature)
+    this.editor?.select?.getFeatures().remove(olFeature)
     this.sources[id].removeFeature(olFeature)
   }
 
@@ -670,26 +489,26 @@ export class OLProxy {
   async createLayer(datalayer) {
     const source = new VectorSource()
     this.sources[datalayer.id] = source
-    if (this.app.editEnabled) {
-      await this.registerSourceForEdit(source)
+    if (this.app.editEnabled && this.editor) {
+      await this.editor.registerSourceForEdit(source)
     }
     const layers = {}
     const isPoint = (feature) => this.isPointGeometry(feature.getGeometry().getType())
 
     if (datalayer.Type?.type === 'Heat') {
       const { createHeatmapLayer } = await import('./heat.js')
-      layers['heat'] = createHeatmapLayer(source)
+      layers.heat = createHeatmapLayer(source)
     } else if (datalayer.Type?.type === 'Cluster') {
       const { createClusterLayer } = await import('./cluster.js')
-      layers['cluster'] = createClusterLayer(source, POINT_ZINDEX_OFFSET)
+      layers.cluster = createClusterLayer(source, POINT_ZINDEX_OFFSET)
     } else {
-      layers['point'] = new VectorLayer({
+      layers.point = new VectorLayer({
         source,
         style: (feature) => (isPoint(feature) ? feature.get('umapStyle') : null),
         zIndexOffset: POINT_ZINDEX_OFFSET,
       })
       // Labels and text above the paths but below the markers.
-      layers['path'] = new VectorLayer({
+      layers.path = new VectorLayer({
         source,
         style: (feature) => {
           const texts = feature.get('umapText') || []
@@ -767,7 +586,7 @@ export class OLProxy {
   isHighlighted(olFeature) {
     return (
       olFeature === this.highlighted ||
-      Boolean(this.select?.getFeatures().getArray().includes(olFeature))
+      Boolean(this.editor?.select?.getFeatures().getArray().includes(olFeature))
     )
   }
 
@@ -852,14 +671,14 @@ export class OLProxy {
   }
 
   get hasExtent() {
-    return Boolean(this.map.getView().getUpdatedOptions_().extent)
+    return Boolean(this.view.getUpdatedOptions_().extent)
   }
 
   getExtentBBoxString() {
     // southwest_lng,southwest_lat,northeast_lng,northeast_lat
     const extent = this.view.getUpdatedOptions_().extent
     if (!extent) return
-    return transformExtent(extent, 'EPSG:3857', 'EPSG:4326').join(',')
+    return fromOLExtent(extent).join(',')
   }
 
   toggleFullscreen() {
@@ -883,127 +702,28 @@ export class OLProxy {
     }
     this.measureTool.toggle(type)
   }
-}
 
-class TileLayerManager {
-  constructor(proxy) {
-    this.proxy = proxy
-    this.all = new Map()
-    this.current = undefined
-    this.overlay = undefined
-
-    proxy.map.on('loadstart', (event) => {
-      this.app.loader.start('tiles')
-    })
-    proxy.map.on('loadend', () => {
-      this.app.loader.stop('tiles')
-    })
-  }
-
-  get app() {
-    return this.proxy.app
-  }
-
-  get map() {
-    return this.proxy.map
-  }
-
-  init(specs) {
-    this.all.clear()
-    for (const spec of specs) {
-      this.add(spec)
-    }
-  }
-
-  create(spec) {
-    const retina = window.devicePixelRatio > 1 && spec.url_template.includes('{r}')
-    const url = spec.url_template
-      .replace('{s}', '{a-c}')
-      .replace('{r}', retina ? '@2x' : '')
-    const source = new XYZ({
-      url,
-      tilePixelRatio: retina ? 2 : 1,
-      attributions: spec.attribution,
-      crossOrigin: null,
-    })
-    return new TileLayer({
-      source,
-      rank: spec.rank,
-      name: spec.name,
-      url,
-      zIndex: -1,
-      minZoom: spec.minZoom,
-      maxZoom: spec.maxZoom,
-      // Keep it to serialize back to JSON for saving it to the back.
-      spec: { ...spec },
-    })
-  }
-
-  add(spec) {
-    if (!spec.url_template) return
-    if (this.all.has(spec.url_template)) return this.all.get(spec.url_template)
-    const layer = this.create(spec)
-    this.all.set(spec.url_template, layer)
-    return layer
-  }
-
-  default() {
-    return this.all.values().next().value
-  }
-
-  // Display the configured base layer: the custom one (`properties.tilelayer`)
-  // if it is set, else the first of the registry.
-  selectDefault() {
-    const custom = this.app.properties.tilelayer
-    if (custom?.url_template && custom.attribution) {
-      this.select(this.add({ ...custom, rank: 0 }))
-    } else {
-      this.select(this.default())
-    }
-  }
-
-  select(tilelayer) {
-    if (tilelayer === this.current) return
-    const view = this.map.getView()
-    const minZoom = tilelayer.getMinZoom()
-    const maxZoom = tilelayer.getMaxZoom()
-    if (Number.isFinite(minZoom)) view.setMinZoom(minZoom)
-    if (Number.isFinite(maxZoom)) view.setMaxZoom(maxZoom)
-    try {
-      this.map.addLayer(tilelayer)
-      if (this.current) {
-        this.map.removeLayer(this.current)
+  toggleTooltip(olFeature, originalEvent) {
+    const label = olFeature?.get('umapLabel')
+    if (!label?.text || label.show !== null) {
+      if (this.hovered) {
+        this.app.tooltip.close()
+        this.hovered = null
       }
-      this.current = tilelayer
-    } catch (e) {
-      console.error(e)
-      this.map.removeLayer(tilelayer)
-      Alert.error(`${translate('Error in the tilelayer URL')}: ${tilelayer._url}`)
-      // Users can put tilelayer URLs by hand, and if they add wrong {variable},
-      // Leaflet throw an error, and then the map is no more editable
+      return
     }
-    this.setOverlay()
-    this.app.fire('map:baselayerchange', { layer: this.current })
-  }
-
-  setOverlay() {
-    const spec = this.app.properties.overlay
-    if (!spec?.url_template) return
-    const overlay = this.create(spec)
-    try {
-      this.map.addLayer(overlay)
-      if (this.overlay) this.map.removeLayer(this.overlay)
-      this.overlay = overlay
-    } catch (e) {
-      this.map.removeLayer(overlay)
-      console.error(e)
-      Alert.error(`${translate('Error in the overlay URL')}: ${overlay._url}`)
+    const at = [originalEvent.clientX, originalEvent.clientY]
+    if (this.hovered === olFeature) {
+      this.app.tooltip.anchorAt(at, label.direction)
+    } else {
+      this.hovered = olFeature
+      this.app.tooltip.open({
+        content: label.text,
+        at,
+        position: label.direction,
+        white: true,
+        duration: Number.POSITIVE_INFINITY,
+      })
     }
-  }
-
-  cloneLayer(layer) {
-    return new TileLayer({
-      source: layer.getSource(),
-    })
   }
 }

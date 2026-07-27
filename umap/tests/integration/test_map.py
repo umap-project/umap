@@ -191,7 +191,7 @@ def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
     add_marker.click()
     # startDrawing loads the Draw interaction asynchronously; wait for it to be in
     # place, else the map click races the import and gets dropped.
-    page.wait_for_function("() => U.MAP.mapProxy.activeDrawing")
+    page.wait_for_function("() => U.MAP.mapProxy.editor.activeDrawing")
     map_el.click(position={"x": 500, "y": 100})
     # The drawn feature enters edit mode; its properties panel opening is the
     # signal that creation completed.
