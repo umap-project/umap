@@ -80,7 +80,7 @@ sync = [
   "uvicorn==0.49.0",
   "pydantic==2.13.0",
   "redis==8.0.1",
-  "websockets==16.0",
+  "websockets==16.1.1",
 ]
 
 [project.scripts]
