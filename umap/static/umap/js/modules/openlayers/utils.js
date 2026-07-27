@@ -1,13 +1,29 @@
 import { asArray } from 'ol/color.js'
 import GeoJSON from 'ol/format/GeoJSON.js'
+import { transformExtent } from 'ol/proj.js'
 
 const PROJECTION = { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' }
 const geojsonFormat = new GeoJSON()
 
-export const readGeometry = (data) => geojsonFormat.readGeometry(data, PROJECTION)
-export const readFeature = (data) => geojsonFormat.readFeature(data, PROJECTION)
-export const writeFeature = (olFeature) =>
-  geojsonFormat.writeFeatureObject(olFeature, PROJECTION)
+export function readGeometry(data) {
+  return geojsonFormat.readGeometry(data, PROJECTION)
+}
+
+export function readFeature(data) {
+  return geojsonFormat.readFeature(data, PROJECTION)
+}
+
+export function writeFeature(olFeature) {
+  return geojsonFormat.writeFeatureObject(olFeature, PROJECTION)
+}
+
+export function toOLExtent(extent) {
+  return transformExtent(extent, 'EPSG:4326', 'EPSG:3857')
+}
+
+export function fromOLExtent(extent) {
+  return transformExtent(extent, 'EPSG:3857', 'EPSG:4326')
+}
 
 export function rgba(color, opacity) {
   const rgba = asArray(color).slice()
