@@ -41,7 +41,8 @@ mkdir -p umap/static/umap/vendors/simple-statistics/
 for mod in jenks jenks_breaks jenks_matrices quantile quantile_sorted quickselect equal_interval_breaks max min ckmeans make_matrix numeric_sort unique_count_sorted; do
    cp node_modules/simple-statistics/src/$mod.js umap/static/umap/vendors/simple-statistics/
 done
-cp -r node_modules/ol umap/static/umap/vendors/
+mkdir -p umap/static/umap/vendors/ol
+rsync -avm --include='*.js' --exclude='*.ts' --exclude='*.map' --exclude='dist/' node_modules/ol/ umap/static/umap/vendors/ol/
 mkdir -p umap/static/umap/vendors/rbush/ && cp node_modules/rbush/index.js umap/static/umap/vendors/rbush/
 mkdir -p umap/static/umap/vendors/quickselect/ && cp node_modules/quickselect/index.js umap/static/umap/vendors/quickselect/
 
