@@ -5,7 +5,12 @@
 ### Breaking changes:
 - heat maps render differently (different algorithms)
 
-## 3.8.0a4 - 2026-07-18
+## 3.8.0a6 - 2026-07-25
+
+* fix testpath skipped since switch to LeafletProxy by @yohanboniface in #3449
+* fix crash on user list admin page by @yohanboniface in #3451
+
+## 3.8.0a5 - 2026-07-18
 
 * align popup content for RTL languages by @ergs0204 in #3432
 * restore popup large mode by @yohanboniface in #3439

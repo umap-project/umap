@@ -32,63 +32,63 @@ describe('Utils', () => {
     it('should handle links without formatting', () => {
       assert.equal(
         Utils.toHTML('A simple http://osm.org link'),
-        'A simple <a href="http://osm.org" target="_blank">http://osm.org</a> link'
+        'A simple <a target="_blank" href="http://osm.org">http://osm.org</a> link'
       )
     })
 
     it('should handle simple link in title', () => {
       assert.equal(
         Utils.toHTML('# http://osm.org'),
-        '<h4><a href="http://osm.org" target="_blank">http://osm.org</a></h4>'
+        '<h4><a target="_blank" href="http://osm.org">http://osm.org</a></h4>'
       )
     })
 
     it('should handle links with url parameter', () => {
       assert.equal(
         Utils.toHTML('A simple https://osm.org/?url=https%3A//anotherurl.com link'),
-        'A simple <a href="https://osm.org/?url=https%3A//anotherurl.com" target="_blank">https://osm.org/?url=https%3A//anotherurl.com</a> link'
+        'A simple <a target="_blank" href="https://osm.org/?url=https%3A//anotherurl.com">https://osm.org/?url=https%3A//anotherurl.com</a> link'
       )
     })
 
     it('should handle links with another url in path', () => {
       assert.equal(
         Utils.toHTML('A simple https://osm.org/https://anotherurl.com link'),
-        'A simple <a href="https://osm.org/https://anotherurl.com" target="_blank">https://osm.org/https://anotherurl.com</a> link'
+        'A simple <a target="_blank" href="https://osm.org/https://anotherurl.com">https://osm.org/https://anotherurl.com</a> link'
       )
     })
 
     it('should handle simple link inside parenthesis', () => {
       assert.equal(
         Utils.toHTML('A simple link (http://osm.org)'),
-        'A simple link (<a href="http://osm.org" target="_blank">http://osm.org</a>)'
+        'A simple link (<a target="_blank" href="http://osm.org">http://osm.org</a>)'
       )
     })
 
     it('should handle simple link with formatting', () => {
       assert.equal(
         Utils.toHTML('A simple [[http://osm.org]] link'),
-        'A simple <a href="http://osm.org" target="_blank">http://osm.org</a> link'
+        'A simple <a target="_blank" href="http://osm.org">http://osm.org</a> link'
       )
     })
 
     it('should handle simple link with formatting and content', () => {
       assert.equal(
         Utils.toHTML('A simple [[http://osm.org|link]]'),
-        'A simple <a href="http://osm.org" target="_blank">link</a>'
+        'A simple <a target="_blank" href="http://osm.org">link</a>'
       )
     })
 
     it('should handle simple link followed by a carriage return', () => {
       assert.equal(
         Utils.toHTML('A simple link http://osm.org\nAnother line'),
-        'A simple link <a href="http://osm.org" target="_blank">http://osm.org</a>\nAnother line'
+        'A simple link <a target="_blank" href="http://osm.org">http://osm.org</a>\nAnother line'
       )
     })
 
     it('should handle target option', () => {
       assert.equal(
         Utils.toHTML('A simple http://osm.org link', { target: 'self' }),
-        'A simple <a href="http://osm.org" target="_self">http://osm.org</a> link'
+        'A simple <a target="_self" href="http://osm.org">http://osm.org</a> link'
       )
     })
 
@@ -109,35 +109,35 @@ describe('Utils', () => {
     it('should handle image with width', () => {
       assert.equal(
         Utils.toHTML('A simple image: {{http://osm.org/pouet.png|100}}'),
-        'A simple image: <img style="width:100px;min-width:100px;" src="http://osm.org/pouet.png">'
+        'A simple image: <img src="http://osm.org/pouet.png" style="width:100px;min-width:100px;">'
       )
     })
 
     it('should handle iframe', () => {
       assert.equal(
         Utils.toHTML('A simple iframe: {{{http://osm.org/pouet.html}}}'),
-        'A simple iframe: <div><iframe style="width: 100%; height: 300px; border: 0;" src="http://osm.org/pouet.html" allowfullscreen=""></iframe></div>'
+        'A simple iframe: <div><iframe allowfullscreen="" src="http://osm.org/pouet.html" style="width: 100%; height: 300px; border: 0;"></iframe></div>'
       )
     })
 
     it('should handle iframe with height', () => {
       assert.equal(
         Utils.toHTML('A simple iframe: {{{http://osm.org/pouet.html|200}}}'),
-        'A simple iframe: <div><iframe style="width: 100%; height: 200px; border: 0;" src="http://osm.org/pouet.html" allowfullscreen=""></iframe></div>'
+        'A simple iframe: <div><iframe allowfullscreen="" src="http://osm.org/pouet.html" style="width: 100%; height: 200px; border: 0;"></iframe></div>'
       )
     })
 
     it('should handle iframe with height and width', () => {
       assert.equal(
         Utils.toHTML('A simple iframe: {{{http://osm.org/pouet.html|200*400}}}'),
-        'A simple iframe: <div><iframe style="width: 400px; height: 200px; border: 0;" src="http://osm.org/pouet.html" allowfullscreen=""></iframe></div>'
+        'A simple iframe: <div><iframe allowfullscreen="" src="http://osm.org/pouet.html" style="width: 400px; height: 200px; border: 0;"></iframe></div>'
       )
     })
 
     it('should handle iframe with height with px', () => {
       assert.equal(
         Utils.toHTML('A simple iframe: {{{http://osm.org/pouet.html|200px}}}'),
-        'A simple iframe: <div><iframe style="width: 100%; height: 200px; border: 0;" src="http://osm.org/pouet.html" allowfullscreen=""></iframe></div>'
+        'A simple iframe: <div><iframe allowfullscreen="" src="http://osm.org/pouet.html" style="width: 100%; height: 200px; border: 0;"></iframe></div>'
       )
     })
 
@@ -146,7 +146,7 @@ describe('Utils', () => {
         Utils.toHTML(
           'A simple iframe: {{{https://osm.org/?url=https%3A//anotherurl.com}}}'
         ),
-        'A simple iframe: <div><iframe style="width: 100%; height: 300px; border: 0;" src="https://osm.org/?url=https%3A//anotherurl.com" allowfullscreen=""></iframe></div>'
+        'A simple iframe: <div><iframe allowfullscreen="" src="https://osm.org/?url=https%3A//anotherurl.com" style="width: 100%; height: 300px; border: 0;"></iframe></div>'
       )
     })
 
@@ -155,7 +155,7 @@ describe('Utils', () => {
         Utils.toHTML(
           'A double iframe: {{{https://osm.org/pouet}}}{{{https://osm.org/boudin}}}'
         ),
-        'A double iframe: <div><iframe style="width: 100%; height: 300px; border: 0;" src="https://osm.org/pouet" allowfullscreen=""></iframe></div><div><iframe style="width: 100%; height: 300px; border: 0;" src="https://osm.org/boudin" allowfullscreen=""></iframe></div>'
+        'A double iframe: <div><iframe allowfullscreen="" src="https://osm.org/pouet" style="width: 100%; height: 300px; border: 0;"></iframe></div><div><iframe allowfullscreen="" src="https://osm.org/boudin" style="width: 100%; height: 300px; border: 0;"></iframe></div>'
       )
     })
 
@@ -164,21 +164,21 @@ describe('Utils', () => {
         Utils.toHTML(
           'An iframe with query string: {{{https://osm.org/pouet.html?name=foobar&description=baz baz}}}'
         ),
-        'An iframe with query string: <div><iframe style="width: 100%; height: 300px; border: 0;" src="https://osm.org/pouet.html?name=foobar&amp;description=baz baz" allowfullscreen=""></iframe></div>'
+        'An iframe with query string: <div><iframe allowfullscreen="" src="https://osm.org/pouet.html?name=foobar&amp;description=baz baz" style="width: 100%; height: 300px; border: 0;"></iframe></div>'
       )
     })
 
     it('http link with http link as parameter as variable', () => {
       assert.equal(
         Utils.toHTML('A phrase with a [[http://iframeurl.com?to=http://another.com]].'),
-        'A phrase with a <a href="http://iframeurl.com?to=http://another.com" target="_blank">http://iframeurl.com?to=http://another.com</a>.'
+        'A phrase with a <a target="_blank" href="http://iframeurl.com?to=http://another.com">http://iframeurl.com?to=http://another.com</a>.'
       )
     })
 
     it('http link with http link as in path', () => {
       assert.equal(
         Utils.toHTML('A phrase with a [[https://iframeurl.com/https://another.com]].'),
-        'A phrase with a <a href="https://iframeurl.com/https://another.com" target="_blank">https://iframeurl.com/https://another.com</a>.'
+        'A phrase with a <a target="_blank" href="https://iframeurl.com/https://another.com">https://iframeurl.com/https://another.com</a>.'
       )
     })
 
@@ -194,7 +194,7 @@ describe('Utils', () => {
         Utils.toHTML(
           '* First *point*\n* Second **point**\n* Last [[https://here.org|point]]'
         ),
-        '<ul><li>First <em>point</em></li><li>Second <strong>point</strong></li><li>Last <a href="https://here.org" target="_blank">point</a></li></ul>'
+        '<ul><li>First <em>point</em></li><li>Second <strong>point</strong></li><li>Last <a target="_blank" href="https://here.org">point</a></li></ul>'
       )
     })
 
@@ -203,7 +203,7 @@ describe('Utils', () => {
         Utils.toHTML(
           '## Some title\n* First *point*\n* Second **point**\n* Last [[https://here.org|point]]'
         ),
-        '<h5>Some title</h5><ul><li>First <em>point</em></li><li>Second <strong>point</strong></li><li>Last <a href="https://here.org" target="_blank">point</a></li></ul>'
+        '<h5>Some title</h5><ul><li>First <em>point</em></li><li>Second <strong>point</strong></li><li>Last <a target="_blank" href="https://here.org">point</a></li></ul>'
       )
     })
   })
@@ -220,7 +220,7 @@ describe('Utils', () => {
     it('should not escape dir and title attributes', () => {
       assert.equal(
         Utils.escapeHTML('<a title="Title" dir="rtl"></a>'),
-        '<a dir="rtl" title="Title"></a>'
+        '<a title="Title" dir="rtl"></a>'
       )
     })
 
@@ -229,7 +229,7 @@ describe('Utils', () => {
         Utils.escapeHTML(
           '<video width="100%" height="281" controls><source type="video/mp4" src="movie.mp4"></video>'
         ),
-        '<video controls="" height="281" width="100%"><source src="movie.mp4" type="video/mp4"></video>'
+        '<video width="100%" height="281" controls=""><source type="video/mp4" src="movie.mp4"></video>'
       )
     })
 
@@ -238,7 +238,7 @@ describe('Utils', () => {
         Utils.escapeHTML(
           '<audio controls><source type="audio/ogg" src="horse.ogg"></audio>'
         ),
-        '<audio controls=""><source src="horse.ogg" type="audio/ogg"></audio>'
+        '<audio controls=""><source type="audio/ogg" src="horse.ogg"></audio>'
       )
     })
 
