@@ -169,6 +169,15 @@ export class Journal {
   }
 
   upsert(subject, metadata, value, oldValue) {
+    if (typeof value === 'function') {
+      return this._track(
+        (async () => {
+          const resolved = await value()
+          if (resolved === undefined) return
+          this.upsert(subject, metadata, resolved, oldValue)
+        })()
+      )
+    }
     const operation = {
       verb: 'upsert',
       subject,

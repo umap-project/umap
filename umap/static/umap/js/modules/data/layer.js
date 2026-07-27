@@ -582,13 +582,13 @@ export class DataLayer {
     return features
   }
 
-  makeFeature(geojson = {}, sync = true, id = null) {
-    const feature = this._buildFeature(geojson, sync, id)
+  makeFeature(geojson = {}, sync = true, id = null, allowEmpty = false) {
+    const feature = this._buildFeature(geojson, sync, id, allowEmpty)
     if (feature) this.app.mapProxy.addFeature(this.id, feature.toRenderer())
     return feature
   }
 
-  _buildFeature(geojson = {}, sync = true, id = null) {
+  _buildFeature(geojson = {}, sync = true, id = null, allowEmpty = false) {
     // Both Feature and Geometry are valid geojson objects.
     const geometry = geojson.geometry || geojson
     let feature
@@ -628,9 +628,21 @@ export class DataLayer {
           )
         }
     }
-    if (feature && !feature.isEmpty()) {
+    if (feature && (allowEmpty || !feature.isEmpty())) {
       return this.addFeature(feature, sync)
     }
+  }
+
+  makeRoute() {
+    const route = this.makeFeature(
+      { type: 'LineString', coordinates: [] },
+      false,
+      null,
+      true
+    )
+    // Defer the server commit until the route is valid (first computed segment).
+    route._needs_upsert = true
+    return route
   }
 
   async importRaw(raw, format) {
