@@ -144,12 +144,11 @@ class Feature {
     // When the layer is a remote layer, we don't want to sync the creation of the
     // points via the websocket, as the other peers will get them themselves.
     if (this.datalayer?.isRemoteLayer()) return
-    if (this._needs_upsert) {
-      this.journal.upsert(this.toJournal(), null)
-      this._needs_upsert = false
-    } else {
-      this.journal.update('geometry', this.geometry, oldGeometry)
-    }
+    this.journal.update('geometry', this.geometry, oldGeometry)
+  }
+
+  isDraft() {
+    return this._needs_upsert === true
   }
 
   isReadOnly() {
@@ -615,6 +614,17 @@ class Feature {
     const attributes = this.datalayer.computed?.attributes?.[this.id]
     if (attributes) geojson.properties = { ...geojson.properties, ...attributes }
     geojson.zIndex = this.getRank()
+    const route = geojson.properties._umap_options?.route
+    if (route) {
+      geojson.route = route
+      geojson.route.geometry = geojson.geometry
+      geojson.geometry = {
+        type: 'MultiPoint',
+        coordinates: route.coordinates,
+      }
+    }
+    // Renderer should not access those property directly.
+    delete geojson.properties._umap_options
     return geojson
   }
 
@@ -1076,7 +1086,14 @@ export class LineString extends Path {
       `<div><h3>${translate('Route settings')}</h3></div>`
     )
     container.appendChild(await this.routeForm())
-    return this.app.dialog.open({ template: container })
+    const dialog = this.app.dialog
+    dialog.open({ template: container })
+    // dialog.open() only resolves on accept, so watch the close to also catch cancel.
+    return new Promise((resolve) => {
+      dialog.on('close', () => resolve(dialog.dialog.returnValue === 'accept'), {
+        once: true,
+      })
+    })
   }
 
   toPolygon() {
@@ -1115,12 +1132,11 @@ export class LineString extends Path {
         <button class="button" type="button"><i class="icon icon-24 icon-route"></i>${translate('Transform to route')}</button>
       `)
       container.appendChild(button)
-      button.addEventListener('click', () =>
-        this.askForRouteSettings().then(() => {
-          this.toRoute()
-          this.computeRoute()
-        })
-      )
+      button.addEventListener('click', async () => {
+        if (!(await this.askForRouteSettings())) return
+        this.toRoute()
+        this.computeRoute()
+      })
     } else if (this.properties._umap_options.route?.coordinates) {
       const button = Utils.loadTemplate(`
         <button class="button" type="button"><i class="icon icon-24 icon-route"></i>${translate('Restore route')}</button>
@@ -1334,25 +1350,35 @@ export class LineString extends Path {
 
   setRoute(coordinates) {
     this.properties._umap_options.route.coordinates = coordinates
+    this.redraw()
     if (coordinates.length >= 2) this.computeRoute()
   }
 
   computeRoute() {
     if (!this.app.properties.ORSAPIKey) return
     const oldGeometry = Utils.CopyJSON(this._geometry)
-    this.journal.update(
-      'geometry',
-      async () => {
-        const { Importer } = await this.loadORS()
-        const importer = new Importer(this.app)
-        const geometry = await importer.directions(this.properties._umap_options.route)
-        if (!geometry?.type) return
-        this.geometry = geometry
-        this.redraw()
-        return this.geometry
-      },
-      oldGeometry
-    )
+    const compute = async () => {
+      const { Importer } = await this.loadORS()
+      const importer = new Importer(this.app)
+      const geometry = await importer.directions(this.properties._umap_options.route)
+      if (!geometry?.type) return false
+      this.geometry = geometry
+      this.redraw()
+      return true
+    }
+    if (this._needs_upsert) {
+      this.journal.upsert(async () => {
+        if (!(await compute())) return
+        this._needs_upsert = false
+        return this.toJournal()
+      }, null)
+    } else {
+      this.journal.update(
+        'geometry',
+        async () => ((await compute()) ? this.geometry : undefined),
+        oldGeometry
+      )
+    }
   }
 
   addExtraEditFieldset(container) {

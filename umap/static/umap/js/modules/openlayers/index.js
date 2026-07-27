@@ -4,7 +4,6 @@ import { default as OLMap } from 'ol/Map.js'
 import TileLayer from 'ol/layer/Tile.js'
 import XYZ from 'ol/source/XYZ.js'
 import View from 'ol/View.js'
-import GeoJSON from 'ol/format/GeoJSON.js'
 import VectorSource from 'ol/source/Vector.js'
 import VectorLayer from 'ol/layer/Vector.js'
 import { fromLonLat, transformExtent, toLonLat } from 'ol/proj.js'
@@ -14,10 +13,13 @@ import Stroke from 'ol/style/Stroke.js'
 import Fill from 'ol/style/Fill.js'
 import Style from 'ol/style/Style.js'
 import MouseWheelZoom from 'ol/interaction/MouseWheelZoom.js'
+import DoubleClickZoom from 'ol/interaction/DoubleClickZoom.js'
 import { makeIcon } from './icon.js'
 import { anchorTexts, makeLabel, makeTextPath } from './label.js'
-import { rgba } from './utils.js'
+import { rgba, readGeometry, readFeature, writeFeature } from './utils.js'
 import { Alert } from '../../components/alerts/alert.js'
+import CircleStyle from 'ol/style/Circle.js'
+import MultiPoint from 'ol/geom/MultiPoint.js'
 
 const POINT_ZINDEX_OFFSET = 10000
 const HIGHLIGHT_ZINDEX = 1e6
@@ -42,7 +44,7 @@ export class OLProxy {
     this.layers = {}
     this.editInteractions = []
     this.highlighted = null
-    this.activeDrawing = null
+    this._activeDrawing = null
     this.map = new OLMap({
       target: element,
       controls: [],
@@ -51,6 +53,10 @@ export class OLProxy {
       .getInteractions()
       .getArray()
       .find((interaction) => interaction instanceof MouseWheelZoom)
+    this.doubleClickZoom = this.map
+      .getInteractions()
+      .getArray()
+      .find((interaction) => interaction instanceof DoubleClickZoom)
     this.tilelayers = new TileLayerManager(this)
 
     this.map.on('pointermove', (event) => this.onPointerMove(event))
@@ -118,6 +124,7 @@ export class OLProxy {
     this.app.on('draw:linestring', async () => await this.startDrawing('LineString'))
     this.app.on('draw:polygon', async () => await this.startDrawing('Polygon'))
     this.app.on('draw:hole', async (event) => await this.startHole(event.detail))
+    this.app.on('draw:route', async () => await this.startRoute())
     this.app.on('map:view:set', (event) => {
       const { easing, zoom, coordinates } = event.detail
       this.setView({ coordinates, zoom, easing })
@@ -147,9 +154,20 @@ export class OLProxy {
       const { sourceId, geojson } = event.detail
       const olFeature = this.sources[sourceId]?.getFeatureById(geojson.id)
       if (!olFeature) return
-      this.setFeatureStyle(olFeature, geojson)
+      this.redrawFeature(olFeature, geojson)
       olFeature.changed()
     })
+  }
+
+  get activeDrawing() {
+    return this._activeDrawing
+  }
+
+  set activeDrawing(interaction) {
+    this._activeDrawing = interaction
+    this.doubleClickZoom?.setActive(!interaction)
+    if (interaction) this.pauseEditInteractions()
+    else this.resumeEditInteractions()
   }
 
   get view() {
@@ -390,7 +408,13 @@ export class OLProxy {
     this.editInteractions.push(snap)
     modify.on('modifyend', (event) => {
       event.features.forEach((olFeature) => {
-        this.pullGeometry(olFeature)
+        if (olFeature.get('route')) {
+          const uFeature = this.getFeatureById(olFeature.getId())
+          const geojson = this.OLFeatureToGeojson(olFeature)
+          uFeature.setRoute(geojson.geometry.coordinates)
+        } else {
+          this.pullGeometry(olFeature)
+        }
       })
     })
     this.map.addInteraction(modify)
@@ -418,6 +442,21 @@ export class OLProxy {
     }
   }
 
+  async startRoute() {
+    if (this.activeDrawing) return
+    const { default: DrawRoute } = await import('./route.js')
+    const drawRoute = new DrawRoute(this.map)
+    const datalayer = await this.app.defaultEditDataLayer()
+    const route = datalayer.makeRoute()
+    if (!(await route.askForRouteSettings())) return route.del(false)
+    const onFinished = drawRoute.start(route)
+    this.activeDrawing = drawRoute.draw
+    const finished = await onFinished
+    this.endDrawing()
+    if (route.isDraft()) route.del(false)
+    else if (finished) route.edit()
+  }
+
   async startHole({ featureId, sourceId }) {
     const olFeature = this.sources[sourceId].getFeatureById(featureId)
     const { default: DrawHole } = await import('./hole.js')
@@ -443,7 +482,6 @@ export class OLProxy {
         })
       })
     }
-    this.pauseEditInteractions()
     const draw = new Draw({ source: this.drawingSource, type })
     this.activeDrawing = draw
     this.map.addInteraction(draw)
@@ -453,23 +491,21 @@ export class OLProxy {
   }
 
   endDrawing() {
+    if (!this.activeDrawing) return
     this.map.removeInteraction(this.activeDrawing)
     document.querySelector('.umap-edit-bar .drawing-tool.on')?.classList.remove('on')
-    this.resumeEditInteractions()
     this.activeDrawing = null
   }
 
   async startContinueLine(feature, sourceId, index, atStart) {
     const olFeature = this.sources[sourceId].getFeatureById(feature.id)
     const { default: ContinueLine } = await import('./continueline.js')
-    this.pauseEditInteractions()
     const continueLine = new ContinueLine(this.map, olFeature, index, atStart)
     const promise = continueLine.start()
     this.activeDrawing = continueLine.draw
     this._moveSnapToTop()
     promise.then((geometry) => {
       this.activeDrawing = null
-      this.resumeEditInteractions()
       if (geometry) this.pullGeometry(olFeature)
     })
   }
@@ -542,10 +578,7 @@ export class OLProxy {
   }
 
   OLFeatureToGeojson(olFeature) {
-    return new GeoJSON().writeFeatureObject(olFeature, {
-      dataProjection: 'EPSG:4326',
-      featureProjection: 'EPSG:3857',
-    })
+    return writeFeature(olFeature)
   }
 
   pullGeometry(olFeature) {
@@ -558,12 +591,7 @@ export class OLProxy {
   pushGeometry(layerId, featureId, geometry) {
     const olFeature = this.sources[layerId]?.getFeatureById(featureId)
     if (!olFeature) return
-    olFeature.setGeometry(
-      new GeoJSON().readGeometry(geometry, {
-        dataProjection: 'EPSG:4326',
-        featureProjection: 'EPSG:3857',
-      })
-    )
+    olFeature.setGeometry(readGeometry(geometry))
   }
 
   onZoomEnd(id) {
@@ -618,7 +646,9 @@ export class OLProxy {
     const olFeature = this.map.forEachFeatureAtPixel(
       event.pixel,
       (feature) => (feature.get('interactive') ? feature : undefined),
-      { layerFilter: (layer) => Object.values(this.sources).includes(layer.getSource()) }
+      {
+        layerFilter: (layer) => Object.values(this.sources).includes(layer.getSource()),
+      }
     )
     const feature = olFeature && this.getFeatureById(olFeature.getId())
     if (feature) feature.onContextMenu(appEvent)
@@ -685,16 +715,18 @@ export class OLProxy {
     return type === 'Point' || type === 'MultiPoint'
   }
 
+  geojsonToOL(geojson) {
+    const olFeature = readFeature(geojson)
+    this.applyGeojson(olFeature, geojson)
+    return olFeature
+  }
+
+  addFeature(id, geojson) {
+    this.sources[id].addFeature(this.geojsonToOL(geojson))
+  }
+
   addData(id, geojson) {
-    const format = new GeoJSON()
-    const options = { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' }
-    // OL drops the top-level `style` member on read, so read each feature and stash its OL
-    // style as `umapStyle` (the layer style fns read it — see createLayer).
-    const olFeatures = geojson.features.map((feature) => {
-      const olFeature = format.readFeature(feature, options)
-      this.setFeatureStyle(olFeature, feature)
-      return olFeature
-    })
+    const olFeatures = geojson.features.map((data) => this.geojsonToOL(data))
     // Before addFeatures, so a (re)cluster uses the new config. Cluster/heat subscribe to the
     // source for it; the others ignore it.
     this.sources[id].set('umapConfig', geojson.style)
@@ -707,12 +739,19 @@ export class OLProxy {
     source.set('umapConfig', geojson.style)
     for (const feature of geojson.features) {
       const olFeature = source.getFeatureById(feature.id)
-      if (olFeature) this.setFeatureStyle(olFeature, feature)
+      if (olFeature) this.redrawFeature(olFeature, feature)
     }
     source.changed()
   }
 
-  setFeatureStyle(olFeature, geojson) {
+  redrawFeature(olFeature, geojson) {
+    if (geojson.route) {
+      olFeature.setGeometry(readGeometry(geojson.geometry))
+    }
+    this.applyGeojson(olFeature, geojson)
+  }
+
+  applyGeojson(olFeature, geojson) {
     const base = this.style(geojson)
     olFeature.set('umapBaseStyle', base.style)
     olFeature.set('umapHighlightStyle', this.style(geojson, true).style)
@@ -720,6 +759,7 @@ export class OLProxy {
     olFeature.set('popupOffsetY', base.popupOffsetY)
     olFeature.set('umapLabel', geojson.label)
     olFeature.set('interactive', geojson.style?.interactive !== false)
+    olFeature.set('route', geojson.route)
     this.applyStyle(olFeature)
   }
 
@@ -760,13 +800,6 @@ export class OLProxy {
     this.map.dispatchEvent('umap:highlight')
   }
 
-  addFeature(id, geojson) {
-    const options = { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' }
-    const olFeature = new GeoJSON().readFeature(geojson, options)
-    this.setFeatureStyle(olFeature, geojson)
-    this.sources[id].addFeature(olFeature)
-  }
-
   style(geojson, highlight = false) {
     const base = geojson.style || {}
     const properties = highlight ? { ...base, ...geojson.highlight } : base
@@ -780,6 +813,7 @@ export class OLProxy {
       anchorTexts(texts, icon.textAnchor, geojson.label?.direction)
       return { style: icon.style, texts, popupOffsetY: icon.popupOffsetY }
     }
+    const style = []
     const stroke =
       properties.stroke === false
         ? undefined
@@ -797,7 +831,24 @@ export class OLProxy {
               properties.fillOpacity
             ),
           })
-    return { style: [new Style({ stroke, fill, zIndex })], texts, popupOffsetY: 0 }
+    if (geojson.route) {
+      const path = readGeometry(geojson.route.geometry)
+      style.push(new Style({ geometry: path, stroke, fill, zIndex }))
+      style.push(
+        new Style({
+          image: new CircleStyle({
+            radius: 6,
+            fill: new Fill({
+              color: properties.fillColor || properties.color,
+            }),
+            stroke: new Stroke({ color: '#fff', width: 2 }),
+          }),
+        })
+      )
+    } else {
+      style.push(new Style({ stroke, fill, zIndex }))
+    }
+    return { style, texts, popupOffsetY: 0 }
   }
 
   get hasExtent() {
