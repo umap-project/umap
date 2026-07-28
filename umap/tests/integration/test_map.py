@@ -8,11 +8,9 @@ from ..base import DataLayerFactory
 pytestmark = pytest.mark.django_db
 
 
-def test_map_shows(
-    live_server, page, tilelayer, map, wait_for_loaded, assert_screenshot
-):
+@pytest.mark.screenshot
+def test_map_shows(live_server, page, tilelayer, map, assert_screenshot):
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    wait_for_loaded(page)
     assert_screenshot(page.locator("#map"))
 
 
@@ -167,8 +165,9 @@ def test_default_view_locate(new_context, live_server, map, new_page):
     expect(page).to_have_url(re.compile(r".*#18/39\.162670/8\.529670"))
 
 
+@pytest.mark.screenshot
 def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
-    openmap, live_server, datalayer, page, assert_screenshot, wait_for_loaded
+    openmap, live_server, datalayer, page, assert_screenshot
 ):
     datalayer.settings["remoteData"] = {
         "url": "https://example.com/",
@@ -178,7 +177,6 @@ def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
     datalayer.settings["fromZoom"] = 10
     datalayer.save()
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#7/51/2")
-    wait_for_loaded(page)
     toggle = page.get_by_role("button", name="Open browser")
     expect(toggle).to_be_visible()
     toggle.click()

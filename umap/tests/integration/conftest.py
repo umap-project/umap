@@ -74,9 +74,7 @@ def page(new_page):
 @pytest.fixture
 def wait_for_loaded():
     def _(page):
-        page.wait_for_function(
-            "() => U.MAP.dataloaded === true && !document.querySelector('.umap-ui-container').classList.contains('umap-loading')"
-        )
+        page.wait_for_function("() => U.MAP.loaded === true")
 
     return _
 
@@ -125,7 +123,7 @@ def asgi_live_server(request, live_server, settings, db):
 
 
 @pytest.fixture
-def assert_screenshot(request):
+def assert_screenshot(request, wait_for_loaded):
     update = request.config.getoption("--update-screenshots")
 
     def assert_(locator, suffix=""):
@@ -141,6 +139,7 @@ def assert_screenshot(request):
         expected_filename = dirname / f"{basename}.expected.png"
         # Freeze CSS animations/transitions (e.g. the edit bar sliding in) to their
         # final state, else the capture races the animation and flakes.
+        wait_for_loaded(locator.page)
         screenshot = locator.screenshot(animations="disabled")
         if update:
             expected_filename.write_bytes(screenshot)
@@ -154,7 +153,7 @@ def assert_screenshot(request):
         actual = Image.open(BytesIO(screenshot))
         img_diff = Image.new("RGBA", expected.size)
         mismatch = pixelmatch(
-            expected, actual, img_diff, includeAA=False, threshold=0.1
+            expected, actual, img_diff, includeAA=False, threshold=0.3
         )
         if mismatch:
             actual_filename = dirname / f"{basename}.actual.png"

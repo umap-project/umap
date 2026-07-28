@@ -28,13 +28,6 @@ export class Control {
     this.container.hidden = true
   }
 
-  static get slug() {
-    // Properties on the uMap object are camelCased, let's comply
-    // TODO make properties case insensitive
-    const stripped = this.name.replace(/Control$/, '')
-    return stripped[0].toLowerCase() + stripped.slice(1)
-  }
-
   get status() {
     return this.app.getProperty(`${this.constructor.slug}Control`)
   }
@@ -81,6 +74,7 @@ class MoreableControl extends Control {
 }
 
 export class ZoomControl extends MoreableControl {
+  static slug = 'zoom'
   static position = 'topleft'
 
   render() {
@@ -121,6 +115,7 @@ export class ZoomControl extends MoreableControl {
 }
 
 export class MeasureControl extends MoreableControl {
+  static slug = 'measure'
   static position = 'topleft'
 
   render() {
@@ -149,6 +144,7 @@ export class MeasureControl extends MoreableControl {
 }
 
 export class FullscreenControl extends MoreableControl {
+  static slug = 'fullscreen'
   static position = 'topleft'
 
   render() {
@@ -172,6 +168,7 @@ export class FullscreenControl extends MoreableControl {
 }
 
 export class HomeControl extends MoreableControl {
+  static slug = 'home'
   static position = 'topleft'
 
   render() {
@@ -184,6 +181,7 @@ export class HomeControl extends MoreableControl {
 }
 
 export class EditControl extends Control {
+  static slug = 'edit'
   static position = 'topright'
 
   get visible() {
@@ -211,6 +209,7 @@ export class EditControl extends Control {
 }
 
 export class LoadTemplateControl extends Control {
+  static slug = 'loadTemplate'
   static position = 'topright'
 
   get visible() {
@@ -244,6 +243,7 @@ export class LoadTemplateControl extends Control {
 }
 
 class MoreControl extends Control {
+  static slug = 'more'
   static position = 'topleft'
 
   get status() {
@@ -281,11 +281,9 @@ class MoreControl extends Control {
 }
 
 class ScaleControl extends Control {
+  static slug = 'scale'
   static position = 'bottomleft'
   render() {
-    if (this.app.mapProxy.constructor.name === 'LeafletProxy') {
-      return document.createElement('div')
-    }
     const container = document.createElement('div')
     const scaleControl = new ScaleLine({ target: container })
     scaleControl.setMap(this.app.mapProxy.map)
@@ -294,6 +292,7 @@ class ScaleControl extends Control {
 }
 
 export class PermanentCreditControl extends Control {
+  static slug = 'permanentCredit'
   static position = 'bottomleft'
 
   render() {
@@ -345,6 +344,7 @@ class SimpleButton extends MoreableControl {
 }
 
 export class DatalayersControl extends SimpleButton {
+  static slug = 'datalayers'
   static position = 'topleft'
   className = 'umap-control-browse'
   title = translate('Open browser')
@@ -360,6 +360,7 @@ export class DatalayersControl extends SimpleButton {
 }
 
 export class CaptionControl extends SimpleButton {
+  static slug = 'caption'
   static position = 'topleft'
   className = 'umap-control-caption'
   title = translate('About')
@@ -371,6 +372,7 @@ export class CaptionControl extends SimpleButton {
 }
 
 export class EmbedControl extends SimpleButton {
+  static slug = 'embed'
   static position = 'topleft'
   className = 'umap-control-embed'
   title = translate('Share and download')
@@ -382,6 +384,7 @@ export class EmbedControl extends SimpleButton {
 }
 
 export class PrintControl extends SimpleButton {
+  static slug = 'print'
   static position = 'topleft'
   title = translate('Print')
   icon = 'icon-print'
@@ -392,6 +395,7 @@ export class PrintControl extends SimpleButton {
 }
 
 export class SearchControl extends SimpleButton {
+  static slug = 'search'
   static position = 'topleft'
   className = 'umap-control-search'
   title = translate('Search location')
@@ -413,6 +417,7 @@ export class SearchControl extends SimpleButton {
 }
 
 export class AttributionControl extends Control {
+  static slug = 'attribution'
   static position = 'bottomright'
 
   get visible() {
@@ -444,6 +449,7 @@ export class AttributionControl extends Control {
 }
 
 export class TilelayersControl extends SimpleButton {
+  static slug = 'tilelayers'
   static DEMO_TILES_OPTIONS = { 'a-c': 'a', z: 9, x: 265, y: 181, '-y': 181, r: '' }
   static position = 'topleft'
   className = 'umap-tilelayer-control'
@@ -499,6 +505,7 @@ export class TilelayersControl extends SimpleButton {
 }
 
 export class LocateControl extends SimpleButton {
+  static slug = 'locate'
   static position = 'topleft'
   title = translate('Center map on your location')
   icon = 'icon-locate'
@@ -518,11 +525,9 @@ export class LocateControl extends SimpleButton {
 }
 
 class MiniMapControl extends Control {
+  static slug = 'miniMap'
   static position = 'bottomright'
   render() {
-    if (this.app.mapProxy.constructor.name === 'LeafletProxy') {
-      return document.createElement('div')
-    }
     const container = document.createElement('div')
     const proxy = this.app.mapProxy
     import('ol/control/OverviewMap.js').then(({ default: OverviewMap }) => {
