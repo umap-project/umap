@@ -21,7 +21,6 @@
   },
   "scripts": {
     "test": "node_modules/mocha/bin/mocha.js",
-    "build": "node scripts/build.mjs",
     "build:watch": "node scripts/build.mjs --watch",
     "build:prod": "node scripts/build.mjs --minify"
   },
