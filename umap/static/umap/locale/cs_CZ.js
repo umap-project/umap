@@ -1,4 +1,4 @@
-const locale = {
+export default {
     "(area: {measure})": "(plocha: {measure})",
     "(length: {measure})": "(délka: {measure})",
     "# one hash for main heading": "# jedna mřížka pro hlavní nadpis",
@@ -657,5 +657,3 @@ const locale = {
     "Choose a group": "Vyberte skupinu",
     "Change map background": "Change map background"
 }
-L.registerLocale("cs_CZ", locale)
-L.setLocale("cs_CZ")

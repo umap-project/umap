@@ -1,4 +1,4 @@
-const locale = {
+export default {
     "(area: {measure})": "(gorread: {measure})",
     "(length: {measure})": "(hirder: {measure})",
     "# one hash for main heading": "# un diezenn evit an titl pennañ",
@@ -657,5 +657,3 @@ const locale = {
     "Choose a group": "Diuzañ ur strollad",
     "Change map background": "Change map background"
 }
-L.registerLocale("br", locale)
-L.setLocale("br")

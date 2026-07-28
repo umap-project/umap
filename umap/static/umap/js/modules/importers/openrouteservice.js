@@ -24,7 +24,7 @@ export class Importer {
   }
 
   async loadORS() {
-    const mod = await import('../../../vendors/openrouteservice/ors-js-client.js')
+    const mod = await import('openrouteservice-js')
     return mod.default
   }
 

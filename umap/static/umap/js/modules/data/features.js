@@ -170,7 +170,7 @@ class Feature {
   async buildCard() {
     const container = document.createElement('div')
     const name = this.getOption('popupTemplate')
-    const { default: loadTemplate } = await import('../rendering/template.js')
+    const { default: loadTemplate } = await import('../template.js')
     const content = await loadTemplate(name, this, container)
     const elements = container.querySelectorAll('img,iframe')
     if (!elements.length && container.textContent.replace('\n', '') === '') {
@@ -341,8 +341,6 @@ class Feature {
     })
     container.appendChild(button)
   }
-
-  addExtraEditFieldset(container) {}
 
   appendEditFieldsets(container) {
     const optionsFields = this.getShapeOptions()

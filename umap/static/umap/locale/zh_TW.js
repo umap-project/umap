@@ -1,4 +1,4 @@
-const locale = {
+export default {
     "(area: {measure})": "(面積：{measure})",
     "(length: {measure})": "(長度：{measure})",
     "# one hash for main heading": "單個 # 代表主標題",
@@ -657,5 +657,3 @@ const locale = {
     "Choose a group": "選擇群組",
     "Change map background": "改變背景地圖"
 }
-L.registerLocale("zh_TW", locale)
-L.setLocale("zh_TW")

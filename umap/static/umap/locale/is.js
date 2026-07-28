@@ -1,4 +1,4 @@
-const locale = {
+export default {
     "(area: {measure})": "(svæði: {measure})",
     "(length: {measure})": "(lengd: {measure})",
     "# one hash for main heading": "# eitt myllumerki fyrir aðalfyrirsögn",
@@ -657,5 +657,3 @@ const locale = {
     "Choose a group": "Choose a group",
     "Change map background": "Change map background"
 }
-L.registerLocale("is", locale)
-L.setLocale("is")

@@ -1,4 +1,4 @@
-const locale = {
+export default {
     "(area: {measure})": "(areal: {measure})",
     "(length: {measure})": "(længde: {measure})",
     "# one hash for main heading": "# et hashtag for hovedoverskrift",
@@ -657,5 +657,3 @@ const locale = {
     "Choose a group": "Vælg en gruppe",
     "Change map background": "Skift kortbaggrund"
 }
-L.registerLocale("da", locale)
-L.setLocale("da")

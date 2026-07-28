@@ -1,9 +1,9 @@
-import * as DOMUtils from '../domutils.js'
-import * as GeoUtils from '../geoutils.js'
-import * as Icon from '../icon.js'
-import { getLocale, translate } from '../i18n.js'
-import { Request } from '../request.js'
-import * as Utils from '../utils.js'
+import * as DOMUtils from './domutils.js'
+import * as GeoUtils from './geoutils.js'
+import * as Icon from './icon.js'
+import { getLocale, translate } from './i18n.js'
+import { Request } from './request.js'
+import * as Utils from './utils.js'
 
 export default async function loadTemplate(name, feature, container) {
   let klass = PopupTemplate
@@ -360,7 +360,7 @@ class Route extends TitleMixin(PopupTemplate) {
           ${translate('Altitude:')} <span data-ref="altitude">—</span> m
         </p>
         <object width="100%"
-          data="${feature.app.getStaticPathFor('../vendors/simple-elevation-chart/elevation.svg')}"
+          data="${feature.app.getStaticPathFor('elevation.svg')}"
           data-elevation="${JSON.stringify(data)}"
           data-ref="chart"
           type="image/svg+xml">
