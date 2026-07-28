@@ -18,6 +18,7 @@ import {
   readGeometry,
   readFeature,
   writeFeature,
+  invertPolygon,
   fromOLExtent,
   toOLExtent,
 } from './utils.js'
@@ -664,6 +665,11 @@ export class OLProxy {
           }),
         })
       )
+    } else if (properties.mask) {
+      style.push(
+        new Style({ geometry: (f) => invertPolygon(f.getGeometry()), fill, zIndex })
+      )
+      style.push(new Style({ stroke, zIndex }))
     } else {
       style.push(new Style({ stroke, fill, zIndex }))
     }
