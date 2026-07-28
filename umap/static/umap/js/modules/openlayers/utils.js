@@ -1,9 +1,19 @@
 import { asArray } from 'ol/color.js'
 import GeoJSON from 'ol/format/GeoJSON.js'
-import { transformExtent } from 'ol/proj.js'
+import Polygon, { fromExtent } from 'ol/geom/Polygon.js'
+import { get as getProjection, transformExtent } from 'ol/proj.js'
 
 const PROJECTION = { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' }
 const geojsonFormat = new GeoJSON()
+const WORLD = fromExtent(getProjection('EPSG:3857').getExtent()).getCoordinates()[0]
+
+export function invertPolygon(geometry) {
+  const rings = [WORLD]
+  const polygons =
+    geometry.getType() === 'MultiPolygon' ? geometry.getPolygons() : [geometry]
+  for (const polygon of polygons) rings.push(...polygon.getCoordinates())
+  return new Polygon(rings)
+}
 
 export function readGeometry(data) {
   return geojsonFormat.readGeometry(data, PROJECTION)
