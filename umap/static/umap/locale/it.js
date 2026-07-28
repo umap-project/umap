@@ -1,4 +1,4 @@
-const locale = {
+export default {
     "(area: {measure})": "(area: {measure})",
     "(length: {measure})": "(lunghezza: {measure})",
     "# one hash for main heading": "# un cancelleto per l'intestazione principale",
@@ -657,5 +657,3 @@ const locale = {
     "Choose a group": "Choose a group",
     "Change map background": "Change map background"
 }
-L.registerLocale("it", locale)
-L.setLocale("it")
