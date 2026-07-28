@@ -59,19 +59,16 @@ export default class App extends Utils.WithEvents {
     this.modifiedAt = this.properties.modified_at
     this.searchParams = new URLSearchParams(window.location.search)
 
-    // Locale name (pt_PT, en_US…): set it for translate() and load the matching
-    // catalog into our i18n. The catalog files are `export default {…}` data
-    // modules, bundled as chunks — only the active one is fetched.
     if (geojson.properties.locale) {
       setLocale(geojson.properties.locale)
-      try {
-        const { default: strings } = await import(
-          `../../locale/${geojson.properties.locale}.js`
-        )
-        registerLocale(geojson.properties.locale, strings)
-      } catch {
-        // No catalog for this locale (e.g. the English source) — untranslated
-        // strings fall back to their key, which is fine.
+      if (geojson.properties.locale_url) {
+        try {
+          const { default: strings } = await import(geojson.properties.locale_url)
+          registerLocale(geojson.properties.locale, strings)
+        } catch {
+          // Catalog unreachable (e.g. English source, or dev without a build)
+          // — untranslated strings fall back to their key, which is fine.
+        }
       }
     }
 
@@ -95,6 +92,11 @@ export default class App extends Utils.WithEvents {
     this.properties.fullscreenControl = false
 
     this.mapProxy = new OLProxy(this, element)
+    this.mapProxy.map.on('rendercomplete', () => {
+      this._rendered = true
+      this._markLoaded()
+    })
+    this.onceDataLoaded(() => this._markLoaded())
     this.uiContainer = Utils.loadTemplate('<div class="umap-ui-container"></div>')
     this.mapProxy.attachUI(this.uiContainer)
     this.controlManager = new ControlManager(this)
@@ -767,6 +769,12 @@ export default class App extends Utils.WithEvents {
       this.once('dataloaded', callback)
     }
     return this
+  }
+
+  _markLoaded() {
+    if (this.loaded || !this.dataloaded || !this._rendered) return
+    this.loaded = true
+    this.fire('loaded')
   }
 
   onDataLayersChanged() {
@@ -2031,7 +2039,7 @@ export default class App extends Utils.WithEvents {
       type: 'jpg',
       fast: false,
       exclude: [
-        '.leaflet-control',
+        '.umap-controls',
         '.umap-loader',
         '.panel',
         '.umap-caption-bar',

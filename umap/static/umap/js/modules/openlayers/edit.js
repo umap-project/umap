@@ -48,9 +48,9 @@ export default class Editor {
         this.proxy.applyStyle(olFeature)
       }
       if (this.select.getFeatures().getLength()) {
-        this.pauseEditInteractions('Modify')
+        this.pauseEditInteractions(Modify)
       } else {
-        this.resumeEditInteractions('Modify')
+        this.resumeEditInteractions(Modify)
       }
     })
 
@@ -97,15 +97,15 @@ export default class Editor {
 
   pauseEditInteractions(type) {
     for (const interaction of this.editInteractions) {
-      if (type && type !== interaction.constructor.name) continue
-      if (interaction.constructor.name === 'Snap') continue
+      if (type && !(interaction instanceof type)) continue
+      if (interaction instanceof Snap) continue
       interaction.setActive(false)
     }
   }
 
   resumeEditInteractions(type) {
     for (const interaction of this.editInteractions) {
-      if (type && type !== interaction.constructor.name) continue
+      if (type && !(interaction instanceof type)) continue
       interaction.setActive(true)
     }
   }
@@ -177,7 +177,7 @@ export default class Editor {
   // Snap must be the last interaction to intercept coordinates before Draw/Modify.
   _moveSnapToTop() {
     for (const snap of this.editInteractions.filter(
-      (i) => i.constructor.name === 'Snap'
+      (i) => i instanceof Snap
     )) {
       this.map.removeInteraction(snap)
       this.map.addInteraction(snap)

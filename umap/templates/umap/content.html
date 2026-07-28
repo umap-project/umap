@@ -58,8 +58,9 @@
     const listenForMore = () => {
       const more = document.querySelector('.more_button')
       if (more) {
-        L.DomEvent.on(more, 'click', (e) => {
-          L.DomEvent.stop(e)
+        more.addEventListener('click', (event) => {
+          event.stopPropagation()
+          event.preventDefault()
           getMore(more)
         })
       }

@@ -1,5 +1,6 @@
 import multiprocessing
 import shutil
+import subprocess
 import tempfile
 
 import pytest
@@ -41,6 +42,12 @@ def pytest_configure(config):
 def pytest_runtest_teardown():
     shutil.rmtree(TMP_ROOT, ignore_errors=True)
     cache.clear()
+
+
+@pytest.fixture(scope="session", autouse=True)
+def run_global_setup():
+    subprocess.run(["npm", "run", "build:prod"])
+    yield
 
 
 @pytest.fixture

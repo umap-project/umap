@@ -3,6 +3,7 @@ import { MutatingForm } from './form/builder.js'
 import { EXPORT_FORMATS } from './formatter.js'
 import { translate } from './i18n.js'
 import { ControlManager } from './ui/controls.js'
+import * as Copiable from '../components/copiable.js'  // Register the webcomponents copiable-input/-textarea.
 import * as Utils from './utils.js'
 
 export default class Share {

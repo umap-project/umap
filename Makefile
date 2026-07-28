@@ -57,9 +57,17 @@ helm: ## Build the helm chart and publish it
 	@echo "Successfully packaged helm chart in: ${PACKAGE}"
 	helm push ${PACKAGE} oci://registry-1.docker.io/umap
 
+watch:
+	npm run build:watch
+
+buildjs: ## Build the javascript assets
+	npm run build:prod
+
 .PHONY: build
-build: ## Build the Python package before release
+buildpy: ## Build the Python package before release
 	@uv run hatch build --clean
+
+build: buildjd buildpy ## Build the package (JS + Python)
 
 .PHONY: publish
 publish: ## Publish the Python package to Pypi

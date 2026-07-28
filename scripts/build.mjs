@@ -12,7 +12,7 @@ import * as esbuild from 'esbuild'
 
 const ROOT = 'umap/static/umap/js'
 
-// Direct script we load (other end in chunk-xxx).
+// Direct script we load synchronally (others end in chunk-xxx).
 const entryPoints = [
   `${ROOT}/modules/app.js`,
   `${ROOT}/components/fragment.js`,
@@ -28,8 +28,8 @@ const entryPoints = [
 
 const minify = process.argv.includes('--minify')
 const watch = process.argv.includes('--watch')
+const verbose = process.argv.includes('--verbose')
 
-/** @type {import('esbuild').BuildOptions} */
 const options = {
   entryPoints,
   bundle: true,
@@ -43,7 +43,7 @@ const options = {
   // harmless double hash) and rewrites the ESM imports between files.
   chunkNames: 'chunks/[name]-[hash]',
   assetNames: 'assets/[name]-[hash]',
-  target: 'es2020',
+  target: 'es2022',
   sourcemap: true,
   minify,
   // Only used by test (in Node, not browser).
@@ -106,25 +106,29 @@ function report(result) {
   console.log(
     `\n=== BOOT (${bootRows.length} fichiers, ${kb(sum(bootRows))})${tag} ===`
   )
-  console.log('--- par source ---')
-  for (const [b, n] of Object.entries(buckets)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 20)) {
-    console.log(`  ${kb(n).padStart(9)}  ${b}`)
+  if (verbose) {
+    console.log('--- par source ---')
+    for (const [b, n] of Object.entries(buckets)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 20)) {
+      console.log(`  ${kb(n).padStart(9)}  ${b}`)
+    }
+    console.log('--- par chunk ---')
+    for (const [f, o] of bootRows)
+      console.log(
+        `  ${kb(o.bytes).padStart(9)}  ${f.replace('umap/static/umap/dist/', '')}`
+      )
   }
-  console.log('--- par chunk ---')
-  for (const [f, o] of bootRows)
-    console.log(
-      `  ${kb(o.bytes).padStart(9)}  ${f.replace('umap/static/umap/dist/', '')}`
-    )
   console.log(
     `\n=== LAZY (${lazyRows.length} chunks, ${kb(sum(lazyRows))}) — chargés à la demande ===`
   )
-  for (const [f, o] of lazyRows.slice(0, 12))
-    console.log(
-      `  ${kb(o.bytes).padStart(9)}  ${f.replace('umap/static/umap/dist/', '')}`
-    )
-  if (lazyRows.length > 12) console.log(`  … +${lazyRows.length - 12} autres`)
+  if (verbose) {
+    for (const [f, o] of lazyRows.slice(0, 12))
+      console.log(
+        `  ${kb(o.bytes).padStart(9)}  ${f.replace('umap/static/umap/dist/', '')}`
+      )
+    if (lazyRows.length > 12) console.log(`  … +${lazyRows.length - 12} autres`)
+  }
   console.log(`\nTotal émis: ${kb(sum(all))}`)
 }
 
