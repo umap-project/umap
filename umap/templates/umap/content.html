@@ -41,7 +41,7 @@
 {% block bottom_js %}
   {{ block.super }}
   <script type="module">
-    import { ServerRequest } from "{% static 'umap/js/modules/request.js' %}"
+    import { ServerRequest } from "{% static 'umap/dist/request.js' %}"
 
     const server = new ServerRequest()
     const getMore = async function (link) {
