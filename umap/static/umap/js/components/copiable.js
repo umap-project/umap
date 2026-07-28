@@ -1,7 +1,7 @@
 import * as Clipboard from '../modules/clipboard.js'
 import * as DOMUtils from '../modules/domutils.js'
-import * as Utils from '../modules/utils.js'
 import { translate } from '../modules/i18n.js'
+import * as Utils from '../modules/utils.js'
 
 class CopiableInput extends HTMLElement {
   constructor() {

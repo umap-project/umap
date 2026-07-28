@@ -1,7 +1,7 @@
 import * as DOMUtils from './domutils.js'
 import * as GeoUtils from './geoutils.js'
-import * as Icon from './icon.js'
 import { getLocale, translate } from './i18n.js'
+import * as Icon from './icon.js'
 import { Request } from './request.js'
 import * as Utils from './utils.js'
 

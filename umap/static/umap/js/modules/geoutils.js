@@ -1,10 +1,10 @@
 // Those module will be loaded even for a single map view, so let's track them.
 // They all share a dep to turf/meta (~21.6 KB) and turf/helpers ((~7.9 KB))
 import { area } from '@turf/area' // deps: meta, helpers — +1.6 KB
+import { bbox } from '@turf/bbox' // deps: meta, helpers — +0.7 KB
 import { centroid } from '@turf/centroid' // deps: meta, helpers — +0.5 KB
 import { flip } from '@turf/flip' // deps: clone, meta, helpers — +3.3 KB (clone)
 import { length } from '@turf/length' // deps: distance (→invariant), meta — +4.7 KB
-import { bbox } from '@turf/bbox' // deps: meta, helpers — +0.7 KB
 import { coordEach } from '@turf/meta' // already a shared dep — +0 KB
 
 export async function distance(from, to, options) {
