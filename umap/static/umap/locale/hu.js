@@ -1,4 +1,4 @@
-const locale = {
+export default {
     "(area: {measure})": "(terület: {measure})",
     "(length: {measure})": "(távolság: {measure})",
     "# one hash for main heading": "# egy számjel: fő címsor",
@@ -657,5 +657,3 @@ const locale = {
     "Choose a group": "Csoport kiválasztása",
     "Change map background": "Change map background"
 }
-L.registerLocale("hu", locale)
-L.setLocale("hu")

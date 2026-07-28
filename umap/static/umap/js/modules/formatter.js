@@ -1,3 +1,4 @@
+import * as csv2geojson from 'csv2geojson'
 import { Alert } from '../components/alerts/alert.js'
 import { translate } from './i18n.js'
 
@@ -6,7 +7,7 @@ const parseTextGeom = async (geom) => {
     return JSON.parse(geom)
   } catch (e) {
     try {
-      const betterknown = await import('../../vendors/betterknown/betterknown.mjs')
+      const betterknown = await import('betterknown')
       return betterknown.wktToGeoJSON(geom)
     } catch {
       return null
@@ -39,7 +40,7 @@ export const EXPORT_FORMATS = {
 
 export class Formatter {
   async fromGPX(str) {
-    const togeojson = await import('../../vendors/togeojson/togeojson.es.js')
+    const togeojson = await import('@tmcw/togeojson')
     const data = togeojson.gpx(this.toDom(str))
     for (const feature of data.features || []) {
       feature.properties.description = feature.properties.desc
@@ -53,7 +54,7 @@ export class Formatter {
   }
 
   async fromKML(str) {
-    const togeojson = await import('../../vendors/togeojson/togeojson.es.js')
+    const togeojson = await import('@tmcw/togeojson')
     return togeojson.kml(this.toDom(str), {
       skipNullGeometry: true,
     })
@@ -64,7 +65,7 @@ export class Formatter {
   }
 
   async fromOSM(str) {
-    const osm2geojson = await import('osm2geojson')
+    const osm2geojson = await import('osm2geojson-lite')
     const data = osm2geojson.default(str, { flatProperties: true })
     // FIXME: make a PR to osmtogeojson when it's more active
     // cf https://github.com/umap-project/umap/issues/3072
@@ -142,9 +143,7 @@ export class Formatter {
   }
 
   async fromGeoRSS(str) {
-    const GeoRSSToGeoJSON = await import(
-      '../../vendors/georsstogeojson/GeoRSSToGeoJSON.js'
-    )
+    const GeoRSSToGeoJSON = await import('georsstogeojson')
     return GeoRSSToGeoJSON.parse(this.toDom(str))
   }
 
@@ -192,7 +191,7 @@ export class Formatter {
   }
 
   async toGPX(features) {
-    const togpx = await import('../../vendors/geojson-to-gpx/index.js')
+    const togpx = await import('@dwayneparton/geojson-to-gpx')
     for (const feature of features) {
       feature.properties.desc = feature.properties.description
     }
@@ -201,7 +200,7 @@ export class Formatter {
   }
 
   async toKML(features) {
-    const tokml = await import('../../vendors/tokml/tokml.es.js')
+    const tokml = await import('@placemarkio/tokml')
     return tokml.toKML(this.toFeatureCollection(features))
   }
 
@@ -231,7 +230,7 @@ export class Formatter {
 
   async toWKT(features) {
     const table = []
-    const betterknown = await import('../../vendors/betterknown/betterknown.mjs')
+    const betterknown = await import('betterknown')
     for (const feature of features) {
       const row = feature.toGeoJSON().properties
       delete row._umap_options

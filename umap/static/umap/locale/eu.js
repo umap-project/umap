@@ -1,4 +1,4 @@
-const locale = {
+export default {
     "(area: {measure})": "(azalera: {measure})",
     "(length: {measure})": "(luzera: {measure})",
     "# one hash for main heading": "# traola bat goiburu nagusirako",
@@ -657,5 +657,3 @@ const locale = {
     "Choose a group": "Aukeratu talde bat",
     "Change map background": "Aldatu maparen atzeko planoa"
 }
-L.registerLocale("eu", locale)
-L.setLocale("eu")

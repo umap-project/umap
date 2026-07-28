@@ -202,7 +202,7 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
 }
 
 .umap-control-fullscreen a {
-    background: #fff url('./vendors/fullscreen/fullscreen.png') no-repeat 0 0;
+    background: #fff url('./img/fullscreen.png') no-repeat 0 0;
     background-size: 36px 68px;
     height: var(--control-size);
     width: var(--control-size);

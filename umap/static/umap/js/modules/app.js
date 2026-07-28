@@ -9,11 +9,10 @@ import { MutatingForm } from './form/builder.js'
 import { Formatter } from './formatter.js'
 import * as GeoUtils from './geoutils.js'
 import Help from './help.js'
-import { getLocale, setLocale, translate } from './i18n.js'
+import { getLocale, registerLocale, setLocale, translate } from './i18n.js'
 import { LayerManager } from './managers.js'
 import { MapPermissions } from './permissions.js'
 import { OLProxy } from './openlayers/index.js'
-import { LeafletProxy } from './rendering/leaflet.js'
 import { Request, ServerRequest } from './request.js'
 import Rules from './rules.js'
 import * as Schema from './schema.js'
@@ -28,6 +27,8 @@ import { EditPanel, FullPanel, Panel } from './ui/panel.js'
 import Tooltip from './ui/tooltip.js'
 import URLs from './urls.js'
 import * as Utils from './utils.js'
+
+window.U = {}
 
 export default class App extends Utils.WithEvents {
   constructor(element, geojson) {
@@ -58,9 +59,21 @@ export default class App extends Utils.WithEvents {
     this.modifiedAt = this.properties.modified_at
     this.searchParams = new URLSearchParams(window.location.search)
 
-    // Locale name (pt_PT, en_US…)
-    // To be used for Django localization
-    if (geojson.properties.locale) setLocale(geojson.properties.locale)
+    // Locale name (pt_PT, en_US…): set it for translate() and load the matching
+    // catalog into our i18n. The catalog files are `export default {…}` data
+    // modules, bundled as chunks — only the active one is fetched.
+    if (geojson.properties.locale) {
+      setLocale(geojson.properties.locale)
+      try {
+        const { default: strings } = await import(
+          `../../locale/${geojson.properties.locale}.js`
+        )
+        registerLocale(geojson.properties.locale, strings)
+      } catch {
+        // No catalog for this locale (e.g. the English source) — untranslated
+        // strings fall back to their key, which is fine.
+      }
+    }
 
     // Language code (pt-pt, en-us…)
     // To be used in javascript APIs
@@ -81,13 +94,7 @@ export default class App extends Utils.WithEvents {
     this.properties.zoomControl = false
     this.properties.fullscreenControl = false
 
-    if (this.searchParams.has('leaflet')) {
-      console.log('You still go Leaflet bro')
-      this.mapProxy = new LeafletProxy(this, element)
-    } else {
-      console.log('So you wanna run OL')
-      this.mapProxy = new OLProxy(this, element)
-    }
+    this.mapProxy = new OLProxy(this, element)
     this.uiContainer = Utils.loadTemplate('<div class="umap-ui-container"></div>')
     this.mapProxy.attachUI(this.uiContainer)
     this.controlManager = new ControlManager(this)
@@ -2016,7 +2023,7 @@ export default class App extends Utils.WithEvents {
   }
 
   async screenshot() {
-    const { snapdom, preCache } = await import('../../vendors/snapdom/snapdom.min.mjs')
+    const { snapdom, preCache } = await import('@zumer/snapdom')
     const el = document.querySelector('#map')
     await preCache(el)
     const result = await snapdom(el, {

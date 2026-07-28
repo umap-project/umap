@@ -1,4 +1,4 @@
-const locale = {
+export default {
     "(area: {measure})": "(περιοχή: {μέτρηση})",
     "(length: {measure})": "(μήκος: {μέτρηση})",
     "# one hash for main heading": "# ένα hash για επικεφαλίδα πρώτου επιπέδου",
@@ -657,5 +657,3 @@ const locale = {
     "Choose a group": "Choose a group",
     "Change map background": "Change map background"
 }
-L.registerLocale("el", locale)
-L.setLocale("el")

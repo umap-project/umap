@@ -1,4 +1,4 @@
-const locale = {
+export default {
     "(area: {measure})": "(kawasan: {measure})",
     "(length: {measure})": "(panjang: {measure})",
     "# one hash for main heading": "# satu tanda pagar untuk tajuk utama",
@@ -657,5 +657,3 @@ const locale = {
     "Choose a group": "Choose a group",
     "Change map background": "Change map background"
 }
-L.registerLocale("ms", locale)
-L.setLocale("ms")

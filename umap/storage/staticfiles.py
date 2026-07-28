@@ -29,15 +29,15 @@ class UmapManifestStaticFilesStorage(ManifestStaticFilesStorage):
                 'export%(exports)s from "%(url)s"\n',
             ),
             (
-                r"""(?P<matched>import\s*['"](?P<url>[\.\/].*?)["']\s*)""",
+                r"""(?P<matched>import\s*['"](?P<url>[\.\/][^\"\)]+)["']\s*)""",
                 'import"%(url)s"\n',
             ),
             (
-                r"""(?P<matched>import\(["'](?P<url>[\.\/].*?)["']\)\.then)""",
+                r"""(?P<matched>import\(["'](?P<url>[\.\/][^\"\)]+)["']\)\.then)""",
                 """import("%(url)s").then""",
             ),
             (
-                r"""(?P<matched>await import\(["'](?P<url>[\.\/].*?)["']\))""",
+                r"""(?P<matched>await import\(["'](?P<url>[\.\/][^\"\)]+)["']\))""",
                 """await import("%(url)s")""",
             ),
         ),

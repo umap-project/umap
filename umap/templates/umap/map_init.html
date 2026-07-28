@@ -8,7 +8,7 @@
 <script id="map-settings" data-settings="{{ map_settings|escape }}"></script>
 <script defer type="module">
     {% autoescape off %}
-    import App from '{% static "umap/js/modules/app.js" %}'
+    import App from '{% static "umap/dist/app.js" %}'
     {% endautoescape %}
     U.SETTINGS = JSON.parse(document.getElementById('map-settings').dataset.settings)
     U.MAP = new App("map", U.SETTINGS)

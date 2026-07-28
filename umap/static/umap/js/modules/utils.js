@@ -1,4 +1,4 @@
-import { default as DOMPurifyInitializer } from '../../vendors/dompurify/purify.es.js'
+import { default as DOMPurifyInitializer } from 'dompurify'
 
 /**
  * Generate a pseudo-unique identifier (5 chars long, mixed-case alphanumeric)
