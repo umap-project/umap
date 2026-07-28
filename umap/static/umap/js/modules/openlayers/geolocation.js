@@ -1,13 +1,13 @@
-import Geolocation from 'ol/Geolocation.js'
 import Feature from 'ol/Feature.js'
-import CircleStyle from 'ol/style/Circle.js'
+import Geolocation from 'ol/Geolocation.js'
 import Point from 'ol/geom/Point.js'
-import Style from 'ol/style/Style.js'
-import Fill from 'ol/style/Fill.js'
-import Stroke from 'ol/style/Stroke.js'
-import VectorSource from 'ol/source/Vector.js'
 import VectorLayer from 'ol/layer/Vector.js'
 import { transformExtent } from 'ol/proj.js'
+import VectorSource from 'ol/source/Vector.js'
+import CircleStyle from 'ol/style/Circle.js'
+import Fill from 'ol/style/Fill.js'
+import Stroke from 'ol/style/Stroke.js'
+import Style from 'ol/style/Style.js'
 
 let geolocation
 

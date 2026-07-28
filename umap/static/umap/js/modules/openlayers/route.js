@@ -1,8 +1,8 @@
+import { unByKey } from 'ol/Observable.js'
 import Draw from 'ol/interaction/Draw.js'
+import Snap from 'ol/interaction/Snap.js'
 import { toLonLat } from 'ol/proj.js'
 import VectorSource from 'ol/source/Vector.js'
-import Snap from 'ol/interaction/Snap.js'
-import { unByKey } from 'ol/Observable.js'
 
 export default class DrawRoute {
   constructor(map) {

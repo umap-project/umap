@@ -1,10 +1,10 @@
 import { Alert } from '../components/alerts/alert.js'
+import * as DOMUtils from './domutils.js'
+import * as GeoUtils from './geoutils.js'
 import { translate } from './i18n.js'
 import { SCHEMA } from './schema.js'
 import Dialog from './ui/dialog.js'
 import * as Utils from './utils.js'
-import * as DOMUtils from './domutils.js'
-import * as GeoUtils from './geoutils.js'
 
 const TEMPLATE = `
   <div class="umap-import">

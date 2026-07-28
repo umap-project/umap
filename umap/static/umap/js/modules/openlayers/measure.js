@@ -1,18 +1,18 @@
-import { translate } from '../i18n.js'
-import * as TextUtils from '../textutils.js'
 import LineString from 'ol/geom/LineString.js'
 import Point from 'ol/geom/Point.js'
 import Draw from 'ol/interaction/Draw.js'
 import Modify from 'ol/interaction/Modify.js'
 import VectorLayer from 'ol/layer/Vector.js'
 import VectorSource from 'ol/source/Vector.js'
+import { getArea, getLength } from 'ol/sphere.js'
 import CircleStyle from 'ol/style/Circle.js'
 import Fill from 'ol/style/Fill.js'
 import RegularShape from 'ol/style/RegularShape.js'
 import Stroke from 'ol/style/Stroke.js'
 import Style from 'ol/style/Style.js'
 import Text from 'ol/style/Text.js'
-import { getArea, getLength } from 'ol/sphere.js'
+import { translate } from '../i18n.js'
+import * as TextUtils from '../textutils.js'
 
 const fillWhite = new Fill({
   color: 'rgba(255, 255, 255, 1)',
@@ -184,7 +184,7 @@ export class MeasureTool {
     if (line) {
       let count = 0
       const segmentStyles = []
-      line.forEachSegment(function (a, b) {
+      line.forEachSegment((a, b) => {
         const segment = new LineString([a, b])
         const label = TextUtils.readableDistance(getLength(segment))
         if (segmentStyles.length - 1 < count) {

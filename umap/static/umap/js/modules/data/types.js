@@ -82,7 +82,9 @@ class Choropleth extends DefaultType {
     const values = features.map((feature) => +feature.properties?.[key])
     let breaks = []
     let colors = []
-    const { equalIntervalBreaks, jenks, quantile, ckmeans, max } = await import('./stats.js')
+    const { equalIntervalBreaks, jenks, quantile, ckmeans, max } = await import(
+      './stats.js'
+    )
 
     if (!values.length) {
       return { properties: {}, caption: null }

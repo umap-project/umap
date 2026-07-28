@@ -1,13 +1,13 @@
-import VectorSource from 'ol/source/Vector.js'
-import Select from 'ol/interaction/Select.js'
-import Translate from 'ol/interaction/Translate.js'
-import Modify from 'ol/interaction/Modify.js'
-import Snap from 'ol/interaction/Snap.js'
-import ContinueLine from './continueline.js'
-import DrawRoute from './route.js'
-import DrawHole from './hole.js'
-import Draw from 'ol/interaction/Draw.js'
 import DoubleClickZoom from 'ol/interaction/DoubleClickZoom.js'
+import Draw from 'ol/interaction/Draw.js'
+import Modify from 'ol/interaction/Modify.js'
+import Select from 'ol/interaction/Select.js'
+import Snap from 'ol/interaction/Snap.js'
+import Translate from 'ol/interaction/Translate.js'
+import VectorSource from 'ol/source/Vector.js'
+import ContinueLine from './continueline.js'
+import DrawHole from './hole.js'
+import DrawRoute from './route.js'
 
 export default class Editor {
   constructor(map, proxy) {

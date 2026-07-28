@@ -2,9 +2,9 @@ import * as DOMUtils from './domutils.js'
 import { Form } from './form/builder.js'
 import { EXPORT_FORMATS } from './formatter.js'
 import { translate } from './i18n.js'
+import { SCHEMA } from './schema.js'
 import ContextMenu from './ui/contextmenu.js'
 import * as Utils from './utils.js'
-import { SCHEMA } from './schema.js'
 
 export default class Browser {
   constructor(app) {

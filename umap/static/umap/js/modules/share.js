@@ -1,9 +1,9 @@
+import * as DOMUtils from './domutils.js'
 import { MutatingForm } from './form/builder.js'
 import { EXPORT_FORMATS } from './formatter.js'
 import { translate } from './i18n.js'
 import { ControlManager } from './ui/controls.js'
 import * as Utils from './utils.js'
-import * as DOMUtils from './domutils.js'
 
 export default class Share {
   constructor(app) {

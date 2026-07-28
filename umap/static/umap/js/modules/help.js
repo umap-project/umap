@@ -1,7 +1,7 @@
+import * as DOMUtils from './domutils.js'
 import { translate } from './i18n.js'
 import Dialog from './ui/dialog.js'
 import * as Utils from './utils.js'
-import * as DOMUtils from './domutils.js'
 
 const SHORTCUTS = {
   DRAW_MARKER: {

@@ -28,8 +28,8 @@ export default class Hash {
     }
     const args = hash.split('/')
     if (args.length !== 3) return
-    const zoom = parseFloat(args[0])
-    const coordinates = [parseFloat(args[2]), parseFloat(args[1])]
+    const zoom = Number.parseFloat(args[0])
+    const coordinates = [Number.parseFloat(args[2]), Number.parseFloat(args[1])]
     if (isNaN(zoom) || !Utils.coordinateIsValid(coordinates)) return
     this.app.fire('map:view:set', { zoom, coordinates, easing: false })
   }

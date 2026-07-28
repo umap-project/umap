@@ -1,5 +1,5 @@
-import * as DOMUtils from '../domutils.js'
 import { LineString, Point, Polygon } from '../data/features.js'
+import * as DOMUtils from '../domutils.js'
 import { translate } from '../i18n.js'
 import { WithTemplate } from '../utils.js'
 import * as Utils from '../utils.js'
