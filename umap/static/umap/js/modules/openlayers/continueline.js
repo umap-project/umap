@@ -1,6 +1,6 @@
-import Draw from 'ol/interaction/Draw.js'
 import LineString from 'ol/geom/LineString.js'
 import MultiLineString from 'ol/geom/MultiLineString.js'
+import Draw from 'ol/interaction/Draw.js'
 
 export default class ContinueLine {
   constructor(map, feature, index, atStart) {

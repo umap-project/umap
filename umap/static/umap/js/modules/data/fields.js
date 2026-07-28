@@ -1,7 +1,7 @@
-import * as Utils from '../utils.js'
-import { translate } from '../i18n.js'
 import { Alert } from '../../components/alerts/alert.js'
 import { Form } from '../form/builder.js'
+import { translate } from '../i18n.js'
+import * as Utils from '../utils.js'
 
 export const getDefaultFields = () => [
   { key: U.DEFAULT_LABEL_KEY, type: 'String' },

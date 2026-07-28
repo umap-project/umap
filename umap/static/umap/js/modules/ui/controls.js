@@ -1,7 +1,7 @@
+import ScaleLine from 'ol/control/ScaleLine.js'
 import { Alert } from '../../components/alerts/alert.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
-import ScaleLine from 'ol/control/ScaleLine.js'
 
 export class Control {
   constructor(app) {
@@ -525,7 +525,7 @@ class MiniMapControl extends Control {
     }
     const container = document.createElement('div')
     const proxy = this.app.mapProxy
-    import('ol/control/OverviewMap.js').then(({default: OverviewMap}) => {
+    import('ol/control/OverviewMap.js').then(({ default: OverviewMap }) => {
       const overviewMap = new OverviewMap({
         layers: [proxy.tilelayers.cloneLayer?.(proxy.tilelayers.current)],
         collapseLabel: '»',
@@ -538,7 +538,6 @@ class MiniMapControl extends Control {
         const map = overviewMap.getOverviewMap()
         map.setLayers([proxy.tilelayers.cloneLayer(event.detail.layer)])
       })
-
     })
     return container
   }
