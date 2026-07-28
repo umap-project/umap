@@ -2,11 +2,11 @@ import * as Utils from '../utils.js'
 import { HybridLogicalClock } from './hlc.js'
 import { UndoManager } from './undo.js'
 import {
+  DataLayerPermissionsUpdater,
   DataLayerUpdater,
   FeatureUpdater,
-  MapUpdater,
   MapPermissionsUpdater,
-  DataLayerPermissionsUpdater,
+  MapUpdater,
 } from './updaters.js'
 import { WebSocketTransport } from './websocket.js'
 

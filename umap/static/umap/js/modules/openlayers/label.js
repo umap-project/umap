@@ -1,7 +1,7 @@
-import Style from 'ol/style/Style.js'
-import TextStyle from 'ol/style/Text.js'
 import Fill from 'ol/style/Fill.js'
 import Stroke from 'ol/style/Stroke.js'
+import Style from 'ol/style/Style.js'
+import TextStyle from 'ol/style/Text.js'
 import { rgba, textWidth } from './utils.js'
 
 const GAP = 12

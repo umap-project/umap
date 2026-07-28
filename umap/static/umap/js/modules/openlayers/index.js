@@ -1,30 +1,30 @@
-import { translate } from '../i18n.js'
-import * as Utils from '../utils.js'
 import { default as OLMap } from 'ol/Map.js'
+import Overlay from 'ol/Overlay.js'
 import View from 'ol/View.js'
-import VectorSource from 'ol/source/Vector.js'
+import { getHeight, getWidth } from 'ol/extent.js'
+import MultiPoint from 'ol/geom/MultiPoint.js'
+import MouseWheelZoom from 'ol/interaction/MouseWheelZoom.js'
 import VectorLayer from 'ol/layer/Vector.js'
 import { fromLonLat, toLonLat } from 'ol/proj.js'
-import { getWidth, getHeight } from 'ol/extent.js'
-import Overlay from 'ol/Overlay.js'
-import Stroke from 'ol/style/Stroke.js'
+import VectorSource from 'ol/source/Vector.js'
+import CircleStyle from 'ol/style/Circle.js'
 import Fill from 'ol/style/Fill.js'
+import Stroke from 'ol/style/Stroke.js'
 import Style from 'ol/style/Style.js'
-import MouseWheelZoom from 'ol/interaction/MouseWheelZoom.js'
+import { translate } from '../i18n.js'
+import * as Utils from '../utils.js'
 import { makeIcon } from './icon.js'
 import { anchorTexts, makeLabel, makeTextPath } from './label.js'
-import {
-  rgba,
-  readGeometry,
-  readFeature,
-  writeFeature,
-  invertPolygon,
-  fromOLExtent,
-  toOLExtent,
-} from './utils.js'
-import CircleStyle from 'ol/style/Circle.js'
-import MultiPoint from 'ol/geom/MultiPoint.js'
 import TileLayerManager from './tilelayer.js'
+import {
+  fromOLExtent,
+  invertPolygon,
+  readFeature,
+  readGeometry,
+  rgba,
+  toOLExtent,
+  writeFeature,
+} from './utils.js'
 
 const POINT_ZINDEX_OFFSET = 10000
 const HIGHLIGHT_ZINDEX = 1e6
@@ -265,7 +265,7 @@ export class OLProxy {
       const [lng, lat] = this.center
       this.app.fire('map:view:updated', {
         // parseFloat drops trailing zeros so a round zoom stays `7`, not `7.00`.
-        zoom: parseFloat(this.zoom.toFixed(2)),
+        zoom: Number.parseFloat(this.zoom.toFixed(2)),
         coordinate: [lng.toFixed(6), lat.toFixed(6)],
       })
     }

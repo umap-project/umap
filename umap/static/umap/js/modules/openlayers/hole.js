@@ -1,8 +1,8 @@
 import { unByKey } from 'ol/Observable.js'
-import Draw from 'ol/interaction/Draw.js'
-import Polygon from 'ol/geom/Polygon.js'
-import MultiPolygon from 'ol/geom/MultiPolygon.js'
 import LinearRing from 'ol/geom/LinearRing.js'
+import MultiPolygon from 'ol/geom/MultiPolygon.js'
+import Polygon from 'ol/geom/Polygon.js'
+import Draw from 'ol/interaction/Draw.js'
 
 export default class DrawHole {
   constructor(map, feature) {
@@ -64,14 +64,14 @@ export default class DrawHole {
       geom = new MultiPolygon([])
       for (let [idx, polygon] of this.feature.getGeometry().getPolygons().entries()) {
         if (idx === this.idx) {
-          let coordinates = polygon.getCoordinates()
+          const coordinates = polygon.getCoordinates()
           polygon = new Polygon(coordinates.slice(0, this.initialLength))
           polygon.appendLinearRing(drawnHole)
         }
         geom.appendPolygon(polygon)
       }
     } else {
-      let coordinates = this.feature.getGeometry().getCoordinates()
+      const coordinates = this.feature.getGeometry().getCoordinates()
       geom = new Polygon(coordinates.slice(0, this.initialLength))
       geom.appendLinearRing(drawnHole)
     }
