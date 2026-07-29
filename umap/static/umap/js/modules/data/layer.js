@@ -142,9 +142,9 @@ export class DataLayer {
 
   defaultName() {
     if (this.group) {
-      return `${translate('Group')} ${this.app.layers.tree.filter((l) => l.group).count() + 1}`
+      return `${translate('Group')} ${this.app.layers.tree.filter((l) => l.group).count()}`
     }
-    return `${translate('Layer')} ${this.app.layers.tree.count() + 1}`
+    return `${translate('Layer')} ${this.app.layers.tree.count()}`
   }
 
   async render(fields, builder) {

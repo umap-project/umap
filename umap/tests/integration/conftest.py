@@ -157,7 +157,10 @@ def assert_screenshot(request, wait_for_loaded):
         )
         # Freeze CSS animations/transitions (e.g. the edit bar sliding in) to their
         # final state, else the capture races the animation and flakes.
-        screenshot = locator_or_page.screenshot(animations="disabled", clip=clip)
+        kwargs = {}
+        if clip:
+            kwargs["clip"] = clip
+        screenshot = locator_or_page.screenshot(animations="disabled", **kwargs)
         if update:
             expected_filename.write_bytes(screenshot)
             return
