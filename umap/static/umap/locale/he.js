@@ -1,4 +1,8 @@
-export default {
+
+import { registerLocale, setLocale } from '/static/umap/dist/i18n.js'
+
+setLocale('he')
+registerLocale('he', {
     "(area: {measure})": "(אזור: {measure})",
     "(length: {measure})": "(אורך: {measure})",
     "# one hash for main heading": "# סולמית אחת לכותרת ראשית",
@@ -656,4 +660,4 @@ export default {
     "Group properties": "מאפייני קבוצה",
     "Choose a group": "בחר קבוצה",
     "Change map background": "Change map background"
-}
+})

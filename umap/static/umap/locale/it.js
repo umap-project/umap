@@ -1,4 +1,8 @@
-export default {
+
+import { registerLocale, setLocale } from '/static/umap/dist/i18n.js'
+
+setLocale('it')
+registerLocale('it', {
     "(area: {measure})": "(area: {measure})",
     "(length: {measure})": "(lunghezza: {measure})",
     "# one hash for main heading": "# un cancelleto per l'intestazione principale",
@@ -656,4 +660,4 @@ export default {
     "Group properties": "Group properties",
     "Choose a group": "Choose a group",
     "Change map background": "Change map background"
-}
+})

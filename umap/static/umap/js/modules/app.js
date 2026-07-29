@@ -9,7 +9,7 @@ import { MutatingForm } from './form/builder.js'
 import { Formatter } from './formatter.js'
 import * as GeoUtils from './geoutils.js'
 import Help from './help.js'
-import { getLocale, registerLocale, setLocale, translate } from './i18n.js'
+import { getLocale, translate } from './i18n.js'
 import { LayerManager } from './managers.js'
 import { OLProxy } from './openlayers/index.js'
 import { MapPermissions } from './permissions.js'
@@ -58,19 +58,6 @@ export default class App extends Utils.WithEvents {
     this.createdAt = new Date(this.properties.created_at)
     this.modifiedAt = this.properties.modified_at
     this.searchParams = new URLSearchParams(window.location.search)
-
-    if (geojson.properties.locale) {
-      setLocale(geojson.properties.locale)
-      if (geojson.properties.locale_url) {
-        try {
-          const { default: strings } = await import(geojson.properties.locale_url)
-          registerLocale(geojson.properties.locale, strings)
-        } catch {
-          // Catalog unreachable (e.g. English source, or dev without a build)
-          // — untranslated strings fall back to their key, which is fine.
-        }
-      }
-    }
 
     // Language code (pt-pt, en-us…)
     // To be used in javascript APIs

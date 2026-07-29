@@ -1,6 +1,7 @@
 {% load umap_tags static %}
 
 {% include "umap/messages.html" %}
+<script type="module" src="{% static 'umap/locale/'|add:locale|add:'.js' %}"></script>
 {# tabindex allows to programmatically focus on the map element (eg. to listen for key events while drawing) #}
 <div id="map" tabindex="0">
 </div>

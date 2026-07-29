@@ -11,9 +11,6 @@ class UmapModal extends HTMLElement {
       if (!CACHE[mapId]) {
         const app = new App(mapId, JSON.parse(this.dataset.settings))
         CACHE[mapId] = app
-      } else {
-        // TODO remove direct call to leafletMap
-        CACHE[mapId].mapProxy.map.invalidateSize()
       }
     })
   }

@@ -1,4 +1,8 @@
-export default {
+
+import { registerLocale, setLocale } from '/static/umap/dist/i18n.js'
+
+setLocale('nl')
+registerLocale('nl', {
     "(area: {measure})": "(oppervlakte: {measure})",
     "(length: {measure})": "(lengte: {measure})",
     "# one hash for main heading": "# een hekje voor koptekst 1",
@@ -656,4 +660,4 @@ export default {
     "Group properties": "Group properties",
     "Choose a group": "Choose a group",
     "Change map background": "Change map background"
-}
+})

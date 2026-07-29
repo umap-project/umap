@@ -15,6 +15,7 @@ const ROOT = 'umap/static/umap/js'
 // Direct script we load synchronally (others end in chunk-xxx).
 const entryPoints = [
   `${ROOT}/modules/app.js`,
+  `${ROOT}/modules/i18n.js`,
   `${ROOT}/components/fragment.js`,
   `${ROOT}/components/modal.js`,
   `${ROOT}/components/copiable.js`,

@@ -6,6 +6,7 @@ from pathlib import Path
 import pytest
 from daphne.testing import DaphneProcess
 from django.contrib.staticfiles.handlers import ASGIStaticFilesHandler
+from django.template.defaultfilters import slugify
 from PIL import Image
 from pixelmatch.contrib.PIL import pixelmatch
 from playwright.sync_api import expect
@@ -135,7 +136,7 @@ def assert_screenshot(request, wait_for_loaded):
             return
         dirname = Path(__file__).parent.parent / "screenshots"
         suffix = f"-{suffix}" if suffix else ""
-        basename = f"{request.module.__name__}.{request.function.__name__}{suffix}"
+        basename = slugify(f"{request.module.__name__}.{request.node.name}{suffix}")
         expected_filename = dirname / f"{basename}.expected.png"
         wait_for_loaded(locator.page)
         # Wait 200ms for any map repaint, so to have a stable canvas in the screenshot

@@ -1,4 +1,8 @@
-export default {
+
+import { registerLocale, setLocale } from '/static/umap/dist/i18n.js'
+
+setLocale('eu')
+registerLocale('eu', {
     "(area: {measure})": "(azalera: {measure})",
     "(length: {measure})": "(luzera: {measure})",
     "# one hash for main heading": "# traola bat goiburu nagusirako",
@@ -656,4 +660,4 @@ export default {
     "Group properties": "Taldearen propietateak",
     "Choose a group": "Aukeratu talde bat",
     "Change map background": "Aldatu maparen atzeko planoa"
-}
+})

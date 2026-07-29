@@ -1,4 +1,8 @@
-export default {
+
+import { registerLocale, setLocale } from '/static/umap/dist/i18n.js'
+
+setLocale('zh')
+registerLocale('zh', {
     "(area: {measure})": "(area: {measure})",
     "(length: {measure})": "(length: {measure})",
     "# one hash for main heading": "# 一个井号表示一级标题",
@@ -656,4 +660,4 @@ export default {
     "Group properties": "Group properties",
     "Choose a group": "Choose a group",
     "Change map background": "Change map background"
-}
+})

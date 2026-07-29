@@ -1,4 +1,8 @@
-export default {
+
+import { registerLocale, setLocale } from '/static/umap/dist/i18n.js'
+
+setLocale('da')
+registerLocale('da', {
     "(area: {measure})": "(areal: {measure})",
     "(length: {measure})": "(længde: {measure})",
     "# one hash for main heading": "# et hashtag for hovedoverskrift",
@@ -656,4 +660,4 @@ export default {
     "Group properties": "Gruppegenskaber",
     "Choose a group": "Vælg en gruppe",
     "Change map background": "Skift kortbaggrund"
-}
+})
