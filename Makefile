@@ -80,7 +80,7 @@ test-unit:
 	uv run pytest -vv umap/tests/ --ignore=umap/tests/integration
 
 test-integration:
-	uv run pytest -vv umap/tests/integration/test_map.py --dist=loadgroup --reruns 1 --maxfail 3
+	uv run pytest -vv umap/tests/integration/test_map.py umap/tests/integration/test_basic.py --dist=loadgroup --reruns 1 --maxfail 3
 
 .PHONY: clean-screenshots
 clean-screenshots: ## Remove generated screenshot artifacts, keeping the expected baselines
