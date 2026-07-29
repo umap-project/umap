@@ -104,13 +104,13 @@ def login(new_page, settings, live_server):
     return do_login
 
 
-def asig_application():
+def asgi_application():
     return ASGIStaticFilesHandler(application)
 
 
 @pytest.fixture(scope="function")
 def asgi_live_server(request, live_server, settings, db):
-    server = DaphneProcess("localhost", asig_application)
+    server = DaphneProcess("localhost", asgi_application)
     server.start()
     server.ready.wait()
     port = server.port.value
@@ -137,9 +137,20 @@ def assert_screenshot(request, wait_for_loaded):
         suffix = f"-{suffix}" if suffix else ""
         basename = f"{request.module.__name__}.{request.function.__name__}{suffix}"
         expected_filename = dirname / f"{basename}.expected.png"
+        wait_for_loaded(locator.page)
+        # Wait 200ms for any map repaint, so to have a stable canvas in the screenshot
+        locator.page.evaluate(
+            """() => new Promise((resolve) => {
+              const map = U.MAP.mapProxy.map
+              let timer
+              const bump = () => { clearTimeout(timer); timer = setTimeout(done, 200) }
+              const done = () => { map.un('rendercomplete', bump); resolve() }
+              map.on('rendercomplete', bump)
+              bump()
+            })"""
+        )
         # Freeze CSS animations/transitions (e.g. the edit bar sliding in) to their
         # final state, else the capture races the animation and flakes.
-        wait_for_loaded(locator.page)
         screenshot = locator.screenshot(animations="disabled")
         if update:
             expected_filename.write_bytes(screenshot)

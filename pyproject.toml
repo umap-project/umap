@@ -121,3 +121,4 @@ DJANGO_SETTINGS_MODULE = "umap.tests.settings"
 addopts = "--pdbcls=IPython.terminal.debugger:Pdb --no-migrations --numprocesses auto --reuse-db"
 asyncio_mode = "auto"
 testpaths = ["umap/tests"]
+markers = ["screenshot"]
