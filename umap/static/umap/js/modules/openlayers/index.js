@@ -1,19 +1,19 @@
-import { default as OLMap } from 'ol/Map.js'
-import Overlay from 'ol/Overlay.js'
-import View from 'ol/View.js'
 import { getHeight, getWidth } from 'ol/extent.js'
 import MultiPoint from 'ol/geom/MultiPoint.js'
 import MouseWheelZoom from 'ol/interaction/MouseWheelZoom.js'
 import VectorLayer from 'ol/layer/Vector.js'
+import { default as OLMap } from 'ol/Map.js'
+import Overlay from 'ol/Overlay.js'
 import { fromLonLat, toLonLat } from 'ol/proj.js'
 import VectorSource from 'ol/source/Vector.js'
 import CircleStyle from 'ol/style/Circle.js'
 import Fill from 'ol/style/Fill.js'
 import Stroke from 'ol/style/Stroke.js'
 import Style from 'ol/style/Style.js'
+import View from 'ol/View.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
-import { makeIcon } from './icon.js'
+import { makeIcon, makePointOverlay } from './icon.js'
 import { anchorTexts, makeLabel, makeTextPath } from './label.js'
 import TileLayerManager from './tilelayer.js'
 import {
@@ -384,9 +384,8 @@ export class OLProxy {
     }
   }
 
-  async showPoint({ coordinate, color }) {
+  showPoint({ coordinate, color }) {
     if (!this.point) {
-      const { makePointOverlay } = await import('./icon.js')
       this.point = makePointOverlay()
       this.map.addOverlay(this.point)
     }

@@ -1,6 +1,6 @@
 import { TYPES as LAYER_TYPES } from '../data/types.js'
 import { translate } from '../i18n.js'
-import * as Icon from '../icon.js'
+import * as Icon from '../iconutils.js'
 import { SCHEMA } from '../schema.js'
 import * as Utils from '../utils.js'
 
