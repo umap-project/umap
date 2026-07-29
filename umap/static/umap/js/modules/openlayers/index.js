@@ -47,6 +47,7 @@ export class OLProxy {
     this.app = app
     this.sources = {}
     this.layers = {}
+    this.point = null
     this.highlighted = null
     this.map = new OLMap({
       target: element,
@@ -131,6 +132,8 @@ export class OLProxy {
       this.highlight(sourceId, id)
     })
     this.app.on('popup:close', () => this.closePopup())
+    this.app.on('map:show:point', (event) => this.showPoint(event.detail))
+    this.app.on('map:hide:point', () => this.hidePoint())
     this.app.on('feature:reset', (event) => {
       const { sourceId, geojson } = event.detail
       const olFeature = this.sources[sourceId]?.getFeatureById(geojson.id)
@@ -379,6 +382,20 @@ export class OLProxy {
     for (const layer of layers) {
       this.map.removeLayer(layer)
     }
+  }
+
+  async showPoint({ coordinate, color }) {
+    if (!this.point) {
+      const { makePointOverlay } = await import('./icon.js')
+      this.point = makePointOverlay()
+      this.map.addOverlay(this.point)
+    }
+    this.point.getElement().style.borderColor = color
+    this.point.setPosition(fromLonLat(coordinate))
+  }
+
+  hidePoint() {
+    this.point?.setPosition(undefined)
   }
 
   deleteLayer(id) {
