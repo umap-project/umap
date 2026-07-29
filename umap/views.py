@@ -723,15 +723,6 @@ class MapDetailMixin(SessionMixin):
             locale = translation.to_locale(lang)
             properties["locale"] = locale
             context["locale"] = locale
-            # We keep locale out of the bundle to keep it smaller, but as the locale
-            # final URL depends on the language, that URL in the JS files cannot be
-            # catched by our manifest storage, so we'd lose the hash.
-            try:
-                properties["locale_url"] = staticfiles_storage.url(
-                    f"umap/locale/{locale}.js"
-                )
-            except ValueError:
-                pass
         geojson = self.get_geojson()
         if "properties" not in geojson:
             geojson["properties"] = {}

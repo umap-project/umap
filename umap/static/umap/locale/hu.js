@@ -1,4 +1,8 @@
-export default {
+
+import { registerLocale, setLocale } from '/static/umap/dist/i18n.js'
+
+setLocale('hu')
+registerLocale('hu', {
     "(area: {measure})": "(terület: {measure})",
     "(length: {measure})": "(távolság: {measure})",
     "# one hash for main heading": "# egy számjel: fő címsor",
@@ -656,4 +660,4 @@ export default {
     "Group properties": "Csoport tulajdonságai",
     "Choose a group": "Csoport kiválasztása",
     "Change map background": "Change map background"
-}
+})
