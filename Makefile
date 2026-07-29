@@ -91,6 +91,7 @@ test-integration:
 		umap/tests/integration/test_slideshow.py \
 		umap/tests/integration/test_star.py \
 		umap/tests/integration/test_team.py \
+		umap/tests/integration/test_anonymous_owned_map.py \
 		--dist=loadgroup --reruns 1 --maxfail 3
 
 .PHONY: clean-screenshots
