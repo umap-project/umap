@@ -56,6 +56,9 @@ class UmapManifestStaticFilesStorage(ManifestStaticFilesStorage):
     )
 
     def post_process(self, paths, **options):
+        # Don't parse this file, it contains inresolvable imports (ol/ol.css from
+        # node_modules)
+        paths.pop("umap/css/umap.css", None)
         collected = super().post_process(paths, **options)
         for original_path, processed_path, processed in collected:
             if isinstance(processed, Exception):
