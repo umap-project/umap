@@ -1,6 +1,7 @@
 import re
 
 import pytest
+from django.utils import translation
 from playwright.sync_api import expect
 
 from ..base import DataLayerFactory
@@ -165,10 +166,26 @@ def test_default_view_locate(new_context, live_server, map, new_page):
     expect(page).to_have_url(re.compile(r".*#18/39\.162670/8\.529670"))
 
 
+@pytest.mark.parametrize(
+    "locale,browser_button,draw_marker,panel_title",
+    [
+        ("en", "Open browser", "Draw a marker", "Feature properties"),
+        ("fr", "Explorateur", "Ajouter un marqueur", "Propriétés de l'élément"),
+    ],
+)
 @pytest.mark.screenshot
 def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
-    openmap, live_server, datalayer, page, assert_screenshot
+    openmap,
+    live_server,
+    datalayer,
+    page,
+    assert_screenshot,
+    locale,
+    browser_button,
+    draw_marker,
+    panel_title,
 ):
+    translation.activate(locale)
     datalayer.settings["remoteData"] = {
         "url": "https://example.com/",
         "format": "osm",
@@ -177,13 +194,13 @@ def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
     datalayer.settings["fromZoom"] = 10
     datalayer.save()
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#7/51/2")
-    toggle = page.get_by_role("button", name="Open browser")
+    toggle = page.get_by_role("button", name=browser_button)
     expect(toggle).to_be_visible()
     toggle.click()
     layers = page.locator(".umap-browser .datalayer summary")
     expect(layers).to_have_count(1)
     map_el = page.locator("#map canvas")
-    add_marker = page.get_by_title("Draw a marker")
+    add_marker = page.get_by_title(draw_marker)
     expect(add_marker).to_be_visible()
     assert_screenshot(page.locator("#map"), "first")
     add_marker.click()
@@ -193,12 +210,13 @@ def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
     map_el.click(position={"x": 500, "y": 100})
     # The drawn feature enters edit mode; its properties panel opening is the
     # signal that creation completed.
-    expect(page.locator(".panel").get_by_text("Feature properties")).to_be_visible()
+    expect(page.locator(".panel").get_by_text(panel_title)).to_be_visible()
     assert_screenshot(page.locator("#map"), "second")
     # A new datalayer has been created to host this created feature
     # given the remote one cannot accept new features
-    page.get_by_title("Open browser").click()
+    page.get_by_title(browser_button).click()
     expect(layers).to_have_count(2)
+    translation.activate("en")
 
 
 def test_minimap_on_load(map, live_server, datalayer, page):
