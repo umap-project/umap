@@ -10,6 +10,7 @@ import Stroke from 'ol/style/Stroke.js'
 import Style from 'ol/style/Style.js'
 import TextStyle from 'ol/style/Text.js'
 import { blackOrWhite } from '../domutils.js'
+import { setRecent } from '../icon.js'
 import { SCHEMA } from '../schema.js'
 import { isDataImage, isPath, isRemoteUrl } from '../utils.js'
 import { rgba, textWidth } from './utils.js'
@@ -192,6 +193,7 @@ export function makePointOverlay() {
 
 // An icon is an optional shape (Ball, Drop, Circle…) + an optional symbol (say a star, a tree, an emoji, some short text)
 export function makeIcon(properties, zIndex) {
+  if (properties.iconUrl) setRecent(properties.iconUrl)
   const iconClass = properties.iconClass
   const scale = properties.scale ?? 1
   const opacity = properties.iconOpacity
