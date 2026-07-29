@@ -127,20 +127,25 @@ def asgi_live_server(request, live_server, settings, db):
 def assert_screenshot(request, wait_for_loaded):
     update = request.config.getoption("--update-screenshots")
 
-    def assert_(locator, suffix=""):
+    def assert_(locator_or_page, suffix="", clip=None):
         # Hide this helper's frame so a failure points at the calling test line.
         __tracebackhide__ = True
         # expected screenshots are run without tiles, so in DEBUG mode trying to
         # compare screenshots will always fail.
         if not tiles_are_mocked():
             return
+        page = (
+            locator_or_page.page
+            if hasattr(locator_or_page, "page")
+            else locator_or_page
+        )
         dirname = Path(__file__).parent.parent / "screenshots"
         suffix = f"-{suffix}" if suffix else ""
         basename = slugify(f"{request.module.__name__}.{request.node.name}{suffix}")
         expected_filename = dirname / f"{basename}.expected.png"
-        wait_for_loaded(locator.page)
+        wait_for_loaded(page)
         # Wait 200ms for any map repaint, so to have a stable canvas in the screenshot
-        locator.page.evaluate(
+        page.evaluate(
             """() => new Promise((resolve) => {
               const map = U.MAP.mapProxy.map
               let timer
@@ -152,7 +157,7 @@ def assert_screenshot(request, wait_for_loaded):
         )
         # Freeze CSS animations/transitions (e.g. the edit bar sliding in) to their
         # final state, else the capture races the animation and flakes.
-        screenshot = locator.screenshot(animations="disabled")
+        screenshot = locator_or_page.screenshot(animations="disabled", clip=clip)
         if update:
             expected_filename.write_bytes(screenshot)
             return
