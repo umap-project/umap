@@ -1,4 +1,5 @@
 import ImageState from 'ol/ImageState.js'
+import Overlay from 'ol/Overlay.js'
 import { asString } from 'ol/color.js'
 import { createCanvasContext2D } from 'ol/dom.js'
 import CircleStyle from 'ol/style/Circle.js'
@@ -174,6 +175,19 @@ function makeSymbol(src, offset, size, bgColor, maxWidth, zIndex) {
     if (widest > maxWidth) text.setScale(maxWidth / widest)
   }
   return new Style({ text, zIndex })
+}
+
+// Overlay for show/hide:point
+export function makePointOverlay() {
+  const element = document.createElement('div')
+  Object.assign(element.style, {
+    width: '16px',
+    height: '16px',
+    borderRadius: '50%',
+    border: '2px solid',
+    backgroundColor: '#fff',
+  })
+  return new Overlay({ element, positioning: 'center-center', stopEvent: false })
 }
 
 // An icon is an optional shape (Ball, Drop, Circle…) + an optional symbol (say a star, a tree, an emoji, some short text)

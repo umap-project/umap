@@ -366,13 +366,7 @@ class Route extends TitleMixin(PopupTemplate) {
           type="image/svg+xml">
       </div>
     `)
-    const id = 'route-icon'
-    let icon
-    const removeIcon = () => {
-      if (icon) {
-        feature.app.fire('map:hide:point', { id })
-      }
-    }
+    const removeIcon = () => feature.app.fire('map:hide:point')
     chart.addEventListener('mouseout', removeIcon)
     feature.app.on('map:popupclose', removeIcon)
     chart.addEventListener('chart:over', (event) => {
@@ -380,10 +374,9 @@ class Route extends TitleMixin(PopupTemplate) {
       if (dataset.ele) {
         altitude.textContent = dataset.ele
       }
-      icon = new Icon.RouteIcon()
-      const position = feature.geometry.coordinates[dataset.index]
-      if (!position) return
-      feature.app.fire('map:show:point', { id, position, icon })
+      const coordinate = feature.geometry.coordinates[dataset.index]
+      if (!coordinate) return
+      feature.app.fire('map:show:point', { coordinate, color: 'orange' })
     })
     if (feature.properties.description) {
       const content = this.toHTML(feature, feature.properties.description)
