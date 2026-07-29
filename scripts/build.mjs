@@ -23,7 +23,8 @@ const entryPoints = [
   `${ROOT}/components/base.js`,
   `${ROOT}/modules/request.js`,
   `${ROOT}/modules/autocomplete.js`,
-  'node_modules/ol/ol.css',
+  // All CSS (uMap + vendored ol.css) in one bundle; theme.css stays separate.
+  'umap/static/umap/css/umap.css',
 ]
 
 const minify = process.argv.includes('--minify')
@@ -46,6 +47,15 @@ const options = {
   target: 'es2022',
   sourcemap: true,
   minify,
+  // Fonts/images referenced via CSS url() get copied to dist/assets (hashed via
+  // assetNames) with their url() rewritten, so paths stay correct from dist/.
+  loader: {
+    '.woff': 'file',
+    '.woff2': 'file',
+    '.png': 'file',
+    '.gif': 'file',
+    '.svg': 'file',
+  },
   // Only used by test (in Node, not browser).
   external: ['jsdom'],
   metafile: true,
