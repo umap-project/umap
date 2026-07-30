@@ -204,3 +204,28 @@ def test_move_to_trash(user, map):
     map.save()
     reloaded = Map.objects.get(pk=map.pk)
     assert reloaded.share_status == Map.DELETED
+
+
+def test_make_icon_urls_absolute(rf):
+    request = rf.get("/")
+    layer = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {"iconUrl": "/uploads/pictogram/beach.svg"},
+            },
+            {
+                "type": "Feature",
+                "properties": {"iconUrl": "https://example.com/icon.svg"},
+            },
+            {
+                "type": "Feature",
+                "properties": {},
+            },
+        ],
+    }
+    Map._make_icon_urls_absolute(layer, request)
+    assert layer["features"][0]["properties"]["iconUrl"] == "http://testserver/uploads/pictogram/beach.svg"
+    assert layer["features"][1]["properties"]["iconUrl"] == "https://example.com/icon.svg"
+    assert "iconUrl" not in layer["features"][2]["properties"]
