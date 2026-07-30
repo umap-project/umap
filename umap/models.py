@@ -321,6 +321,7 @@ class Map(NamedModel):
             if include_data:
                 with datalayer.geojson.open("rb") as f:
                     layer = json.loads(f.read())
+                self._make_icon_urls_absolute(layer, request)
             if datalayer.settings:
                 datalayer.settings.pop("id", None)
                 datalayer.settings.pop("parent", None)
@@ -330,6 +331,18 @@ class Map(NamedModel):
             datalayers.append(layer)
         umapjson["layers"] = layers_tree(datalayers, keep_ids=False)
         return umapjson
+
+    @staticmethod
+    def _make_icon_urls_absolute(layer, request):
+        if not isinstance(layer, dict):
+            return
+        for feature in layer.get("features") or []:
+            props = feature.get("properties")
+            if not isinstance(props, dict):
+                continue
+            icon_url = props.get("iconUrl")
+            if icon_url and icon_url.startswith("/"):
+                props["iconUrl"] = request.build_absolute_uri(icon_url)
 
     def get_absolute_url(self):
         return reverse("map", kwargs={"slug": self.slug or "map", "map_id": self.pk})
