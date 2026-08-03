@@ -404,8 +404,16 @@ export class OLProxy {
   }
 
   reorderLayers() {
-    for (const datalayer of this.app.layers.tree) {
-      this.applyZIndex(datalayer)
+    const datalayers = Array.from(this.app.layers.tree)
+    let zIndex = datalayers.length
+    for (const datalayer of datalayers) {
+      const OLLayers = Object.values(this.layers[datalayer.id] || {})
+      if (!OLLayers.length) continue
+      for (const layer of OLLayers) {
+        const offset = layer.get('zIndexOffset') || 0
+        layer.setZIndex(zIndex + offset)
+      }
+      zIndex--
     }
   }
 
@@ -535,16 +543,7 @@ export class OLProxy {
       })
     }
     this.layers[datalayer.id] = layers
-    this.applyZIndex(datalayer)
-  }
-
-  // Points ride the high zIndex band so all markers stay above all paths, across layers.
-  applyZIndex(datalayer) {
-    const layers = Object.values(this.layers[datalayer.id] || {})
-    if (!layers.length) return
-    for (const layer of layers) {
-      layer.setZIndex(datalayer.rank + (layer.get('zIndexOffset') || 0))
-    }
+    this.reorderLayers()
   }
 
   isPointGeometry(type) {
