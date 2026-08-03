@@ -57,9 +57,17 @@ helm: ## Build the helm chart and publish it
 	@echo "Successfully packaged helm chart in: ${PACKAGE}"
 	helm push ${PACKAGE} oci://registry-1.docker.io/umap
 
+watch:
+	npm run build:watch
+
+buildjs: ## Build the javascript assets
+	npm run build:prod
+
 .PHONY: build
-build: ## Build the Python package before release
+buildpy: ## Build the Python package before release
 	@uv run hatch build --clean
+
+build: buildjd buildpy ## Build the package (JS + Python)
 
 .PHONY: publish
 publish: ## Publish the Python package to Pypi
@@ -72,7 +80,24 @@ test-unit:
 	uv run pytest -vv umap/tests/ --ignore=umap/tests/integration
 
 test-integration:
-	uv run pytest -vv umap/tests/integration/ --dist=loadgroup --reruns 1 --maxfail 3
+	uv run pytest -vv \
+		umap/tests/integration/test_basics.py \
+		umap/tests/integration/test_caption.py \
+		umap/tests/integration/test_features_id_generation.py \
+		umap/tests/integration/test_fields.py \
+		umap/tests/integration/test_iframe.py \
+		umap/tests/integration/test_save.py \
+		umap/tests/integration/test_search.py \
+		umap/tests/integration/test_slideshow.py \
+		umap/tests/integration/test_star.py \
+		umap/tests/integration/test_team.py \
+		umap/tests/integration/test_anonymous_owned_map.py \
+		umap/tests/integration/test_caption_layer_switcher.py \
+		--dist=loadgroup --reruns 1 --maxfail 3
+
+.PHONY: clean-screenshots
+clean-screenshots: ## Remove generated screenshot artifacts, keeping the expected baselines
+	rm -f umap/tests/screenshots/*.actual.png umap/tests/screenshots/*.diff.png
 
 clean:
 	rm -f dist/*
@@ -82,9 +107,7 @@ compilemessages:
 	uv run umap generate_js_locale
 messages:
 	cd umap && uv run umap makemessages -l en
-	node node_modules/leaflet-i18n/bin/i18n.js --dir_path=umap/static/umap/js/ --dir_path=umap/static/umap/vendors/measurable/ --locale_dir_path=umap/static/umap/locale/ --locale_codes=en --mode=json --clean --default_values --expressions=_,translate
-vendors:
-	npm run vendors
+	node scripts/i18n.js
 installjs:
 	npm install
 testjs: node_modules

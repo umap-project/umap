@@ -6,11 +6,11 @@
     position: absolute;
     box-shadow: var(--block-shadow);
     display: block;
-    color: #eeeeec;
     border-radius: var(--border-radius);
     z-index: var(--zindex-tooltip);
     font-weight: normal;
-    --tooltip-color: var(--color-darkGray);
+    color: var(--text-color);
+    --tooltip-color: var(--background-color);
     background-color: var(--tooltip-color);
     --arrow-size: 8px;
     font-size: 0.8rem;
@@ -18,6 +18,25 @@
 
 .tooltip-accent {
     --tooltip-color: var(--color-lightCyan);
+}
+
+/* Placement relative to the anchor point: the transform picks the side, the
+   margin adds the gap the arrow bridges. */
+.umap-tooltip-container.tooltip-top {
+    transform: translate(-50%, -100%);
+    margin-top: calc(-1 * var(--arrow-size));
+}
+.umap-tooltip-container.tooltip-bottom {
+    transform: translate(-50%, 0);
+    margin-top: var(--arrow-size);
+}
+.umap-tooltip-container.tooltip-left {
+    transform: translate(-100%, -50%);
+    margin-left: calc(-1 * var(--arrow-size));
+}
+.umap-tooltip-container.tooltip-right {
+    transform: translate(0, -50%);
+    margin-left: var(--arrow-size);
 }
 
 .umap-tooltip-container.tooltip-top:after {

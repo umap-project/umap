@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.0 - work in progress
+
+### Breaking changes:
+- heat maps render differently (different algorithms)
+
 ## 3.8.0a6 - 2026-07-25
 
 * fix testpath skipped since switch to LeafletProxy by @yohanboniface in #3449

@@ -1,4 +1,8 @@
-const locale = {
+
+import { registerLocale, setLocale } from '/static/umap/dist/i18n.js'
+
+setLocale('cs_CZ')
+registerLocale('cs_CZ', {
     "(area: {measure})": "(plocha: {measure})",
     "(length: {measure})": "(délka: {measure})",
     "# one hash for main heading": "# jedna mřížka pro hlavní nadpis",
@@ -656,6 +660,4 @@ const locale = {
     "Group properties": "Vlastnosti skupiny",
     "Choose a group": "Vyberte skupinu",
     "Change map background": "Change map background"
-}
-L.registerLocale("cs_CZ", locale)
-L.setLocale("cs_CZ")
+})

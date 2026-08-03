@@ -1,4 +1,8 @@
-const locale = {
+
+import { registerLocale, setLocale } from '/static/umap/dist/i18n.js'
+
+setLocale('br')
+registerLocale('br', {
     "(area: {measure})": "(gorread: {measure})",
     "(length: {measure})": "(hirder: {measure})",
     "# one hash for main heading": "# un diezenn evit an titl pennañ",
@@ -656,6 +660,4 @@ const locale = {
     "Group properties": "Perzhioù ar strollad",
     "Choose a group": "Diuzañ ur strollad",
     "Change map background": "Change map background"
-}
-L.registerLocale("br", locale)
-L.setLocale("br")
+})

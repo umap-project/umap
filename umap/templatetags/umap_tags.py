@@ -14,8 +14,8 @@ def umap_css():
 
 
 @register.inclusion_tag("umap/js.html")
-def umap_js(locale=None):
-    return {"STATIC_URL": settings.STATIC_URL, "locale": locale}
+def umap_js():
+    return {"STATIC_URL": settings.STATIC_URL}
 
 
 @register.inclusion_tag("umap/map_fragment.html")
