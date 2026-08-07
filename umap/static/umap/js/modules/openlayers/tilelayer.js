@@ -41,7 +41,7 @@ export default class TileLayerManager {
       url,
       tilePixelRatio: retina ? 2 : 1,
       attributions: spec.attribution,
-      crossOrigin: null,
+      crossOrigin: 'anonymous',
     })
     return new TileLayer({
       source,
