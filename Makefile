@@ -94,6 +94,7 @@ test-integration:
 		umap/tests/integration/test_anonymous_owned_map.py \
 		umap/tests/integration/test_caption_layer_switcher.py \
 		umap/tests/integration/test_export_map.py \
+		umap/tests/integration/test_view_polyline.py \
 		--dist=loadgroup --reruns 1 --maxfail 3
 
 .PHONY: clean-screenshots
