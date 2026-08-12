@@ -132,7 +132,7 @@ class PaginatorMixin:
         return response
 
 
-class PublicMapsMixin(object):
+class PublicMapsMixin:
     def get_public_maps(self):
         qs = Map.public
         if (
@@ -529,39 +529,38 @@ class AjaxProxy(View):
         tmp_path = None
         try:
             try:
-                async with httpx.AsyncClient(
-                    timeout=self.HTTP_TIMEOUT,
-                    follow_redirects=True,
-                    max_redirects=3,
-                    headers={"User-Agent": self.USER_AGENT},
-                    event_hooks={"request": [self._reject_private_target]},
-                ) as client:
-                    async with client.stream("GET", url) as resp:
-                        if resp.status_code >= 400:
-                            raise ValueError(f"Upstream {resp.status_code}")
-                        content_type = (
-                            resp.headers.get("content-type")
-                            or "application/octet-stream"
-                        )
-                        # HTTP forbids CR/LF in headers, but a malformed
-                        # upstream could still send them — strip defensively
-                        # so the header line stays a single line.
-                        content_type = (
-                            content_type.replace("\n", " ").replace("\r", " ").strip()
-                        )
-                        with tempfile.NamedTemporaryFile(
-                            delete=False, dir=cache_dir, prefix=f"{cache_file.name}."
-                        ) as tmp:
-                            tmp_path = Path(tmp.name)
-                            tmp.write(
-                                f"{content_type}\n".encode("ascii", errors="replace")
-                            )
-                            size = 0
-                            async for chunk in resp.aiter_bytes():
-                                size += len(chunk)
-                                if size > self.MAX_BYTES:
-                                    raise ValueError("Response too large")
-                                tmp.write(chunk)
+                async with (
+                    httpx.AsyncClient(
+                        timeout=self.HTTP_TIMEOUT,
+                        follow_redirects=True,
+                        max_redirects=3,
+                        headers={"User-Agent": self.USER_AGENT},
+                        event_hooks={"request": [self._reject_private_target]},
+                    ) as client,
+                    client.stream("GET", url) as resp,
+                ):
+                    if resp.status_code >= 400:
+                        raise ValueError(f"Upstream {resp.status_code}")
+                    content_type = (
+                        resp.headers.get("content-type") or "application/octet-stream"
+                    )
+                    # HTTP forbids CR/LF in headers, but a malformed
+                    # upstream could still send them — strip defensively
+                    # so the header line stays a single line.
+                    content_type = (
+                        content_type.replace("\n", " ").replace("\r", " ").strip()
+                    )
+                    with tempfile.NamedTemporaryFile(
+                        delete=False, dir=cache_dir, prefix=f"{cache_file.name}."
+                    ) as tmp:
+                        tmp_path = Path(tmp.name)
+                        tmp.write(f"{content_type}\n".encode("ascii", errors="replace"))
+                        size = 0
+                        async for chunk in resp.aiter_bytes():
+                            size += len(chunk)
+                            if size > self.MAX_BYTES:
+                                raise ValueError("Response too large")
+                            tmp.write(chunk)
             except httpx.TimeoutException:
                 raise ValueError("Timeout")
             except httpx.InvalidURL:
@@ -651,7 +650,12 @@ class MapDetailMixin(SessionMixin):
             if tilelayers:
                 url_template = tilelayers[0].get("url_template")
         if url_template:
-            domain = urlparse(url_template).netloc
+            # url_template is user-controlled and may be malformed (e.g.
+            # https://{s}[.basemaps.cartocdn.com/light_all/](https://.basemaps.cartocdn.com/light_all/){z}/{x}/{y}.png ).
+            try:
+                domain = urlparse(url_template).netloc
+            except ValueError:
+                domain = None
             # Do not try to preconnect on domains with variables
             if domain and "{" not in domain:
                 context["preconnect_domains"] = [f"//{domain}"]
@@ -797,7 +801,7 @@ class MapView(MapDetailMixin, PermissionsMixin, DetailView):
 
     def get(self, request, *args, **kwargs):
         # Keep at the top to be able to access self.object.
-        response = super(MapView, self).get(request, *args, **kwargs)
+        response = super().get(request, *args, **kwargs)
         canonical = self.get_canonical_url()
         if not request.path == canonical:
             if request.META.get("QUERY_STRING"):
@@ -1474,29 +1478,27 @@ def stats(request):
     members = set(Team.users.through.objects.values_list("user_id", flat=True))
     orphans = set(users) - owners - editors - members
     return simple_json_response(
-        **{
-            "version": VERSION,
-            "realtime_enabled": settings.REALTIME_ENABLED,
-            "routing_enabled": bool(settings.OPENROUTESERVICE_APIKEY),
-            "anonymous_allowed": settings.UMAP_ALLOW_ANONYMOUS,
-            "importers": list(settings.UMAP_IMPORTERS.keys()),
-            "teams_count": Team.objects.count(),
-            "maps_count": Map.objects.count(),
-            "maps_active_last_week_count": Map.objects.filter(
-                modified_at__gt=last_week
-            ).count(),
-            "users_count": User.objects.count(),
-            "users_active_last_week_count": User.objects.filter(
-                last_login__gt=last_week
-            ).count(),
-            "active_sessions": Session.objects.filter(
-                expire_date__gt=datetime.utcnow()
-            ).count(),
-            "owners_count": len(owners),
-            "editors_count": len(editors),
-            "members_count": len(members),
-            "orphans_count": len(orphans),
-        }
+        version=VERSION,
+        realtime_enabled=settings.REALTIME_ENABLED,
+        routing_enabled=bool(settings.OPENROUTESERVICE_APIKEY),
+        anonymous_allowed=settings.UMAP_ALLOW_ANONYMOUS,
+        importers=list(settings.UMAP_IMPORTERS.keys()),
+        teams_count=Team.objects.count(),
+        maps_count=Map.objects.count(),
+        maps_active_last_week_count=Map.objects.filter(
+            modified_at__gt=last_week
+        ).count(),
+        users_count=User.objects.count(),
+        users_active_last_week_count=User.objects.filter(
+            last_login__gt=last_week
+        ).count(),
+        active_sessions=Session.objects.filter(
+            expire_date__gt=datetime.utcnow()
+        ).count(),
+        owners_count=len(owners),
+        editors_count=len(editors),
+        members_count=len(members),
+        orphans_count=len(orphans),
     )
 
 
@@ -1511,20 +1513,18 @@ design_system = DesignSystem.as_view()
 @cache_control(max_age=60 * 60 * 24, immutable=True, public=True)  # One day.
 def webmanifest(request):
     return simple_json_response(
-        **{
-            "icons": [
-                {
-                    "src": staticfiles_storage.url("umap/favicons/icon-192.png"),
-                    "type": "image/png",
-                    "sizes": "192x192",
-                },
-                {
-                    "src": staticfiles_storage.url("umap/favicons/icon-512.png"),
-                    "type": "image/png",
-                    "sizes": "512x512",
-                },
-            ]
-        }
+        icons=[
+            {
+                "src": staticfiles_storage.url("umap/favicons/icon-192.png"),
+                "type": "image/png",
+                "sizes": "192x192",
+            },
+            {
+                "src": staticfiles_storage.url("umap/favicons/icon-512.png"),
+                "type": "image/png",
+                "sizes": "512x512",
+            },
+        ]
     )
 
 

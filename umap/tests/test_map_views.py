@@ -21,8 +21,8 @@ User = get_user_model()
 def post_data():
     return {
         "name": "name",
-        "center": '{"type":"Point","coordinates":[13.447265624999998,48.94415123418794]}',  # noqa
-        "settings": '{"type":"Feature","geometry":{"type":"Point","coordinates":[5.0592041015625,52.05924589011585]},"properties":{"tilelayer":{"maxZoom":20,"url_template":"http://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png","minZoom":0,"attribution":"HOT and friends"},"licence":"","description":"","name":"test enrhûmé","tilelayersControl":true,"displayDataBrowserOnLoad":false,"displayPopupFooter":true,"displayCaptionOnLoad":false,"miniMap":true,"moreControl":true,"scaleControl":true,"zoomControl":true,"datalayersControl":true,"zoom":8}}',  # noqa
+        "center": '{"type":"Point","coordinates":[13.447265624999998,48.94415123418794]}',
+        "settings": '{"type":"Feature","geometry":{"type":"Point","coordinates":[5.0592041015625,52.05924589011585]},"properties":{"tilelayer":{"maxZoom":20,"url_template":"http://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png","minZoom":0,"attribution":"HOT and friends"},"licence":"","description":"","name":"test enrhûmé","tilelayersControl":true,"displayDataBrowserOnLoad":false,"displayPopupFooter":true,"displayCaptionOnLoad":false,"miniMap":true,"moreControl":true,"scaleControl":true,"zoomControl":true,"datalayersControl":true,"zoom":8}}',
     }
 
 
@@ -135,9 +135,9 @@ def test_wrong_slug_should_redirect_to_canonical(client, map):
 
 def test_wrong_slug_should_redirect_with_query_string(client, map):
     url = reverse("map", kwargs={"map_id": map.pk, "slug": "wrong-slug"})
-    url = "{}?editMode=simple".format(url)
+    url = f"{url}?editMode=simple"
     canonical = reverse("map", kwargs={"map_id": map.pk, "slug": map.slug})
-    canonical = "{}?editMode=simple".format(canonical)
+    canonical = f"{canonical}?editMode=simple"
     response = client.get(url)
     assert response.status_code == 301
     assert response["Location"] == canonical
@@ -145,7 +145,7 @@ def test_wrong_slug_should_redirect_with_query_string(client, map):
 
 def test_should_not_consider_the_query_string_for_canonical_check(client, map):
     url = reverse("map", kwargs={"map_id": map.pk, "slug": map.slug})
-    url = "{}?editMode=simple".format(url)
+    url = f"{url}?editMode=simple"
     response = client.get(url)
     assert response.status_code == 200
 
@@ -155,6 +155,14 @@ def test_map_headers(client, map):
     response = client.get(url)
     assert response.status_code == 200
     assert response.headers["Access-Control-Allow-Origin"] == "*"
+
+
+def test_map_with_malformed_tilelayer_url_should_not_crash(client, map):
+    map.settings["properties"]["tilelayer"]["url_template"] = "https://[/{z}/{x}/{y}"
+    map.save()
+    url = reverse("map", kwargs={"map_id": map.pk, "slug": map.slug})
+    response = client.get(url)
+    assert response.status_code == 200
 
 
 def test_short_url_should_redirect_to_canonical(client, map):
@@ -361,7 +369,7 @@ def test_logged_in_user_can_edit_map_editable_by_anonymous(client, map, user):
     url = reverse("map_update", kwargs={"map_id": map.pk})
     new_name = "this is my new name"
     data = {
-        "center": '{"type":"Point","coordinates":[13.447265624999998,48.94415123418794]}',  # noqa
+        "center": '{"type":"Point","coordinates":[13.447265624999998,48.94415123418794]}',
         "name": new_name,
     }
     response = client.post(url, data)
