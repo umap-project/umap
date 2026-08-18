@@ -665,7 +665,10 @@ class TileLayerManager {
   setOverlay() {
     const spec = this.app.properties.overlay
     if (!spec?.url_template) return
-    const overlay = this.create(spec)
+    const base = this.current?.options
+    const minZoom = spec.minZoom > base?.minZoom ? spec.minZoom : base?.minZoom
+    const maxZoom = spec.maxZoom < base?.maxZoom ? spec.maxZoom : base?.maxZoom
+    const overlay = this.create({ ...spec, minZoom, maxZoom })
     try {
       this.map.addLayer(overlay)
       if (this.overlay) this.map.removeLayer(this.overlay)

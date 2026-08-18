@@ -116,3 +116,41 @@ def test_can_have_smart_text_in_attribution(tilelayer, map, live_server, page):
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     expect(page.get_by_text("© OpenStreetMap contributors")).to_be_visible()
     expect(page.get_by_role("link", name="OpenStreetMap")).to_be_visible()
+
+
+def test_custom_tilelayer_maxzoom_is_respected(map, live_server, tilelayers, page):
+    map.settings["properties"]["tilelayer"]["maxZoom"] = 10
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.wait_for_selector(".leaflet-tile-pane img")
+    max_zoom = page.evaluate("() => U.MAP.mapProxy.map.getMaxZoom()")
+    assert max_zoom == 10
+
+
+def test_overlay_default_maxzoom_does_not_widen_base(
+    map, live_server, tilelayers, page
+):
+    map.settings["properties"]["tilelayer"]["maxZoom"] = 10
+    map.settings["properties"]["overlay"] = {
+        "url_template": "https://a.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
+        "attribution": "overlay",
+    }
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.wait_for_selector(".leaflet-tile-pane img")
+    max_zoom = page.evaluate("() => U.MAP.mapProxy.map.getMaxZoom()")
+    assert max_zoom == 10
+
+
+def test_overlay_higher_maxzoom_is_clamped_to_base(map, live_server, tilelayers, page):
+    map.settings["properties"]["tilelayer"]["maxZoom"] = 10
+    map.settings["properties"]["overlay"] = {
+        "url_template": "https://a.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
+        "attribution": "overlay",
+        "maxZoom": 20,
+    }
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.wait_for_selector(".leaflet-tile-pane img")
+    max_zoom = page.evaluate("() => U.MAP.mapProxy.map.getMaxZoom()")
+    assert max_zoom == 10
