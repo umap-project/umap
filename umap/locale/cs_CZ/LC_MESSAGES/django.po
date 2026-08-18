@@ -3,11 +3,12 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Aleš Fiala <ales.fiala.yakari1@seznam.cz>, 2026
 # Aleš Fiala <ales.fiala.yakari1@seznam.cz>, 2023-2024
 # Jakub A. Tesinsky, 2014
 # Jakub A. Tesinsky, 2014
 # Jiří Podhorecký, 2018-2019
-# Jiří Podhorecký <jirka.p@volny.cz>, 2018-2019,2023-2025
+# Jiří Podhorecký <jirka.p@volny.cz>, 2018-2019,2023-2026
 # Jiří Podhorecký <jirka.p@volny.cz>, 2019
 # Jiří Podhorecký <jirka.p@volny.cz>, 2018
 # Jiří Podhorecký <jirka.p@volny.cz>, 2018
@@ -16,9 +17,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-02 15:00+0000\n"
+"POT-Creation-Date: 2026-07-15 11:51+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
-"Last-Translator: Jiří Podhorecký <jirka.p@volny.cz>, 2018-2019,2023-2025\n"
+"Last-Translator: Aleš Fiala <ales.fiala.yakari1@seznam.cz>, 2026\n"
 "Language-Team: Czech (Czech Republic) (http://app.transifex.com/openstreetmap/umap/language/cs_CZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,27 +31,27 @@ msgstr ""
 msgid "CSV Export"
 msgstr "CSV Export"
 
-#: decorators.py:60
+#: decorators.py:70
 msgid "This map is not publicly available"
 msgstr "Tato mapa není veřejně dostupná"
 
-#: middleware.py:19
+#: middleware.py:42
 msgid "Site is readonly for maintenance"
 msgstr "Stránka je jen ke čtení kvůli údržbě"
 
-#: middleware.py:34
+#: middleware.py:57
 #, python-format
 msgid ""
 "Using “%(name)s” to authenticate is deprecated and will be removed soon. "
 "Please configure another provider below before losing access to your account"
 " and maps. Then, please logout and login again with the new provider."
-msgstr ""
+msgstr "Používání “%(name)s”  k ověřování je zastaralé a brzy bude odstraněno. Než ztratíte přístup ke svému účtu a mapám, nakonfigurujte prosím níže jiného poskytovatele. Poté se prosím odhlaste a znovu přihlaste s novým poskytovatelem."
 
 #: models.py:61 models.py:80
 msgid "name"
 msgstr "název"
 
-#: models.py:63 models.py:510
+#: models.py:63 models.py:534
 msgid "description"
 msgstr "popis"
 
@@ -70,23 +71,23 @@ msgstr "Vzor URL ve formátu pro dlaždice OSM "
 msgid "Order of the tilelayers in the edit box"
 msgstr "Pořadí vrstev při editaci"
 
-#: models.py:176 models.py:503
+#: models.py:176 models.py:527
 msgid "Only editable with secret edit link"
 msgstr "Lze upravovat jen pomocí tajného odkazu"
 
-#: models.py:177 models.py:504
+#: models.py:177 models.py:528
 msgid "Everyone can edit"
 msgstr "Kdokoli může editovat"
 
-#: models.py:180 models.py:497
+#: models.py:180 models.py:521
 msgid "Everyone"
 msgstr "Kdokoli"
 
-#: models.py:181 models.py:190 models.py:498
+#: models.py:181 models.py:190 models.py:522
 msgid "Editors and team only"
 msgstr "Pouze pro editory a tým"
 
-#: models.py:182 models.py:499
+#: models.py:182 models.py:523
 msgid "Owner only"
 msgstr "Jen vlastník"
 
@@ -106,7 +107,7 @@ msgstr "Kdokoli kdo má odkaz"
 msgid "Blocked"
 msgstr "Blokováno"
 
-#: models.py:192 models.py:493
+#: models.py:192 models.py:517
 msgid "Deleted"
 msgstr "Smazáno"
 
@@ -146,125 +147,125 @@ msgstr "přispěvovatelé"
 msgid "team"
 msgstr "tým"
 
-#: models.py:230 models.py:526
+#: models.py:230 models.py:550
 msgid "edit status"
 msgstr "kdo může provádět úpravy"
 
-#: models.py:235 models.py:531
+#: models.py:235 models.py:555
 msgid "share status"
 msgstr "nastavení sdílení"
 
-#: models.py:238 models.py:521
+#: models.py:238 models.py:545
 msgid "settings"
 msgstr "nastavení"
 
 #: models.py:243
 msgid "save as template"
-msgstr ""
+msgstr "uložit jako šablonu"
 
 #: models.py:244
 msgid "This map is a template map."
-msgstr ""
+msgstr "Tato mapa je šablonová mapa."
 
-#: models.py:422
+#: models.py:435
 msgid "Clone of"
 msgstr "Kopie"
 
-#: models.py:492 models.py:496 models.py:502
+#: models.py:516 models.py:520 models.py:526
 msgid "Inherit"
 msgstr "Zdědit"
 
-#: models.py:516
+#: models.py:540
 msgid "display on load"
 msgstr "zobrazit při startu"
 
-#: models.py:517
+#: models.py:541
 msgid "Display this layer on load."
 msgstr "Zobrazit tuto vrstvu na startu."
 
-#: settings/base.py:285
+#: settings/base.py:287
 msgid "uMap user documentation"
-msgstr ""
+msgstr "Uživatelská dokumentace uMap"
 
-#: settings/base.py:290
+#: settings/base.py:292
 msgid "Video tutorials"
-msgstr ""
+msgstr "Video návody"
 
-#: settings/base.py:295
+#: settings/base.py:297
 msgid "OpenStreetMap.org forum"
-msgstr ""
+msgstr "OpenStreetMap.org fórum"
 
-#: settings/base.py:300
+#: settings/base.py:302
 msgid "OpenStreetMap France forum"
-msgstr ""
-
-#: settings/base.py:320
-msgid "Art and Culture"
-msgstr ""
-
-#: settings/base.py:321
-msgid "Cycling"
-msgstr ""
+msgstr "Fórum OpenStreetMap Francie"
 
 #: settings/base.py:322
-msgid "Business"
-msgstr ""
+msgid "Art and Culture"
+msgstr "Umění a kultura"
 
 #: settings/base.py:323
-msgid "Environment"
-msgstr ""
+msgid "Cycling"
+msgstr "Cyklistika"
 
 #: settings/base.py:324
-msgid "Education"
-msgstr ""
+msgid "Business"
+msgstr "Obchod"
 
 #: settings/base.py:325
-msgid "Food and Agriculture"
-msgstr ""
+msgid "Environment"
+msgstr "Životní prostředí"
 
 #: settings/base.py:326
-msgid "Geopolitics"
-msgstr ""
+msgid "Education"
+msgstr "Vzdělání"
 
 #: settings/base.py:327
-msgid "Health"
-msgstr ""
+msgid "Food and Agriculture"
+msgstr "Potraviny a zemědělství"
 
 #: settings/base.py:328
-msgid "Hiking"
-msgstr ""
+msgid "Geopolitics"
+msgstr "Geopolitika"
 
 #: settings/base.py:329
-msgid "History"
-msgstr ""
+msgid "Health"
+msgstr "Zdraví"
 
 #: settings/base.py:330
-msgid "Public sector"
-msgstr ""
+msgid "Hiking"
+msgstr "Turistika"
 
 #: settings/base.py:331
-msgid "Science"
-msgstr ""
+msgid "History"
+msgstr "Historie"
 
 #: settings/base.py:332
-msgid "Shopping"
-msgstr ""
+msgid "Public sector"
+msgstr "Veřejný sektor"
 
 #: settings/base.py:333
-msgid "Sport and Leisure"
-msgstr ""
+msgid "Science"
+msgstr "Věda"
 
 #: settings/base.py:334
-msgid "Travel"
-msgstr ""
+msgid "Shopping"
+msgstr "Nakupování"
 
 #: settings/base.py:335
-msgid "Transports"
-msgstr ""
+msgid "Sport and Leisure"
+msgstr "Sport a volný čas"
 
 #: settings/base.py:336
+msgid "Travel"
+msgstr "Cestování"
+
+#: settings/base.py:337
+msgid "Transports"
+msgstr "Přeprava"
+
+#: settings/base.py:338
 msgid "Tourism"
-msgstr ""
+msgstr "Cestovní ruch"
 
 #: templates/403.html:8
 msgid ""
@@ -428,13 +429,13 @@ msgid ""
 "Oops, I didn't mean it, I want to <a href=\"%(LOGIN_URL)s\" "
 "class=\"login\">create an account</a> or <a href=\"%(LOGIN_URL)s\" "
 "class=\"login\">log in</a> (no worry, we'll attach the map to your account)."
-msgstr ""
+msgstr "Jejda, to jsem nemyslel/a vážně, chci si <a href=\"%(LOGIN_URL)s\" class=\"login\">vytvořit účet</a> nebo se <a href=\"%(LOGIN_URL)s\" class=\"login\">přihlásit</a> (žádný problém, mapu k vašemu účtu připojíme)."
 
 #: templates/umap/components/alerts/alert.html:34
 msgid ""
 "Yes, I want to continue editing anonymously, I will save the secret edit "
 "link to be able to edit this map later or on another device"
-msgstr ""
+msgstr "Ano, chci pokračovat v úpravách anonymně, uložím si tajný odkaz pro úpravy, abych mohl tuto mapu upravovat později nebo na jiném zařízení."
 
 #: templates/umap/components/alerts/alert.html:38
 msgid "Here is your secret link to edit the map, please keep it safe:"
@@ -505,7 +506,7 @@ msgstr "Nápověda"
 
 #: templates/umap/content_footer.html:10
 msgid "Terms of Service"
-msgstr ""
+msgstr "Podmínky služby"
 
 #: templates/umap/dashboard_menu.html:6
 #, python-format
@@ -519,11 +520,11 @@ msgstr "Moje mapy"
 #: templates/umap/dashboard_menu.html:11
 #, python-format
 msgid "My Templates (%(count)s)"
-msgstr ""
+msgstr "Moje šablony (%(count)s)"
 
 #: templates/umap/dashboard_menu.html:13 templates/umap/user_templates.html:6
 msgid "My Templates"
-msgstr ""
+msgstr "Moje šablony"
 
 #: templates/umap/dashboard_menu.html:17
 msgid "My profile"
@@ -543,7 +544,7 @@ msgstr "Jste přihlášeni. Jedeme dál ..."
 
 #: templates/umap/map_list.html:15
 msgid "template"
-msgstr ""
+msgstr "šablona"
 
 #: templates/umap/map_list.html:18
 msgid "by"
@@ -551,11 +552,11 @@ msgstr ", autor:"
 
 #: templates/umap/map_list.html:22
 msgid "See the template"
-msgstr ""
+msgstr "Viz šablona"
 
 #: templates/umap/map_list.html:22
 msgid "See the map"
-msgstr ""
+msgstr "Viz mapa"
 
 #: templates/umap/map_list.html:28
 msgid "More"
@@ -724,7 +725,7 @@ msgstr "Mapa nenalezena."
 
 #: templates/umap/search.html:36
 msgid "Latest created maps in category"
-msgstr ""
+msgstr "Nejnovější vytvořené mapy v kategorii"
 
 #: templates/umap/search.html:43
 msgid "Latest created maps"
@@ -736,7 +737,7 @@ msgstr "Prohledávejte mapy"
 
 #: templates/umap/search_bar.html:14 templates/umap/user_map_table.html:15
 msgid "Any category"
-msgstr ""
+msgstr "Jakákoliv kategorie"
 
 #: templates/umap/search_bar.html:19
 msgid "Search"
@@ -769,7 +770,7 @@ msgstr "Vytvořit nebo upravit tým"
 msgid "Delete this team"
 msgstr "Smazat tento tým"
 
-#: templates/umap/team_form.html:51
+#: templates/umap/team_form.html:52
 msgid "Add user"
 msgstr "Přidat uživatele"
 
@@ -779,7 +780,7 @@ msgstr "Prohledávat moje mapy"
 
 #: templates/umap/user_dashboard.html:11
 msgid "Map’s name"
-msgstr ""
+msgstr "Název mapy"
 
 #: templates/umap/user_dashboard.html:12
 #, python-format
@@ -804,93 +805,105 @@ msgstr "Nový tým"
 
 #: templates/umap/user_templates.html:10
 msgid "Search my templates"
-msgstr ""
+msgstr "Prohledat moje šablony"
 
 #: templates/umap/user_templates.html:11
 msgid "Template’s name"
-msgstr ""
+msgstr "Název šablony"
 
 #: templates/umap/user_templates.html:12
 #, python-format
 msgid "Download %(count)s templates"
-msgstr ""
+msgstr "Stáhnout %(count)s šablony"
 
 #: templates/umap/user_templates.html:15
 msgid "You have no template yet."
-msgstr ""
+msgstr "Zatím nemáte žádnou šablonu"
 
 #: templates/umap/user_templates.html:16
 msgid "Create a template"
-msgstr ""
+msgstr "Vytvořit šablonu"
 
 #: templates/umap/user_templates.html:17
 msgid "No template found."
-msgstr ""
+msgstr "Šablona nenalezena."
 
-#: views.py:226
+#: views.py:98
+msgid "5 min"
+msgstr "5 minut"
+
+#: views.py:99
+msgid "1 hour"
+msgstr "1 hodina"
+
+#: views.py:100
+msgid "1 day"
+msgstr "1 den"
+
+#: views.py:237
 msgid "Cannot delete a team with more than one member"
 msgstr "Nelze smazat tým s více než jedním členem"
 
-#: views.py:230
+#: views.py:241
 #, python-format
 msgid "Team “%(name)s” has been deleted"
 msgstr "Tým \"%(name)s\" byl smazán"
 
-#: views.py:809
+#: views.py:895
 msgid "See full screen"
 msgstr "Zobrazit celou obrazovku"
 
-#: views.py:952
+#: views.py:1038
 msgid "Map editors updated with success!"
 msgstr "Seznam přispěvovatelů byl úspěšně upraven!"
 
-#: views.py:977
+#: views.py:1063
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "Odkaz na úpravu uMap pro vaši mapu: %(map_name)s"
 
-#: views.py:980
+#: views.py:1066
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Zde je váš tajný odkaz na úpravu: %(link)s"
 
-#: views.py:987
+#: views.py:1073
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "Nelze odeslat e-mail na %(email)s"
 
-#: views.py:990
+#: views.py:1076
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "E-mail odeslán na %(email)s"
 
-#: views.py:1001
+#: views.py:1087
 msgid "Only its owner can delete the map."
 msgstr "Jen vlastník může vymzat tuto mapu."
 
-#: views.py:1007
+#: views.py:1093
 msgid "Map successfully deleted."
 msgstr "Mapa byla úspěšně smazána."
 
-#: views.py:1033
+#: views.py:1119
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Byla vytvořena kopie mapy! Pokud chcete upravovat tuto mapu z jiného počítače, použijte tento odkaz: %(anonymous_url)s"
 
-#: views.py:1038
+#: views.py:1124
 msgid "Congratulations, your map has been cloned!"
 msgstr "Gratulujeme, byla vytvořena kopie mapy!"
 
-#: views.py:1298
+#: views.py:1392
 msgid "Layer successfully deleted."
 msgstr "Vrstva úspěšně vymazána."
 
-#: views.py:1320
+#: views.py:1414
 msgid "Permissions updated with success!"
 msgstr "Oprávnění úspěšně aktualizována!"
 
-#: views.py:1337
+#: views.py:1431
 msgid "Generic"
-msgstr ""
+msgstr "Generická"

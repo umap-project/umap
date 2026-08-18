@@ -655,7 +655,7 @@ const locale = {
     "Parent group": "Nadřazená skupina",
     "Group properties": "Vlastnosti skupiny",
     "Choose a group": "Vyberte skupinu",
-    "Change map background": "Change map background"
+    "Change map background": "Změnit pozadí mapy"
 }
 L.registerLocale("cs_CZ", locale)
 L.setLocale("cs_CZ")
