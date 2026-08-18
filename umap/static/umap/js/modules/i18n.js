@@ -25,10 +25,7 @@ export function getLocale() {
 
 function interpolate(str, ctx) {
   return Utils.escapeHTML(
-    str
-      .split(/\{|\}/)
-      .map((t, i) => (!(i % 2) ? t : ctx[t]))
-      .join('')
+    str.replace(/\{ *([\w_-]+) *\}/g, (match, key) => (key in ctx ? ctx[key] : match))
   )
 }
 
