@@ -6,9 +6,6 @@ import * as GeoUtils from '../geoutils.js'
 import { translate } from '../i18n.js'
 import { FeatureManager, LayerManager } from '../managers.js'
 import { DataLayerPermissions } from '../permissions.js'
-import { Default as DefaultLayer } from '../rendering/layers/base.js'
-import { Cluster } from '../rendering/layers/cluster.js'
-import { Heat } from '../rendering/layers/heat.js'
 import Rules from '../rules.js'
 import * as Schema from '../schema.js'
 import * as Utils from '../utils.js'
@@ -40,21 +37,20 @@ export class DataLayer {
     delete spec.properties?.rank
     delete spec.properties?.id
     delete spec.properties?.editMode
-    this.setProperties(spec.properties)
-    this.properties.name = this.properties.name || this.defaultName()
 
-    this.parentPane = this.app.mapProxy.overlayPane
+    // Resolve parent/rank before the first render: the layer is built lazily (show/addData),
+    // and createLayer needs parentId (Leaflet pane parent) and rank (OL zIndex) already set.
     if (spec.parent) {
       this.parentId = spec.parent
       if (!this.parent) {
         console.error(`Parent defined but not found: ${spec.parent} (self: ${this.id})`)
       }
-      this.parentPane = this.parent.pane
     } else {
       this.app.layers.add(this)
     }
-    this.pane = this.app.mapProxy.createOverlayPane(this.id, this.parentPane)
-    this.pane.dataset.id = this.id
+
+    this.setProperties(spec.properties)
+    this.properties.name = this.properties.name || this.defaultName()
 
     if (!Utils.isObject(this.properties.remoteData)) {
       this.properties.remoteData = {}
@@ -70,7 +66,10 @@ export class DataLayer {
     }
     this.permissions = new DataLayerPermissions(this.app, this, spec.permissions)
 
+    this.setType()
+
     this._needsFetch = this.createdOnServer || this.isRemoteLayer()
+    this._needsRenderer = true
     this.fields = new Fields(this, this.app.dialog)
     this.filters = new Filters(this, this.app)
     this.rules = new Rules(app, this)
@@ -143,9 +142,9 @@ export class DataLayer {
 
   defaultName() {
     if (this.group) {
-      return `${translate('Group')} ${this.app.layers.tree.filter((l) => l.group).count() + 1}`
+      return `${translate('Group')} ${this.app.layers.tree.filter((l) => l.group).count()}`
     }
-    return `${translate('Layer')} ${this.app.layers.tree.count() + 1}`
+    return `${translate('Layer')} ${this.app.layers.tree.count()}`
   }
 
   async render(fields, builder) {
@@ -174,7 +173,7 @@ export class DataLayer {
           break
         case 'data':
           if (fields.includes('properties.type')) {
-            this.resetLayer()
+            await this.resetLayer(true)
           }
           await this.compute()
           this.redraw()
@@ -184,7 +183,7 @@ export class DataLayer {
           this.fetchRemoteData()
           break
         case 'datalayer-rank':
-          this.app.reorderDOM()
+          this.app.reorderLayers()
           break
       }
     }
@@ -242,32 +241,32 @@ export class DataLayer {
     this._autoVisibility = value
   }
 
-  reorderDOM() {
-    for (const layer of this.layers.root.reverse()) {
-      this.parentPane.appendChild(layer.pane)
-    }
+  setType() {
+    this.Type = loadType(this.properties.type)
+    this.Type.ensureProperties(this.properties)
   }
 
-  bringToTop() {
-    this.parentPane.appendChild(this.pane)
+  async ensureLayer() {
+    if (!this._needsRenderer) return
+    await this.app.mapProxy.createLayer(this)
+    this._needsRenderer = false
   }
 
-  resetLayer(force) {
-    // Only reset if type is defined (undefined is the default) and different from current type
-    if (
-      this.Type &&
-      (!this.properties.type || this.properties.type === this.Type.type) &&
-      !force
-    ) {
+  async resetLayer(force) {
+    // Nothing to reset before the renderer's first build; it will pick up the
+    // current type when it is eventually built. `this.Type` is the type the layer
+    // was built for, so a differing properties.type means we must rebuild.
+    if (this._needsRenderer) return
+    if ((!this.properties.type || this.properties.type === this.Type?.type) && !force) {
       return
     }
     const visible = this.isVisible()
-    if (this.Type) this.app.mapProxy.clear(this.id)
-    if (visible) this.app.mapProxy.hideLayer(this.id)
-    // this.Type is needed by createLayer (for cluster/heat)
-    this.Type = loadType(this.properties.type)
-    this.Type.ensureProperties(this.properties)
-    this.app.mapProxy.createLayer(this)
+    this.app.mapProxy.deleteLayer(this.id)
+    this.setType()
+    this._needsRenderer = true
+    await this.ensureLayer()
+    // deleteLayer dropped the source; repopulate it.
+    this.app.mapProxy.addData(this.id, this.toRenderer())
     if (visible) this.show()
   }
 
@@ -425,15 +424,6 @@ export class DataLayer {
     return this.properties.type === 'Cluster'
   }
 
-  // showFeature(feature) {
-  //   if (feature.isFiltered()) return
-  //   // this.layer.addLayer(feature.ui)
-  // }
-
-  // hideFeature(feature) {
-  //   this.app.mapProxy.removeFeature(this.id, feature.id)
-  // }
-
   addFeature(feature, sync = false) {
     if (this.group) {
       console.error('Adding feature to a group', feature, this.datalayer)
@@ -530,11 +520,12 @@ export class DataLayer {
     this.computed = await this.Type.compute(
       this.properties,
       this.features.all(),
-      this.fields.keys()
+      Array.from(this.fields.keys())
     )
   }
 
   async addData(geojson, sync) {
+    await this.ensureLayer()
     const id = Math.random()
     this.app.loader.start(id)
     let data = []
@@ -588,13 +579,13 @@ export class DataLayer {
     return features
   }
 
-  makeFeature(geojson = {}, sync = true, id = null) {
-    const feature = this._buildFeature(geojson, sync, id)
+  makeFeature(geojson = {}, sync = true, id = null, allowEmpty = false) {
+    const feature = this._buildFeature(geojson, sync, id, allowEmpty)
     if (feature) this.app.mapProxy.addFeature(this.id, feature.toRenderer())
     return feature
   }
 
-  _buildFeature(geojson = {}, sync = true, id = null) {
+  _buildFeature(geojson = {}, sync = true, id = null, allowEmpty = false) {
     // Both Feature and Geometry are valid geojson objects.
     const geometry = geojson.geometry || geojson
     let feature
@@ -616,6 +607,8 @@ export class DataLayer {
         break
       case 'MultiLineString':
       case 'LineString':
+        // In case of mixed 2D/3D coordinates, OL will fail.
+        GeoUtils.normalizeCoords(geometry)
         feature = new LineString(this.app, this, geojson, id)
         break
       case 'MultiPolygon':
@@ -632,9 +625,21 @@ export class DataLayer {
           )
         }
     }
-    if (feature && !feature.isEmpty()) {
+    if (feature && (allowEmpty || !feature.isEmpty())) {
       return this.addFeature(feature, sync)
     }
+  }
+
+  makeRoute() {
+    const route = this.makeFeature(
+      { type: 'LineString', coordinates: [] },
+      false,
+      null,
+      true
+    )
+    // Defer the server commit until the route is valid (first computed segment).
+    route._needs_upsert = true
+    return route
   }
 
   async importRaw(raw, format) {
@@ -725,7 +730,7 @@ export class DataLayer {
     }
     if (root) this.journal.commitBatch()
     this.hide()
-    this.parentPane.removeChild(this.pane)
+    this.app.mapProxy.deleteLayer(this.id)
     if (root) this.dataChanged()
     this.propagateDelete()
   }
@@ -762,15 +767,13 @@ export class DataLayer {
       return
     }
     if (!this.isVisible()) return
-    // TODO: Let's reset for now, and add a more gentle way to redraw later
-    this.app.mapProxy.clear(this.id)
-    this.app.mapProxy.addData(this.id, this.toRenderer())
+    this.app.mapProxy.redraw(this.id, this.toRenderer())
   }
 
-  reindex() {
+  async reindex() {
     this.features.sort(this.sortKey)
     if (this.isBrowsable()) {
-      this.resetLayer(true)
+      await this.resetLayer(true)
     }
   }
 
@@ -998,10 +1001,11 @@ export class DataLayer {
       'properties.textPathRotate',
       'properties.textPathSize',
       'properties.textPathOffset',
+      'properties.textPathPlacement',
       'properties.textPathPosition',
     ]
     const builder = new MutatingForm(this, fields)
-    const fieldset = DOMUtils.createFieldset(container, translate('Line decoration'))
+    const fieldset = DOMUtils.createFieldset(container, translate('Text decoration'))
     fieldset.appendChild(await builder.build())
   }
 
@@ -1232,6 +1236,7 @@ export class DataLayer {
   }
 
   async show() {
+    await this.ensureLayer()
     this.app.mapProxy.showLayer(this.id)
     if (!this.isLoaded()) await this.fetchData()
     this.propagateVisibility({ force: true })
@@ -1302,7 +1307,7 @@ export class DataLayer {
 
   zoomToBounds(bounds) {
     if (GeoUtils.isValidBbox(bounds)) {
-      this.app.fire('map:view:fit-bounds', {
+      this.app.fire('map:view:fit', {
         bounds,
         zoom: this.getProperty('zoomTo'),
       })
@@ -1378,10 +1383,6 @@ export class DataLayer {
         .filter((feature) => !feature.isFiltered() && !feature.isEmpty())
         .map((feature) => feature.toRenderer()),
     }
-  }
-
-  getDOMOrder() {
-    return Array.from(this.parentPane.children).indexOf(this.pane)
   }
 
   isReadOnly() {

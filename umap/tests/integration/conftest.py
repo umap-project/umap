@@ -1,9 +1,14 @@
 import os
 import re
+from io import BytesIO
+from pathlib import Path
 
 import pytest
 from daphne.testing import DaphneProcess
 from django.contrib.staticfiles.handlers import ASGIStaticFilesHandler
+from django.template.defaultfilters import slugify
+from PIL import Image
+from pixelmatch.contrib.PIL import pixelmatch
 from playwright.sync_api import expect
 
 from umap.asgi import application
@@ -11,9 +16,25 @@ from umap.asgi import application
 from ..base import mock_tiles
 
 
+def tiles_are_mocked():
+    # PWDEBUG/FORCE_TILES load real tiles, so map content is non-deterministic.
+    return not bool(os.environ.get("PWDEBUG", os.environ.get("FORCE_TILES", False)))
+
+
 @pytest.fixture(scope="session")
 def browser_context_args(browser_context_args):
-    return {**browser_context_args, "locale": "en-GB", "timezone_id": "Europe/Paris"}
+    return {
+        **browser_context_args,
+        "locale": "en-GB",
+        "timezone_id": "Europe/Paris",
+        # Pin everything that shifts pixels across machines/CI so screenshots are
+        # reproducible: fixed window, no Retina scaling, light theme, no motion.
+        "viewport": {"width": 1280, "height": 720},
+        "device_scale_factor": 1,
+        "color_scheme": "light",
+        "reduced_motion": "reduce",
+        "forced_colors": "none",
+    }
 
 
 @pytest.fixture(autouse=True)
@@ -39,7 +60,7 @@ def new_page(context):
             "pageerror",
             lambda exc: print(f"{prefix} uncaught exception:\n{exc.stack}"),
         )
-        if not bool(os.environ.get("PWDEBUG", os.environ.get("FORCE_TILES", False))):
+        if tiles_are_mocked():
             page.route(re.compile(r".*\btile\..*"), mock_tiles)
         return page
 
@@ -54,7 +75,7 @@ def page(new_page):
 @pytest.fixture
 def wait_for_loaded():
     def _(page):
-        page.wait_for_function("() => U.MAP.dataloaded === true")
+        page.wait_for_function("() => U.MAP.loaded === true")
 
     return _
 
@@ -84,13 +105,13 @@ def login(new_page, settings, live_server):
     return do_login
 
 
-def asig_application():
+def asgi_application():
     return ASGIStaticFilesHandler(application)
 
 
 @pytest.fixture(scope="function")
 def asgi_live_server(request, live_server, settings, db):
-    server = DaphneProcess("localhost", asig_application)
+    server = DaphneProcess("localhost", asgi_application)
     server.start()
     server.ready.wait()
     port = server.port.value
@@ -100,3 +121,70 @@ def asgi_live_server(request, live_server, settings, db):
 
     server.terminate()
     server.join()
+
+
+@pytest.fixture
+def assert_screenshot(request, wait_for_loaded):
+    update = request.config.getoption("--update-screenshots")
+
+    def assert_(locator_or_page, suffix="", clip=None):
+        # Hide this helper's frame so a failure points at the calling test line.
+        __tracebackhide__ = True
+        # expected screenshots are run without tiles, so in DEBUG mode trying to
+        # compare screenshots will always fail.
+        if not tiles_are_mocked():
+            return
+        page = (
+            locator_or_page.page
+            if hasattr(locator_or_page, "page")
+            else locator_or_page
+        )
+        dirname = Path(__file__).parent.parent / "screenshots"
+        suffix = f"-{suffix}" if suffix else ""
+        basename = slugify(f"{request.module.__name__}.{request.node.name}{suffix}")
+        expected_filename = dirname / f"{basename}.expected.png"
+        wait_for_loaded(page)
+        # Wait 200ms for any map repaint, so to have a stable canvas in the screenshot
+        page.evaluate(
+            """() => new Promise((resolve) => {
+              const map = U.MAP.mapProxy.map
+              let timer
+              const bump = () => { clearTimeout(timer); timer = setTimeout(done, 200) }
+              const done = () => { map.un('rendercomplete', bump); resolve() }
+              map.on('rendercomplete', bump)
+              bump()
+            })"""
+        )
+        # Freeze CSS animations/transitions (e.g. the edit bar sliding in) to their
+        # final state, else the capture races the animation and flakes.
+        kwargs = {}
+        if clip:
+            kwargs["clip"] = clip
+        screenshot = locator_or_page.screenshot(animations="disabled", **kwargs)
+        if update:
+            expected_filename.write_bytes(screenshot)
+            return
+        if not expected_filename.exists():
+            raise AssertionError(
+                f"Missing screenshot baseline: {expected_filename}\n"
+                "Run the tests with --update-screenshots to create it."
+            )
+        expected = Image.open(expected_filename)
+        actual = Image.open(BytesIO(screenshot))
+        img_diff = Image.new("RGBA", expected.size)
+        mismatch = pixelmatch(
+            expected, actual, img_diff, includeAA=False, threshold=0.3
+        )
+        if mismatch:
+            actual_filename = dirname / f"{basename}.actual.png"
+            diff_filename = dirname / f"{basename}.diff.png"
+            actual_filename.write_bytes(screenshot)
+            img_diff.save(diff_filename)
+            raise AssertionError(
+                f"Screenshot mismatch: {mismatch} pixels differ.\n"
+                f"  expected: {expected_filename}\n"
+                f"  actual:   {actual_filename}\n"
+                f"  diff:     {diff_filename}"
+            )
+
+    return assert_

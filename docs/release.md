@@ -20,7 +20,7 @@
     - `make tx_pull` to retrieve new translations from transifex
     - `make compilemessages` to create regular `.mo` + `umap/static/umap/locale/*.js`
     - commit new translations `git commit -am "i18n"`
-2. Test collectstatic: `umap collectstatic --no-input`
+2. Test collectstatic: `make buildjs && umap collectstatic --no-input`
 2. Bump version: `make patch|minor`
 2. Ask automatic release notes to Github: `make changelog` and paste it in `docs/changelog.md`
 3. `git commit -am "2.X.Y"`

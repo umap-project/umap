@@ -1,5 +1,5 @@
-import * as Utils from '../utils.js'
 import * as Schema from '../schema.js'
+import * as Utils from '../utils.js'
 
 /**
  * Updaters are classes able to convert messages

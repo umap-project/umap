@@ -1,4 +1,8 @@
-const locale = {
+
+import { registerLocale, setLocale } from '/static/umap/dist/i18n.js'
+
+setLocale('si')
+registerLocale('si', {
     "(area: {measure})": "(area: {measure})",
     "(length: {measure})": "(length: {measure})",
     "# one hash for main heading": "# one hash for main heading",
@@ -482,6 +486,4 @@ const locale = {
     "Search area": "Search area",
     "Type area name, or let empty to load data in current map view": "Type area name, or let empty to load data in current map view",
     "Please define an expression for the query first": "Please define an expression for the query first"
-}
-L.registerLocale("si", locale)
-L.setLocale("si")
+})

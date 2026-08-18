@@ -1,5 +1,6 @@
 import multiprocessing
 import shutil
+import subprocess
 import tempfile
 
 import pytest
@@ -20,6 +21,15 @@ from .base import (
 TMP_ROOT = tempfile.mkdtemp()
 
 
+def pytest_addoption(parser):
+    parser.addoption(
+        "--update-screenshots",
+        action="store_true",
+        default=False,
+        help="Write screenshot baselines instead of comparing against them.",
+    )
+
+
 def pytest_configure(config):
     # Ugly but make asgi_live_server work, otherwise Daphne will use a spawn process
     # (since python 3.14) and thus start a fresh Django without default settings
@@ -32,6 +42,12 @@ def pytest_configure(config):
 def pytest_runtest_teardown():
     shutil.rmtree(TMP_ROOT, ignore_errors=True)
     cache.clear()
+
+
+@pytest.fixture(scope="session", autouse=True)
+def run_global_setup():
+    subprocess.run(["npm", "run", "build:prod"])
+    yield
 
 
 @pytest.fixture

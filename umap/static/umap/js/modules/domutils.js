@@ -55,25 +55,34 @@ export const colorToRGB = (color) => {
 }
 
 const CACHE_CONTRAST = {}
-export const contrastedColor = (el, bgcolor) => {
-  // Return 0 for black and 1 for white
-  // bgcolor is a human color, it can be a any keyword (purple…)
-  if (typeof CACHE_CONTRAST[bgcolor] !== 'undefined') return CACHE_CONTRAST[bgcolor]
-  let rgb = window.getComputedStyle(el).getPropertyValue('background-color')
-  rgb = RGBRegex.exec(rgb)
-  if (rgb && rgb.length === 4) {
-    rgb = [
-      Number.parseInt(rgb[1], 10),
-      Number.parseInt(rgb[2], 10),
-      Number.parseInt(rgb[3], 10),
-    ]
-  } else {
-    // The element may not yet be added to the DOM, so let's try
-    // another way
-    const hex = colorNameToHex(bgcolor)
-    rgb = hexToRGB(hex)
+export const contrastedColorFromColor = (bgcolor) => {
+  if (CACHE_CONTRAST[bgcolor] === undefined) {
+    CACHE_CONTRAST[bgcolor] = contrastWCAG21(colorToRGB(bgcolor))
   }
-  if (!rgb) return 1
+  return CACHE_CONTRAST[bgcolor]
+}
+
+export const blackOrWhite = (bgcolor) =>
+  contrastedColorFromColor(bgcolor) ? '#ffffff' : '#000000'
+
+const rgbFromComputedStyle = (el) => {
+  const match = RGBRegex.exec(
+    window.getComputedStyle(el).getPropertyValue('background-color')
+  )
+  if (!match) return null
+  return [
+    Number.parseInt(match[1], 10),
+    Number.parseInt(match[2], 10),
+    Number.parseInt(match[3], 10),
+  ]
+}
+
+// DOM variant: prefer the element's actually-rendered background; fall back to the color
+// string (e.g. when the element isn't added to the DOM yet).
+export const contrastedColor = (el, bgcolor) => {
+  if (CACHE_CONTRAST[bgcolor] !== undefined) return CACHE_CONTRAST[bgcolor]
+  const rgb = rgbFromComputedStyle(el)
+  if (!rgb) return contrastedColorFromColor(bgcolor)
   const out = contrastWCAG21(rgb)
   if (bgcolor) CACHE_CONTRAST[bgcolor] = out
   return out

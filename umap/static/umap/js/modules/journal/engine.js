@@ -2,11 +2,11 @@ import * as Utils from '../utils.js'
 import { HybridLogicalClock } from './hlc.js'
 import { UndoManager } from './undo.js'
 import {
+  DataLayerPermissionsUpdater,
   DataLayerUpdater,
   FeatureUpdater,
-  MapUpdater,
   MapPermissionsUpdater,
-  DataLayerPermissionsUpdater,
+  MapUpdater,
 } from './updaters.js'
 import { WebSocketTransport } from './websocket.js'
 
@@ -169,6 +169,15 @@ export class Journal {
   }
 
   upsert(subject, metadata, value, oldValue) {
+    if (typeof value === 'function') {
+      return this._track(
+        (async () => {
+          const resolved = await value()
+          if (resolved === undefined) return
+          this.upsert(subject, metadata, resolved, oldValue)
+        })()
+      )
+    }
     const operation = {
       verb: 'upsert',
       subject,
