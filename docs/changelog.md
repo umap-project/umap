@@ -1,55 +1,11 @@
 # Changelog
 
-## 3.8.0a6 - 2026-07-25
+## 3.8.0 - 2026-08-18
 
-* fix testpath skipped since switch to LeafletProxy by @yohanboniface in #3449
-* fix crash on user list admin page by @yohanboniface in #3451
+This release is mainly about preparing the switch [from Leaflet to OpenLayers](https://www.openstreetmap.org/user/David%20Larlet/diary/409079).
 
-## 3.8.0a5 - 2026-07-18
-
-* align popup content for RTL languages by @ergs0204 in #3432
-* restore popup large mode by @yohanboniface in #3439
-* fix edit center form not showing lat/lng by @yohanboniface in #3438
-* restore form order in edit caption panel by @yohanboniface in #3435
-* use sha256 instead of base64 for ajax proxy cache file names by @yohanboniface in #3437
-* fix overlay opacity initial value by @yohanboniface in #3436
-* fix conflict between limitBounds and tilelayer minZoom by @yohanboniface in #3440
-
-## 3.8.0a4 - 2026-07-16
-
-* reduce database queries for map detail view by @davidbgk in #3430
-* restore original forms/fields order in permissions panel by @yohanboniface in #3429
-* fix browser form order by @yohanboniface in #3431
-* also show show/total counter in browser when filtering by bbox
-* expose TTL and DEFAULT_TTL in map fragment
-
-## 3.8.0a3 - 2026-07-16
-
-* truncate the cache file name not to hit Linux limit by @yohanboniface in #3428
-
-## 3.8.0a2 - 2026-07-16
-
-* review ajax proxy by @yohanboniface in #3425
-* redraw cluster on moveend, and pass correct zoom arg to flyTo by @yohanboniface in #3427
-* add back background-color of attribution control by @yohanboniface in #3426
-* add uv.lock to gitignore by @davidbgk in #3424
-
-## 3.8.0a1 - 2026-07-15
-
-### Bug fixes
-* SCHEMA is now imported as Schema by @yohanboniface in #3417
-* do not share loader event between maps by @yohanboniface in #3418
-* only show the more button if at least one control is in hidden by @yohanboniface in #3419
-* be more defensive for invalid datetime by @yohanboniface in #3420
-* do not register a new url on each hash change by @davidbgk in #3422
-* restore correct order for forms and fieldsets in feature edit by @yohanboniface in #3421
-* use schema to validate a value for a given property by @yohanboniface in #3423
-
-## 3.8.0a0 - 2026-07-15
-
-This release is mainly about preparing the switch from Leaflet to OpenLayers.
-New mandatory setting: AJAX_PROXY_CACHE_DIR (used for caching proxied request, now done
-in python instead of via Nginx).
+**New mandatory setting: [AJAX_PROXY_CACHE_DIR](https://docs.umap-project.org/en/stable/config/settings/#ajax_proxy_cache_dir)**
+(used for caching proxied request, now done in python instead of via Nginx).
 
 ### Bug fixes
 * read OPENROUTESERVICE_HOST from env by @rapenne-s in #3309
@@ -59,8 +15,23 @@ in python instead of via Nginx).
 * workaround memory leak in GeoDjango/GEOS by @yohanboniface in #3360
 * do not crash when map settings are NULL by @yohanboniface in #3361
 * reintegrate the proxy in python by @yohanboniface in #3330
+* do not crash when tilelayer url is invalid by @yohanboniface in #3463
+* do not eat uMap markdown-like syntax in translations by @yohanboniface in #3464
+* don't overlay max/minZoom override tilelayer by @yohanboniface in #3466
+* fix crash on user list admin page by @yohanboniface in #3451
+* align popup content for RTL languages by @ergs0204 in #3432
+* fix overlay opacity initial value by @yohanboniface in #3436
+* fix conflict between limitBounds and tilelayer minZoom by @yohanboniface in #3440
+* also show show/total counter in browser when filtering by bbox
+* redraw cluster on moveend, and pass correct zoom arg to flyTo by @yohanboniface in #3427
+* do not share loader event between maps by @yohanboniface in #3418
+* only show the more button if at least one control is in hidden by @yohanboniface in #3419
+* be more defensive for invalid datetime by @yohanboniface in #3420
+* do not register a new url on each hash change by @davidbgk in #3422
+* use schema to validate a value for a given property by @yohanboniface in #3423
 
 ### Internal changes
+* reduce database queries for map detail view by @davidbgk in #3430
 * update deprecated OAuth backends in local.py.sample by @AlexVplle in #3290
 * docs: mention data sources in Québec / Canada by @dhdaines in #3285
 * docs: update local settings and ASGI docs by @dhdaines in #3283
