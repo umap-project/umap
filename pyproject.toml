@@ -50,7 +50,7 @@ dev = [
   "django-debug-toolbar==7.0.0",
   "hatch==1.17.1",
   "ruff==0.15.22",
-  "djlint==1.39.2",
+  "djlint==1.44.2",
   "mkdocs==1.6.1",
   "mkdocs-material==9.7.6",
   "mkdocs-static-i18n==1.3.1",
