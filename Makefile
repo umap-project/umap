@@ -72,7 +72,7 @@ test-unit:
 	uv run pytest -vv umap/tests/ --ignore=umap/tests/integration
 
 test-integration:
-	uv run pytest -vv umap/tests/integration/ --dist=loadgroup --reruns 1 --maxfail 3
+	uv run pytest -vv umap/tests/integration/ --dist=loadgroup --tracing=retain-on-failure --reruns=1 --maxfail=3
 
 clean:
 	rm -f dist/*

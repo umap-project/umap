@@ -228,8 +228,8 @@ def test_can_change_owner(map, live_server, login, user, wait_for_edit_mode):
     close.click()
     input = page.locator("input.edit-owner")
     with page.expect_response(re.compile(r".*/agnocomplete/.*")):
-        input.type(user.username)
-    input.press("Tab")
+        input.press_sequentially(user.username)
+    page.locator(".umap-autocomplete li").filter(has_text=user.username).click()
     save = page.get_by_role("button", name="Save")
     expect(save).to_be_visible()
     with page.expect_response(re.compile(r".*/update/permissions/.*")):

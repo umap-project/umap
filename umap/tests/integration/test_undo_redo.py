@@ -132,7 +132,7 @@ def test_can_undo_redo_tilelayer_change(live_server, page, openmap, tilelayer):
         r"https://[abcd]{1}.basemaps.cartocdn.com/dark_all/\d+/\d+/\d+.png"
     )
     page.get_by_role("button", name="Change tilelayers").click()
-    page.locator("li").filter(has_text="Black Tiles").get_by_role("img").click()
+    page.locator("li").filter(has_text="Black Tiles").get_by_text("Black Tiles").click()
 
     tiles = page.locator(".leaflet-tile-pane img")
     expect(tiles.first).to_have_attribute("src", new_pattern)
@@ -204,8 +204,9 @@ def test_can_undo_redo_polygon_geometry_change(live_server, page, tilelayer):
     assert polygon.bounding_box() != old_bbox
 
 
-def test_can_undo_redo_marker_create(live_server, page, tilelayer):
+def test_can_undo_redo_marker_create(live_server, page, tilelayer, wait_for_edit_mode):
     page.goto(f"{live_server.url}/en/map/new")
+    wait_for_edit_mode(page)
 
     page.get_by_title("Open browser").click()
     marker = page.locator(".leaflet-marker-icon")

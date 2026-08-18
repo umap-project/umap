@@ -261,8 +261,8 @@ def test_can_extract_shape(live_server, page, tilelayer):
     map.click(position={"x": 200, "y": 200})
     # Click again to finish
     map.click(position={"x": 200, "y": 200})
-    # Let the panel fully open, not to close the contextmenu (when
-    # refocus on panel input)
+    # When panel opens, it will have the focus, thus close the contextmenu,
+    # so wait for it before trying to right click (and prevent a race).
     page.wait_for_timeout(300)
     expect(lines).to_have_count(1)
     lines.first.click(position={"x": 10, "y": 1}, button="right")
@@ -282,9 +282,9 @@ def test_can_clone_polyline(live_server, page, tilelayer, settings):
     map.click(position={"x": 100, "y": 200})
     # Click again to finish
     map.click(position={"x": 100, "y": 200})
-    # Let the panel fully open, not to close the contextmenu (when
-    # refocus on panel input)
-    page.wait_for_timeout(300)
+    # When panel opens, it will have the focus, thus close the contextmenu,
+    # so wait for it before trying to right click (and prevent a race).
+    expect(page.locator(".panel.right form input").first).to_be_focused()
     expect(lines).to_have_count(1)
     lines.first.click(position={"x": 10, "y": 1}, button="right")
     page.get_by_role("button", name="Clone this feature").click()
@@ -332,9 +332,9 @@ def test_can_delete_shape_using_toolbar(live_server, page, tilelayer, settings):
     map.click(position={"x": 100, "y": 100})
     map.click(position={"x": 100, "y": 200})
     map.click(position={"x": 100, "y": 200})
-    # Let the panel fully open, not to close the contextmenu (when
-    # refocus on panel input)
-    page.wait_for_timeout(300)
+    # When panel opens, it will have the focus, thus close the contextmenu,
+    # so wait for it before trying to right click (and prevent a race).
+    expect(page.locator(".panel.right form input").first).to_be_focused()
 
     # Now split the line
     map.click(position={"x": 100, "y": 100}, button="right")
