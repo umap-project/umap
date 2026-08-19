@@ -45,10 +45,10 @@ minor: ## Bump the current version to a new minor one
 
 .PHONY: docker
 docker: ## Create a new Docker image and publish it
-	$(eval VERSION=$(shell hatch version))
+	$(eval VERSION=$(shell uv run hatch version))
 	@echo "Version to build: ${VERSION}"
-	docker build -t umap/umap:${VERSION} .
-	docker push umap/umap:${VERSION}
+	# You must run `docker buildx create --use` first or check with `docker buildx ls`
+	docker buildx build --platform linux/amd64,linux/arm64 -t umap/umap:${VERSION} --push .
 
 .PHONY: helm
 helm: ## Build the helm chart and publish it
