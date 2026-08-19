@@ -48,7 +48,7 @@
     "dompurify": "3.4.13",
     "georsstogeojson": "^0.2.0",
     "jsdom": "^24.0.0",
-    "ol": "^10.9.0",
+    "ol": "10.10.0",
     "openrouteservice-js": "^0.4.1",
     "osm2geojson-lite": "^2.0.1",
     "simple-elevation-chart": "^1.0.0",
