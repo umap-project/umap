@@ -137,7 +137,10 @@ class Peer:
     async def receive(self, text_data):
         if not self.is_authenticated:
             logging.debug("AUTHENTICATING", text_data)
-            message = JoinRequest.model_validate_json(text_data)
+            try:
+                message = JoinRequest.model_validate_json(text_data)
+            except ValidationError as error:
+                return await self.reject(text_data, error)
             signed = TimestampSigner().unsign_object(message.token, max_age=30)
             user, map_id, permissions = signed.values()
             if str(map_id) != self.map_id:
@@ -158,23 +161,24 @@ class Peer:
         try:
             incoming = Request.model_validate_json(text_data)
         except ValidationError as error:
-            message = (
-                f"An error occurred when receiving the following message: {text_data!r}"
-            )
-            logging.error(message, error)
-        else:
-            match incoming.root:
-                # Broadcast all operation messages to connected peers
-                case OperationMessage():
-                    await self.broadcast(text_data)
+            return await self.reject(text_data, error)
 
-                # Broadcast the new map state to connected peers
-                case SavedMessage():
-                    await self.broadcast(text_data)
+        match incoming.root:
+            # Broadcast all operation messages to connected peers
+            case OperationMessage():
+                await self.broadcast(text_data)
 
-                # Send peer messages to the proper peer
-                case PeerMessage():
-                    await self.send_to(incoming.root.recipient, text_data)
+            # Broadcast the new map state to connected peers
+            case SavedMessage():
+                await self.broadcast(text_data)
+
+            # Send peer messages to the proper peer
+            case PeerMessage():
+                await self.send_to(incoming.root.recipient, text_data)
+
+    async def reject(self, text_data, error):
+        logging.error("Invalid message received: %r (%s)", text_data, error)
+        await self._send({"type": "websocket.close"})
 
     async def send(self, text):
         logging.debug("  FORWARDING TO", self.peer_id, text)
