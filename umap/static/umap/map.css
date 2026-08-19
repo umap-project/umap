@@ -95,6 +95,14 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     height: initial !important;
 }
 
+.print-portrait .ol-viewport,
+.print-landscape .ol-viewport {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+}
+
 .print-a4.print-landscape {
     aspect-ratio: 297/210;
 }
@@ -143,7 +151,7 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     align-items: flex-end;
 }
 
-.umap-controls > * {
+.umap-controls>* {
     pointer-events: auto;
 }
 
@@ -262,11 +270,11 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     display: inline-block;
 }
 
-.umap-control-measure input:checked + label {
+.umap-control-measure input:checked+label {
     background-color: var(--color-accent);
 }
 
-.umap-controls > .display-on-more {
+.umap-controls>.display-on-more {
     display: none;
 }
 
@@ -316,10 +324,10 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
 }
 
 .umap-control-attribution {
-  background-color: var(--background-color);
-  padding: var(--small-box-padding);
-  opacity: 0.6;
-  margin-bottom: calc(var(--panel-gutter) * -1);
+    background-color: var(--background-color);
+    padding: var(--small-box-padding);
+    opacity: 0.6;
+    margin-bottom: calc(var(--panel-gutter) * -1);
 }
 
 .umap-permanent-credits-container {
@@ -730,7 +738,7 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     display: inline-block;
 }
 
-.datalayer-legend  li + li {
+.datalayer-legend li+li {
     margin-top: 2px;
 }
 
@@ -1022,6 +1030,7 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
 .ol-overviewmap {
     position: relative;
 }
+
 .ol-overviewmap .ol-overviewmap-box {
     border: 2px dashed darkorange;
 }
@@ -1166,7 +1175,8 @@ details details {
 
 @media print {
 
-    .leaflet-control-container,
+    .umap-control-container,
+    .window,
     .umap-ui-container {
         display: none;
     }

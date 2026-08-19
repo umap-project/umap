@@ -96,6 +96,7 @@ export class OLProxy {
   }
 
   proxyOutgoingEvents() {
+    this.app.on('map:resize', () => this.map.updateSize())
     this.app.on('draw:marker', async () => await this.editor?.startDrawing('Point'))
     this.app.on(
       'draw:linestring',
