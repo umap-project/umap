@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.8.1 - 2026-08-19
+
+* do not crash on permissions change while realtime is on by @yohanboniface in #3471
+
 ## 3.8.0 - 2026-08-18
 
 This release is mainly about preparing the switch [from Leaflet to OpenLayers](https://www.openstreetmap.org/user/David%20Larlet/diary/409079).
