@@ -2017,26 +2017,6 @@ export default class App extends Utils.WithEvents {
     this.journal._undoManager.redo()
   }
 
-  async screenshot() {
-    const { snapdom, preCache } = await import('@zumer/snapdom')
-    const el = document.querySelector('#map')
-    await preCache(el)
-    const result = await snapdom(el, {
-      scale: 1,
-      type: 'jpg',
-      fast: false,
-      exclude: [
-        '.umap-controls',
-        '.umap-loader',
-        '.panel',
-        '.umap-caption-bar',
-        '.umap-main-edit-toolbox',
-        '.umap-edit-bar',
-      ],
-    })
-    return result
-  }
-
   async openPrinter(action) {
     if (!this._printer) {
       const Printer = (await import('./printer.js')).default
