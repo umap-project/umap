@@ -2,11 +2,11 @@ import * as Utils from '../utils.js'
 import { HybridLogicalClock } from './hlc.js'
 import { UndoManager } from './undo.js'
 import {
+  DataLayerPermissionsUpdater,
   DataLayerUpdater,
   FeatureUpdater,
-  MapUpdater,
   MapPermissionsUpdater,
-  DataLayerPermissionsUpdater,
+  MapUpdater,
 } from './updaters.js'
 import { WebSocketTransport } from './websocket.js'
 
@@ -155,24 +155,25 @@ export class Journal {
     this._batch = []
   }
 
-  commitBatch(subject, metadata) {
+  commitBatch(subject, metadata, broadcast) {
     // TODO: if batch length is 1, send simple operation instead?
     if (!this._batch.length) {
       this._batch = null
       return
     }
     const operations = this._batch.map((stage) => stage.operation)
-    const operation = { verb: 'batch', operations, subject, metadata }
+    const operation = { verb: 'batch', operations, subject, metadata, broadcast }
     this._undoManager.add({ operation, stages: this._batch })
     this._send(operation)
     this._batch = null
   }
 
-  upsert(subject, metadata, value, oldValue) {
+  upsert(subject, metadata, broadcast, value, oldValue) {
     const operation = {
       verb: 'upsert',
       subject,
       metadata,
+      broadcast,
       value,
     }
     const stage = {
@@ -188,13 +189,21 @@ export class Journal {
     this._send(operation)
   }
 
-  update(subject, metadata, key, value, oldValue, { undo } = { undo: true }) {
+  update(
+    subject,
+    metadata,
+    broadcast,
+    key,
+    value,
+    oldValue,
+    { undo } = { undo: true }
+  ) {
     if (typeof value === 'function') {
       return this._track(
         (async () => {
           const resolved = await value()
           if (resolved === undefined) return
-          this.update(subject, metadata, key, resolved, oldValue, { undo })
+          this.update(subject, metadata, broadcast, key, resolved, oldValue, { undo })
         })()
       )
     }
@@ -202,6 +211,7 @@ export class Journal {
       verb: 'update',
       subject,
       metadata,
+      broadcast,
       key,
       value,
     }
@@ -218,11 +228,12 @@ export class Journal {
     this._send(operation)
   }
 
-  delete(subject, metadata, oldValue) {
+  delete(subject, metadata, broadcast, oldValue) {
     const operation = {
       verb: 'delete',
       subject,
       metadata,
+      broadcast,
     }
     const stage = {
       operation,
@@ -309,16 +320,13 @@ export class Journal {
     const message = this._operations.addLocal(operation)
 
     if (this.offline) return
+    if (operation.broadcast === false) return
     if (this.transport) {
       this.transport.send('OperationMessage', { sender: this.peerId, ...message })
     }
   }
 
-  _getUpdater(subject, metadata, sync) {
-    // For now, prevent permissions to be synced, for security reasons
-    if (sync && (subject === 'mappermissions' || subject === 'datalayerpermissions')) {
-      return
-    }
+  _getUpdater(subject, metadata) {
     if (Object.keys(this.updaters).includes(subject)) {
       return this.updaters[subject]
     }
@@ -529,10 +537,10 @@ export class Journal {
       get(target, prop) {
         // Only proxy these methods
         if (['upsert', 'update', 'delete', 'commitBatch'].includes(prop)) {
-          const { subject, metadata } = object.getJournalMetadata()
+          const { subject, metadata, broadcast } = object.getJournalMetadata()
           // Reflect.get is calling the original method.
           // .bind is adding the parameters automatically
-          return Reflect.get(...arguments).bind(target, subject, metadata)
+          return Reflect.get(...arguments).bind(target, subject, metadata, broadcast)
         }
         return Reflect.get(...arguments)
       },
