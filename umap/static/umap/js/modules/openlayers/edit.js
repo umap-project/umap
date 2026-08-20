@@ -138,7 +138,7 @@ export default class Editor {
   async startDrawing(type) {
     if (this.activeDrawing) return
     // Allow for escape to be catched by the app listener.
-    this.map.getTargetElement().focus()
+    this.proxy.focus()
     if (!this.drawingSource) {
       this.drawingSource = new VectorSource()
       this.drawingSource.on('addfeature', (event) => {

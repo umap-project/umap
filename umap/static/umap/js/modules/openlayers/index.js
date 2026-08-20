@@ -244,6 +244,10 @@ export class OLProxy {
     return this.map.overlayContainerStopEvent_.parentNode
   }
 
+  focus() {
+    this.map.getTargetElement().focus()
+  }
+
   getFeatureById(id) {
     for (const layer of this.app.layers.tree) {
       if (layer.features.has(id)) {
@@ -263,6 +267,7 @@ export class OLProxy {
   }
 
   render() {
+    this.focus()
     this.initCenter()
     const updateHash = () => {
       const [lng, lat] = this.center
@@ -337,6 +342,7 @@ export class OLProxy {
     const { default: Editor } = await import('./edit.js')
     this.editor = new Editor(this.map, this)
     await this.editor.enable()
+    this.focus()
   }
 
   disableEdit() {
