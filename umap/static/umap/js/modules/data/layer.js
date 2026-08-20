@@ -951,7 +951,6 @@ export class DataLayer {
 
   async _editAdvancedProperties(container) {
     const fields = [
-      'properties.smoothFactor',
       'properties.dashArray',
       'properties.zoomTo',
       'properties.fromZoom',

@@ -535,17 +535,6 @@ export const SCHEMA = {
     placeholder: translate('Default: name'),
     label: translate('Feature identifier key'),
   },
-  smoothFactor: {
-    type: Number,
-    impacts: ['data'],
-    min: 0,
-    max: 10,
-    step: 0.5,
-    label: translate('Simplify'),
-    helpEntries: ['smoothFactor'],
-    inheritable: true,
-    default: 1.0,
-  },
   sortKey: {
     type: String,
     impacts: ['datalayer-index', 'data'],

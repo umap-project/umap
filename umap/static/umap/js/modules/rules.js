@@ -116,7 +116,6 @@ class Rule {
       'properties.fill',
       'properties.fillColor',
       'properties.fillOpacity',
-      'properties.smoothFactor',
       'properties.dashArray',
     ]
     const builder = new MutatingForm(this, options)
