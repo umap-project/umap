@@ -14,7 +14,7 @@ import View from 'ol/View.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
 import { makeIcon, makePointOverlay } from './icon.js'
-import { anchorTexts, makeLabel, makeTextPath } from './label.js'
+import { anchorTexts, makeLabel, makeTextPath, simplifyForText } from './label.js'
 import TileLayerManager from './tilelayer.js'
 import {
   fromOLExtent,
@@ -649,6 +649,9 @@ export class OLProxy {
       anchorTexts(texts, icon.textAnchor, geojson.label?.direction)
       return { style: icon.style, texts, popupOffsetY: icon.popupOffsetY }
     }
+    for (const t of texts) {
+      t.setGeometry((feature) => simplifyForText(feature.getGeometry(), this.zoom))
+    }
     const style = []
     const stroke =
       properties.stroke === false
@@ -668,8 +671,9 @@ export class OLProxy {
             ),
           })
     if (geojson.route) {
-      const path = readGeometry(geojson.route.geometry)
-      style.push(new Style({ geometry: path, stroke, fill, zIndex }))
+      const route = readGeometry(geojson.route.geometry)
+      for (const t of texts) t.setGeometry(() => simplifyForText(route, this.zoom))
+      style.push(new Style({ geometry: route, stroke, fill, zIndex }))
       style.push(
         new Style({
           image: new CircleStyle({

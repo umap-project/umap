@@ -47,6 +47,17 @@ export function makeLabel(label, zIndex) {
   return new Style({ text, zIndex })
 }
 
+// OL's textPath renders nothing on dense lines, so the text follows a simplified copy.
+// Expected simplification level per zoom:
+// - zoom 10 => ~1000
+// - zoom 13 => ~300
+// - zoom 16 => ~100
+const textTolerance = (zoom) => 1000 * 0.3 ** ((zoom - 10) / 3)
+
+export function simplifyForText(geometry, zoom) {
+  return geometry.simplify(textTolerance(Math.round(zoom)))
+}
+
 // Text decoration drawn along (or on) the geometry itself.
 export function makeTextPath(options, zIndex) {
   if (!options?.text) return null

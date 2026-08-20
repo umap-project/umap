@@ -944,7 +944,6 @@ export default class App extends Utils.WithEvents {
       'properties.fill',
       'properties.fillColor',
       'properties.fillOpacity',
-      'properties.smoothFactor',
       'properties.dashArray',
     ]
 
