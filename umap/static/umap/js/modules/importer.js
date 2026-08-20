@@ -393,7 +393,7 @@ export default class Importer extends Utils.WithTemplate {
         bounds = GeoUtils.unionBbox(bounds, feature.bounds)
       }
       this.onSuccess(features.length)
-      layer.zoomToBounds(bounds)
+      this.app.fire('map:view:fit', { bounds })
     }
   }
 }
