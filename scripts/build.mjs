@@ -8,6 +8,7 @@
 //   node scripts/build.mjs --watch    # rebuild on change
 //   node scripts/build.mjs --minify   # production build
 
+import { rm } from 'node:fs/promises'
 import * as esbuild from 'esbuild'
 
 const ROOT = 'umap/static/umap/js'
@@ -142,6 +143,10 @@ function report(result) {
   }
   console.log(`\nTotal émis: ${kb(sum(all))}`)
 }
+
+// Delete stales chunks, so collectstatic does not complain.
+await rm(`${options.outdir}/chunks`, { recursive: true, force: true })
+await rm(`${options.outdir}/assets`, { recursive: true, force: true })
 
 if (watch) {
   const ctx = await esbuild.context(options)
