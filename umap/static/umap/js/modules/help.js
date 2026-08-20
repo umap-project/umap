@@ -67,9 +67,6 @@ const ENTRIES = {
     'Supported variables that will be dynamically replaced'
   )}: {bbox}, {lat}, {lng}, {zoom}, {east}, {north}..., {left}, {top}..., locale, lang`,
   colorValue: translate('Must be a valid CSS value (eg.: DarkBlue or #123456)'),
-  smoothFactor: translate(
-    'How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)'
-  ),
   dashArray: translate(
     'A comma separated list of numbers that defines the stroke dash pattern. Ex.: "5, 10, 15".'
   ),

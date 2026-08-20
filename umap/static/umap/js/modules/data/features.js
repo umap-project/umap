@@ -550,7 +550,6 @@ class Feature {
 
   getStyleProperties() {
     return [
-      'smoothFactor',
       'color',
       'opacity',
       'stroke',
@@ -893,7 +892,6 @@ class Path extends Feature {
 
   getAdvancedOptions() {
     return [
-      'properties._umap_options.smoothFactor',
       'properties._umap_options.dashArray',
       'properties._umap_options.zoomTo',
     ]
