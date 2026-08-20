@@ -663,7 +663,7 @@ export default class App extends Utils.WithEvents {
         event.preventDefault()
       }
     }
-    document.addEventListener('keydown', onKeyDown)
+    document.addEventListener('keydown', onKeyDown, true)
   }
 
   openImporter() {
