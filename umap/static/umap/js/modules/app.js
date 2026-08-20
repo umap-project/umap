@@ -3,7 +3,6 @@ import * as Clipboard from './clipboard.js'
 import { Fields } from './data/fields.js'
 import { DataLayer } from './data/layer.js'
 import * as DOMUtils from './domutils.js'
-import DropControl from './drop.js'
 import { Filters, migrateLegacyFilters } from './filters.js'
 import { MutatingForm } from './form/builder.js'
 import { Formatter } from './formatter.js'
@@ -87,7 +86,6 @@ export default class App extends Utils.WithEvents {
     this.uiContainer = Utils.loadTemplate('<div class="umap-ui-container"></div>')
     this.mapProxy.attachUI(this.uiContainer)
     this.controlManager = new ControlManager(this)
-    this.drop = new DropControl(this, this.mapProxy.container)
 
     this.properties.zoomControl = zoomControl !== undefined ? zoomControl : true
     this.properties.fullscreenControl =
@@ -397,6 +395,15 @@ export default class App extends Utils.WithEvents {
       this.caption = new Caption(this)
     }
     return this.caption
+  }
+
+  async initDrop() {
+    if (!this.drop) {
+      const DropControl = (await import('./drop.js')).default
+      // The dropzone must be the canvas for Firefox.
+      this.drop = new DropControl(this, this.mapProxy.container.querySelector("canvas"))
+    }
+    return this.drop
   }
 
   async loadTemplateFromQueryString() {
@@ -1418,8 +1425,9 @@ export default class App extends Utils.WithEvents {
   async enableEdit() {
     document.body.classList.add('umap-edit-enabled')
     await this.initJournal()
+    await this.initDrop()
     this.editEnabled = true
-    this.drop.enable()
+    this.drop?.enable()
     this.fire('edit:enabled')
     this.editBar.redraw()
     this.topBar.redraw()
