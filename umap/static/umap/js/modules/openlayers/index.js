@@ -182,7 +182,6 @@ export class OLProxy {
       const extent = toOLExtent(bounds)
       this.view.fit(extent, {
         duration,
-        maxZoom: zoom ?? this.zoom,
         padding: FIT_PADDING,
       })
     } else if (easing) {
