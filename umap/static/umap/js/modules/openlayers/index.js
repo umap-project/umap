@@ -119,6 +119,8 @@ export class OLProxy {
     this.app.on('panel:show', (event) => {
       const { content } = event.detail
       this.app.panel.open({ content })
+      // Mimic popup behaviour
+      this.map.once('click', () => this.app.fire('panel:close'))
     })
     this.app.on('popup:show', (event) => {
       const { sourceId, id, content, center, mode } = event.detail
