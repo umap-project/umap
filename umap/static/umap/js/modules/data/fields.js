@@ -2,6 +2,7 @@ import { Alert } from '../../components/alerts/alert.js'
 import { Form } from '../form/builder.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
+import * as DOMUtils from '../domutils.js'
 
 export const getDefaultFields = () => [
   { key: U.DEFAULT_LABEL_KEY, type: 'String' },
@@ -258,19 +259,19 @@ export class Fields extends Map {
   }
 
   edit(container) {
+    const fieldset = DOMUtils.createFieldset(container, translate('Manage Fields'), {
+      id: 'fields-management',
+    })
     const [root, { ul, add, manageFilters }] = Utils.loadTemplateWithRefs(`
-      <details id="fields-management">
-        <summary><h4>${translate('Manage Fields')}</h4></summary>
-        <fieldset>
-          <ul data-ref=ul></ul>
-          <div class="button-bar half">
-            <button type="button" data-ref=add>${translate('Add a new field')}</button>
-            <button type="button" data-ref="manageFilters">${translate('Manage filters')}</button>
-          </div>
-        </fieldset>
-      </details>
+      <div>
+        <ul data-ref=ul></ul>
+        <div class="button-bar half">
+          <button type="button" data-ref=add>${translate('Add a new field')}</button>
+          <button type="button" data-ref="manageFilters">${translate('Manage filters')}</button>
+        </div>
+      </div>
     `)
-    container.appendChild(root)
+    fieldset.appendChild(root)
     add.hidden = this.parent.isRemoteLayer?.()
     add.addEventListener('click', () => {
       this.editField().then(() => {

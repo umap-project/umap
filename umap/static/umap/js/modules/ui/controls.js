@@ -488,6 +488,10 @@ export class TilelayersControl extends SimpleButton {
         <div>${tilelayer.get('name')}</div>
       </li>
     `)
+    li.classList.toggle(
+      'selected',
+      tilelayer.get('url') === this.app.mapProxy.tilelayers.current?.get('url')
+    )
     li.addEventListener('click', () => {
       const oldTileLayer = this.app.properties.tilelayer
       this.app.mapProxy.tilelayers.select(tilelayer)

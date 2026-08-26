@@ -56,18 +56,26 @@
     --dialog-width: 40vw;
     --map-fragment-height: 210px;
 
-    /* z-indexes (leaflet CSS sets the map at 400 by default) */
-    --zindex-tooltip: 510;
-    --zindex-alert: 500;
-    --zindex-loader: 490;
-    --zindex-toolbar: 480;
-    --zindex-autocomplete: 470;
-    --zindex-dialog: 460;
-    --zindex-contextmenu: 450;
-    --zindex-panels: 440;
-    --zindex-controls: 430;
-    --zindex-dragover: 410;
-    --zindex-orphan-marker: 401;
+    /* font-size  */
+    /* From https://utopia.fyi/type/calculator/?c=320,8,1.125,1240,12,1.25,5,1,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12  */
+    --font-size--1: clamp(0.5556rem, 0.4783rem + 0.3865vw, 0.7778rem);
+    --font-size-0: clamp(0.625rem, 0.538rem + 0.4348vw, 0.875rem);
+    --font-size-1: clamp(0.7031rem, 0.6053rem + 0.4891vw, 0.9844rem);
+    --font-size-2: clamp(0.791rem, 0.681rem + 0.5503vw, 1.1074rem);
+    --font-size-3: clamp(0.8899rem, 0.7661rem + 0.6191vw, 1.2458rem);
+    --font-size-4: clamp(1.0011rem, 0.8618rem + 0.6964vw, 1.4016rem);
+    --font-size-5: clamp(1.1263rem, 0.9696rem + 0.7835vw, 1.5768rem);
+
+    /* z-indexes */
+    --zindex-tooltip: 110;
+    --zindex-alert: 100;
+    --zindex-loader: 90;
+    --zindex-autocomplete: 70;
+    --zindex-dialog: 60;
+    --zindex-contextmenu: 50;
+    --zindex-panels: 40;
+    --zindex-controls: 30;
+    --zindex-dragover: 10;
 
     --block-shadow: 0 1px 7px var(--color-mediumGray);
     --transition: 300ms;

@@ -6,7 +6,6 @@ export default class Printer {
     this.app = app
     this.dialog = this.app.dialog
     this.printElement = this.app.mapProxy.container.parentNode
-
   }
 
   build() {
@@ -77,5 +76,4 @@ export default class Printer {
       })
     this.resizeMap()
   }
-
 }

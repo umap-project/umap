@@ -9,7 +9,7 @@ const TOP_BAR_TEMPLATE = `
 <div class="umap-main-edit-toolbox with-transition dark">
     <div class="umap-left-edit-toolbox" data-ref="left">
         <div class="logo"><a class="" href="#" title="${translate('Go to the homepage')}" data-ref="home">uMap</a></div>
-        <button class="map-name flat truncate" type="button" data-ref="name"></button>
+        <h1 class="h3"><button class="map-name flat truncate" type="button" data-ref="name"></button></h1>
         <button class="flat truncate" type="button" data-ref="share">
           <i class="icon icon-16 icon-draft show-on-draft"></i><span class="share-status"></span>
         </button>
@@ -209,7 +209,7 @@ export class TopBar extends WithTemplate {
 
 const BOTTOM_BAR_TEMPLATE = `
   <div class="umap-caption-bar">
-    <h3 class="map-name"></h3>
+    <h5 class="map-name"></h5>
     <span data-ref="author"></span>
     <button class="umap-about-link flat" type="button" title="${translate('Open caption')}" data-ref="caption">${translate('Open caption')}</button>
     <button class="umap-open-browser-link flat" type="button" title="${translate('Browse data')}" data-ref="browse">${translate('Browse data')}</button>
