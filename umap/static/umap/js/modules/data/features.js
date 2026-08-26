@@ -875,6 +875,12 @@ export class Point extends Feature {
     const fieldset = DOMUtils.createFieldset(container, translate('Coordinates'))
     builder.build().then((form) => fieldset.appendChild(form))
   }
+
+  view(event) {
+    // Do not pass the event center, as we always want to use the Point center
+    // for centering popup.
+    return super.view()
+  }
 }
 
 class Path extends Feature {
@@ -891,10 +897,7 @@ class Path extends Feature {
   }
 
   getAdvancedOptions() {
-    return [
-      'properties._umap_options.dashArray',
-      'properties._umap_options.zoomTo',
-    ]
+    return ['properties._umap_options.dashArray', 'properties._umap_options.zoomTo']
   }
 
   getBestZoom() {

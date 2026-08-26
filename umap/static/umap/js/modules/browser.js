@@ -62,8 +62,10 @@ export default class Browser {
         <summary class="with-toolbox" data-ontoggle data-id="${datalayer.id}">
           <span>
             <i class="icon icon-16 icon-folder" data-ref="parentIcon"></i>
-            <h4 class="datalayer-name truncate" data-onrename data-id="${datalayer.id}"></h4>
-            <span class="datalayer-counter"></span>
+            <h4 class="datalayer-name truncate h5">
+              <span data-onrename data-id="${datalayer.id}"></span>&nbsp;
+              <span class="datalayer-counter"></span>
+            </h4>
           </span>
           <span data-ref=toolbox></span>
         </summary>

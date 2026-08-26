@@ -176,9 +176,7 @@ export default class Editor {
 
   // Snap must be the last interaction to intercept coordinates before Draw/Modify.
   _moveSnapToTop() {
-    for (const snap of this.editInteractions.filter(
-      (i) => i instanceof Snap
-    )) {
+    for (const snap of this.editInteractions.filter((i) => i instanceof Snap)) {
       this.map.removeInteraction(snap)
       this.map.addInteraction(snap)
     }

@@ -92,10 +92,11 @@ export const createFieldset = (parent, title, options) => {
   options = options || {}
   const [details, { summary, fieldset }] = loadTemplateWithRefs(`
     <details class="${options.className || ''}">
-      <summary data-ref="summary"><h4>${title}</h4></summary>
+      <summary data-ref="summary"><h4 class="h5">${title}</h4></summary>
       <fieldset data-ref="fieldset"></fieldset>
     </details>
   `)
+  if (options.id) details.id = options.id
   details.open = options.on === true
   parent.appendChild(details)
   if (options.icon) {

@@ -13,7 +13,7 @@
     --tooltip-color: var(--background-color);
     background-color: var(--tooltip-color);
     --arrow-size: 8px;
-    font-size: 0.8rem;
+    font-size: var(--font-size--1);
 }
 
 .tooltip-accent {

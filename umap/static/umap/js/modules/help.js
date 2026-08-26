@@ -251,9 +251,13 @@ export default class Help {
 
   button(container, entries) {
     const button = DOMUtils.loadTemplate(
-      `<button class="umap-help-button" type="button">${translate('Help')}</button>`
+      `<button class="icon icon-16 icon-help" type="button" title="${translate('Help')}"></button>`
     )
-    container.appendChild(button)
+    const target =
+      Array.from(container.children).filter(
+        (node) => node.nodeType === Node.TEXT_NODE
+      )[0] || container.firstChild
+    target.after(button)
     button.addEventListener('click', () => this.show(entries))
     return button
   }

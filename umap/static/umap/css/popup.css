@@ -3,7 +3,7 @@
     flex-flow: column nowrap;
     height: 100%;
     background-color: var(--background-color);
-    padding: var(--box-padding);
+    padding: var(--medium-box-padding);
     width: 300px;
 }
 .umap-popup:after, .umap-popup:before {
@@ -29,16 +29,14 @@
 }
 
 .umap-popup-footer {
+    background-color: var(--background-color);
+    color: var(--text-color);
     position: relative;
-    background-color: rgb(68, 68, 68);
-    color: white;
     display: flex;
     width: 100%;
-    margin-top: auto;
-    min-width: 99px;
-    border-radius: 2px;
-    max-height: 24px;
+    border-radius: var(--border-radius);
     justify-content: space-around;
+    margin-top: var(--text-margin);
 }
 
 .umap-popup a:hover {
@@ -73,25 +71,6 @@ address span {
     font-style: italic;
 }
 
-span.popup-icon {
-    padding: 5px;
-}
-
-.leaflet-popup-content {
-    min-width: 200px;
-    line-height: inherit;
-}
-
-.leaflet-popup-content-wrapper,
-.leaflet-popup-tip {
-    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
-}
-
-.leaflet-popup-content-wrapper {
-    border-radius: 4px;
-    text-align: start;
-}
-
 .umap-popup aside {
     max-height: 500px;
     flex-grow: 1;
@@ -124,29 +103,6 @@ span.popup-icon {
     padding: 1px 3px;
 }
 
-.umap-popup-container {
-    flex-grow: 1;
-    margin-bottom: 10px;
-}
-
-.umap-popup-container ul {
-    list-style-type: disc;
-}
-
-.leaflet-bar {
-    box-shadow: none;
-}
-
-.marker-cluster {
-    background-color: white;
-    width: 40px;
-    height: 40px;
-}
-
-.leaflet-contextmenu-icon {
-    display: none;
-}
-
 .umap-popup-large iframe {
     /* See https://github.com/Leaflet/Leaflet/commit/61d746818b99d362108545c151a27f09d60960ee#commitcomment-6061847 */
     max-width: 100% !important;
@@ -161,8 +117,8 @@ span.popup-icon {
     max-width: 100%;
 }
 
-.umap-georss-link .popup-title {
-    text-align: center;
+.umap-popup.window .buttons {
+    padding: 0;
 }
 
 @media all and (max-width: 480px) {

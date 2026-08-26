@@ -20,7 +20,7 @@
 
 .dark .umap-contextmenu button,
 .umap-contextmenu button {
-    font-size: 1rem;
+    margin-bottom: calc(var(--text-margin) / 2);
 }
 
 .umap-contextmenu>li {

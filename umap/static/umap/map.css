@@ -1,29 +1,3 @@
-/* ************* */
-/* temporary fix */
-/* ************* */
-/* https://github.com/umap-project/umap/pull/2046#issuecomment-2278046469 */
-html[dir="rtl"] .leaflet-inplace-toolbar {
-    direction: ltr;
-}
-
-html[dir="rtl"] .leaflet-inplace-toolbar>* {
-    direction: rtl;
-}
-
-html[dir="rtl"] .leaflet-tooltip-pane {
-    direction: ltr;
-}
-
-html[dir="rtl"] .leaflet-tooltip-pane>* {
-    direction: rtl;
-}
-
-.marker-cluster div {
-    /* fix cluster icon for rtl */
-    margin-left: unset;
-    margin-inline-start: 5px;
-}
-
 /* *********** */
 /*   Generic   */
 /* *********** */
@@ -127,14 +101,6 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     --current-header-height: var(--header-height);
 }
 
-.leaflet-top {
-    top: var(--current-header-height);
-}
-
-.leaflet-bottom {
-    bottom: var(--current-footer-height);
-}
-
 .umap-controls {
     position: absolute;
     z-index: var(--zindex-controls);
@@ -221,11 +187,11 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     display: none;
 }
 
-.leaflet-fullscreen-on .umap-control-fullscreen .enter {
+:fullscreen .umap-control-fullscreen .enter {
     display: none;
 }
 
-.leaflet-fullscreen-on .umap-control-fullscreen .exit {
+:fullscreen .umap-control-fullscreen .exit {
     display: block;
 }
 
@@ -263,7 +229,6 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     width: var(--control-size);
     text-align: center;
     cursor: pointer;
-    font-size: 12px;
 }
 
 .umap-control-measure.on label {
@@ -311,7 +276,6 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     background-color: #666;
     color: #f8f8f8;
     text-align: center;
-    font-size: 0.8em;
 }
 
 .umap-control-text [type="button"] {
@@ -328,6 +292,7 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     padding: var(--small-box-padding);
     opacity: 0.6;
     margin-bottom: calc(var(--panel-gutter) * -1);
+    font-size: var(--font-size--1);
 }
 
 .umap-permanent-credits-container {
@@ -352,62 +317,6 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     vertical-align: middle;
     background-image: url('./img/16.svg');
     background-position: 0px 0px;
-}
-
-.leaflet-iconLayers-layer {
-    width: 38px;
-    height: 38px;
-    box-shadow: none;
-    border: 1px solid var(--color-veryLightGray);
-    border-radius: 4px;
-}
-
-.leaflet-iconLayers-layerTitleContainer {
-    display: none;
-    inset-inline-start: 0;
-    overflow: hidden;
-    min-height: 1.5rem;
-    height: 1.5rem;
-}
-
-.leaflet-iconLayers-layerTitle {
-    text-align: center;
-    display: inline-block;
-}
-
-.leaflet-iconLayers:hover .leaflet-iconLayers-layer {
-    width: 80px;
-    height: 80px;
-}
-
-.leaflet-iconLayers:hover .leaflet-iconLayers-layerTitleContainer {
-    display: initial;
-}
-
-.leaflet-iconLayers-layerCell:hover .leaflet-iconLayers-layerTitleContainer {
-    height: initial;
-}
-
-.leaflet-iconLayers-layerCell-plus {
-    width: 80px;
-    height: 80px;
-    background-color: var(--background-color);
-    vertical-align: middle;
-    text-align: center;
-    font-size: 3rem;
-    display: none;
-    line-height: 100%;
-    border-radius: var(--border-radius);
-    margin-bottom: 0;
-    border: 1px solid var(--color-veryLightGray);
-}
-
-.leaflet-iconLayers-layerCell-plus:hover {
-    background-color: var(--color-veryLightGray);
-}
-
-.leaflet-iconLayers:hover .leaflet-iconLayers-layerCell-plus {
-    display: block;
 }
 
 .home-button {
@@ -444,7 +353,6 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     padding-inline-start: 10px;
     overflow: hidden;
     white-space: nowrap;
-    font-size: 1em;
     border-inline-start: 4px solid var(--color-veryLightGray);
 }
 
@@ -475,7 +383,6 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
 .umap-autocomplete.umap-search li.umap-autocomplete-noresult {
     text-align: center;
     color: #666;
-    font-size: 0.9em;
     line-height: 40px;
 }
 
@@ -514,11 +421,6 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
 /* *********** */
 /*    Draw     */
 /* *********** */
-.leaflet-drawing-icon,
-.leaflet-editable-drawing {
-    cursor: crosshair;
-}
-
 .umap-toolbar a,
 .umap-toolbar a:hover {
     height: var(--control-size);
@@ -541,34 +443,9 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     display: block;
 }
 
-.leaflet-middle-icon,
-.leaflet-vertex-icon {
-    border-radius: 50%;
-}
-
 /* ********************************* */
 /*     Help Lightbox                 */
 /* ********************************* */
-.umap-help-button[type="button"] {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    margin-inline-start: 2px;
-    background-position: 2px -4px;
-    background-repeat: no-repeat;
-    background-image: url('./img/16.svg');
-    background-color: transparent !important;
-    vertical-align: middle;
-    text-indent: -9999px;
-    min-height: inherit;
-    padding-top: 5px;
-    border: none !important;
-}
-
-.dark .umap-help-button {
-    background-image: url('./img/16-white.svg');
-}
-
 .umap-help-entry+.umap-help-entry {
     margin-top: 10px;
     border-top: 1px solid #aaa;
@@ -586,10 +463,6 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
 
 .umap-help {
     font-style: italic;
-}
-
-.leaflet-toolbar-tip {
-    background-color: var(--color-darkGray);
 }
 
 .show-on-edit {
@@ -611,22 +484,6 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
 .umap-edit-enabled .hide-on-edit {
     display: none !important;
 }
-
-/* ********************************* */
-/*   Browser panel          */
-/* ********************************* */
-
-.leaflet-inplace-toolbar a {
-    background-repeat: no-repeat;
-    background-image: url('./img/16.svg');
-    display: inline;
-    padding: 0 10px;
-    cursor: pointer;
-    height: 24px;
-    line-height: 24px;
-    vertical-align: middle;
-}
-
 
 /* ********************************* */
 /*      Tilelayer switcher           */
@@ -652,7 +509,6 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     height: 56px;
     line-height: 56px;
     opacity: 0.9;
-    padding-inline-start: 10px;
     position: absolute;
     width: 100%;
     text-align: center;
@@ -660,12 +516,11 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
 
 .umap-edit-tilelayers li:hover div:before,
 .umap-edit-tilelayers .selected div:before {
-    content: "✓";
-    font-size: 1.3em;
-    line-height: 56px;
-    padding-inline-end: 7px;
-    position: absolute;
-    inset-inline-start: 7px;
+    content: "✔";
+    padding-inline-end: var(--text-margin);
+}
+.umap-edit-tilelayers .selected {
+    font-weight: bold;
 }
 
 .umap-edit-tilelayers li img {
@@ -770,9 +625,8 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
 
 .umap-div-icon .icon-container img {
     vertical-align: middle;
-    max-width: 24px !important;
-    /* leaflet.css has !important, so... */
-    max-height: 24px !important;
+    max-width: 24px;
+    max-height: 24px;
 }
 
 .umap-div-icon .icon-arrow {
@@ -943,10 +797,6 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     font-weight: bold;
 }
 
-.leaflet-overlay-pane>svg {
-    z-index: var(--zindex-orphan-marker);
-}
-
 /* ********************************* */
 /*         Ajax loader               */
 /* ********************************* */
@@ -991,34 +841,6 @@ html[dir="rtl"] .leaflet-tooltip-pane>* {
     display: block;
 }
 
-/* *************************** */
-/* Overriding leaflet defaults */
-/* *************************** */
-
-.leaflet-top,
-.leaflet-bottom {
-    z-index: var(--zindex-controls);
-}
-
-.leaflet-inplace-toolbar {
-    z-index: var(--zindex-toolbar) !important;
-}
-
-.leaflet-inplace-toolbar a {
-    background-image: url('./img/16-white.svg');
-    background-color: var(--color-darkGray) !important;
-}
-
-.leaflet-inplace-toolbar a:hover {
-    background-color: #353c3e !important;
-}
-
-/* Links are dark cyan by default  */
-.leaflet-container a {
-    color: var(--color-veryDarkCyan);
-}
-
-/* But not in controls  */
 .umap-control a {
     color: black;
 }
@@ -1108,14 +930,7 @@ details details {
 
 @media all and (max-width: 980px) {
 
-    .umap-main-edit-toolbox .umap-user span,
-    .leaflet-container .leaflet-control-edit-save span,
-    .leaflet-container .leaflet-control-edit-disable span,
-    .leaflet-container .edit-cancel span {
-        display: none;
-    }
-
-    .umap-main-edit-toolbox .umap-help-button {
+    .umap-main-edit-toolbox .umap-user span {
         display: none;
     }
 
@@ -1135,15 +950,6 @@ details details {
 }
 
 @media all and (max-width: 480px) {
-    .leaflet-control-layers-expanded label {
-        display: inline-block;
-        margin-inline-end: 10px;
-    }
-
-    .leaflet-control-layers-expanded {
-        margin-inline-start: 10px;
-    }
-
     .umap-permanent-credits-container {
         max-width: 100%;
     }

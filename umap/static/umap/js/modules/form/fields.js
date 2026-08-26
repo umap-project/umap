@@ -116,15 +116,15 @@ Fields.Base = class {
     this.builder.setter(this, this.toJS())
   }
 
-  getLabelTemplate() {
+  getLabelTemplate(template) {
     const label = this.properties.label
     const help = this.properties.helpEntries?.join() || ''
     const className = this.properties.labelClassName
       ? `class="${this.properties.labelClassName}"`
       : ''
     return label
-      ? `<label data-ref=label for="${this.id}" data-help="${help}"${className}>${label}</label>`
-      : ''
+      ? `<label data-ref=label for="${this.id}" data-help="${help}"${className}>${label}${template || ''}</label>`
+      : template || ''
   }
 
   fetch() {}
@@ -956,7 +956,7 @@ Fields.IconUrl = class extends Fields.BlurInput {
     const hidden = name ? '' : ' hidden'
     const [container, { grid }] = Utils.loadTemplateWithRefs(`
       <div class="umap-pictogram-category">
-        <h6${hidden}>${name}</h6>
+        <h5${hidden}>${name}</h5>
         <div class="umap-pictogram-grid" data-ref=grid></div>
       </div>
     `)
@@ -1084,9 +1084,9 @@ Fields.Url = class extends Fields.Input {
 }
 
 Fields.Switch = class extends Fields.CheckBox {
-  getLabelTemplate() {
-    if (!this.properties.inheritable) return ''
-    return super.getLabelTemplate()
+  getLabelTemplate(template) {
+    if (!this.properties.inheritable) return template
+    return super.getLabelTemplate(template)
   }
   getTemplate() {
     const label = this.properties.inheritable ? '' : this.properties.label

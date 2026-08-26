@@ -4,6 +4,7 @@ import { translate } from './i18n.js'
 import * as Icon from './iconutils.js'
 import * as Schema from './schema.js'
 import * as Utils from './utils.js'
+import * as DOMUtils from './domutils.js'
 
 const EMPTY_VALUES = ['', undefined, null]
 
@@ -276,14 +277,16 @@ export default class Rules {
   }
 
   edit(container) {
+    const fieldset = DOMUtils.createFieldset(
+      container,
+      translate('Conditional style rules'),
+      { id: 'rules' }
+    )
     const template = Utils.sanitizeVars`
-      <details id="rules">
-        <summary><h4>${translate('Conditional style rules')}</h4></summary>
-        <fieldset>
-          <ul data-ref=ul></ul>
-          <button type="button" data-ref=add>${translate('Add rule')}</button>
-        </fieldset>
-      </details>
+      <div>
+        <ul data-ref=ul></ul>
+        <button type="button" data-ref=add>${translate('Add rule')}</button>
+      </div>
     `
     const [body, { ul, add }] = Utils.loadTemplateWithRefs(template)
     if (this.rules.length) {
@@ -295,7 +298,7 @@ export default class Rules {
       })
     }
     add.addEventListener('click', () => this.addRule())
-    container.appendChild(body)
+    fieldset.appendChild(body)
   }
 
   count() {

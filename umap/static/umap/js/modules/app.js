@@ -401,7 +401,7 @@ export default class App extends Utils.WithEvents {
     if (!this.drop) {
       const DropControl = (await import('./drop.js')).default
       // The dropzone must be the canvas for Firefox.
-      this.drop = new DropControl(this, this.mapProxy.container.querySelector("canvas"))
+      this.drop = new DropControl(this, this.mapProxy.container.querySelector('canvas'))
     }
     return this.drop
   }
@@ -905,14 +905,14 @@ export default class App extends Utils.WithEvents {
       app: this,
     })
     builder.build().then((form) => container.appendChild(form))
-    const button = DOMUtils.loadTemplate(
-      `<button type="button">${translate('Use current center and zoom')}</button>`
+    const [p, { button }] = DOMUtils.loadTemplateWithRefs(
+      `<p><button type="button" data-ref="button">${translate('Use current center and zoom')}</button></p>`
     )
     button.addEventListener('click', () => {
       this.setCenterAndZoom()
       builder.fetchAll()
     })
-    container.appendChild(button)
+    container.appendChild(p)
     this.editPanel.open({ content: container, highlight: 'center' })
   }
 

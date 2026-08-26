@@ -214,8 +214,7 @@ export class MutatingForm extends Form {
     } else {
       template = `
       <div class="formbox umap-field-${helper.name}" data-ref=container>
-        ${helper.getLabelTemplate()}
-        ${helper.getTemplate()}
+        ${helper.getLabelTemplate(helper.getTemplate())}
         <small class="help-text" data-ref=helpText></small>
       </div>`
     }

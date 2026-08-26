@@ -142,7 +142,9 @@ export default class Caption extends Utils.WithTemplate {
     const tilelayer = this.app.mapProxy.tilelayers.current
     if (tilelayer) {
       this.elements.bgName.textContent = tilelayer.get('name')
-      this.elements.bgAttribution.innerHTML = tilelayer.getAttributions().join(' ')
+      this.elements.bgAttribution.innerHTML = Utils.toHTML(
+        tilelayer.getAttributions().join(' ')
+      )
     }
     const urls = {
       leaflet: 'http://leafletjs.com',
