@@ -97,6 +97,7 @@ test-integration:
 		umap/tests/integration/test_view_polyline.py \
 		umap/tests/integration/test_view_polygon.py \
 		umap/tests/integration/test_view_marker.py \
+		umap/tests/integration/test_import.py \
 		--dist=loadgroup --reruns 1 --maxfail 3
 
 .PHONY: clean-screenshots

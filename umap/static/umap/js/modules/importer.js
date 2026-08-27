@@ -336,13 +336,16 @@ export default class Importer extends Utils.WithTemplate {
       layer.properties.remoteData.proxy = true
       layer.properties.remoteData.ttl = SCHEMA.ttl.default
     }
-    layer.fetchRemoteData(true).then((features) => {
-      if (features?.length) {
-        layer.zoomTo()
-        this.onSuccess()
-      } else {
-        this.onError()
-      }
+    // Make sure the layer is visible (proxy.createLayer is async)
+    layer.show().then(() => {
+      layer.fetchRemoteData(true).then((features) => {
+        if (features?.length) {
+          layer.zoomTo()
+          this.onSuccess()
+        } else {
+          this.onError()
+        }
+      })
     })
   }
 

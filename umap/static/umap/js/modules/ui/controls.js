@@ -125,7 +125,9 @@ export class MeasureControl extends MoreableControl {
         <input type="radio" id="distance" name="type" value="LineString" checked>
         <label for="distance" title="${translate('Measure distances')}"><i class="icon icon-16 icon-polyline"></i><span class="sr-only">${translate('Measure distances')}</span></label>
         <input type="radio" id="area" name="type" value="Polygon">
-        <label for="area" title="${translate('Measure areas')}"><i class="icon icon-16 icon-polygon"></i><span class="sr-only">${translate('Measure areas')}</span></label>
+        <label for="area" title="${translate('Measure areas')}">
+          <i class="icon icon-16 icon-polygon"></i><span class="sr-only">${translate('Measure areas')}</span>
+        </label>
       </form>
     `)
     toggle.addEventListener('click', (event) => {

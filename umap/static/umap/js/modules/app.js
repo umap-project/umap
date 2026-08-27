@@ -710,7 +710,7 @@ export default class App extends Utils.WithEvents {
     delete spec._umap_options
 
     const datalayer = new DataLayer(this, spec)
-    if (spec.features) {
+    if (spec.features?.length || spec.properties?.remoteData?.url) {
       datalayer.fromUmapGeoJSON(spec)
     }
 
@@ -1425,7 +1425,6 @@ export default class App extends Utils.WithEvents {
   async enableEdit() {
     document.body.classList.add('umap-edit-enabled')
     await this.initJournal()
-    await this.initDrop()
     this.editEnabled = true
     this.drop?.enable()
     this.fire('edit:enabled')
@@ -1434,6 +1433,7 @@ export default class App extends Utils.WithEvents {
     this.checkForLegacy()
     this.checkForAnonymous()
     await this.mapProxy.enableEdit()
+    await this.initDrop()
   }
 
   checkForAnonymous() {
