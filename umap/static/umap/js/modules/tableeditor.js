@@ -153,27 +153,29 @@ export default class TableEditor extends Utils.WithTemplate {
     if (this.datalayer.isRemoteLayer()) return
     const property = cell.dataset.property
     const field = `properties.${property}`
-    const tr = event.target.closest('tr')
+    const tr = cell.closest('tr')
     const feature = this.datalayer.features.get(tr.dataset.feature)
     const handler = property === 'description' ? 'Textarea' : 'Input'
     const builder = new MutatingForm(feature, [[field, { handler }]], {
       id: `umap-feature-properties_${feature.id}`,
     })
     cell.innerHTML = ''
-    builder.build().then((form) => cell.appendChild(form))
-    const input = builder.helpers[field].input
-    input.focus()
-    input.addEventListener('blur', () => {
-      cell.innerHTML = feature.properties[property] || ''
-      cell.focus()
-    })
-    input.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') {
-        builder.restoreField(field)
+    builder.build().then((form) => {
+      cell.appendChild(form)
+      const input = builder.helpers[field].input
+      input.focus()
+      input.addEventListener('blur', () => {
         cell.innerHTML = feature.properties[property] || ''
         cell.focus()
-        event.stopPropagation()
-      }
+      })
+      input.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          builder.restoreField(field)
+          cell.innerHTML = feature.properties[property] || ''
+          cell.focus()
+          event.stopPropagation()
+        }
+      })
     })
   }
 
