@@ -49,7 +49,7 @@ dev = [
   "Django==6.0.7",
   "django-debug-toolbar==7.0.0",
   "hatch==1.17.1",
-  "ruff==0.15.22",
+  "ruff==0.16.4",
   "djlint==1.44.2",
   "mkdocs==1.6.1",
   "mkdocs-material==9.7.7",
@@ -78,7 +78,7 @@ s3 = [
 ]
 sync = [
   "uvicorn==0.52.3",
-  "pydantic==2.13.0",
+  "pydantic==2.13.4",
   "redis==8.0.1",
   "websockets==17.0.1",
 ]
