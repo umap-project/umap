@@ -17,7 +17,7 @@ const TEMPLATE = `
         <option value="center">${translate('Only geometry centers')}</option>
       </select>
     </label>
-    <label data-ref="area" id="area"><span>${translate('Search area')}</span></label>
+    <label data-ref="area" id="area-filter"><span>${translate('Search area')}</span></label>
   </div>
 `
 
