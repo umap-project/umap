@@ -48,7 +48,7 @@ dependencies = [
 dev = [
   "Django==6.0.7",
   "django-debug-toolbar==7.0.0",
-  "hatch==1.17.1",
+  "hatch==1.18.0",
   "ruff==0.16.4",
   "djlint==1.44.2",
   "mkdocs==1.6.1",
