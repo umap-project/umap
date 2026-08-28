@@ -90,6 +90,24 @@ def test_table_editor(live_server, openmap, datalayer, page):
     assert "name" not in data["features"][0]["properties"]
 
 
+def test_edit_cell_focuses_input_and_saves(live_server, openmap, page):
+    DataLayerFactory(map=openmap, data=DATALAYER_DATA)
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#6/48.093/1.890")
+    page.get_by_role("button", name="Manage layers").click()
+    page.locator(".panel").get_by_title("Edit properties in a table").click()
+    page.locator("td[data-property=name]").first.dblclick()
+    field = page.locator('input[name="name"]')
+    expect(field).to_be_focused()
+    field.fill("Point renamed")
+    page.wait_for_timeout(300)  # Time for the input debounce.
+    with page.expect_response(re.compile(r".*/datalayer/update/.*")):
+        page.get_by_role("button", name="Save").click()
+    saved = DataLayer.objects.last()
+    data = json.loads(Path(saved.geojson.path).read_text())
+    names = [feature["properties"].get("name") for feature in data["features"]]
+    assert "Point renamed" in names
+
+
 def test_cannot_add_existing_property_name(live_server, openmap, datalayer, page):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.get_by_role("button", name="Manage layers").click()
