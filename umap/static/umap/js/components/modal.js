@@ -10,6 +10,8 @@ class UmapModal extends HTMLElement {
       const mapId = `${this.dataset.mapId}_target`
       if (!CACHE[mapId]) {
         const app = new App(mapId, JSON.parse(this.dataset.settings))
+        // Expose it for playwright.
+        U.MAP = app
         CACHE[mapId] = app
       }
     })

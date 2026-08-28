@@ -25,7 +25,7 @@ def test_owner_can_delete_map_after_confirmation(map, live_server, login):
     assert Map.objects.get(pk=map.pk).share_status == Map.DELETED
 
 
-def test_dashboard_map_preview(map, live_server, datalayer, login):
+def test_dashboard_map_preview(map, live_server, datalayer, login, assert_screenshot):
     page = login(map.owner)
     page.goto(f"{live_server.url}/en/me")
     dialog = page.get_by_role("dialog")
@@ -35,7 +35,9 @@ def test_dashboard_map_preview(map, live_server, datalayer, login):
     button.click()
     expect(dialog).to_be_visible()
     # Let's check we have a marker on it, so we can guess the map loaded correctly
-    expect(dialog.locator(".leaflet-marker-icon")).to_be_visible()
+    assert_screenshot(
+        page, "preview", clip={"x": 650, "y": 300, "width": 200, "height": 200}
+    )
 
 
 def test_no_delete_button_for_editors(map, live_server, datalayer, login, user):
