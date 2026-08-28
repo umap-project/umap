@@ -47,11 +47,11 @@ def bootstrap(map, live_server):
 
 
 def test_can_edit_on_ctrl_shift_click(
-    live_server, openmap, page, datalayer, wait_for_loaded
+    live_server, openmap, page, datalayer, wait_for_edit_mode
 ):
     modifier = "Meta" if platform.system() == "Darwin" else "Control"
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
-    wait_for_loaded(page)
+    wait_for_edit_mode(page)
     page.locator(".leaflet-marker-icon").click(modifiers=[modifier, "Shift"])
     expect(page.get_by_text("Layer properties")).to_be_visible()
 
