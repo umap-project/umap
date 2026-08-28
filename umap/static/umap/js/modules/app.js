@@ -768,6 +768,8 @@ export default class App extends Utils.WithEvents {
   _markLoaded() {
     if (this.loaded || !this.dataloaded || !this._rendered) return
     this.loaded = true
+    // Per-instance readiness signal on the map element (used by tests).
+    this.mapProxy.map.getTargetElement()?.classList.add('umap-loaded')
     this.fire('loaded')
   }
 
