@@ -103,6 +103,7 @@ test-integration:
 		umap/tests/integration/test_popup.py \
 		umap/tests/integration/test_browser.py \
 		umap/tests/integration/test_dashboard.py \
+		umap/tests/integration/test_map_list.py \
 		--dist=loadgroup --reruns 1 --maxfail 3
 
 .PHONY: clean-screenshots

@@ -11,7 +11,7 @@ def test_should_not_render_any_control(live_server, tilelayer, page, map):
     map.save()
     # Make sure those controls are visible in normal view
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    expect(page.locator(".leaflet-control-minimap")).to_be_visible()
+    expect(page.locator(".ol-overviewmap")).to_be_visible()
     expect(page.locator(".umap-browser")).to_be_visible()
     expect(page.locator(".umap-caption-bar")).to_be_visible()
     expect(page.locator(".umap-control-zoom")).to_be_visible()
@@ -21,7 +21,7 @@ def test_should_not_render_any_control(live_server, tilelayer, page, map):
     page.goto(live_server.url)
     map_el = page.locator(".map_fragment")
     expect(map_el).to_be_visible()
-    expect(map_el.locator(".leaflet-control-minimap")).to_be_hidden()
+    expect(map_el.locator(".ol-overviewmap")).to_be_hidden()
     expect(map_el.locator(".umap-browser")).to_be_hidden()
     expect(map_el.locator(".umap-caption-bar")).to_be_hidden()
     expect(map_el.locator(".umap-control-zoom")).to_be_hidden()
