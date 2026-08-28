@@ -75,7 +75,7 @@ def page(new_page):
 @pytest.fixture
 def wait_for_loaded():
     def _(page):
-        page.wait_for_function("() => U.MAP.loaded === true && !U.MAP.loader.isLoading")
+        page.locator(".umap-loaded").first.wait_for()
 
     return _
 
@@ -83,7 +83,8 @@ def wait_for_loaded():
 @pytest.fixture
 def wait_for_edit_mode():
     def _(page):
-        page.wait_for_function("() => U.MAP.editEnabled === true")
+        # Body is 0px height, so Playwright will never sees it as visible.
+        page.locator(".umap-edit-enabled").first.wait_for(state="attached")
 
     return _
 
@@ -147,17 +148,8 @@ def assert_screenshot(request, wait_for_loaded):
         basename = slugify(f"{request.module.__name__}.{request.node.name}{suffix}")
         expected_filename = dirname / f"{basename}.expected.png"
         wait_for_loaded(page)
-        # Wait 200ms for any map repaint, so to have a stable canvas in the screenshot
-        page.evaluate(
-            """() => new Promise((resolve) => {
-              const map = U.MAP.mapProxy.map
-              let timer
-              const bump = () => { clearTimeout(timer); timer = setTimeout(done, 200) }
-              const done = () => { map.un('rendercomplete', bump); resolve() }
-              map.on('rendercomplete', bump)
-              bump()
-            })"""
-        )
+        # Do not screenshot while anything is loading in the map (tiles…).
+        expect(page.locator(".umap-loading")).to_have_count(0)
         # Freeze CSS animations/transitions (e.g. the edit bar sliding in) to their
         # final state, else the capture races the animation and flakes.
         kwargs = {}
