@@ -180,17 +180,25 @@ export class OLProxy {
   setView({ coordinates, bounds, zoom, easing }) {
     if (easing === undefined) easing = this.app.getProperty('easing')
     const duration = easing ? 500 : 0
+    const id = Math.random()
+    this.app.loader.start(id)
+    const settled = () => {
+      this.app.loader.stop(id)
+    }
     if (bounds) {
       const extent = toOLExtent(bounds)
       this.view.fit(extent, {
         duration,
         padding: FIT_PADDING,
+        callback: settled,
       })
     } else if (easing) {
-      this.view.animate({ center: fromLonLat(coordinates), zoom, duration })
+      this.view.animate({ center: fromLonLat(coordinates), zoom, duration }, settled)
     } else {
+      // setCenter/setZoom are synchronous, with no animation callback.
       this.view.setCenter(fromLonLat(coordinates))
       if (zoom !== undefined) this.view.setZoom(zoom)
+      settled()
     }
   }
 
@@ -268,9 +276,9 @@ export class OLProxy {
     }
   }
 
-  render() {
+  async render() {
     this.focus()
-    this.initCenter()
+    await this.initCenter()
     const updateHash = () => {
       const [lng, lat] = this.center
       this.app.fire('map:view:updated', {
@@ -587,9 +595,16 @@ export class OLProxy {
     const source = this.sources[id]
     if (!source) return
     source.set('umapConfig', geojson.style)
+    // Reflect geojson in visible features on the map (eg. some can be
+    // filtered out from the databrowser).
+    const wanted = new Set(geojson.features.map((feature) => feature.id))
+    for (const olFeature of source.getFeatures()) {
+      if (!wanted.has(olFeature.getId())) source.removeFeature(olFeature)
+    }
     for (const feature of geojson.features) {
       const olFeature = source.getFeatureById(feature.id)
       if (olFeature) this.redrawFeature(olFeature, feature)
+      else source.addFeature(this.geojsonToOL(feature))
     }
     source.changed()
   }

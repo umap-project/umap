@@ -101,6 +101,7 @@ test-integration:
 		umap/tests/integration/test_remote_data.py \
 		umap/tests/integration/test_picto.py \
 		umap/tests/integration/test_popup.py \
+		umap/tests/integration/test_browser.py \
 		--dist=loadgroup --reruns 1 --maxfail 3
 
 .PHONY: clean-screenshots

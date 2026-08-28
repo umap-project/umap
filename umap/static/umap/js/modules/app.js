@@ -113,7 +113,7 @@ export default class App extends Utils.WithEvents {
     }
     // initCenter (in setup) needs the locate control to exist.
     this.controlManager.init()
-    this.mapProxy.render()
+    await this.mapProxy.render()
     this.controlManager.update()
 
     this.panel = new Panel(this)
