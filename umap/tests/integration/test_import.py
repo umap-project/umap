@@ -983,7 +983,7 @@ def test_import_geojson_from_url(page, live_server, tilelayer):
     page.locator(".umap-browser .datalayer").first.click()
     expect(markers).to_have_count(1)
     page.get_by_role("button", name="Manage layers").click()
-    page.get_by_role("button", name="Edit", exact=True).click()
+    page.locator(".panel.right").get_by_role("button", name="Edit", exact=True).click()
     page.locator("summary").filter(has_text="Remote data").click()
     expect(page.locator('.panel input[name="url"]')).to_have_value("")
 

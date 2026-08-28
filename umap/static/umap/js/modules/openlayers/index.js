@@ -281,8 +281,15 @@ export class OLProxy {
     }
     // OL has no zoomend, and we want only round zoom events.
     let lastZoom = Math.round(this.zoom)
+    // OL emits a movend at its first render, even if the view hasn't changed, and this
+    // can make dynamic remote data to be fetched twice.
+    let firstRenderSeen = false
     this.map.on('moveend', () => {
       updateHash()
+      if (!firstRenderSeen) {
+        firstRenderSeen = true
+        return
+      }
       this.app.fire('map:moveend')
       const zoom = Math.round(this.zoom)
       if (zoom !== lastZoom) {
