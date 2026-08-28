@@ -28,6 +28,10 @@ DATALAYER_DATA = {
 }
 FIXTURES = Path(__file__).parent.parent / "fixtures"
 
+# Icons are drawn on the canvas; each URL carries a `#16/48.55297/13.68896` hash to
+# center the marker, so this small central clip captures the pin (anchored at center).
+ICON_CLIP = {"x": 590, "y": 280, "width": 100, "height": 110}
+
 
 @pytest.fixture
 def pictos():
@@ -43,13 +47,15 @@ def pictos():
     ).save()
 
 
-def test_can_change_picto_at_map_level(openmap, live_server, page, pictos):
+def test_can_change_picto_at_map_level(
+    openmap, live_server, page, pictos, assert_screenshot
+):
     DataLayerFactory(map=openmap, data=DATALAYER_DATA)
-    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
-    marker = page.locator(".umap-div-icon img")
-    expect(marker).to_have_count(1)
-    # Should have default img
-    expect(marker).to_have_attribute("src", "/static/umap/img/marker.svg")
+    page.goto(
+        f"{live_server.url}{openmap.get_absolute_url()}?edit#16/48.55297/13.68896"
+    )
+    # Default icon, drawn on the canvas.
+    assert_screenshot(page, suffix="default", clip=ICON_CLIP)
     edit_settings = page.get_by_title("Map advanced properties")
     expect(edit_settings).to_be_visible()
     edit_settings.click()
@@ -71,23 +77,27 @@ def test_can_change_picto_at_map_level(openmap, live_server, page, pictos):
     search.type("star")
     expect(symbols).to_have_count(1)
     symbols.click()
-    expect(marker).to_have_attribute("src", "/uploads/pictogram/star.svg")
+    assert_screenshot(page, suffix="star", clip=ICON_CLIP)
     undefine.click()
-    expect(marker).to_have_attribute("src", "/static/umap/img/marker.svg")
+    assert_screenshot(page, suffix="default", clip=ICON_CLIP)
 
 
-def test_can_change_picto_at_datalayer_level(openmap, live_server, page, pictos):
+def test_can_change_picto_at_datalayer_level(
+    openmap, live_server, page, pictos, assert_screenshot
+):
     openmap.settings["properties"]["iconUrl"] = "/uploads/pictogram/star.svg"
     openmap.save()
     DataLayerFactory(map=openmap, data=DATALAYER_DATA)
-    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
-    marker = page.locator(".umap-div-icon img")
-    expect(marker).to_have_count(1)
-    # Should have default img
-    expect(marker).to_have_attribute("src", "/uploads/pictogram/star.svg")
-    # Edit datalayer
+    page.goto(
+        f"{live_server.url}{openmap.get_absolute_url()}?edit#16/48.55297/13.68896"
+    )
+    # Icon inherited from the map, drawn on the canvas.
+    assert_screenshot(page, suffix="star", clip=ICON_CLIP)
+    # Edit datalayer: shift+meta click on the (centered) marker.
     modifier = "Meta" if platform.system() == "Darwin" else "Control"
-    marker.click(modifiers=[modifier, "Shift"])
+    page.locator("#map").click(
+        position={"x": 640, "y": 340}, modifiers=[modifier, "Shift"]
+    )
     settings = page.get_by_text("Layer properties")
     expect(settings).to_be_visible()
     shape_settings = page.get_by_text("Shape properties")
@@ -110,22 +120,25 @@ def test_can_change_picto_at_datalayer_level(openmap, live_server, page, pictos)
     search.type("circle")
     expect(symbols).to_have_count(1)
     symbols.click()
-    expect(marker).to_have_attribute("src", "/uploads/pictogram/circle.svg")
+    assert_screenshot(page, suffix="circle", clip=ICON_CLIP)
     undefine.click()
-    expect(marker).to_have_attribute("src", "/uploads/pictogram/star.svg")
+    # The marker is still selected (edit form open), so it keeps the highlight.
+    assert_screenshot(page, suffix="star-highlighted", clip=ICON_CLIP)
 
 
-def test_can_change_picto_at_marker_level(openmap, live_server, page, pictos):
+def test_can_change_picto_at_marker_level(
+    openmap, live_server, page, pictos, assert_screenshot
+):
     openmap.settings["properties"]["iconUrl"] = "/uploads/pictogram/star.svg"
     openmap.save()
     DataLayerFactory(map=openmap, data=DATALAYER_DATA)
-    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
-    marker = page.locator(".umap-div-icon img")
-    expect(marker).to_have_count(1)
-    # Should have default img
-    expect(marker).to_have_attribute("src", "/uploads/pictogram/star.svg")
-    # Edit marker
-    marker.click(modifiers=["Shift"])
+    page.goto(
+        f"{live_server.url}{openmap.get_absolute_url()}?edit#16/48.55297/13.68896"
+    )
+    # Icon inherited from the map, drawn on the canvas.
+    assert_screenshot(page, suffix="star", clip=ICON_CLIP)
+    # Edit marker: shift click on the (centered) marker.
+    page.locator("#map").click(position={"x": 640, "y": 340}, modifiers=["Shift"])
     settings = page.get_by_text("Feature properties")
     expect(settings).to_be_visible()
     shape_settings = page.get_by_text("Shape properties")
@@ -148,18 +161,28 @@ def test_can_change_picto_at_marker_level(openmap, live_server, page, pictos):
     search.type("circle")
     expect(symbols).to_have_count(1)
     symbols.click()
-    expect(marker).to_have_attribute("src", "/uploads/pictogram/circle.svg")
+    assert_screenshot(page, suffix="circle", clip=ICON_CLIP)
     undefine.click()
-    expect(marker).to_have_attribute("src", "/uploads/pictogram/star.svg")
+    # The marker is still selected (edit form open), so it keeps the highlight.
+    assert_screenshot(page, suffix="star-highlighted", clip=ICON_CLIP)
 
 
-def test_can_use_remote_url_as_picto(openmap, live_server, page, pictos):
+def test_can_use_remote_url_as_picto(
+    openmap, live_server, page, pictos, assert_screenshot
+):
     DataLayerFactory(map=openmap, data=DATALAYER_DATA)
-    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
-    marker = page.locator(".umap-div-icon img")
-    expect(marker).to_have_count(1)
-    # Should have default img
-    expect(marker).to_have_attribute("src", "/static/umap/img/marker.svg")
+    page.route(
+        "https://foo.bar/img.jpg",
+        lambda route: route.fulfill(
+            content_type="image/svg+xml",
+            headers={"Access-Control-Allow-Origin": "*"},
+            body='<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">'
+            '<rect width="24" height="24" fill="red"/></svg>',
+        ),
+    )
+    page.goto(
+        f"{live_server.url}{openmap.get_absolute_url()}?edit#16/48.55297/13.68896"
+    )
     edit_settings = page.get_by_title("Map advanced properties")
     expect(edit_settings).to_be_visible()
     edit_settings.click()
@@ -177,7 +200,7 @@ def test_can_use_remote_url_as_picto(openmap, live_server, page, pictos):
     expect(input_el).to_be_visible()
     input_el.fill("https://foo.bar/img.jpg")
     input_el.blur()
-    expect(marker).to_have_attribute("src", "https://foo.bar/img.jpg")
+    assert_screenshot(page, suffix="remote", clip=ICON_CLIP)
     # Now close and reopen the form, it should still be the URL tab
     close = page.locator(".panel.right.on .buttons").get_by_title("Close")
     expect(close).to_be_visible()
@@ -193,12 +216,11 @@ def test_can_use_remote_url_as_picto(openmap, live_server, page, pictos):
     expect(symbols).to_have_count(1)
 
 
-def test_can_use_char_as_picto(openmap, live_server, page, pictos):
+def test_can_use_char_as_picto(openmap, live_server, page, pictos, assert_screenshot):
     DataLayerFactory(map=openmap, data=DATALAYER_DATA)
-    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
-    marker = page.locator(".umap-div-icon span")
-    # Should have default img, so not a span
-    expect(marker).to_have_count(0)
+    page.goto(
+        f"{live_server.url}{openmap.get_absolute_url()}?edit#16/48.55297/13.68896"
+    )
     edit_settings = page.get_by_title("Map advanced properties")
     expect(edit_settings).to_be_visible()
     edit_settings.click()
@@ -215,8 +237,7 @@ def test_can_use_char_as_picto(openmap, live_server, page, pictos):
     expect(input_el).to_be_visible()
     input_el.fill("♩")
     input_el.blur()
-    expect(marker).to_have_count(1)
-    expect(marker).to_have_text("♩")
+    assert_screenshot(page, suffix="char", clip=ICON_CLIP)
     # Now close and reopen the form, it should still be the URL tab
     close = page.locator(".panel.right.on .buttons").get_by_title("Close")
     expect(close).to_be_visible()
