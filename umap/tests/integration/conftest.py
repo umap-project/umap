@@ -75,7 +75,7 @@ def page(new_page):
 @pytest.fixture
 def wait_for_loaded():
     def _(page):
-        page.wait_for_function("() => U.MAP.loaded === true")
+        page.wait_for_function("() => U.MAP.loaded === true && !U.MAP.loader.isLoading")
 
     return _
 
@@ -127,7 +127,7 @@ def asgi_live_server(request, live_server, settings, db):
 def assert_screenshot(request, wait_for_loaded):
     update = request.config.getoption("--update-screenshots")
 
-    def assert_(locator_or_page, suffix="", clip=None):
+    def assert_(locator_or_page, suffix="", clip=None, ui=True):
         # Hide this helper's frame so a failure points at the calling test line.
         __tracebackhide__ = True
         # expected screenshots are run without tiles, so in DEBUG mode trying to
@@ -139,6 +139,9 @@ def assert_screenshot(request, wait_for_loaded):
             if hasattr(locator_or_page, "page")
             else locator_or_page
         )
+        # Hide panels and controls for a cleaner map screenshot.
+        if not ui:
+            page.emulate_media(media="print")
         dirname = Path(__file__).parent.parent / "screenshots"
         suffix = f"-{suffix}" if suffix else ""
         basename = slugify(f"{request.module.__name__}.{request.node.name}{suffix}")
@@ -161,6 +164,8 @@ def assert_screenshot(request, wait_for_loaded):
         if clip:
             kwargs["clip"] = clip
         screenshot = locator_or_page.screenshot(animations="disabled", **kwargs)
+        if not ui:
+            page.emulate_media(media="screen")
         if update:
             expected_filename.write_bytes(screenshot)
             return

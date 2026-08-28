@@ -8,6 +8,10 @@ export default class Loader {
     this._counter = new Set()
   }
 
+  get isLoading() {
+    return Boolean(this._counter.size)
+  }
+
   start(id) {
     this._counter.add(id)
     this.parent.classList.add('umap-loading')
