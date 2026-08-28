@@ -26,8 +26,12 @@ def test_iframe_code_can_contain_datalayers(map, live_server, datalayer, page):
 
 
 def test_iframe_code_can_contain_feature(map, live_server, datalayer, page):
-    page.goto(f"{live_server.url}{map.get_absolute_url()}?share")
-    page.locator(".icon-container").click()
+    # Open first the browser to be able to click on the feature.
+    page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=databrowser")
+    page.locator(".umap-browser .feature").get_by_title(
+        "Bring feature to center"
+    ).click()
+    page.get_by_title("Share and download").click()
     textarea = page.get_by_label("Iframe")
     expect(textarea).to_be_visible()
     expect(textarea).not_to_have_text(re.compile("feature=Here"))
