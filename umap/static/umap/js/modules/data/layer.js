@@ -307,9 +307,10 @@ export class DataLayer {
 
   async fromUmapGeoJSON(geojson) {
     if (this.isRemoteLayer()) {
-      // createLayer() is async, so a freshly created layer may not be on the map
-      // yet; show it first, otherwise fetchRemoteData bails on its isVisible guard.
-      if (this.showAtLoad()) await this.show()
+      // FIXME: hack
+      // Just created datalayer try to load their remote data before being
+      // addeded to the map (this part is async), so let's force a show here.
+      if (!this.createdOnServer && this.showAtLoad()) await this.show()
       await this.fetchRemoteData()
     } else {
       await this.fromGeoJSON(geojson, false)
