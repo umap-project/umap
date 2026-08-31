@@ -81,32 +81,33 @@ test-unit:
 
 test-integration:
 	uv run pytest -vv \
+		umap/tests/integration/test_anonymous_owned_map.py \
 		umap/tests/integration/test_basics.py \
+		umap/tests/integration/test_browser.py \
 		umap/tests/integration/test_caption.py \
+		umap/tests/integration/test_caption_layer_switcher.py \
+		umap/tests/integration/test_categorized_layer.py \
+		umap/tests/integration/test_dashboard.py \
+		umap/tests/integration/test_export_map.py \
 		umap/tests/integration/test_features_id_generation.py \
 		umap/tests/integration/test_fields.py \
 		umap/tests/integration/test_iframe.py \
+		umap/tests/integration/test_import.py \
+		umap/tests/integration/test_map.py \
+		umap/tests/integration/test_map_list.py \
+		umap/tests/integration/test_optimistic_merge.py \
+		umap/tests/integration/test_picto.py \
+		umap/tests/integration/test_popup.py \
+		umap/tests/integration/test_remote_data.py \
 		umap/tests/integration/test_save.py \
 		umap/tests/integration/test_search.py \
+		umap/tests/integration/test_share.py \
 		umap/tests/integration/test_slideshow.py \
 		umap/tests/integration/test_star.py \
 		umap/tests/integration/test_team.py \
-		umap/tests/integration/test_anonymous_owned_map.py \
-		umap/tests/integration/test_caption_layer_switcher.py \
-		umap/tests/integration/test_export_map.py \
-		umap/tests/integration/test_view_polyline.py \
-		umap/tests/integration/test_view_polygon.py \
 		umap/tests/integration/test_view_marker.py \
-		umap/tests/integration/test_import.py \
-		umap/tests/integration/test_remote_data.py \
-		umap/tests/integration/test_picto.py \
-		umap/tests/integration/test_popup.py \
-		umap/tests/integration/test_browser.py \
-		umap/tests/integration/test_dashboard.py \
-		umap/tests/integration/test_map_list.py \
-		umap/tests/integration/test_share.py \
-		umap/tests/integration/test_map.py \
-		umap/tests/integration/test_optimistic_merge.py \
+		umap/tests/integration/test_view_polygon.py \
+		umap/tests/integration/test_view_polyline.py \
 		--dist=loadgroup --reruns 1 --maxfail 3
 
 .PHONY: clean-screenshots
