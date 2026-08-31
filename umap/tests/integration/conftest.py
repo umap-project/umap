@@ -148,6 +148,21 @@ def assert_screenshot(request, wait_for_loaded):
         basename = slugify(f"{request.module.__name__}.{request.node.name}{suffix}")
         expected_filename = dirname / f"{basename}.expected.png"
         wait_for_loaded(page)
+        # Wait 200ms for any map repaint, so to have a stable canvas in the screenshot
+        page.evaluate(
+            """() => new Promise((resolve) => {
+              if (!U?.MAP) {
+                  resolve()
+                  return
+              }
+              const map = U.MAP.mapProxy.map
+              let timer
+              const bump = () => { clearTimeout(timer); timer = setTimeout(done, 200) }
+              const done = () => { map.un('rendercomplete', bump); resolve() }
+              map.on('rendercomplete', bump)
+              bump()
+            })"""
+        )
         # Do not screenshot while anything is loading in the map (tiles…).
         expect(page.locator(".umap-loading")).to_have_count(0)
         # Freeze CSS animations/transitions (e.g. the edit bar sliding in) to their
