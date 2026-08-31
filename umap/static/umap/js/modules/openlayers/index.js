@@ -109,12 +109,12 @@ export class OLProxy {
     )
     this.app.on('draw:route', async () => await this.editor?.startRoute())
     this.app.on('map:view:set', (event) => {
-      const { easing, zoom, coordinates } = event.detail
-      this.setView({ coordinates, zoom, easing })
+      const { easing, zoom, coordinates, callback } = event.detail
+      this.setView({ coordinates, zoom, easing, callback })
     })
     this.app.on('map:view:fit', (event) => {
-      const { easing, zoom, bounds } = event.detail
-      this.setView({ bounds, zoom, easing })
+      const { easing, zoom, bounds, callback } = event.detail
+      this.setView({ bounds, zoom, easing, callback })
     })
     this.app.on('panel:show', (event) => {
       const { content } = event.detail
@@ -177,13 +177,14 @@ export class OLProxy {
     return this.view.getZoomForResolution(resolution)
   }
 
-  setView({ coordinates, bounds, zoom, easing }) {
+  setView({ coordinates, bounds, zoom, easing, callback }) {
     if (easing === undefined) easing = this.app.getProperty('easing')
     const duration = easing ? 500 : 0
     const id = Math.random()
     this.app.loader.start(id)
     const settled = () => {
       this.app.loader.stop(id)
+      callback?.()
     }
     if (bounds) {
       const extent = toOLExtent(bounds)
@@ -345,7 +346,7 @@ export class OLProxy {
           const feature = datalayer.features.last()
           if (feature) {
             feature.zoomTo({
-              callback: this.app.properties.noControl ? null : feature.view,
+              callback: this.app.properties.noControl ? null : () => feature.view(),
             })
             return
           }
