@@ -984,6 +984,6 @@ details details {
     .umap-control-container,
     .window,
     .umap-ui-container {
-        display: none;
+        display: none!important;
     }
 }
