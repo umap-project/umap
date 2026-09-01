@@ -1428,14 +1428,14 @@ export default class App extends Utils.WithEvents {
     document.body.classList.add('umap-edit-enabled')
     await this.initJournal()
     this.editEnabled = true
-    this.drop?.enable()
     this.fire('edit:enabled')
     this.editBar.redraw()
     this.topBar.redraw()
     this.checkForLegacy()
     this.checkForAnonymous()
     await this.mapProxy.enableEdit()
-    await this.initDrop()
+    const drop = await this.initDrop()
+    drop.enable()
   }
 
   checkForAnonymous() {
@@ -1483,7 +1483,7 @@ export default class App extends Utils.WithEvents {
 
   disableEdit() {
     if (this.isDirty) return
-    this.drop.disable()
+    this.drop?.disable()
     document.body.classList.remove('umap-edit-enabled')
     this.editedFeature = null
     this.editEnabled = false
