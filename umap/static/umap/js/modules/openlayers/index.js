@@ -84,6 +84,17 @@ export class OLProxy {
   proxyIncomingEvents() {
     this.map.on('click', (event) => this.onClick(event))
     this.map.on('contextmenu', (event) => this.onContextMenu(event))
+    this.map.on('loadstart', (event) => {
+      this.app.loader.start('map-loading')
+    })
+    this.map.on('loadend', () => {
+      this.app.loader.stop('map-loading')
+    })
+    // Whoever moves the view: a pan, our own setView, or an overlay panning itself
+    // into sight.
+    this.map.on('movestart', () => this.app.loader.start('map-moving'))
+    this.map.on('moveend', () => this.app.loader.stop('map-moving'))
+
   }
 
   onPointerMove(event) {
@@ -137,6 +148,7 @@ export class OLProxy {
     this.app.on('popup:close', () => this.closePopup())
     this.app.on('map:show:point', (event) => this.showPoint(event.detail))
     this.app.on('map:hide:point', () => this.hidePoint())
+    this.app.on('feature:endedit', () => this.editor?.select.clearSelection())
     this.app.on('feature:reset', (event) => {
       const { sourceId, geojson } = event.detail
       const olFeature = this.sources[sourceId]?.getFeatureById(geojson.id)
@@ -368,9 +380,11 @@ export class OLProxy {
   }
 
   onEscape() {
-    if (!this.activeDrawing) return false
-    this.activeDrawing.abortDrawing()
-    this.endDrawing()
+    const drawing = this.editor?.activeDrawing
+    if (!drawing) return false
+    // Commit what has been drawn so far.
+    drawing.finishDrawing()
+    this.editor.endDrawing()
     return true
   }
 

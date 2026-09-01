@@ -8,13 +8,6 @@ export default class TileLayerManager {
     this.all = new Map()
     this.current = undefined
     this.overlay = undefined
-
-    proxy.map.on('loadstart', (event) => {
-      this.app.loader.start('tiles')
-    })
-    proxy.map.on('loadend', () => {
-      this.app.loader.stop('tiles')
-    })
   }
 
   get app() {
