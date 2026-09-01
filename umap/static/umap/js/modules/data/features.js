@@ -4,7 +4,7 @@ import * as DOMUtils from '../domutils.js'
 import { MutatingForm } from '../form/builder.js'
 import * as GeoUtils from '../geoutils.js'
 import { getLocale, translate } from '../i18n.js'
-import * as Icon from '../icon.js'
+import * as Icon from '../iconutils.js'
 import * as Schema from '../schema.js'
 import * as TextUtils from '../textutils.js'
 import * as Utils from '../utils.js'
@@ -71,7 +71,6 @@ class Feature {
   }
 
   set geometry(value) {
-    this._geometry_bk = Utils.CopyJSON(this._geometry)
     this._geometry = value
     this.pushGeometry()
   }
@@ -130,17 +129,26 @@ class Feature {
   }
 
   onCommit(geometry) {
-    this._geometry_bk = Utils.CopyJSON(this._geometry)
+    const oldGeometry = Utils.CopyJSON(this._geometry)
     this._geometry = geometry
+    this.journalGeometry(oldGeometry)
+  }
+
+  commitGeometry(geometry) {
+    const oldGeometry = Utils.CopyJSON(this._geometry)
+    this.geometry = geometry
+    this.journalGeometry(oldGeometry)
+  }
+
+  journalGeometry(oldGeometry) {
     // When the layer is a remote layer, we don't want to sync the creation of the
     // points via the websocket, as the other peers will get them themselves.
     if (this.datalayer?.isRemoteLayer()) return
-    if (this._needs_upsert) {
-      this.journal.upsert(this.toJournal(), null)
-      this._needs_upsert = false
-    } else {
-      this.journal.update('geometry', this.geometry, this._geometry_bk)
-    }
+    this.journal.update('geometry', this.geometry, oldGeometry)
+  }
+
+  isDraft() {
+    return this._needs_upsert === true
   }
 
   isReadOnly() {
@@ -161,9 +169,8 @@ class Feature {
 
   async buildCard() {
     const container = document.createElement('div')
-    container.classList.add('umap-popup')
     const name = this.getOption('popupTemplate')
-    const { default: loadTemplate } = await import('../rendering/template.js')
+    const { default: loadTemplate } = await import('../template.js')
     const content = await loadTemplate(name, this, container)
     const elements = container.querySelectorAll('img,iframe')
     if (!elements.length && container.textContent.replace('\n', '') === '') {
@@ -203,6 +210,7 @@ class Feature {
       } else {
         this.app.fire('popup:show', {
           id: this.id,
+          sourceId: this.datalayer.id,
           content: element,
           center: center || this.center,
           mode: popupShape === 'Large' ? 'large' : 'normal',
@@ -333,8 +341,6 @@ class Feature {
     })
     container.appendChild(button)
   }
-
-  addExtraEditFieldset(container) {}
 
   appendEditFieldsets(container) {
     const optionsFields = this.getShapeOptions()
@@ -484,12 +490,11 @@ class Feature {
   }
 
   zoomTo({ easing, latlng, callback } = {}) {
-    if (easing === undefined) easing = this.app.getProperty('easing')
-    if (callback) this.app.once('map:moveend', (event) => callback.call(this, event))
     this.app.fire('map:view:set', {
       coordinates: latlng || this.center,
       zoom: this.getBestZoom(),
       easing,
+      callback,
     })
   }
 
@@ -545,7 +550,6 @@ class Feature {
 
   getStyleProperties() {
     return [
-      'smoothFactor',
       'color',
       'opacity',
       'stroke',
@@ -569,10 +573,23 @@ class Feature {
     for (const option of this.getStyleProperties()) {
       style[option] = this.getDynamicOption(option)
     }
-    style.highlight = {
-      opacity: 1,
-      fillOpacity: Math.sqrt(style.fillOpacity ?? 1),
-      weight: 1.3 * style.weight,
+    const defaultPlacement = this instanceof LineString ? 'line' : 'point'
+    const text = this.getDynamicOption('textPath')
+    if (text) {
+      const color = this.getOption('textPathColor') || this.getDynamicOption('color')
+      const textPath = {
+        text,
+        repeat: this.getOption('textPathRepeat'),
+        offset: this.getOption('textPathOffset') || undefined,
+        align: this.getOption('textPathPosition'),
+        placement: this.getOption('textPathPlacement') || defaultPlacement,
+        fill: color,
+        stroke: this instanceof Path ? DOMUtils.blackOrWhite(color) : '#fff',
+        opacity: this.getDynamicOption('opacity'),
+        rotate: this.getOption('textPathRotate'),
+        fontSize: this.getOption('textPathSize'),
+      }
+      style.textPath = textPath
     }
     return style
   }
@@ -581,17 +598,40 @@ class Feature {
     const geojson = this.toGeoJSON()
     geojson.id = this.id
     geojson.style = this.getRenderProperties()
+    geojson.highlight = {
+      opacity: 1,
+      fillOpacity: Math.sqrt(geojson.style.fillOpacity ?? 1),
+      weight: 1.3 * geojson.style.weight,
+      iconOpacity: 1,
+      scale: 1.2,
+    }
     geojson.readonly = this.isReadOnly()
     geojson.label = this.getLabel()
-    geojson.zIndex = this.datalayer.getDOMOrder()
+    // Per-feature values a Type computes as feature attributes (vs style), e.g. the heat weight.
+    const attributes = this.datalayer.computed?.attributes?.[this.id]
+    if (attributes) geojson.properties = { ...geojson.properties, ...attributes }
+    geojson.zIndex = this.getRank()
+    const route = geojson.properties._umap_options?.route
+    if (route) {
+      geojson.route = route
+      geojson.route.geometry = geojson.geometry
+      geojson.geometry = {
+        type: 'MultiPoint',
+        coordinates: route.coordinates,
+      }
+    }
+    // Renderer should not access those property directly.
+    delete geojson.properties._umap_options
     return geojson
   }
 
   getLabel() {
+    let show = this.getOption('showLabel')
+    // Retrocompat
+    if (this.getOption('labelHover') && show) show = null
     return {
       text: this.getDisplayName(),
-      show: this.getOption('showLabel'),
-      hover: this.getOption('labelHover'),
+      show,
       direction: this.getOption('labelDirection'),
       interactive: this.getOption('labelInteractive'),
     }
@@ -672,6 +712,13 @@ class Feature {
     })
   }
 
+  onContextMenu({ lat, lng, pixel }) {
+    const items = this.getContextMenu({ lat, lng }).concat(
+      this.app.getSharedContextMenu({ lat, lng })
+    )
+    this.app.contextmenu.openAt(pixel, items)
+  }
+
   getContextMenu(event) {
     const permalink = this.getPermalink()
     const items = []
@@ -714,13 +761,7 @@ class Feature {
   }
 
   getEditContextMenu(event) {
-    const items = []
-    const vertexClicked = event.vertex
-    if (vertexClicked) {
-      items.push(...this.getVertexTools(event))
-    } else {
-      items.push(...this.getDrawingTools(event))
-    }
+    const items = [...this.getDrawingTools(event)]
     items.push(
       '-',
       {
@@ -757,6 +798,24 @@ class Feature {
     } else if (DOMUtils.contrastedColor(element, bgcolor)) {
       element.classList.add('icon-white')
     }
+  }
+
+  addExtraEditFieldset(container) {
+    const options = [
+      'properties._umap_options.textPath',
+      'properties._umap_options.textPathColor',
+      'properties._umap_options.textPathRepeat',
+      'properties._umap_options.textPathRotate',
+      'properties._umap_options.textPathSize',
+      'properties._umap_options.textPathOffset',
+      'properties._umap_options.textPathPlacement',
+      'properties._umap_options.textPathPosition',
+    ]
+    const builder = new MutatingForm(this, options, {
+      id: 'umap-feature-text-decoration',
+    })
+    const fieldset = DOMUtils.createFieldset(container, translate('Text decoration'))
+    builder.build().then((form) => fieldset.appendChild(form))
   }
 }
 
@@ -810,12 +869,17 @@ export class Point extends Feature {
         Alert.error(translate('Invalid latitude or longitude'))
         return
       }
-      this.onCommit({ type: 'Point', coordinates })
-      this.pushGeometry()
+      this.commitGeometry({ type: 'Point', coordinates })
       this.zoomTo({ easing: false })
     })
     const fieldset = DOMUtils.createFieldset(container, translate('Coordinates'))
     builder.build().then((form) => fieldset.appendChild(form))
+  }
+
+  view(event) {
+    // Do not pass the event center, as we always want to use the Point center
+    // for centering popup.
+    return super.view()
   }
 }
 
@@ -833,11 +897,7 @@ class Path extends Feature {
   }
 
   getAdvancedOptions() {
-    return [
-      'properties._umap_options.smoothFactor',
-      'properties._umap_options.dashArray',
-      'properties._umap_options.zoomTo',
-    ]
+    return ['properties._umap_options.dashArray', 'properties._umap_options.zoomTo']
   }
 
   getBestZoom() {
@@ -857,19 +917,6 @@ class Path extends Feature {
       coordinates: shapes.length > 1 ? shapes : shapes[0],
     }
     return extracted
-  }
-
-  appendShape(coordinates) {
-    const oldGeometry = Utils.CopyJSON(this._geometry)
-    const type = this.geometry.type
-    const isMultiType = type.startsWith('Multi')
-    this.geometry = {
-      type: isMultiType ? type : `Multi${type}`,
-      coordinates: isMultiType
-        ? [...this.coordinates, coordinates]
-        : [this.coordinates, coordinates],
-    }
-    this.journal.update('geometry', this.geometry, oldGeometry)
   }
 
   isolateShape(coordinate) {
@@ -907,49 +954,36 @@ class Path extends Feature {
     )
   }
 
-  transferShape(coordinate, to) {
-    if (this.isMulti()) {
-      const oldGeometry = Utils.CopyJSON(this._geometry)
-      return this.journal.update(
-        'geometry',
-        async () => {
-          const extracted = await this._removeShapeAt(coordinate)
-          if (!extracted) return
-          to.appendShape(extracted)
-          return this.geometry
-        },
-        oldGeometry
-      )
-    }
-    to.appendShape(Utils.CopyJSON(this.coordinates))
-    this.del()
+  combine(others) {
+    const shapesOf = (feature) =>
+      feature.isMulti() ? feature.coordinates : [feature.coordinates]
+    const coordinates = Utils.CopyJSON([this, ...others].flatMap(shapesOf))
+    const type = `Multi${this.geometry.type.replace('Multi', '')}`
+    this.journal.startBatch()
+    this.commitGeometry({ type, coordinates })
+    for (const feature of others) feature.del()
+    this.journal.commitBatch()
   }
 
   zoomTo({ easing, callback }) {
     // Use bounds instead of centroid for paths.
-    easing = easing || this.app.getProperty('easing')
     const zoom = this.getBestZoom()
-    this.app.fire('map:view:fit-bounds', { bounds: this.bounds, zoom, easing })
-    if (callback) callback.call(this)
+    this.app.fire('map:view:fit', {
+      bounds: this.bounds,
+      zoom,
+      easing,
+      callback,
+    })
   }
 
   getContextMenu(event) {
     const items = super.getContextMenu(event)
+    const measure = this.measure
     items.push({
-      label: translate('Display measure'),
-      action: () => Alert.info(this.measure),
+      label: this.getMeasureLabel(measure),
+      action: () => Clipboard.copy(measure),
     })
     return items
-  }
-
-  getVertexTools(event) {
-    return [
-      {
-        action: () => event.vertex.delete(),
-        title: translate('Delete this vertex (Alt+Click)'),
-        icon: 'icon-delete-vertex',
-      },
-    ]
   }
 
   getDrawingTools(event) {
@@ -959,67 +993,31 @@ class Path extends Feature {
         {
           title: translate('Extract shape to separate feature'),
           icon: 'icon-extract-shape',
-          action: () => {
-            this.isolateShape(event.coordinate)
-          },
+          action: () => this.isolateShape([event.lng, event.lat]),
         },
         {
           title: translate('Delete this shape'),
           icon: 'icon-delete-shape',
-          action: () => this.deleteShape(event.coordinate),
+          action: () => this.deleteShape([event.lng, event.lat]),
         }
       )
     }
-    if (this.app?.editedFeature !== this && this.isSameClass(this.app.editedFeature)) {
-      items.push({
-        title: translate('Transfer shape to edited feature'),
-        icon: 'icon-transfer-shape',
-        action: () => {
-          this.transferShape(event.coordinate, this.app.editedFeature)
-        },
-      })
+    if (this.app.mapProxy.hasSelection()) {
+      const others = this.app.mapProxy.selection.filter((feature) => feature !== this)
+      const combinable =
+        others.length &&
+        others.every(
+          (feature) => this.isSameClass(feature) && feature.datalayer === this.datalayer
+        )
+      if (combinable) {
+        items.push({
+          title: translate('Combine features'),
+          icon: 'icon-transfer-shape',
+          action: () => this.combine(others),
+        })
+      }
     }
     return items
-  }
-
-  addExtraEditFieldset(container) {
-    const options = [
-      'properties._umap_options.textPath',
-      'properties._umap_options.textPathColor',
-      'properties._umap_options.textPathRepeat',
-      'properties._umap_options.textPathRotate',
-      'properties._umap_options.textPathSize',
-      'properties._umap_options.textPathOffset',
-      'properties._umap_options.textPathPosition',
-    ]
-    const builder = new MutatingForm(this, options, {
-      id: 'umap-feature-line-decoration',
-    })
-    const fieldset = DOMUtils.createFieldset(container, translate('Line decoration'))
-    builder.build().then((form) => fieldset.appendChild(form))
-  }
-
-  getRenderProperties() {
-    const properties = super.getRenderProperties()
-    const textPath = this.getDynamicOption('textPath')
-    let textPathOptions = {}
-    if (textPath) {
-      const color = this.getOption('textPathColor') || this.getDynamicOption('color')
-      textPathOptions = {
-        repeat: this.getOption('textPathRepeat'),
-        offset: this.getOption('textPathOffset') || undefined,
-        position: this.getOption('textPathPosition'),
-        attributes: {
-          fill: color,
-          opacity: this.getDynamicOption('opacity'),
-          rotate: this.getOption('textPathRotate'),
-          'font-size': this.getOption('textPathSize'),
-        },
-      }
-      properties.textPath = textPath
-      properties.textPathOptions = textPathOptions
-    }
-    return properties
   }
 }
 
@@ -1038,6 +1036,10 @@ export class LineString extends Path {
     return TextUtils.readableDistance(
       GeoUtils.length(this.geometry, { units: 'meters' })
     )
+  }
+
+  getMeasureLabel(measure) {
+    return translate('Length: {measure}', { measure })
   }
 
   isSameClass(other) {
@@ -1087,7 +1089,14 @@ export class LineString extends Path {
       `<div><h3>${translate('Route settings')}</h3></div>`
     )
     container.appendChild(await this.routeForm())
-    return this.app.dialog.open({ template: container })
+    const dialog = this.app.dialog
+    dialog.open({ template: container })
+    // dialog.open() only resolves on accept, so watch the close to also catch cancel.
+    return new Promise((resolve) => {
+      dialog.on('close', () => resolve(dialog.dialog.returnValue === 'accept'), {
+        once: true,
+      })
+    })
   }
 
   toPolygon() {
@@ -1126,12 +1135,11 @@ export class LineString extends Path {
         <button class="button" type="button"><i class="icon icon-24 icon-route"></i>${translate('Transform to route')}</button>
       `)
       container.appendChild(button)
-      button.addEventListener('click', () =>
-        this.askForRouteSettings().then(() => {
-          this.toRoute()
-          this.computeRoute()
-        })
-      )
+      button.addEventListener('click', async () => {
+        if (!(await this.askForRouteSettings())) return
+        this.toRoute()
+        this.computeRoute()
+      })
     } else if (this.properties._umap_options.route?.coordinates) {
       const button = Utils.loadTemplate(`
         <button class="button" type="button"><i class="icon icon-24 icon-route"></i>${translate('Restore route')}</button>
@@ -1148,33 +1156,6 @@ export class LineString extends Path {
     }
   }
 
-  async _reduceMulti(previous, current) {
-    if (!previous?.length) return current
-    const previousStart = previous[0]
-    const previousEnd = previous[previous.length - 1]
-    const currentStart = current[0]
-    const currentEnd = current[current.length - 1]
-    // Compute distance between edges (start/end with all combinations)
-    const ss = await GeoUtils.distance(previousStart, currentStart)
-    const se = await GeoUtils.distance(previousStart, currentEnd)
-    const ee = await GeoUtils.distance(previousEnd, currentEnd)
-    const es = await GeoUtils.distance(previousEnd, currentStart)
-    const shortest = Math.min(ss, ee, es, se)
-    // Find the shortest distance
-    switch (shortest) {
-      case se:
-        return [...current, ...previous]
-      case es:
-        return [...previous, ...current]
-      case ee:
-        return [...previous, ...[...current].reverse()]
-      case ss:
-        return [...[...current].reverse(), ...previous]
-      default:
-        throw new Error('Cannot compute merge orientation (invalid coordinates?)')
-    }
-  }
-
   mergeShapes() {
     if (!this.isMulti()) return
     const oldGeometry = Utils.CopyJSON(this._geometry)
@@ -1183,7 +1164,7 @@ export class LineString extends Path {
       async () => {
         let coordinates = []
         for (const coords of this.geometry.coordinates) {
-          coordinates = await this._reduceMulti(coordinates, coords)
+          coordinates = await GeoUtils.mergeLines(coordinates, coords)
         }
         this.geometry = await GeoUtils.cleanCoords({ type: 'LineString', coordinates })
         return this.geometry
@@ -1196,27 +1177,27 @@ export class LineString extends Path {
     return !GeoUtils.isFlat(this.coordinates) && this.coordinates.length > 1
   }
 
-  getVertexTools(event) {
-    const items = super.getVertexTools(event)
-    const index = event.vertex.getIndex()
-    if (index !== 0 && index !== event.vertex.getLastIndex()) {
+  getDrawingTools(event) {
+    const items = super.getDrawingTools(event)
+    items.push({
+      title: this.app.help.displayLabel('CONTINUE_LINE', false),
+      icon: 'icon-continue-line',
+      action: async () => {
+        const point = [event.lng, event.lat]
+        const index = this.isMulti() ? await GeoUtils.shapeAt(this.geometry, point) : 0
+        const rings = this.isMulti() ? this.coordinates : [this.coordinates]
+        const atStart =
+          GeoUtils.closestVertexIndex(rings[index], point, { ends: true }) === 0
+        this.app.mapProxy.startContinueLine(this, this.datalayer.id, index, atStart)
+      },
+    })
+    if (!this.isMulti() && this.coordinates.length > 2) {
       items.push({
         title: translate('Split line'),
         icon: 'icon-split-line',
-        action: () => event.vertex.split(),
-      })
-    } else if (index === 0 || index === event.vertex.getLastIndex()) {
-      items.push({
-        title: this.app.help.displayLabel('CONTINUE_LINE', false),
-        icon: 'icon-continue-line',
-        action: () => event.vertex.continue(),
+        action: () => this.splitShape([event.lng, event.lat]),
       })
     }
-    return items
-  }
-
-  getDrawingTools(event) {
-    const items = super.getDrawingTools(event)
     if (this.isMulti()) {
       items.push({
         title: translate('Merge lines'),
@@ -1231,6 +1212,26 @@ export class LineString extends Path {
       })
     }
     return items
+  }
+
+  splitShape(coordinate) {
+    if (this.isMulti()) return
+    const coordinates = this.coordinates
+    const index = GeoUtils.closestVertexIndex(coordinates, coordinate)
+    // Splitting on an endpoint would yield an empty half.
+    if (index <= 0 || index >= coordinates.length - 1) return
+    this.journal.startBatch()
+    const other = this.datalayer.makeFeature({
+      geometry: { type: 'LineString', coordinates: coordinates.slice(index) },
+      properties: this.cloneProperties(),
+    })
+    other.journal.upsert(other.toJournal())
+    this.commitGeometry({
+      type: 'LineString',
+      coordinates: coordinates.slice(0, index + 1),
+    })
+    this.journal.commitBatch()
+    other.edit()
   }
 
   extendedProperties() {
@@ -1352,25 +1353,35 @@ export class LineString extends Path {
 
   setRoute(coordinates) {
     this.properties._umap_options.route.coordinates = coordinates
+    this.redraw()
     if (coordinates.length >= 2) this.computeRoute()
   }
 
   computeRoute() {
     if (!this.app.properties.ORSAPIKey) return
     const oldGeometry = Utils.CopyJSON(this._geometry)
-    this.journal.update(
-      'geometry',
-      async () => {
-        const { Importer } = await this.loadORS()
-        const importer = new Importer(this.app)
-        const geometry = await importer.directions(this.properties._umap_options.route)
-        if (!geometry?.type) return
-        this.geometry = geometry
-        this.redraw()
-        return this.geometry
-      },
-      oldGeometry
-    )
+    const compute = async () => {
+      const { Importer } = await this.loadORS()
+      const importer = new Importer(this.app)
+      const geometry = await importer.directions(this.properties._umap_options.route)
+      if (!geometry?.type) return false
+      this.geometry = geometry
+      this.redraw()
+      return true
+    }
+    if (this._needs_upsert) {
+      this.journal.upsert(async () => {
+        if (!(await compute())) return
+        this._needs_upsert = false
+        return this.toJournal()
+      }, null)
+    } else {
+      this.journal.update(
+        'geometry',
+        async () => ((await compute()) ? this.geometry : undefined),
+        oldGeometry
+      )
+    }
   }
 
   addExtraEditFieldset(container) {
@@ -1392,6 +1403,10 @@ export class Polygon extends Path {
 
   get measure() {
     return TextUtils.readableArea(GeoUtils.area(this.geometry))
+  }
+
+  getMeasureLabel(measure) {
+    return translate('Area: {measure}', { measure })
   }
 
   isEmpty() {
@@ -1479,13 +1494,45 @@ export class Polygon extends Path {
     }
     items.push({
       title: translate('Start a hole here'),
-      action: () => this.startHole(event.coordinate),
+      action: () => this.startHole([event.lng, event.lat]),
       icon: 'icon-hole',
     })
+    if (this.app.mapProxy.hasSelection()) {
+      const selection = this.app.mapProxy.selection
+      const others = selection.filter((feature) => feature !== this)
+      const mergeable =
+        others.length &&
+        selection.every(
+          (feature) =>
+            feature instanceof Polygon && feature.datalayer === this.datalayer
+        )
+      if (mergeable) {
+        items.push({
+          title: translate('Merge selected polygons'),
+          icon: 'icon-transfer-shape',
+          action: async () => {
+            const { union } = await import('../geoutils.js')
+            const merged = await union(
+              [this, ...others].map((feature) => feature.toGeoJSON())
+            )
+            if (!merged) return
+            this.journal.startBatch()
+            this.commitGeometry(merged.geometry)
+            for (const feature of others) feature.del()
+            this.journal.commitBatch()
+          },
+        })
+      }
+    }
+
     return items
   }
 
   startHole(coordinate) {
-    this.app.fire('feature:hole', { id: this.id, coordinate })
+    this.app.fire('draw:hole', {
+      featureId: this.id,
+      sourceId: this.datalayer.id,
+      coordinate,
+    })
   }
 }

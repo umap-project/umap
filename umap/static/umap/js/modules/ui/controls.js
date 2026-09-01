@@ -1,8 +1,4 @@
-import {
-  LayerGroup,
-  Control as LeafletControl,
-  TileLayer,
-} from '../../../vendors/leaflet/leaflet-src.esm.js'
+import ScaleLine from 'ol/control/ScaleLine.js'
 import { Alert } from '../../components/alerts/alert.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
@@ -30,13 +26,6 @@ export class Control {
   hide() {
     if (!this.container) return
     this.container.hidden = true
-  }
-
-  static get slug() {
-    // Properties on the uMap object are camelCased, let's comply
-    // TODO make properties case insensitive
-    const stripped = this.name.replace(/Control$/, '')
-    return stripped[0].toLowerCase() + stripped.slice(1)
   }
 
   get status() {
@@ -85,6 +74,7 @@ class MoreableControl extends Control {
 }
 
 export class ZoomControl extends MoreableControl {
+  static slug = 'zoom'
   static position = 'topleft'
 
   render() {
@@ -113,10 +103,10 @@ export class ZoomControl extends MoreableControl {
   }
 
   _update() {
-    const map = this.app.mapProxy.map
-    const zoom = map.getZoom()
-    const atMax = zoom >= map.getMaxZoom()
-    const atMin = zoom <= map.getMinZoom()
+    const view = this.app.mapProxy.view
+    const zoom = view.getZoom()
+    const atMax = zoom >= view.getMaxZoom()
+    const atMin = zoom <= view.getMinZoom()
     this._zoomInButton.classList.toggle('disabled', atMax)
     this._zoomOutButton.classList.toggle('disabled', atMin)
     this._zoomInButton.setAttribute('aria-disabled', atMax ? 'true' : 'false')
@@ -125,33 +115,38 @@ export class ZoomControl extends MoreableControl {
 }
 
 export class MeasureControl extends MoreableControl {
+  static slug = 'measure'
   static position = 'topleft'
 
   render() {
-    // TODO remove direct call to leafletMap => turf
-    const defaultUnit = this.app.mapProxy.map.measureTools?.options.defaultUnit
-    const checked = (unit) => (unit === defaultUnit ? 'checked' : '')
-    const [container, { toggle }] = Utils.loadTemplateWithRefs(`
-      <div class="umap-control umap-control-measure">
-        <a class="umap-control-measure-toggle" href="#" role="button" title="${translate('Measure distances')}" data-ref="toggle"></a>
-        <input type="radio" id="km" name="unit" value="km" ${checked('km')}>
-        <label for="km" title="${translate('kilometers')}">${translate('km')}</label>
-        <input type="radio" id="mi" name="unit" value="mi" ${checked('mi')}>
-        <label for="mi" title="${translate('miles')}">${translate('mi')}</label>
-        <input type="radio" id="nm" name="unit" value="nm" ${checked('nm')}>
-        <label for="nm" title="${translate('nautical miles')}">${translate('NM')}</label>
-      </div>
+    const [form, { toggle }] = Utils.loadTemplateWithRefs(`
+      <form class="umap-control umap-control-measure">
+        <a class="umap-control-measure-toggle" href="#" role="button" title="${translate('Measure')}" data-ref="toggle"></a>
+        <input type="radio" id="distance" name="type" value="LineString" checked>
+        <label for="distance" title="${translate('Measure distances')}"><i class="icon icon-16 icon-polyline"></i><span class="sr-only">${translate('Measure distances')}</span></label>
+        <input type="radio" id="area" name="type" value="Polygon">
+        <label for="area" title="${translate('Measure areas')}">
+          <i class="icon icon-16 icon-polygon"></i><span class="sr-only">${translate('Measure areas')}</span>
+        </label>
+      </form>
     `)
     toggle.addEventListener('click', (event) => {
       event.preventDefault()
       event.stopPropagation()
-      this.app.mapProxy.map.measureTools.toggle()
+      form.classList.toggle('on')
+      const data = new FormData(form)
+      this.app.mapProxy.toggleMeasure(data.get('type'))
     })
-    return container
+    form.addEventListener('change', (event) => {
+      const data = new FormData(form)
+      this.app.mapProxy.toggleMeasure(data.get('type'))
+    })
+    return form
   }
 }
 
 export class FullscreenControl extends MoreableControl {
+  static slug = 'fullscreen'
   static position = 'topleft'
 
   render() {
@@ -175,6 +170,7 @@ export class FullscreenControl extends MoreableControl {
 }
 
 export class HomeControl extends MoreableControl {
+  static slug = 'home'
   static position = 'topleft'
 
   render() {
@@ -187,6 +183,7 @@ export class HomeControl extends MoreableControl {
 }
 
 export class EditControl extends Control {
+  static slug = 'edit'
   static position = 'topright'
 
   get visible() {
@@ -214,6 +211,7 @@ export class EditControl extends Control {
 }
 
 export class LoadTemplateControl extends Control {
+  static slug = 'loadTemplate'
   static position = 'topright'
 
   get visible() {
@@ -247,6 +245,7 @@ export class LoadTemplateControl extends Control {
 }
 
 class MoreControl extends Control {
+  static slug = 'more'
   static position = 'topleft'
 
   get status() {
@@ -284,14 +283,18 @@ class MoreControl extends Control {
 }
 
 class ScaleControl extends Control {
+  static slug = 'scale'
   static position = 'bottomleft'
   render() {
-    this._scaleControl = new LeafletControl.Scale()
-    return this._scaleControl.addTo(this.app.mapProxy.map)._container
+    const container = document.createElement('div')
+    const scaleControl = new ScaleLine({ target: container })
+    scaleControl.setMap(this.app.mapProxy.map)
+    return container
   }
 }
 
 export class PermanentCreditControl extends Control {
+  static slug = 'permanentCredit'
   static position = 'bottomleft'
 
   render() {
@@ -343,6 +346,7 @@ class SimpleButton extends MoreableControl {
 }
 
 export class DatalayersControl extends SimpleButton {
+  static slug = 'datalayers'
   static position = 'topleft'
   className = 'umap-control-browse'
   title = translate('Open browser')
@@ -358,6 +362,7 @@ export class DatalayersControl extends SimpleButton {
 }
 
 export class CaptionControl extends SimpleButton {
+  static slug = 'caption'
   static position = 'topleft'
   className = 'umap-control-caption'
   title = translate('About')
@@ -369,6 +374,7 @@ export class CaptionControl extends SimpleButton {
 }
 
 export class EmbedControl extends SimpleButton {
+  static slug = 'embed'
   static position = 'topleft'
   className = 'umap-control-embed'
   title = translate('Share and download')
@@ -380,6 +386,7 @@ export class EmbedControl extends SimpleButton {
 }
 
 export class PrintControl extends SimpleButton {
+  static slug = 'print'
   static position = 'topleft'
   title = translate('Print')
   icon = 'icon-print'
@@ -390,6 +397,7 @@ export class PrintControl extends SimpleButton {
 }
 
 export class SearchControl extends SimpleButton {
+  static slug = 'search'
   static position = 'topleft'
   className = 'umap-control-search'
   title = translate('Search location')
@@ -411,6 +419,7 @@ export class SearchControl extends SimpleButton {
 }
 
 export class AttributionControl extends Control {
+  static slug = 'attribution'
   static position = 'bottomright'
 
   get visible() {
@@ -424,7 +433,7 @@ export class AttributionControl extends Control {
     const template = Utils.sanitizeVars`
       <div class="umap-control-attribution">
         <div class="attribution-container">
-          ${Utils.toHTML(tilelayer?.options.attribution)}
+          ${Utils.toHTML(tilelayer?.getAttributions?.()[0])}
           <span data-ref="short"> — ${Utils.toHTML(shortCredit)}</span>
           <a  href="#" data-ref="caption"> — ${translate('Open caption')}</a>
            — <a href="https://umap-project.org/" data-ref="site">${translate('Powered by uMap')}</a>
@@ -442,7 +451,8 @@ export class AttributionControl extends Control {
 }
 
 export class TilelayersControl extends SimpleButton {
-  static DEMO_TILES_OPTIONS = { s: 'a', z: 9, x: 265, y: 181, '-y': 181, r: '' }
+  static slug = 'tilelayers'
+  static DEMO_TILES_OPTIONS = { 'a-c': 'a', z: 9, x: 265, y: 181, '-y': 181, r: '' }
   static position = 'topleft'
   className = 'umap-tilelayer-control'
   title = translate('Change map background')
@@ -460,7 +470,7 @@ export class TilelayersControl extends SimpleButton {
       </div>
     `)
     const tilelayers = Array.from(this.app.mapProxy.tilelayers.all.values()).sort(
-      (a, b) => a.options.rank - b.options.rank
+      (a, b) => a.get('rank') - b.get('rank')
     )
     for (const layer of tilelayers) {
       tileContainer.appendChild(this.addTileLayerElement(layer, options))
@@ -471,20 +481,24 @@ export class TilelayersControl extends SimpleButton {
 
   addTileLayerElement(tilelayer, options) {
     const src = Utils.template(
-      tilelayer.options.url_template,
+      tilelayer.get('url'),
       TilelayersControl.DEMO_TILES_OPTIONS
     )
     const li = Utils.loadTemplate(Utils.sanitizeVars`
       <li>
         <img src="${src}" loading="lazy" />
-        <div>${tilelayer.options.name}</div>
+        <div>${tilelayer.get('name')}</div>
       </li>
     `)
+    li.classList.toggle(
+      'selected',
+      tilelayer.get('url') === this.app.mapProxy.tilelayers.current?.get('url')
+    )
     li.addEventListener('click', () => {
       const oldTileLayer = this.app.properties.tilelayer
       this.app.mapProxy.tilelayers.select(tilelayer)
       if (options?.edit) {
-        this.app.properties.tilelayer = tilelayer.toJSON()
+        this.app.properties.tilelayer = { ...tilelayer.get('spec') }
         this.app.journal.update(
           'properties.tilelayer',
           this.app.properties.tilelayer,
@@ -497,70 +511,46 @@ export class TilelayersControl extends SimpleButton {
 }
 
 export class LocateControl extends SimpleButton {
+  static slug = 'locate'
   static position = 'topleft'
   title = translate('Center map on your location')
   icon = 'icon-locate'
 
   onMount() {
-    this.app.on('map:locateactivate', () => {
+    this.app.on('map:locate:activate', () => {
       this.container.classList.add('active')
     })
-    this.app.on('map:locatedeactivate', () => {
+    this.app.on('map:locate:deactivate', () => {
       this.container.classList.remove('active')
     })
   }
 
-  async start() {
-    await this.loadPlugin()
-    this._locate.start()
-  }
-
-  stop() {
-    this._locate?.stop()
-  }
-
-  async loadPlugin() {
-    if (this._locate) return
-    const { LocateControl: LeafletLocate } = await import(
-      '../../../vendors/locatecontrol/L.Control.Locate.esm.js'
-    )
-    this._locate = new LeafletLocate({
-      strings: { title: translate('Center map on your location') },
-      showPopup: false,
-      onLocationError: (err) => Alert.error(err.message),
-    })
-    // TODO remove direct call to leafletMap
-    this._locate._map = this.app.mapProxy.map
-    this._locate.onAdd(this.app.mapProxy.map)
-  }
-
   async onClick() {
-    if (this._locate?._active) this.stop()
-    else this.start()
+    this.app.mapProxy.toggleLocate()
   }
 }
 
 class MiniMapControl extends Control {
+  static slug = 'miniMap'
   static position = 'bottomright'
   render() {
-    const layer = this._cloneLayer(this.app.mapProxy.tilelayers.current)
-    this._miniMap = new LeafletControl.MiniMap(layer, {
-      aimingRectOptions: {
-        color: this.app.getProperty('color'),
-        fillColor: this.app.getProperty('fillColor'),
-        stroke: this.app.getProperty('stroke'),
-        fill: this.app.getProperty('fill'),
-        weight: this.app.getProperty('weight'),
-        opacity: this.app.getProperty('opacity'),
-        fillOpacity: this.app.getProperty('fillOpacity'),
-      },
+    const container = document.createElement('div')
+    const proxy = this.app.mapProxy
+    import('ol/control/OverviewMap.js').then(({ default: OverviewMap }) => {
+      const overviewMap = new OverviewMap({
+        layers: [proxy.tilelayers.cloneLayer?.(proxy.tilelayers.current)],
+        collapseLabel: '»',
+        label: '«',
+        collapsed: false,
+        target: container,
+      })
+      overviewMap.setMap(proxy.map)
+      this.app.on('map:baselayerchange', (event) => {
+        const map = overviewMap.getOverviewMap()
+        map.setLayers([proxy.tilelayers.cloneLayer(event.detail.layer)])
+      })
     })
-    // TODO remove direct call to leafletMap
-    return this._miniMap.addTo(this.app.mapProxy.map)._container
-  }
-
-  _cloneLayer(layer) {
-    return new TileLayer(layer._url, Object.assign({}, layer.options))
+    return container
   }
 }
 

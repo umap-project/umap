@@ -16,7 +16,7 @@
   {% endif %}
   {% umap_css %}
   {{ block.super }}
-  {% umap_js locale=locale %}
+  {% umap_js %}
   {% if UMAP_DEMO_SITE or object.share_status != object.PUBLIC %}
     <meta name="robots" content="noindex,nofollow">
   {% endif %}

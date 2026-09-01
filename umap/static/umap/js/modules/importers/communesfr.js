@@ -1,6 +1,6 @@
 import { BaseAjax, SingleMixin } from '../autocomplete.js'
-import * as Util from '../utils.js'
 import * as DOMUtils from '../domutils.js'
+import * as Util from '../utils.js'
 
 export class AutocompleteCommunes extends SingleMixin(BaseAjax) {
   createResult(item) {

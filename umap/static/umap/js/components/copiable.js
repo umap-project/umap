@@ -1,7 +1,7 @@
 import * as Clipboard from '../modules/clipboard.js'
 import * as DOMUtils from '../modules/domutils.js'
-import * as Utils from '../modules/utils.js'
 import { translate } from '../modules/i18n.js'
+import * as Utils from '../modules/utils.js'
 
 class CopiableInput extends HTMLElement {
   constructor() {
@@ -21,11 +21,12 @@ class CopiableTextarea extends HTMLElement {
     this.appendChild(
       DOMUtils.loadTemplate(Utils.sanitizeVars`
     <div class="copiable-textarea">
-      <label for="${id}">${this.dataset.label}</label>
-      <div>
-        <textarea type="text" id="${id}" readOnly>${this.value}</textarea>
-        <button type="button" class="icon icon-24 icon-copy" title="${translate('copy')}" data-ref=button></button>
-      </div>
+      <label for="${id}">${this.dataset.label}
+        <div>
+          <textarea type="text" id="${id}" readOnly>${this.value}</textarea>
+          <button type="button" class="icon icon-24 icon-copy" title="${translate('copy')}" data-ref=button></button>
+        </div>
+      </label>
     </div>
   `)
     )

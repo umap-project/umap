@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.0 - work in progress
+
+### Breaking changes:
+- heat maps render differently (different algorithms)
+
 ## 3.8.1 - 2026-08-19
 
 * do not crash on permissions change while realtime is on by @yohanboniface in #3471

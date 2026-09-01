@@ -1,9 +1,10 @@
+import * as DOMUtils from './domutils.js'
 import { MutatingForm } from './form/builder.js'
 import { EXPORT_FORMATS } from './formatter.js'
 import { translate } from './i18n.js'
 import { ControlManager } from './ui/controls.js'
+import * as Copiable from '../components/copiable.js' // Register the webcomponents copiable-input/-textarea.
 import * as Utils from './utils.js'
-import * as DOMUtils from './domutils.js'
 
 export default class Share {
   constructor(app) {
@@ -19,11 +20,13 @@ export default class Share {
       <div>
         <h3><i class="icon icon-16 icon-share"></i> ${translate('Share and download')}</h3>
         <h4>${translate('Share')}</h4>
-        <copiable-input data-label="${translate('Link to view the map')}" data-value="${window.location.protocol + Utils.getBaseUrl()}"></copiable-input>
-        <copiable-input data-label="${translate('Short link')}" data-value="${this.app.properties.shortUrl}" data-ref="shortUrl" hidden></copiable-input>
-        <copiable-textarea data-label="${translate('Customized link')}" data-ref="customLink"></copiable-textarea>
-        <copiable-textarea data-label="${translate('Iframe')}" data-ref="textarea"></copiable-textarea>
-        <div data-ref="iframeOptionsWrapper"></div>
+        <form>
+          <copiable-input data-label="${translate('Link to view the map')}" data-value="${window.location.protocol + Utils.getBaseUrl()}"></copiable-input>
+          <copiable-input data-label="${translate('Short link')}" data-value="${this.app.properties.shortUrl}" data-ref="shortUrl" hidden></copiable-input>
+          <copiable-textarea data-label="${translate('Customized link')}" data-ref="customLink"></copiable-textarea>
+          <copiable-textarea data-label="${translate('Iframe')}" data-ref="textarea"></copiable-textarea>
+          <div data-ref="iframeOptionsWrapper"></div>
+        </form>
         <hr>
         <h4>${translate('Download')}</h4>
         <h5>${translate("Only visible layers' data")}</h5>
