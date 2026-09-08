@@ -53,57 +53,108 @@ def test_can_open_feature_on_browser_click(live_server, page, map):
     expect(page.get_by_text("and me ?")).to_be_visible()
 
 
-def test_can_drag_single_marker_in_cluster_layer(live_server, page, tilelayer, openmap):
+def test_can_drag_single_marker_in_cluster_layer(
+    live_server, page, tilelayer, openmap, assert_screenshot
+):
     DataLayerFactory(map=openmap, data=DATALAYER_DATA)
-    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#7/46.920/3.340")
 
-    marker = page.locator(".umap-div-icon")
-    map = page.locator("#map")
+    # Center the map on the marker, so we can drag it
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#7/46.1/3.34")
 
     expect(page.locator(".edit-undo")).to_be_disabled()
+
     # Drag marker
-    old_bbox = marker.bounding_box()
-    marker.first.drag_to(map, target_position={"x": 250, "y": 250})
-    assert marker.bounding_box() != old_bbox
+    assert_screenshot(page, "before_drag", ui=False)
+    box = page.locator("#map").bounding_box()
+    cx, cy = box["x"] + box["width"] / 2, box["y"] + box["height"] / 2
+    page.mouse.move(cx, cy)
+    page.mouse.down()
+    page.mouse.move(cx - 60, cy - 60, steps=10)
+    page.mouse.up()
+    assert_screenshot(page, "after_drag", ui=False)
+
     expect(page.locator(".edit-undo")).to_be_enabled()
-    # Make sure edit stays panel
-    page.wait_for_timeout(1000)
-    expect(page.locator(".panel.right")).to_be_visible()
 
 
-def test_can_drag_marker_in_cluster(live_server, page, tilelayer, openmap):
+def test_can_drag_marker_in_cluster(
+    live_server, page, tilelayer, openmap, assert_screenshot
+):
     DataLayerFactory(map=openmap, data=DATALAYER_DATA)
-    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#18/46.92/3.34")
-
-    marker = page.locator(".umap-div-icon")
-    cluster = page.locator(".umap-cluster-icon")
-    map = page.locator("#map")
-    expect(marker).to_have_count(0)
+    # Put the cluster at the map center, to make easier to click on it.
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#7/46.92/3.34")
 
     expect(page.locator(".edit-undo")).to_be_disabled()
-    cluster.click()
-    marker.first.drag_to(map, target_position={"x": 250, "y": 250})
+    assert_screenshot(page, "before", ui=False)
+    page.locator("#map").click()
+    assert_screenshot(page, "spiderified", ui=False)
+    # Spiderfying spreads the first member at the maximum radius, due east of the
+    # cluster it came from — so 150px to the right of the map center.
+    cx, cy = 790, 360
+    page.mouse.move(cx, cy)
+    page.mouse.down()
+    page.mouse.move(cx - 60, cy - 60, steps=10)
+    page.mouse.up()
+    assert_screenshot(page, "after", ui=False)
     expect(page.locator(".edit-undo")).to_be_enabled()
-    # There is no more cluster
-    expect(marker).to_have_count(2)
+
+
+def test_cannot_drag_cluster(live_server, page, tilelayer, openmap, wait_for_edit_mode):
+    DataLayerFactory(map=openmap, data=DATALAYER_DATA)
+    # Put the cluster at the map center, to make easier to click on it.
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#7/46.92/3.34")
+
+    expect(page.locator(".edit-undo")).to_be_disabled()
+    wait_for_edit_mode(page)
+
+    box = page.locator("#map").bounding_box()
+    cx, cy = box["x"] + box["width"] / 2, box["y"] + box["height"] / 2
+    before = page.url
+    page.mouse.move(cx, cy)
+    page.mouse.down()
+    page.mouse.move(cx - 60, cy - 60, steps=10)
+    page.mouse.up()
+
+    # A cluster stands for several features, and has no geometry of its own to drag.
+    expect(page.locator(".edit-undo")).to_be_disabled()
+    # Nothing took the drag, so it reached the map, which panned: had the cluster
+    # been draggable the view would have stayed put, and this test proved nothing.
+    expect(page).not_to_have_url(before)
 
 
 def test_can_change_datalayer_of_marker_in_cluster(
-    live_server, page, datalayer, openmap, tilelayer
+    live_server, page, datalayer, openmap, tilelayer, assert_screenshot
 ):
     DataLayerFactory(map=openmap, data=DATALAYER_DATA)
     datalayer.settings["iconClass"] = "Ball"
     datalayer.save()
-    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#7/46.920/3.340")
+    page.goto(
+        f"{live_server.url}{openmap.get_absolute_url()}"
+        "?edit&onLoadPanel=databrowser#7/46.920/3.340"
+    )
 
-    expect(page.locator(".umap-ball-icon")).to_have_count(0)
-    page.locator(".umap-div-icon").click(modifiers=["Shift"])
+    target = page.locator(f'.umap-browser details[data-id="{datalayer.pk}"]')
+    expect(target).not_to_contain_text("again one another point")
+    assert_screenshot(page, "before_change", ui=False)
+
+    # The marker get highlighted when OL adds it to the selection, which only happen
+    # after 250ms, delay of OL before firing a singleclick event. So wait for that
+    # before doing the screenshot, so it's stable.
+    page.evaluate(
+        "() => { window.singleclick = new Promise((done) => "
+        "U.MAP.mapProxy.map.once('singleclick', done)) }"
+    )
+    # Shift-click opens the edit form of the lone marker, south of the cluster.
+    page.locator("#map").click(position={"x": 640, "y": 468}, modifiers=["Shift"])
+    page.evaluate("() => window.singleclick")
     page.get_by_role("combobox").select_option(str(datalayer.pk))
-    expect(page.locator(".umap-ball-icon")).to_have_count(1)
+
+    expect(target).to_contain_text("again one another point")
+    # Its new layer draws Ball icons.
+    assert_screenshot(page, "after_change", ui=False)
 
 
 def test_can_combine_cluster_with_remote_data_and_fromZoom(
-    page, live_server, tilelayer, map
+    page, live_server, tilelayer, map, assert_screenshot
 ):
     settings = {
         "fromZoom": "7",
@@ -195,24 +246,28 @@ def test_can_combine_cluster_with_remote_data_and_fromZoom(
         route.fulfill(json=data.pop())
 
     page.route("https://remote.org/data.json", handle)
-    page.goto(f"{live_server.url}{map.get_absolute_url()}#7/12.271/4.338")
-    expect(page.locator(".umap-cluster-icon")).to_have_count(1)
-    expect(page.locator(".umap-div-icon")).to_have_count(0)
-    assert requests == 1
-    page.get_by_role("button", name="Zoom out").click()
+    page.goto(
+        f"{live_server.url}{map.get_absolute_url()}"
+        "?onLoadPanel=databrowser#7/12.271/4.338"
+    )
+    # The browser reads the model, so it cannot tell a hidden layer from a drawn
+    # one: what is on the map is checked by the screenshots.
+    expect(page.locator(".umap-browser .feature.marker")).to_have_count(2)
+    # Close enough to each other to be drawn as a single cluster.
+    assert_screenshot(page, "clustered", ui=False)
     assert requests == 1
 
+    page.get_by_role("button", name="Zoom out").click()
     # We are above fromZoom, so no call of the remote resource
-    expect(page.locator(".umap-div-icon")).to_have_count(0)
-    expect(page.locator(".umap-cluster-icon")).to_have_count(0)
+    assert_screenshot(page, "hidden", ui=False)
+    assert requests == 1
 
     page.get_by_role("button", name="Zoom in").click()
-
-    expect(page.locator(".umap-cluster-icon")).to_have_count(1)
-    expect(page.locator(".umap-div-icon")).to_have_count(0)
+    assert_screenshot(page, "clustered", ui=False)
     assert requests == 2
 
-    page.locator(".umap-cluster-icon").click()
-    expect(page.locator(".umap-div-icon")).to_have_count(2)
-    expect(page.get_by_role("tooltip", name="Call 3", exact=True)).to_be_visible()
+    # Clicking the cluster fits it, which moves the map, hence one more call.
+    page.locator("#map").click(position={"x": 640, "y": 360})
+    # Once apart, each marker carries its own label.
+    assert_screenshot(page, "split", ui=False)
     assert requests == 3

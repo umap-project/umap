@@ -89,6 +89,7 @@ test-integration:
 		umap/tests/integration/test_categorized_layer.py \
 		umap/tests/integration/test_circles_layer.py \
 		umap/tests/integration/test_choropleth.py \
+		umap/tests/integration/test_cluster.py \
 		umap/tests/integration/test_dashboard.py \
 		umap/tests/integration/test_export_map.py \
 		umap/tests/integration/test_features_id_generation.py \
