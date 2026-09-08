@@ -81,9 +81,6 @@ export class DataLayer {
       if (this.showAtLoad()) this.show()
     }
     this.eventsController = new AbortController()
-    this.app.on('map:zoomend', () => this.onZoomEnd(), {
-      signal: this.eventsController.signal,
-    })
     this.app.on('map:moveend', () => this.onMoveEnd(), {
       signal: this.eventsController.signal,
     })
@@ -319,10 +316,12 @@ export class DataLayer {
     }
   }
 
-  onMoveEnd() {
-    if (this.hasDynamicData() && this.showAtZoom()) {
-      this.fetchRemoteData()
+  async onMoveEnd() {
+    if (!this.isDeleted && this.autoVisibility) {
+      if (!this.showAtZoom() && this.isVisible()) this.hide()
+      else if (this.showAtZoom() && !this.isVisible()) await this.show()
     }
+    if (this.hasDynamicData()) await this.fetchRemoteData()
   }
 
   showAtZoom() {
@@ -330,16 +329,6 @@ export class DataLayer {
     const to = Number.parseInt(this.properties.toZoom, 10)
     const zoom = this.app.mapProxy.zoom
     return !((!Number.isNaN(from) && zoom < from) || (!Number.isNaN(to) && zoom > to))
-  }
-
-  onZoomEnd() {
-    if (this.isDeleted || !this.autoVisibility) return
-    if (!this.showAtZoom() && this.isVisible()) {
-      this.hide()
-    }
-    if (this.showAtZoom() && !this.isVisible()) {
-      this.show()
-    }
   }
 
   hasDynamicData() {
