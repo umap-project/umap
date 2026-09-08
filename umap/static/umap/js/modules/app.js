@@ -1425,7 +1425,6 @@ export default class App extends Utils.WithEvents {
   }
 
   async enableEdit() {
-    document.body.classList.add('umap-edit-enabled')
     await this.initJournal()
     this.editEnabled = true
     this.fire('edit:enabled')
@@ -1436,6 +1435,7 @@ export default class App extends Utils.WithEvents {
     await this.mapProxy.enableEdit()
     const drop = await this.initDrop()
     drop.enable()
+    document.body.classList.add('umap-edit-enabled')
   }
 
   checkForAnonymous() {
