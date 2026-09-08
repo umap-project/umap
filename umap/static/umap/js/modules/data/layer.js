@@ -49,6 +49,9 @@ export class DataLayer {
       this.app.layers.add(this)
     }
 
+    // Must be set before first call to ensureLayer.
+    this._needsRenderer = true
+
     this.setProperties(spec.properties)
     this.properties.name = this.properties.name || this.defaultName()
 
@@ -69,7 +72,6 @@ export class DataLayer {
     this.setType()
 
     this._needsFetch = this.createdOnServer || this.isRemoteLayer()
-    this._needsRenderer = true
     this.fields = new Fields(this, this.app.dialog)
     this.filters = new Filters(this, this.app)
     this.rules = new Rules(app, this)
