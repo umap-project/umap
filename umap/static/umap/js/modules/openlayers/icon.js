@@ -13,7 +13,7 @@ import { blackOrWhite } from '../domutils.js'
 import { setRecent } from '../iconutils.js'
 import { SCHEMA } from '../schema.js'
 import { isDataImage, isPath, isRemoteUrl } from '../utils.js'
-import { rgba, textWidth } from './utils.js'
+import { FONT_FAMILY, rgba, textWidth } from './utils.js'
 
 // Patch IconImage.replaceColor to have our own composite operation
 // TODO make a PR upstream to either allow setting the composite operation
@@ -162,7 +162,7 @@ function makeSymbol(src, offset, size, bgColor, maxWidth, zIndex) {
     }
     return new Style({ image: new Icon(options), zIndex })
   }
-  const font = `bold ${size ? Math.round(size * 0.72) : 12}px sans-serif`
+  const font = `bold ${size ? Math.round(size * 0.72) : 12}px ${FONT_FAMILY}`
   const label = maxWidth ? wrapText(src, font, maxWidth) : src
   const text = new TextStyle({
     text: label,

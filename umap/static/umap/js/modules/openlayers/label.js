@@ -2,7 +2,7 @@ import Fill from 'ol/style/Fill.js'
 import Stroke from 'ol/style/Stroke.js'
 import Style from 'ol/style/Style.js'
 import TextStyle from 'ol/style/Text.js'
-import { rgba, textWidth } from './utils.js'
+import { FONT_FAMILY, rgba, textWidth } from './utils.js'
 
 const GAP = 12
 const REPEAT_GAP = 20
@@ -36,7 +36,7 @@ export function makeLabel(label, zIndex) {
   if (!label?.text || label.show !== true) return null
   const text = new TextStyle({
     text: label.text,
-    font: '12px sans-serif',
+    font: `12px ${FONT_FAMILY}`,
     fill: new Fill({ color: '#333' }),
     backgroundFill: new Fill({ color: '#fff' }),
     backgroundStroke: new Stroke({ color: 'rgba(0, 0, 0, 0.15)', width: 1 }),
@@ -61,7 +61,7 @@ export function simplifyForText(geometry, zoom) {
 // Text decoration drawn along (or on) the geometry itself.
 export function makeTextPath(options, zIndex) {
   if (!options?.text) return null
-  const font = `${options.fontSize}px sans-serif`
+  const font = `${options.fontSize}px ${FONT_FAMILY}`
   const text = new TextStyle({
     text: options.text,
     textAlign: options.align === 'auto' ? undefined : options.align,

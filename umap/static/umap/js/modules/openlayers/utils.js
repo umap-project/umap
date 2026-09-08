@@ -41,6 +41,10 @@ export function rgba(color, opacity) {
   return rgba
 }
 
+// Font to use in canvas (no CSS there) to try to make test screenshots less OS
+// dependent.
+export const FONT_FAMILY = 'fira_sans, sans-serif'
+
 let measureContext
 export function textWidth(text, font) {
   measureContext ??= document.createElement('canvas').getContext('2d')
