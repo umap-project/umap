@@ -1,3 +1,4 @@
+import { primaryAction } from 'ol/events/condition.js'
 import DoubleClickZoom from 'ol/interaction/DoubleClickZoom.js'
 import Draw from 'ol/interaction/Draw.js'
 import Modify from 'ol/interaction/Modify.js'
@@ -47,11 +48,6 @@ export default class Editor {
       for (const olFeature of [...event.selected, ...event.deselected]) {
         this.proxy.applyStyle(olFeature)
       }
-      if (this.select.getFeatures().getLength()) {
-        this.pauseEditInteractions(Modify)
-      } else {
-        this.resumeEditInteractions(Modify)
-      }
     })
 
     const translateFeature = new Translate({
@@ -76,7 +72,16 @@ export default class Editor {
   }
 
   async registerSourceForEdit(source) {
-    const modify = new Modify({ source })
+    const modify = new Modify({
+      source,
+      // Do not allow to modify a selected feature, as they can already be translated,
+      // and both interactions will conflict for LineString.
+      condition: (event) =>
+        primaryAction(event) &&
+        !event.map.forEachFeatureAtPixel(event.pixel, (feature) =>
+          this.select.getFeatures().getArray().includes(feature)
+        ),
+    })
     const snap = new Snap({ source })
     this.editInteractions.push(modify)
     this.editInteractions.push(snap)
@@ -95,17 +100,15 @@ export default class Editor {
     this.map.addInteraction(snap)
   }
 
-  pauseEditInteractions(type) {
+  pauseEditInteractions() {
     for (const interaction of this.editInteractions) {
-      if (type && !(interaction instanceof type)) continue
       if (interaction instanceof Snap) continue
       interaction.setActive(false)
     }
   }
 
-  resumeEditInteractions(type) {
+  resumeEditInteractions() {
     for (const interaction of this.editInteractions) {
-      if (type && !(interaction instanceof type)) continue
       interaction.setActive(true)
     }
   }
