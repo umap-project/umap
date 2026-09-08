@@ -12,6 +12,7 @@ import Stroke from 'ol/style/Stroke.js'
 import Style from 'ol/style/Style.js'
 import TextStyle from 'ol/style/Text.js'
 import { blackOrWhite } from '../domutils.js'
+import { FONT_FAMILY } from './utils.js'
 
 const SPIDER_ZINDEX = 1e6
 const SPIDER_LINE_STYLE = new Style({ stroke: new Stroke({ color: '#000', width: 1 }) })
@@ -101,7 +102,7 @@ function clusterStyle(clusterFeature, config = {}) {
     }),
     text: new TextStyle({
       text: members.length.toString(),
-      font: 'bold 12px sans-serif',
+      font: `bold 12px ${FONT_FAMILY}`,
       fill: new Fill({ color: config.cluster?.textColor || blackOrWhite(color) }),
     }),
     // A distinct zIndex per cluster, else OL draws every count above every circle.
