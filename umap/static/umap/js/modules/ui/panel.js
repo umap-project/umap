@@ -114,6 +114,7 @@ export class Panel {
     if (this.container.classList.contains('on')) {
       this.container.classList.remove('on')
     }
+    if (this.container.contains(document.activeElement)) this.app.mapProxy.focus()
   }
 
   scrollTo(selector) {
