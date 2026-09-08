@@ -489,16 +489,19 @@ export class OLProxy {
 
   onClick(event) {
     this.closePopup()
-    // Topmost interactive feature (or a cluster), skipping non-interactive ones.
+    // Topmost interactive feature, skipping non-interactive ones.
     const olFeature = this.map.forEachFeatureAtPixel(event.pixel, (feature) =>
-      feature.get('features') || feature.get('interactive') ? feature : undefined
+      feature.get('interactive') ? feature : undefined
     )
     if (!olFeature) return
-    const isCluster = Boolean(olFeature.get('features')?.length)
-    if (isCluster) {
-      // A cluster resolves to a member id, or nothing, when it spiderfies/zooms
-      import('./cluster.js').then(({ onClusterClick }) => {
-        this.onFeatureClick(onClusterClick(olFeature, this.map, this.app), event)
+    const represented = olFeature.get('represents')
+    if (represented) {
+      this.onFeatureClick(represented.getId(), event)
+    } else if (olFeature.get('features')) {
+      // Several features under one marker: the click spreads or zooms them, it opens nothing.
+      import('./cluster.js').then((Cluster) => {
+        this.spider ??= new Cluster.Spider(this.map)
+        Cluster.onClick(olFeature, { map: this.map, spider: this.spider, app: this.app })
       })
     } else {
       this.onFeatureClick(olFeature.getId(), event)

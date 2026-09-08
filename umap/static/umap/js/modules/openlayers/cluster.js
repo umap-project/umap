@@ -3,6 +3,7 @@ import { boundingExtent } from 'ol/extent.js'
 import LineString from 'ol/geom/LineString.js'
 import Point from 'ol/geom/Point.js'
 import VectorLayer from 'ol/layer/Vector.js'
+import { unByKey } from 'ol/Observable.js'
 import { transformExtent } from 'ol/proj.js'
 import Cluster from 'ol/source/Cluster.js'
 import VectorSource from 'ol/source/Vector.js'
@@ -33,65 +34,72 @@ function memberStyle(member) {
   return [].concat(member.get('umapStyle') || [], member.get('umapText') || [])
 }
 
-function spiderLayer(map) {
-  let layer = map.get('spiderLayer')
-  if (!layer) {
-    layer = new VectorLayer({
-      source: new VectorSource(),
+export class Spider {
+  constructor(map) {
+    this.map = map
+    this.source = new VectorSource()
+    this.watching = []
+    const layer = new VectorLayer({
+      source: this.source,
       zIndex: SPIDER_ZINDEX,
-      style: (feature) => memberStyle(feature.get('features')[0]),
+      editable: true,
+      style: (feature) => memberStyle(feature.get('represents')),
     })
-    map.set('spiderLayer', layer)
     map.addLayer(layer)
     map.on('umap:highlight', () => layer.changed())
-    const collapse = () => layer.getSource().clear()
-    map.on('moveend', collapse)
-    // A click dismisses the spider — unless it landed on one of its own features (member or
-    // link line), so a member's popup stays anchored to its still-visible marker.
+    map.on('moveend', () => this.collapse())
+    // Clicking on the map should collapse the spider, unless the click is on a spiderfied marker.
     map.on('click', (event) => {
       const onSpider = map.getFeaturesAtPixel(event.pixel, {
         layerFilter: (candidate) => candidate === layer,
       }).length
-      if (!onSpider) collapse()
+      if (!onSpider) this.collapse()
     })
   }
-  return layer
+
+  collapse() {
+    unByKey(this.watching)
+    this.watching = []
+    this.source.clear()
+  }
+
+  reveal(members, center) {
+    this.collapse()
+    const resolution = this.map.getView().getResolution()
+    const revealed = []
+    members.forEach((member, index) => {
+      const spread = spiderfyLatLng(center, index, members.length, resolution)
+      const line = new Feature({ geometry: new LineString([center, spread]) })
+      line.setStyle(SPIDER_LINE_STYLE)
+      const marker = new Feature({
+        geometry: new Point(spread),
+        represents: member,
+        interactive: member.get('interactive'),
+        editable: member.get('editable'),
+      })
+      revealed.push(line, marker)
+    })
+    this.watching = members.map((member) =>
+      member.on('change:geometry', () => this.collapse())
+    )
+    this.source.addFeatures(revealed)
+  }
 }
 
-function spiderfy(members, center, map) {
-  const source = spiderLayer(map).getSource()
-  source.clear()
-  const resolution = map.getView().getResolution()
-  const revealed = []
-  members.forEach((member, index) => {
-    const spread = spiderfyLatLng(center, index, members.length, resolution)
-    const line = new Feature({ geometry: new LineString([center, spread]) })
-    line.setStyle(SPIDER_LINE_STYLE)
-    const marker = new Feature({ features: [member], geometry: new Point(spread) })
-    revealed.push(line, marker)
-  })
-  source.addFeatures(revealed)
-}
-
-export function onClusterClick(clusterFeature, map, app) {
+export function onClick(clusterFeature, { map, spider, app }) {
   const members = clusterFeature.get('features')
   const center = clusterFeature.getGeometry().getCoordinates()
-  if (members.length > 1) {
-    const view = map.getView()
-    const extent = boundingExtent(members.map((r) => r.getGeometry().getCoordinates()))
-    const sameSpot = extent[0] === extent[2] && extent[1] === extent[3]
-    if (sameSpot || view.getZoom() === view.getMaxZoom()) {
-      spiderfy(members, center, map)
-    } else {
-      app.fire('map:view:fit', {
-        bounds: transformExtent(extent, 'EPSG:3857', 'EPSG:4326'),
-        zoom: view.getMaxZoom(),
-      })
-    }
-    return true
+  const view = map.getView()
+  const extent = boundingExtent(members.map((r) => r.getGeometry().getCoordinates()))
+  const sameSpot = extent[0] === extent[2] && extent[1] === extent[3]
+  if (sameSpot || view.getZoom() === view.getMaxZoom()) {
+    spider.reveal(members, center)
+  } else {
+    app.fire('map:view:fit', {
+      bounds: transformExtent(extent, 'EPSG:3857', 'EPSG:4326'),
+      zoom: view.getMaxZoom(),
+    })
   }
-  // A spiderfied member (or a size-1 cluster) resolves to its original feature.
-  return members[0].getId()
 }
 
 function clusterStyle(clusterFeature, config = {}) {
@@ -122,8 +130,18 @@ export function createClusterLayer(source, zIndexOffset) {
     distance: radius(),
     geometryFunction: (feature) =>
       feature.getGeometry().getType() === 'Point' ? feature.getGeometry() : null,
+    createCluster: (geometry, features) => {
+      const member = features.length === 1 ? features[0] : undefined
+      return new Feature({
+        geometry,
+        features,
+        represents: member,
+        interactive: member ? member.get('interactive') : true,
+        editable: member?.get('editable') ?? false,
+      })
+    },
   })
-  const layer = new VectorLayer({ source: clustered, zIndexOffset })
+  const layer = new VectorLayer({ source: clustered, zIndexOffset, editable: true })
   layer.setStyle((feature) => clusterStyle(feature, source.get('umapConfig')))
   source.on('change:umapConfig', () => {
     clustered.setDistance(radius())
