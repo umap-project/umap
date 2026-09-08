@@ -29,13 +29,17 @@ function spiderfyLatLng(center, index, layerCount, resolution) {
   return [lng + x * resolution, lat + y * resolution]
 }
 
+function memberStyle(member) {
+  return [].concat(member.get('umapStyle') || [], member.get('umapText') || [])
+}
+
 function spiderLayer(map) {
   let layer = map.get('spiderLayer')
   if (!layer) {
     layer = new VectorLayer({
       source: new VectorSource(),
       zIndex: SPIDER_ZINDEX,
-      style: (feature) => feature.get('features')[0].get('umapStyle'),
+      style: (feature) => memberStyle(feature.get('features')[0]),
     })
     map.set('spiderLayer', layer)
     map.addLayer(layer)
@@ -92,7 +96,7 @@ export function onClusterClick(clusterFeature, map, app) {
 
 function clusterStyle(clusterFeature, config = {}) {
   const members = clusterFeature.get('features')
-  if (members.length === 1) return members[0].get('umapStyle')
+  if (members.length === 1) return memberStyle(members[0])
   const color = config.color || '#000000'
   return new Style({
     image: new CircleStyle({
