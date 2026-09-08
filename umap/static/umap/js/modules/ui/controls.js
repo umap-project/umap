@@ -93,7 +93,8 @@ export class ZoomControl extends MoreableControl {
 
   onMount() {
     this.app.on('map:zoomend', () => this._update())
-    this.app.on('map:zoomlevelschange', () => this._update())
+    // A map may well open already at one of its bounds.
+    this._update()
   }
 
   zoom(event, direction) {
