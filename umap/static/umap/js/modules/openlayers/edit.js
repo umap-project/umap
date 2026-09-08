@@ -5,6 +5,7 @@ import Modify from 'ol/interaction/Modify.js'
 import Select from 'ol/interaction/Select.js'
 import Snap from 'ol/interaction/Snap.js'
 import Translate from 'ol/interaction/Translate.js'
+import { unByKey } from 'ol/Observable.js'
 import VectorSource from 'ol/source/Vector.js'
 import ContinueLine from './continueline.js'
 import DrawHole from './hole.js'
@@ -14,7 +15,8 @@ export default class Editor {
   constructor(map, proxy) {
     this.map = map
     this.proxy = proxy
-    this.editInteractions = []
+    this.watched = new Map()
+    this.listeners = []
     this._activeDrawing = null
     this.doubleClickZoom = this.map
       .getInteractions()
@@ -29,20 +31,27 @@ export default class Editor {
   set activeDrawing(interaction) {
     this._activeDrawing = interaction
     this.doubleClickZoom?.setActive(!interaction)
-    if (interaction) this.pauseEditInteractions()
-    else this.resumeEditInteractions()
+    if (interaction) this.pauseInteractions()
+    else this.resumeInteractions()
   }
 
   disable() {
-    for (const interaction of this.editInteractions) {
-      this.map.removeInteraction(interaction)
+    unByKey(this.listeners)
+    this.map.removeInteraction(this.select)
+    this.map.removeInteraction(this.translate)
+    for (const { modify, snap } of this.watched.values()) {
+      this.map.removeInteraction(modify)
+      this.map.removeInteraction(snap)
     }
   }
 
-  async enable() {
-    // Don't let select duplicate the highlighted style.
-    this.select = new Select({ style: null })
-    this.editInteractions.push(this.select)
+  enable() {
+    // Do not allow to select spiderfied "false" markers (they are recreated at each
+    // spiderfy, and this would activate the translate, which we do not want).
+    const selectable = (feature) =>
+      feature.get('editable') && !feature.get('represents')
+    // Style: null, so select do not duplicate the highlighted style.
+    this.select = new Select({ style: null, filter: selectable })
     this.map.addInteraction(this.select)
     this.select.on('select', (event) => {
       for (const olFeature of [...event.selected, ...event.deselected]) {
@@ -50,31 +59,32 @@ export default class Editor {
       }
     })
 
-    const translateFeature = new Translate({
-      features: this.select.getFeatures(),
-    })
-    this.map.addInteraction(translateFeature)
-    translateFeature.on('translatestart', () => this.proxy.hideOverlays())
-    translateFeature.on('translateend', (event) => {
-      if (
-        event.startCoordinate[0] === event.coordinate[0] &&
-        event.startCoordinate[1] === event.coordinate[1]
-      )
-        return
+    this.translate = new Translate({ features: this.select.getFeatures() })
+    this.map.addInteraction(this.translate)
+    this.translate.on('translatestart', () => this.proxy.hideOverlays())
+    this.translate.on('translateend', (event) => {
+      const { startCoordinate: start, coordinate: end } = event
+      if (start[0] === end[0] && start[1] === end[1]) return
       for (const olFeature of event.features.getArray()) {
         this.proxy.pullGeometry(olFeature)
       }
     })
-    this.editInteractions.push(translateFeature)
 
-    for (const source of Object.values(this.proxy.sources)) {
-      await this.registerSourceForEdit(source)
-    }
+    const layers = this.map.getLayers()
+    layers.forEach((layer) => this.watch(layer))
+    this.listeners = [
+      layers.on('add', (event) => this.watch(event.element)),
+      layers.on('remove', (event) => this.unwatch(event.element)),
+    ]
   }
 
-  async registerSourceForEdit(source) {
+  watch(layer) {
+    if (!layer.get('editable')) return
+    const source = layer.getSource()
+    if (this.watched.has(source)) return
     const modify = new Modify({
       source,
+      filter: (drawn) => drawn.get('editable'),
       // Do not allow to modify a selected feature, as they can already be translated,
       // and both interactions will conflict for LineString.
       condition: (event) =>
@@ -83,36 +93,51 @@ export default class Editor {
           this.select.getFeatures().getArray().includes(feature)
         ),
     })
-    const snap = new Snap({ source })
-    this.editInteractions.push(modify)
-    this.editInteractions.push(snap)
     modify.on('modifystart', () => this.proxy.hideOverlays())
     modify.on('modifyend', (event) => {
-      event.features.forEach((olFeature) => {
-        if (olFeature.get('route')) {
-          const uFeature = this.proxy.getFeatureById(olFeature.getId())
-          const geojson = this.proxy.OLFeatureToGeojson(olFeature)
-          uFeature.setRoute(geojson.geometry.coordinates)
-        } else {
-          this.proxy.pullGeometry(olFeature)
-        }
-      })
+      for (const drawn of event.features.getArray()) {
+        const represented = drawn.get('represents')
+        // A spiderfied marker has been drawn.
+        if (represented) represented.setGeometry(drawn.getGeometry().clone())
+        this.onModified(represented || drawn)
+      }
     })
+    const snap = new Snap({ source })
+    this.watched.set(source, { modify, snap })
+    // OL serves the last added interaction first: Snap after Modify, or nothing snaps.
     this.map.addInteraction(modify)
     this.map.addInteraction(snap)
   }
 
-  pauseEditInteractions() {
-    for (const interaction of this.editInteractions) {
-      if (interaction instanceof Snap) continue
-      interaction.setActive(false)
+  unwatch(layer) {
+    const source = layer.getSource()
+    const { modify, snap } = this.watched.get(source) || {}
+    if (modify) this.map.removeInteraction(modify)
+    if (snap) this.map.removeInteraction(snap)
+    this.watched.delete(source)
+  }
+
+  onModified(olFeature) {
+    if (olFeature.get('route')) {
+      const uFeature = this.proxy.getFeatureById(olFeature.getId())
+      const geojson = this.proxy.OLFeatureToGeojson(olFeature)
+      uFeature.setRoute(geojson.geometry.coordinates)
+    } else {
+      this.proxy.pullGeometry(olFeature)
     }
   }
 
-  resumeEditInteractions() {
-    for (const interaction of this.editInteractions) {
-      interaction.setActive(true)
-    }
+  // Snap stays on: drawing snaps to existing features too.
+  pauseInteractions() {
+    this.select.setActive(false)
+    this.translate.setActive(false)
+    for (const { modify } of this.watched.values()) modify.setActive(false)
+  }
+
+  resumeInteractions() {
+    this.select.setActive(true)
+    this.translate.setActive(true)
+    for (const { modify } of this.watched.values()) modify.setActive(true)
   }
 
   async startRoute() {
@@ -142,7 +167,7 @@ export default class Editor {
 
   async startDrawing(type) {
     if (this.activeDrawing) return
-    // Allow for escape to be catched by the app listener.
+    // Allow for Escape to be catched by the app listener.
     this.proxy.focus()
     if (!this.drawingSource) {
       this.drawingSource = new VectorSource()
@@ -181,7 +206,7 @@ export default class Editor {
 
   // Snap must be the last interaction to intercept coordinates before Draw/Modify.
   _moveSnapToTop() {
-    for (const snap of this.editInteractions.filter((i) => i instanceof Snap)) {
+    for (const { snap } of this.watched.values()) {
       this.map.removeInteraction(snap)
       this.map.addInteraction(snap)
     }

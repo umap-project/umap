@@ -94,7 +94,6 @@ export class OLProxy {
     // into sight.
     this.map.on('movestart', () => this.app.loader.start('map-moving'))
     this.map.on('moveend', () => this.app.loader.stop('map-moving'))
-
   }
 
   onPointerMove(event) {
@@ -371,7 +370,7 @@ export class OLProxy {
   async enableEdit() {
     const { default: Editor } = await import('./edit.js')
     this.editor = new Editor(this.map, this)
-    await this.editor.enable()
+    this.editor.enable()
     this.focus()
   }
 
@@ -559,9 +558,6 @@ export class OLProxy {
   async createLayer(datalayer) {
     const source = new VectorSource()
     this.sources[datalayer.id] = source
-    if (this.app.editEnabled && this.editor) {
-      await this.editor.registerSourceForEdit(source)
-    }
     const layers = {}
     const isPoint = (feature) => this.isPointGeometry(feature.getGeometry().getType())
 
@@ -576,6 +572,7 @@ export class OLProxy {
         source,
         style: (feature) => (isPoint(feature) ? feature.get('umapStyle') : null),
         zIndexOffset: POINT_ZINDEX_OFFSET,
+        editable: true,
       })
       // Labels and text above the paths but below the markers.
       layers.path = new VectorLayer({
@@ -585,6 +582,7 @@ export class OLProxy {
           if (isPoint(feature)) return texts
           return [].concat(feature.get('umapStyle') || [], texts)
         },
+        editable: true,
       })
     }
     this.layers[datalayer.id] = layers
@@ -645,7 +643,9 @@ export class OLProxy {
     olFeature.set('umapText', base.texts)
     olFeature.set('popupOffsetY', base.popupOffsetY)
     olFeature.set('umapLabel', geojson.label)
-    olFeature.set('interactive', geojson.style?.interactive !== false)
+    const interactive = geojson.style?.interactive !== false
+    olFeature.set('interactive', interactive)
+    olFeature.set('editable', interactive && !geojson.readonly)
     olFeature.set('route', geojson.route)
     this.applyStyle(olFeature)
   }
