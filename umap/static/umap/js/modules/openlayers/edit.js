@@ -54,6 +54,7 @@ export default class Editor {
       features: this.select.getFeatures(),
     })
     this.map.addInteraction(translateFeature)
+    translateFeature.on('translatestart', () => this.proxy.hideOverlays())
     translateFeature.on('translateend', (event) => {
       if (
         event.startCoordinate[0] === event.coordinate[0] &&
@@ -85,6 +86,7 @@ export default class Editor {
     const snap = new Snap({ source })
     this.editInteractions.push(modify)
     this.editInteractions.push(snap)
+    modify.on('modifystart', () => this.proxy.hideOverlays())
     modify.on('modifyend', (event) => {
       event.features.forEach((olFeature) => {
         if (olFeature.get('route')) {

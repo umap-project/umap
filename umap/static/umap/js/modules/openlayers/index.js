@@ -431,6 +431,13 @@ export class OLProxy {
     this.point.setPosition(fromLonLat(coordinate))
   }
 
+  // Overlays are anchored to a coordinate: dragging a feature would leave them
+  // behind, pointing at where it no longer is.
+  hideOverlays() {
+    this.closePopup()
+    this.hidePoint()
+  }
+
   hidePoint() {
     this.point?.setPosition(undefined)
   }
