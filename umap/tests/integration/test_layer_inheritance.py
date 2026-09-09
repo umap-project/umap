@@ -51,9 +51,10 @@ def test_can_add_parent_from_edit_panel(page, live_server, tilelayer, settings):
     page.goto(f"{live_server.url}/en/map/new/")
     page.get_by_role("button", name="Manage layers").click()
     page.get_by_role("button", name="Add a group").click()
+    expect(page.get_by_role("heading", name="Group properties")).to_be_visible()
     page.get_by_role("button", name="Manage layers").click()
     page.get_by_role("button", name="Add a layer").click()
-    page.get_by_label("Group", exact=True).select_option("Group 1")
+    page.locator('select[name="parentId"]').select_option("Group 1")
     page.get_by_role("button", name="Manage layers").click()
     # Layer 1 should be under Layer 2
     parent = page.locator(".panel.right details").first
@@ -74,7 +75,7 @@ def test_can_remove_parent_from_edit_panel(page, live_server, tilelayer, openmap
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.get_by_role("button", name="Manage layers").click()
     page.get_by_role("button", name="Edit", exact=True).nth(1).click()
-    page.get_by_label("Group", exact=True).select_option("null")
+    page.locator('select[name="parentId"]').select_option("null")
     page.get_by_role("button", name="Manage layers").click()
     parentEl = page.locator(".panel.right details").last
     expect(parentEl.locator("summary").first).to_have_text("Parent Layer")
@@ -100,7 +101,7 @@ def test_can_change_parent_from_edit_panel(page, live_server, tilelayer, openmap
     page.locator(f"summary[data-id='{child.pk}']").get_by_role(
         "button", name="Edit", exact=True
     ).click()
-    page.get_by_label("Group", exact=True).select_option("Other Layer")
+    page.locator('select[name="parentId"]').select_option("Other Layer")
     page.get_by_role("button", name="Manage layers").click()
     parentEl = page.locator(f".panel.right details[data-id='{parent.pk}']")
     expect(parentEl.locator("summary").first).to_have_text("Parent Layer")
@@ -126,8 +127,10 @@ def test_can_drag_new_child(page, live_server, tilelayer, settings):
     page.goto(f"{live_server.url}/en/map/new/")
     page.get_by_role("button", name="Manage layers").click()
     page.get_by_role("button", name="Add a layer").click()
+    expect(page.get_by_role("heading", name="Layer properties")).to_be_visible()
     page.get_by_role("button", name="Manage layers").click()
     page.get_by_role("button", name="Add a layer").click()
+    expect(page.get_by_role("heading", name="Layer properties")).to_be_visible()
     page.get_by_role("button", name="Manage layers").click()
     target = page.locator(".panel.right li.orderable").first
     source = page.locator(".panel.right li.orderable").last
@@ -149,8 +152,10 @@ def test_can_drag_layer_above_other(page, live_server, tilelayer, settings):
     page.goto(f"{live_server.url}/en/map/new/")
     page.get_by_role("button", name="Manage layers").click()
     page.get_by_role("button", name="Add a group").click()
+    expect(page.get_by_role("heading", name="Group properties")).to_be_visible()
     page.get_by_role("button", name="Manage layers").click()
     page.get_by_role("button", name="Add a layer").click()
+    expect(page.get_by_role("heading", name="Layer properties")).to_be_visible()
     page.get_by_role("button", name="Manage layers").click()
     target = page.locator(".panel.right li.orderable").first
     source = page.locator(".panel.right li.orderable").last
@@ -172,8 +177,10 @@ def test_can_drag_layer_below_other(page, live_server, tilelayer, settings):
     page.goto(f"{live_server.url}/en/map/new/")
     page.get_by_role("button", name="Manage layers").click()
     page.get_by_role("button", name="Add a group").click()
+    expect(page.get_by_role("heading", name="Group properties")).to_be_visible()
     page.get_by_role("button", name="Manage layers").click()
     page.get_by_role("button", name="Add a layer").click()
+    expect(page.get_by_role("heading", name="Layer properties")).to_be_visible()
     page.get_by_role("button", name="Manage layers").click()
     target = page.locator(".panel.right li.orderable").last
     source = page.locator(".panel.right li.orderable").first

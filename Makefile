@@ -96,6 +96,7 @@ test-integration:
 		umap/tests/integration/test_fields.py \
 		umap/tests/integration/test_iframe.py \
 		umap/tests/integration/test_import.py \
+		umap/tests/integration/test_layer_inheritance.py \
 		umap/tests/integration/test_map.py \
 		umap/tests/integration/test_map_list.py \
 		umap/tests/integration/test_optimistic_merge.py \
