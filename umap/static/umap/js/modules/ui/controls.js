@@ -3,6 +3,8 @@ import { Alert } from '../../components/alerts/alert.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
 
+const ZOOM_TOLERANCE = 1e-6
+
 export class Control {
   constructor(app) {
     this.app = app
@@ -106,8 +108,10 @@ export class ZoomControl extends MoreableControl {
   _update() {
     const view = this.app.mapProxy.view
     const zoom = view.getZoom()
-    const atMax = zoom >= view.getMaxZoom()
-    const atMin = zoom <= view.getMinZoom()
+    // OL does not store the zoom itself, just the resolution, so the zoom is
+    // never perfectly rounded (but we have still to deal with float max/minZoom).
+    const atMax = zoom >= view.getMaxZoom() - ZOOM_TOLERANCE
+    const atMin = zoom <= view.getMinZoom() + ZOOM_TOLERANCE
     this._zoomInButton.classList.toggle('disabled', atMax)
     this._zoomOutButton.classList.toggle('disabled', atMin)
     this._zoomInButton.setAttribute('aria-disabled', atMax ? 'true' : 'false')

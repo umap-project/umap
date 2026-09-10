@@ -188,6 +188,7 @@ export class TopBar extends WithTemplate {
         duration: 5000,
       })
     })
+    this.app.on('edit:enabled', () => this.redraw())
   }
 
   redraw() {
@@ -379,6 +380,7 @@ export class EditBar extends WithTemplate {
     this.addTitle('marker', 'DRAW_MARKER')
     this.addTitle('linestring', 'DRAW_LINE')
     this.addTitle('polygon', 'DRAW_POLYGON')
+    this.app.on('edit:enabled', () => this.redraw())
     this.app.on('seteditedfeature', () => this.redraw())
   }
 
