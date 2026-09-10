@@ -19,6 +19,7 @@ import TileLayerManager from './tilelayer.js'
 import {
   fromOLExtent,
   invertPolygon,
+  loadFonts,
   readFeature,
   readGeometry,
   rgba,
@@ -290,6 +291,7 @@ export class OLProxy {
 
   async render() {
     this.focus()
+    await loadFonts()
     await this.initCenter()
     const updateHash = () => {
       const [lng, lat] = this.center

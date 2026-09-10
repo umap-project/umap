@@ -45,6 +45,16 @@ export function rgba(color, opacity) {
 // dependent.
 export const FONT_FAMILY = 'fira_sans, sans-serif'
 
+// Make sure fonts used in canvas are preloaded, otherwise it will fallback to
+// system font (if the font is not in the DOM yet; eg. the bold used in a cluster
+// is not in the DOM for a normal map detail view).
+export async function loadFonts() {
+  await Promise.allSettled([
+    document.fonts.load(`12px ${FONT_FAMILY}`),
+    document.fonts.load(`bold 12px ${FONT_FAMILY}`),
+  ])
+}
+
 let measureContext
 export function textWidth(text, font) {
   measureContext ??= document.createElement('canvas').getContext('2d')
