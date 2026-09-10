@@ -101,6 +101,7 @@ test-integration:
 		umap/tests/integration/test_map.py \
 		umap/tests/integration/test_map_list.py \
 		umap/tests/integration/test_optimistic_merge.py \
+		umap/tests/integration/test_owned_map.py \
 		umap/tests/integration/test_picto.py \
 		umap/tests/integration/test_popup.py \
 		umap/tests/integration/test_remote_data.py \
