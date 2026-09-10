@@ -237,6 +237,15 @@ export default class App extends Utils.WithEvents {
     return this.journal._undoManager.isDirty()
   }
 
+  get editEnabled() {
+    return this._editEnabled
+  }
+
+  set editEnabled(value) {
+    this._editEnabled = value
+    document.body.classList.toggle('umap-edit-enabled', value)
+  }
+
   get editedFeature() {
     return this._editedFeature
   }
@@ -1426,16 +1435,13 @@ export default class App extends Utils.WithEvents {
 
   async enableEdit() {
     await this.initJournal()
+    await this.mapProxy.enableEdit()
     this.editEnabled = true
     this.fire('edit:enabled')
-    this.editBar.redraw()
-    this.topBar.redraw()
     this.checkForLegacy()
     this.checkForAnonymous()
-    await this.mapProxy.enableEdit()
     const drop = await this.initDrop()
     drop.enable()
-    document.body.classList.add('umap-edit-enabled')
   }
 
   checkForAnonymous() {
@@ -1484,7 +1490,6 @@ export default class App extends Utils.WithEvents {
   disableEdit() {
     if (this.isDirty) return
     this.drop?.disable()
-    document.body.classList.remove('umap-edit-enabled')
     this.editedFeature = null
     this.editEnabled = false
     this.fire('edit:disabled')
