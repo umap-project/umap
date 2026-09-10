@@ -235,7 +235,7 @@ def test_can_use_char_as_picto(openmap, live_server, page, pictos, assert_screen
     expect(url_tab).to_be_visible()
     url_tab.click()
     expect(input_el).to_be_visible()
-    input_el.fill("♩")
+    input_el.fill("@")
     input_el.blur()
     assert_screenshot(page, suffix="char", clip=ICON_CLIP)
     # Now close and reopen the form, it should still be the URL tab
