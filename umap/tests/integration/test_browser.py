@@ -87,11 +87,15 @@ def test_data_browser_should_be_open(live_server, page, bootstrap, map):
     expect(page.get_by_text("one polygon in greenland")).to_be_visible()
 
 
-def test_data_browser_should_be_filterable(live_server, page, bootstrap, map):
+def test_data_browser_should_be_filterable(
+    live_server, page, bootstrap, map, assert_screenshot
+):
     page.goto(f"{live_server.url}{map.get_absolute_url()}#2/19/-2")
     expect(page.get_by_title("Features in this layer: 3")).to_be_visible()
-    markers = page.locator(".leaflet-marker-icon")
-    paths = page.locator(".leaflet-overlay-pane path")
+    markers = page.locator(".umap-browser .feature.marker")
+    paths = page.locator(
+        ".umap-browser .feature.polyline, .umap-browser .feature.polygon"
+    )
     expect(markers).to_have_count(1)
     expect(paths).to_have_count(2)
     page.locator(".filters summary").click()
@@ -105,6 +109,8 @@ def test_data_browser_should_be_filterable(live_server, page, bootstrap, map):
     expect(page.get_by_text("one polygon in greenland")).to_be_visible()
     expect(markers).to_have_count(0)  # Hidden by filter
     expect(paths).to_have_count(1)  # Only polygon
+    page.get_by_title("zoom to data extent").click()
+    assert_screenshot(page, suffix="map-poly", ui=False)
     # Empty the filter
     filter_.fill("")
     filter_.blur()
@@ -116,6 +122,8 @@ def test_data_browser_should_be_filterable(live_server, page, bootstrap, map):
     expect(page.get_by_text("one polygon in greenland")).to_be_hidden()
     expect(markers).to_have_count(1)
     expect(paths).to_have_count(0)
+    page.get_by_title("zoom to data extent").click()
+    assert_screenshot(page, suffix="map-point", ui=False)
 
 
 def test_filter_uses_layer_setting_if_any(live_server, page, bootstrap, map):
@@ -124,8 +132,10 @@ def test_filter_uses_layer_setting_if_any(live_server, page, bootstrap, map):
     datalayer.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}#2/19/-2")
     expect(page.get_by_title("Features in this layer: 3")).to_be_visible()
-    markers = page.locator(".leaflet-marker-icon")
-    paths = page.locator(".leaflet-overlay-pane path")
+    markers = page.locator(".umap-browser .feature.marker")
+    paths = page.locator(
+        ".umap-browser .feature.polyline, .umap-browser .feature.polygon"
+    )
     expect(markers).to_have_count(1)
     expect(paths).to_have_count(2)
     expect(page.get_by_text("point")).to_be_visible()
@@ -163,8 +173,10 @@ def test_filter_works_with_variable_in_labelKey(live_server, page, map):
     DataLayerFactory(map=map, data=data)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#2/19/-2")
     expect(page.get_by_title("Features in this layer: 3")).to_be_visible()
-    markers = page.locator(".leaflet-marker-icon")
-    paths = page.locator(".leaflet-overlay-pane path")
+    markers = page.locator(".umap-browser .feature.marker")
+    paths = page.locator(
+        ".umap-browser .feature.polyline, .umap-browser .feature.polygon"
+    )
     expect(markers).to_have_count(1)
     expect(paths).to_have_count(2)
     expect(page.get_by_text("one point in france (one)")).to_be_visible()
@@ -191,8 +203,10 @@ def test_filter_works_with_missing_name(live_server, page, map):
     DataLayerFactory(map=map, data=data, name="foobar")
     page.goto(f"{live_server.url}{map.get_absolute_url()}#2/19/-2")
     expect(page.get_by_title("Features in this layer: 3")).to_be_visible()
-    markers = page.locator(".leaflet-marker-icon")
-    paths = page.locator(".leaflet-overlay-pane path")
+    markers = page.locator(".umap-browser .feature.marker")
+    paths = page.locator(
+        ".umap-browser .feature.polyline, .umap-browser .feature.polygon"
+    )
     expect(markers).to_have_count(1)
     expect(paths).to_have_count(2)
     page.locator(".filters summary").click()
@@ -285,7 +299,7 @@ def test_data_browser_bbox_filter_should_be_persistent(
 
 
 def test_data_browser_bbox_filtered_is_clickable(live_server, page, bootstrap, map):
-    popup = page.locator(".leaflet-popup")
+    popup = page.locator(".umap-popup")
     # Zoom on Europe
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/51.000/2.000")
     page.locator(".filters summary").click()
@@ -361,7 +375,9 @@ def test_should_change_feature_title_and_color_on_edit(
     expect(page.locator(".umap-browser .feature.marker")).to_contain_text(
         "one point in france"
     )
-    page.locator(".leaflet-marker-icon").click(modifiers=["Shift"])
+    page.locator(".umap-browser .feature.marker").get_by_title(
+        "Edit this feature"
+    ).click()
     page.locator('input[name="name"]').fill("changed name")
     expect(page.locator(".umap-browser .feature.marker")).to_contain_text(
         "changed name"
@@ -373,7 +389,10 @@ def test_should_change_feature_title_and_color_on_edit(
     ).to_have_css("background-color", "rgb(0, 0, 139)")
     page.get_by_role("heading", name="Shape properties").click()
     page.locator(".umap-field-color").get_by_role("button", name="define").first.click()
-    page.get_by_title("Crimson").click()
+    # Focus the input to open the color picker (onFocus -> showPicker).
+    color_field = page.locator(".umap-field-color")
+    color_field.locator("input").first.click()
+    color_field.get_by_title("Crimson").click()
     expect(
         page.get_by_role("listitem").filter(has_text="changed name").locator("i")
     ).to_have_css("background-color", "rgb(220, 20, 60)")
@@ -422,16 +441,17 @@ def test_should_use_color_variable(live_server, map, page):
     expect(features.nth(2)).to_have_css("background-color", "rgb(0, 0, 139)")
 
 
-def test_should_allow_to_toggle_datalayer_visibility(live_server, map, page, bootstrap):
+def test_should_allow_to_toggle_datalayer_visibility(
+    live_server, map, page, bootstrap, assert_screenshot
+):
     page.goto(f"{live_server.url}{map.get_absolute_url()}#2/19/-2")
-    markers = page.locator(".leaflet-marker-icon")
-    paths = page.locator(".leaflet-overlay-pane path")
-    expect(markers).to_have_count(1)
-    expect(paths).to_have_count(2)
+    page.get_by_title("zoom to data extent").click()
+    assert_screenshot(page, suffix="map-visible", ui=False)
     toggle = page.locator(".umap-browser").get_by_title("Show/hide layer")
     toggle.click()
-    expect(markers).to_have_count(0)
-    expect(paths).to_have_count(0)
+    # The layer is hidden: its summary is marked off and the canvas is now empty.
+    expect(page.locator(".umap-browser .datalayer summary.off")).to_have_count(1)
+    assert_screenshot(page, suffix="map-hidden", ui=False)
 
 
 def test_should_have_edit_buttons_in_edit_mode(live_server, openmap, page, bootstrap):
@@ -497,28 +517,24 @@ def test_main_toolbox_toggle_all_layers(live_server, map, page):
     }
     DataLayerFactory(map=map, data=data, settings={"displayOnLoad": False})
     page.goto(f"{live_server.url}{map.get_absolute_url()}#10/46.93/3.33")
-    markers = page.locator(".leaflet-marker-icon")
-    expect(markers).to_have_count(2)
-    # Only one is off
+    # Only one is off (the browser lists every feature regardless of visibility, so
+    # rely on the summary `off` state rather than a map feature count).
     expect(page.locator(".datalayer summary.off")).to_have_count(1)
 
     # Click on button
     page.locator(".umap-browser").get_by_title("Show/hide all layers").click()
     # Should have hidden the two other layers
     expect(page.locator(".datalayer summary.off")).to_have_count(3)
-    expect(markers).to_have_count(0)
 
     # Click again
     page.locator(".umap-browser").get_by_title("Show/hide all layers").click()
     # Should shown all layers
     expect(page.locator(".datalayer summary.off")).to_have_count(0)
-    expect(markers).to_have_count(3)
 
     # Click again
     page.locator(".umap-browser").get_by_title("Show/hide all layers").click()
     # Should hidden again all layers
     expect(page.locator(".datalayer summary.off")).to_have_count(3)
-    expect(markers).to_have_count(0)
 
 
 def test_honour_the_label_fields_settings(live_server, map, page, bootstrap, settings):

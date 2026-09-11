@@ -1,4 +1,8 @@
-const locale = {
+
+import { registerLocale, setLocale } from '/static/umap/dist/i18n.js'
+
+setLocale('th_TH')
+registerLocale('th_TH', {
     "(area: {measure})": "(area: {measure})",
     "(length: {measure})": "(length: {measure})",
     "# one hash for main heading": "# แฮชหนึ่งอันสำหรับหัวข้อหลัก",
@@ -656,6 +660,4 @@ const locale = {
     "Group properties": "Group properties",
     "Choose a group": "Choose a group",
     "Change map background": "Change map background"
-}
-L.registerLocale("th_TH", locale)
-L.setLocale("th_TH")
+})

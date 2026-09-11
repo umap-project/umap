@@ -16,6 +16,8 @@ const RECONNECT_DELAY = 2000
 const RECONNECT_DELAY_FACTOR = 2
 const MAX_RECONNECT_DELAY = 32000
 
+const CATCHING_UP = 'journal-catching-up'
+
 /**
  * The Journal records every mutation of the map state as an operation, syncs
  * those operations with peers over a websocket transport, persists them to the
@@ -169,6 +171,15 @@ export class Journal {
   }
 
   upsert(subject, metadata, broadcast, value, oldValue) {
+    if (typeof value === 'function') {
+      return this._track(
+        (async () => {
+          const resolved = await value()
+          if (resolved === undefined) return
+          this.upsert(subject, metadata, broadcast, resolved, oldValue)
+        })()
+      )
+    }
     const operation = {
       verb: 'upsert',
       subject,
@@ -404,7 +415,9 @@ export class Journal {
     const randomPeer = this._getRandomPeer()
 
     if (randomPeer) {
-      // Retrieve the operations which happened before join.
+      // Retrieve the operations which happened before join. Until they land, this
+      // peer displays an incomplete map.
+      this.app.loader.start(CATCHING_UP)
       this.sendToPeer(randomPeer, 'ListOperationsRequest', {
         lastKnownHLC: this._operations.getLastKnownHLC(),
       })
@@ -450,23 +463,24 @@ export class Journal {
   onListOperationsResponse({ sender, message }) {
     debug(`received operations list from peer ${sender}`, message.operations)
 
-    if (message.operations.length === 0) return
+    if (message.operations.length) {
+      // Get the list of stored operations before this message.
+      const remoteOperations = Operations.sort(message.operations)
+      this._operations.storeRemoteOperations(remoteOperations)
 
-    // Get the list of stored operations before this message.
-    const remoteOperations = Operations.sort(message.operations)
-    this._operations.storeRemoteOperations(remoteOperations)
-
-    // Sort the local operations only once, see below.
-    for (const remote of remoteOperations) {
-      if (this._operations.shouldBypassOperation(remote)) {
-        debug(
-          'Skipping the following operation, because a newer one has been found locally',
-          remote
-        )
-      } else {
-        this._applyOperation(remote)
+      // Sort the local operations only once, see below.
+      for (const remote of remoteOperations) {
+        if (this._operations.shouldBypassOperation(remote)) {
+          debug(
+            'Skipping the following operation, because a newer one has been found locally',
+            remote
+          )
+        } else {
+          this._applyOperation(remote)
+        }
       }
     }
+    this.app.loader.stop(CATCHING_UP)
 
     // TODO: compact the changes here?
     // e.g. we might want to :

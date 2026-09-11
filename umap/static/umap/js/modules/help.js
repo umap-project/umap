@@ -1,7 +1,7 @@
+import * as DOMUtils from './domutils.js'
 import { translate } from './i18n.js'
 import Dialog from './ui/dialog.js'
 import * as Utils from './utils.js'
-import * as DOMUtils from './domutils.js'
 
 const SHORTCUTS = {
   DRAW_MARKER: {
@@ -67,9 +67,6 @@ const ENTRIES = {
     'Supported variables that will be dynamically replaced'
   )}: {bbox}, {lat}, {lng}, {zoom}, {east}, {north}..., {left}, {top}..., locale, lang`,
   colorValue: translate('Must be a valid CSS value (eg.: DarkBlue or #123456)'),
-  smoothFactor: translate(
-    'How much to simplify the polyline on each zoom level (more = better performance and smoother look, less = more accurate)'
-  ),
   dashArray: translate(
     'A comma separated list of numbers that defines the stroke dash pattern. Ex.: "5, 10, 15".'
   ),
@@ -254,9 +251,13 @@ export default class Help {
 
   button(container, entries) {
     const button = DOMUtils.loadTemplate(
-      `<button class="umap-help-button" type="button">${translate('Help')}</button>`
+      `<button class="icon icon-16 icon-help" type="button" title="${translate('Help')}"></button>`
     )
-    container.appendChild(button)
+    const target =
+      Array.from(container.children).filter(
+        (node) => node.nodeType === Node.TEXT_NODE
+      )[0] || container.firstChild
+    target.after(button)
     button.addEventListener('click', () => this.show(entries))
     return button
   }

@@ -52,9 +52,7 @@ class TileLayerFactory(factory.django.DjangoModelFactory):
 
 class UserFactory(factory.django.DjangoModelFactory):
     username = "Joe"
-    email = factory.LazyAttribute(
-        lambda a: "{0}@example.com".format(a.username).lower()
-    )
+    email = factory.LazyAttribute(lambda a: f"{a.username}@example.com".lower())
     password = factory.PostGenerationMethodCall("set_password", "123123")
 
     class Meta:
@@ -178,4 +176,5 @@ def login_required(response):
 def mock_tiles(route):
     print("Intercepted route", route.request.url)
     path = Path(__file__).parent / "fixtures/empty_tile.png"
-    route.fulfill(path=path)
+    # Need for PNG export through canvas.
+    route.fulfill(path=path, headers={"Access-Control-Allow-Origin": "*"})

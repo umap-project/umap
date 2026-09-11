@@ -7,9 +7,13 @@ from playwright.sync_api import expect
 
 from umap.models import DataLayer, Map
 
-from ..base import DataLayerFactory, MapFactory
+from ..base import DataLayerFactory
 
 DATALAYER_UPDATE = re.compile(r".*/datalayer/update/.*")
+
+# The data browser panel overlays the map on its left, so map clicks are shifted
+# by its width to stay on the canvas.
+PANEL = 400
 
 pytestmark = pytest.mark.django_db
 
@@ -24,28 +28,46 @@ def setup_function():
     client.flushdb()
 
 
-@pytest.mark.xdist_group(name="websockets")
-def test_websocket_connection_can_sync_markers(
-    new_page, asgi_live_server, tilelayer, wait_for_loaded
-):
-    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
+def drag_on_map(page, source, target):
+    """Drag on the canvas, where there is no element to hand to drag_to."""
+    page.mouse.move(*source)
+    page.mouse.down()
+    page.mouse.move(*target, steps=10)
+    page.mouse.up()
+
+
+@pytest.fixture
+def syncmap(map):
     map.settings["properties"]["syncEnabled"] = True
+    map.edit_status = Map.ANONYMOUS
     map.save()
-    DataLayerFactory(map=map, data={})
+    return map
+
+
+@pytest.mark.xdist_group(name="websockets")
+@pytest.mark.screenshot
+def test_websocket_connection_can_sync_markers(
+    syncmap, new_page, asgi_live_server, tilelayer, wait_for_loaded, assert_screenshot
+):
+    DataLayerFactory(map=syncmap, data={})
 
     # Create two tabs
     peerA = new_page("Page A")
-    response = peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    response = peerA.goto(
+        f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit&onLoadPanel=databrowser"
+    )
     assert response.status == 200
     wait_for_loaded(peerA)
     peerB = new_page("Page B")
-    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerB.goto(
+        f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit&onLoadPanel=databrowser"
+    )
     wait_for_loaded(peerB)
 
-    a_marker_pane = peerA.locator(".leaflet-marker-pane > div")
-    b_marker_pane = peerB.locator(".leaflet-marker-pane > div")
-    expect(a_marker_pane).to_have_count(0)
-    expect(b_marker_pane).to_have_count(0)
+    a_markers = peerA.locator(".umap-browser .feature.marker")
+    b_markers = peerB.locator(".umap-browser .feature.marker")
+    expect(a_markers).to_have_count(0)
+    expect(b_markers).to_have_count(0)
 
     # Add a marker from peer A
     a_create_marker = peerA.get_by_title("Draw a marker")
@@ -53,23 +75,25 @@ def test_websocket_connection_can_sync_markers(
     a_create_marker.click()
 
     a_map_el = peerA.locator("#map")
-    a_map_el.click(position={"x": 220, "y": 220})
+    a_map_el.click(position={"x": PANEL + 220, "y": 220})
     peerA.wait_for_timeout(300)  # Time for the panel animation to finish
-    expect(a_marker_pane).to_have_count(1)
-    expect(b_marker_pane).to_have_count(1)
+    expect(a_markers).to_have_count(1)
+    expect(b_markers).to_have_count(1)
+
     # Peer B should not be in state dirty
     expect(peerB.get_by_role("button", name="View", exact=True)).to_be_visible()
     expect(peerB.get_by_role("button", name="Cancel edits")).to_be_hidden()
     peerA.locator("body").type("Synced name")
     peerA.locator("body").press("Escape")
-    peerA.wait_for_timeout(300)
 
-    peerB.locator(".leaflet-marker-icon").first.click(button="right")
-    peerB.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
+    # The browser only proves the feature reached the model: check both canvases.
+    assert_screenshot(peerA.locator("#map"), "a-one-marker", ui=False)
+    assert_screenshot(peerB.locator("#map"), "b-one-marker", ui=False)
+
+    expect(b_markers).to_contain_text("Synced name")
+    b_markers.first.get_by_title("Edit this feature").click()
     expect(peerB.locator('input[name="name"]')).to_have_value("Synced name")
-
-    a_first_marker = peerA.locator("div:nth-child(4) > div:nth-child(2)").first
-    b_first_marker = peerB.locator("div:nth-child(4) > div:nth-child(2)").first
+    peerB.locator("body").press("Escape")
 
     # Add a second marker from peer B
     b_create_marker = peerB.get_by_title("Draw a marker")
@@ -77,59 +101,65 @@ def test_websocket_connection_can_sync_markers(
     b_create_marker.click()
 
     b_map_el = peerB.locator("#map")
-    b_map_el.click(position={"x": 225, "y": 225})
-    expect(a_marker_pane).to_have_count(2)
-    expect(b_marker_pane).to_have_count(2)
-
-    # Drag a marker on peer B and check that it moved on peer A
-    assert a_first_marker.bounding_box() == b_first_marker.bounding_box()
-    b_old_bbox = b_first_marker.bounding_box()
-    b_first_marker.drag_to(b_map_el, target_position={"x": 250, "y": 250})
-
-    assert b_old_bbox is not b_first_marker.bounding_box()
-    assert a_first_marker.bounding_box() == b_first_marker.bounding_box()
+    # Far enough from the first marker: Snap would otherwise stack them, and the
+    # drag below would then move both at once.
+    b_map_el.click(position={"x": PANEL + 320, "y": 320})
+    expect(a_markers).to_have_count(2)
+    expect(b_markers).to_have_count(2)
+    peerB.locator("body").press("Escape")
+    assert_screenshot(peerA.locator("#map"), "a-two-markers", ui=False)
+    assert_screenshot(peerB.locator("#map"), "b-two-markers", ui=False)
 
     # Delete a marker from peer A and check it's been deleted on peer B
-    a_first_marker.click(button="right")
-    peerA.get_by_role("button", name="Delete this feature").click()
-    expect(a_marker_pane).to_have_count(1)
-    expect(b_marker_pane).to_have_count(1)
+    a_markers.first.get_by_title("Delete this feature").click()
+    expect(a_markers).to_have_count(1)
+    expect(b_markers).to_have_count(1)
+    assert_screenshot(peerA.locator("#map"), "a-marker-deleted", ui=False)
+    assert_screenshot(peerB.locator("#map"), "b-marker-deleted", ui=False)
+
+    # Drag the remaining marker on peer B and check that it moved on peer A
+    drag_on_map(peerB, (PANEL + 320, 320), (PANEL + 350, 350))
+
+    assert_screenshot(peerA.locator("#map"), "a-marker-moved", ui=False)
+    assert_screenshot(peerB.locator("#map"), "b-marker-moved", ui=False)
 
 
 @pytest.mark.xdist_group(name="websockets")
+@pytest.mark.screenshot
 def test_websocket_connection_can_sync_polygons(
-    new_page, asgi_live_server, tilelayer, wait_for_loaded
+    syncmap, new_page, asgi_live_server, tilelayer, wait_for_loaded, assert_screenshot
 ):
-    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
-    map.settings["properties"]["syncEnabled"] = True
-    map.save()
-    DataLayerFactory(map=map, data={})
+    DataLayerFactory(map=syncmap, data={})
 
     # Create two tabs
     peerA = new_page("Page A")
-    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerA.goto(
+        f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit&onLoadPanel=databrowser"
+    )
     wait_for_loaded(peerA)
     peerB = new_page("Page B")
-    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerB.goto(
+        f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit&onLoadPanel=databrowser"
+    )
     wait_for_loaded(peerB)
 
+    a_map_el = peerA.locator("#map")
     b_map_el = peerB.locator("#map")
 
     # Click on the Draw a polygon button on a new map.
     create_line = peerA.locator(".umap-edit-bar ").get_by_title("Draw a polygon")
     create_line.click()
 
-    a_polygons = peerA.locator(".leaflet-overlay-pane path[fill='DarkBlue']")
-    b_polygons = peerB.locator(".leaflet-overlay-pane path[fill='DarkBlue']")
+    a_polygons = peerA.locator(".umap-browser .feature.polygon")
+    b_polygons = peerB.locator(".umap-browser .feature.polygon")
     expect(a_polygons).to_have_count(0)
     expect(b_polygons).to_have_count(0)
 
     # Click on the map, it will create a polygon.
-    map = peerA.locator("#map")
-    map.click(position={"x": 200, "y": 200})
-    map.click(position={"x": 100, "y": 200})
-    map.click(position={"x": 100, "y": 100})
-    map.click(position={"x": 100, "y": 100})
+    a_map_el.click(position={"x": PANEL + 200, "y": 200})
+    a_map_el.click(position={"x": PANEL + 100, "y": 200})
+    a_map_el.click(position={"x": PANEL + 100, "y": 100})
+    a_map_el.click(position={"x": PANEL + 100, "y": 100})
 
     # It is created on peerA, and should be on peerB
     expect(a_polygons).to_have_count(1)
@@ -140,60 +170,44 @@ def test_websocket_connection_can_sync_polygons(
     expect(a_polygons).to_have_count(1)
     expect(b_polygons).to_have_count(1)
 
-    # change the geometry by moving a point on peer B
-    a_polygon = peerA.locator("path")
-    b_polygon = peerB.locator("path")
-    b_polygon_bbox_t1 = b_polygon.bounding_box()
-    a_polygon_bbox_t1 = a_polygon.bounding_box()
-    assert b_polygon_bbox_t1 == a_polygon_bbox_t1
+    assert_screenshot(peerA.locator("#map"), "a-polygon-created", ui=False)
+    assert_screenshot(peerB.locator("#map"), "b-polygon-created", ui=False)
 
-    b_polygon.click(button="right")
-    peerB.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
-
-    edited_vertex = peerB.locator("div:nth-child(6)").first
-    edited_vertex.drag_to(b_map_el, target_position={"x": 233, "y": 126})
+    # Change the geometry by moving a vertex on peer B. Modify is paused while
+    # something is selected, so make sure nothing is.
+    peerB.keyboard.press("Escape")
+    drag_on_map(peerB, (PANEL + 100, 100), (PANEL + 233, 126))
     peerB.keyboard.press("Escape")
 
-    b_polygon_bbox_t2 = b_polygon.bounding_box()
-    a_polygon_bbox_t2 = a_polygon.bounding_box()
-
-    assert b_polygon_bbox_t2 != b_polygon_bbox_t1
-    assert b_polygon_bbox_t2 == a_polygon_bbox_t2
+    assert_screenshot(peerA.locator("#map"), "a-vertex-moved", ui=False)
+    assert_screenshot(peerB.locator("#map"), "b-vertex-moved", ui=False)
 
     # Move the polygon on peer B and check it moved also on peer A
-    b_polygon.click(button="right")
-    peerB.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
-
-    b_polygon.drag_to(b_map_el, target_position={"x": 400, "y": 400})
+    b_map_el.click(position={"x": PANEL + 140, "y": 170})
+    drag_on_map(peerB, (PANEL + 140, 170), (PANEL + 300, 300))
     peerB.keyboard.press("Escape")
-    b_polygon_bbox_t3 = b_polygon.bounding_box()
-    a_polygon_bbox_t3 = a_polygon.bounding_box()
 
-    assert b_polygon_bbox_t3 != b_polygon_bbox_t2
-    assert b_polygon_bbox_t3 == a_polygon_bbox_t3
+    assert_screenshot(peerA.locator("#map"), "a-polygon-moved", ui=False)
+    assert_screenshot(peerB.locator("#map"), "b-polygon-moved", ui=False)
 
     # Delete a polygon from peer A and check it's been deleted on peer B
-    a_polygon.click(button="right")
-    peerA.get_by_role("button", name="Delete this feature").click()
+    a_polygons.first.get_by_title("Delete this feature").click()
     expect(a_polygons).to_have_count(0)
     expect(b_polygons).to_have_count(0)
 
 
 @pytest.mark.xdist_group(name="websockets")
 def test_websocket_connection_can_sync_map_properties(
-    new_page, asgi_live_server, tilelayer, wait_for_loaded
+    syncmap, new_page, asgi_live_server, tilelayer, wait_for_loaded
 ):
-    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
-    map.settings["properties"]["syncEnabled"] = True
-    map.save()
-    DataLayerFactory(map=map, data={})
+    DataLayerFactory(map=syncmap, data={})
 
     # Create two tabs
     peerA = new_page()
-    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerA.goto(f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit")
     wait_for_loaded(peerA)
     peerB = new_page()
-    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerB.goto(f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit")
     wait_for_loaded(peerB)
 
     # Name change is synced
@@ -217,19 +231,16 @@ def test_websocket_connection_can_sync_map_properties(
 
 @pytest.mark.xdist_group(name="websockets")
 def test_websocket_connection_can_sync_datalayer_properties(
-    new_page, asgi_live_server, tilelayer, wait_for_loaded
+    syncmap, new_page, asgi_live_server, tilelayer, wait_for_loaded
 ):
-    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
-    map.settings["properties"]["syncEnabled"] = True
-    map.save()
-    DataLayerFactory(map=map, data={})
+    DataLayerFactory(map=syncmap, data={})
 
     # Create two tabs
     peerA = new_page()
-    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerA.goto(f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit")
     wait_for_loaded(peerA)
     peerB = new_page()
-    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerB.goto(f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit")
     wait_for_loaded(peerB)
 
     # Layer addition, name and type are synced
@@ -249,39 +260,40 @@ def test_websocket_connection_can_sync_datalayer_properties(
 
 @pytest.mark.xdist_group(name="websockets")
 def test_websocket_connection_can_sync_cloned_polygons(
-    new_page, asgi_live_server, tilelayer, wait_for_loaded
+    syncmap, new_page, asgi_live_server, tilelayer, wait_for_loaded
 ):
-    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
-    map.settings["properties"]["syncEnabled"] = True
-    map.save()
-    DataLayerFactory(map=map, data={})
+    DataLayerFactory(map=syncmap, data={})
 
     # Create two tabs
     peerA = new_page("Page A")
-    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerA.goto(
+        f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit&onLoadPanel=databrowser"
+    )
     wait_for_loaded(peerA)
     peerB = new_page("Page B")
-    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerB.goto(
+        f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit&onLoadPanel=databrowser"
+    )
     wait_for_loaded(peerB)
 
+    a_map_el = peerA.locator("#map")
     b_map_el = peerB.locator("#map")
 
     # Click on the Draw a polygon button on a new map.
     create_line = peerA.locator(".umap-edit-bar ").get_by_title("Draw a polygon")
     create_line.click()
 
-    a_polygons = peerA.locator(".leaflet-overlay-pane path[fill='DarkBlue']")
-    b_polygons = peerB.locator(".leaflet-overlay-pane path[fill='DarkBlue']")
+    a_polygons = peerA.locator(".umap-browser .feature.polygon")
+    b_polygons = peerB.locator(".umap-browser .feature.polygon")
     expect(a_polygons).to_have_count(0)
     expect(b_polygons).to_have_count(0)
 
     # Click on the map, it will create a polygon.
-    map = peerA.locator("#map")
-    map.click(position={"x": 200, "y": 200})
-    map.click(position={"x": 100, "y": 200})
-    map.click(position={"x": 100, "y": 100})
-    map.click(position={"x": 200, "y": 100})
-    map.click(position={"x": 200, "y": 100})
+    a_map_el.click(position={"x": PANEL + 200, "y": 200})
+    a_map_el.click(position={"x": PANEL + 100, "y": 200})
+    a_map_el.click(position={"x": PANEL + 100, "y": 100})
+    a_map_el.click(position={"x": PANEL + 200, "y": 100})
+    a_map_el.click(position={"x": PANEL + 200, "y": 100})
 
     # Escaping the edition syncs
     peerA.keyboard.press("Escape")
@@ -291,37 +303,35 @@ def test_websocket_connection_can_sync_cloned_polygons(
     # Save from peer A
     peerA.get_by_role("button", name="Save").click()
 
-    b_polygon = peerB.locator("path")
-
     # Clone on peer B and save
-    b_polygon.click(button="right", delay=200)
+    b_map_el.click(position={"x": PANEL + 150, "y": 150}, button="right", delay=200)
     peerB.get_by_role("button", name="Clone this feature").click()
 
-    expect(peerB.locator("path")).to_have_count(2)
+    expect(b_polygons).to_have_count(2)
 
-    peerB.locator("path").nth(1).drag_to(b_map_el, target_position={"x": 400, "y": 400})
-    peerB.locator("path").nth(1).click()
+    # The clone is the edited feature, hence the one Translate will move.
+    drag_on_map(peerB, (PANEL + 150, 150), (PANEL + 350, 350))
     peerB.locator("summary").filter(has_text="Shape properties").click()
     peerB.locator(".umap-field-color button.define").first.click()
     peerB.get_by_title("Orchid", exact=True).first.click()
     peerB.locator("#map").press("Escape")
     peerB.get_by_role("button", name="Save").click()
 
-    expect(peerB.locator("path")).to_have_count(2)
+    expect(b_polygons).to_have_count(2)
+    expect(a_polygons).to_have_count(2)
 
 
 @pytest.mark.xdist_group(name="websockets")
 def test_websocket_connection_can_sync_late_joining_peer(
-    new_page, asgi_live_server, tilelayer, wait_for_loaded
+    syncmap, new_page, asgi_live_server, tilelayer, wait_for_loaded
 ):
-    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
-    map.settings["properties"]["syncEnabled"] = True
-    map.save()
-    DataLayerFactory(map=map, data={})
+    DataLayerFactory(map=syncmap, data={})
 
     # Create first peer (A) and have it join immediately
     peerA = new_page("Page A")
-    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerA.goto(
+        f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit&onLoadPanel=databrowser"
+    )
     wait_for_loaded(peerA)
 
     # Add a marker from peer A
@@ -330,80 +340,80 @@ def test_websocket_connection_can_sync_late_joining_peer(
     a_create_marker.click()
 
     a_map_el = peerA.locator("#map")
-    a_map_el.click(position={"x": 220, "y": 220})
+    a_map_el.click(position={"x": PANEL + 220, "y": 220})
     peerA.wait_for_timeout(300)  # Time for the panel animation to finish
     peerA.locator("body").type("First marker")
     peerA.locator("body").press("Escape")
-    peerA.wait_for_timeout(300)
 
     # Add a polygon from peer A
     create_polygon = peerA.locator(".umap-edit-bar ").get_by_title("Draw a polygon")
     create_polygon.click()
 
-    a_map_el.click(position={"x": 200, "y": 200})
-    a_map_el.click(position={"x": 100, "y": 200})
-    a_map_el.click(position={"x": 100, "y": 100})
-    a_map_el.click(position={"x": 200, "y": 100})
-    a_map_el.click(position={"x": 200, "y": 100})
+    a_map_el.click(position={"x": PANEL + 200, "y": 200})
+    a_map_el.click(position={"x": PANEL + 100, "y": 200})
+    a_map_el.click(position={"x": PANEL + 100, "y": 100})
+    a_map_el.click(position={"x": PANEL + 200, "y": 100})
+    a_map_el.click(position={"x": PANEL + 200, "y": 100})
     peerA.keyboard.press("Escape")
 
     # Now create peer B and have it join
     peerB = new_page("Page B")
-    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerB.goto(
+        f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit&onLoadPanel=databrowser"
+    )
     wait_for_loaded(peerB)
 
     # Check if peer B has received all the updates
-    b_marker_pane = peerB.locator(".leaflet-marker-pane > div")
-    b_polygons = peerB.locator(".leaflet-overlay-pane path[fill='DarkBlue']")
+    b_markers = peerB.locator(".umap-browser .feature.marker")
+    b_polygons = peerB.locator(".umap-browser .feature.polygon")
 
-    expect(b_marker_pane).to_have_count(1)
+    expect(b_markers).to_have_count(1)
     expect(b_polygons).to_have_count(1)
 
     # Verify marker properties
-    peerB.locator(".leaflet-marker-icon").first.click(button="right")
-    peerB.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
+    expect(b_markers).to_contain_text("First marker")
+    b_markers.first.get_by_title("Edit this feature").click()
     expect(peerB.locator('input[name="name"]')).to_have_value("First marker")
-
-    # Verify polygon exists (we've already checked the count)
-    b_polygon = peerB.locator("path")
-    expect(b_polygon).to_be_visible()
-
-    # Optional: Verify polygon properties if you have any specific ones set
 
     # Clean up: close edit mode
     peerB.locator("body").press("Escape")
 
 
 @pytest.mark.xdist_group(name="websockets")
-def test_should_sync_datalayers(new_page, asgi_live_server, tilelayer, wait_for_loaded):
-    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
-    map.settings["properties"]["syncEnabled"] = True
-    map.save()
+def test_should_sync_datalayers(
+    syncmap, new_page, asgi_live_server, tilelayer, wait_for_loaded
+):
 
     assert not DataLayer.objects.count()
 
     # Create two tabs
     peerA = new_page("Page A")
-    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerA.goto(
+        f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit&onLoadPanel=databrowser"
+    )
     wait_for_loaded(peerA)
     peerB = new_page("Page B")
-    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerB.goto(
+        f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit&onLoadPanel=databrowser"
+    )
     wait_for_loaded(peerB)
+
+    a_markers = peerA.locator(".umap-browser .feature.marker")
+    b_markers = peerB.locator(".umap-browser .feature.marker")
 
     # Create a new layer from peerA
     peerA.get_by_role("button", name="Manage layers").click()
     peerA.get_by_role("button", name="Add a layer").click()
 
     # Check layer has been sync to peerB
-    peerB.get_by_role("button", name="Open browser").click()
     expect(peerB.get_by_text("Layer 1")).to_be_visible()
 
     # Draw a marker in layer 1 from peerA
     peerA.get_by_role("button", name="Draw a marker (Ctrl+M)").click()
-    peerA.locator("#map").click()
+    peerA.locator("#map").click(position={"x": PANEL + 200, "y": 200})
 
     # Check marker is visible from peerB
-    expect(peerB.locator(".leaflet-marker-icon")).to_be_visible()
+    expect(b_markers).to_have_count(1)
 
     # Save layer to the server
     with peerA.expect_response(re.compile(".*/datalayer/create/.*")):
@@ -415,21 +425,15 @@ def test_should_sync_datalayers(new_page, asgi_live_server, tilelayer, wait_for_
     peerA.get_by_role("button", name="Manage layers").click()
     peerA.get_by_role("button", name="Add a layer").click()
     peerA.get_by_role("button", name="Draw a marker (Ctrl+M)").click()
-    peerA.locator("#map").click()
+    peerA.locator("#map").click(position={"x": PANEL + 250, "y": 250})
 
     # Make sure this new marker is in Layer 2 for peerB
-    # Show features for this layer in the browser.
-    peerB.locator("#map").click(button="right")
-    peerB.get_by_role("button", name="Browse data").click()
-    expect(peerB.locator("li").filter(has_text="Layer 2")).to_be_visible()
-    peerB.locator(".panel.left").get_by_role("button", name="Show/hide layer").nth(
-        1
-    ).click()
-    expect(peerB.locator(".leaflet-marker-icon")).to_be_visible()
+    expect(peerB.locator("summary").filter(has_text="Layer 2")).to_be_visible()
+    expect(b_markers).to_have_count(2)
 
     # Now draw a marker from peerB
     peerB.get_by_role("button", name="Draw a marker (Ctrl+M)").click()
-    peerB.locator("#map").click()
+    peerB.locator("#map").click(position={"x": PANEL + 300, "y": 300})
     peerB.locator('input[name="name"]').fill("marker from peerB")
 
     # Save from peer B
@@ -438,28 +442,19 @@ def test_should_sync_datalayers(new_page, asgi_live_server, tilelayer, wait_for_
 
     assert DataLayer.objects.count() == 2
 
-    # Check this new marker is visible from peerA
-    peerA.get_by_role("button", name="Open browser").click()
-    peerA.locator(".panel.left").get_by_role("button", name="Show/hide layer").nth(
-        1
-    ).click()
-
     # Peer A should not be in dirty state
     expect(peerA.locator("body")).not_to_have_class(re.compile(".*umap-is-dirty.*"))
 
-    # Peer A should only have two markers
-    expect(peerA.locator(".leaflet-marker-icon")).to_have_count(2)
+    # Check this new marker is visible from peerA
+    expect(a_markers).to_have_count(3)
 
     assert DataLayer.objects.count() == 2
 
 
 @pytest.mark.xdist_group(name="websockets")
 def test_should_sync_datalayers_delete(
-    new_page, asgi_live_server, tilelayer, wait_for_loaded
+    syncmap, new_page, asgi_live_server, tilelayer, wait_for_loaded
 ):
-    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
-    map.settings["properties"]["syncEnabled"] = True
-    map.save()
     data1 = {
         "type": "FeatureCollection",
         "features": [
@@ -490,26 +485,28 @@ def test_should_sync_datalayers_delete(
             "name": "datalayer 2",
         },
     }
-    layer1 = DataLayerFactory(map=map, data=data1)
-    layer2 = DataLayerFactory(map=map, data=data2)
+    layer1 = DataLayerFactory(map=syncmap, data=data1)
+    layer2 = DataLayerFactory(map=syncmap, data=data2)
 
     # Create two tabs
     peerA = new_page("Page A")
-    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerA.goto(
+        f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit&onLoadPanel=databrowser"
+    )
     wait_for_loaded(peerA)
     peerB = new_page("Page B")
-    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerB.goto(
+        f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit&onLoadPanel=databrowser"
+    )
     wait_for_loaded(peerB)
 
-    peerA.get_by_role("button", name="Open browser").click()
     expect(peerA.locator(".panel").get_by_text("datalayer 1")).to_be_visible()
     expect(peerA.locator(".panel").get_by_text("datalayer 2")).to_be_visible()
-    peerB.get_by_role("button", name="Open browser").click()
     expect(peerB.locator(".panel").get_by_text("datalayer 1")).to_be_visible()
     expect(peerB.locator(".panel").get_by_text("datalayer 2")).to_be_visible()
 
-    # Delete "datalayer 2" in peerA
-    peerA.locator(f'summary[data-id="{layer2.pk}"] .icon-delete').click()
+    # Delete "datalayer 2" in peerA, from the browser
+    peerA.locator(f'.umap-browser summary[data-id="{layer2.pk}"] .icon-delete').click()
     peerA.locator(".datalayer").get_by_role("button", name="Delete layer").first.click()
     expect(peerA.locator(".panel").get_by_text("datalayer 2")).to_be_hidden()
     expect(peerB.locator(".panel").get_by_text("datalayer 2")).to_be_hidden()
@@ -519,6 +516,7 @@ def test_should_sync_datalayers_delete(
         peerA.get_by_role("button", name="Save").click()
     expect(peerA.locator(".panel").get_by_text("datalayer 2")).to_be_hidden()
     expect(peerB.locator(".panel").get_by_text("datalayer 2")).to_be_hidden()
+    assert layer1
 
 
 @pytest.mark.xdist_group(name="websockets")
@@ -544,42 +542,45 @@ def test_create_and_sync_map(
     expect(peerA.get_by_role("button", name="Cancel edits")).to_be_hidden()
     # Quit edit mode
     peerA.get_by_role("button", name="View", exact=True).click()
+    expect(peerA.locator("body")).not_to_have_class(re.compile(".*umap-edit-enabled.*"))
 
     # Open map and go to edit mode with peer B
     peerB = new_page("Page B")
     peerB.goto(peerA.url)
     wait_for_loaded(peerB)
-    peerB.get_by_role("button", name="Edit").click()
+    peerB.get_by_role("button", name="Edit", exact=True).click()
 
-    # Create a marker from peerA
-    markersA = peerA.locator(".leaflet-marker-pane > div")
-    markersB = peerB.locator(".leaflet-marker-pane > div")
-    expect(markersA).to_have_count(0)
-    expect(markersB).to_have_count(0)
+    # This map is created through the UI, so the browser has to be opened by hand.
+    peerB.get_by_role("button", name="Open browser").click()
+    # This test toggles edit mode several times, and each rebuild of the browser
+    # collapses the layer, dropping the feature rows. The layer counter survives it.
+    countA = peerA.locator(".umap-browser .datalayer-counter")
+    countB = peerB.locator(".umap-browser .datalayer-counter")
+    expect(countB).to_have_count(0)
 
     # Add a marker from peer A
-    peerA.get_by_role("button", name="Edit").click()
+    peerA.get_by_role("button", name="Edit", exact=True).click()
     peerA.wait_for_timeout(300)  # Time for the animation to finish
+    peerA.get_by_role("button", name="Open browser").click()
+    expect(countA).to_have_count(0)
     peerA.get_by_title("Draw a marker").click()
-    peerA.locator("#map").click(position={"x": 220, "y": 220})
+    peerA.locator("#map").click(position={"x": PANEL + 220, "y": 220})
     peerA.wait_for_timeout(300)  # Time for the panel animation to finish
-    expect(markersA).to_have_count(1)
-    expect(markersB).to_have_count(1)
+    expect(countA).to_have_text("(1)")
+    expect(countB).to_have_text("(1)")
 
     # Make sure only one layer has been created on peer B
-    peerB.get_by_role("button", name="Open browser").click()
     expect(peerB.locator("summary").get_by_text("Layer 1")).to_be_visible()
-    peerB.get_by_role("button", name="Close").click()
 
     # Save and quit edit mode again
     with peerA.expect_response(re.compile("./datalayer/create/.*")):
         peerA.get_by_role("button", name="Save").click()
     peerA.get_by_role("button", name="View", exact=True).click()
-    expect(markersA).to_have_count(1)
-    expect(markersB).to_have_count(1)
+    expect(countA).to_have_text("(1)")
+    expect(countB).to_have_text("(1)")
     peerA.wait_for_timeout(500)
-    expect(markersA).to_have_count(1)
-    expect(markersB).to_have_count(1)
+    expect(countA).to_have_text("(1)")
+    expect(countB).to_have_text("(1)")
 
     # Peer B should not be in state dirty
     expect(peerB.get_by_role("button", name="View", exact=True)).to_be_visible()
@@ -587,35 +588,34 @@ def test_create_and_sync_map(
 
     # Add a marker from peer B
     peerB.get_by_title("Draw a marker").click()
-    peerB.locator("#map").click(position={"x": 200, "y": 200})
+    peerB.locator("#map").click(position={"x": PANEL + 200, "y": 200})
     peerA.wait_for_timeout(300)  # Time for the panel animation to finish
-    expect(markersB).to_have_count(2)
-    expect(markersA).to_have_count(1)
+    expect(countB).to_have_text("(2)")
+    expect(countA).to_have_text("(1)")
     with peerB.expect_response(re.compile("./datalayer/update/.*")):
         peerB.get_by_role("button", name="Save").click()
-    expect(markersB).to_have_count(2)
-    expect(markersA).to_have_count(1)
-    peerA.get_by_role("button", name="Edit").click()
-    expect(markersA).to_have_count(2)
-    expect(markersB).to_have_count(2)
+    expect(countB).to_have_text("(2)")
+    expect(countA).to_have_text("(1)")
+    peerA.get_by_role("button", name="Edit", exact=True).click()
+    expect(countA).to_have_text("(2)")
+    expect(countB).to_have_text("(2)")
 
 
 @pytest.mark.xdist_group(name="websockets")
 def test_saved_datalayer_are_not_duplicated(
-    new_page, asgi_live_server, tilelayer, wait_for_loaded
+    syncmap, new_page, asgi_live_server, tilelayer, wait_for_loaded
 ):
-    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
-    map.settings["properties"]["syncEnabled"] = True
-    map.save()
 
     # Create one tab
     peerA = new_page("Page A")
-    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerA.goto(
+        f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit&onLoadPanel=databrowser"
+    )
     wait_for_loaded(peerA)
     # Create a new datalayer
     peerA.get_by_title("Manage layers").click()
     peerA.get_by_role("button", name="Add a layer").click()
-    peerA.locator("#map").click(position={"x": 220, "y": 220})
+    peerA.locator("#map").click(position={"x": PANEL + 220, "y": 220})
     # Save layer to the server, so now the datalayer exist on the server AND
     # is still in the live operations of peer A
     with peerA.expect_response(re.compile(".*/datalayer/create/.*")):
@@ -625,32 +625,28 @@ def test_saved_datalayer_are_not_duplicated(
     peerB = new_page("Page B")
     peerB.goto(peerA.url)
     wait_for_loaded(peerB)
-    peerB.get_by_role("button", name="Open browser").click()
     expect(peerB.get_by_text("Layer 1")).to_be_visible()
-    peerB.get_by_role("button", name="Edit").click()
+    peerB.get_by_role("button", name="Edit", exact=True).click()
     peerA.wait_for_timeout(300)  # Let the synchro roll on.
     expect(peerB.get_by_text("Layer 1")).to_be_visible()
 
 
 @pytest.mark.xdist_group(name="websockets")
 def test_should_sync_saved_status(
-    new_page, asgi_live_server, tilelayer, wait_for_loaded
+    syncmap, new_page, asgi_live_server, tilelayer, wait_for_loaded
 ):
-    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
-    map.settings["properties"]["syncEnabled"] = True
-    map.save()
 
     # Create two tabs
     peerA = new_page("Page A")
-    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerA.goto(f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit")
     wait_for_loaded(peerA)
     peerB = new_page("Page B")
-    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerB.goto(f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit")
     wait_for_loaded(peerB)
 
     # Create a new marker from peerA
     peerA.get_by_title("Draw a marker").click()
-    peerA.locator("#map").click(position={"x": 220, "y": 220})
+    peerA.locator("#map").click(position={"x": PANEL + 220, "y": 220})
 
     # Peer A should be in dirty state
     expect(peerA.locator("body")).to_have_class(re.compile(".*umap-is-dirty.*"))
@@ -660,7 +656,7 @@ def test_should_sync_saved_status(
 
     # Create a new marker from peerB
     peerB.get_by_title("Draw a marker").click()
-    peerB.locator("#map").click(position={"x": 200, "y": 250})
+    peerB.locator("#map").click(position={"x": PANEL + 200, "y": 250})
 
     # Peer B should be in dirty state
     expect(peerB.locator("body")).to_have_class(re.compile(".*umap-is-dirty.*"))
@@ -681,78 +677,78 @@ def test_should_sync_saved_status(
 
 @pytest.mark.xdist_group(name="websockets")
 def test_should_sync_line_on_escape(
-    new_page, asgi_live_server, tilelayer, wait_for_loaded
+    syncmap, new_page, asgi_live_server, tilelayer, wait_for_loaded
 ):
-    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
-    map.settings["properties"]["syncEnabled"] = True
-    map.save()
 
     # Create two tabs
     peerA = new_page("Page A")
-    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerA.goto(
+        f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit&onLoadPanel=databrowser"
+    )
     wait_for_loaded(peerA)
     peerB = new_page("Page B")
-    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerB.goto(
+        f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit&onLoadPanel=databrowser"
+    )
     wait_for_loaded(peerB)
 
-    # Create a new marker from peerA
+    # Create a new line from peerA
     peerA.get_by_title("Draw a polyline").click()
-    peerA.locator("#map").click(position={"x": 220, "y": 220})
-    peerA.locator("#map").click(position={"x": 200, "y": 200})
+    peerA.locator("#map").click(position={"x": PANEL + 220, "y": 220})
+    peerA.locator("#map").click(position={"x": PANEL + 200, "y": 200})
     peerA.locator("body").press("Escape")
 
-    expect(peerA.locator("path")).to_have_count(1)
-    expect(peerB.locator("path")).to_have_count(1)
+    expect(peerA.locator(".umap-browser .feature.polyline")).to_have_count(1)
+    expect(peerB.locator(".umap-browser .feature.polyline")).to_have_count(1)
 
 
 @pytest.mark.xdist_group(name="websockets")
 def test_should_sync_datalayer_clear(
-    new_page, asgi_live_server, tilelayer, map, datalayer, wait_for_loaded
+    syncmap, datalayer, new_page, asgi_live_server, tilelayer, wait_for_loaded
 ):
-    map.settings["properties"]["syncEnabled"] = True
-    map.edit_status = Map.ANONYMOUS
-    map.save()
-
     # Create two tabs
     peerA = new_page("Page A")
-    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerA.goto(
+        f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit&onLoadPanel=databrowser"
+    )
     wait_for_loaded(peerA)
     peerB = new_page("Page B")
-    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerB.goto(
+        f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit&onLoadPanel=databrowser"
+    )
     wait_for_loaded(peerB)
-    expect(peerA.locator(".leaflet-marker-icon")).to_have_count(1)
-    expect(peerB.locator(".leaflet-marker-icon")).to_have_count(1)
+    a_markers = peerA.locator(".umap-browser .feature.marker")
+    b_markers = peerB.locator(".umap-browser .feature.marker")
+    expect(a_markers).to_have_count(1)
+    expect(b_markers).to_have_count(1)
 
     # Clear layer in peer A
     peerA.get_by_role("button", name="Manage layers").click()
-    peerA.get_by_role("button", name="Edit", exact=True).click()
+    peerA.locator(".panel.right").get_by_role("button", name="Edit", exact=True).click()
     peerA.locator("summary").filter(has_text="Advanced actions").click()
     peerA.get_by_role("button", name="Empty").click()
-    expect(peerA.locator(".leaflet-marker-icon")).to_have_count(0)
-    expect(peerB.locator(".leaflet-marker-icon")).to_have_count(0)
+    expect(a_markers).to_have_count(0)
+    expect(b_markers).to_have_count(0)
 
     # Undo in peer A
     peerA.locator(".edit-undo").click()
-    expect(peerA.locator(".leaflet-marker-icon")).to_have_count(1)
-    expect(peerB.locator(".leaflet-marker-icon")).to_have_count(1)
+    expect(a_markers).to_have_count(1)
+    expect(b_markers).to_have_count(1)
 
 
 @pytest.mark.xdist_group(name="websockets")
 def test_should_save_remote_dirty_datalayers(
-    new_page, asgi_live_server, tilelayer, wait_for_loaded
+    syncmap, new_page, asgi_live_server, tilelayer, wait_for_loaded
 ):
-    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
-    map.settings["properties"]["syncEnabled"] = True
-    map.save()
 
     assert not DataLayer.objects.count()
 
     # Create two tabs
     peerA = new_page("Page A")
-    peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerA.goto(f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit")
     wait_for_loaded(peerA)
     peerB = new_page("Page B")
-    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerB.goto(f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit")
     wait_for_loaded(peerB)
 
     # Create a new layer from peerA
@@ -782,25 +778,22 @@ def test_should_save_remote_dirty_datalayers(
 
 
 def test_can_sync_new_parent_from_edit_panel(
-    asgi_live_server, tilelayer, new_page, wait_for_loaded
+    syncmap, asgi_live_server, tilelayer, new_page, wait_for_loaded
 ):
-    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
-    map.settings["properties"]["syncEnabled"] = True
-    map.save()
-    DataLayerFactory(name="Parent Layer", map=map, data=None, group=True)
-    DataLayerFactory(name="Child Layer", map=map, data=None)
+    DataLayerFactory(name="Parent Layer", map=syncmap, data=None, group=True)
+    DataLayerFactory(name="Child Layer", map=syncmap, data=None)
     # Create two tabs
     peerA = new_page("Page A")
-    response = peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    response = peerA.goto(f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit")
     assert response.status == 200
     wait_for_loaded(peerA)
     peerB = new_page("Page B")
-    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerB.goto(f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit")
     wait_for_loaded(peerB)
 
     peerA.get_by_role("button", name="Manage layers").click()
     peerA.get_by_role("button", name="Edit", exact=True).first.click()
-    peerA.get_by_label("Group", exact=True).select_option("Parent Layer")
+    peerA.locator('select[name="parentId"]').select_option("Parent Layer")
 
     peerA.get_by_role("button", name="Manage layers").click()
     # Layer 1 should be under Layer 2
@@ -818,25 +811,22 @@ def test_can_sync_new_parent_from_edit_panel(
 
 
 def test_can_sync_remove_parent_from_edit_panel(
-    page, asgi_live_server, tilelayer, new_page, wait_for_loaded
+    page, syncmap, asgi_live_server, tilelayer, new_page, wait_for_loaded
 ):
-    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
-    map.settings["properties"]["syncEnabled"] = True
-    map.save()
-    parent = DataLayerFactory(name="Parent Layer", map=map, data=None, group=True)
-    DataLayerFactory(name="Child Layer", map=map, parent=parent)
+    parent = DataLayerFactory(name="Parent Layer", map=syncmap, data=None, group=True)
+    DataLayerFactory(name="Child Layer", map=syncmap, parent=parent)
     # Create two tabs
     peerA = new_page("Page A")
-    response = peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    response = peerA.goto(f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit")
     assert response.status == 200
     wait_for_loaded(peerA)
     peerB = new_page("Page B")
-    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerB.goto(f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit")
     wait_for_loaded(peerB)
 
     peerA.get_by_role("button", name="Manage layers").click()
     peerA.get_by_role("button", name="Edit", exact=True).nth(1).click()
-    peerA.get_by_label("Group", exact=True).select_option("null")
+    peerA.locator('select[name="parentId"]').select_option("null")
     peerA.get_by_role("button", name="Manage layers").click()
     parentEl = peerA.locator(".panel.right details").last
     expect(parentEl.locator("summary").first).to_have_text("Parent Layer")
@@ -855,28 +845,25 @@ def test_can_sync_remove_parent_from_edit_panel(
 
 
 def test_can_sync_change_parent_from_edit_panel(
-    page, asgi_live_server, tilelayer, new_page, wait_for_loaded
+    page, syncmap, asgi_live_server, tilelayer, new_page, wait_for_loaded
 ):
-    map = MapFactory(name="sync", edit_status=Map.ANONYMOUS)
-    map.settings["properties"]["syncEnabled"] = True
-    map.save()
-    parent = DataLayerFactory(name="Parent Layer", map=map, data=None, group=True)
-    child = DataLayerFactory(name="Child Layer", map=map, parent=parent)
-    other = DataLayerFactory(name="Other Layer", map=map, data=None, group=True)
+    parent = DataLayerFactory(name="Parent Layer", map=syncmap, data=None, group=True)
+    child = DataLayerFactory(name="Child Layer", map=syncmap, parent=parent)
+    other = DataLayerFactory(name="Other Layer", map=syncmap, data=None, group=True)
     # Create two tabs
     peerA = new_page("Page A")
-    response = peerA.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    response = peerA.goto(f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit")
     assert response.status == 200
     wait_for_loaded(peerA)
     peerB = new_page("Page B")
-    peerB.goto(f"{asgi_live_server.url}{map.get_absolute_url()}?edit")
+    peerB.goto(f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit")
     wait_for_loaded(peerB)
 
     peerA.get_by_role("button", name="Manage layers").click()
     peerA.locator(f"summary[data-id='{child.pk}']").get_by_role(
         "button", name="Edit", exact=True
     ).click()
-    peerA.get_by_label("Group", exact=True).select_option("Other Layer")
+    peerA.locator('select[name="parentId"]').select_option("Other Layer")
     peerA.get_by_role("button", name="Manage layers").click()
     parentEl = peerA.locator(f".panel.right details[data-id='{parent.pk}']")
     expect(parentEl.locator("summary").first).to_have_text("Parent Layer")

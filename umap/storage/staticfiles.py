@@ -29,15 +29,15 @@ class UmapManifestStaticFilesStorage(ManifestStaticFilesStorage):
                 'export%(exports)s from "%(url)s"\n',
             ),
             (
-                r"""(?P<matched>import\s*['"](?P<url>[\.\/].*?)["']\s*)""",
+                r"""(?P<matched>import\s*['"](?P<url>[\.\/][^\"\)]+)["']\s*)""",
                 'import"%(url)s"\n',
             ),
             (
-                r"""(?P<matched>import\(["'](?P<url>[\.\/].*?)["']\)\.then)""",
+                r"""(?P<matched>import\(["'](?P<url>[\.\/][^\"\)]+)["']\)\.then)""",
                 """import("%(url)s").then""",
             ),
             (
-                r"""(?P<matched>await import\(["'](?P<url>[\.\/].*?)["']\))""",
+                r"""(?P<matched>await import\(["'](?P<url>[\.\/][^\"\)]+)["']\))""",
                 """await import("%(url)s")""",
             ),
         ),
@@ -56,6 +56,9 @@ class UmapManifestStaticFilesStorage(ManifestStaticFilesStorage):
     )
 
     def post_process(self, paths, **options):
+        # Don't parse this file, it contains inresolvable imports (ol/ol.css from
+        # node_modules)
+        paths.pop("umap/css/umap.css", None)
         collected = super().post_process(paths, **options)
         for original_path, processed_path, processed in collected:
             if isinstance(processed, Exception):

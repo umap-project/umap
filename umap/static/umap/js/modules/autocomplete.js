@@ -1,7 +1,6 @@
 import { Alert } from '../components/alerts/alert.js'
 import * as DOMUtils from './domutils.js'
 import { translate } from './i18n.js'
-import { LocationIcon } from './icon.js'
 import { Request, ServerRequest } from './request.js'
 import { escapeHTML, generateId } from './utils.js'
 import * as Utils from './utils.js'
@@ -470,7 +469,7 @@ export class Geocoder extends BaseAjax {
     geom.hidden = !['R', 'W'].includes(properties.osm_type)
     point.addEventListener('mousedown', (event) => {
       event.stopPropagation()
-      this.app.defaultEditDataLayer().makeFeature(feature).edit()
+      this.app.fire('feature:create', { geojson: feature })
     })
     geom.addEventListener('mousedown', async (event) => {
       event.stopPropagation()
@@ -483,17 +482,14 @@ export class Geocoder extends BaseAjax {
       importer.raw = await this.getOSMObject(osm_type, properties.osm_id)
       importer.submit()
     })
-    const id = 'location'
-    const icon = new LocationIcon()
     li.addEventListener('mouseover', () => {
       this.app.fire('map:show:point', {
-        id,
-        position: feature.geometry.coordinates,
-        icon,
+        coordinate: feature.geometry.coordinates,
+        color: 'blue',
       })
     })
     li.addEventListener('mouseout', () => {
-      this.app.fire('map:hide:point', { id })
+      this.app.fire('map:hide:point')
     })
     return li
   }

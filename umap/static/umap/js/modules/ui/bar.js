@@ -1,5 +1,5 @@
-import * as DOMUtils from '../domutils.js'
 import { LineString, Point, Polygon } from '../data/features.js'
+import * as DOMUtils from '../domutils.js'
 import { translate } from '../i18n.js'
 import { WithTemplate } from '../utils.js'
 import * as Utils from '../utils.js'
@@ -9,7 +9,7 @@ const TOP_BAR_TEMPLATE = `
 <div class="umap-main-edit-toolbox with-transition dark">
     <div class="umap-left-edit-toolbox" data-ref="left">
         <div class="logo"><a class="" href="#" title="${translate('Go to the homepage')}" data-ref="home">uMap</a></div>
-        <button class="map-name flat truncate" type="button" data-ref="name"></button>
+        <h1 class="h3"><button class="map-name flat truncate" type="button" data-ref="name"></button></h1>
         <button class="flat truncate" type="button" data-ref="share">
           <i class="icon icon-16 icon-draft show-on-draft"></i><span class="share-status"></span>
         </button>
@@ -188,6 +188,7 @@ export class TopBar extends WithTemplate {
         duration: 5000,
       })
     })
+    this.app.on('edit:enabled', () => this.redraw())
   }
 
   redraw() {
@@ -209,7 +210,7 @@ export class TopBar extends WithTemplate {
 
 const BOTTOM_BAR_TEMPLATE = `
   <div class="umap-caption-bar">
-    <h3 class="map-name"></h3>
+    <h5 class="map-name"></h5>
     <span data-ref="author"></span>
     <button class="umap-about-link flat" type="button" title="${translate('Open caption')}" data-ref="caption">${translate('Open caption')}</button>
     <button class="umap-open-browser-link flat" type="button" title="${translate('Browse data')}" data-ref="browse">${translate('Browse data')}</button>
@@ -320,7 +321,7 @@ const EDIT_BAR_TEMPLATE = `
   <div class="umap-edit-bar dark with-transition">
     <ul>
       <li data-ref="marker"><button class="drawing-tool" type="button" data-getstarted><i class="icon icon-24 icon-marker"></i></button></li>
-      <li data-ref="polyline"><button class="drawing-tool" type="button" data-getstarted><i class="icon icon-24 icon-polyline"></i></button></li>
+      <li data-ref="linestring"><button class="drawing-tool" type="button" data-getstarted><i class="icon icon-24 icon-polyline"></i></button></li>
       <li data-ref="multiline" hidden>
         <button class="drawing-tool" type="button" title="${translate('Add a line to the current multi')}"><i class="icon icon-24 icon-multiline"></i></button>
       </li>
@@ -355,7 +356,7 @@ export class EditBar extends WithTemplate {
     this.parent.appendChild(this.element)
     DOMUtils.disableClickPropagation(this.element)
     this.addDrawListener('marker')
-    this.addDrawListener('polyline')
+    this.addDrawListener('linestring')
     this.addDrawListener('multiline')
     this.addDrawListener('polygon')
     this.addDrawListener('multipolygon')
@@ -377,8 +378,9 @@ export class EditBar extends WithTemplate {
     this.addClickListener('settings', () => this.app.edit())
     this.addTitle('import', 'IMPORT_PANEL')
     this.addTitle('marker', 'DRAW_MARKER')
-    this.addTitle('polyline', 'DRAW_LINE')
+    this.addTitle('linestring', 'DRAW_LINE')
     this.addTitle('polygon', 'DRAW_POLYGON')
+    this.app.on('edit:enabled', () => this.redraw())
     this.app.on('seteditedfeature', () => this.redraw())
   }
 

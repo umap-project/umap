@@ -5,6 +5,7 @@ export default class Printer {
   constructor(app) {
     this.app = app
     this.dialog = this.app.dialog
+    this.printElement = this.app.mapProxy.container.parentNode
   }
 
   build() {
@@ -36,32 +37,28 @@ export default class Printer {
   }
 
   resetSize() {
-    const container = this.app.mapProxy.container
-    for (const name of Array.from(container.classList)) {
+    for (const name of Array.from(this.printElement.classList)) {
       if (name.startsWith('print-')) {
-        container.classList.remove(name)
+        this.printElement.classList.remove(name)
       }
     }
-    container.removeAttribute('style')
+    this.printElement.removeAttribute('style')
     this.app.fire('map:resize')
   }
 
   resizeMap() {
     const form = this.dialog.collectFormData()
     this.resetSize()
-    const container = this.app.mapProxy.container
     if (form.format && form.mode) {
-      container.classList.add(`print-${form.format}`)
-      container.classList.add(`print-${form.mode}`)
-      container.style.width = `${form.scale}%`
+      this.printElement.classList.add(`print-${form.format}`)
+      this.printElement.classList.add(`print-${form.mode}`)
+      this.printElement.style.width = `${form.scale}%`
       this.app.fire('map:resize')
     }
   }
 
-  open(action = 'print') {
+  open() {
     if (!this.container) this.build()
-    this.action = action
-    const acceptLabel = action === 'print' ? translate('Print') : translate('Download')
     this.dialog.on(
       'close',
       (event) => {
@@ -72,37 +69,11 @@ export default class Printer {
       { once: true }
     )
     this.dialog
-      .open({ template: this.container, cancel: false, accept: acceptLabel })
-      .then((form) => this.onSubmit(form))
+      .open({ template: this.container, cancel: false, accept: translate('Print') })
+      .then((form) => {
+        window.print()
+        this.resetSize()
+      })
     this.resizeMap()
-  }
-
-  async onSubmit(form) {
-    this.app.fire('dataloading', { id: 'screenshot' })
-    if (this.action === 'print') {
-      const win = window.open('', '_blank')
-      // Using document.body.appendChild here will end with black font
-      // on a black blackground, no idea why.
-      win.document.write(`<span>${translate('Preparing the print…')}</span>`)
-      // screenshot must be called after window.open, no idea why,
-      // otherwise window.open sometimes fails and returns null.
-      const screenshot = await this.app.screenshot()
-      const img = await screenshot.toPng()
-      img.addEventListener('load', () => {
-        win.print()
-        win.close()
-      })
-      win.document.querySelector('span').remove()
-      win.document.body.appendChild(img)
-      win.focus()
-    } else {
-      const screenshot = await this.app.screenshot()
-      await screenshot.download({
-        format: this.action,
-        filename: Utils.slugify(this.app.properties.name),
-      })
-    }
-    this.resetSize()
-    this.app.fire('dataload', { id: 'screenshot' })
   }
 }

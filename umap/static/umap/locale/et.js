@@ -1,4 +1,8 @@
-const locale = {
+
+import { registerLocale, setLocale } from '/static/umap/dist/i18n.js'
+
+setLocale('et')
+registerLocale('et', {
     "(area: {measure})": "(area: {measure})",
     "(length: {measure})": "(length: {measure})",
     "# one hash for main heading": "# üks trell põhipealkirja jaoks",
@@ -656,6 +660,4 @@ const locale = {
     "Group properties": "Group properties",
     "Choose a group": "Choose a group",
     "Change map background": "Change map background"
-}
-L.registerLocale("et", locale)
-L.setLocale("et")
+})

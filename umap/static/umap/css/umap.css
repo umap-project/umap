@@ -1,0 +1,28 @@
+/* Single bundle entry for all of uMap's CSS (plus vendored ol.css): esbuild
+ * inlines these @imports, in cascade order, into dist/umap.css and relocates
+ * their url() assets to dist/assets. Only `theme.css` stays separate — it is
+ * loaded last so instances can override everything. Keep this order in sync
+ * with templates/umap/css.html. */
+
+/* Vendored OL styles go in a cascade layer: layered rules always lose to our
+ * (unlayered) CSS, so uMap overrides win regardless of specificity. */
+@import 'ol/ol.css' layer(ol);
+@import '../vars.css';
+@import '../font.css';
+@import '../base.css';
+@import './popup.css';
+@import './form.css';
+@import './icon.css';
+@import '../content.css';
+@import '../nav.css';
+@import '../map.css';
+@import './slideshow.css';
+@import './contextmenu.css';
+@import './panel.css';
+@import './window.css';
+@import './tooltip.css';
+@import './dialog.css';
+@import './importers.css';
+@import './tableeditor.css';
+@import './bar.css';
+@import './browser.css';

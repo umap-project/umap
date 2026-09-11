@@ -1,7 +1,7 @@
 import { Alert } from '../../components/alerts/alert.js'
 import { BaseAjax, SingleMixin } from '../autocomplete.js'
-import { translate } from '../i18n.js'
 import * as DOMUtils from '../domutils.js'
+import { translate } from '../i18n.js'
 
 const TEMPLATE = `
   <div>
@@ -17,7 +17,7 @@ const TEMPLATE = `
         <option value="center">${translate('Only geometry centers')}</option>
       </select>
     </label>
-    <label data-ref="area" id="area"><span>${translate('Search area')}</span></label>
+    <label data-ref="area" id="area-filter"><span>${translate('Search area')}</span></label>
   </div>
 `
 

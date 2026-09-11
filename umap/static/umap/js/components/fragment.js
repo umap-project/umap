@@ -1,7 +1,6 @@
-import App from '../modules/app.js'
-
 class UmapFragment extends HTMLElement {
-  connectedCallback() {
+  async connectedCallback() {
+    const { default: App } = await import('../modules/app.js')
     new App(this.firstElementChild.id, JSON.parse(this.dataset.settings))
   }
 }

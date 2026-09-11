@@ -20,10 +20,11 @@ input:-moz-placeholder,
 }
 
 .search-form {
-    display: flex;
     align-items: baseline;
     max-width: 800px;
     margin: 0 auto;
+    flex-direction: row;
+    gap: 0;
 }
 
 .search-form select {
@@ -209,7 +210,7 @@ h2.tabs a:hover {
     white-space: nowrap;
     text-overflow: ellipsis;
     vertical-align: middle;
-    font-size: small;
+    font-size: var(--font-size--1);
     padding: 0 3px;
 }
 

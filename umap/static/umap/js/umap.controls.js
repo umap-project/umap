@@ -41,11 +41,11 @@ U.Editable = L.Editable.extend({
     }
   },
 
-  startRoute: function (latlng) {
+  startRoute: function () {
     const feature = this.createLineString()
     feature.askForRouteSettings().then(() => {
       const layer = this.drawNewFeature(feature)
-      layer.enableEdit(this.map).newShape(latlng)
+      layer.enableEdit(this.map).newShape()
     })
   },
 
