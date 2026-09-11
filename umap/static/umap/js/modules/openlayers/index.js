@@ -148,6 +148,12 @@ export class OLProxy {
     this.app.on('popup:close', () => this.closePopup())
     this.app.on('map:show:point', (event) => this.showPoint(event.detail))
     this.app.on('map:hide:point', () => this.hidePoint())
+    this.app.on('feature:edit', (event) => {
+      const { sourceId, id } = event.detail
+      const olFeature = this.sources[sourceId]?.getFeatureById(id)
+      if (!olFeature) return
+      this.editor?.select.selectFeature(olFeature)
+    })
     this.app.on('feature:endedit', () => this.editor?.select.clearSelection())
     this.app.on('feature:reset', (event) => {
       const { sourceId, geojson } = event.detail

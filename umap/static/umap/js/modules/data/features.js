@@ -303,7 +303,7 @@ class Feature {
       builder.form.querySelector('input')?.focus()
     })
     this.app.editedFeature = this
-    this.app.fire('feature:edit', { id: this.id })
+    this.app.fire('feature:edit', { id: this.id, sourceId: this.datalayer.id })
     return Promise.all([onFormCreated, onPanelLoaded]).then(([form, panel]) => panel)
   }
 
