@@ -147,6 +147,7 @@ export class MeasureTool {
     this.draw = new Draw({
       source: this.source,
       type: type,
+      stopClick: true,
       style: (feature) => this.style(feature, type, tip),
     })
     this.draw.on('drawstart', () => {

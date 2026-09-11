@@ -129,13 +129,11 @@ export default class Editor {
 
   // Snap stays on: drawing snaps to existing features too.
   pauseInteractions() {
-    this.select.setActive(false)
     this.translate.setActive(false)
     for (const { modify } of this.watched.values()) modify.setActive(false)
   }
 
   resumeInteractions() {
-    this.select.setActive(true)
     this.translate.setActive(true)
     for (const { modify } of this.watched.values()) modify.setActive(true)
   }
@@ -177,7 +175,7 @@ export default class Editor {
         })
       })
     }
-    const draw = new Draw({ source: this.drawingSource, type })
+    const draw = new Draw({ source: this.drawingSource, type, stopClick: true })
     this.activeDrawing = draw
     this.map.addInteraction(draw)
     this._moveSnapToTop()
