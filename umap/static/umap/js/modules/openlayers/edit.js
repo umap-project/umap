@@ -1,4 +1,4 @@
-import { primaryAction } from 'ol/events/condition.js'
+import { never, primaryAction } from 'ol/events/condition.js'
 import DoubleClickZoom from 'ol/interaction/DoubleClickZoom.js'
 import Draw from 'ol/interaction/Draw.js'
 import Modify from 'ol/interaction/Modify.js'
@@ -51,7 +51,8 @@ export default class Editor {
     const selectable = (feature) =>
       feature.get('editable') && !feature.get('represents')
     // Style: null, so select do not duplicate the highlighted style.
-    this.select = new Select({ style: null, filter: selectable })
+    // Shift means "edit this feature" in uMap, not OL's default "toggle selection".
+    this.select = new Select({ style: null, filter: selectable, toggleCondition: never })
     this.map.addInteraction(this.select)
     this.select.on('select', (event) => {
       for (const olFeature of [...event.selected, ...event.deselected]) {
