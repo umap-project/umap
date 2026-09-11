@@ -354,7 +354,11 @@ export class Journal {
       debug('No updater for', operation)
       return
     }
-    updater.applyMessage(operation)
+    try {
+      updater.applyMessage(operation)
+    } catch (error) {
+      debug('Cannot apply', operation, error.message)
+    }
   }
 
   getPeers() {

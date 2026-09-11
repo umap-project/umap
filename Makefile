@@ -104,6 +104,7 @@ test-integration:
 		umap/tests/integration/test_owned_map.py \
 		umap/tests/integration/test_picto.py \
 		umap/tests/integration/test_popup.py \
+		umap/tests/integration/test_querystring.py \
 		umap/tests/integration/test_remote_data.py \
 		umap/tests/integration/test_save.py \
 		umap/tests/integration/test_search.py \
