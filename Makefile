@@ -112,6 +112,7 @@ test-integration:
 		umap/tests/integration/test_slideshow.py \
 		umap/tests/integration/test_star.py \
 		umap/tests/integration/test_team.py \
+		umap/tests/integration/test_templates.py \
 		umap/tests/integration/test_view_marker.py \
 		umap/tests/integration/test_view_polygon.py \
 		umap/tests/integration/test_view_polyline.py \
