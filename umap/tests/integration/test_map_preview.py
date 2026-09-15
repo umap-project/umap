@@ -54,8 +54,8 @@ def test_map_preview_can_load_remote_geojson(page, live_server, tilelayer):
     page.route("*/**/ajax-proxy/**", handle)
 
     page.goto(f"{live_server.url}/map/?dataUrl=http://some.org/geo.json")
-    markers = page.locator(".leaflet-marker-icon")
-    expect(markers).to_have_count(1)
+    page.get_by_title("Open browser").click()
+    expect(page.locator(".umap-browser .datalayer-counter")).to_have_text("(1)")
 
 
 def test_map_preview_can_load_multiple_remote_geojson(page, live_server, tilelayer):
@@ -74,8 +74,10 @@ def test_map_preview_can_load_multiple_remote_geojson(page, live_server, tilelay
             "dataUrl=http://some.org/geo.json&dataUrl=http://some.org/geo2.json"
         )
     )
-    markers = page.locator(".leaflet-marker-icon")
-    expect(markers).to_have_count(2)
+    page.get_by_title("Open browser").click()
+    expect(page.locator(".umap-browser .datalayer-counter")).to_have_text(
+        ["(1)", "(1)"]
+    )
 
 
 def test_map_preview_can_load_remote_csv(page, live_server, tilelayer):
@@ -86,27 +88,30 @@ def test_map_preview_can_load_remote_csv(page, live_server, tilelayer):
     page.route("*/**/ajax-proxy/**", handle)
 
     page.goto(f"{live_server.url}/map/?dataUrl=http://some.org/geo.csv&dataFormat=csv")
-    markers = page.locator(".leaflet-marker-icon")
-    expect(markers).to_have_count(1)
+    page.get_by_title("Open browser").click()
+    expect(page.locator(".umap-browser .datalayer-counter")).to_have_text("(1)")
 
 
 def test_map_preview_can_load_geojson_in_querystring(page, live_server, tilelayer):
     page.goto(f"{live_server.url}/map/?data={quote(json.dumps(GEOJSON))}")
-    markers = page.locator(".leaflet-marker-icon")
-    expect(markers).to_have_count(1)
+    page.get_by_title("Open browser").click()
+    expect(page.locator(".umap-browser .datalayer-counter")).to_have_text("(1)")
 
 
 def test_map_preview_can_load_csv_in_querystring(page, live_server, tilelayer):
     page.goto(f"{live_server.url}/map/?data={quote(CSV)}&dataFormat=csv")
-    markers = page.locator(".leaflet-marker-icon")
-    expect(markers).to_have_count(1)
+    page.get_by_title("Open browser").click()
+    expect(page.locator(".umap-browser .datalayer-counter")).to_have_text("(1)")
 
 
 def test_map_preview_can_change_styling_from_querystring(page, live_server, tilelayer):
     page.goto(f"{live_server.url}/map/?data={quote(json.dumps(GEOJSON))}&color=DarkRed")
-    markers = page.locator(".leaflet-marker-icon .icon-container")
-    expect(markers).to_have_count(1)
-    expect(markers).to_have_css("background-color", "rgb(139, 0, 0)")
+    page.get_by_title("Open browser").click()
+    expect(page.locator(".umap-browser .datalayer-counter")).to_have_text("(1)")
+    page.locator(".umap-browser .datalayer").first.click()
+    expect(page.locator(".umap-browser .feature-color")).to_have_css(
+        "background-color", "rgb(139, 0, 0)"
+    )
 
 
 def test_can_open_feature_on_load(page, live_server, tilelayer):
