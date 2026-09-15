@@ -73,11 +73,9 @@ def tilelayers():
 def test_map_should_display_first_tilelayer_by_default(
     map, live_server, tilelayers, page
 ):
-    page.goto(f"{live_server.url}/map/new")
-    tiles = page.locator(".leaflet-tile-pane img")
-    expect(tiles.first).to_have_attribute(
-        "src", re.compile(r"https://tile.openstreetmap.org/\d+/\d+/\d+.png")
-    )
+    url_pattern = re.compile(r"https://tile.openstreetmap.org/\d+/\d+/\d+.png")
+    with page.expect_request(url_pattern):
+        page.goto(f"{live_server.url}/map/new")
 
 
 def test_map_should_display_selected_tilelayer(map, live_server, tilelayers, page):
@@ -88,9 +86,8 @@ def test_map_should_display_selected_tilelayer(map, live_server, tilelayers, pag
     map.settings["properties"]["tilelayer"]["url_template"] = piano.url_template
     map.settings["properties"]["tilelayersControl"] = True
     map.save()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    tiles = page.locator(".leaflet-tile-pane img")
-    expect(tiles.first).to_have_attribute("src", url_pattern)
+    with page.expect_request(url_pattern):
+        page.goto(f"{live_server.url}{map.get_absolute_url()}")
 
 
 def test_map_should_display_custom_tilelayer(map, live_server, tilelayers, page):
@@ -103,9 +100,8 @@ def test_map_should_display_custom_tilelayer(map, live_server, tilelayers, page)
     )
     map.settings["properties"]["tilelayersControl"] = True
     map.save()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    tiles = page.locator(".leaflet-tile-pane img")
-    expect(tiles.first).to_have_attribute("src", url_pattern)
+    with page.expect_request(url_pattern):
+        page.goto(f"{live_server.url}{map.get_absolute_url()}")
 
 
 def test_can_have_smart_text_in_attribution(tilelayer, map, live_server, page):
@@ -118,17 +114,21 @@ def test_can_have_smart_text_in_attribution(tilelayer, map, live_server, page):
     expect(page.get_by_role("link", name="OpenStreetMap")).to_be_visible()
 
 
-def test_custom_tilelayer_maxzoom_is_respected(map, live_server, tilelayers, page):
+def test_custom_tilelayer_maxzoom_is_respected(
+    map, live_server, tilelayers, page, wait_for_loaded
+):
     map.settings["properties"]["tilelayer"]["maxZoom"] = 10
     map.save()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    page.wait_for_selector(".leaflet-tile-pane img")
-    max_zoom = page.evaluate("() => U.MAP.mapProxy.map.getMaxZoom()")
-    assert max_zoom == 10
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#9/48.55/14.68")
+    wait_for_loaded(page)
+    zoom_in = page.locator(".umap-control-zoom-in")
+    expect(zoom_in).to_have_attribute("aria-disabled", "false")
+    zoom_in.click()
+    expect(zoom_in).to_have_attribute("aria-disabled", "true")
 
 
 def test_overlay_default_maxzoom_does_not_widen_base(
-    map, live_server, tilelayers, page
+    map, live_server, tilelayers, page, wait_for_loaded
 ):
     map.settings["properties"]["tilelayer"]["maxZoom"] = 10
     map.settings["properties"]["overlay"] = {
@@ -136,13 +136,17 @@ def test_overlay_default_maxzoom_does_not_widen_base(
         "attribution": "overlay",
     }
     map.save()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    page.wait_for_selector(".leaflet-tile-pane img")
-    max_zoom = page.evaluate("() => U.MAP.mapProxy.map.getMaxZoom()")
-    assert max_zoom == 10
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#9/48.55/14.68")
+    wait_for_loaded(page)
+    zoom_in = page.locator(".umap-control-zoom-in")
+    expect(zoom_in).to_have_attribute("aria-disabled", "false")
+    zoom_in.click()
+    expect(zoom_in).to_have_attribute("aria-disabled", "true")
 
 
-def test_overlay_higher_maxzoom_is_clamped_to_base(map, live_server, tilelayers, page):
+def test_overlay_higher_maxzoom_is_clamped_to_base(
+    map, live_server, tilelayers, page, wait_for_loaded
+):
     map.settings["properties"]["tilelayer"]["maxZoom"] = 10
     map.settings["properties"]["overlay"] = {
         "url_template": "https://a.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
@@ -150,7 +154,9 @@ def test_overlay_higher_maxzoom_is_clamped_to_base(map, live_server, tilelayers,
         "maxZoom": 20,
     }
     map.save()
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    page.wait_for_selector(".leaflet-tile-pane img")
-    max_zoom = page.evaluate("() => U.MAP.mapProxy.map.getMaxZoom()")
-    assert max_zoom == 10
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#9/48.55/14.68")
+    wait_for_loaded(page)
+    zoom_in = page.locator(".umap-control-zoom-in")
+    expect(zoom_in).to_have_attribute("aria-disabled", "false")
+    zoom_in.click()
+    expect(zoom_in).to_have_attribute("aria-disabled", "true")
