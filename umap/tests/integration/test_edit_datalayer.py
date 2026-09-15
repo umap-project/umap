@@ -56,15 +56,15 @@ def test_cancel_deleting_datalayer_should_restore(
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    markers = page.locator(".leaflet-marker-icon")
+    counter = page.locator(".umap-browser .datalayer-counter")
     expect(layers).to_have_count(1)
-    expect(markers).to_have_count(1)
+    expect(counter).to_have_text("(1)")
     page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel.right").get_by_title("Delete layer").click()
-    expect(markers).to_have_count(0)
+    expect(layers).to_have_count(0)
     expect(page.get_by_text("test datalayer")).to_be_hidden()
     page.locator(".edit-undo").click()
-    expect(markers).to_have_count(1)
+    expect(counter).to_have_text("(1)")
     expect(page.locator(".umap-browser").get_by_text("test datalayer")).to_be_visible()
 
 
@@ -73,21 +73,21 @@ def test_can_clone_datalayer(live_server, openmap, login, datalayer, page):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    markers = page.locator(".leaflet-marker-icon")
+    counter = page.locator(".umap-browser .datalayer-counter")
     expect(layers).to_have_count(1)
-    expect(markers).to_have_count(1)
+    expect(counter).to_have_text("(1)")
     page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel.right").get_by_title("Edit", exact=True).click()
     page.get_by_text("Advanced actions").click()
     page.get_by_role("button", name="Clone").click()
     expect(layers).to_have_count(2)
-    expect(markers).to_have_count(2)
+    expect(counter).to_have_text(["(1)", "(1)"])
     with page.expect_response(re.compile(".*/datalayer/create/.*")):
         page.get_by_role("button", name="Save").click()
     assert DataLayer.objects.count() == 2
 
 
-def test_can_change_icon_class(live_server, openmap, page):
+def test_can_change_icon_class(live_server, openmap, page, assert_screenshot):
     data = {
         "type": "FeatureCollection",
         "features": [
@@ -100,15 +100,13 @@ def test_can_change_icon_class(live_server, openmap, page):
     }
     DataLayerFactory(map=openmap, data=data)
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#6/45.3/1")
-    expect(page.locator(".umap-div-icon")).to_be_visible()
+    assert_screenshot(page, suffix="default", ui=False)
     page.get_by_role("button", name="Manage layers").click()
-    expect(page.locator(".umap-circle-icon")).to_be_hidden()
     page.locator(".panel.right").get_by_title("Edit", exact=True).click()
     page.get_by_text("Shape properties").click()
     page.locator(".umap-field-iconClass button.define").click()
     page.get_by_text("Circle", exact=True).click()
-    expect(page.locator(".umap-circle-icon")).to_be_visible()
-    expect(page.locator(".umap-div-icon")).to_be_hidden()
+    assert_screenshot(page, suffix="circle", ui=False)
 
 
 def test_can_change_name(live_server, openmap, page, datalayer):
@@ -171,32 +169,39 @@ def test_can_create_new_datalayer(live_server, openmap, page, datalayer):
     expect(page.locator(".umap-is-dirty")).to_be_hidden()
 
 
-def test_can_restore_version(live_server, openmap, page, datalayer, wait_for_edit_mode):
-    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+def test_can_restore_version(
+    live_server, openmap, page, datalayer, wait_for_edit_mode, assert_screenshot
+):
+    page.goto(
+        f"{live_server.url}{openmap.get_absolute_url()}?edit#16/48.55298/14.68896"
+    )
     wait_for_edit_mode(page)
-    marker = page.locator(".leaflet-marker-icon")
-    expect(marker).to_contain_class("umap-ball-icon")
-    marker.click(modifiers=["Shift"])
+    assert_screenshot(page, suffix="ball", ui=False)
+    page.locator("#map").click(position={"x": 640, "y": 340}, modifiers=["Shift"])
     page.get_by_text("Shape properties").click()
     page.locator("#umap-feature-shape-properties").get_by_text("Default").click()
     with page.expect_response(re.compile(".*/datalayer/update/.*")):
         page.get_by_role("button", name="Save").click()
-    expect(marker).to_contain_class("umap-div-icon")
+    assert_screenshot(page, suffix="default", ui=False)
     page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel.right").get_by_title("Edit", exact=True).click()
     page.get_by_text("Versions").click()
     page.get_by_title("Restore this version").last.click()
     page.get_by_role("button", name="OK").click()
-    expect(marker).to_contain_class("umap-ball-icon")
+    assert_screenshot(page, suffix="ball", ui=False)
 
 
 def test_can_edit_layer_on_ctrl_shift_click(
     live_server, openmap, page, datalayer, wait_for_edit_mode
 ):
     modifier = "Meta" if platform.system() == "Darwin" else "Control"
-    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    page.goto(
+        f"{live_server.url}{openmap.get_absolute_url()}?edit#16/48.55298/14.68896"
+    )
     wait_for_edit_mode(page)
-    page.locator(".leaflet-marker-icon").click(modifiers=[modifier, "Shift"])
+    page.locator("#map").click(
+        position={"x": 640, "y": 340}, modifiers=[modifier, "Shift"]
+    )
     expect(page.get_by_text("Layer properties")).to_be_visible()
 
 
