@@ -33,10 +33,8 @@ def test_others_cannot_see_team_private_maps_in_team_page(
     assert map.name not in response.content.decode()
 
 
-@pytest.mark.parametrize("share_status", [Map.PRIVATE, Map.DRAFT])
-def test_members_can_see_private_maps_in_team_page(
-    client, map, team, user, share_status
-):
+@pytest.mark.parametrize("share_status", [Map.PUBLIC, Map.OPEN, Map.PRIVATE, Map.DRAFT])
+def test_members_can_see_team_maps(client, map, team, user, share_status):
     map.team = team
     map.share_status = share_status
     map.save()
@@ -47,6 +45,42 @@ def test_members_can_see_private_maps_in_team_page(
     response = client.get(url)
     assert response.status_code == 200
     assert map.name in response.content.decode()
+
+
+@pytest.mark.parametrize("share_status", [Map.DELETED, Map.BLOCKED])
+def test_members_cannot_see_deleted_or_blocked_team_maps(
+    client, map, team, user, share_status
+):
+    map.team = team
+    map.share_status = share_status
+    map.save()
+    user.teams.add(team)
+    client.login(username=user.username, password="123123")
+    response = client.get(reverse("team_maps", args=(team.pk,)))
+    assert response.status_code == 200
+    assert response.context["maps"].paginator.count == 0
+    assert map.name not in response.content.decode()
+
+
+def test_deleted_map_disappears_from_team_page(client, map, team):
+    map.team = team
+    map.save()
+    map.owner.teams.add(team)
+    client.login(username=map.owner.username, password="123123")
+    url = reverse("team_maps", args=(team.pk,))
+    assert map.name in client.get(url).content.decode()
+
+    response = client.post(
+        reverse("map_delete", args=(map.pk,)),
+        headers={"X-Requested-With": "XMLHttpRequest"},
+    )
+    assert response.status_code == 200
+    map.refresh_from_db()
+    assert map.share_status == Map.DELETED
+    response = client.get(url)
+    assert response.status_code == 200
+    assert response.context["maps"].paginator.count == 0
+    assert map.name not in response.content.decode()
 
 
 def test_user_can_see_their_teams(client, team, user):
