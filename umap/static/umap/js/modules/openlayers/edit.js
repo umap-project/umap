@@ -8,10 +8,21 @@ import Select from 'ol/interaction/Select.js'
 import Snap from 'ol/interaction/Snap.js'
 import Translate from 'ol/interaction/Translate.js'
 import { unByKey } from 'ol/Observable.js'
-import VectorSource from 'ol/source/Vector.js'
 import ContinueLine from './continueline.js'
 import DrawHole from './hole.js'
 import DrawRoute from './route.js'
+
+// A polygon ring repeats its first point to close itself (eg. a triangle has 4).
+function isValidGeometry(geometry) {
+  switch (geometry.getType()) {
+    case 'Polygon':
+      return geometry.getCoordinates()[0].length >= 4
+    case 'LineString':
+      return geometry.getCoordinates().length >= 2
+    default:
+      return true
+  }
+}
 
 function appendShape(olFeature, shape) {
   const geometry = olFeature.getGeometry()
@@ -205,19 +216,17 @@ export default class Editor {
     if (this.activeDrawing) return
     // Allow for Escape to be catched by the app listener.
     this.proxy.focus()
-    if (!this.drawingSource) {
-      this.drawingSource = new VectorSource()
-      this.drawingSource.on('addfeature', (event) => {
-        this.proxy.app.fire('feature:create', {
-          geojson: this.proxy.OLFeatureToGeojson(event.feature),
-        })
-      })
-    }
-    const draw = new Draw({ source: this.drawingSource, type, stopClick: true })
+    const draw = new Draw({ type, stopClick: true })
     this.activeDrawing = draw
     this.map.addInteraction(draw)
     this._moveSnapToTop()
-    draw.on('drawend', () => this.endDrawing())
+    draw.on('drawend', (event) => {
+      this.endDrawing()
+      if (!isValidGeometry(event.feature.getGeometry())) return
+      this.proxy.app.fire('feature:create', {
+        geojson: this.proxy.OLFeatureToGeojson(event.feature),
+      })
+    })
     draw.on('drawabort', () => this.endDrawing())
   }
 
