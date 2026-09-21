@@ -1,3 +1,4 @@
+import { noModifierKeys } from 'ol/events/condition.js'
 import { getHeight, getWidth } from 'ol/extent.js'
 import MultiPoint from 'ol/geom/MultiPoint.js'
 import MouseWheelZoom from 'ol/interaction/MouseWheelZoom.js'
@@ -531,7 +532,7 @@ export class OLProxy {
       } else if (!uFeature.isReadOnly()) {
         uFeature.edit()
       }
-    } else if (!this.map.editTools?.drawing()) {
+    } else if (noModifierKeys(event) && !this.map.editTools?.drawing()) {
       // Events carry geographic lon/lat; the proxy converts to/from its projection.
       uFeature.view({ center: toLonLat(event.coordinate) })
     }

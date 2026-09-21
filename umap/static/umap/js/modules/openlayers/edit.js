@@ -1,4 +1,4 @@
-import { never, primaryAction } from 'ol/events/condition.js'
+import { never, platformModifierKeyOnly, singleClick } from 'ol/events/condition.js'
 import MultiLineString from 'ol/geom/MultiLineString.js'
 import MultiPolygon from 'ol/geom/MultiPolygon.js'
 import DoubleClickZoom from 'ol/interaction/DoubleClickZoom.js'
@@ -117,13 +117,9 @@ export default class Editor {
     const modify = new Modify({
       source,
       filter: (drawn) => drawn.get('editable'),
-      // Do not allow to modify a selected feature, as they can already be translated,
-      // and both interactions will conflict for LineString.
-      condition: (event) =>
-        primaryAction(event) &&
-        !event.map.forEachFeatureAtPixel(event.pixel, (feature) =>
-          this.select.getFeatures().getArray().includes(feature)
-        ),
+      // Dragging a segment is left to Translate; a vertex is inserted on demand only.
+      insertVertexCondition: platformModifierKeyOnly,
+      deleteCondition: (event) => platformModifierKeyOnly(event) && singleClick(event),
     })
     modify.on('modifystart', () => this.proxy.hideOverlays())
     modify.on('modifyend', (event) => {
