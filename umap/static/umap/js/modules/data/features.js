@@ -1227,18 +1227,13 @@ export class LineString extends Path {
     const index = GeoUtils.closestVertexIndex(coordinates, coordinate)
     // Splitting on an endpoint would yield an empty half.
     if (index <= 0 || index >= coordinates.length - 1) return
-    this.journal.startBatch()
-    const other = this.datalayer.makeFeature({
-      geometry: { type: 'LineString', coordinates: coordinates.slice(index) },
-      properties: this.cloneProperties(),
-    })
-    other.journal.upsert(other.toJournal())
     this.commitGeometry({
-      type: 'LineString',
-      coordinates: coordinates.slice(0, index + 1),
+      type: 'MultiLineString',
+      coordinates: Utils.CopyJSON([
+        coordinates.slice(0, index + 1),
+        coordinates.slice(index),
+      ]),
     })
-    this.journal.commitBatch()
-    other.edit()
   }
 
   extendedProperties() {
