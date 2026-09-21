@@ -1,4 +1,6 @@
 import { never, primaryAction } from 'ol/events/condition.js'
+import MultiLineString from 'ol/geom/MultiLineString.js'
+import MultiPolygon from 'ol/geom/MultiPolygon.js'
 import DoubleClickZoom from 'ol/interaction/DoubleClickZoom.js'
 import Draw from 'ol/interaction/Draw.js'
 import Modify from 'ol/interaction/Modify.js'
@@ -10,6 +12,24 @@ import VectorSource from 'ol/source/Vector.js'
 import ContinueLine from './continueline.js'
 import DrawHole from './hole.js'
 import DrawRoute from './route.js'
+
+function appendShape(olFeature, shape) {
+  const geometry = olFeature.getGeometry()
+  switch (geometry.getType()) {
+    case 'MultiLineString':
+      geometry.appendLineString(shape)
+      break
+    case 'MultiPolygon':
+      geometry.appendPolygon(shape)
+      break
+    case 'LineString':
+      olFeature.setGeometry(new MultiLineString([geometry, shape]))
+      break
+    case 'Polygon':
+      olFeature.setGeometry(new MultiPolygon([geometry, shape]))
+      break
+  }
+}
 
 export default class Editor {
   constructor(map, proxy) {
@@ -162,6 +182,23 @@ export default class Editor {
       this.activeDrawing = null
       if (geometry) this.proxy.pullGeometry(olFeature)
     })
+  }
+
+  async startShape({ featureId, sourceId }) {
+    if (this.activeDrawing) return
+    this.proxy.focus()
+    const olFeature = this.proxy.sources[sourceId].getFeatureById(featureId)
+    const type = olFeature.getGeometry().getType().replace('Multi', '')
+    const draw = new Draw({ type, stopClick: true })
+    this.activeDrawing = draw
+    this.map.addInteraction(draw)
+    this._moveSnapToTop()
+    draw.on('drawend', (event) => {
+      appendShape(olFeature, event.feature.getGeometry())
+      this.endDrawing()
+      this.proxy.pullGeometry(olFeature)
+    })
+    draw.on('drawabort', () => this.endDrawing())
   }
 
   async startDrawing(type) {

@@ -118,6 +118,10 @@ export class OLProxy {
       'draw:hole',
       async (event) => await this.editor?.startHole(event.detail)
     )
+    this.app.on(
+      'draw:shape',
+      async (event) => await this.editor?.startShape(event.detail)
+    )
     this.app.on('draw:route', async () => await this.editor?.startRoute())
     this.app.on('map:view:set', (event) => {
       const { easing, zoom, coordinates, callback } = event.detail

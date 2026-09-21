@@ -355,12 +355,12 @@ export class EditBar extends WithTemplate {
   setup() {
     this.parent.appendChild(this.element)
     DOMUtils.disableClickPropagation(this.element)
-    this.addDrawListener('marker')
-    this.addDrawListener('linestring')
-    this.addDrawListener('multiline')
-    this.addDrawListener('polygon')
-    this.addDrawListener('multipolygon')
-    this.addDrawListener('route')
+    this.addDrawListener('marker', () => this.app.startDrawing('marker'))
+    this.addDrawListener('linestring', () => this.app.startDrawing('linestring'))
+    this.addDrawListener('multiline', () => this.app.editedFeature.startShape())
+    this.addDrawListener('polygon', () => this.app.startDrawing('polygon'))
+    this.addDrawListener('multipolygon', () => this.app.editedFeature.startShape())
+    this.addDrawListener('route', () => this.app.startDrawing('route'))
     this.addClickListener('caption', () => this.app.editCaption())
     this.addClickListener('import', () => this.app.openImporter())
     this.addClickListener('templates', () => {
@@ -407,12 +407,11 @@ export class EditBar extends WithTemplate {
     )
   }
 
-  addDrawListener(shape) {
-    const action = (event) => {
+  addDrawListener(ref, action) {
+    this.addClickListener(ref, (event) => {
       event.target.closest('button').classList.add('on')
-      this.app.fire(`draw:${shape}`)
-    }
-    this.addClickListener(shape, action)
+      action()
+    })
   }
 
   addClickListener(ref, action) {
