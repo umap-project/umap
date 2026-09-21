@@ -318,7 +318,7 @@ class TeamMaps(PaginatorMixin, DetailView):
         qs = Map.public
         user = self.request.user
         if user.is_authenticated and user in self.object.users.all():
-            qs = Map.objects
+            qs = Map.objects.exclude(share_status__in=[Map.DELETED, Map.BLOCKED])
         return qs.filter(team=self.object).order_by("-modified_at")
 
     def get_context_data(self, **kwargs):
