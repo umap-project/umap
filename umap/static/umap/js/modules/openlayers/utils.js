@@ -24,7 +24,7 @@ export function readFeature(data) {
 }
 
 export function writeFeature(olFeature) {
-  return geojsonFormat.writeFeatureObject(olFeature, PROJECTION)
+  return geojsonFormat.writeFeatureObject(olFeature, { ...PROJECTION, decimals: 6 })
 }
 
 export function toOLExtent(extent) {
