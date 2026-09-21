@@ -880,6 +880,7 @@ class MapDownload(DetailView):
         response["Content-Disposition"] = (
             f'attachment; filename="umap_backup_{self.object.slug}.umap"'
         )
+        response["Access-Control-Allow-Origin"] = "*"
         return response
 
 
