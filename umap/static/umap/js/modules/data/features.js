@@ -299,12 +299,12 @@ class Feature {
       this.addAdvancedActions(container)
     })
     const onPanelLoaded = this.app.editPanel.open({ content: container })
-    onPanelLoaded.then(() => {
-      builder.form.querySelector('input')?.focus()
-    })
     this.app.editedFeature = this
     this.app.fire('feature:edit', { id: this.id, sourceId: this.datalayer.id })
-    return Promise.all([onFormCreated, onPanelLoaded]).then(([form, panel]) => panel)
+    return Promise.all([onFormCreated, onPanelLoaded]).then(([form, panel]) => {
+      form.querySelector('input')?.focus()
+      return panel
+    })
   }
 
   addAdvancedActions(container) {
