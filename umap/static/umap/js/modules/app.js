@@ -467,17 +467,17 @@ export default class App extends Utils.WithEvents {
           {
             title: this.help.displayLabel('DRAW_MARKER', false),
             icon: 'icon-marker',
-            action: () => this.fire('draw:marker'),
+            action: () => this.startDrawing('marker'),
           },
           {
             title: this.help.displayLabel('DRAW_LINE', false),
             icon: 'icon-polyline',
-            action: () => this.fire('draw:polyline'),
+            action: () => this.startDrawing('linestring'),
           },
           {
             title: this.help.displayLabel('DRAW_POLYGON', false),
             icon: 'icon-polygon',
-            action: () => this.fire('draw:polygon'),
+            action: () => this.startDrawing('polygon'),
           },
         ],
       })
@@ -564,6 +564,10 @@ export default class App extends Utils.WithEvents {
     this.controlManager.controls.search?.onClick()
   }
 
+  startDrawing(type) {
+    this.fire(`draw:${type}`)
+  }
+
   hasEditMode() {
     const editMode = this.properties.editMode
     return editMode === 'simple' || editMode === 'advanced'
@@ -636,15 +640,15 @@ export default class App extends Utils.WithEvents {
       },
       'Ctrl+m': {
         if: () => this.editEnabled,
-        do: () => this.fire('draw:marker'),
+        do: () => this.startDrawing('marker'),
       },
       'Ctrl+p': {
         if: () => this.editEnabled,
-        do: () => this.fire('draw:polygon'),
+        do: () => this.startDrawing('polygon'),
       },
       'Ctrl+l': {
         if: () => this.editEnabled,
-        do: () => this.fire('draw:polyline'),
+        do: () => this.startDrawing('linestring'),
       },
       'Ctrl+i': {
         if: () => this.editEnabled,

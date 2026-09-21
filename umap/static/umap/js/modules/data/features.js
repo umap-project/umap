@@ -1019,6 +1019,13 @@ class Path extends Feature {
     }
     return items
   }
+
+  startShape() {
+    this.app.fire('draw:shape', {
+      featureId: this.id,
+      sourceId: this.datalayer.id,
+    })
+  }
 }
 
 export class LineString extends Path {
