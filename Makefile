@@ -92,6 +92,7 @@ test-integration:
 		umap/tests/integration/test_cluster.py \
 		umap/tests/integration/test_dashboard.py \
 		umap/tests/integration/test_datalayer.py \
+		umap/tests/integration/test_draw_polyline.py \
 		umap/tests/integration/test_draw_route.py \
 		umap/tests/integration/test_edit_datalayer.py \
 		umap/tests/integration/test_edit_map.py \
