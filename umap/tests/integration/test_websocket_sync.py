@@ -183,8 +183,10 @@ def test_websocket_connection_can_sync_polygons(
     assert_screenshot(peerB.locator("#map"), "b-vertex-moved", ui=False)
 
     # Move the polygon on peer B and check it moved also on peer A
-    b_map_el.click(position={"x": PANEL + 140, "y": 170})
-    drag_on_map(peerB, (PANEL + 140, 170), (PANEL + 300, 300))
+    b_map_el.click(position={"x": PANEL + 178, "y": 175})
+    # OL selects on its singleclick event, 250ms after the click.
+    peerB.wait_for_timeout(400)
+    drag_on_map(peerB, (PANEL + 178, 175), (PANEL + 300, 300))
     peerB.keyboard.press("Escape")
 
     assert_screenshot(peerA.locator("#map"), "a-polygon-moved", ui=False)
