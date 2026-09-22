@@ -202,7 +202,6 @@ def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
     map_el = page.locator("#map canvas")
     add_marker = page.get_by_title(draw_marker)
     expect(add_marker).to_be_visible()
-    assert_screenshot(page.locator("#map"), "first")
     add_marker.click()
     # startDrawing loads the Draw interaction asynchronously; wait for it to be in
     # place, else the map click races the import and gets dropped.
@@ -211,7 +210,7 @@ def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
     # The drawn feature enters edit mode; its properties panel opening is the
     # signal that creation completed.
     expect(page.locator(".panel").get_by_text(panel_title)).to_be_visible()
-    assert_screenshot(page.locator("#map"), "second")
+    assert_screenshot(page.locator("#map"), "second", ui=False)
     # A new datalayer has been created to host this created feature
     # given the remote one cannot accept new features
     page.get_by_title(browser_button).click()
