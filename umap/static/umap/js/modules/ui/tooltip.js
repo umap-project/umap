@@ -15,6 +15,7 @@ export default class Tooltip extends Positioned {
 
   open(opts) {
     this.container.classList.toggle('tooltip-accent', Boolean(opts.accent))
+    this.container.classList.toggle('dark', !opts.white)
     const showIt = () => {
       if (opts.content.nodeType === 1) {
         this.container.appendChild(opts.content)

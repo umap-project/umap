@@ -1,6 +1,5 @@
 .umap-main-edit-toolbox [type=button] {
     color: #fff;
-    font-size: 0.8rem;
     background-color: var(--color-darkGray);
     width: auto;
     margin-bottom: 0;
@@ -11,17 +10,17 @@
     text-decoration: underline;
 }
 
-.leaflet-container [type=button].umap-help-link {
+.umap-ui-container [type=button].umap-help-link {
     padding: 0 var(--text-margin);
     background-color: inherit;
 }
 
-.leaflet-container .edit-undo {
+.umap-ui-container .edit-undo {
     margin-left: var(--box-margin);
 }
 
-.leaflet-container .edit-undo[disabled],
-.leaflet-container .edit-redo[disabled] {
+.umap-ui-container .edit-undo[disabled],
+.umap-ui-container .edit-redo[disabled] {
     filter: invert(.5);
 }
 
@@ -33,7 +32,7 @@
     padding: 0 20px;
 }
 
-.leaflet-container .connected-peers,
+.umap-ui-container .connected-peers,
 .dark [type=button].connected-peers:hover {
     background-color: var(--color-lightCyan);
     color: var(--color-dark);
@@ -49,12 +48,12 @@
     color: var(--color-darkGray);
 }
 
-.leaflet-container .edit-disable:hover {
+.umap-ui-container .edit-disable:hover {
     border: 0.5px solid rgba(153, 153, 153, 0.80);
     text-decoration: none;
 }
 
-.leaflet-container .edit-save {
+.umap-ui-container .edit-save {
     opacity: 0.5;
     cursor: not-allowed;
     border-radius: 16px;
@@ -62,7 +61,7 @@
     background: rgba(153, 153, 153, 0.10);
 }
 
-.leaflet-container .icon-save {
+.umap-ui-container .icon-save {
     display: none;
 }
 
@@ -92,7 +91,7 @@
     background: rgba(66, 236, 230, 0.10);
 }
 
-.leaflet-container .edit-save,
+.umap-ui-container .edit-save,
 .umap-edit-enabled .edit-enable {
     display: none;
 }
@@ -131,6 +130,9 @@
     display: flex;
     column-gap: 10px;
     align-items: center;
+}
+.umap-left-edit-toolbox {
+    align-items: baseline;
 }
 
 .umap-main-edit-toolbox .logo {

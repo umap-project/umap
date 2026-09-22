@@ -1,11 +1,18 @@
 import re
 
 import pytest
+from django.utils import translation
 from playwright.sync_api import expect
 
 from ..base import DataLayerFactory
 
 pytestmark = pytest.mark.django_db
+
+
+@pytest.mark.screenshot
+def test_map_shows(live_server, page, tilelayer, map, assert_screenshot):
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    assert_screenshot(page.locator("#map"))
 
 
 def test_preconnect_for_tilelayer(map, page, live_server, tilelayer):
@@ -85,7 +92,7 @@ def test_default_view_latest_with_marker(map, live_server, datalayer, page):
     expect(page).to_have_url(re.compile(r".*#7/48\..+/14\..+"))
     layers = page.locator(".umap-browser .datalayer summary")
     expect(layers).to_have_count(1)
-    expect(page.locator(".leaflet-popup")).to_be_visible()
+    expect(page.locator(".umap-popup")).to_be_visible()
 
 
 def test_default_view_latest_with_line(map, live_server, page):
@@ -111,7 +118,7 @@ def test_default_view_latest_with_line(map, live_server, page):
     map.settings["properties"]["defaultView"] = "latest"
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datalayers")
-    expect(page).to_have_url(re.compile(r".*#8/48\..+/2\..+"))
+    expect(page).to_have_url(re.compile(r".*#8.16/48\..+/2\..+"))
     layers = page.locator(".umap-browser .datalayer summary")
     expect(layers).to_have_count(1)
 
@@ -142,13 +149,13 @@ def test_default_view_latest_with_polygon(map, live_server, page):
     map.settings["properties"]["defaultView"] = "latest"
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datalayers")
-    expect(page).to_have_url(re.compile(r".*#8/48\..+/2\..+"))
+    expect(page).to_have_url(re.compile(r".*#8.16/48\..+/2\..+"))
     layers = page.locator(".umap-browser .datalayer summary")
     expect(layers).to_have_count(1)
 
 
-def test_default_view_locate(browser, live_server, map, new_page):
-    context = browser.new_context(
+def test_default_view_locate(new_context, live_server, map, new_page):
+    context = new_context(
         geolocation={"longitude": 8.52967, "latitude": 39.16267},
         permissions=["geolocation"],
     )
@@ -159,42 +166,66 @@ def test_default_view_locate(browser, live_server, map, new_page):
     expect(page).to_have_url(re.compile(r".*#18/39\.162670/8\.529670"))
 
 
+@pytest.mark.parametrize(
+    "locale,browser_button,draw_marker,panel_title",
+    [
+        ("en", "Open browser", "Draw a marker", "Feature properties"),
+        ("fr", "Explorateur", "Ajouter un marqueur", "Propriétés de l'élément"),
+    ],
+)
+@pytest.mark.screenshot
 def test_remote_layer_should_not_be_used_as_datalayer_for_created_features(
-    openmap, live_server, datalayer, page
+    openmap,
+    live_server,
+    datalayer,
+    page,
+    assert_screenshot,
+    locale,
+    browser_button,
+    draw_marker,
+    panel_title,
 ):
+    translation.activate(locale)
     datalayer.settings["remoteData"] = {
-        "url": "https://overpass-api.de/api/interpreter?data=[out:xml];node[harbour=yes]({south},{west},{north},{east});out body;",
+        "url": "https://example.com/",
         "format": "osm",
-        "from": "10",
     }
+    # Prevent the layer to be really loaded
+    datalayer.settings["fromZoom"] = 10
     datalayer.save()
-    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
-    toggle = page.get_by_role("button", name="Open browser")
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#7/51/2")
+    toggle = page.get_by_role("button", name=browser_button)
     expect(toggle).to_be_visible()
     toggle.click()
     layers = page.locator(".umap-browser .datalayer summary")
     expect(layers).to_have_count(1)
-    map_el = page.locator("#map")
-    add_marker = page.get_by_title("Draw a marker")
+    map_el = page.locator("#map canvas")
+    add_marker = page.get_by_title(draw_marker)
     expect(add_marker).to_be_visible()
-    marker = page.locator(".leaflet-marker-icon")
-    expect(marker).to_have_count(0)
+    assert_screenshot(page.locator("#map"), "first")
     add_marker.click()
+    # startDrawing loads the Draw interaction asynchronously; wait for it to be in
+    # place, else the map click races the import and gets dropped.
+    page.wait_for_function("() => U.MAP.mapProxy.editor.activeDrawing")
     map_el.click(position={"x": 500, "y": 100})
-    expect(marker).to_have_count(1)
+    # The drawn feature enters edit mode; its properties panel opening is the
+    # signal that creation completed.
+    expect(page.locator(".panel").get_by_text(panel_title)).to_be_visible()
+    assert_screenshot(page.locator("#map"), "second")
     # A new datalayer has been created to host this created feature
     # given the remote one cannot accept new features
-    page.get_by_title("Open browser").click()
+    page.get_by_title(browser_button).click()
     expect(layers).to_have_count(2)
+    translation.activate("en")
 
 
 def test_minimap_on_load(map, live_server, datalayer, page):
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    expect(page.locator(".leaflet-control-minimap")).to_be_hidden()
+    expect(page.locator(".ol-overviewmap")).to_be_hidden()
     map.settings["properties"]["miniMap"] = True
     map.save()
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
-    expect(page.locator(".leaflet-control-minimap")).to_be_visible()
+    expect(page.locator(".ol-overviewmap")).to_be_visible()
 
 
 def test_zoom_control_on_load(map, live_server, page):
@@ -254,11 +285,11 @@ def test_limitbounds(map, live_server, new_page, tilelayer):
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
 
     # We should be in the limitBounds center
-    expect(page).to_have_url(re.compile(r".*#9/42\..+/1\..+"))
+    expect(page).to_have_url(re.compile(r".*#10/42\..+/1\..+"))
 
     # Force a hash (on a new page, to workaround playwright hallucinations)
     page = new_page()
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/51.0/2.0")
 
     # We should still be in the limitBounds center
-    expect(page).to_have_url(re.compile(r".*#9/42\..+/1\..+"))
+    expect(page).to_have_url(re.compile(r".*#10/42\..+/1\..+"))

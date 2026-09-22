@@ -21,6 +21,8 @@ def test_created_markers_are_merged(
     settings.FILE_UPLOAD_MAX_MEMORY_SIZE = upload_limit
     # Let's create a new map with an empty datalayer
     map = MapFactory(name="server-side merge")
+    map.settings["properties"]["onLoadPanel"] = "databrowser"
+    map.save()
     datalayer = DataLayerFactory(map=map, edit_status=DataLayer.ANONYMOUS, data={})
 
     # Now navigate to this map and create marker
@@ -36,12 +38,12 @@ def test_created_markers_are_merged(
     create_marker_p1.click()
 
     # Check no marker is present by default.
-    marker_pane_p1 = page_one.locator(".leaflet-marker-pane > div")
+    marker_pane_p1 = page_one.locator(".umap-browser .feature.marker")
     expect(marker_pane_p1).to_have_count(0)
 
     # Click on the map, it will place a marker at the given position.
     map_el_p1 = page_one.locator("#map")
-    map_el_p1.click(position={"x": 200, "y": 200})
+    map_el_p1.click(position={"x": 600, "y": 200})
     expect(marker_pane_p1).to_have_count(1)
 
     with page_one.expect_response(DATALAYER_UPDATE):
@@ -81,12 +83,12 @@ def test_created_markers_are_merged(
     create_marker_p2.click()
 
     # Check that the marker created in the orther tab is present.
-    marker_pane_p2 = page_two.locator(".leaflet-marker-pane > div")
+    marker_pane_p2 = page_two.locator(".umap-browser .feature.marker")
     expect(marker_pane_p2).to_have_count(1)
 
     # Click on the map, it will place a marker at the given position.
     map_el_p2 = page_two.locator("#map")
-    map_el_p2.click(position={"x": 220, "y": 220})
+    map_el_p2.click(position={"x": 620, "y": 220})
     expect(marker_pane_p2).to_have_count(2)
 
     with page_two.expect_response(DATALAYER_UPDATE):
@@ -115,7 +117,7 @@ def test_created_markers_are_merged(
 
     # Now create another marker in the first tab
     create_marker_p1.click()
-    map_el_p1.click(position={"x": 150, "y": 150})
+    map_el_p1.click(position={"x": 550, "y": 150})
     expect(marker_pane_p1).to_have_count(2)
     with page_one.expect_response(DATALAYER_UPDATE):
         save_p1.click()
@@ -142,7 +144,7 @@ def test_created_markers_are_merged(
 
     # And again
     create_marker_p1.click()
-    map_el_p1.click(position={"x": 180, "y": 150})
+    map_el_p1.click(position={"x": 580, "y": 150})
     expect(marker_pane_p1).to_have_count(4)
     with page_one.expect_response(DATALAYER_UPDATE):
         save_p1.click()
@@ -171,7 +173,7 @@ def test_created_markers_are_merged(
     # And again from the second tab
     expect(marker_pane_p2).to_have_count(2)
     create_marker_p2.click()
-    map_el_p2.click(position={"x": 250, "y": 150})
+    map_el_p2.click(position={"x": 650, "y": 150})
     expect(marker_pane_p2).to_have_count(3)
     with page_two.expect_response(DATALAYER_UPDATE):
         save_p2.click()
@@ -201,6 +203,8 @@ def test_created_markers_are_merged(
 def test_empty_datalayers_can_be_merged(new_page, live_server, tilelayer):
     # Let's create a new map with an empty datalayer
     map = MapFactory(name="server-side merge")
+    map.settings["properties"]["onLoadPanel"] = "databrowser"
+    map.save()
     DataLayerFactory(map=map, edit_status=DataLayer.ANONYMOUS, data={})
 
     # Open two tabs at the same time, on the same empty map
@@ -219,12 +223,12 @@ def test_empty_datalayers_can_be_merged(new_page, live_server, tilelayer):
     create_marker_p1.click()
 
     # Check no marker is present by default.
-    marker_pane_p1 = page_one.locator(".leaflet-marker-pane > div")
+    marker_pane_p1 = page_one.locator(".umap-browser .feature.marker")
     expect(marker_pane_p1).to_have_count(0)
 
     # Click on the map, it will place a marker at the given position.
     map_el_p1 = page_one.locator("#map")
-    map_el_p1.click(position={"x": 200, "y": 200})
+    map_el_p1.click(position={"x": 600, "y": 200})
     expect(marker_pane_p1).to_have_count(1)
 
     with page_one.expect_response(DATALAYER_UPDATE):
@@ -239,11 +243,11 @@ def test_empty_datalayers_can_be_merged(new_page, live_server, tilelayer):
     expect(create_marker_p2).to_be_visible()
     create_marker_p2.click()
 
-    marker_pane_p2 = page_two.locator(".leaflet-marker-pane > div")
+    marker_pane_p2 = page_two.locator(".umap-browser .feature.marker")
 
     # Click on the map, it will place a marker at the given position.
     map_el_p2 = page_two.locator("#map")
-    map_el_p2.click(position={"x": 220, "y": 220})
+    map_el_p2.click(position={"x": 620, "y": 220})
     expect(marker_pane_p2).to_have_count(1)
 
     # Save p1 and p2 at the same time
@@ -257,6 +261,8 @@ def test_empty_datalayers_can_be_merged(new_page, live_server, tilelayer):
 def test_same_second_edit_doesnt_conflict(new_page, live_server, tilelayer):
     # Let's create a new map with an empty datalayer
     map = MapFactory(name="server-side merge")
+    map.settings["properties"]["onLoadPanel"] = "databrowser"
+    map.save()
     datalayer = DataLayerFactory(map=map, edit_status=DataLayer.ANONYMOUS, data={})
 
     # Open the created map on two pages.
@@ -277,12 +283,12 @@ def test_same_second_edit_doesnt_conflict(new_page, live_server, tilelayer):
     create_marker_p1.click()
 
     # Check no marker is present by default.
-    marker_pane_p1 = page_one.locator(".leaflet-marker-pane > div")
+    marker_pane_p1 = page_one.locator(".umap-browser .feature.marker")
     expect(marker_pane_p1).to_have_count(0)
 
     # Click on the map, it will place a marker at the given position.
     map_el_p1 = page_one.locator("#map")
-    map_el_p1.click(position={"x": 200, "y": 200})
+    map_el_p1.click(position={"x": 600, "y": 200})
     expect(marker_pane_p1).to_have_count(1)
 
     # And add one on the second map as well.
@@ -290,11 +296,11 @@ def test_same_second_edit_doesnt_conflict(new_page, live_server, tilelayer):
     expect(create_marker_p2).to_be_visible()
     create_marker_p2.click()
 
-    marker_pane_p2 = page_two.locator(".leaflet-marker-pane > div")
+    marker_pane_p2 = page_two.locator(".umap-browser .feature.marker")
 
     # Click on the map, it will place a marker at the given position.
     map_el_p2 = page_two.locator("#map")
-    map_el_p2.click(position={"x": 220, "y": 220})
+    map_el_p2.click(position={"x": 620, "y": 220})
     expect(marker_pane_p2).to_have_count(1)
 
     # Save the two tabs at the same time
@@ -305,7 +311,7 @@ def test_same_second_edit_doesnt_conflict(new_page, live_server, tilelayer):
 
     # Now create another marker in the first tab
     create_marker_p1.click()
-    map_el_p1.click(position={"x": 150, "y": 150})
+    map_el_p1.click(position={"x": 550, "y": 150})
     expect(marker_pane_p1).to_have_count(2)
     with page_one.expect_response(DATALAYER_UPDATE):
         save_p1.click()
@@ -332,6 +338,8 @@ def test_same_second_edit_doesnt_conflict(new_page, live_server, tilelayer):
 
 
 def test_should_display_alert_on_conflict(new_page, live_server, datalayer, openmap):
+    openmap.settings["properties"]["onLoadPanel"] = "databrowser"
+    openmap.save()
     # Open the map on two pages.
     page_one = new_page("page 1")
     page_one.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
@@ -339,14 +347,18 @@ def test_should_display_alert_on_conflict(new_page, live_server, datalayer, open
     page_two.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
 
     # Change name on page one and save
-    page_one.locator(".leaflet-marker-icon").click(modifiers=["Shift"])
+    page_one.locator(".umap-browser .feature.marker").get_by_title(
+        "Edit this feature"
+    ).click()
     page_one.locator('input[name="name"]').fill("name from page one")
     page_one.wait_for_timeout(300)  # Time for the input debounce.
     with page_one.expect_response(re.compile(r".*/datalayer/update/.*")):
         page_one.get_by_role("button", name="Save").click()
 
     # Change name on page two and save
-    page_two.locator(".leaflet-marker-icon").click(modifiers=["Shift"])
+    page_two.locator(".umap-browser .feature.marker").get_by_title(
+        "Edit this feature"
+    ).click()
     page_two.locator('input[name="name"]').fill("name from page two")
     page_two.wait_for_timeout(300)  # Time for the input debounce.
 

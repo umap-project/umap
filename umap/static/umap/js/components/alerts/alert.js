@@ -1,6 +1,6 @@
+import * as Clipboard from '../../modules/clipboard.js'
 import { translate } from '../../modules/i18n.js'
 import { uMapElement } from '../base.js'
-import * as Clipboard from '../../modules/clipboard.js'
 
 class Alert extends uMapElement {
   static get observedAttributes() {

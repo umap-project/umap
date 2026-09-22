@@ -5,11 +5,9 @@
     font-size: 10px;
     justify-content: flex-start;
     gap: 5px;
-    line-height: 2.2em;
     background-color: inherit;
     position: sticky;
     top: 0;
-    height: var(--panel-header-height);
 }
 .window .buttons li {
     cursor: pointer;

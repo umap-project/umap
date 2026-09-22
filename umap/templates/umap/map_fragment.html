@@ -1,4 +1,5 @@
-{% load umap_tags %}
+{% load umap_tags static %}
+<script type="module" src="{% static 'umap/dist/fragment.js' %}" defer></script>
 
 <umap-fragment data-settings='{{ map_settings|escape }}' inert>
 <div id="{{ unique_id }}" class="map_fragment">

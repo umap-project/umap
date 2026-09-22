@@ -1,5 +1,5 @@
-import { translate } from '../i18n.js'
 import * as DOMUtils from '../domutils.js'
+import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
 
 export class Importer {

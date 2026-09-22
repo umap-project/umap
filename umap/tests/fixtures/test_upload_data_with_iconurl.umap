@@ -107,7 +107,6 @@
       ],
       "properties": {
         "displayOnLoad": true,
-        "browsable": false,
         "editMode": "disabled",
         "remoteData": {},
         "popupContentTemplate": "# {nom_lieu}\nAdresse : {ad_lieu} {com_lieu}\nType : {type}\nNombre de places : {nbre_pl}\n",

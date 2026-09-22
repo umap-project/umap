@@ -1,3 +1,4 @@
+import * as csv2geojson from 'csv2geojson'
 import { Alert } from '../../components/alerts/alert.js'
 import { BaseAjax, SingleMixin } from '../autocomplete.js'
 import { translate } from '../i18n.js'

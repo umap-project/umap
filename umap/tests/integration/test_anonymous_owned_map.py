@@ -98,29 +98,40 @@ def test_owner_permissions_form(map, datalayer, live_server, owner_session, page
 
 
 def test_anonymous_can_add_marker_on_editable_layer(
-    anonymap, datalayer, live_server, page
+    anonymap, datalayer, live_server, page, assert_screenshot, wait_for_loaded
 ):
     datalayer.edit_status = DataLayer.OWNER
     datalayer.name = "Should not be in the select"
     datalayer.save()  # Non editable by anonymous users
     assert datalayer.map == anonymap
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [14.69, 48.56],
+                },
+            }
+        ],
+    }
     other = DataLayerFactory(
-        map=anonymap, edit_status=DataLayer.ANONYMOUS, name="Editable"
+        map=anonymap, edit_status=DataLayer.ANONYMOUS, name="Editable", data=data
     )
     assert other.map == anonymap
-    page.goto(f"{live_server.url}{anonymap.get_absolute_url()}?edit")
+    page.goto(f"{live_server.url}{anonymap.get_absolute_url()}?edit#12/48.55/14.7")
     add_marker = page.get_by_title("Draw a marker")
     expect(add_marker).to_be_visible()
-    marker = page.locator(".leaflet-marker-icon")
     map_el = page.locator("#map")
-    expect(marker).to_have_count(2)
     panel = page.locator(".panel.right.on")
+    wait_for_loaded(page)
     expect(panel).to_be_hidden()
     add_marker.click()
-    map_el.click(position={"x": 100, "y": 100})
-    expect(marker).to_have_count(3)
+    map_el.click(position={"x": 500, "y": 300})
     # Edit panel is open
     expect(panel).to_be_visible()
+    assert_screenshot(page, clip={"x": 450, "y": 250, "width": 200, "height": 100})
     datalayer_select = page.locator("select[name='datalayer']")
     expect(datalayer_select).to_be_visible()
     options = page.locator("select[name='datalayer'] option:not([disabled])")

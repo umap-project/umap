@@ -1,8 +1,8 @@
 import { Alert } from '../../components/alerts/alert.js'
 import { BaseAjax, SingleMixin } from '../autocomplete.js'
+import * as DOMUtils from '../domutils.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
-import * as DOMUtils from '../domutils.js'
 
 const BOUNDARY_TYPES = {
   admin_6: 'département',

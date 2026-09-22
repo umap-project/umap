@@ -108,10 +108,6 @@ html[dir="rtl"] .icon {
     background-position: calc(var(--tile) * 4) calc(var(--tile) * 3);
 }
 
-.icon-delete-vertex {
-    background-position: calc(var(--tile) * 5) calc(var(--tile) * 4);
-}
-
 .readonly .icon-delete,
 .off .icon-delete {
     background-position: calc(var(--tile) * 5) calc(var(--tile) * 5);
@@ -226,10 +222,6 @@ html[dir="rtl"] .icon {
 
 .icon-layers {
     background-position: calc(var(--tile) * 4) calc(var(--tile) * 5);
-}
-
-.icon-list {
-    background-position: var(--tile) calc(var(--tile) * 4);
 }
 
 .icon-locate {

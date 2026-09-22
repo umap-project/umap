@@ -1,7 +1,7 @@
 import { Alert } from '../../components/alerts/alert.js'
+import { Form } from '../form/builder.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
-import { Form } from '../form/builder.js'
 
 export const PROFILES = [
   ['foot-walking', translate('Walking')],
@@ -24,7 +24,7 @@ export class Importer {
   }
 
   async loadORS() {
-    const mod = await import('../../../vendors/openrouteservice/ors-js-client.js')
+    const mod = await import('openrouteservice-js')
     return mod.default
   }
 

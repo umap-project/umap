@@ -162,7 +162,7 @@ export class MapPermissions {
 
     const builder = new MutatingForm(this, topFields)
     const form = await builder.build()
-    container.appendChild(form)
+    fieldset.appendChild(form)
     if (collaboratorsFields.length) {
       const fieldset = Utils.loadTemplate(
         `<fieldset class="separator"><legend>${translate('Manage collaborators')}</legend></fieldset>`
@@ -170,7 +170,7 @@ export class MapPermissions {
       container.appendChild(fieldset)
       const builder = new MutatingForm(this, collaboratorsFields)
       const form = await builder.build()
-      container.appendChild(form)
+      fieldset.appendChild(form)
     }
   }
 
@@ -192,7 +192,7 @@ export class MapPermissions {
         } else {
           icon.hidden = true
         }
-        parentContainer.appendChild(details)
+        fieldset.appendChild(details)
         await layer.permissions.edit(body)
         for (const child of layer.layers) {
           appendLayer(child, body)

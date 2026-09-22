@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load umap_tags i18n %}
+{% load umap_tags i18n static %}
 
 {% block head_title %}
   {{ map.name }} - {{ SITE_NAME }} - {{ SITE_DESCRIPTION }}
@@ -14,9 +14,19 @@
       <link rel="preconnect" href="{{ domain }}" />
     {% endfor %}
   {% endif %}
+  <link rel="preload"
+        as="font"
+        type="font/woff2"
+        crossorigin
+        href="{% static 'umap/font/FiraSans-Light.woff2' %}" />
+  <link rel="preload"
+        as="font"
+        type="font/woff2"
+        crossorigin
+        href="{% static 'umap/font/FiraSans-SemiBold.woff2' %}" />
   {% umap_css %}
   {{ block.super }}
-  {% umap_js locale=locale %}
+  {% umap_js %}
   {% if UMAP_DEMO_SITE or object.share_status != object.PUBLIC %}
     <meta name="robots" content="noindex,nofollow">
   {% endif %}

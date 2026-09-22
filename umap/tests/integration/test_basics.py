@@ -22,32 +22,18 @@ def test_create_map_link(page, live_server, lang, link_name, link_url):
     expect(create_map_button).to_have_attribute("href", link_url)
 
 
-def test_create_map_with_cursor(page, live_server, tilelayer):
+@pytest.mark.screenshot
+def test_create_map_with_cursor(page, live_server, tilelayer, assert_screenshot):
     page.goto(f"{live_server.url}/en/map/new/")
 
     # Click on the Draw a marker button on a new map.
     create_marker_link = page.locator(".umap-edit-bar ").get_by_title("Draw a marker")
     create_marker_link.click()
 
-    # Check no marker is present by default.
-    marker_pane_children = page.locator(".leaflet-marker-pane > div")
-    expect(marker_pane_children).to_have_count(0)
-
     # Click on the map, it will place a marker at the given position.
     map = page.locator("#map")
     map.click(position={"x": 200, "y": 200})
-    expect(marker_pane_children).to_have_count(1)
-    expect(marker_pane_children).to_have_attribute(
-        "style",
-        (
-            "margin-left: -16px; "
-            "margin-top: -40px; "
-            "width: 32px; "
-            "height: 40px; "
-            "transform: translate3d(200px, 200px, 0px); "
-            "z-index: 0;"
-        ),
-    )
+    assert_screenshot(page, clip={"x": 150, "y": 150, "width": 100, "height": 100})
 
 
 def test_cannot_put_script_tag_in_datalayer_name_or_description(
