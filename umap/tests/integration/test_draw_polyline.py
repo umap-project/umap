@@ -156,8 +156,9 @@ def test_can_draw_multi(live_server, page, tilelayer):
     map.click(position={"x": 200, "y": 200})
     page.keyboard.press("Escape")
     expect(add_shape).to_be_hidden()
-    # Closing the panel empties it only once its animation is over, and dropping the
-    # focused input from the DOM would close a context menu opened meanwhile.
+    # Wait for the panel to be fully closed, otherwise it will close the contextmenu
+    # we are opening (panel closes => removes DOM => removes focused input =>
+    # fires focusout => closes contextmenu)
     expect(page.locator(".panel.right form")).to_have_count(0)
     map.click(position={"x": 110, "y": 100}, button="right")
     expect(page.get_by_role("button", name="Transform to polygon")).to_be_hidden()
