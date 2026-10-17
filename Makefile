@@ -120,6 +120,7 @@ test-integration:
 		umap/tests/integration/test_slideshow.py \
 		umap/tests/integration/test_star.py \
 		umap/tests/integration/test_team.py \
+		umap/tests/integration/test_tableeditor.py \
 		umap/tests/integration/test_templates.py \
 		umap/tests/integration/test_tilelayer.py \
 		umap/tests/integration/test_undo_redo.py \

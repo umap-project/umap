@@ -148,13 +148,14 @@ def test_rename_field(live_server, openmap, page):
     expect(page.locator("table th button[data-property=mytype]")).to_have_count(0)
 
     page.locator(".panel.full").get_by_role("button", name="Close").click()
-    page.locator(".leaflet-marker-icon").first.click(button="right")
+    # Click the marker
+    page.locator("#map").click(position={"x": 557, "y": 320}, button="right")
     page.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
     expect(page.locator(".panel.right .umap-field-mynewtype")).to_be_visible()
     expect(page.locator(".panel.right .umap-field-mytype")).to_be_hidden()
     page.locator(".edit-undo").click()
     page.locator(".panel.right").get_by_role("button", name="Close").click()
-    page.locator(".leaflet-marker-icon").first.click(button="right")
+    page.locator("#map").click(position={"x": 557, "y": 320}, button="right")
     page.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
     expect(page.locator(".panel.right .umap-field-mynewtype")).to_be_hidden()
     expect(page.locator(".panel.right .umap-field-mytype")).to_be_visible()
@@ -172,45 +173,46 @@ def test_delete_field(live_server, openmap, page):
     expect(page.locator("table th button[data-property=mytype]")).to_have_count(0)
 
     page.locator(".panel.full").get_by_role("button", name="Close").click()
-    page.locator(".leaflet-marker-icon").first.click(button="right")
+    # Click the marker
+    page.locator("#map").click(position={"x": 557, "y": 320}, button="right")
     page.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
     expect(page.locator(".panel.right .umap-field-mytype")).to_be_hidden()
     page.locator(".edit-undo").click()
     page.locator(".panel.right").get_by_role("button", name="Close").click()
-    page.locator(".leaflet-marker-icon").first.click(button="right")
+    page.locator("#map").click(position={"x": 557, "y": 320}, button="right")
     page.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
     expect(page.locator(".panel.right .umap-field-mytype")).to_be_visible()
 
 
-def test_delete_selected_rows(live_server, openmap, page):
+def test_delete_selected_rows(live_server, openmap, page, assert_screenshot):
     DataLayerFactory(map=openmap, data=DATALAYER_DATA)
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#6/48.093/1.890")
     page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit properties in a table").click()
     expect(page.locator("tbody tr")).to_have_count(4)
-    expect(page.locator(".leaflet-marker-icon")).to_have_count(4)
+    assert_screenshot(page, suffix="four-markers", ui=False)
     page.locator("tr[data-feature=poin2]").get_by_role("checkbox").check()
     page.get_by_role("button", name="Delete selected rows").click()
     page.get_by_role("button", name="OK").click()
     expect(page.locator("tbody tr")).to_have_count(3)
-    expect(page.locator(".leaflet-marker-icon")).to_have_count(3)
+    assert_screenshot(page, suffix="three-markers", ui=False)
 
 
-def test_delete_all_rows(live_server, openmap, page):
+def test_delete_all_rows(live_server, openmap, page, assert_screenshot):
     DataLayerFactory(map=openmap, data=DATALAYER_DATA)
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#6/48.093/1.890")
     page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit properties in a table").click()
     expect(page.locator("tbody tr")).to_have_count(4)
-    expect(page.locator(".leaflet-marker-icon")).to_have_count(4)
+    assert_screenshot(page, suffix="four-markers", ui=False)
     page.locator("thead").get_by_role("checkbox").check()
     page.get_by_role("button", name="Delete selected rows").click()
     page.get_by_role("button", name="OK").click()
     expect(page.locator("tbody tr")).to_have_count(0)
-    expect(page.locator(".leaflet-marker-icon")).to_have_count(0)
+    assert_screenshot(page, suffix="no-marker", ui=False)
 
 
-def test_filter_and_delete_rows(live_server, openmap, page):
+def test_filter_and_delete_rows(live_server, openmap, page, assert_screenshot):
     DataLayerFactory(map=openmap, data=DATALAYER_DATA)
     panel = page.locator(".panel.left.on")
     table = page.locator(".panel.full table")
@@ -218,7 +220,7 @@ def test_filter_and_delete_rows(live_server, openmap, page):
     page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit properties in a table").click()
     expect(table.locator("tbody tr")).to_have_count(4)
-    expect(page.locator(".leaflet-marker-icon")).to_have_count(4)
+    assert_screenshot(page, suffix="four-markers", ui=False)
     table.locator("thead button[data-property=mytype]").click()
     page.get_by_role("button", name="Add filter for this field").click()
     page.get_by_role("button", name="OK").click()
@@ -228,7 +230,7 @@ def test_filter_and_delete_rows(live_server, openmap, page):
     page.get_by_role("button", name="Delete selected rows").click()
     page.get_by_role("button", name="OK").click()
     expect(table.locator("tbody tr")).to_have_count(2)
-    expect(page.locator(".leaflet-marker-icon")).to_have_count(2)
+    assert_screenshot(page, suffix="two-markers", ui=False)
     expect(table.get_by_text("Point 1")).to_be_visible()
     expect(table.get_by_text("Point 3")).to_be_visible()
     expect(table.get_by_text("Point 2")).to_be_hidden()
