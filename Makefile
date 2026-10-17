@@ -122,6 +122,7 @@ test-integration:
 		umap/tests/integration/test_team.py \
 		umap/tests/integration/test_templates.py \
 		umap/tests/integration/test_tilelayer.py \
+		umap/tests/integration/test_undo_redo.py \
 		umap/tests/integration/test_view_marker.py \
 		umap/tests/integration/test_view_polygon.py \
 		umap/tests/integration/test_view_polyline.py \

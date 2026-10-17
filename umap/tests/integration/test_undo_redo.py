@@ -1,7 +1,9 @@
 import re
+from io import BytesIO
 from pathlib import Path
 
 import pytest
+from PIL import Image
 from playwright.sync_api import expect
 
 from umap.models import Map, TileLayer
@@ -9,6 +11,18 @@ from umap.models import Map, TileLayer
 from ..base import DataLayerFactory
 
 pytestmark = pytest.mark.django_db
+
+TILE_HEADERS = {
+    "content_type": "image/png",
+    "headers": {"Access-Control-Allow-Origin": "*"},
+}
+
+
+def colored_tile(color):
+    buffer = BytesIO()
+    Image.new("RGB", (256, 256), color).save(buffer, format="PNG")
+    return buffer.getvalue()
+
 
 DATALAYER_DATA = {
     "type": "FeatureCollection",
@@ -86,9 +100,11 @@ def test_can_undo_redo_map_name_change(page, live_server, tilelayer):
 
 
 def test_can_undo_redo_layer_color_change(
-    page, map_with_polygon, live_server, tilelayer
+    page, map_with_polygon, live_server, tilelayer, assert_screenshot
 ):
-    page.goto(f"{live_server.url}{map_with_polygon.get_absolute_url()}?edit")
+    page.goto(
+        f"{live_server.url}{map_with_polygon.get_absolute_url()}?edit#6/53.109/12.162"
+    )
 
     expect(page.locator(".edit-undo")).to_be_disabled()
     expect(page.locator(".edit-redo")).to_be_disabled()
@@ -96,89 +112,92 @@ def test_can_undo_redo_layer_color_change(
     page.locator(".panel").get_by_title("Edit", exact=True).click()
     page.get_by_text("Shape properties").click()
     page.locator(".umap-field-color .define").click()
-    expect(page.locator(".leaflet-overlay-pane path[fill='DarkBlue']")).to_have_count(1)
+    assert_screenshot(page, suffix="blue", ui=False)
     page.get_by_title("DarkRed").first.click()
-    expect(page.locator(".leaflet-overlay-pane path[fill='DarkRed']")).to_have_count(1)
+    assert_screenshot(page, suffix="red", ui=False)
     expect(page.locator(".edit-undo")).to_be_enabled()
     expect(page.locator(".edit-redo")).to_be_disabled()
 
     page.locator(".edit-undo").click()
-    expect(page.locator(".leaflet-overlay-pane path[fill='DarkBlue']")).to_have_count(1)
-    expect(page.locator(".leaflet-overlay-pane path[fill='DarkRed']")).to_have_count(0)
+    assert_screenshot(page, suffix="blue", ui=False)
     expect(page.locator(".edit-undo")).to_be_disabled()
     expect(page.locator(".edit-redo")).to_be_enabled()
 
     page.locator(".edit-redo").click()
-    expect(page.locator(".leaflet-overlay-pane path[fill='DarkRed']")).to_have_count(1)
-    expect(page.locator(".leaflet-overlay-pane path[fill='DarkBlue']")).to_have_count(0)
+    assert_screenshot(page, suffix="red", ui=False)
     expect(page.locator(".edit-undo")).to_be_enabled()
     expect(page.locator(".edit-redo")).to_be_disabled()
 
 
-def test_can_undo_redo_tilelayer_change(live_server, page, openmap, tilelayer):
+def test_can_undo_redo_tilelayer_change(
+    live_server, page, openmap, tilelayer, assert_screenshot
+):
     TileLayer.objects.create(
         url_template="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
         attribution="OSM/Carto",
         name="Black Tiles",
     )
+    # Serve a different tile per layer, so the screenshots tell them apart.
+    page.route(
+        re.compile(r"https://[abc]{1}.tile.openstreetmap.fr/osmfr/.*"),
+        lambda route: route.fulfill(body=colored_tile("green"), **TILE_HEADERS),
+    )
+    page.route(
+        re.compile(r"https://[abcd]{1}.basemaps.cartocdn.com/dark_all/.*"),
+        lambda route: route.fulfill(body=colored_tile("purple"), **TILE_HEADERS),
+    )
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
-    old_pattern = re.compile(
-        r"https://[abc]{1}.tile.openstreetmap.fr/osmfr/\d+/\d+/\d+.png"
-    )
-    tiles = page.locator(".leaflet-tile-pane img")
-    expect(tiles.first).to_have_attribute("src", old_pattern)
+    assert_screenshot(page, suffix="old-tiles", ui=False)
 
-    new_pattern = re.compile(
-        r"https://[abcd]{1}.basemaps.cartocdn.com/dark_all/\d+/\d+/\d+.png"
-    )
     page.get_by_role("button", name="Change tilelayers").click()
     page.locator("li").filter(has_text="Black Tiles").get_by_text("Black Tiles").click()
-
-    tiles = page.locator(".leaflet-tile-pane img")
-    expect(tiles.first).to_have_attribute("src", new_pattern)
+    assert_screenshot(page, suffix="new-tiles", ui=False)
 
     page.locator(".edit-undo").click()
-    tiles = page.locator(".leaflet-tile-pane img")
-    expect(tiles.first).to_have_attribute("src", old_pattern)
+    assert_screenshot(page, suffix="old-tiles", ui=False)
 
     page.locator(".edit-redo").click()
-    tiles = page.locator(".leaflet-tile-pane img")
-    expect(tiles.first).to_have_attribute("src", new_pattern)
+    assert_screenshot(page, suffix="new-tiles", ui=False)
 
 
-def test_can_undo_redo_marker_drag(live_server, page, tilelayer):
+def test_can_undo_redo_marker_drag(live_server, page, tilelayer, assert_screenshot):
     page.goto(f"{live_server.url}/en/map/new")
 
-    marker = page.locator(".leaflet-marker-icon")
     map = page.locator("#map")
 
     # Create a marker
     page.get_by_title("Draw a marker").click()
     map.click(position={"x": 225, "y": 225})
-    expect(marker).to_have_count(1)
+    # A selected feature renders highlighted, and undo does not restore the
+    # selection: leave edit mode so every screenshot shares the same style.
+    page.keyboard.press("Escape")
+    assert_screenshot(page, suffix="created", ui=False)
 
-    # Drag marker
-    old_bbox = marker.bounding_box()
-    marker.first.drag_to(map, target_position={"x": 250, "y": 250})
-    assert marker.bounding_box() != old_bbox
+    # Translate acts on the selection.
+    map.click(position={"x": 225, "y": 215}, modifiers=["Shift"])
+    expect(page.locator(".panel.right form input").first).to_be_focused()
+    # Drag the marker, grabbing its icon, which sits above its anchor
+    map.drag_to(
+        map, source_position={"x": 225, "y": 215}, target_position={"x": 250, "y": 240}
+    )
+    page.keyboard.press("Escape")
 
     # Undo
     page.locator(".edit-undo").click()
-    assert marker.bounding_box() == old_bbox
+    assert_screenshot(page, suffix="created", ui=False)
 
     # Redo
     page.locator(".edit-redo").click()
-    assert marker.bounding_box() != old_bbox
+    assert_screenshot(page, suffix="moved", ui=False)
 
 
-def test_can_undo_redo_polygon_geometry_change(live_server, page, tilelayer):
+def test_can_undo_redo_polygon_geometry_change(
+    live_server, page, tilelayer, assert_screenshot
+):
     page.goto(f"{live_server.url}/en/map/new")
 
     # Click on the Draw a polygon button on a new map.
     page.get_by_title("Draw a polygon").click()
-
-    polygon = page.locator("path[fill='DarkBlue']")
-    expect(polygon).to_have_count(0)
 
     # Click on the map, it will create a polygon.
     map = page.locator("#map")
@@ -186,22 +205,21 @@ def test_can_undo_redo_polygon_geometry_change(live_server, page, tilelayer):
     map.click(position={"x": 100, "y": 200})
     map.click(position={"x": 100, "y": 100})
     map.click(position={"x": 100, "y": 100})
-
-    # It is created on peerA, and should be on peerB
-    expect(polygon).to_have_count(1)
-    old_bbox = polygon.bounding_box()
-
-    edited_vertex = page.locator(".leaflet-middle-icon:nth-child(3)").first
-    edited_vertex.drag_to(map, target_position={"x": 250, "y": 250})
+    # A selected feature renders highlighted, and undo does not restore the
+    # selection: leave edit mode so every screenshot shares the same style.
     page.keyboard.press("Escape")
+    assert_screenshot(page, suffix="drawn", ui=False)
 
-    assert polygon.bounding_box() != old_bbox
+    # Move one of its vertices
+    map.drag_to(
+        map, source_position={"x": 200, "y": 200}, target_position={"x": 250, "y": 250}
+    )
 
     page.locator(".edit-undo").click()
-    assert polygon.bounding_box() == old_bbox
+    assert_screenshot(page, suffix="drawn", ui=False)
 
     page.locator(".edit-redo").click()
-    assert polygon.bounding_box() != old_bbox
+    assert_screenshot(page, suffix="moved", ui=False)
 
 
 def test_can_undo_redo_marker_create(live_server, page, tilelayer, wait_for_edit_mode):
@@ -209,17 +227,18 @@ def test_can_undo_redo_marker_create(live_server, page, tilelayer, wait_for_edit
     wait_for_edit_mode(page)
 
     page.get_by_title("Open browser").click()
-    marker = page.locator(".leaflet-marker-icon")
+    # An empty layer has no counter at all.
+    counter = page.locator(".umap-browser .datalayer-counter")
     map = page.locator("#map")
 
     # Create a marker
     page.get_by_title("Draw a marker").click()
     map.click(position={"x": 600, "y": 100})
-    expect(marker).to_have_count(1)
+    expect(counter).to_have_text("(1)")
     expect(page.locator(".panel .datalayer")).to_have_count(1)
 
     page.locator(".edit-undo").click()
-    expect(marker).to_have_count(0)
+    expect(counter).to_be_hidden()
     # Layer still exists
     expect(page.locator(".panel .datalayer")).to_have_count(1)
 
@@ -230,7 +249,7 @@ def test_can_undo_redo_marker_create(live_server, page, tilelayer, wait_for_edit
     expect(page.locator(".panel .datalayer")).to_have_count(1)
 
     page.locator(".edit-redo").click()
-    expect(marker).to_have_count(1)
+    expect(counter).to_have_text("(1)")
 
 
 def test_undo_redo_import(live_server, page, tilelayer):
@@ -268,7 +287,9 @@ def test_undo_redo_import(live_server, page, tilelayer):
     expect(features_count).to_have_text("(5)")
 
 
-def test_can_undo_redo_datalayer_delete_with_parent(live_server, openmap, page):
+def test_can_undo_redo_datalayer_delete_with_parent(
+    live_server, openmap, page, assert_screenshot
+):
     openmap.settings["properties"]["onLoadPanel"] = "databrowser"
     openmap.save()
     root1 = DataLayerFactory(name="root 1", rank=0, map=openmap, data={})
@@ -295,24 +316,26 @@ def test_can_undo_redo_datalayer_delete_with_parent(live_server, openmap, page):
         },
     )
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#6/48/4")
-    expect(page.locator(".leaflet-marker-icon")).to_have_count(1)
     expect(page.locator(".panel.left").get_by_text("grandchild (1)")).to_be_visible()
     expect(page.locator(".panel.left").get_by_text("child", exact=True)).to_be_visible()
+    assert_screenshot(page, suffix="with-feature", ui=False)
 
     # Delete child
     page.locator(f'summary[data-id="{child1.pk}"] .icon-delete').click()
-    expect(page.locator(".leaflet-marker-icon")).to_have_count(0)
     expect(page.locator(".panel.left").get_by_text("grandchild (1)")).to_be_hidden()
     expect(page.locator(".panel.left").get_by_text("child", exact=True)).to_be_hidden()
+    assert_screenshot(page, suffix="deleted", ui=False)
 
     # Undo
     page.locator(".edit-undo").click()
-    expect(page.locator(".leaflet-marker-icon")).to_have_count(1)
     expect(page.locator(".panel.left").get_by_text("grandchild (1)")).to_be_visible()
     expect(page.locator(".panel.left").get_by_text("child", exact=True)).to_be_visible()
+    assert_screenshot(page, suffix="with-feature", ui=False)
 
 
-def test_can_undo_redo_datalayer_delete_with_children(live_server, openmap, page):
+def test_can_undo_redo_datalayer_delete_with_children(
+    live_server, openmap, page, assert_screenshot
+):
     openmap.settings["properties"]["onLoadPanel"] = "databrowser"
     openmap.save()
     root1 = DataLayerFactory(name="root 1", rank=0, map=openmap, data={})
@@ -354,21 +377,21 @@ def test_can_undo_redo_datalayer_delete_with_children(live_server, openmap, page
         },
     )
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#6/48/4")
-    expect(page.locator(".leaflet-marker-icon")).to_have_count(2)
     expect(page.locator(".panel.left").get_by_text("grandchild (1)")).to_be_visible()
     expect(page.locator(".panel.left").get_by_text("child2 (1)")).to_be_visible()
     expect(page.locator(".panel.left").get_by_text("child", exact=True)).to_be_visible()
+    assert_screenshot(page, suffix="with-features", ui=False)
 
     # Delete parent
     page.locator(f'summary[data-id="{root1.pk}"] .icon-delete').click()
-    expect(page.locator(".leaflet-marker-icon")).to_have_count(0)
     expect(page.locator(".panel.left").get_by_text("grandchild (1)")).to_be_hidden()
     expect(page.locator(".panel.left").get_by_text("child2 (1)")).to_be_hidden()
     expect(page.locator(".panel.left").get_by_text("child", exact=True)).to_be_hidden()
+    assert_screenshot(page, suffix="deleted", ui=False)
 
     # Undo
     page.locator(".edit-undo").click()
-    expect(page.locator(".leaflet-marker-icon")).to_have_count(2)
     expect(page.locator(".panel.left").get_by_text("grandchild (1)")).to_be_visible()
     expect(page.locator(".panel.left").get_by_text("child2 (1)")).to_be_visible()
     expect(page.locator(".panel.left").get_by_text("child", exact=True)).to_be_visible()
+    assert_screenshot(page, suffix="with-features", ui=False)

@@ -251,6 +251,11 @@ export class DataLayer {
     this._needsRenderer = false
   }
 
+  dropRenderer() {
+    this.app.mapProxy.deleteLayer(this.id)
+    this._needsRenderer = true
+  }
+
   async resetLayer(force) {
     // Nothing to reset before the renderer's first build; it will pick up the
     // current type when it is eventually built. `this.Type` is the type the layer
@@ -260,11 +265,10 @@ export class DataLayer {
       return
     }
     const visible = this.isVisible()
-    this.app.mapProxy.deleteLayer(this.id)
+    this.dropRenderer()
     this.setType()
-    this._needsRenderer = true
     await this.ensureLayer()
-    // deleteLayer dropped the source; repopulate it.
+    // The source was dropped along with the layer; repopulate it.
     this.app.mapProxy.addData(this.id, this.toRenderer())
     if (visible) this.show()
   }
@@ -731,7 +735,7 @@ export class DataLayer {
     }
     if (root) this.journal.commitBatch()
     this.hide()
-    this.app.mapProxy.deleteLayer(this.id)
+    this.dropRenderer()
     if (root) this.dataChanged()
     this.propagateDelete()
   }
