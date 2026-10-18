@@ -102,6 +102,7 @@ test-integration:
 		umap/tests/integration/test_export_map.py \
 		umap/tests/integration/test_features_id_generation.py \
 		umap/tests/integration/test_fields.py \
+		umap/tests/integration/test_filters.py \
 		umap/tests/integration/test_iframe.py \
 		umap/tests/integration/test_import.py \
 		umap/tests/integration/test_layer_inheritance.py \
