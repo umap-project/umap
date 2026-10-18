@@ -90,6 +90,7 @@ test-integration:
 		umap/tests/integration/test_circles_layer.py \
 		umap/tests/integration/test_choropleth.py \
 		umap/tests/integration/test_cluster.py \
+		umap/tests/integration/test_conditional_rules.py \
 		umap/tests/integration/test_dashboard.py \
 		umap/tests/integration/test_datalayer.py \
 		umap/tests/integration/test_draw_polygon.py \
