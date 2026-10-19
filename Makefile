@@ -80,59 +80,7 @@ test-unit:
 	uv run pytest -vv umap/tests/ --ignore=umap/tests/integration
 
 test-integration:
-	uv run pytest -vv \
-		umap/tests/integration/test_anonymous_owned_map.py \
-		umap/tests/integration/test_basics.py \
-		umap/tests/integration/test_browser.py \
-		umap/tests/integration/test_caption.py \
-		umap/tests/integration/test_caption_layer_switcher.py \
-		umap/tests/integration/test_categorized_layer.py \
-		umap/tests/integration/test_circles_layer.py \
-		umap/tests/integration/test_choropleth.py \
-		umap/tests/integration/test_cluster.py \
-		umap/tests/integration/test_conditional_rules.py \
-		umap/tests/integration/test_dashboard.py \
-		umap/tests/integration/test_datalayer.py \
-		umap/tests/integration/test_draw_polygon.py \
-		umap/tests/integration/test_draw_polyline.py \
-		umap/tests/integration/test_draw_route.py \
-		umap/tests/integration/test_edit_datalayer.py \
-		umap/tests/integration/test_edit_map.py \
-		umap/tests/integration/test_edit_marker.py \
-		umap/tests/integration/test_edit_polygon.py \
-		umap/tests/integration/test_export_map.py \
-		umap/tests/integration/test_features_id_generation.py \
-		umap/tests/integration/test_fields.py \
-		umap/tests/integration/test_filters.py \
-		umap/tests/integration/test_heatmap.py \
-		umap/tests/integration/test_iframe.py \
-		umap/tests/integration/test_import.py \
-		umap/tests/integration/test_layer_inheritance.py \
-		umap/tests/integration/test_lazy_loading.py \
-		umap/tests/integration/test_map.py \
-		umap/tests/integration/test_map_list.py \
-		umap/tests/integration/test_map_preview.py \
-		umap/tests/integration/test_optimistic_merge.py \
-		umap/tests/integration/test_owned_map.py \
-		umap/tests/integration/test_picto.py \
-		umap/tests/integration/test_popup.py \
-		umap/tests/integration/test_querystring.py \
-		umap/tests/integration/test_remote_data.py \
-		umap/tests/integration/test_save.py \
-		umap/tests/integration/test_search.py \
-		umap/tests/integration/test_share.py \
-		umap/tests/integration/test_slideshow.py \
-		umap/tests/integration/test_star.py \
-		umap/tests/integration/test_team.py \
-		umap/tests/integration/test_tableeditor.py \
-		umap/tests/integration/test_templates.py \
-		umap/tests/integration/test_tilelayer.py \
-		umap/tests/integration/test_undo_redo.py \
-		umap/tests/integration/test_view_marker.py \
-		umap/tests/integration/test_view_polygon.py \
-		umap/tests/integration/test_view_polyline.py \
-		umap/tests/integration/test_websocket_sync.py \
-		--dist=loadgroup --reruns 1 --maxfail 3
+	uv run pytest -vv umap/tests/integration/ --dist=loadgroup --reruns 1 --maxfail 3
 
 .PHONY: clean-screenshots
 clean-screenshots: ## Remove generated screenshot artifacts, keeping the expected baselines
