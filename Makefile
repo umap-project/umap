@@ -107,6 +107,7 @@ test-integration:
 		umap/tests/integration/test_iframe.py \
 		umap/tests/integration/test_import.py \
 		umap/tests/integration/test_layer_inheritance.py \
+		umap/tests/integration/test_lazy_loading.py \
 		umap/tests/integration/test_map.py \
 		umap/tests/integration/test_map_list.py \
 		umap/tests/integration/test_map_preview.py \
@@ -186,7 +187,7 @@ icons:
 
 .PHONY: help
 help:
-	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
+	@python3 -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
 # See https://daniel.feldroy.com/posts/autodocumenting-makefiles
 define PRINT_HELP_PYSCRIPT # start of Python section
