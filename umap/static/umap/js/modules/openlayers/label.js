@@ -21,13 +21,19 @@ function placement(direction, [x, top, bottom] = [0, 0, 0]) {
   }
 }
 
-export function anchorTexts(texts, textAnchor, direction) {
+export function anchorLabel(style, textAnchor, direction) {
   const { offsetX, offsetY } = placement(direction, textAnchor)
-  for (const style of texts) {
-    const text = style.getText()
-    text.setOffsetX(offsetX)
-    text.setOffsetY(offsetY)
-  }
+  const text = style.getText()
+  text.setOffsetX(offsetX)
+  text.setOffsetY(offsetY)
+}
+
+export function anchorTextPath(style, [, , bottom], offset = 0) {
+  const text = style.getText()
+  text.setTextAlign('center')
+  text.setTextBaseline('top')
+  text.setOffsetX(0)
+  text.setOffsetY(bottom + offset)
 }
 
 // Permanent label (showLabel === true): the feature name drawn on the canvas,

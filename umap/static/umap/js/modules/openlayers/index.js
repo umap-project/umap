@@ -15,7 +15,13 @@ import View from 'ol/View.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
 import { makeIcon, makePointOverlay } from './icon.js'
-import { anchorTexts, makeLabel, makeTextPath, simplifyForText } from './label.js'
+import {
+  anchorLabel,
+  anchorTextPath,
+  makeLabel,
+  makeTextPath,
+  simplifyForText,
+} from './label.js'
 import TileLayerManager from './tilelayer.js'
 import {
   fromOLExtent,
@@ -715,13 +721,13 @@ export class OLProxy {
     const base = geojson.style || {}
     const properties = highlight ? { ...base, ...geojson.highlight } : base
     const zIndex = highlight ? HIGHLIGHT_ZINDEX : geojson.zIndex
-    const texts = [
-      makeTextPath(base.textPath, zIndex),
-      makeLabel(geojson.label, zIndex),
-    ].filter(Boolean)
+    const textPath = makeTextPath(base.textPath, zIndex)
+    const label = makeLabel(geojson.label, zIndex)
+    const texts = [textPath, label].filter(Boolean)
     if (geojson.geometry.type === 'Point') {
       const icon = makeIcon(properties, zIndex)
-      anchorTexts(texts, icon.textAnchor, geojson.label?.direction)
+      if (label) anchorLabel(label, icon.textAnchor, geojson.label.direction)
+      if (textPath) anchorTextPath(textPath, icon.textAnchor, base.textPath.offset)
       return { style: icon.style, texts, popupOffsetY: icon.popupOffsetY }
     }
     for (const t of texts) {
