@@ -47,7 +47,9 @@ export class Spider {
     })
     map.addLayer(layer)
     map.on('umap:highlight', () => layer.changed())
-    map.on('moveend', () => this.collapse())
+    map.on('moveend', () => {
+      if (map.getView().getResolution() !== this.resolution) this.collapse()
+    })
     // Clicking on the map should collapse the spider, unless the click is on a spiderfied marker.
     map.on('click', (event) => {
       const onSpider = map.getFeaturesAtPixel(event.pixel, {
@@ -66,6 +68,7 @@ export class Spider {
   reveal(members, center) {
     this.collapse()
     const resolution = this.map.getView().getResolution()
+    this.resolution = resolution
     const revealed = []
     members.forEach((member, index) => {
       const spread = spiderfyLatLng(center, index, members.length, resolution)

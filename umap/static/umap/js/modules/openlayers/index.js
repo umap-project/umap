@@ -506,9 +506,14 @@ export class OLProxy {
       feature.get('interactive') ? feature : undefined
     )
     if (!olFeature) return
+    const geometry = olFeature.getGeometry()
+    // A point is anchored where it is drawn, which differs from its data position
+    // once spiderfied.
+    const anchor =
+      geometry.getType() === 'Point' ? geometry.getCoordinates() : event.coordinate
     const represented = olFeature.get('represents')
     if (represented) {
-      this.onFeatureClick(represented.getId(), event)
+      this.onFeatureClick(represented.getId(), event, anchor)
     } else if (olFeature.get('features')) {
       // Several features under one marker: the click spreads or zooms them, it opens nothing.
       import('./cluster.js').then((Cluster) => {
@@ -520,11 +525,11 @@ export class OLProxy {
         })
       })
     } else {
-      this.onFeatureClick(olFeature.getId(), event)
+      this.onFeatureClick(olFeature.getId(), event, anchor)
     }
   }
 
-  onFeatureClick(id, event) {
+  onFeatureClick(id, event, anchor) {
     if (!id) return
     const uFeature = this.getFeatureById(id)
     if (!uFeature) return
@@ -537,7 +542,7 @@ export class OLProxy {
       }
     } else if (noModifierKeys(event) && !this.map.editTools?.drawing()) {
       // Events carry geographic lon/lat; the proxy converts to/from its projection.
-      uFeature.view({ center: toLonLat(event.coordinate) })
+      uFeature.view({ center: toLonLat(anchor) })
     }
   }
 

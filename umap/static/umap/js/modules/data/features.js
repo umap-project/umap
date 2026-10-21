@@ -876,11 +876,6 @@ export class Point extends Feature {
     builder.build().then((form) => fieldset.appendChild(form))
   }
 
-  view(event) {
-    // Do not pass the event center, as we always want to use the Point center
-    // for centering popup.
-    return super.view()
-  }
 }
 
 class Path extends Feature {

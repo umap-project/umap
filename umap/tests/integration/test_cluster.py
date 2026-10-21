@@ -53,6 +53,22 @@ def test_can_open_feature_on_browser_click(live_server, page, map):
     expect(page.get_by_text("and me ?")).to_be_visible()
 
 
+def test_popup_of_spiderfied_member_opens_on_its_marker(
+    live_server, page, tilelayer, map, assert_screenshot, wait_for_loaded
+):
+    DataLayerFactory(map=map, data=DATALAYER_DATA)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#7/46.92/3.34")
+    wait_for_loaded(page)
+    box = page.locator("#map").bounding_box()
+    cx, cy = box["x"] + box["width"] / 2, box["y"] + box["height"] / 2
+    page.mouse.click(cx, cy)
+    assert_screenshot(page, "spiderified", ui=False)
+    # The first member is spread 150px due east of the cluster; click its pin body.
+    page.mouse.click(cx + 150, cy - 20)
+    expect(page.locator(".umap-popup")).to_be_visible()
+    assert_screenshot(page, "popup")
+
+
 def test_can_drag_single_marker_in_cluster_layer(
     live_server, page, tilelayer, openmap, assert_screenshot
 ):
