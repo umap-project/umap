@@ -148,6 +148,7 @@ export default class TileLayerManager {
       target: canvas,
       layers: [await this.cloneLayer(layer)],
       controls: [],
+      interactions: [],
       view: new View({
         center: this.proxy.view.getCenter(),
         zoom: this.proxy.zoom,

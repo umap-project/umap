@@ -875,7 +875,6 @@ export class Point extends Feature {
     const fieldset = DOMUtils.createFieldset(container, translate('Coordinates'))
     builder.build().then((form) => fieldset.appendChild(form))
   }
-
 }
 
 class Path extends Feature {

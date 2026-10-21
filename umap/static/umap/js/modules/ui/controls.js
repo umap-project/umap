@@ -2,6 +2,7 @@ import ScaleLine from 'ol/control/ScaleLine.js'
 import { Alert } from '../../components/alerts/alert.js'
 import { translate } from '../i18n.js'
 import * as Utils from '../utils.js'
+import * as DOMUtils from '../domutils.js'
 
 const ZOOM_TOLERANCE = 1e-6
 
@@ -489,13 +490,16 @@ export class TilelayersControl extends SimpleButton {
   }
 
   addTileLayerElement(tilelayer, options) {
-    const [li, { mapContainer }] = Utils.loadTemplateWithRefs(Utils.sanitizeVars`
+    const [li, { mapContainer }] = DOMUtils.loadTemplateWithRefs(Utils.sanitizeVars`
       <li>
         <div class="preview" inert data-ref="mapContainer"></div>
         <div class="legend">${tilelayer.get('name')}</div>
       </li>
     `)
-    this.app.mapProxy.tilelayers.preview(tilelayer, mapContainer)
+    DOMUtils.lazyLoad(li).then(() => {
+      this.app.mapProxy.tilelayers.preview(tilelayer, mapContainer)
+    })
+
     li.classList.toggle(
       'selected',
       tilelayer.get('spec').url_template ===

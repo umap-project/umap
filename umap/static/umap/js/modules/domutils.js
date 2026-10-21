@@ -106,5 +106,19 @@ export const createFieldset = (parent, title, options) => {
   return fieldset
 }
 
+export const lazyLoad = (element, options = { rootMargin: '200px' }) => {
+  return new Promise((resolve) => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          resolve()
+          observer.unobserve(element)
+        }
+      })
+    }, options)
+    observer.observe(element)
+  })
+}
+
 export const loadTemplateWithRefs = Utils.loadTemplateWithRefs
 export const loadTemplate = Utils.loadTemplate
