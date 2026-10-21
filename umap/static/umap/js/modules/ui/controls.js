@@ -435,10 +435,12 @@ export class AttributionControl extends Control {
     const shortCredit = this.app.getProperty('shortCredit')
     const captionMenus = this.app.getProperty('captionMenus')
     const tilelayer = this.app.mapProxy.tilelayers?.current
+    const overlay = this.app.mapProxy.tilelayers?.overlay?.get('spec')
     const template = Utils.sanitizeVars`
       <div class="umap-control-attribution">
         <div class="attribution-container">
-          ${Utils.toHTML(tilelayer?.getAttributions?.()[0])}
+          ${Utils.toHTML(tilelayer?.get('spec').attribution)}
+          <span data-ref="overlay"> — ${Utils.toHTML(overlay?.attribution)}</span>
           <span data-ref="short"> — ${Utils.toHTML(shortCredit)}</span>
           <a  href="#" data-ref="caption"> — ${translate('Open caption')}</a>
            — <a href="https://umap-project.org/" data-ref="site">${translate('Powered by uMap')}</a>
@@ -446,7 +448,9 @@ export class AttributionControl extends Control {
         <a href="#" class="attribution-toggle"></a>
       </div>
     `
-    const [container, { short, caption, site }] = Utils.loadTemplateWithRefs(template)
+    const [container, { short, caption, site, overlay: overlayCredit }] =
+      Utils.loadTemplateWithRefs(template)
+    overlayCredit.hidden = !overlay?.attribution
     short.hidden = !shortCredit
     caption.hidden = !captionMenus
     site.hidden = !captionMenus
@@ -485,19 +489,17 @@ export class TilelayersControl extends SimpleButton {
   }
 
   addTileLayerElement(tilelayer, options) {
-    const src = Utils.template(
-      tilelayer.get('url'),
-      TilelayersControl.DEMO_TILES_OPTIONS
-    )
-    const li = Utils.loadTemplate(Utils.sanitizeVars`
+    const [li, { mapContainer }] = Utils.loadTemplateWithRefs(Utils.sanitizeVars`
       <li>
-        <img src="${src}" loading="lazy" />
-        <div>${tilelayer.get('name')}</div>
+        <div class="preview" inert data-ref="mapContainer"></div>
+        <div class="legend">${tilelayer.get('name')}</div>
       </li>
     `)
+    this.app.mapProxy.tilelayers.preview(tilelayer, mapContainer)
     li.classList.toggle(
       'selected',
-      tilelayer.get('url') === this.app.mapProxy.tilelayers.current?.get('url')
+      tilelayer.get('spec').url_template ===
+        this.app.mapProxy.tilelayers.current?.get('spec').url_template
     )
     li.addEventListener('click', () => {
       const oldTileLayer = this.app.properties.tilelayer
@@ -541,18 +543,20 @@ class MiniMapControl extends Control {
   render() {
     const container = document.createElement('div')
     const proxy = this.app.mapProxy
-    import('ol/control/OverviewMap.js').then(({ default: OverviewMap }) => {
+    import('ol/control/OverviewMap.js').then(async ({ default: OverviewMap }) => {
       const overviewMap = new OverviewMap({
-        layers: [proxy.tilelayers.cloneLayer?.(proxy.tilelayers.current)],
+        layers: [await proxy.tilelayers.cloneLayer(proxy.tilelayers.current)],
         collapseLabel: '»',
         label: '«',
         collapsed: false,
         target: container,
       })
       overviewMap.setMap(proxy.map)
-      this.app.on('map:baselayerchange', (event) => {
-        const map = overviewMap.getOverviewMap()
-        map.setLayers([proxy.tilelayers.cloneLayer(event.detail.layer)])
+      this.app.on('map:baselayerchange', async (event) => {
+        const clone = await proxy.tilelayers.cloneLayer(event.detail.layer)
+        if (event.detail.layer === proxy.tilelayers.current) {
+          overviewMap.getOverviewMap().setLayers([clone])
+        }
       })
     })
     return container

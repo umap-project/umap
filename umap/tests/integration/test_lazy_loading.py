@@ -24,7 +24,16 @@ def test_lazy_modules_not_loaded_on_basic_view(
 ):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
     page.wait_for_load_state("networkidle")
-    assert loaded_js_modules == {"base", "i18n", "chunk", "en", "alert", "app"}
+    assert loaded_js_modules == {
+        "base",
+        "i18n",
+        "chunk",
+        "en",
+        "alert",
+        "app",
+        "XYZ",
+        "Tile",
+    }
 
     # These modules must stay lazy: not pulled on a plain view load.
     lazy_modules = [

@@ -24,4 +24,5 @@ def test_tilelayer_json():
         "rank": 1,
         "tms": True,
         "url_template": "http://{s}.x.fr/{z}/{x}/{y}",
+        "is_vector": False,
     }

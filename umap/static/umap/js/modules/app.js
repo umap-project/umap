@@ -1057,6 +1057,10 @@ export default class App extends Utils.WithEvents {
         'properties.tilelayer.tms',
         { handler: 'Switch', label: translate('TMS format') },
       ],
+      [
+        'properties.tilelayer.is_vector',
+        { handler: 'Switch', label: translate('Vector tiles style') },
+      ],
     ]
     const customTilelayer = DOMUtils.createFieldset(
       container,
@@ -1565,8 +1569,7 @@ export default class App extends Utils.WithEvents {
           this.reorderLayers()
           break
         case 'background':
-          this.mapProxy.tilelayers.init(this.properties.tilelayers)
-          this.mapProxy.tilelayers.selectDefault()
+          this.mapProxy.tilelayers.refresh()
           break
         case 'bounds':
           this.mapProxy.handleLimitBounds()

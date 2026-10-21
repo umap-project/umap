@@ -330,8 +330,7 @@ export class OLProxy {
         this.app.fire('map:zoomend')
       }
     })
-    this.tilelayers.init(this.app.properties.tilelayers)
-    this.tilelayers.selectDefault()
+    await this.tilelayers.init(this.app.properties.tilelayers)
     this.handleLimitBounds()
     this.updateUI()
   }
@@ -514,7 +513,11 @@ export class OLProxy {
       // Several features under one marker: the click spreads or zooms them, it opens nothing.
       import('./cluster.js').then((Cluster) => {
         this.spider ??= new Cluster.Spider(this.map)
-        Cluster.onClick(olFeature, { map: this.map, spider: this.spider, app: this.app })
+        Cluster.onClick(olFeature, {
+          map: this.map,
+          spider: this.spider,
+          app: this.app,
+        })
       })
     } else {
       this.onFeatureClick(olFeature.getId(), event)

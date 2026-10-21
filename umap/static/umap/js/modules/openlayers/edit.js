@@ -83,7 +83,11 @@ export default class Editor {
       feature.get('editable') && !feature.get('represents')
     // Style: null, so select do not duplicate the highlighted style.
     // Shift means "edit this feature" in uMap, not OL's default "toggle selection".
-    this.select = new Select({ style: null, filter: selectable, toggleCondition: never })
+    this.select = new Select({
+      style: null,
+      filter: selectable,
+      toggleCondition: never,
+    })
     this.map.addInteraction(this.select)
     this.select.on('select', (event) => {
       for (const olFeature of [...event.selected, ...event.deselected]) {
@@ -138,6 +142,7 @@ export default class Editor {
   }
 
   unwatch(layer) {
+    if (!layer.get('editable')) return
     const source = layer.getSource()
     const { modify, snap } = this.watched.get(source) || {}
     if (modify) this.map.removeInteraction(modify)

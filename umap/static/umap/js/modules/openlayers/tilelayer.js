@@ -1,6 +1,11 @@
-import TileLayer from 'ol/layer/Tile.js'
-import XYZ from 'ol/source/XYZ.js'
 import { Alert } from '../../components/alerts/alert.js'
+import { translate } from '../i18n.js'
+import LayerGroup from 'ol/layer/Group.js'
+import View from 'ol/View.js'
+import { default as OLMap } from 'ol/Map.js'
+
+// Size of `.umap-edit-tilelayers li` in map.css.
+const PREVIEW_SIZE = [256, 200]
 
 export default class TileLayerManager {
   constructor(proxy) {
@@ -18,18 +23,31 @@ export default class TileLayerManager {
     return this.proxy.map
   }
 
-  init(specs) {
+  async init(specs) {
     this.all.clear()
-    for (const spec of specs) {
-      this.add(spec)
-    }
+    await Promise.all(specs.map((spec) => this.add(spec)))
+    await this.refresh()
   }
 
-  create(spec) {
+  async refresh() {
+    await Promise.all([this.selectDefault(), this.setOverlay()])
+  }
+
+  async create(spec) {
+    if (spec.is_vector) {
+      const { apply } = await import('ol-mapbox-style')
+      const vectorlayer = new LayerGroup({ name: spec.name, spec: { ...spec } })
+      apply(vectorlayer, spec.url_template)
+      return vectorlayer
+    }
     const retina = window.devicePixelRatio > 1 && spec.url_template.includes('{r}')
     const url = spec.url_template
       .replace('{s}', '{a-c}')
       .replace('{r}', retina ? '@2x' : '')
+    const [{ default: XYZ }, { default: TileLayer }] = await Promise.all([
+      import('ol/source/XYZ.js'),
+      import('ol/layer/Tile.js'),
+    ])
     const source = new XYZ({
       url,
       tilePixelRatio: retina ? 2 : 1,
@@ -49,10 +67,10 @@ export default class TileLayerManager {
     })
   }
 
-  add(spec) {
+  async add(spec) {
     if (!spec.url_template) return
     if (this.all.has(spec.url_template)) return this.all.get(spec.url_template)
-    const layer = this.create(spec)
+    const layer = await this.create(spec)
     this.all.set(spec.url_template, layer)
     return layer
   }
@@ -63,10 +81,10 @@ export default class TileLayerManager {
 
   // Display the configured base layer: the custom one (`properties.tilelayer`)
   // if it is set, else the first of the registry.
-  selectDefault() {
+  async selectDefault() {
     const custom = this.app.properties.tilelayer
     if (custom?.url_template && custom.attribution) {
-      this.select(this.add({ ...custom, rank: 0 }))
+      this.select(await this.add({ ...custom, rank: 0 }))
     } else {
       this.select(this.default())
     }
@@ -88,32 +106,52 @@ export default class TileLayerManager {
     } catch (e) {
       console.error(e)
       this.map.removeLayer(tilelayer)
-      Alert.error(`${translate('Error in the tilelayer URL')}: ${tilelayer._url}`)
+      Alert.error(
+        `${translate('Error in the tilelayer URL')}: ${tilelayer.get('spec').url_template}`
+      )
       // Users can put tilelayer URLs by hand, and if they add wrong {variable},
       // Leaflet throw an error, and then the map is no more editable
     }
-    this.setOverlay()
     this.app.fire('map:baselayerchange', { layer: this.current })
   }
 
-  setOverlay() {
+  async setOverlay() {
     const spec = this.app.properties.overlay
-    if (!spec?.url_template) return
-    const overlay = this.create(spec)
-    try {
-      this.map.addLayer(overlay)
-      if (this.overlay) this.map.removeLayer(this.overlay)
-      this.overlay = overlay
-    } catch (e) {
-      this.map.removeLayer(overlay)
-      console.error(e)
-      Alert.error(`${translate('Error in the overlay URL')}: ${overlay._url}`)
+    const overlay = spec?.url_template ? await this.create(spec) : undefined
+    if (this.overlay) this.map.removeLayer(this.overlay)
+    this.overlay = overlay
+    if (overlay) {
+      try {
+        this.map.addLayer(overlay)
+      } catch (e) {
+        this.map.removeLayer(overlay)
+        this.overlay = undefined
+        console.error(e)
+        Alert.error(`${translate('Error in the overlay URL')}: ${spec.url_template}`)
+      }
     }
   }
 
-  cloneLayer(layer) {
-    return new TileLayer({
-      source: layer.getSource(),
+  async cloneLayer(layer) {
+    return await this.create(layer.get('spec'))
+  }
+
+  async preview(layer, element) {
+    const [width, height] = PREVIEW_SIZE
+    const ratio = window.devicePixelRatio
+    const canvas = document.createElement('canvas')
+    canvas.width = width * ratio
+    canvas.height = height * ratio
+    canvas.getContext('2d').scale(ratio, ratio)
+    element.appendChild(canvas)
+    new OLMap({
+      target: canvas,
+      layers: [await this.cloneLayer(layer)],
+      controls: [],
+      view: new View({
+        center: this.proxy.view.getCenter(),
+        zoom: this.proxy.zoom,
+      }),
     })
   }
 }

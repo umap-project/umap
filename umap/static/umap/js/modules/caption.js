@@ -25,6 +25,7 @@ const TEMPLATE = `
         <p data-ref="noLicence">${translate('No licence has been set')}</p>
         <h5>${translate('Map background credits')}</h5>
         <p><strong data-ref="bgName"></strong> <span data-ref="bgAttribution"></span></p>
+        <p data-ref="overlay" hidden><strong data-ref="overlayName"></strong> <span data-ref="overlayAttribution"></span></p>
         <p data-ref="poweredBy"></p>
         <p data-ref="routing" hidden></p>
       </fieldset>
@@ -143,8 +144,14 @@ export default class Caption extends Utils.WithTemplate {
     if (tilelayer) {
       this.elements.bgName.textContent = tilelayer.get('name')
       this.elements.bgAttribution.innerHTML = Utils.toHTML(
-        tilelayer.getAttributions().join(' ')
+        tilelayer.get('spec').attribution
       )
+    }
+    const overlay = this.app.mapProxy.tilelayers.overlay?.get('spec')
+    this.elements.overlay.hidden = !overlay
+    if (overlay) {
+      this.elements.overlayName.textContent = overlay.name || ''
+      this.elements.overlayAttribution.innerHTML = Utils.toHTML(overlay.attribution)
     }
     const urls = {
       leaflet: 'http://leafletjs.com',
