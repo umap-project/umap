@@ -56,6 +56,13 @@ jobs:
           PLAYWRIGHT_TIMEOUT: '20000'
           REDIS_HOST: localhost
           REDIS_PORT: 6379
+      - name: Upload Playwright traces
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces-py${{ matrix.python-version }}
+          path: test-results/
+          retention-days: 2
   lint:
     runs-on: ubuntu-latest
     steps:
