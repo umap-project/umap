@@ -25,7 +25,9 @@ export default class TileLayerManager {
 
   async init(specs) {
     this.all.clear()
-    await Promise.all(specs.map((spec) => this.add(spec)))
+    for (const spec of specs) {
+      await this.add(spec)
+    }
     await this.refresh()
   }
 
