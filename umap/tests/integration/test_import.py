@@ -560,24 +560,26 @@ def test_import_homogeneous_geometry_collection_in_feature(
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
     features = page.locator(".umap-browser .feature")
-    assert_screenshot("before", ui=False)
     page.get_by_title("Import data").click()
     page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
     textarea.fill(json.dumps(data))
     page.locator('select[name="format"]').select_option("geojson")
     page.get_by_role("button", name="Import data", exact=True).click()
+    page.locator(".panel.right").get_by_title("Close").click()
     # A layer has been created
     expect(layers).to_have_count(1)
-    page.get_by_title("Import data").click()
     # Polygons are merged into a single MultiPolygon feature.
-    assert_screenshot("after", ui=False)
+    assert_screenshot(page, ui=False)
     page.get_by_text("Layer 1").click()  # Open layer box in browser.
     expect(features).to_have_count(1)
     expect(page.get_by_text("foobar")).to_have_count(1)
 
 
-def test_import_kml_multigeometry(live_server, page, tilelayer, assert_screenshot):
+def test_import_kml_multigeometry(
+    live_server, page, tilelayer, assert_screenshot, settings
+):
+    settings.UMAP_ALLOW_ANONYMOUS = True
     kml = """<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
 <Placemark id="kyNTQ">
 <name>test 1</name><description>Multi polygon</description><ExtendedData></ExtendedData>
@@ -607,13 +609,77 @@ def test_import_kml_multigeometry(live_server, page, tilelayer, assert_screensho
     textarea.fill(kml)
     page.locator('select[name="format"]').select_option("kml")
     page.get_by_role("button", name="Import data", exact=True).click()
+    page.locator(".panel.right").get_by_title("Close").click()
     # A layer has been created
     expect(layers).to_have_count(1)
     # The MultiGeometry is imported as a single MultiPolygon feature.
     page.get_by_text("Layer 1").click()  # Open layer box in browser.
     expect(features).to_have_count(1)
     expect(page.get_by_text("test 1", exact=True)).to_have_count(1)
-    assert_screenshot("imported", ui=False)
+    assert_screenshot(page, "imported", ui=False)
+    data = save_and_get_json(page)
+    assert len(data["features"]) == 1
+    assert data["features"][0] == {
+        "geometry": {
+            "coordinates": [
+                [
+                    [
+                        [
+                            5.523248,
+                            50.573835,
+                        ],
+                        [
+                            5.524278,
+                            50.564349,
+                        ],
+                        [
+                            5.540586,
+                            50.562986,
+                        ],
+                        [
+                            5.540414,
+                            50.573562,
+                        ],
+                        [
+                            5.523248,
+                            50.573835,
+                        ],
+                    ],
+                ],
+                [
+                    [
+                        [
+                            5.522904,
+                            50.576642,
+                        ],
+                        [
+                            5.539985,
+                            50.576424,
+                        ],
+                        [
+                            5.539083,
+                            50.584681,
+                        ],
+                        [
+                            5.523162,
+                            50.585825,
+                        ],
+                        [
+                            5.522904,
+                            50.576642,
+                        ],
+                    ],
+                ],
+            ],
+            "type": "MultiPolygon",
+        },
+        "id": "kyNTQ",
+        "properties": {
+            "description": "Multi polygon",
+            "name": "test 1",
+        },
+        "type": "Feature",
+    }
 
 
 def test_import_multipolygon(live_server, page, tilelayer, assert_screenshot):
