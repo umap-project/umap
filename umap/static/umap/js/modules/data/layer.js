@@ -572,6 +572,12 @@ export class DataLayer {
     Utils.sortFeatures(collection, this.sortKey, U.lang)
     for (const featureJson of collection) {
       if (featureJson.geometry?.type === 'GeometryCollection') {
+        const merged = GeoUtils.mergeGeometryCollection(featureJson.geometry)
+        if (merged) {
+          const feature = this._buildFeature({ ...featureJson, geometry: merged }, sync)
+          if (feature) features.push(feature)
+          continue
+        }
         for (const geometry of featureJson.geometry.geometries) {
           const feature = this._buildFeature({
             type: 'Feature',

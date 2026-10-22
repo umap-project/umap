@@ -491,6 +491,101 @@ def test_import_geometry_collection_in_feature(live_server, page, tilelayer):
     expect(page.get_by_text("foobar")).to_have_count(3)
 
 
+def test_import_homogeneous_geometry_collection_in_feature(
+    live_server, page, tilelayer
+):
+    data = {
+        "type": "Feature",
+        "properties": {"name": "foobar"},
+        "geometry": {
+            "type": "GeometryCollection",
+            "geometries": [
+                {
+                    "type": "Polygon",
+                    "coordinates": [
+                        [
+                            [-80.6645, 35.0449],
+                            [-80.6634, 35.0460],
+                            [-80.6625, 35.0455],
+                            [-80.6638, 35.0442],
+                            [-80.6645, 35.0449],
+                        ]
+                    ],
+                },
+                {
+                    "type": "Polygon",
+                    "coordinates": [
+                        [
+                            [-80.6545, 35.0449],
+                            [-80.6534, 35.0460],
+                            [-80.6525, 35.0455],
+                            [-80.6538, 35.0442],
+                            [-80.6545, 35.0449],
+                        ]
+                    ],
+                },
+            ],
+        },
+    }
+    page.goto(f"{live_server.url}/map/new/")
+    page.get_by_title("Open browser").click()
+    layers = page.locator(".umap-browser .datalayer")
+    paths = page.locator("path")
+    expect(paths).to_have_count(0)
+    expect(layers).to_have_count(0)
+    page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
+    textarea = page.locator(".umap-import textarea")
+    textarea.fill(json.dumps(data))
+    page.locator('select[name="format"]').select_option("geojson")
+    page.get_by_role("button", name="Import data", exact=True).click()
+    # A layer has been created
+    expect(layers).to_have_count(1)
+    # Polygons are merged into a single MultiPolygon feature.
+    expect(paths).to_have_count(1)
+    page.get_by_text("Layer 1").click()  # Open layer box in browser.
+    expect(page.get_by_text("foobar")).to_have_count(1)
+
+
+def test_import_kml_multigeometry(live_server, page, tilelayer):
+    kml = """<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
+<Placemark id="kyNTQ">
+<name>test 1</name><description>Multi polygon</description><ExtendedData></ExtendedData>
+  <MultiGeometry>
+<Polygon>
+<outerBoundaryIs>
+  <LinearRing><coordinates>5.523248,50.573835
+5.524278,50.564349
+5.540586,50.562986
+5.540414,50.573562
+5.523248,50.573835</coordinates></LinearRing></outerBoundaryIs></Polygon>
+<Polygon>
+<outerBoundaryIs>
+  <LinearRing><coordinates>5.522904,50.576642
+5.539985,50.576424
+5.539083,50.584681
+5.523162,50.585825
+5.522904,50.576642</coordinates></LinearRing></outerBoundaryIs></Polygon></MultiGeometry></Placemark></Document></kml>"""
+    page.goto(f"{live_server.url}/map/new/")
+    page.get_by_title("Open browser").click()
+    layers = page.locator(".umap-browser .datalayer")
+    paths = page.locator("path")
+    expect(paths).to_have_count(0)
+    expect(layers).to_have_count(0)
+    page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
+    textarea = page.locator(".umap-import textarea")
+    textarea.fill(kml)
+    page.locator('select[name="format"]').select_option("kml")
+    page.get_by_role("button", name="Import data", exact=True).click()
+    # A layer has been created
+    expect(layers).to_have_count(1)
+    # The MultiGeometry is imported as a single MultiPolygon feature.
+    expect(paths).to_have_count(1)
+    page.get_by_text("Layer 1").click()  # Open layer box in browser.
+    expect(page.get_by_text("test 1", exact=True)).to_have_count(1)
+
+
 def test_import_multipolygon(live_server, page, tilelayer):
     data = {
         "type": "Feature",
