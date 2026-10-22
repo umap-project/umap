@@ -55,6 +55,30 @@ export function isFlat(arr) {
   )
 }
 
+// Merge the geometries of a GeometryCollection into a single MultiPolygon or
+// MultiLineString when they are all polygons or all lines (as KML MultiGeometry
+// is converted to a GeometryCollection). Return null for any other collection.
+export function mergeGeometryCollection(collection) {
+  const geometries = collection?.geometries || []
+  if (!geometries.length) return null
+  const kinds = {
+    Polygon: 'MultiPolygon',
+    MultiPolygon: 'MultiPolygon',
+    LineString: 'MultiLineString',
+    MultiLineString: 'MultiLineString',
+  }
+  const type = kinds[geometries[0].type]
+  if (!type || !geometries.every((geometry) => kinds[geometry.type] === type)) {
+    return null
+  }
+  const coordinates = []
+  for (const geometry of geometries) {
+    if (geometry.type === type) coordinates.push(...geometry.coordinates)
+    else coordinates.push(geometry.coordinates)
+  }
+  return { type, coordinates }
+}
+
 // Bounding boxes are kept in geojson order: [west, south, east, north].
 export function unionBbox(a, b) {
   if (!a) return b || null
