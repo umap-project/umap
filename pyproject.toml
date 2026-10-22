@@ -78,7 +78,7 @@ s3 = [
 ]
 sync = [
   "uvicorn==0.52.3",
-  "pydantic==2.13.4",
+  "pydantic==2.13.5",
   "redis==8.0.1",
   "websockets==17.0.1",
 ]
