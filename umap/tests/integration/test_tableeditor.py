@@ -134,9 +134,10 @@ def test_cannot_add_property_with_a_dot(live_server, openmap, datalayer, page):
     expect(page.locator("table th button[data-property=name]")).to_have_count(1)
 
 
-def test_rename_field(live_server, openmap, page):
+def test_rename_field(live_server, openmap, page, wait_for_loaded):
     DataLayerFactory(map=openmap, data=DATALAYER_DATA)
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#6/48.093/1.890")
+    wait_for_loaded(page)
     page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit properties in a table").click()
     expect(page.locator("table th button[data-property=mytype]")).to_have_count(1)
@@ -161,9 +162,10 @@ def test_rename_field(live_server, openmap, page):
     expect(page.locator(".panel.right .umap-field-mytype")).to_be_visible()
 
 
-def test_delete_field(live_server, openmap, page):
+def test_delete_field(live_server, openmap, page, wait_for_loaded):
     DataLayerFactory(map=openmap, data=DATALAYER_DATA)
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit#6/48.093/1.890")
+    wait_for_loaded(page)
     page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel").get_by_title("Edit properties in a table").click()
     expect(page.locator("table th button[data-property=mytype]")).to_have_count(1)

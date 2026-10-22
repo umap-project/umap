@@ -107,9 +107,10 @@ def test_should_open_an_edit_toolbar_on_click(
 
 
 def test_should_update_open_popup_on_edit(
-    live_server, openmap, page, bootstrap, wait_for_edit_mode
+    live_server, openmap, page, bootstrap, wait_for_edit_mode, wait_for_loaded
 ):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}#16/48.5529/14.6889")
+    wait_for_loaded(page)
     popup = page.locator(".umap-popup")
     expect(popup).to_be_hidden()
     page.locator("#map").click(position={"x": 640, "y": 340})
