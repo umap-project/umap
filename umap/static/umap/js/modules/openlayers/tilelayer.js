@@ -25,9 +25,7 @@ export default class TileLayerManager {
 
   async init(specs) {
     this.all.clear()
-    for (const spec of specs) {
-      await this.add(spec)
-    }
+    this.specs = specs
     await this.refresh()
   }
 
@@ -77,8 +75,8 @@ export default class TileLayerManager {
     return layer
   }
 
-  default() {
-    return this.all.values().next().value
+  async default() {
+    return await this.add(this.specs[0])
   }
 
   // Display the configured base layer: the custom one (`properties.tilelayer`)
@@ -88,7 +86,7 @@ export default class TileLayerManager {
     if (custom?.url_template && custom.attribution) {
       this.select(await this.add({ ...custom, rank: 0 }))
     } else {
-      this.select(this.default())
+      this.select(await this.default())
     }
   }
 
@@ -156,5 +154,13 @@ export default class TileLayerManager {
         zoom: this.proxy.zoom,
       }),
     })
+  }
+
+  // Only load vector tiles deps when really needed.
+  async *iterLayers() {
+    for (const spec of this.specs.toSorted((a, b) => a.rank - b.rank)) {
+      const layer = await this.add(spec)
+      if (layer) yield layer
+    }
   }
 }

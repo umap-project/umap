@@ -472,17 +472,15 @@ export class TilelayersControl extends SimpleButton {
     this.openSwitcher()
   }
 
-  openSwitcher(options = {}) {
+  async openSwitcher(options = {}) {
     const [container, { tileContainer }] = Utils.loadTemplateWithRefs(`
       <div class="umap-edit-tilelayers">
         <h3><i class="icon icon-16 icon-tilelayer" title=""></i><span class="">${translate('Change tilelayers')}</span></h3>
         <ul data-ref="tileContainer"></ul>
       </div>
     `)
-    const tilelayers = Array.from(this.app.mapProxy.tilelayers.all.values()).sort(
-      (a, b) => a.get('rank') - b.get('rank')
-    )
-    for (const layer of tilelayers) {
+    const layers = this.app.mapProxy.tilelayers.iterLayers()
+    for await (const layer of layers) {
       tileContainer.appendChild(this.addTileLayerElement(layer, options))
     }
     const panel = options.edit ? this.app.editPanel : this.app.panel
