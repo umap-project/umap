@@ -129,6 +129,9 @@ class TileLayer(NamedModel):
     )
     # See https://wiki.openstreetmap.org/wiki/TMS#The_Y_coordinate
     tms = models.BooleanField(default=False)
+    is_vector = models.BooleanField(
+        default=False, help_text=_("This URL points to a vector style")
+    )
 
     @property
     def json(self):
@@ -562,7 +565,7 @@ class DataLayer(NamedModel):
         ordering = ("rank",)
 
     def save(self, **kwargs):
-        super(DataLayer, self).save(**kwargs)
+        super().save(**kwargs)
         self.geojson.storage.onDatalayerSave(self)
         if hasattr(self, "_reference_version"):
             del self._reference_version

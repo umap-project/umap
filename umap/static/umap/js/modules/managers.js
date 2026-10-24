@@ -224,6 +224,7 @@ export class FeatureManager extends Map {
     }
     UNIQUE_IDS.add(feature.id)
     this.set(feature.id, feature)
+    this._index = null
   }
 
   all() {
@@ -236,6 +237,7 @@ export class FeatureManager extends Map {
 
   del(feature) {
     this.delete(feature.id)
+    this._index = null
   }
 
   count() {
@@ -249,11 +251,16 @@ export class FeatureManager extends Map {
     for (const feature of features) {
       this.set(feature.id, feature)
     }
+    this._index = null
   }
 
   getIndex(feature) {
-    const entries = Array.from(this)
-    return entries.findIndex(([id]) => id === feature.id)
+    if (!this._index) {
+      this._index = new Map()
+      let i = 0
+      for (const id of this.keys()) this._index.set(id, i++)
+    }
+    return this._index.get(feature.id) ?? -1
   }
 
   first() {

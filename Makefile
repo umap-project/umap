@@ -57,9 +57,17 @@ helm: ## Build the helm chart and publish it
 	@echo "Successfully packaged helm chart in: ${PACKAGE}"
 	helm push ${PACKAGE} oci://registry-1.docker.io/umap
 
+watch:
+	npm run build:watch
+
+buildjs: ## Build the javascript assets
+	npm run build:prod
+
 .PHONY: build
-build: ## Build the Python package before release
+buildpy: ## Build the Python package before release
 	@uv run hatch build --clean
+
+build: buildjd buildpy ## Build the package (JS + Python)
 
 .PHONY: publish
 publish: ## Publish the Python package to Pypi
@@ -74,6 +82,10 @@ test-unit:
 test-integration:
 	uv run pytest -vv umap/tests/integration/ --dist=loadgroup --reruns 1 --maxfail 3
 
+.PHONY: clean-screenshots
+clean-screenshots: ## Remove generated screenshot artifacts, keeping the expected baselines
+	rm -f umap/tests/screenshots/*.actual.png umap/tests/screenshots/*.diff.png
+
 clean:
 	rm -f dist/*
 	rm -rf build/*
@@ -82,9 +94,7 @@ compilemessages:
 	uv run umap generate_js_locale
 messages:
 	cd umap && uv run umap makemessages -l en
-	node node_modules/leaflet-i18n/bin/i18n.js --dir_path=umap/static/umap/js/ --dir_path=umap/static/umap/vendors/measurable/ --locale_dir_path=umap/static/umap/locale/ --locale_codes=en --mode=json --clean --default_values --expressions=_,translate
-vendors:
-	npm run vendors
+	node scripts/i18n.js
 installjs:
 	npm install
 testjs: node_modules
@@ -126,7 +136,7 @@ icons:
 
 .PHONY: help
 help:
-	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
+	@python3 -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
 # See https://daniel.feldroy.com/posts/autodocumenting-makefiles
 define PRINT_HELP_PYSCRIPT # start of Python section

@@ -30,21 +30,22 @@ OSM_DATA = {
 }
 
 
-def test_openstreetmap_popup(live_server, map, page):
+def test_openstreetmap_popup(live_server, map, page, wait_for_loaded):
     DataLayerFactory(map=map, data=OSM_DATA)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#18/48.79/2.49")
-    expect(page.locator(".umap-icon-active")).to_be_hidden()
-    page.locator(".leaflet-marker-icon").click()
+    wait_for_loaded(page)
+    # The marker is drawn on the canvas (centered by the hash); click it to open the popup.
+    page.locator("#map").click(position={"x": 640, "y": 340})
     expect(page.get_by_role("heading", name="A Casa di Nonna")).to_be_visible()
     expect(page.get_by_text("+33 1 48 89 54 12")).to_be_visible()
-    img = page.locator(".umap-popup-content img")
+    img = page.locator(".umap-popup aside img:not(.icon)")
     expect(img).to_have_attribute(
         "src",
         "https://api.panoramax.xyz/api/pictures/d811b398-d930-4cf8-95a2-0c29c34d9fca/sd.jpg",
     )
 
 
-def test_table_popup(live_server, map, page):
+def test_table_popup(live_server, map, page, wait_for_loaded):
     data = {
         "type": "FeatureCollection",
         "features": [
@@ -68,14 +69,15 @@ def test_table_popup(live_server, map, page):
     }
     DataLayerFactory(map=map, data=data)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#18/48.79/2.49")
-    page.locator(".leaflet-marker-icon").click()
+    wait_for_loaded(page)
+    page.locator("#map").click(position={"x": 640, "y": 340})
     expect(page.get_by_role("link", name="https://restaurant.org")).to_be_visible()
     expect(page.get_by_role("cell", name="with bold").locator("strong")).to_have_text(
         "bold"
     )
 
 
-def test_popup_alignment_in_rtl_language(live_server, map, page):
+def test_popup_alignment_in_rtl_language(live_server, map, page, wait_for_loaded):
     data = {
         "type": "FeatureCollection",
         "features": [
@@ -90,15 +92,14 @@ def test_popup_alignment_in_rtl_language(live_server, map, page):
     DataLayerFactory(map=map, data=data)
     path = map.get_absolute_url().replace("/en/", "/he/")
     page.goto(f"{live_server.url}{path}#18/48.79/2.49")
-    page.locator(".leaflet-marker-icon").click()
+    wait_for_loaded(page)
+    page.locator("#map").click(position={"x": 640, "y": 340})
 
     expect(page.locator("html")).to_have_attribute("dir", "rtl")
-    expect(page.locator(".leaflet-popup-content-wrapper")).to_have_css(
-        "text-align", "start"
-    )
+    expect(page.locator(".umap-popup aside")).to_have_css("text-align", "start")
 
 
-def test_should_open_large_popup(live_server, map, page):
+def test_should_open_large_popup(live_server, map, page, wait_for_loaded):
     data = {
         "type": "FeatureCollection",
         "properties": {"popupShape": "Large"},
@@ -117,9 +118,10 @@ def test_should_open_large_popup(live_server, map, page):
         ],
     }
     DataLayerFactory(map=map, data=data)
-    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#16/48.5529/14.6889")
+    wait_for_loaded(page)
     expect(page.locator(".umap-popup-large")).to_be_hidden()
-    page.locator(".leaflet-marker-icon").click()
+    page.locator("#map").click(position={"x": 640, "y": 340})
     expect(page.locator(".umap-popup-large")).to_be_visible()
     expect(page.get_by_role("heading", name="test marker")).to_be_visible()
     expect(page.get_by_text("Some description")).to_be_visible()
