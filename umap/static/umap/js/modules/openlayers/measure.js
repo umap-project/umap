@@ -122,7 +122,7 @@ export class MeasureTool {
 
   toggle(type) {
     if (this.map.getLayers().getArray().includes(this.layer)) {
-      if (this.draw.type_ !== type) {
+      if (this.type !== type) {
         this.map.removeInteraction(this.draw)
         this.draw.setActive(false)
         this.startDraw(type)
@@ -144,6 +144,7 @@ export class MeasureTool {
     }
     const idleTip = translate('Click to start measuring')
     let tip = idleTip
+    this.type = type
     this.draw = new Draw({
       source: this.source,
       type: type,

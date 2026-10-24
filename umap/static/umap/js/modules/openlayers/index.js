@@ -243,10 +243,13 @@ export class OLProxy {
       maxZoom: this.view.getMaxZoom(),
       projection: this.view.getProjection(),
     }
-    if (!bbox.some(Number.isNaN)) {
-      const extent = toOLExtent(bbox)
-      options.extent = extent
-      const resolution = this.view.getResolutionForExtent(extent, this.map.getSize())
+    this.limitExtent = bbox.some(Number.isNaN) ? undefined : toOLExtent(bbox)
+    if (this.limitExtent) {
+      options.extent = this.limitExtent
+      const resolution = this.view.getResolutionForExtent(
+        this.limitExtent,
+        this.map.getSize()
+      )
       options.minZoom = Math.max(
         options.minZoom,
         this.view.getZoomForResolution(resolution)
@@ -279,7 +282,7 @@ export class OLProxy {
 
   position(a, b, c) {}
   get container() {
-    return this.map.overlayContainerStopEvent_.parentNode
+    return this.map.getViewport()
   }
 
   focus() {
@@ -778,14 +781,13 @@ export class OLProxy {
   }
 
   get hasExtent() {
-    return Boolean(this.view.getUpdatedOptions_().extent)
+    return Boolean(this.limitExtent)
   }
 
   getExtentBBoxString() {
     // southwest_lng,southwest_lat,northeast_lng,northeast_lat
-    const extent = this.view.getUpdatedOptions_().extent
-    if (!extent) return
-    return fromOLExtent(extent).join(',')
+    if (!this.limitExtent) return
+    return fromOLExtent(this.limitExtent).join(',')
   }
 
   toggleFullscreen() {
