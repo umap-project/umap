@@ -90,9 +90,7 @@ export default class Editor {
     })
     this.map.addInteraction(this.select)
     this.select.on('select', (event) => {
-      for (const olFeature of [...event.selected, ...event.deselected]) {
-        this.proxy.applyStyle(olFeature)
-      }
+      this.proxy.restyle([...event.selected, ...event.deselected])
     })
 
     this.translate = new Translate({ features: this.select.getFeatures() })

@@ -147,7 +147,7 @@ export class OLProxy {
     this.app.on('popup:show', (event) => {
       const { sourceId, id, content, center, mode } = event.detail
       const olFeature = this.sources[sourceId]?.getFeatureById(id)
-      const popupOffsetY = olFeature?.get('popupOffsetY') || 0
+      const popupOffsetY = olFeature?.umapStyles.popupOffsetY || 0
       this.popup.setOffset([0, popupOffsetY - POPUP_ARROW_HEIGHT])
       this.popup.setPosition(fromLonLat(center))
       const body = this.popup.get('body')
@@ -600,7 +600,7 @@ export class OLProxy {
     } else {
       layers.point = new VectorLayer({
         source,
-        style: (feature) => (isPoint(feature) ? feature.get('umapStyle') : null),
+        style: (feature) => (isPoint(feature) ? feature.umapStyles.current : null),
         zIndexOffset: POINT_ZINDEX_OFFSET,
         editable: true,
       })
@@ -608,9 +608,9 @@ export class OLProxy {
       layers.path = new VectorLayer({
         source,
         style: (feature) => {
-          const texts = feature.get('umapText') || []
+          const { current, texts } = feature.umapStyles
           if (isPoint(feature)) return texts
-          return [].concat(feature.get('umapStyle') || [], texts)
+          return [].concat(current, texts)
         },
         editable: true,
       })
@@ -668,15 +668,22 @@ export class OLProxy {
 
   applyGeojson(olFeature, geojson) {
     const base = this.style(geojson)
-    olFeature.set('umapBaseStyle', base.style)
-    olFeature.set('umapHighlightStyle', this.style(geojson, true).style)
-    olFeature.set('umapText', base.texts)
-    olFeature.set('popupOffsetY', base.popupOffsetY)
-    olFeature.set('umapLabel', geojson.label)
+    olFeature.umapStyles = {
+      base: base.style,
+      highlight: this.style(geojson, true).style,
+      texts: base.texts,
+      popupOffsetY: base.popupOffsetY,
+    }
     const interactive = geojson.style?.interactive !== false
-    olFeature.set('interactive', interactive)
-    olFeature.set('editable', interactive && !geojson.readonly)
-    olFeature.set('route', geojson.route)
+    olFeature.setProperties(
+      {
+        umapLabel: geojson.label,
+        interactive,
+        editable: interactive && !geojson.readonly,
+        route: geojson.route,
+      },
+      true  // Do not ask for rerender, here, it will be donne on the next line.
+    )
     this.applyStyle(olFeature)
   }
 
@@ -689,8 +696,16 @@ export class OLProxy {
   }
 
   applyStyle(olFeature) {
-    const key = this.isHighlighted(olFeature) ? 'umapHighlightStyle' : 'umapBaseStyle'
-    olFeature.set('umapStyle', olFeature.get(key))
+    const styles = olFeature.umapStyles
+    styles.current = this.isHighlighted(olFeature) ? styles.highlight : styles.base
+  }
+
+  restyle(olFeatures) {
+    for (const olFeature of olFeatures) this.applyStyle(olFeature)
+    for (const layers of Object.values(this.layers)) {
+      for (const layer of Object.values(layers)) layer.changed()
+    }
+    this.map.dispatchEvent('umap:highlight')
   }
 
   closePopup() {
@@ -703,18 +718,14 @@ export class OLProxy {
     if (olFeature === this.highlighted) return
     const previous = this.highlighted
     this.highlighted = olFeature
-    if (previous) this.applyStyle(previous)
-    if (!olFeature) return
-    this.applyStyle(olFeature)
-    this.map.dispatchEvent('umap:highlight')
+    this.restyle([previous, olFeature].filter(Boolean))
   }
 
   unhighlight() {
     if (!this.highlighted) return
     const olFeature = this.highlighted
     this.highlighted = null
-    this.applyStyle(olFeature)
-    this.map.dispatchEvent('umap:highlight')
+    this.restyle([olFeature])
   }
 
   style(geojson, highlight = false) {

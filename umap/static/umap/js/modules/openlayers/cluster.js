@@ -31,7 +31,8 @@ function spiderfyLatLng(center, index, layerCount, resolution) {
 }
 
 function memberStyle(member) {
-  return [].concat(member.get('umapStyle') || [], member.get('umapText') || [])
+  const { current, texts } = member.umapStyles
+  return [].concat(current, texts)
 }
 
 export class Spider {
