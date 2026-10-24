@@ -1,5 +1,4 @@
 import { noModifierKeys } from 'ol/events/condition.js'
-import { getHeight, getWidth } from 'ol/extent.js'
 import MultiPoint from 'ol/geom/MultiPoint.js'
 import MouseWheelZoom from 'ol/interaction/MouseWheelZoom.js'
 import VectorLayer from 'ol/layer/Vector.js'
@@ -201,8 +200,7 @@ export class OLProxy {
 
   getBoundsZoom(bounds) {
     const extent = toOLExtent(bounds)
-    const [width, height] = this.map.getSize()
-    const resolution = Math.min(getWidth(extent) / width, getHeight(extent) / height)
+    const resolution = this.view.getResolutionForExtent(extent, this.map.getSize())
     return this.view.getZoomForResolution(resolution)
   }
 
