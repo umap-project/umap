@@ -269,7 +269,7 @@ export class DataLayer {
     this.setType()
     await this.ensureLayer()
     // The source was dropped along with the layer; repopulate it.
-    this.app.mapProxy.addData(this.id, this.toRenderer())
+    this.app.mapProxy.redraw(this.id, this.toRenderer())
     if (visible) this.show()
   }
 
@@ -542,10 +542,7 @@ export class DataLayer {
     // per-feature colors/radius.
     this.dataChanged()
     await this.compute()
-    // toRenderer() returns the full (accumulated) model, so replace rather than
-    // append, otherwise reimporting into the same layer duplicates features.
-    this.app.mapProxy.clear(this.id)
-    this.app.mapProxy.addData(this.id, this.toRenderer())
+    this.app.mapProxy.redraw(this.id, this.toRenderer())
     this.app.loader.stop(id)
     return data
   }

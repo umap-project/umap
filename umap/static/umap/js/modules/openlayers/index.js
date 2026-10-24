@@ -479,10 +479,6 @@ export class OLProxy {
     }
   }
 
-  clear(id) {
-    this.sources[id]?.clear()
-  }
-
   OLFeatureToGeojson(olFeature) {
     return writeFeature(olFeature)
   }
@@ -600,7 +596,8 @@ export class OLProxy {
     } else {
       layers.point = new VectorLayer({
         source,
-        style: (feature) => (isPoint(feature) ? feature.umapStyles.current : null),
+        style: (feature, resolution) =>
+          isPoint(feature) ? feature.umapStyles.current : null,
         zIndexOffset: POINT_ZINDEX_OFFSET,
         editable: true,
       })
@@ -633,30 +630,24 @@ export class OLProxy {
     this.sources[id].addFeature(this.geojsonToOL(geojson))
   }
 
-  addData(id, geojson) {
-    const olFeatures = geojson.features.map((data) => this.geojsonToOL(data))
-    // Before addFeatures, so a (re)cluster uses the new config. Cluster/heat subscribe to the
-    // source for it; the others ignore it.
-    this.sources[id].set('umapConfig', geojson.style)
-    this.sources[id].addFeatures(olFeatures)
-  }
-
   redraw(id, geojson) {
     const source = this.sources[id]
     if (!source) return
+    // Before addFeatures, so a (re)cluster uses the new config.
     source.set('umapConfig', geojson.style)
     // Reflect geojson in visible features on the map (eg. some can be
     // filtered out from the databrowser).
     const wanted = new Set(geojson.features.map((feature) => feature.id))
-    for (const olFeature of source.getFeatures()) {
-      if (!wanted.has(olFeature.getId())) source.removeFeature(olFeature)
-    }
+    source.removeFeatures(
+      source.getFeatures().filter((olFeature) => !wanted.has(olFeature.getId()))
+    )
+    const added = []
     for (const feature of geojson.features) {
       const olFeature = source.getFeatureById(feature.id)
       if (olFeature) this.redrawFeature(olFeature, feature)
-      else source.addFeature(this.geojsonToOL(feature))
+      else added.push(this.geojsonToOL(feature))
     }
-    source.changed()
+    source.addFeatures(added)
   }
 
   redrawFeature(olFeature, geojson) {
@@ -682,7 +673,7 @@ export class OLProxy {
         editable: interactive && !geojson.readonly,
         route: geojson.route,
       },
-      true  // Do not ask for rerender, here, it will be donne on the next line.
+      true // Do not ask for rerender, here, it will be donne on the next line.
     )
     this.applyStyle(olFeature)
   }
