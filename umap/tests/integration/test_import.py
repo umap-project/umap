@@ -14,6 +14,8 @@ from .helpers import save_and_get_json
 pytestmark = pytest.mark.django_db
 
 PANEL_ANIMATION_TIME = 350
+# Limit the screenshot area to prevent CSS changes and such to make the check fail.
+FEATURE_CLIP = {"x": 560, "y": 260, "width": 160, "height": 200}
 
 
 def test_layers_list_is_updated(live_server, tilelayer, page):
@@ -90,10 +92,7 @@ def test_umap_import_from_textarea(live_server, tilelayer, page, settings):
     )
     expect(page.locator(".panel.left").get_by_text("Tunnels")).to_be_visible()
     expect(page.locator(".panel.left").get_by_text("Cities")).to_be_visible()
-    expect(page.locator(".leaflet-control-minimap")).to_be_visible()
-    expect(
-        page.locator('img[src="https://tile.openstreetmap.fr/hot/6/32/21.png"]')
-    ).to_be_visible()
+    expect(page.locator(".ol-overviewmap")).to_be_visible()
     # Should not have imported id, while in the file options
     assert not page.evaluate("U.MAP.properties.id")
     with page.expect_response(re.compile(r".*/datalayer/create/.*")):
@@ -105,8 +104,10 @@ def test_import_geojson_from_textarea(tilelayer, live_server, page):
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    markers = page.locator(".leaflet-marker-icon")
-    paths = page.locator("path")
+    markers = page.locator(".umap-browser .feature.marker")
+    paths = page.locator(
+        ".umap-browser .feature.polyline, .umap-browser .feature.polygon"
+    )
     expect(markers).to_have_count(0)
     expect(paths).to_have_count(0)
     expect(layers).to_have_count(0)
@@ -119,6 +120,7 @@ def test_import_geojson_from_textarea(tilelayer, live_server, page):
     page.get_by_role("button", name="Import data", exact=True).click()
     # A layer has been created
     expect(layers).to_have_count(1)
+    layers.first.click()
     expect(markers).to_have_count(2)
     expect(paths).to_have_count(3)
 
@@ -129,8 +131,10 @@ def test_import_invalid_data(tilelayer, live_server, page):
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    markers = page.locator(".leaflet-marker-icon")
-    paths = page.locator("path")
+    markers = page.locator(".umap-browser .feature.marker")
+    paths = page.locator(
+        ".umap-browser .feature.polyline, .umap-browser .feature.polygon"
+    )
     expect(markers).to_have_count(0)
     expect(paths).to_have_count(0)
     expect(layers).to_have_count(0)
@@ -148,8 +152,10 @@ def test_import_kml_from_textarea(tilelayer, live_server, page):
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    markers = page.locator(".leaflet-marker-icon")
-    paths = page.locator("path")
+    markers = page.locator(".umap-browser .feature.marker")
+    paths = page.locator(
+        ".umap-browser .feature.polyline, .umap-browser .feature.polygon"
+    )
     expect(markers).to_have_count(0)
     expect(paths).to_have_count(0)
     expect(layers).to_have_count(0)
@@ -162,6 +168,9 @@ def test_import_kml_from_textarea(tilelayer, live_server, page):
     page.get_by_role("button", name="Import data", exact=True).click()
     # A layer has been created
     expect(layers).to_have_count(1)
+    # Force PW to wait for the browser refresh.
+    expect(page.locator(".umap-browser .datalayer-counter")).to_have_text("(3)")
+    layers.first.click()
     expect(markers).to_have_count(1)
     expect(paths).to_have_count(2)
 
@@ -171,8 +180,10 @@ def test_import_gpx_from_textarea(tilelayer, live_server, page, settings):
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    markers = page.locator(".leaflet-marker-icon")
-    paths = page.locator("path")
+    markers = page.locator(".umap-browser .feature.marker")
+    paths = page.locator(
+        ".umap-browser .feature.polyline, .umap-browser .feature.polygon"
+    )
     expect(markers).to_have_count(0)
     expect(paths).to_have_count(0)
     expect(layers).to_have_count(0)
@@ -185,6 +196,8 @@ def test_import_gpx_from_textarea(tilelayer, live_server, page, settings):
     page.get_by_role("button", name="Import data", exact=True).click()
     # A layer has been created
     expect(layers).to_have_count(1)
+    expect(page.locator(".umap-browser .datalayer-counter")).to_have_text("(2)")
+    layers.first.click()
     expect(markers).to_have_count(1)
     expect(paths).to_have_count(1)
     data = save_and_get_json(page)
@@ -229,7 +242,7 @@ def test_import_osm_from_textarea(tilelayer, live_server, page):
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    markers = page.locator(".leaflet-marker-icon")
+    markers = page.locator(".umap-browser .feature.marker")
     expect(markers).to_have_count(0)
     expect(layers).to_have_count(0)
     page.get_by_title("Import data").click()
@@ -241,6 +254,8 @@ def test_import_osm_from_textarea(tilelayer, live_server, page):
     page.get_by_role("button", name="Import data", exact=True).click()
     # A layer has been created
     expect(layers).to_have_count(1)
+    expect(page.locator(".umap-browser .datalayer-counter")).to_have_text("(2)")
+    layers.first.click()
     expect(markers).to_have_count(2)
 
 
@@ -248,7 +263,7 @@ def test_import_csv_from_textarea(tilelayer, live_server, page):
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    markers = page.locator(".leaflet-marker-icon")
+    markers = page.locator(".umap-browser .feature.marker")
     expect(markers).to_have_count(0)
     expect(layers).to_have_count(0)
     page.get_by_title("Import data").click()
@@ -260,6 +275,7 @@ def test_import_csv_from_textarea(tilelayer, live_server, page):
     page.get_by_role("button", name="Import data", exact=True).click()
     # A layer has been created
     expect(layers).to_have_count(1)
+    layers.first.click()
     expect(markers).to_have_count(2)
 
 
@@ -267,7 +283,8 @@ def test_can_import_in_existing_datalayer(live_server, datalayer, page, openmap)
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    markers = page.locator(".leaflet-marker-icon")
+    layers.first.click()
+    markers = page.locator(".umap-browser .feature.marker")
     expect(markers).to_have_count(1)
     expect(layers).to_have_count(1)
     page.get_by_role("button", name="Edit").click()
@@ -282,6 +299,7 @@ def test_can_import_in_existing_datalayer(live_server, datalayer, page, openmap)
     page.get_by_role("button", name="Import data", exact=True).click()
     # No layer has been created
     expect(layers).to_have_count(1)
+    layers.first.click()
     expect(markers).to_have_count(3)
 
 
@@ -289,7 +307,8 @@ def test_can_replace_datalayer_data(live_server, datalayer, page, openmap):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    markers = page.locator(".leaflet-marker-icon")
+    layers.first.click()
+    markers = page.locator(".umap-browser .feature.marker")
     expect(markers).to_have_count(1)
     expect(layers).to_have_count(1)
     page.get_by_role("button", name="Edit").click()
@@ -304,6 +323,7 @@ def test_can_replace_datalayer_data(live_server, datalayer, page, openmap):
     page.get_by_role("button", name="Import data", exact=True).click()
     # No layer has been created
     expect(layers).to_have_count(1)
+    layers.first.click()
     expect(markers).to_have_count(2)
 
 
@@ -311,7 +331,8 @@ def test_can_import_in_new_datalayer(live_server, datalayer, page, openmap):
     page.goto(f"{live_server.url}{openmap.get_absolute_url()}")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    markers = page.locator(".leaflet-marker-icon")
+    markers = page.locator(".umap-browser .feature.marker")
+    layers.first.click()
     expect(markers).to_have_count(1)
     expect(layers).to_have_count(1)
     page.get_by_role("button", name="Edit").click()
@@ -326,6 +347,8 @@ def test_can_import_in_new_datalayer(live_server, datalayer, page, openmap):
     page.get_by_role("button", name="Import data", exact=True).click()
     # A new layer has been created
     expect(layers).to_have_count(2)
+    layers.first.click()
+    layers.last.click()
     expect(markers).to_have_count(3)
     expect(page.get_by_text("My new layer name")).to_be_visible()
 
@@ -417,8 +440,10 @@ def test_import_geometry_collection(live_server, page, tilelayer):
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    markers = page.locator(".leaflet-marker-icon")
-    paths = page.locator("path")
+    markers = page.locator(".umap-browser .feature.marker")
+    paths = page.locator(
+        ".umap-browser .feature.polyline, .umap-browser .feature.polygon"
+    )
     expect(markers).to_have_count(0)
     expect(paths).to_have_count(0)
     expect(layers).to_have_count(0)
@@ -430,6 +455,7 @@ def test_import_geometry_collection(live_server, page, tilelayer):
     page.get_by_role("button", name="Import data", exact=True).click()
     # A layer has been created
     expect(layers).to_have_count(1)
+    layers.first.click()
     expect(markers).to_have_count(1)
     expect(paths).to_have_count(2)
 
@@ -471,8 +497,10 @@ def test_import_geometry_collection_in_feature(live_server, page, tilelayer):
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    markers = page.locator(".leaflet-marker-icon")
-    paths = page.locator("path")
+    markers = page.locator(".umap-browser .feature.marker")
+    paths = page.locator(
+        ".umap-browser .feature.polyline, .umap-browser .feature.polygon"
+    )
     expect(markers).to_have_count(0)
     expect(paths).to_have_count(0)
     expect(layers).to_have_count(0)
@@ -484,6 +512,7 @@ def test_import_geometry_collection_in_feature(live_server, page, tilelayer):
     page.get_by_role("button", name="Import data", exact=True).click()
     # A layer has been created
     expect(layers).to_have_count(1)
+    layers.first.click()
     expect(markers).to_have_count(1)
     expect(paths).to_have_count(2)
     # Geometries are treated as separate features.
@@ -492,7 +521,7 @@ def test_import_geometry_collection_in_feature(live_server, page, tilelayer):
 
 
 def test_import_homogeneous_geometry_collection_in_feature(
-    live_server, page, tilelayer
+    live_server, page, tilelayer, assert_screenshot
 ):
     data = {
         "type": "Feature",
@@ -530,24 +559,27 @@ def test_import_homogeneous_geometry_collection_in_feature(
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    paths = page.locator("path")
-    expect(paths).to_have_count(0)
-    expect(layers).to_have_count(0)
+    features = page.locator(".umap-browser .feature")
     page.get_by_title("Import data").click()
     page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
     textarea.fill(json.dumps(data))
     page.locator('select[name="format"]').select_option("geojson")
     page.get_by_role("button", name="Import data", exact=True).click()
+    page.locator(".panel.right").get_by_title("Close").click()
     # A layer has been created
     expect(layers).to_have_count(1)
     # Polygons are merged into a single MultiPolygon feature.
-    expect(paths).to_have_count(1)
+    assert_screenshot(page, ui=False)
     page.get_by_text("Layer 1").click()  # Open layer box in browser.
+    expect(features).to_have_count(1)
     expect(page.get_by_text("foobar")).to_have_count(1)
 
 
-def test_import_kml_multigeometry(live_server, page, tilelayer):
+def test_import_kml_multigeometry(
+    live_server, page, tilelayer, assert_screenshot, settings
+):
+    settings.UMAP_ALLOW_ANONYMOUS = True
     kml = """<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
 <Placemark id="kyNTQ">
 <name>test 1</name><description>Multi polygon</description><ExtendedData></ExtendedData>
@@ -569,8 +601,7 @@ def test_import_kml_multigeometry(live_server, page, tilelayer):
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    paths = page.locator("path")
-    expect(paths).to_have_count(0)
+    features = page.locator(".umap-browser .feature")
     expect(layers).to_have_count(0)
     page.get_by_title("Import data").click()
     page.wait_for_timeout(PANEL_ANIMATION_TIME)
@@ -578,15 +609,80 @@ def test_import_kml_multigeometry(live_server, page, tilelayer):
     textarea.fill(kml)
     page.locator('select[name="format"]').select_option("kml")
     page.get_by_role("button", name="Import data", exact=True).click()
+    page.locator(".panel.right").get_by_title("Close").click()
     # A layer has been created
     expect(layers).to_have_count(1)
     # The MultiGeometry is imported as a single MultiPolygon feature.
-    expect(paths).to_have_count(1)
     page.get_by_text("Layer 1").click()  # Open layer box in browser.
+    expect(features).to_have_count(1)
     expect(page.get_by_text("test 1", exact=True)).to_have_count(1)
+    assert_screenshot(page, "imported", ui=False)
+    data = save_and_get_json(page)
+    assert len(data["features"]) == 1
+    assert data["features"][0] == {
+        "geometry": {
+            "coordinates": [
+                [
+                    [
+                        [
+                            5.523248,
+                            50.573835,
+                        ],
+                        [
+                            5.524278,
+                            50.564349,
+                        ],
+                        [
+                            5.540586,
+                            50.562986,
+                        ],
+                        [
+                            5.540414,
+                            50.573562,
+                        ],
+                        [
+                            5.523248,
+                            50.573835,
+                        ],
+                    ],
+                ],
+                [
+                    [
+                        [
+                            5.522904,
+                            50.576642,
+                        ],
+                        [
+                            5.539985,
+                            50.576424,
+                        ],
+                        [
+                            5.539083,
+                            50.584681,
+                        ],
+                        [
+                            5.523162,
+                            50.585825,
+                        ],
+                        [
+                            5.522904,
+                            50.576642,
+                        ],
+                    ],
+                ],
+            ],
+            "type": "MultiPolygon",
+        },
+        "id": "kyNTQ",
+        "properties": {
+            "description": "Multi polygon",
+            "name": "test 1",
+        },
+        "type": "Feature",
+    }
 
 
-def test_import_multipolygon(live_server, page, tilelayer):
+def test_import_multipolygon(live_server, page, tilelayer, assert_screenshot):
     data = {
         "type": "Feature",
         "properties": {"name": "Some states"},
@@ -604,7 +700,9 @@ def test_import_multipolygon(live_server, page, tilelayer):
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    paths = page.locator("path")
+    paths = page.locator(
+        ".umap-browser .feature.polyline, .umap-browser .feature.polygon"
+    )
     expect(paths).to_have_count(0)
     expect(layers).to_have_count(0)
     page.get_by_title("Import data").click()
@@ -615,10 +713,14 @@ def test_import_multipolygon(live_server, page, tilelayer):
     page.get_by_role("button", name="Import data", exact=True).click()
     # A layer has been created
     expect(layers).to_have_count(1)
+    layers.first.click()
     expect(paths).to_have_count(1)
+    # Visual check that the polygon is actually drawn on the canvas.
+    page.locator(".panel.left").get_by_title("Close").click()
+    assert_screenshot(page, suffix="polygon", clip=FEATURE_CLIP)
 
 
-def test_import_multipolyline(live_server, page, tilelayer):
+def test_import_multipolyline(live_server, page, tilelayer, assert_screenshot):
     data = {
         "type": "FeatureCollection",
         "features": [
@@ -635,7 +737,9 @@ def test_import_multipolyline(live_server, page, tilelayer):
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    paths = page.locator("path")
+    paths = page.locator(
+        ".umap-browser .feature.polyline, .umap-browser .feature.polygon"
+    )
     expect(paths).to_have_count(0)
     expect(layers).to_have_count(0)
     page.get_by_title("Import data").click()
@@ -646,10 +750,14 @@ def test_import_multipolyline(live_server, page, tilelayer):
     page.get_by_role("button", name="Import data", exact=True).click()
     # A layer has been created
     expect(layers).to_have_count(1)
+    layers.first.click()
     expect(paths).to_have_count(1)
+    # Visual check that the polyline is actually drawn on the canvas.
+    page.locator(".panel.left").get_by_title("Close").click()
+    assert_screenshot(page, suffix="polyline", clip=FEATURE_CLIP)
 
 
-def test_import_false_multipoint(live_server, page, tilelayer):
+def test_import_false_multipoint(live_server, page, tilelayer, assert_screenshot):
     data = {
         "type": "FeatureCollection",
         "features": [
@@ -666,7 +774,7 @@ def test_import_false_multipoint(live_server, page, tilelayer):
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    markers = page.locator(".leaflet-marker-icon")
+    markers = page.locator(".umap-browser .feature.marker")
     expect(markers).to_have_count(0)
     expect(layers).to_have_count(0)
     page.get_by_title("Import data").click()
@@ -677,7 +785,11 @@ def test_import_false_multipoint(live_server, page, tilelayer):
     page.get_by_role("button", name="Import data", exact=True).click()
     # A layer has been created
     expect(layers).to_have_count(1)
+    layers.first.click()
     expect(markers).to_have_count(1)
+    # Visual check that the marker is actually drawn on the canvas.
+    page.locator(".panel.left").get_by_title("Close").click()
+    assert_screenshot(page, suffix="marker", clip=FEATURE_CLIP)
 
 
 def test_should_not_import_empty_coordinates(live_server, page, tilelayer):
@@ -749,7 +861,7 @@ def test_import_csv_without_valid_latlon_headers(tilelayer, live_server, page):
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    markers = page.locator(".leaflet-marker-icon")
+    markers = page.locator(".umap-browser .feature.marker")
     page.get_by_title("Import data").click()
     page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
@@ -758,6 +870,7 @@ def test_import_csv_without_valid_latlon_headers(tilelayer, live_server, page):
     page.get_by_role("button", name="Import data", exact=True).click()
     # FIXME do not create a layer
     expect(layers).to_have_count(1)
+    layers.first.click()
     expect(markers).to_have_count(0)
     expect(page.locator('umap-alert div[data-level="error"]')).to_be_visible()
 
@@ -767,7 +880,7 @@ def test_import_csv_with_commas_in_latlon(tilelayer, live_server, page, settings
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    markers = page.locator(".leaflet-marker-icon")
+    markers = page.locator(".umap-browser .feature.marker")
     page.get_by_title("Import data").click()
     page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
@@ -775,6 +888,7 @@ def test_import_csv_with_commas_in_latlon(tilelayer, live_server, page, settings
     page.locator('select[name="format"]').select_option("csv")
     page.get_by_role("button", name="Import data", exact=True).click()
     expect(layers).to_have_count(1)
+    layers.first.click()
     expect(markers).to_have_count(2)
     with page.expect_response(re.compile(r".*/datalayer/create/.*")):
         page.get_by_role("button", name="Save").click()
@@ -801,8 +915,10 @@ def test_import_csv_with_wkt_geom(tilelayer, live_server, page, settings):
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    markers = page.locator(".leaflet-marker-icon")
-    paths = page.locator("path")
+    markers = page.locator(".umap-browser .feature.marker")
+    paths = page.locator(
+        ".umap-browser .feature.polyline, .umap-browser .feature.polygon"
+    )
     page.get_by_title("Import data").click()
     page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
@@ -812,6 +928,8 @@ def test_import_csv_with_wkt_geom(tilelayer, live_server, page, settings):
     page.locator('select[name="format"]').select_option("csv")
     page.get_by_role("button", name="Import data", exact=True).click()
     expect(layers).to_have_count(1)
+    expect(page.locator(".umap-browser .datalayer-counter")).to_have_text("(2)")
+    layers.first.click()
     expect(markers).to_have_count(1)
     expect(paths).to_have_count(1)
     with page.expect_response(re.compile(r".*/datalayer/create/.*")):
@@ -855,8 +973,10 @@ def test_import_csv_with_geojson_geom(tilelayer, live_server, page, settings):
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    markers = page.locator(".leaflet-marker-icon")
-    paths = page.locator("path")
+    markers = page.locator(".umap-browser .feature.marker")
+    paths = page.locator(
+        ".umap-browser .feature.polyline, .umap-browser .feature.polygon"
+    )
     page.get_by_title("Import data").click()
     page.wait_for_timeout(PANEL_ANIMATION_TIME)
     textarea = page.locator(".umap-import textarea")
@@ -868,6 +988,8 @@ def test_import_csv_with_geojson_geom(tilelayer, live_server, page, settings):
     page.locator('select[name="format"]').select_option("csv")
     page.get_by_role("button", name="Import data", exact=True).click()
     expect(layers).to_have_count(1)
+    expect(page.locator(".umap-browser .datalayer-counter")).to_have_text("(2)")
+    layers.first.click()
     expect(markers).to_have_count(1)
     expect(paths).to_have_count(1)
     with page.expect_response(re.compile(r".*/datalayer/create/.*")):
@@ -927,16 +1049,21 @@ def test_create_remote_data(page, live_server, tilelayer):
     # Intercept the route to the proxy
     page.route("*/**/ajax-proxy/**", handle)
     page.goto(f"{live_server.url}/map/new/")
-    expect(page.locator(".leaflet-marker-icon")).to_be_hidden()
+    markers = page.locator(".umap-browser .feature.marker")
+    page.get_by_title("Open browser").click()
+    layers = page.locator(".umap-browser .datalayer")
+    expect(markers).to_have_count(0)
     page.get_by_role("button", name="Import data").click()
     page.wait_for_timeout(PANEL_ANIMATION_TIME)
     page.get_by_placeholder("Provide an URL here").fill("https://remote.org/data.json")
     page.locator("[name=format]").select_option("geojson")
     page.get_by_role("radio", name="Link to the layer as remote data").click()
     page.get_by_role("button", name="Import data", exact=True).click()
-    expect(page.locator(".leaflet-marker-icon")).to_be_visible()
+    expect(page.locator(".umap-browser .datalayer-counter")).to_have_text("(1)")
+    layers.first.click()
+    expect(markers).to_have_count(1)
     page.get_by_role("button", name="Manage layers").click()
-    page.get_by_role("button", name="Edit", exact=True).click()
+    page.locator(".panel.right").get_by_role("button", name="Edit", exact=True).click()
     page.locator("summary").filter(has_text="Remote data").click()
     expect(page.locator('.panel input[name="url"]')).to_have_value(
         "https://remote.org/data.json"
@@ -963,7 +1090,6 @@ def test_create_remote_data_from_umap_backup(page, live_server, tilelayer):
 
     page.route("https://remote.org/data.json", handle)
     page.goto(f"{live_server.url}/map/new/")
-    expect(page.locator(".leaflet-marker-icon")).to_be_hidden()
     page.get_by_title("Import data").click()
     file_input = page.locator("input[type='file']")
     with page.expect_file_chooser() as fc_info:
@@ -975,7 +1101,9 @@ def test_create_remote_data_from_umap_backup(page, live_server, tilelayer):
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
     expect(layers).to_have_count(1)
-    expect(page.locator(".leaflet-marker-icon")).to_be_visible()
+    expect(page.locator(".umap-browser .datalayer-counter")).to_have_text("(1)")
+    layers.first.click()
+    expect(page.locator(".umap-browser .feature.marker")).to_have_count(1)
     page.get_by_role("button", name="Edit", exact=True).click()
     page.locator("summary").filter(has_text="Remote data").click()
     expect(page.locator('.panel input[name="url"]')).to_have_value(
@@ -1004,16 +1132,20 @@ def test_import_geojson_from_url(page, live_server, tilelayer):
     # Intercept the route
     page.route("https://remote.org/data.json", handle)
     page.goto(f"{live_server.url}/map/new/")
-    expect(page.locator(".leaflet-marker-icon")).to_be_hidden()
+    markers = page.locator(".umap-browser .feature.marker")
+    page.get_by_title("Open browser").click()
+    expect(markers).to_have_count(0)
     page.get_by_role("button", name="Import data").click()
     page.get_by_placeholder("Provide an URL here").click()
     page.get_by_placeholder("Provide an URL here").fill("https://remote.org/data.json")
     page.locator("[name=format]").select_option("geojson")
     page.get_by_role("radio", name="Copy into the layer").click()
     page.get_by_role("button", name="Import data", exact=True).click()
-    expect(page.locator(".leaflet-marker-icon")).to_be_visible()
+    expect(page.locator(".umap-browser .datalayer-counter")).to_have_text("(1)")
+    page.locator(".umap-browser .datalayer").first.click()
+    expect(markers).to_have_count(1)
     page.get_by_role("button", name="Manage layers").click()
-    page.get_by_role("button", name="Edit", exact=True).click()
+    page.locator(".panel.right").get_by_role("button", name="Edit", exact=True).click()
     page.locator("summary").filter(has_text="Remote data").click()
     expect(page.locator('.panel input[name="url"]')).to_have_value("")
 
@@ -1081,7 +1213,7 @@ def test_overpass_import_retains_boundary(page, live_server, tilelayer, settings
     page.get_by_placeholder("Type area name, or let empty").click()
     page.get_by_placeholder("Type area name, or let empty").press_sequentially("bray")
     page.get_by_text("Bray-sur-Seine, Seine-et-Marne, Île-de-France, France").click()
-    expect(page.locator("#area")).to_contain_text(
+    expect(page.locator("#area-filter")).to_contain_text(
         "Bray-sur-Seine, Seine-et-Marne, Île-de-France, France"
     )
     page.get_by_role("button", name="Choose this data").click()
@@ -1090,7 +1222,7 @@ def test_overpass_import_retains_boundary(page, live_server, tilelayer, settings
     )
     page.get_by_role("button", name="Import helpers").click()
     page.get_by_role("button", name="Overpass").click()
-    expect(page.locator("#area")).to_contain_text(
+    expect(page.locator("#area-filter")).to_contain_text(
         "Bray-sur-Seine, Seine-et-Marne, Île-de-France, France"
     )
 
@@ -1128,7 +1260,9 @@ def test_import_from_datasets(page, live_server, tilelayer, settings):
     # Intercept the route
     page.route("https://remote.org/data.json", handle)
     page.goto(f"{live_server.url}/map/new/")
-    expect(page.locator(".leaflet-marker-icon")).to_be_hidden()
+    markers = page.locator(".umap-browser .feature.marker")
+    page.get_by_title("Open browser").click()
+    expect(markers).to_have_count(0)
     page.get_by_title("Import data").click()
     page.get_by_role("button", name="Import helpers").click()
     page.get_by_role("button", name="Datasets").click()
@@ -1138,8 +1272,8 @@ def test_import_from_datasets(page, live_server, tilelayer, settings):
     page.get_by_role("button", name="Choose this dataset").click()
     page.get_by_label("Copy into the layer").check()
     page.get_by_role("button", name="Import data", exact=True).click()
-    expect(page.locator(".leaflet-marker-icon")).to_be_visible()
-    page.get_by_role("button", name="Open browser").click()
+    page.locator(".umap-browser .datalayer").first.click()
+    expect(markers).to_have_count(1)
     expect(page.locator("summary").get_by_text("Good data")).to_be_visible()
 
 
@@ -1149,7 +1283,9 @@ def test_import_osm_relation(tilelayer, live_server, page):
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    paths = page.locator("path")
+    paths = page.locator(
+        ".umap-browser .feature.polyline, .umap-browser .feature.polygon"
+    )
     expect(paths).to_have_count(0)
     expect(layers).to_have_count(0)
     page.get_by_title("Import data").click()
@@ -1161,6 +1297,8 @@ def test_import_osm_relation(tilelayer, live_server, page):
     page.get_by_role("button", name="Import data", exact=True).click()
     # A layer and one path has been created
     expect(layers).to_have_count(1)
+    expect(page.locator(".umap-browser .datalayer-counter")).to_have_text("(1)")
+    layers.first.click()
     expect(paths).to_have_count(1)
 
 
@@ -1168,7 +1306,7 @@ def test_import_georss_from_textarea(tilelayer, live_server, page):
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    markers = page.locator(".leaflet-marker-icon")
+    markers = page.locator(".umap-browser .feature.marker")
     expect(markers).to_have_count(0)
     expect(layers).to_have_count(0)
     page.get_by_title("Import data").click()
@@ -1180,6 +1318,8 @@ def test_import_georss_from_textarea(tilelayer, live_server, page):
     page.get_by_role("button", name="Import data", exact=True).click()
     # A layer has been created
     expect(layers).to_have_count(1)
+    expect(page.locator(".umap-browser .datalayer-counter")).to_have_text("(1)")
+    layers.first.click()
     expect(markers).to_have_count(1)
 
 
@@ -1196,14 +1336,15 @@ def test_import_from_multiple_files(live_server, page, tilelayer):
         FIXTURES / "test_upload_simple_marker.json",
     ]
     file_chooser.set_files(paths)
-    markers = page.locator(".leaflet-marker-icon")
-    expect(markers).to_have_count(0)
     page.get_by_role("button", name="Import data", exact=True).click()
+    page.get_by_title("Open browser").click()
     # Two in one file, one in the other
-    expect(markers).to_have_count(3)
+    page.locator(".umap-browser .datalayer").first.click()
+    expect(page.locator(".umap-browser .feature.marker")).to_have_count(3)
 
 
-def test_umap_import_with_iconurl(live_server, tilelayer, page):
+def test_umap_import_with_iconurl(live_server, tilelayer, page, settings):
+    settings.UMAP_ALLOW_ANONYMOUS = True
     page.goto(f"{live_server.url}/map/new/")
     page.get_by_title("Import data").click()
     file_input = page.locator("input[type='file']")
@@ -1213,11 +1354,14 @@ def test_umap_import_with_iconurl(live_server, tilelayer, page):
     path = Path(__file__).parent.parent / "fixtures/test_upload_data_with_iconurl.umap"
     file_chooser.set_files(path)
     page.get_by_role("button", name="Import data", exact=True).click()
-    expect(
-        page.locator(
-            'img[src="https://umap.incubateur.anct.gouv.fr/uploads/pictogram/car-24.png"]'
-        )
-    ).to_have_count(2)
+    page.get_by_title("Open browser").click()
+    page.locator(".umap-browser .datalayer").first.click()
+    expect(page.locator(".umap-browser .feature.marker")).to_have_count(2)
+    data = save_and_get_json(page)
+    assert (
+        data["properties"]["iconUrl"]
+        == "https://umap.incubateur.anct.gouv.fr/uploads/pictogram/car-24.png"
+    )
 
 
 def test_umap_import_with_enum_and_filter(live_server, tilelayer, page):
@@ -1230,5 +1374,7 @@ def test_umap_import_with_enum_and_filter(live_server, tilelayer, page):
     path = Path(__file__).parent.parent / "fixtures/test_upload_data_with_enum.umap"
     file_chooser.set_files(path)
     page.get_by_role("button", name="Import data", exact=True).click()
-    markers = page.locator(".umap-large-circle-icon")
+    page.get_by_title("Open browser").click()
+    markers = page.locator(".umap-browser .feature.marker")
+    page.locator(".umap-browser .datalayer").first.click()
     expect(markers).to_have_count(4)

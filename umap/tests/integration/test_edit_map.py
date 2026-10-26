@@ -38,7 +38,7 @@ def test_can_display_help(page, live_server, tilelayer):
     page.goto(f"{live_server.url}/en/map/new/")
 
     page.get_by_title("Edit map name and caption").click()
-    help_button = page.locator(".panel .umap-field-description .umap-help-button")
+    help_button = page.locator(".panel .umap-field-description .icon-help")
     expect(help_button).to_be_visible()
     help_button.click()
     expect(page.locator("dialog").first).to_contain_text("Text formatting")
@@ -88,7 +88,7 @@ def test_zoomcontrol_impacts_ui(live_server, page, tilelayer):
     expect(zoom_out).to_be_hidden()
 
 
-def test_map_color_impacts_data(live_server, page, tilelayer):
+def test_map_color_impacts_data(live_server, page, tilelayer, assert_screenshot):
     page.goto(f"{live_server.url}/en/map/new/")
 
     gear_icon = page.get_by_title("Map advanced properties")
@@ -101,21 +101,31 @@ def test_map_color_impacts_data(live_server, page, tilelayer):
     create_marker_p1.click()
 
     # Add a new marker
-    marker_pane_p1 = page.locator(".leaflet-marker-pane > div")
     map_el = page.locator("#map")
     map_el.click(position={"x": 200, "y": 200})
-    expect(marker_pane_p1).to_have_count(1)
 
     # Change the default color
     page.get_by_text("Shape properties").click()
-    page.locator("#umap-feature-shape-properties").get_by_text("define").first.click()
-    page.get_by_title("Lime", exact=True).click()
+    shape = page.locator("#umap-feature-shape-properties")
+    shape.get_by_text("define").first.click()
+    shape.get_by_title("Lime", exact=True).click()
+
+    # Leave the edited state, so the marker renders with its base style.
+    page.locator(".panel.right .icon-close").click()
+    expect(page.locator(".panel.right.on")).to_have_count(0)
 
     # Assert the new color was used
-    marker_style = page.locator(".leaflet-marker-icon .icon-container").get_attribute(
-        "style"
+    page.get_by_role("button", name="Open browser").click()
+    layers = page.locator(".umap-browser .datalayer")
+    expect(page.locator(".umap-browser .datalayer-counter")).to_have_text("(1)")
+    layers.first.click()
+    expect(page.locator(".umap-browser .feature.marker")).to_have_count(1)
+    expect(page.locator(".umap-browser .feature-color")).to_have_css(
+        "background-color", "rgb(0, 255, 0)"
     )
-    assert "lime" in marker_style
+
+    page.get_by_title("zoom to data extent").click()
+    assert_screenshot(page, ui=False)
 
 
 def test_limitbounds_impacts_ui(live_server, page, tilelayer):

@@ -103,12 +103,12 @@
 <umap-alert-conflict></umap-alert-conflict>
 {% autoescape off %}
 <script type="module">
-  import { register } from '{% static 'umap/js/components/base.js' %}'
+  import { register } from '{% static 'umap/dist/base.js' %}'
   import {
     Alert,
     AlertCreation,
     AlertConflict
-  } from '{% static 'umap/js/components/alerts/alert.js' %}'
+  } from '{% static 'umap/dist/alert.js' %}'
   register(Alert, 'umap-alert')
   register(AlertCreation, 'umap-alert-creation')
   register(AlertConflict, 'umap-alert-conflict')

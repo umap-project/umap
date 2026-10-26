@@ -1,4 +1,3 @@
-import re
 from copy import deepcopy
 
 import pytest
@@ -34,26 +33,31 @@ DATALAYER_DATA = {
 }
 
 
-def test_should_open_popup_on_click(live_server, map, page):
+def test_should_open_popup_on_click(
+    live_server, map, page, wait_for_loaded, assert_screenshot
+):
     DataLayerFactory(map=map, data=DATALAYER_DATA)
-    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/53.239/8.429")
-    polygon = page.locator("path").first
-    expect(polygon).to_have_attribute("fill-opacity", "0.3")
-    polygon.click()
-    expect(page.locator(".leaflet-popup-content-wrapper")).to_be_visible()
+    # Center on a point inside the polygon so clicking on the map element ends inside.
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/53.09/12.16")
+    wait_for_loaded(page)
+    # Target the polygon only (not UI buttons & co).
+    clip = {"x": 628, "y": 382, "width": 48, "height": 24}
+    assert_screenshot(page, suffix="default", clip=clip)
+    page.locator("#map").click()
+    expect(page.locator(".umap-popup")).to_be_visible()
     expect(page.get_by_role("heading", name="name poly")).to_be_visible()
     expect(page.get_by_text("poly description")).to_be_visible()
-    # It's not a round value
-    expect(polygon).to_have_attribute("fill-opacity", re.compile(r"0.5\d+"))
-    # Close popup
-    page.locator("#map").click()
-    expect(polygon).to_have_attribute("fill-opacity", "0.3")
+    assert_screenshot(page, suffix="highlighted", clip=clip)
 
 
-def test_should_not_react_to_click_if_interactive_false(live_server, map, page):
+def test_should_not_react_to_click_if_interactive_false(
+    live_server, map, page, wait_for_loaded
+):
     data = deepcopy(DATALAYER_DATA)
     data["features"][0]["properties"]["_umap_options"] = {"interactive": False}
     DataLayerFactory(map=map, data=data)
-    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/53.239/8.429")
-    polygon = page.locator("path").first
-    expect(polygon).to_have_css("pointer-events", "none")
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#6/53.09/12.16")
+    wait_for_loaded(page)
+    # Center is on the polygon, but it is not interactive: click must be ignored.
+    page.locator("#map").click()
+    expect(page.locator(".umap-popup")).to_be_hidden()

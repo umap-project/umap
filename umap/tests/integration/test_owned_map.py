@@ -170,16 +170,20 @@ def test_create(tilelayer, live_server, login, user):
     add_marker = page.get_by_title("Draw a marker")
     map_el = page.locator("#map")
     expect(add_marker).to_be_visible()
-    marker = page.locator(".leaflet-marker-icon")
-    expect(marker).to_have_count(0)
     add_marker.click()
     map_el.click(position={"x": 100, "y": 100})
-    expect(marker).to_have_count(1)
+    page.get_by_title("Open browser").click()
+    counter = page.locator(".umap-browser .datalayer-counter")
+    layers = page.locator(".umap-browser .datalayer")
+    markers = page.locator(".umap-browser .feature.marker")
+    expect(counter).to_have_text("(1)")
+    layers.first.click()
+    expect(markers).to_have_count(1)
     save = page.get_by_role("button", name="Save")
     expect(save).to_be_visible()
     with page.expect_response(re.compile(r".*/datalayer/create/")):
         save.click()
-    expect(marker).to_have_count(1)
+    expect(counter).to_have_text("(1)")
 
 
 def test_can_change_perms_after_create(tilelayer, live_server, login, user):
@@ -243,15 +247,16 @@ def test_can_delete_datalayer(live_server, map, login, datalayer):
     page.goto(f"{live_server.url}{map.get_absolute_url()}?edit")
     page.get_by_title("Open browser").click()
     layers = page.locator(".umap-browser .datalayer")
-    markers = page.locator(".leaflet-marker-icon")
+    markers = page.locator(".umap-browser .feature.marker")
     expect(layers).to_have_count(1)
+    expect(page.locator(".umap-browser .datalayer-counter")).to_have_text("(1)")
+    layers.first.click()
     expect(markers).to_have_count(1)
     page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel.right").get_by_title("Delete layer").click()
     with page.expect_response(re.compile(r".*/datalayer/delete/.*")):
         page.get_by_role("button", name="Save").click()
     expect(markers).to_have_count(0)
-    # FIXME does not work, resolve to 1 element, even if this command is empty:
     expect(layers).to_have_count(0)
 
 

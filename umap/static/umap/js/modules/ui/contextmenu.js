@@ -64,12 +64,10 @@ export default class ContextMenu extends Positioned {
   openAt([left, top], items) {
     this.container.innerHTML = ''
     this.addItems(items, this.container)
-    // When adding contextmenu below the map container, clicking on any link will send the
-    // "focusout" element on link click, preventing to trigger the click action
-    const parent = document
-      .elementFromPoint(left, top)
-      .closest('.leaflet-container').parentNode
-    parent.appendChild(this.container)
+    // Attach to the body, outside any map event container: a menu nested in the map would get a
+    // "focusout" on link click (before the click lands), swallowing the action. The menu is
+    // position:fixed, so the parent has no effect on placement.
+    document.body.appendChild(this.container)
     if (this.options.fixed) {
       this.setPosition({ left, top })
     } else {

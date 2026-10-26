@@ -6,8 +6,10 @@ from ..base import DataLayerFactory
 pytestmark = pytest.mark.django_db
 
 
-def test_caption_layer_switcher_should_toggle_group_and_child(live_server, page, map):
-    map.settings["properties"]["onLoadPanel"] = "caption"
+def test_caption_layer_switcher_should_toggle_group_and_child(
+    live_server, page, map, assert_screenshot
+):
+    map.settings["properties"]["onLoadPanel"] = "databrowser"
     map.settings["properties"]["captionBar"] = True
     map.settings["properties"]["layerSwitcher"] = True
     map.settings["properties"]["showLabel"] = True
@@ -51,43 +53,54 @@ def test_caption_layer_switcher_should_toggle_group_and_child(live_server, page,
         "properties": {"name": "Other Layer"},
     }
     parent = DataLayerFactory(
-        map=map, name="Parent Layer", data=parent_data, group=True
+        map=map, name="Parent Layer", data=parent_data, group=True, rank=0
     )
     child = DataLayerFactory(
-        map=map, name="Child Layer", data=child_data, parent=parent
+        map=map, name="Child Layer", data=child_data, parent=parent, rank=1
     )
     child2 = DataLayerFactory(
-        map=map, name="Child 2 Layer", data=child2_data, parent=parent
+        map=map, name="Child 2 Layer", data=child2_data, parent=parent, rank=2
     )
-    other = DataLayerFactory(map=map, name="Other Layer", data=other_data)
+    other = DataLayerFactory(map=map, name="Other Layer", data=other_data, rank=3)
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
     select = page.locator(".umap-caption-bar select")
     expect(select).to_be_visible()
     expect(select).to_have_value("")
-    expect(page.locator(".leaflet-marker-icon")).to_have_count(3)
-    expect(page.get_by_text("Child marker"))
-    expect(page.get_by_text("Child 2 marker"))
-    expect(page.get_by_text("Other marker"))
+    map_canvas = page.locator("#map")
+    browser = page.locator(".panel.left")
+    child_marker = browser.get_by_text("Child marker")
+    child2_marker = browser.get_by_text("Child 2 marker")
+    other_marker = browser.get_by_text("Other marker")
+
+    expect(child_marker).to_be_visible()
+    expect(child2_marker).to_be_visible()
+    expect(other_marker).to_be_visible()
+    assert_screenshot(map_canvas, suffix="all")
 
     select.select_option(str(parent.pk))
-    expect(page.locator(".leaflet-marker-icon")).to_have_count(2)
-    expect(page.get_by_text("Child marker"))
-    expect(page.get_by_text("Child 2 marker"))
+    expect(child_marker).to_be_visible()
+    expect(child2_marker).to_be_visible()
+    expect(other_marker).to_be_hidden()
+    assert_screenshot(map_canvas, suffix="group")
 
     select.select_option("")
-    expect(page.locator(".leaflet-marker-icon")).to_have_count(3)
-    expect(page.get_by_text("Child marker"))
-    expect(page.get_by_text("Child 2 marker"))
-    expect(page.get_by_text("Other marker"))
+    expect(other_marker).to_be_visible()
+    assert_screenshot(map_canvas, suffix="all")
 
     select.select_option(str(child.pk))
-    expect(page.locator(".leaflet-marker-icon")).to_have_count(1)
-    expect(page.get_by_text("Child marker"))
+    expect(child_marker).to_be_visible()
+    expect(child2_marker).to_be_hidden()
+    expect(other_marker).to_be_hidden()
+    assert_screenshot(map_canvas, suffix="child")
 
     select.select_option(str(child2.pk))
-    expect(page.locator(".leaflet-marker-icon")).to_have_count(1)
-    expect(page.get_by_text("Child 2 marker"))
+    expect(child2_marker).to_be_visible()
+    expect(child_marker).to_be_hidden()
+    expect(other_marker).to_be_hidden()
+    assert_screenshot(map_canvas, suffix="child2")
 
     select.select_option(str(other.pk))
-    expect(page.locator(".leaflet-marker-icon")).to_have_count(1)
-    expect(page.get_by_text("Other marker"))
+    expect(other_marker).to_be_visible()
+    expect(child_marker).to_be_hidden()
+    expect(child2_marker).to_be_hidden()
+    assert_screenshot(map_canvas, suffix="other")

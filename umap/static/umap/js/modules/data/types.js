@@ -82,6 +82,9 @@ class Choropleth extends DefaultType {
     const values = features.map((feature) => +feature.properties?.[key])
     let breaks = []
     let colors = []
+    const { equalIntervalBreaks, jenks, quantile, ckmeans, max } = await import(
+      './stats.js'
+    )
 
     if (!values.length) {
       return { properties: {}, caption: null }
@@ -98,20 +101,13 @@ class Choropleth extends DefaultType {
           .filter((b) => !Number.isNaN(b))
       }
     } else if (mode === 'equidistant') {
-      const equalIntervalBreaks = (
-        await import('simple-statistics/equal_interval_breaks.js')
-      ).default
       breaks = equalIntervalBreaks(values, classes)
     } else if (mode === 'jenks') {
-      const jenks = (await import('simple-statistics/jenks.js')).default
       breaks = jenks(values, classes)
     } else if (mode === 'quantiles') {
-      const quantile = (await import('simple-statistics/quantile.js')).default
       const quantiles = [...Array(classes)].map((e, i) => i / classes).concat(1)
       breaks = quantile(values, quantiles)
     } else {
-      const ckmeans = (await import('simple-statistics/ckmeans.js')).default
-      const max = (await import('simple-statistics/max.js')).default
       breaks = ckmeans(values, classes).map((cluster) => cluster[0])
       breaks.push(max(values)) // Needed for computing the legend
     }
@@ -292,7 +288,7 @@ class Circles extends DefaultType {
   static key = 'circles'
   static defaults = {
     weight: 1,
-    shape: 'circle',
+    iconClass: 'ProportionalCircle',
   }
 
   static ensureProperties(properties) {
@@ -435,10 +431,29 @@ class Heat extends DefaultType {
   static key = 'heat'
   static browsable = false
 
+  // OL's heatmap clamps the weight to [0,1], so normalize the intensity to that range.
+  static async compute(properties, features) {
+    const key = properties[this.key]?.intensityProperty
+    if (!key) return { properties: {} }
+    let max = 0
+    for (const feature of features) {
+      const value = Number.parseFloat(feature.properties?.[key])
+      if (Number.isFinite(value) && value > max) max = value
+    }
+    if (!max) return { properties: {} }
+    const attributes = {}
+    for (const feature of features) {
+      const value = Number.parseFloat(feature.properties?.[key])
+      attributes[feature.id] = { weight: Number.isFinite(value) ? value / max : 0 }
+    }
+    return { properties: {}, attributes }
+  }
+
   static renderConfig(properties) {
     return {
       [this.key]: {
-        radius: properties.heat?.radius,
+        radius: properties.heat?.radius || 25,
+        blur: properties.heat?.blur || 15,
         intensityProperty: properties.heat?.intensityProperty,
       },
     }
@@ -455,6 +470,17 @@ class Heat extends DefaultType {
           step: 5,
           label: translate('Heatmap radius'),
           helpText: translate('Override heatmap radius (default 25)'),
+        },
+      ],
+      [
+        'properties.heat.blur',
+        {
+          handler: 'Range',
+          min: 5,
+          max: 50,
+          step: 5,
+          label: translate('Heatmap blur'),
+          helpText: translate('Override heatmap blur (default 15)'),
         },
       ],
       [

@@ -1,3 +1,11 @@
+form {
+    display: flex;
+    gap: var(--box-margin);
+    flex-direction: column;
+    margin-top: calc(var(--box-margin) / 2);
+    margin-bottom: calc(var(--box-margin) / 2);
+}
+
 .umap-form-inline .formbox,
 .umap-form-inline {
     display: inline;
@@ -85,6 +93,9 @@ select {
     background-color: var(--background-color);
     color: var(--text-color);
     min-height: 40px;
+}
+label select {
+    margin-top: var(--text-margin);
 }
 
 .dark select {
@@ -225,12 +236,12 @@ button.round.small {
 .help-text,
 .helptext {
     display: block;
-    padding: 7px 7px;
-    margin-bottom: 14px;
+    padding: var(--text-margin);
+    margin-bottom: calc(var(--text-margin) * 2);
     background: var(--color-mediumGray);
     color: var(--color-veryLightGray);
-    font-size: 10px;
-    border-radius: 0 2px;
+    font-size: var(--font-size--1);
+    border-radius: var(--border-radius);
 }
 
 .content .helptext {
@@ -239,12 +250,10 @@ button.round.small {
 }
 
 input+.help-text {
-    margin-top: -14px;
+    margin-top: calc(var(--text-margin) * -2);
 }
 
 .formbox {
-    min-height: 36px;
-    margin-bottom: 14px;
     display: flex;
     flex-direction: column;
     gap: var(--gutter);
@@ -262,6 +271,11 @@ input+.help-text {
     overflow: hidden;
 }
 
+fieldset.separator {
+    padding: var(--box-margin);
+}
+
+
 fieldset.formbox {
     border: none;
     border-top: 1px solid var(--color-veryLightGray);
@@ -269,17 +283,31 @@ fieldset.formbox {
 
 label {
     display: block;
-    font-size: 12px;
-    line-height: 21px;
+    font-size: var(--font-size-0);
     width: 100%;
 }
 
-label+label {
-    margin-top: var(--box-margin);
+label textarea,
+label input[type="password"],
+label input[type="date"],
+label input[type="datetime-local"],
+label input[type="email"],
+label input[type="number"],
+label input[type="search"],
+label input[type="tel"],
+label input[type="time"],
+label input[type="file"],
+label input[type="url"],
+label input[type=text] {
+    margin-top: calc(var(--text-margin) / 2);
 }
 
 .content label {
     font-weight: bold;
+}
+
+label .icon-help {
+    margin-top: calc(var(--box-margin) * -1);
 }
 
 input[type="checkbox"]+label {
@@ -296,7 +324,7 @@ input+.error {
     background: var(--color-veryLightGray);
     color: var(--color-light);
     background-color: var(--color-red);
-    font-size: 11px;
+    font-size: var(--font-size--1);
     border-radius: 0 2px;
 }
 
@@ -339,7 +367,6 @@ details fieldset {
 details summary {
     cursor: pointer;
     background-color: var(--color-veryLightGray);
-    font-size: 0.9rem;
     padding: var(--small-box-padding);
 }
 
@@ -358,7 +385,6 @@ summary h4 {
 }
 
 fieldset legend {
-    font-size: .9rem;
     padding: 0 5px;
 }
 
@@ -383,7 +409,7 @@ fieldset.separator {
     background-color: var(--color-accent);
     color: var(--color-darkBlue);
     text-align: center;
-    font-size: .75rem;
+    font-size: var(--font-size--1);
     border-radius: 50%;
     content: attr(data-badge);
 }
@@ -479,7 +505,8 @@ input.switch[disabled]~label {
 
 .button-bar,
 .umap-multiplechoice {
-    margin-top: var(--box-margin);
+    margin-top: var(--text-margin);
+    margin-bottom: var(--text-margin);
     text-align: center;
     display: grid;
     width: 100%;
@@ -545,14 +572,17 @@ input.switch[disabled]~label {
     color: var(--color-darkGray);
 }
 
+.formbox.inheritable {
+    margin-bottom: 0;
+}
+
 .inheritable .header .buttons {
     padding: 0;
 }
 
 .inheritable .header {
-    margin-bottom: 5px;
     display: flex;
-    align-items: center;
+    align-items: baseline;
     align-content: center;
     justify-content: space-between;
 }
@@ -564,8 +594,7 @@ input.switch[disabled]~label {
 
 .inheritable+.inheritable {
     border-top: 1px solid var(--color-darkerGray);
-    padding-top: 5px;
-    margin-top: 5px;
+    padding-top: var(--box-margin);
 }
 
 .umap-field-iconUrl .action-button,
@@ -600,46 +629,6 @@ i.info {
 
 .dark i.info {
     background-image: url('../img/16-white.svg');
-}
-
-.umap-empty:before,
-.umap-to-polygon:before,
-.umap-clone:before,
-.umap-edit:before,
-.umap-download:before {
-    background-repeat: no-repeat;
-    text-indent: 36px;
-    height: 24px;
-    line-height: 24px;
-    display: inline-block;
-    background-image: url('../img/24.svg');
-    vertical-align: bottom;
-    content: " ";
-}
-
-.dark .umap-empty:before,
-.dark .umap-to-polygon:before,
-.dark .umap-clone:before,
-.dark .umap-edit:before,
-.dark .umap-download:before {
-    background-image: url('../img/24-white.svg');
-    vertical-align: middle;
-}
-
-.umap-to-polygon:before {
-    background-position: -72px -42px;
-}
-
-.umap-clone:before {
-    background-position: -144px -78px;
-}
-
-.umap-empty:before {
-    background-position: -108px -78px;
-}
-
-.umap-download:before {
-    background-position: -72px -78px;
 }
 
 .umap-field-datalist {
@@ -687,8 +676,8 @@ i.info {
     border-bottom: 2px solid var(--color-verySoftCyan);
 }
 
-.umap-pictogram-category h6 {
-    font-size: 1.3em;
+.umap-pictogram-category {
+    margin-top: calc(var(--text-margin) * 2);
 }
 
 .umap-pictogram-grid {
@@ -724,12 +713,6 @@ i.info {
 
 .umap-pictogram-choice.selected {
     box-shadow: inset 0 0 0 1px var(--color-lighterGray);
-}
-
-.umap-pictogram-choice .leaflet-marker-icon {
-    bottom: 0;
-    inset-inline-start: 30px;
-    position: absolute;
 }
 
 .umap-color-picker {

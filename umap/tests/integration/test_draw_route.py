@@ -9,7 +9,7 @@ def test_route_button_is_hidden(page, live_server, tilelayer, settings):
     expect(page.get_by_role("button", name="Draw along routes")).to_be_hidden()
 
 
-def test_draw_route(page, live_server, tilelayer, settings):
+def test_draw_route(page, live_server, tilelayer, settings, assert_screenshot):
     settings.OPENROUTESERVICE_APIKEY = "FOOBAR="
     cycling_response = {
         "type": "FeatureCollection",
@@ -155,24 +155,20 @@ def test_draw_route(page, live_server, tilelayer, settings):
         handle_car,
     )
     page.goto(f"{live_server.url}/en/map/new/#14/47.7591/2.4134")
-    expect(page.locator("path")).to_be_hidden()
-    expect(page.locator(".leaflet-vertex-icon")).to_be_hidden()
     page.get_by_role("button", name="Draw along routes").click()
     page.locator('select[name="profile"]').select_option("cycling-regular")
     page.get_by_role("button", name="OK").click()
     page.locator("#map").click(position={"x": 100, "y": 100})
     page.locator("#map").click(position={"x": 200, "y": 200})
     page.locator("#map").click(position={"x": 200, "y": 200})
-    expect(page.locator("path")).to_be_visible()
-    expect(page.locator(".leaflet-vertex-icon")).to_have_count(2)
+    assert_screenshot(page, suffix="by-bike", ui=False)
     page.get_by_text("Advanced actions").click()
     page.get_by_role("button", name="Transform to regular line").click()
-    expect(page.locator(".leaflet-vertex-icon")).to_have_count(32)
     page.get_by_text("Advanced actions").click()
+    expect(page.get_by_role("button", name="Restore route")).to_be_visible()
     page.get_by_role("button", name="Restore route").click()
-    expect(page.locator(".leaflet-vertex-icon")).to_have_count(2)
+    page.get_by_text("Advanced actions").click()
+    expect(page.get_by_role("button", name="Transform to regular line")).to_be_visible()
     page.locator('#edit-route select[name="profile"]').select_option("driving-car")
     page.get_by_role("button", name="Compute route").click()
-    page.get_by_text("Advanced actions").click()
-    page.get_by_role("button", name="Transform to regular line").click()
-    expect(page.locator(".leaflet-vertex-icon")).to_have_count(18)
+    assert_screenshot(page, suffix="by-car", ui=False)

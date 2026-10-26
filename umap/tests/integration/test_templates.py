@@ -13,7 +13,8 @@ def test_reuse_template_button(map, datalayer, page, live_server, context):
         page.get_by_text("Reuse this template").click()
     new_page = new_page_info.value
     expect(new_page.get_by_text("Reuse this template")).to_be_hidden()
-    expect(page.locator(".leaflet-marker-icon")).to_have_count(1)
+    page.get_by_title("Open browser").click()
+    expect(page.locator(".umap-browser .datalayer-counter")).to_have_text("(1)")
 
 
 def test_load_template_from_panel(map, datalayer, page, live_server):
@@ -26,7 +27,8 @@ def test_load_template_from_panel(map, datalayer, page, live_server):
     page.get_by_label("My Great Template").check()
     page.get_by_role("button", name="Load template with data").click()
     expect(page.get_by_text("My Great Template")).to_be_visible()
-    expect(page.locator(".leaflet-marker-icon")).to_have_count(1)
+    page.get_by_title("Open browser").click()
+    expect(page.locator(".umap-browser .datalayer-counter")).to_have_text("(1)")
 
 
 def test_load_template_without_data(map, datalayer, page, live_server):
@@ -41,4 +43,6 @@ def test_load_template_without_data(map, datalayer, page, live_server):
         "button", name="Load template", exact=True
     ).click()
     expect(page.get_by_text("My Great Template")).to_be_visible()
-    expect(page.locator(".leaflet-marker-icon")).to_have_count(0)
+    page.get_by_title("Open browser").click()
+    expect(page.locator(".umap-browser .datalayer")).to_have_count(1)
+    expect(page.locator(".umap-browser .datalayer-counter")).to_be_empty()

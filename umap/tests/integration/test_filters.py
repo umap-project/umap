@@ -118,7 +118,7 @@ DATALAYER_DATA_NATURAL_SORT = {
 }
 
 
-def test_simple_facet_search(live_server, page, map):
+def test_simple_facet_search(live_server, page, map, assert_screenshot):
     map.settings["properties"]["onLoadPanel"] = "datafilters"
     map.settings["properties"]["filters"] = [
         {"fieldKey": "mytype", "label": "My type"},
@@ -137,9 +137,6 @@ def test_simple_facet_search(live_server, page, map):
     panel = page.locator(".panel.left.on")
     expect(panel).to_have_class(re.compile(".*expanded.*"))
     expect(panel.locator(".umap-browser")).to_be_visible()
-    # From a non browsable datalayer, should not be impacted
-    paths = page.locator(".leaflet-overlay-pane path")
-    expect(paths).to_be_visible()
     expect(panel).to_be_visible()
     # Facet name
     expect(page.get_by_text("My type")).to_be_visible()
@@ -148,16 +145,10 @@ def test_simple_facet_search(live_server, page, map):
     odd = page.get_by_text("odd")
     expect(oven).to_be_visible()
     expect(odd).to_be_visible()
-    expect(paths).to_be_visible()
-    markers = page.locator(".leaflet-marker-icon")
-    expect(markers).to_have_count(4)
-    # Tooltips
-    # Sometimes PW founds two tooltips with the same name, but cannot reproduce it.
-    page.wait_for_timeout(300)
-    expect(page.get_by_role("tooltip", name="Point 1")).to_be_visible()
-    expect(page.get_by_role("tooltip", name="Point 2")).to_be_visible()
-    expect(page.get_by_role("tooltip", name="Point 3")).to_be_visible()
-    expect(page.get_by_role("tooltip", name="Point 4")).to_be_visible()
+    features = page.locator(".umap-browser li.feature")
+    expect(features).to_have_count(4)
+    # The polygon comes from a non browsable datalayer, so it is never filtered.
+    assert_screenshot(page, suffix="four-markers", ui=False)
 
     # Datalist
     expect(panel.get_by_text("Point 1")).to_be_visible()
@@ -167,20 +158,16 @@ def test_simple_facet_search(live_server, page, map):
 
     # Now let's filter
     odd.click()
-    expect(markers).to_have_count(2)
-    expect(page.get_by_role("tooltip", name="Point 2")).to_be_hidden()
-    expect(page.get_by_role("tooltip", name="Point 4")).to_be_hidden()
-    expect(page.get_by_role("tooltip", name="Point 1")).to_be_visible()
-    expect(page.get_by_role("tooltip", name="Point 3")).to_be_visible()
+    expect(features).to_have_count(2)
+    assert_screenshot(page, suffix="two-markers", ui=False)
     expect(panel.get_by_text("Point 2")).to_be_hidden()
     expect(panel.get_by_text("Point 4")).to_be_hidden()
     expect(panel.get_by_text("Point 1")).to_be_visible()
     expect(panel.get_by_text("Point 3")).to_be_visible()
-    expect(paths).to_be_visible
     # Now let's filter
     odd.click()
-    expect(markers).to_have_count(4)
-    expect(paths).to_be_visible()
+    expect(features).to_have_count(4)
+    assert_screenshot(page, suffix="four-markers", ui=False)
 
     # Let's filter using the number facet
     expect(page.get_by_text("My Number")).to_be_visible()
@@ -188,22 +175,24 @@ def test_simple_facet_search(live_server, page, map):
     expect(page.get_by_label("Max")).to_have_value("14")
     page.get_by_label("Min").fill("11")
     page.keyboard.press("Tab")  # Move out of the input, so the "change" event is sent
-    expect(markers).to_have_count(2)
-    expect(paths).to_be_visible()
+    expect(features).to_have_count(2)
+    assert_screenshot(page, suffix="two-markers", ui=False)
     page.get_by_label("Max").fill("13")
     page.keyboard.press("Tab")
-    expect(markers).to_have_count(1)
+    expect(features).to_have_count(1)
+    assert_screenshot(page, suffix="one-marker", ui=False)
 
     # Now let's combine
     page.get_by_label("Min").fill("10")
     page.keyboard.press("Tab")
-    expect(markers).to_have_count(3)
+    expect(features).to_have_count(3)
+    assert_screenshot(page, suffix="three-markers", ui=False)
     odd.click()
-    expect(markers).to_have_count(1)
-    expect(paths).to_be_visible()
+    expect(features).to_have_count(1)
+    assert_screenshot(page, suffix="one-marker", ui=False)
 
 
-def test_date_facet_search(live_server, page, map):
+def test_date_facet_search(live_server, page, map, assert_screenshot):
     map.settings["properties"]["onLoadPanel"] = "datafilters"
     map.settings["properties"]["filters"] = [
         {"fieldKey": "mydate", "label": "Date filter", "widget": "MinMax"}
@@ -213,18 +202,21 @@ def test_date_facet_search(live_server, page, map):
     DataLayerFactory(map=map, data=DATALAYER_DATA1)
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/47.5/-1.5")
-    markers = page.locator(".leaflet-marker-icon")
-    expect(markers).to_have_count(4)
+    features = page.locator(".umap-browser li.feature")
+    expect(features).to_have_count(4)
+    assert_screenshot(page, suffix="four-markers", ui=False)
     expect(page.get_by_text("Date Filter")).to_be_visible()
     expect(page.get_by_label("From")).to_have_value("2024-03-13")
     expect(page.get_by_label("Until")).to_have_value("2024-08-18")
     page.get_by_label("From").fill("2024-03-14")
-    expect(markers).to_have_count(3)
+    expect(features).to_have_count(3)
+    assert_screenshot(page, suffix="three-markers", ui=False)
     page.get_by_label("Until").fill("2024-08-17")
-    expect(markers).to_have_count(2)
+    expect(features).to_have_count(2)
+    assert_screenshot(page, suffix="two-markers", ui=False)
 
 
-def test_choice_with_empty_value(live_server, page, map):
+def test_choice_with_empty_value(live_server, page, map, assert_screenshot):
     map.settings["properties"]["onLoadPanel"] = "datafilters"
     map.settings["properties"]["fields"] = [{"key": "mytype", "type": "String"}]
     map.settings["properties"]["filters"] = [{"fieldKey": "mytype", "label": "My type"}]
@@ -236,13 +228,15 @@ def test_choice_with_empty_value(live_server, page, map):
     DataLayerFactory(map=map, data=DATALAYER_DATA2)
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/47.5/-1.5")
     expect(page.get_by_text("[empty value]")).to_be_visible()
-    markers = page.locator(".leaflet-marker-icon")
-    expect(markers).to_have_count(4)
+    features = page.locator(".umap-browser li.feature")
+    expect(features).to_have_count(4)
+    assert_screenshot(page, suffix="four-markers", ui=False)
     page.get_by_text("[empty value]").click()
-    expect(markers).to_have_count(2)
+    expect(features).to_have_count(2)
+    assert_screenshot(page, suffix="two-markers", ui=False)
 
 
-def test_choice_with_numbers(live_server, page, map):
+def test_choice_with_numbers(live_server, page, map, assert_screenshot):
     map.settings["properties"]["onLoadPanel"] = "datafilters"
     map.settings["properties"]["fields"] = [{"key": "mynumber", "type": "Number"}]
     map.settings["properties"]["filters"] = [
@@ -257,13 +251,16 @@ def test_choice_with_numbers(live_server, page, map):
     page.goto(f"{live_server.url}{map.get_absolute_url()}#6/47.5/-1.5")
     expect(page.get_by_text("[empty value]")).to_be_visible()
     expect(page.get_by_text("14")).to_be_visible()
-    markers = page.locator(".leaflet-marker-icon")
-    expect(markers).to_have_count(4)
+    features = page.locator(".umap-browser li.feature")
+    expect(features).to_have_count(4)
+    assert_screenshot(page, suffix="four-markers", ui=False)
     page.get_by_text("14", exact=True).click()
-    expect(markers).to_have_count(1)
+    expect(features).to_have_count(1)
+    assert_screenshot(page, suffix="one-marker", ui=False)
     page.get_by_text("14", exact=True).click()  # Unselect this filter.
     page.get_by_text("[empty value]", exact=True).click()
-    expect(markers).to_have_count(2)
+    expect(features).to_have_count(2)
+    assert_screenshot(page, suffix="two-markers", ui=False)
 
 
 def test_natural_sort_facet_search(live_server, page, map):
@@ -287,7 +284,7 @@ def test_natural_sort_facet_search(live_server, page, map):
     expect(choices.nth(2)).to_have_text("10")
 
 
-def test_number_with_zero_value(live_server, page, map):
+def test_number_with_zero_value(live_server, page, map, assert_screenshot):
     map.settings["properties"]["onLoadPanel"] = "datafilters"
     map.settings["properties"]["filters"] = [
         {"fieldKey": "mynumber", "label": "Filter", "widget": "MinMax"}
@@ -303,11 +300,14 @@ def test_number_with_zero_value(live_server, page, map):
     expect(page.get_by_label("Max")).to_have_value("14")
     page.get_by_label("Min").fill("1")
     page.keyboard.press("Tab")  # Move out of the input, so the "change" event is sent
-    markers = page.locator(".leaflet-marker-icon")
-    expect(markers).to_have_count(3)
+    features = page.locator(".umap-browser li.feature")
+    expect(features).to_have_count(3)
+    assert_screenshot(page, suffix="three-markers", ui=False)
 
 
-def test_facets_search_are_persistent_when_closing_panel(live_server, page, map):
+def test_facets_search_are_persistent_when_closing_panel(
+    live_server, page, map, assert_screenshot
+):
     map.settings["properties"]["onLoadPanel"] = "datafilters"
     map.settings["properties"]["filters"] = [
         {"fieldKey": "mytype", "label": "My type"},
@@ -325,8 +325,9 @@ def test_facets_search_are_persistent_when_closing_panel(live_server, page, map)
 
     # Facet values
     odd = page.get_by_label("odd")
-    markers = page.locator(".leaflet-marker-icon")
-    expect(markers).to_have_count(4)
+    features = page.locator(".umap-browser li.feature")
+    expect(features).to_have_count(4)
+    assert_screenshot(page, suffix="four-markers", ui=False)
 
     # Datalist in the browser
     expect(panel.get_by_text("Point 1")).to_be_visible()
@@ -338,7 +339,8 @@ def test_facets_search_are_persistent_when_closing_panel(live_server, page, map)
     odd.click()
     expect(page.locator(".filters summary")).to_have_attribute("data-badge", " ")
     expect(page.locator(".umap-control-browse")).to_have_attribute("data-badge", " ")
-    expect(markers).to_have_count(2)
+    expect(features).to_have_count(2)
+    assert_screenshot(page, suffix="two-markers", ui=False)
     expect(panel.get_by_text("Point 2")).to_be_hidden()
     expect(panel.get_by_text("Point 4")).to_be_hidden()
     expect(panel.get_by_text("Point 1")).to_be_visible()
@@ -350,7 +352,8 @@ def test_facets_search_are_persistent_when_closing_panel(live_server, page, map)
     page.get_by_label("Min").fill("13")
     page.keyboard.press("Tab")  # Move out of the input, so the "change" event is sent
     expect(panel.get_by_label("Min")).to_have_attribute("data-modified", "true")
-    expect(markers).to_have_count(1)
+    expect(features).to_have_count(1)
+    assert_screenshot(page, suffix="one-marker", ui=False)
     expect(panel.get_by_text("Point 2")).to_be_hidden()
     expect(panel.get_by_text("Point 4")).to_be_hidden()
     expect(panel.get_by_text("Point 1")).to_be_hidden()
@@ -364,6 +367,7 @@ def test_facets_search_are_persistent_when_closing_panel(live_server, page, map)
     expect(panel.get_by_label("Min")).to_have_value("13")
     expect(panel.get_by_label("Min")).to_have_attribute("data-modified", "true")
     expect(panel.get_by_label("odd")).to_be_checked()
+    assert_screenshot(page, suffix="one-marker", ui=False)
 
     # Datalist in the browser should be inchanged
     expect(panel.get_by_text("Point 2")).to_be_hidden()
@@ -627,7 +631,7 @@ def test_can_edit_filter_from_panel(live_server, page, openmap):
     ).to_be_visible()
 
 
-def test_filter_with_enum(live_server, openmap, page):
+def test_filter_with_enum(live_server, openmap, page, assert_screenshot):
     data = {
         "type": "FeatureCollection",
         "features": [
@@ -672,13 +676,18 @@ def test_filter_with_enum(live_server, openmap, page):
     expect(
         page.locator(".umap-browser .filters span").filter(has_text="products")
     ).to_be_visible()
-    markers = page.locator(".leaflet-marker-icon")
-    expect(markers).to_have_count(3)
+    features = page.locator(".umap-browser li.feature")
+    expect(features).to_have_count(3)
+    assert_screenshot(page, suffix="three-markers", ui=False)
     page.get_by_role("checkbox", name="bread").check()
-    expect(markers).to_have_count(2)
+    expect(features).to_have_count(2)
+    assert_screenshot(page, suffix="two-markers", ui=False)
     page.get_by_role("checkbox", name="bread").uncheck()
-    expect(markers).to_have_count(3)
+    expect(features).to_have_count(3)
+    assert_screenshot(page, suffix="three-markers", ui=False)
     page.get_by_role("checkbox", name="vegetable").check()
-    expect(markers).to_have_count(3)
+    expect(features).to_have_count(3)
+    assert_screenshot(page, suffix="three-markers", ui=False)
     page.get_by_role("checkbox", name="milk").check()
-    expect(markers).to_have_count(1)
+    expect(features).to_have_count(1)
+    assert_screenshot(page, suffix="one-marker", ui=False)

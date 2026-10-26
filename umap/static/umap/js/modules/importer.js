@@ -1,10 +1,10 @@
 import { Alert } from '../components/alerts/alert.js'
+import * as DOMUtils from './domutils.js'
+import * as GeoUtils from './geoutils.js'
 import { translate } from './i18n.js'
 import { SCHEMA } from './schema.js'
 import Dialog from './ui/dialog.js'
 import * as Utils from './utils.js'
-import * as DOMUtils from './domutils.js'
-import * as GeoUtils from './geoutils.js'
 
 const TEMPLATE = `
   <div class="umap-import">
@@ -336,13 +336,16 @@ export default class Importer extends Utils.WithTemplate {
       layer.properties.remoteData.proxy = true
       layer.properties.remoteData.ttl = SCHEMA.ttl.default
     }
-    layer.fetchRemoteData(true).then((features) => {
-      if (features?.length) {
-        layer.zoomTo()
-        this.onSuccess()
-      } else {
-        this.onError()
-      }
+    // Make sure the layer is visible (proxy.createLayer is async)
+    layer.show().then(() => {
+      layer.fetchRemoteData(true).then((features) => {
+        if (features?.length) {
+          layer.zoomTo()
+          this.onSuccess()
+        } else {
+          this.onError()
+        }
+      })
     })
   }
 
@@ -393,7 +396,7 @@ export default class Importer extends Utils.WithTemplate {
         bounds = GeoUtils.unionBbox(bounds, feature.bounds)
       }
       this.onSuccess(features.length)
-      layer.zoomToBounds(bounds)
+      this.app.fire('map:view:fit', { bounds })
     }
   }
 }

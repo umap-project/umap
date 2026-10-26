@@ -67,27 +67,37 @@ def test_dynamic_remote_data(page, live_server, tilelayer, map):
 
     page.goto(f"{live_server.url}{map.get_absolute_url()}")
 
-    expect(page.get_by_role("tooltip", name="Point 1")).to_be_visible()
+    layers = page.locator(".umap-browser .datalayer")
+    title = page.locator(".umap-browser .feature-title")
+    page.get_by_title("Open browser").click()
+    expect(page.locator(".umap-browser .datalayer-counter")).to_have_text("(1)")
+    layers.first.click()
+    expect(title).to_have_text("Point 1")
+    # Close it to free the map area for the drag.
+    page.locator(".panel.left").get_by_title("Close").click()
 
-    # Now drag the map
-    map_el = page.locator("#map")
-    map_el.drag_to(
-        map_el,
-        source_position={"x": 100, "y": 100},
-        target_position={"x": 110, "y": 110},
-    )
+    # Simulate a drag that OL understands.
+    box = page.locator("#map").bounding_box()
+    cx, cy = box["x"] + box["width"] / 2, box["y"] + box["height"] / 2
+    with page.expect_response(re.compile(r"remote\.org/data\.json")):
+        page.mouse.move(cx, cy)
+        page.mouse.down()
+        page.mouse.move(cx - 60, cy - 60, steps=10)
+        page.mouse.up()
 
-    expect(page.get_by_role("tooltip", name="Point 2")).to_be_visible()
-    # Needed otherwise it found two (!) tooltip with name "Point 1"…
-    page.wait_for_timeout(300)
-    expect(page.get_by_role("tooltip", name="Point 1")).to_be_hidden()
+    page.get_by_title("Open browser").click()
+    expect(page.locator(".umap-browser .datalayer-counter")).to_have_text("(1)")
+    layers.first.click()
+    expect(title).to_have_text("Point 2")
 
     # Map must not be dirty
     page.get_by_role("button", name="Edit").click()
     expect(page.locator(".edit-undo")).to_be_disabled()
 
 
-def test_create_remote_data_layer(page, live_server, tilelayer, settings):
+def test_create_remote_data_layer(
+    page, live_server, tilelayer, settings, assert_screenshot
+):
     settings.UMAP_ALLOW_ANONYMOUS = True
     intercept_remote_data(page)
     page.goto(f"{live_server.url}/en/map/new#6/11.2707/4.3375")
@@ -98,9 +108,18 @@ def test_create_remote_data_layer(page, live_server, tilelayer, settings):
     # We have a setTimeout on each input to throttle, so wait for it
     page.wait_for_timeout(300)
     page.locator('select[name="format"]').select_option("geojson")
-    # with page.expect_response(re.compile("https://remote.org/data.json")):
     page.get_by_role("button", name="Verify remote URL").click()
-    expect(page.locator(".leaflet-marker-icon")).to_have_count(1)
+    # The icon is drawn on the canvas; check the loaded feature via the browser.
+    page.get_by_title("Open browser").click()
+    expect(page.locator(".umap-browser .datalayer-counter")).to_have_text("(1)")
+
+    # Visual check that the marker is actually drawn on the canvas.
+    page.get_by_title("zoom to data extent").click()
+    page.locator(".panel.left").get_by_title("Close").click()
+    assert_screenshot(
+        page, suffix="marker", clip={"x": 560, "y": 260, "width": 160, "height": 200}
+    )
+
     with page.expect_response(re.compile(".*/datalayer/create/.*")):
         page.get_by_role("button", name="Save draft", exact=True).click()
     assert DataLayer.objects.count() == 1
