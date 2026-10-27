@@ -67,7 +67,7 @@ buildjs: ## Build the javascript assets
 buildpy: ## Build the Python package before release
 	@uv run hatch build --clean
 
-build: buildjd buildpy ## Build the package (JS + Python)
+build: buildjs buildpy ## Build the package (JS + Python)
 
 .PHONY: publish
 publish: ## Publish the Python package to Pypi

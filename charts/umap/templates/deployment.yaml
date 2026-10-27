@@ -82,6 +82,8 @@ spec:
               readOnly: true
             - name: statics
               mountPath: /srv/umap/static
+            - name: proxy-cache
+              mountPath: /srv/umap/proxy-cache
           {{- if .Values.persistence.enabled }}
             - name: data
               mountPath: /srv/umap/uploads/
@@ -132,6 +134,8 @@ spec:
           configMap:
             name: {{ include "umap.fullname" . }}-nginx-config
         - name: statics
+          emptyDir: {}
+        - name: proxy-cache
           emptyDir: {}
       {{- if .Values.persistence.enabled }}
         - name: data

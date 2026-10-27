@@ -85,6 +85,8 @@ umap:
       value: /srv/umap/static
     - name: MEDIA_ROOT
       value: /srv/umap/uploads
+    - name: AJAX_PROXY_CACHE_DIR
+      value: /srv/umap/proxy-cache
   # Configure environment variables using an existing secret in the same namespace.
   envFromSecret: null
 

@@ -87,6 +87,9 @@ sync = [
 [project.scripts]
 umap = "umap.bin:main"
 
+[tool.hatch.build]
+artifacts = ["umap/static/umap/dist/"]
+
 [tool.hatch.build.targets.sdist]
 include = [
   "/umap",

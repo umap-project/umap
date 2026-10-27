@@ -1,3 +1,20 @@
+# This part bundles the JS and CSS assets.
+FROM node:24-slim AS assets
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        git \
+        ca-certificates
+
+WORKDIR /srv/umap
+
+COPY package.json /srv/umap/
+RUN npm install
+
+COPY scripts/ /srv/umap/scripts/
+COPY umap/static/ /srv/umap/umap/static/
+RUN npm run build:prod
+
 # This part installs deps needed at runtime.
 FROM python:3.12-slim AS common
 
@@ -37,6 +54,7 @@ RUN python -m venv /venv
 WORKDIR /srv/umap
 
 COPY . /srv/umap
+COPY --from=assets /srv/umap/umap/static/umap/dist/ /srv/umap/umap/static/umap/dist/
 
 RUN /venv/bin/pip install .[deploy,s3,sync]
 

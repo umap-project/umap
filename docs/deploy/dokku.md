@@ -4,7 +4,7 @@ You must have a Dokku host up and running. This can be either self hosted, or fr
 
 To set up Dokku on your own server, see https://dokku.com/docs/getting-started/installation/
 
-Dokku has several deployement method, in this guide we'll use the Docker based one, using our [maintained Dockerfile](docker.md).
+Dokku has several deployment methods, in this guide we'll use the Docker based one, using our [maintained Dockerfile](docker.md).
 
 ## Installation
 
@@ -19,7 +19,7 @@ sudo dokku plugin:install https://github.com/dokku/dokku-redis.git --name redis
 
 Note: if you do not use the real time collaboration feature, you can skip the redis part.
 
-Create the `umap` app (or name it as you prefer), and posgis and redis services:
+Create the `umap` app (or name it as you prefer), and postgis and redis services:
 
 ```bash
 dokku apps:create umap
@@ -29,14 +29,25 @@ dokku redis:create umap
 dokku redis:link umap umap
 ```
 
-Create a folder for user data (mainly layers) and static files:
+Create a folder for user data (mainly layers), static files and the ajax proxy cache:
 
 ```bash
 sudo mkdir /var/lib/dokku/data/storage/umap-data
 dokku storage:mount umap /var/lib/dokku/data/storage/umap-data:/srv/umap/uploads
 sudo mkdir /var/lib/dokku/data/storage/umap-static
 dokku storage:mount umap /var/lib/dokku/data/storage/umap-static:/srv/umap/static
+sudo mkdir /var/lib/dokku/data/storage/umap-proxy-cache
+dokku storage:mount umap /var/lib/dokku/data/storage/umap-proxy-cache:/srv/umap/proxy-cache
 ```
+
+The proxy cache is never purged automatically, so schedule its cleanup, for
+example in the host crontab:
+
+```
+0 3 * * * dokku run umap umap clear_proxy_cache
+```
+
+See [AJAX_PROXY_CACHE_DIR](../config/settings.md#ajax_proxy_cache_dir).
 
 Expose the app to the Internet and add a SSL certificate:
 
@@ -56,6 +67,8 @@ Configure via env vars:
 
 ```bash
 dokku config:set --no-restart umap SECRET_KEY=something-random-and-unique
+dokku config:set --no-restart umap AJAX_PROXY_CACHE_DIR=/srv/umap/proxy-cache
+dokku config:set --no-restart umap SOCIAL_AUTH_REDIRECT_IS_HTTPS=1
 ```
 
 ### Nginx configuration
@@ -76,12 +89,40 @@ map $http_upgrade $connection_upgrade {
 
 Other need to be integrated in the `server` section.
 
-So, create a file at `/home/dokku/umap/nginx.conf.d/umap.conf`, with this content, but
-adapt the `alias` to match the volumes created above (`/static/` => `/var/lib/dokku/data/storage/umap-static`,
-`/data/` => `/var/lib/dokku/data/storage/umap-data`):
+So, create a file at `/home/dokku/umap/nginx.conf.d/umap.conf`, pointing to
+the volumes created above:
 
-```nginx title="umap.conf"
---8<-- "docker/umap-snippet.conf"
+```bash
+sudo -u dokku mkdir -p /home/dokku/umap/nginx.conf.d
+sudo -u dokku tee /home/dokku/umap/nginx.conf.d/umap.conf <<'EOF'
+location /static/ {
+    alias /var/lib/dokku/data/storage/umap-static/;
+    gzip on;
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_types text/plain application/javascript application/x-javascript text/javascript text/xml text/css;
+    expires 365d;
+    access_log /dev/null;
+}
+
+location /uploads/ {
+    alias /var/lib/dokku/data/storage/umap-data/;
+    expires 30d;
+}
+
+location /favicon.ico {
+    alias /var/lib/dokku/data/storage/umap-static/favicon.ico;
+}
+
+location /internal/ {
+    internal;
+    gzip_vary on;
+    gzip_static on;
+    add_header X-DataLayer-Version $upstream_http_x_datalayer_version;
+    alias /var/lib/dokku/data/storage/umap-data/;
+}
+EOF
+sudo nginx -t && sudo systemctl reload nginx
 ```
 
 ### OAuth configuration
@@ -105,8 +146,7 @@ And get the client key and secret and set them in Dokku like this:
 
 ```bash
 dokku config:set --no-restart umap SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_KEY=somekey
-dokku config:set --no-restart umap SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_SECRET=somesecret
-dokku config:set umap SOCIAL_AUTH_REDIRECT_IS_HTTPS=1
+dokku config:set umap SOCIAL_AUTH_OPENSTREETMAP_OAUTH2_SECRET=somesecret
 ```
 
 ### More settings
