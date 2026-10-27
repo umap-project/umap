@@ -3,8 +3,9 @@
     flex-flow: column nowrap;
     height: 100%;
     background-color: var(--background-color);
-    padding: var(--medium-box-padding);
-    width: 300px;
+    padding: var(--box-padding);
+    width: 340px;
+    border-radius: var(--border-radius);
 }
 .umap-popup:after, .umap-popup:before {
     top: 100%;
@@ -119,6 +120,12 @@ address span {
 
 .umap-popup.window .buttons {
     padding: 0;
+    margin-top: calc(var(--box-padding) * -1);
+    margin-right: calc(var(--box-padding) * -1);
+    border-radius: var(--border-radius);
+}
+.umap-popup.window .buttons li {
+    border: none;
 }
 
 @media all and (max-width: 480px) {
