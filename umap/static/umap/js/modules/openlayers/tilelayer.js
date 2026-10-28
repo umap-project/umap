@@ -34,9 +34,19 @@ export default class TileLayerManager {
   }
 
   async create(spec) {
+    const opacity = Number.parseFloat(spec.opacity)
+    const options = {
+      name: spec.name,
+      opacity: Number.isFinite(opacity) ? opacity : 1,
+      // Keep it to serialize back to JSON for saving it to the back.
+      spec: { ...spec },
+    }
     if (spec.is_vector) {
-      const { apply } = await import('ol-mapbox-style')
-      const vectorlayer = new LayerGroup({ name: spec.name, spec: { ...spec } })
+      const [{ apply }] = await Promise.all([
+        import('ol-mapbox-style'),
+        import('./pmtiles.js'),
+      ])
+      const vectorlayer = new LayerGroup(options)
       apply(vectorlayer, spec.url_template)
       return vectorlayer
     }
@@ -44,6 +54,7 @@ export default class TileLayerManager {
     const url = spec.url_template
       .replace('{s}', '{a-c}')
       .replace('{r}', retina ? '@2x' : '')
+      .replace('{y}', spec.tms ? '{-y}' : '{y}')
     const [{ default: XYZ }, { default: TileLayer }] = await Promise.all([
       import('ol/source/XYZ.js'),
       import('ol/layer/Tile.js'),
@@ -55,15 +66,13 @@ export default class TileLayerManager {
       crossOrigin: 'anonymous',
     })
     return new TileLayer({
+      ...options,
       source,
       rank: spec.rank,
-      name: spec.name,
       url,
       zIndex: -1,
       minZoom: spec.minZoom,
       maxZoom: spec.maxZoom,
-      // Keep it to serialize back to JSON for saving it to the back.
-      spec: { ...spec },
     })
   }
 
