@@ -136,13 +136,17 @@ export function createClusterLayer(source, zIndexOffset) {
       feature.getGeometry().getType() === 'Point' ? feature.getGeometry() : null,
     createCluster: (geometry, features) => {
       const member = features.length === 1 ? features[0] : undefined
-      return new Feature({
+      const newFeature = new Feature({
         geometry,
         features,
         represents: member,
         interactive: member ? member.get('interactive') : true,
         editable: member?.get('editable') ?? false,
       })
+      for (const feature of features) {
+        feature.represented = newFeature
+      }
+      return newFeature
     },
   })
   const layer = new VectorLayer({ source: clustered, zIndexOffset, editable: true })
