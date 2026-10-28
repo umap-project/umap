@@ -54,6 +54,7 @@ export default class TileLayerManager {
     const url = spec.url_template
       .replace('{s}', '{a-c}')
       .replace('{r}', retina ? '@2x' : '')
+      .replace('{y}', spec.tms ? '{-y}' : '{y}')
     const [{ default: XYZ }, { default: TileLayer }] = await Promise.all([
       import('ol/source/XYZ.js'),
       import('ol/layer/Tile.js'),
