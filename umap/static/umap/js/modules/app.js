@@ -409,8 +409,7 @@ export default class App extends Utils.WithEvents {
   async initDrop() {
     if (!this.drop) {
       const DropControl = (await import('./drop.js')).default
-      // The dropzone must be the canvas for Firefox.
-      this.drop = new DropControl(this, this.mapProxy.container.querySelector('canvas'))
+      this.drop = new DropControl(this, this.mapProxy.container)
     }
     return this.drop
   }
