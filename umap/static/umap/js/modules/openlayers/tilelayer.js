@@ -35,7 +35,10 @@ export default class TileLayerManager {
 
   async create(spec) {
     if (spec.is_vector) {
-      const { apply } = await import('ol-mapbox-style')
+      const [{ apply }] = await Promise.all([
+        import('ol-mapbox-style'),
+        import('./pmtiles.js'),
+      ])
       const vectorlayer = new LayerGroup({ name: spec.name, spec: { ...spec } })
       apply(vectorlayer, spec.url_template)
       return vectorlayer
