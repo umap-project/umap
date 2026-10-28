@@ -46,3 +46,11 @@ def test_caption_should_display_team_as_author(live_server, page, map, team):
     expect(panel).to_be_visible()
     expect(panel.get_by_text("By Gabriel")).to_be_hidden()
     expect(panel.get_by_text("By Awesome Team")).to_be_visible()
+
+
+def test_caption_bar_should_display_map_name(live_server, page, map):
+    map.settings["properties"]["captionBar"] = True
+    map.settings["properties"]["onLoadPanel"] = "none"
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page.locator(".umap-caption-bar .map-name")).to_have_text(map.name)
