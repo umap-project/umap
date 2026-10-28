@@ -1123,6 +1123,10 @@ export default class App extends Utils.WithEvents {
         },
       ],
       ['properties.overlay.tms', { handler: 'Switch', label: translate('TMS format') }],
+      [
+        'properties.overlay.is_vector',
+        { handler: 'Switch', label: translate('Vector tiles style') },
+      ],
     ]
     const overlay = DOMUtils.createFieldset(container, translate('Custom overlay'))
     const builder = new MutatingForm(this, overlayFields, { app: this })
