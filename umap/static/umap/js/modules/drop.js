@@ -24,8 +24,12 @@ export default class DropControl {
     this.controller.abort()
   }
 
+  hasFiles(event) {
+    return event.dataTransfer.types.includes('Files')
+  }
+
   dragenter(event) {
-    if (event.target !== this.dropzone) return false
+    if (!this.hasFiles(event)) return false
     event.stopPropagation()
     event.preventDefault()
     this.dropzone.classList.add('umap-dragover')
@@ -37,7 +41,7 @@ export default class DropControl {
   }
 
   drop(event) {
-    if (event.target !== this.dropzone) return false
+    if (!this.hasFiles(event)) return false
     this.dropzone.classList.remove('umap-dragover')
     event.stopPropagation()
     event.preventDefault()
