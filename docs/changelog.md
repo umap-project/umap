@@ -1,9 +1,24 @@
 # Changelog
 
-## 4.0.0 - work in progress
+## 4.0.0-alpha-0 - 2026-10-29
 
-### Breaking changes:
-- heat maps render differently (different algorithms)
+This version is about switching from Leaflet to OpenLayers as rendering engine.
+The aim is to stay at constant perimeter, but expect some glitches here and there,
+if not bugs.
+
+* switching to OpenLayers by @yohanboniface in #3441
+* fix race in tableeditor when editing from a cell by @yohanboniface in #3481
+* hide deleted and blocked maps from team pages by @bensynapse in #3496
+* add CORS headers to MapDownload by @dschep in #3497
+* add missing logo for the OIDC login provider by @LorenzBischof in #3499
+* import KML MultiGeometry of polygons or lines as a single feature by @monsterlag in #3505
+
+### New Contributors
+* @bensynapse made their first contribution in #3496
+* @dschep made their first contribution in #3497
+* @LorenzBischof made their first contribution in #3499
+* @monsterlag made their first contribution in #3505
+
 
 ## 3.8.1 - 2026-08-19
 
