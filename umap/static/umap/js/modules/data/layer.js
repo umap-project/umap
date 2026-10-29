@@ -645,14 +645,16 @@ export class DataLayer {
   }
 
   async importRaw(raw, format) {
+    this.journal.startBatch()
+    const data = await this.addRaw(raw, format)
+    this.journal.commitBatch()
+    return data
+  }
+
+  async addRaw(raw, format) {
     return this.app.formatter
       .parse(raw, format)
-      .then(async (geojson) => {
-        this.journal.startBatch()
-        const data = await this.addData(geojson)
-        this.journal.commitBatch()
-        return data
-      })
+      .then((geojson) => this.addData(geojson))
       .catch((error) => {
         console.debug(error)
         Alert.error(translate('Import failed: invalid data'))
@@ -668,20 +670,14 @@ export class DataLayer {
   }
 
   async importFromFiles(files, type) {
-    const toLoad = []
-    for (const file of files) {
-      toLoad.push(this.importFromFile(file, type))
-    }
-    const features = await Promise.all(toLoad)
-    return new Promise((resolve) => {
-      resolve([].concat(...features))
-    })
-  }
-
-  async importFromFile(file, type) {
-    type = type || Utils.detectFileType(f)
-    const raw = await this.readFile(file)
-    return this.importRaw(raw, type)
+    this.journal.startBatch()
+    const features = await Promise.all(
+      Array.from(files, async (file) =>
+        this.addRaw(await this.readFile(file), type || Utils.detectFileType(file))
+      )
+    )
+    this.journal.commitBatch()
+    return features.filter(Boolean).flat()
   }
 
   async importFromUrl(uri, type) {

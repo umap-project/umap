@@ -366,7 +366,7 @@ export default class Importer extends Utils.WithTemplate {
     } else if (this.url) {
       promise = layer.importFromUrl(this.url, this.format)
     }
-    if (promise) promise.then((data) => this.onCopyFinished(layer, data))
+    if (promise) promise.then((features) => this.onCopyFinished(layer, features))
   }
 
   onError(message = translate('No data has been found for import')) {

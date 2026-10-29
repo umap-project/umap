@@ -1865,7 +1865,7 @@ export default class App extends Utils.WithEvents {
         const properties = { name: file.name }
         layer = this.createDataLayer({ properties })
       }
-      layer.importFromFile(file, type)
+      layer.importFromFiles([file], type)
     }
   }
 
