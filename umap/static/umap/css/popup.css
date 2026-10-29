@@ -6,6 +6,7 @@
     padding: var(--box-padding);
     width: 340px;
     border-radius: var(--border-radius);
+    box-shadow: var(--block-shadow);
 }
 .umap-popup:after, .umap-popup:before {
     top: 100%;
