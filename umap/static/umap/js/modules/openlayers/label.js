@@ -42,11 +42,11 @@ export function makeLabel(label, zIndex) {
   if (!label?.text || label.show !== true) return null
   const text = new TextStyle({
     text: label.text,
-    font: `12px ${FONT_FAMILY}`,
+    font: `13px ${FONT_FAMILY}`,
     fill: new Fill({ color: '#333' }),
     backgroundFill: new Fill({ color: '#fff' }),
     backgroundStroke: new Stroke({ color: 'rgba(0, 0, 0, 0.15)', width: 1 }),
-    padding: [3, 6, 3, 6],
+    padding: [6, 6, 6, 6],
     overflow: true,
     ...placement(label.direction),
   })
