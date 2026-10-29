@@ -210,7 +210,7 @@ export class TopBar extends WithTemplate {
 
 const BOTTOM_BAR_TEMPLATE = `
   <div class="umap-caption-bar">
-    <h5 class="map-name" data-ref="name"></h5>
+    <h5 class="map-name"></h5>
     <span data-ref="author"></span>
     <button class="umap-about-link flat" type="button" title="${translate('Open caption')}" data-ref="caption">${translate('Open caption')}</button>
     <button class="umap-open-browser-link flat" type="button" title="${translate('Browse data')}" data-ref="browse">${translate('Browse data')}</button>
@@ -259,6 +259,7 @@ export class BottomBar extends WithTemplate {
       }
     })
     this.ready = true
+    this.redraw()
   }
 
   redraw() {
@@ -268,7 +269,6 @@ export class BottomBar extends WithTemplate {
     document.body.classList.toggle('umap-caption-bar-enabled', barEnabled)
     document.body.classList.toggle('umap-slideshow-enabled', hasSlideshow)
     if (!barEnabled) return
-    this.elements.name.textContent = this.app.getDisplayName()
     const showMenus = this.app.getProperty('captionMenus')
     this.elements.caption.hidden = !showMenus
     this.elements.browse.hidden = !showMenus
