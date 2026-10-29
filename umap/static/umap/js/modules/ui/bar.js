@@ -259,7 +259,6 @@ export class BottomBar extends WithTemplate {
       }
     })
     this.ready = true
-    this.redraw()
   }
 
   redraw() {
@@ -275,6 +274,7 @@ export class BottomBar extends WithTemplate {
     this.elements.filter.hidden = !showMenus || !this.app.hasFilters()
     this.buildDataLayerSwitcher()
     this.parent.appendChild(this.element)
+    this.app.propagate([], this.element)
   }
 
   buildDataLayerSwitcher() {
