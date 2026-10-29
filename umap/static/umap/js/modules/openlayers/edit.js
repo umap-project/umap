@@ -4,7 +4,6 @@ import MultiPolygon from 'ol/geom/MultiPolygon.js'
 import DoubleClickZoom from 'ol/interaction/DoubleClickZoom.js'
 import Draw from 'ol/interaction/Draw.js'
 import Modify from 'ol/interaction/Modify.js'
-import Select from 'ol/interaction/Select.js'
 import Snap from 'ol/interaction/Snap.js'
 import Translate from 'ol/interaction/Translate.js'
 import { unByKey } from 'ol/Observable.js'
@@ -68,7 +67,6 @@ export default class Editor {
 
   disable() {
     unByKey(this.listeners)
-    this.map.removeInteraction(this.select)
     this.map.removeInteraction(this.translate)
     for (const { modify, snap } of this.watched.values()) {
       this.map.removeInteraction(modify)
@@ -77,23 +75,7 @@ export default class Editor {
   }
 
   enable() {
-    // Do not allow to select spiderfied "false" markers (they are recreated at each
-    // spiderfy, and this would activate the translate, which we do not want).
-    const selectable = (feature) =>
-      feature.get('editable') && !feature.get('represents')
-    // Style: null, so select do not duplicate the highlighted style.
-    // Shift means "edit this feature" in uMap, not OL's default "toggle selection".
-    this.select = new Select({
-      style: null,
-      filter: selectable,
-      toggleCondition: never,
-    })
-    this.map.addInteraction(this.select)
-    this.select.on('select', (event) => {
-      this.proxy.restyle([...event.selected, ...event.deselected])
-    })
-
-    this.translate = new Translate({ features: this.select.getFeatures() })
+    this.translate = new Translate({ features: this.proxy.select.getFeatures() })
     this.map.addInteraction(this.translate)
     this.translate.on('translatestart', () => this.proxy.hideOverlays())
     this.translate.on('translateend', (event) => {
