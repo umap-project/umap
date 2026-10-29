@@ -49,7 +49,7 @@ dev = [
   "Django==6.0.8",
   "django-debug-toolbar==7.0.0",
   "hatch==1.18.0",
-  "ruff==0.16.4",
+  "ruff==0.17.2",
   "djlint==1.44.2",
   "mkdocs==1.6.1",
   "mkdocs-material==9.7.7",
