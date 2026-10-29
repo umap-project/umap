@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-02 15:00+0000\n"
+"POT-Creation-Date: 2026-10-29 15:49+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Štefan Baebler <stefan.baebler@gmail.com>, 2019\n"
 "Language-Team: Slovenian (http://app.transifex.com/openstreetmap/umap/language/sl/)\n"
@@ -24,15 +24,15 @@ msgstr ""
 msgid "CSV Export"
 msgstr ""
 
-#: decorators.py:60
+#: decorators.py:70
 msgid "This map is not publicly available"
 msgstr ""
 
-#: middleware.py:19
+#: middleware.py:42
 msgid "Site is readonly for maintenance"
 msgstr "Zaradi vzdrževanja je strežnik na voljo samo za ogled."
 
-#: middleware.py:34
+#: middleware.py:57
 #, python-format
 msgid ""
 "Using “%(name)s” to authenticate is deprecated and will be removed soon. "
@@ -44,7 +44,7 @@ msgstr ""
 msgid "name"
 msgstr "ime"
 
-#: models.py:63 models.py:510
+#: models.py:63 models.py:539
 msgid "description"
 msgstr "opis"
 
@@ -64,200 +64,216 @@ msgstr "Predloga naslova URL z uporabo zapisa OSM."
 msgid "Order of the tilelayers in the edit box"
 msgstr "Vrstni red plasti v urejevalniku"
 
-#: models.py:176 models.py:503
+#: models.py:133
+msgid "This URL points to a vector style"
+msgstr ""
+
+#: models.py:179 models.py:532
 msgid "Only editable with secret edit link"
 msgstr "Urejanje je mogoče le prek posebne skrivne povezave"
 
-#: models.py:177 models.py:504
+#: models.py:180 models.py:533
 msgid "Everyone can edit"
 msgstr "Vsakdo lahko ureja"
 
-#: models.py:180 models.py:497
+#: models.py:183 models.py:526
 msgid "Everyone"
 msgstr ""
 
-#: models.py:181 models.py:190 models.py:498
+#: models.py:184 models.py:193 models.py:527
 msgid "Editors and team only"
 msgstr ""
 
-#: models.py:182 models.py:499
+#: models.py:185 models.py:528
 msgid "Owner only"
 msgstr ""
 
-#: models.py:185
+#: models.py:188
 msgid "Draft (private)"
 msgstr ""
 
-#: models.py:186
+#: models.py:189
 msgid "Everyone (public)"
 msgstr ""
 
-#: models.py:189
+#: models.py:192
 msgid "Anyone with link"
 msgstr ""
 
-#: models.py:191
+#: models.py:194
 msgid "Blocked"
 msgstr ""
 
-#: models.py:192 models.py:493
+#: models.py:195 models.py:522
 msgid "Deleted"
 msgstr ""
 
-#: models.py:195
+#: models.py:198
 msgid "center"
 msgstr "središče"
 
-#: models.py:196
+#: models.py:199
 msgid "zoom"
 msgstr "približaj"
 
-#: models.py:198
+#: models.py:201
 msgid "locate"
 msgstr "določi mesto"
 
-#: models.py:198
+#: models.py:201
 msgid "Locate user on load?"
 msgstr "Al naj se ob zagonu določi trenutno mesto uporabnika?"
 
-#: models.py:202
+#: models.py:205
 msgid "Choose the map licence."
 msgstr "Izbor dovoljenja za zemljevid."
 
-#: models.py:203
+#: models.py:206
 msgid "licence"
 msgstr "dovoljenje"
 
-#: models.py:214
+#: models.py:217
 msgid "owner"
 msgstr "lastnik"
 
-#: models.py:218
+#: models.py:221
 msgid "editors"
 msgstr "uredniki"
 
-#: models.py:224
+#: models.py:227
 msgid "team"
 msgstr ""
 
-#: models.py:230 models.py:526
+#: models.py:233 models.py:555
 msgid "edit status"
 msgstr "stanje urejanja"
 
-#: models.py:235 models.py:531
+#: models.py:238 models.py:560
 msgid "share status"
 msgstr "stanje souporabe"
 
-#: models.py:238 models.py:521
+#: models.py:241 models.py:550
 msgid "settings"
 msgstr "nastavitve"
 
-#: models.py:243
+#: models.py:246
 msgid "save as template"
 msgstr ""
 
-#: models.py:244
+#: models.py:247
 msgid "This map is a template map."
 msgstr ""
 
-#: models.py:422
+#: models.py:440
 msgid "Clone of"
 msgstr "Klon zemljevida"
 
-#: models.py:492 models.py:496 models.py:502
+#: models.py:521 models.py:525 models.py:531
 msgid "Inherit"
 msgstr ""
 
-#: models.py:516
+#: models.py:545
 msgid "display on load"
 msgstr "pokaži ob zagonu"
 
-#: models.py:517
+#: models.py:546
 msgid "Display this layer on load."
 msgstr "Pokaži to plast med nalaganjem."
 
-#: settings/base.py:285
+#: settings/base.py:292
 msgid "uMap user documentation"
 msgstr ""
 
-#: settings/base.py:290
+#: settings/base.py:297
 msgid "Video tutorials"
 msgstr ""
 
-#: settings/base.py:295
+#: settings/base.py:302
 msgid "OpenStreetMap.org forum"
 msgstr ""
 
-#: settings/base.py:300
+#: settings/base.py:307
 msgid "OpenStreetMap France forum"
 msgstr ""
 
-#: settings/base.py:320
+#: settings/base.py:327
 msgid "Art and Culture"
 msgstr ""
 
-#: settings/base.py:321
+#: settings/base.py:328
 msgid "Cycling"
 msgstr ""
 
-#: settings/base.py:322
+#: settings/base.py:329
 msgid "Business"
 msgstr ""
 
-#: settings/base.py:323
+#: settings/base.py:330
 msgid "Environment"
 msgstr ""
 
-#: settings/base.py:324
+#: settings/base.py:331
 msgid "Education"
 msgstr ""
 
-#: settings/base.py:325
+#: settings/base.py:332
 msgid "Food and Agriculture"
 msgstr ""
 
-#: settings/base.py:326
+#: settings/base.py:333
 msgid "Geopolitics"
 msgstr ""
 
-#: settings/base.py:327
+#: settings/base.py:334
 msgid "Health"
 msgstr ""
 
-#: settings/base.py:328
+#: settings/base.py:335
 msgid "Hiking"
 msgstr ""
 
-#: settings/base.py:329
+#: settings/base.py:336
 msgid "History"
 msgstr ""
 
-#: settings/base.py:330
+#: settings/base.py:337
 msgid "Public sector"
 msgstr ""
 
-#: settings/base.py:331
+#: settings/base.py:338
 msgid "Science"
 msgstr ""
 
-#: settings/base.py:332
+#: settings/base.py:339
 msgid "Shopping"
 msgstr ""
 
-#: settings/base.py:333
+#: settings/base.py:340
 msgid "Sport and Leisure"
 msgstr ""
 
-#: settings/base.py:334
+#: settings/base.py:341
 msgid "Travel"
 msgstr ""
 
-#: settings/base.py:335
+#: settings/base.py:342
 msgid "Transports"
 msgstr ""
 
-#: settings/base.py:336
+#: settings/base.py:343
 msgid "Tourism"
+msgstr ""
+
+#: settings/base.py:358
+msgid "5 min"
+msgstr ""
+
+#: settings/base.py:359
+msgid "1 hour"
+msgstr ""
+
+#: settings/base.py:360
+msgid "1 day"
 msgstr ""
 
 #: templates/403.html:8
@@ -400,15 +416,6 @@ msgstr "Vstavljanje in objavljanje zemljevida"
 #, python-format
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "Povrh vsega pa je projekt še <a href=\"%(repo_url)s\">odprtokoden</a>!"
-
-#: templates/umap/about_summary.html:63 templates/umap/navigation.html:39
-#: templates/umap/user_dashboard.html:16
-msgid "Create a map"
-msgstr "Ustvari zemljevid"
-
-#: templates/umap/about_summary.html:66
-msgid "Play with the demo"
-msgstr "Pokaži preizkusne strani"
 
 #: templates/umap/components/alerts/alert.html:17
 #: templates/umap/components/alerts/alert.html:68
@@ -639,6 +646,10 @@ msgstr ""
 msgid "%(count)s maps"
 msgstr ""
 
+#: templates/umap/map_table.html:154
+msgid "Are you sure you want to delete this map?"
+msgstr ""
+
 #: templates/umap/navigation.html:11 templates/umap/user_dashboard.html:6
 msgid "My Dashboard"
 msgstr ""
@@ -662,6 +673,10 @@ msgstr "Zamenjaj geslo"
 #: templates/umap/navigation.html:34
 msgid "Log out"
 msgstr "Odjava"
+
+#: templates/umap/navigation.html:39 templates/umap/user_dashboard.html:16
+msgid "Create a map"
+msgstr "Ustvari zemljevid"
 
 #: templates/umap/password_change.html:6
 #: templates/umap/password_change.html:11
@@ -763,7 +778,7 @@ msgstr ""
 msgid "Delete this team"
 msgstr ""
 
-#: templates/umap/team_form.html:51
+#: templates/umap/team_form.html:52
 msgid "Add user"
 msgstr ""
 
@@ -821,70 +836,70 @@ msgstr ""
 msgid "No template found."
 msgstr ""
 
-#: views.py:226
+#: views.py:232
 msgid "Cannot delete a team with more than one member"
 msgstr ""
 
-#: views.py:230
+#: views.py:236
 #, python-format
 msgid "Team “%(name)s” has been deleted"
 msgstr ""
 
-#: views.py:809
+#: views.py:919
 msgid "See full screen"
 msgstr ""
 
-#: views.py:952
+#: views.py:1062
 msgid "Map editors updated with success!"
 msgstr "seznam urednikov je posodobljen!"
 
-#: views.py:977
+#: views.py:1087
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr ""
 
-#: views.py:980
+#: views.py:1090
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr ""
 
-#: views.py:987
+#: views.py:1097
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr ""
 
-#: views.py:990
+#: views.py:1100
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr ""
 
-#: views.py:1001
+#: views.py:1111
 msgid "Only its owner can delete the map."
 msgstr "Zemljevid lahko izbriše le lastnik."
 
-#: views.py:1007
+#: views.py:1117
 msgid "Map successfully deleted."
 msgstr ""
 
-#: views.py:1033
+#: views.py:1143
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Zemljevid je kloniran! Za urejanje z drugega računalnika uporabite povezavo: %(anonymous_url)s"
 
-#: views.py:1038
+#: views.py:1148
 msgid "Congratulations, your map has been cloned!"
 msgstr "Zemljevid je uspešno kloniran!"
 
-#: views.py:1298
+#: views.py:1416
 msgid "Layer successfully deleted."
 msgstr "Plast je uspešno izbrisana."
 
-#: views.py:1320
+#: views.py:1438
 msgid "Permissions updated with success!"
 msgstr ""
 
-#: views.py:1337
+#: views.py:1455
 msgid "Generic"
 msgstr ""

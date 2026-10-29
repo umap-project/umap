@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uMap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-02 15:00+0000\n"
+"POT-Creation-Date: 2026-10-29 15:49+0000\n"
 "PO-Revision-Date: 2013-11-22 14:00+0000\n"
 "Last-Translator: Metzor Metzingen, 2025\n"
 "Language-Team: German (http://app.transifex.com/openstreetmap/umap/language/de/)\n"
@@ -35,15 +35,15 @@ msgstr ""
 msgid "CSV Export"
 msgstr "CSV-Export"
 
-#: decorators.py:60
+#: decorators.py:70
 msgid "This map is not publicly available"
 msgstr "Diese Karte ist nicht öffentlich einsehbar"
 
-#: middleware.py:19
+#: middleware.py:42
 msgid "Site is readonly for maintenance"
 msgstr "Die Seite ist wegen Wartungsarbeiten im Nur-Lesen-Modus."
 
-#: middleware.py:34
+#: middleware.py:57
 #, python-format
 msgid ""
 "Using “%(name)s” to authenticate is deprecated and will be removed soon. "
@@ -55,7 +55,7 @@ msgstr "Anmelden mittels “%(name)s” ist veraltet und wird bald nicht mehr m�
 msgid "name"
 msgstr "Name"
 
-#: models.py:63 models.py:510
+#: models.py:63 models.py:539
 msgid "description"
 msgstr "Beschreibung"
 
@@ -75,201 +75,217 @@ msgstr "Das URL-Template nutzt das OSM Tile Format"
 msgid "Order of the tilelayers in the edit box"
 msgstr "Reihenfolge der Karten-Ebenen in der Bearbeiten-Box"
 
-#: models.py:176 models.py:503
+#: models.py:133
+msgid "This URL points to a vector style"
+msgstr ""
+
+#: models.py:179 models.py:532
 msgid "Only editable with secret edit link"
 msgstr "Nur mit geheimem Bearbeitungslink zu bearbeiten"
 
-#: models.py:177 models.py:504
+#: models.py:180 models.py:533
 msgid "Everyone can edit"
 msgstr "Jeder kann bearbeiten"
 
-#: models.py:180 models.py:497
+#: models.py:183 models.py:526
 msgid "Everyone"
 msgstr "Jeder"
 
-#: models.py:181 models.py:190 models.py:498
+#: models.py:184 models.py:193 models.py:527
 msgid "Editors and team only"
 msgstr "Nur Bearbeiter und Team"
 
-#: models.py:182 models.py:499
+#: models.py:185 models.py:528
 msgid "Owner only"
 msgstr "Nur Ersteller"
 
-#: models.py:185
+#: models.py:188
 msgid "Draft (private)"
 msgstr "Entwurf (privat)"
 
-#: models.py:186
+#: models.py:189
 msgid "Everyone (public)"
 msgstr "Jeder (Öffentlich)"
 
-#: models.py:189
+#: models.py:192
 msgid "Anyone with link"
 msgstr "Jeder mit Link"
 
-#: models.py:191
+#: models.py:194
 msgid "Blocked"
 msgstr "blockiert"
 
-#: models.py:192 models.py:493
+#: models.py:195 models.py:522
 msgid "Deleted"
 msgstr "Gelöscht"
 
-#: models.py:195
+#: models.py:198
 msgid "center"
 msgstr "Mittelpunkt"
 
-#: models.py:196
+#: models.py:199
 msgid "zoom"
 msgstr "Zoom"
 
-#: models.py:198
+#: models.py:201
 msgid "locate"
 msgstr "lokalisiere"
 
-#: models.py:198
+#: models.py:201
 msgid "Locate user on load?"
 msgstr "Standort des Benutzers beim Seitenaufruf bestimmen?"
 
-#: models.py:202
+#: models.py:205
 msgid "Choose the map licence."
 msgstr "Kartenlizenz auswählen"
 
-#: models.py:203
+#: models.py:206
 msgid "licence"
 msgstr "Lizenz"
 
-#: models.py:214
+#: models.py:217
 msgid "owner"
 msgstr "Ersteller"
 
-#: models.py:218
+#: models.py:221
 msgid "editors"
 msgstr "Bearbeiter"
 
-#: models.py:224
+#: models.py:227
 msgid "team"
 msgstr "Team"
 
-#: models.py:230 models.py:526
+#: models.py:233 models.py:555
 msgid "edit status"
 msgstr "Bearbeitungsstatus"
 
-#: models.py:235 models.py:531
+#: models.py:238 models.py:560
 msgid "share status"
 msgstr "Teilen-Status"
 
-#: models.py:238 models.py:521
+#: models.py:241 models.py:550
 msgid "settings"
 msgstr "Einstellungen"
 
-#: models.py:243
+#: models.py:246
 msgid "save as template"
 msgstr "als Vorlage speichern"
 
-#: models.py:244
+#: models.py:247
 msgid "This map is a template map."
 msgstr "Diese Karte ist eine Vorlage."
 
-#: models.py:422
+#: models.py:440
 msgid "Clone of"
 msgstr "Duplikat von"
 
-#: models.py:492 models.py:496 models.py:502
+#: models.py:521 models.py:525 models.py:531
 msgid "Inherit"
 msgstr "erben"
 
-#: models.py:516
+#: models.py:545
 msgid "display on load"
 msgstr "Beim Seitenaufruf einblenden"
 
-#: models.py:517
+#: models.py:546
 msgid "Display this layer on load."
 msgstr "Diese Ebene beim Seitenaufruf einblenden."
 
-#: settings/base.py:285
+#: settings/base.py:292
 msgid "uMap user documentation"
 msgstr "uMap Benutzerhandbuch"
 
-#: settings/base.py:290
+#: settings/base.py:297
 msgid "Video tutorials"
 msgstr "Videotutorials"
 
-#: settings/base.py:295
+#: settings/base.py:302
 msgid "OpenStreetMap.org forum"
 msgstr "OpenStreetMap.org Forum"
 
-#: settings/base.py:300
+#: settings/base.py:307
 msgid "OpenStreetMap France forum"
 msgstr "OpenStreetMap.org Frankreich Forum"
 
-#: settings/base.py:320
+#: settings/base.py:327
 msgid "Art and Culture"
 msgstr "Kunst und Kultur"
 
-#: settings/base.py:321
+#: settings/base.py:328
 msgid "Cycling"
 msgstr "Fahrradfahren"
 
-#: settings/base.py:322
+#: settings/base.py:329
 msgid "Business"
 msgstr "Gewerblich"
 
-#: settings/base.py:323
+#: settings/base.py:330
 msgid "Environment"
 msgstr "Umwelt"
 
-#: settings/base.py:324
+#: settings/base.py:331
 msgid "Education"
 msgstr "Bildung"
 
-#: settings/base.py:325
+#: settings/base.py:332
 msgid "Food and Agriculture"
 msgstr "Nahrungsmittel und Landwirtschaft"
 
-#: settings/base.py:326
+#: settings/base.py:333
 msgid "Geopolitics"
 msgstr "Geopolitik"
 
-#: settings/base.py:327
+#: settings/base.py:334
 msgid "Health"
 msgstr "Gesundheit"
 
-#: settings/base.py:328
+#: settings/base.py:335
 msgid "Hiking"
 msgstr "Wandern"
 
-#: settings/base.py:329
+#: settings/base.py:336
 msgid "History"
 msgstr "Geschichte"
 
-#: settings/base.py:330
+#: settings/base.py:337
 msgid "Public sector"
 msgstr "Öffentlicher Sektor"
 
-#: settings/base.py:331
+#: settings/base.py:338
 msgid "Science"
 msgstr "Wissenschaft"
 
-#: settings/base.py:332
+#: settings/base.py:339
 msgid "Shopping"
 msgstr "Einkaufsmöglichkeiten"
 
-#: settings/base.py:333
+#: settings/base.py:340
 msgid "Sport and Leisure"
 msgstr "Sport und Freizeit"
 
-#: settings/base.py:334
+#: settings/base.py:341
 msgid "Travel"
 msgstr "Reisen"
 
-#: settings/base.py:335
+#: settings/base.py:342
 msgid "Transports"
 msgstr "Transport"
 
-#: settings/base.py:336
+#: settings/base.py:343
 msgid "Tourism"
 msgstr "Tourismus"
+
+#: settings/base.py:358
+msgid "5 min"
+msgstr ""
+
+#: settings/base.py:359
+msgid "1 hour"
+msgstr ""
+
+#: settings/base.py:360
+msgid "1 day"
+msgstr ""
 
 #: templates/403.html:8
 msgid ""
@@ -411,15 +427,6 @@ msgstr "Teile und binde deine Karte ein"
 #, python-format
 msgid "And it's <a href=\"%(repo_url)s\">open source</a>!"
 msgstr "Und es ist <a href=\"%(repo_url)s\">Open Source</a>!"
-
-#: templates/umap/about_summary.html:63 templates/umap/navigation.html:39
-#: templates/umap/user_dashboard.html:16
-msgid "Create a map"
-msgstr "Erstelle eine Karte"
-
-#: templates/umap/about_summary.html:66
-msgid "Play with the demo"
-msgstr "Spiele mit der Demo"
 
 #: templates/umap/components/alerts/alert.html:17
 #: templates/umap/components/alerts/alert.html:68
@@ -650,6 +657,10 @@ msgstr "Zeilen pro Seite: %(per_page)s"
 msgid "%(count)s maps"
 msgstr "%(count)s Karten"
 
+#: templates/umap/map_table.html:154
+msgid "Are you sure you want to delete this map?"
+msgstr ""
+
 #: templates/umap/navigation.html:11 templates/umap/user_dashboard.html:6
 msgid "My Dashboard"
 msgstr "Mein Dashboard"
@@ -673,6 +684,10 @@ msgstr "Passwort ändern"
 #: templates/umap/navigation.html:34
 msgid "Log out"
 msgstr "Ausloggen"
+
+#: templates/umap/navigation.html:39 templates/umap/user_dashboard.html:16
+msgid "Create a map"
+msgstr "Erstelle eine Karte"
 
 #: templates/umap/password_change.html:6
 #: templates/umap/password_change.html:11
@@ -772,7 +787,7 @@ msgstr "Team erstellen oder bearbeiten"
 msgid "Delete this team"
 msgstr "Dieses Team löschen"
 
-#: templates/umap/team_form.html:51
+#: templates/umap/team_form.html:52
 msgid "Add user"
 msgstr "Benutzer hinzufügen"
 
@@ -830,70 +845,70 @@ msgstr "Erstelle Vorlage"
 msgid "No template found."
 msgstr "Keine Vorlage gefunden"
 
-#: views.py:226
+#: views.py:232
 msgid "Cannot delete a team with more than one member"
 msgstr "Teams mit mehr als einem Mitglied können nicht gelöscht werden"
 
-#: views.py:230
+#: views.py:236
 #, python-format
 msgid "Team “%(name)s” has been deleted"
 msgstr "Team “%(name)s” wurde gelöscht"
 
-#: views.py:809
+#: views.py:919
 msgid "See full screen"
 msgstr "Vollbildanzeige"
 
-#: views.py:952
+#: views.py:1062
 msgid "Map editors updated with success!"
 msgstr "Bearbeiter erfolgreich geändert"
 
-#: views.py:977
+#: views.py:1087
 #, python-format
 msgid "The uMap edit link for your map: %(map_name)s"
 msgstr "Der uMap-Bearbeitungslink für Deine Karte: %(map_name)s"
 
-#: views.py:980
+#: views.py:1090
 #, python-format
 msgid "Here is your secret edit link: %(link)s"
 msgstr "Dies ist der geheime Bearbeitungslink: %(link)s"
 
-#: views.py:987
+#: views.py:1097
 #, python-format
 msgid "Can't send email to %(email)s"
 msgstr "E-Mail kann nicht gesendet werden an %(email)s"
 
-#: views.py:990
+#: views.py:1100
 #, python-format
 msgid "Email sent to %(email)s"
 msgstr "Email gesendet an %(email)s"
 
-#: views.py:1001
+#: views.py:1111
 msgid "Only its owner can delete the map."
 msgstr "Nur der Ersteller kann die Karte löschen."
 
-#: views.py:1007
+#: views.py:1117
 msgid "Map successfully deleted."
 msgstr "Karte erfolgreich gelöscht."
 
-#: views.py:1033
+#: views.py:1143
 #, python-format
 msgid ""
 "Your map has been cloned! If you want to edit this map from another "
 "computer, please use this link: %(anonymous_url)s"
 msgstr "Deine Karte wurde kopiert! Wenn du diese Karte von einem anderen Computer aus bearbeiten möchtest, benutze bitte diesen Link: %(anonymous_url)s"
 
-#: views.py:1038
+#: views.py:1148
 msgid "Congratulations, your map has been cloned!"
 msgstr "Glückwunsch, deine Karte wurde kopiert!"
 
-#: views.py:1298
+#: views.py:1416
 msgid "Layer successfully deleted."
 msgstr "Ebene erfolgreich gelöscht."
 
-#: views.py:1320
+#: views.py:1438
 msgid "Permissions updated with success!"
 msgstr "Berechtigungen erfolgreich aktualisiert!"
 
-#: views.py:1337
+#: views.py:1455
 msgid "Generic"
 msgstr "Allgemein"
