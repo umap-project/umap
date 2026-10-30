@@ -3,7 +3,7 @@ entries:
   umap:
   - apiVersion: v2
     appVersion: 3.0.0
-    created: "2026-10-29T16:01:41.153204364Z"
+    created: "2026-10-30T08:56:54.793369278Z"
     dependencies:
     - alias: cnpg
       condition: cnpg.enabled
@@ -11,7 +11,7 @@ entries:
       repository: https://charts.enix.io/
       version: 2.0.1
     description: A Helm chart to deploy umap on Kubernetes
-    digest: 25808292d39855bc357fead3a312e50a686792ade5a802f9363991ef6ec8a96b
+    digest: a60fee2a4c5ed59100a02f545c935303afbf111f25628bff8719f15c44099fdc
     name: umap
     type: application
     urls:
@@ -49,4 +49,4 @@ entries:
     urls:
     - https://umap-project.github.io/umap/umap-0.1.0.tgz
     version: 0.1.0
-generated: "2026-10-29T16:01:41.151880411Z"
+generated: "2026-10-30T08:56:54.791437834Z"
