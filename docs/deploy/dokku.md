@@ -125,6 +125,13 @@ EOF
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
+To increase the upload max size (1M by default):
+
+```
+dokku nginx:set umap client-max-body-size 50m
+dokku proxy:build-config umap
+```
+
 ### OAuth configuration
 
 As an example, we'll use OpenStreetMap OAuth, but it's possible to use whatever service supported
