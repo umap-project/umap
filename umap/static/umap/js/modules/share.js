@@ -126,15 +126,7 @@ export default class Share {
       this.app.openPrinter(mode)
     } else {
       const { content, filetype, filename } = await this.format(mode)
-      const blob = new Blob([content], { type: filetype })
-      window.URL = window.URL || window.webkitURL
-      const el = document.createElement('a')
-      el.download = filename
-      el.href = window.URL.createObjectURL(blob)
-      el.style.display = 'none'
-      document.body.appendChild(el)
-      el.click()
-      document.body.removeChild(el)
+      Utils.download(content, filetype, filename)
     }
   }
 }

@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 from playwright.sync_api import expect
 
@@ -52,6 +54,23 @@ def test_should_open_popup_on_click(
     expect(page.get_by_role("heading", name="name line")).to_be_visible()
     expect(page.get_by_text("line description")).to_be_visible()
     assert_screenshot(page, suffix="highlighted", clip=clip)
+
+
+def test_can_download_line_as_gpx_from_contextmenu(
+    live_server, map, page, bootstrap, wait_for_loaded
+):
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    wait_for_loaded(page)
+    # Will click on the center, so on the line.
+    page.locator("#map").click(button="right")
+    with page.expect_download() as download_info:
+        page.get_by_role("button", name="Download as GPX").click()
+    download = download_info.value
+    assert download.suggested_filename == "name_line.gpx"
+    assert (
+        Path(download.path()).read_text()
+        == """<?xml version="1.0" encoding="UTF-8"?><gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="@dwayneparton/geojson-to-gpx"><trk><name>name line</name><desc>line description</desc><trkseg><trkpt lat="53.585984" lon="11.25"/><trkpt lat="52.975108" lon="10.151367"/></trkseg></trk></gpx>"""
+    )
 
 
 def test_can_use_measure_on_name(live_server, map, page):
