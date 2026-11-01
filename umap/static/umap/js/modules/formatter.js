@@ -192,10 +192,11 @@ export class Formatter {
 
   async toGPX(features) {
     const togpx = await import('@dwayneparton/geojson-to-gpx')
-    for (const feature of features) {
+    const collection = this.toFeatureCollection(features)
+    for (const feature of collection.features) {
       feature.properties.desc = feature.properties.description
     }
-    const gpx = togpx.default(this.toFeatureCollection(features))
+    const gpx = togpx.default(collection)
     return new XMLSerializer().serializeToString(gpx)
   }
 

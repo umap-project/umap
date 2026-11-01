@@ -432,6 +432,17 @@ export function slugify(str) {
   return (str || 'data').replace(/[^a-z0-9]/gi, '_').toLowerCase()
 }
 
+export function download(content, filetype, filename) {
+  const blob = new Blob([content], { type: filetype })
+  const el = document.createElement('a')
+  el.download = filename
+  el.href = window.URL.createObjectURL(blob)
+  el.style.display = 'none'
+  document.body.appendChild(el)
+  el.click()
+  document.body.removeChild(el)
+}
+
 export function eachElement(selector, callback) {
   for (const el of document.querySelectorAll(selector)) {
     callback(el)

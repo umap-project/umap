@@ -2,6 +2,7 @@ import { Alert } from '../../components/alerts/alert.js'
 import * as Clipboard from '../clipboard.js'
 import * as DOMUtils from '../domutils.js'
 import { MutatingForm } from '../form/builder.js'
+import { EXPORT_FORMATS } from '../formatter.js'
 import * as GeoUtils from '../geoutils.js'
 import { getLocale, translate } from '../i18n.js'
 import * as Icon from '../iconutils.js'
@@ -1045,6 +1046,21 @@ export class LineString extends Path {
 
   isSameClass(other) {
     return other instanceof LineString
+  }
+
+  getContextMenu(event) {
+    const items = super.getContextMenu(event)
+    items.push({
+      label: translate('Download as GPX'),
+      action: () => this.downloadAsGPX(),
+    })
+    return items
+  }
+
+  async downloadAsGPX() {
+    const { ext, filetype } = EXPORT_FORMATS.gpx
+    const content = await this.app.formatter.toGPX([this])
+    Utils.download(content, filetype, Utils.slugify(this.getDisplayName()) + ext)
   }
 
   cancelRoute() {
