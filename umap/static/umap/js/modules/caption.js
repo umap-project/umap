@@ -87,7 +87,7 @@ export default class Caption extends Utils.WithTemplate {
     this.app.panel.open({ content: this.element }).then(() => {
       // Create the legend when the panel is actually on the DOM
       this.app.layers.tree.map((datalayer) => datalayer.renderLegend())
-      this.app.propagate()
+      this.app.propagate([], this.element)
     })
   }
 
