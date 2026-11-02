@@ -662,5 +662,29 @@ registerLocale('pt', {
     "Click to continue drawing the line": "Click to continue drawing the line",
     "Click to start measuring": "Click to start measuring",
     "Measure": "Measure",
-    "Measure areas": "Measure areas"
-})
+    "Measure areas": "Measure areas",
+    "Feature timing": "Controlo temporal",
+    "Automatic cleanup": "Eliminação automática",
+    "Hide from (optional)": "Ocultar a partir de (opcional)",
+    "Delete on": "Eliminar em",
+    "Required for automatic cleanup. Dates start at midnight UTC. Hidden features remain accessible; older versions and backups may retain deleted features.": "Obrigatório para a eliminação automática. As datas começam à meia-noite UTC. Os objetos ocultos continuam acessíveis; versões anteriores e cópias de segurança podem conservar objetos eliminados.",
+    "Invalid feature timing. Delete on is required for automatic cleanup; Hide from must not be later. Use calendar dates in UTC.": "Definições temporais inválidas. A eliminação automática exige uma data de eliminação; a data de ocultação não pode ser posterior. Use datas do calendário em UTC.",
+    "This layer changed and uses automatic cleanup. Reload the map before saving to avoid restoring deleted features.": "Esta camada foi alterada e usa eliminação automática. Recarregue o mapa antes de guardar para evitar repor objetos eliminados.",
+    "Use a date or a field reference such as {Ende}. Empty referenced fields pause the schedule.": "Use uma data ou uma referência como {Ende}. Um campo vazio suspende o agendamento.",
+    "Delete after hiding": "Eliminar depois de ocultar",
+    "Enter a delay instead of Delete on. Calendar months end on the last available day.": "Introduza um prazo em vez da data de eliminação. Os meses ajustam-se ao último dia disponível.",
+    "Unit": "Unidade",
+    "Days": "Dias",
+    "Months": "Meses",
+    "Applied to newly drawn features only. Existing features keep their own schedule.": "Apenas para novos objetos desenhados. Os existentes mantêm o seu agendamento.",
+    "Use for new features in this layer": "Usar para novos objetos desta camada",
+    "Invalid calendar date.": "Data do calendário inválida.",
+    "Enable timing": "Ativar agendamento",
+    "At expiration": "No fim do prazo",
+    "Move to layer (keep)": "Mover para uma camada (manter)",
+    "Destination layer": "Camada de destino",
+    "Choose a saved local layer with compatible edit permissions. Moving disables timing. Older versions remain; reload to see background changes.": "Escolha uma camada local guardada com permissões de edição compatíveis. Mover desativa o agendamento. As versões anteriores permanecem; recarregue para ver alterações em segundo plano.",
+    "Move on": "Mover em",
+    "Move after hiding": "Mover depois de ocultar"
+}
+)

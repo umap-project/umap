@@ -899,3 +899,53 @@ msgstr ""
 #: views.py:1455
 msgid "Generic"
 msgstr ""
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Use a calendar date in YYYY-MM-DD format (UTC)."
+msgstr "የግሪጎሪያን ቀን በYYYY-MM-DD ቅርጽ ይጠቀሙ (UTC)።"
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid calendar date."
+msgstr "ልክ ያልሆነ የቀን መቁጠሪያ ቀን።"
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid feature collection."
+msgstr "ልክ ያልሆነ የነገሮች ስብስብ።"
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timing must contain a boolean enabled option."
+msgstr "የጊዜ ቅንብሩ እውነት ወይም ሐሰት የሆነ የማንቃት አማራጭ ሊኖረው ይገባል።"
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Hide from must not be after Delete on."
+msgstr "የመደበቂያ ቀን ከመሰረዣ ቀን በኋላ መሆን የለበትም።"
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "A timed feature needs a stable string ID."
+msgstr "በጊዜ የሚቆጣጠር ነገር ቋሚ የጽሑፍ መለያ ያስፈልገዋል።"
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Delete on is required when timing is enabled."
+msgstr "የጊዜ ቁጥጥር ሲነቃ የመሰረዣ ቀን ግዴታ ነው።"
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timed feature IDs must be unique in their layer."
+msgstr "በጊዜ የሚቆጣጠሩ ነገሮች መለያዎች በንብርብራቸው ውስጥ ልዩ መሆን አለባቸው።"
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "An automatically deleted feature cannot be restored with the same ID. Reload the layer."
+msgstr "ራስ-ሰር የተሰረዘ ነገር በተመሳሳይ መለያ ሊመለስ አይችልም። ንብርብሩን እንደገና ይጫኑ።"
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "Invalid GeoJSON or timing options."
+msgstr "ልክ ያልሆነ GeoJSON ወይም የጊዜ ቅንብር።"

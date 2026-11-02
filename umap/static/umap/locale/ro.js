@@ -662,5 +662,29 @@ registerLocale('ro', {
     "Click to continue drawing the line": "Click to continue drawing the line",
     "Click to start measuring": "Click to start measuring",
     "Measure": "Measure",
-    "Measure areas": "Measure areas"
-})
+    "Measure areas": "Measure areas",
+    "Feature timing": "Control temporal",
+    "Automatic cleanup": "Ștergere automată",
+    "Hide from (optional)": "Ascunde începând cu (opțional)",
+    "Delete on": "Șterge la data",
+    "Required for automatic cleanup. Dates start at midnight UTC. Hidden features remain accessible; older versions and backups may retain deleted features.": "Obligatoriu pentru ștergerea automată. Datele încep la miezul nopții UTC. Obiectele ascunse rămân accesibile; versiunile mai vechi și copiile de siguranță pot păstra obiectele șterse.",
+    "Invalid feature timing. Delete on is required for automatic cleanup; Hide from must not be later. Use calendar dates in UTC.": "Setări temporale nevalide. Ștergerea automată necesită o dată de ștergere; data ascunderii nu poate fi ulterioară. Folosiți date calendaristice în UTC.",
+    "This layer changed and uses automatic cleanup. Reload the map before saving to avoid restoring deleted features.": "Acest strat a fost modificat și folosește ștergerea automată. Reîncărcați harta înainte de salvare pentru a nu restaura obiecte șterse.",
+    "Use a date or a field reference such as {Ende}. Empty referenced fields pause the schedule.": "Folosiți o dată sau o referință precum {Ende}. Un câmp gol suspendă programarea.",
+    "Delete after hiding": "Ștergere după ascundere",
+    "Enter a delay instead of Delete on. Calendar months end on the last available day.": "Introduceți un interval în locul datei ștergerii. Lunile se limitează la ultima zi disponibilă.",
+    "Unit": "Unitate",
+    "Days": "Zile",
+    "Months": "Luni",
+    "Applied to newly drawn features only. Existing features keep their own schedule.": "Doar pentru obiectele nou desenate. Cele existente își păstrează programarea.",
+    "Use for new features in this layer": "Folosește pentru obiectele noi din acest strat",
+    "Invalid calendar date.": "Dată calendaristică nevalidă.",
+    "Enable timing": "Activează programarea",
+    "At expiration": "La expirare",
+    "Move to layer (keep)": "Mută într-un strat (păstrează)",
+    "Destination layer": "Strat destinație",
+    "Choose a saved local layer with compatible edit permissions. Moving disables timing. Older versions remain; reload to see background changes.": "Alegeți un strat local salvat cu drepturi de editare compatibile. Mutarea dezactivează programarea. Versiunile vechi rămân; reîncărcați pentru a vedea schimbările din fundal.",
+    "Move on": "Mută la",
+    "Move after hiding": "Mută după ascundere"
+}
+)

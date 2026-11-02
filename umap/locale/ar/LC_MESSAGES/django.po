@@ -693,3 +693,53 @@ msgstr "تم حذف الطبقة بنجاح."
 #: views.py:1335
 msgid "Permissions updated with success!"
 msgstr ""
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Use a calendar date in YYYY-MM-DD format (UTC)."
+msgstr "استخدم تاريخًا ميلاديًا بصيغة YYYY-MM-DD بتوقيت UTC."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid calendar date."
+msgstr "تاريخ ميلادي غير صالح."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid feature collection."
+msgstr "مجموعة عناصر غير صالحة."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timing must contain a boolean enabled option."
+msgstr "يجب أن تتضمن الإعدادات الزمنية خيار تفعيل بقيمة منطقية."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Hide from must not be after Delete on."
+msgstr "يجب ألا يأتي تاريخ الإخفاء بعد تاريخ الحذف."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "A timed feature needs a stable string ID."
+msgstr "يتطلب العنصر ذو التحكم الزمني معرّفًا نصيًا ثابتًا."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Delete on is required when timing is enabled."
+msgstr "تاريخ الحذف مطلوب عند تفعيل التحكم الزمني."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timed feature IDs must be unique in their layer."
+msgstr "يجب أن تكون معرّفات العناصر ذات التحكم الزمني فريدة ضمن طبقتها."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "An automatically deleted feature cannot be restored with the same ID. Reload the layer."
+msgstr "لا يمكن استعادة عنصر حُذف تلقائيًا بالمعرّف نفسه. أعد تحميل الطبقة."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "Invalid GeoJSON or timing options."
+msgstr "بيانات GeoJSON أو إعدادات زمنية غير صالحة."

@@ -662,5 +662,29 @@ registerLocale('ms', {
     "Click to continue drawing the line": "Click to continue drawing the line",
     "Click to start measuring": "Click to start measuring",
     "Measure": "Measure",
-    "Measure areas": "Measure areas"
-})
+    "Measure areas": "Measure areas",
+    "Feature timing": "Tetapan masa",
+    "Automatic cleanup": "Pemadaman automatik",
+    "Hide from (optional)": "Sembunyikan mulai (pilihan)",
+    "Delete on": "Padam pada",
+    "Required for automatic cleanup. Dates start at midnight UTC. Hidden features remain accessible; older versions and backups may retain deleted features.": "Diperlukan untuk pemadaman automatik. Tarikh bermula pada tengah malam UTC. Objek tersembunyi masih boleh dicapai; versi lama dan salinan sandaran mungkin menyimpan objek yang dipadam.",
+    "Invalid feature timing. Delete on is required for automatic cleanup; Hide from must not be later. Use calendar dates in UTC.": "Tetapan masa tidak sah. Pemadaman automatik memerlukan tarikh pemadaman; tarikh penyembunyian tidak boleh lebih lewat. Gunakan tarikh kalendar dalam UTC.",
+    "This layer changed and uses automatic cleanup. Reload the map before saving to avoid restoring deleted features.": "Lapisan ini telah berubah dan menggunakan pemadaman automatik. Muat semula peta sebelum menyimpan supaya objek yang dipadam tidak dipulihkan.",
+    "Use a date or a field reference such as {Ende}. Empty referenced fields pause the schedule.": "Gunakan tarikh atau rujukan medan seperti {Ende}. Medan kosong menjeda jadual.",
+    "Delete after hiding": "Padam selepas disembunyikan",
+    "Enter a delay instead of Delete on. Calendar months end on the last available day.": "Masukkan tempoh menggantikan tarikh pemadaman. Bulan dihadkan kepada hari terakhir yang tersedia.",
+    "Unit": "Unit",
+    "Days": "Hari",
+    "Months": "Bulan",
+    "Applied to newly drawn features only. Existing features keep their own schedule.": "Hanya untuk objek baharu yang dilukis. Objek sedia ada mengekalkan jadualnya.",
+    "Use for new features in this layer": "Gunakan untuk objek baharu dalam lapisan ini",
+    "Invalid calendar date.": "Tarikh kalendar tidak sah.",
+    "Enable timing": "Aktifkan jadual",
+    "At expiration": "Apabila tamat tempoh",
+    "Move to layer (keep)": "Pindah ke lapisan (simpan)",
+    "Destination layer": "Lapisan destinasi",
+    "Choose a saved local layer with compatible edit permissions. Moving disables timing. Older versions remain; reload to see background changes.": "Pilih lapisan tempatan tersimpan dengan kebenaran penyuntingan yang serasi. Pemindahan menyahaktifkan jadual. Versi lama kekal; muat semula untuk melihat perubahan latar belakang.",
+    "Move on": "Pindah pada",
+    "Move after hiding": "Pindah selepas disembunyikan"
+}
+)

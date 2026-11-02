@@ -900,3 +900,53 @@ msgstr "Az engedélyek sikeresen frissültek!"
 #: views.py:1455
 msgid "Generic"
 msgstr "Általános"
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Use a calendar date in YYYY-MM-DD format (UTC)."
+msgstr "ÉÉÉÉ-HH-NN formátumú naptári dátumot használjon (UTC)."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid calendar date."
+msgstr "Érvénytelen naptári dátum."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid feature collection."
+msgstr "Érvénytelen objektumgyűjtemény."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timing must contain a boolean enabled option."
+msgstr "Az időzítésnek logikai értékű engedélyezési beállítást kell tartalmaznia."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Hide from must not be after Delete on."
+msgstr "Az elrejtés dátuma nem lehet a törlés dátuma után."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "A timed feature needs a stable string ID."
+msgstr "Az időzített objektumnak állandó szöveges azonosító kell."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Delete on is required when timing is enabled."
+msgstr "Bekapcsolt időzítés esetén a törlés dátuma kötelező."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timed feature IDs must be unique in their layer."
+msgstr "Az időzített objektumok azonosítóinak a rétegükön belül egyedinek kell lenniük."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "An automatically deleted feature cannot be restored with the same ID. Reload the layer."
+msgstr "Az automatikusan törölt objektum nem állítható vissza ugyanazzal az azonosítóval. Töltse újra a réteget."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "Invalid GeoJSON or timing options."
+msgstr "Érvénytelen GeoJSON vagy időzítési beállítások."

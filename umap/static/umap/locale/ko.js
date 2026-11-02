@@ -662,5 +662,29 @@ registerLocale('ko', {
     "Click to continue drawing the line": "Click to continue drawing the line",
     "Click to start measuring": "Click to start measuring",
     "Measure": "Measure",
-    "Measure areas": "Measure areas"
-})
+    "Measure areas": "Measure areas",
+    "Feature timing": "시간 설정",
+    "Automatic cleanup": "자동 삭제",
+    "Hide from (optional)": "숨김 시작일 (선택)",
+    "Delete on": "삭제일",
+    "Required for automatic cleanup. Dates start at midnight UTC. Hidden features remain accessible; older versions and backups may retain deleted features.": "자동 삭제 시 필수입니다. 날짜는 UTC 자정부터 적용됩니다. 숨겨진 객체는 계속 접근할 수 있으며, 삭제된 객체는 이전 버전과 백업에 남아 있을 수 있습니다.",
+    "Invalid feature timing. Delete on is required for automatic cleanup; Hide from must not be later. Use calendar dates in UTC.": "시간 설정이 올바르지 않습니다. 자동 삭제에는 삭제일이 필요하며 숨김 시작일은 삭제일보다 늦을 수 없습니다. UTC 기준 달력 날짜를 사용하세요.",
+    "This layer changed and uses automatic cleanup. Reload the map before saving to avoid restoring deleted features.": "이 레이어는 변경되었으며 자동 삭제를 사용합니다. 삭제된 객체가 복원되지 않도록 저장하기 전에 지도를 다시 불러오세요.",
+    "Use a date or a field reference such as {Ende}. Empty referenced fields pause the schedule.": "날짜 또는 {Ende} 같은 필드 참조를 사용하세요. 참조 필드가 비어 있으면 일정이 일시 중지됩니다.",
+    "Delete after hiding": "숨긴 후 삭제까지의 기간",
+    "Enter a delay instead of Delete on. Calendar months end on the last available day.": "삭제 날짜 대신 기간을 입력하세요. 해당 날짜가 없으면 대상 월의 마지막 날을 사용합니다.",
+    "Unit": "단위",
+    "Days": "일",
+    "Months": "개월",
+    "Applied to newly drawn features only. Existing features keep their own schedule.": "새로 그리는 객체에만 적용됩니다. 기존 객체는 자체 일정을 유지합니다.",
+    "Use for new features in this layer": "이 레이어의 새 객체에 사용",
+    "Invalid calendar date.": "올바르지 않은 달력 날짜입니다.",
+    "Enable timing": "일정 활성화",
+    "At expiration": "만료 시",
+    "Move to layer (keep)": "레이어로 이동 (보관)",
+    "Destination layer": "대상 레이어",
+    "Choose a saved local layer with compatible edit permissions. Moving disables timing. Older versions remain; reload to see background changes.": "편집 권한이 호환되는 저장된 로컬 레이어를 선택하세요. 이동하면 일정이 비활성화됩니다. 이전 버전은 남아 있습니다. 백그라운드 변경 사항을 보려면 새로고침하세요.",
+    "Move on": "이동 날짜",
+    "Move after hiding": "숨긴 후 이동까지의 기간"
+}
+)
