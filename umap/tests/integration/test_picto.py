@@ -1,4 +1,5 @@
 import platform
+from copy import deepcopy
 from pathlib import Path
 
 import pytest
@@ -214,6 +215,30 @@ def test_can_use_remote_url_as_picto(
     symbols = page.locator(".umap-pictogram-body .umap-pictogram-choice")
     expect(page.get_by_text("Recent")).to_be_visible()
     expect(symbols).to_have_count(1)
+
+
+@pytest.mark.parametrize(
+    "suffix,icon_url", [("image", "https://foo.bar/img.svg"), ("char", "@")]
+)
+def test_icon_opacity_applies_to_symbol(
+    map, live_server, page, assert_screenshot, suffix, icon_url
+):
+    page.route(
+        "https://foo.bar/img.svg",
+        lambda route: route.fulfill(
+            content_type="image/svg+xml",
+            headers={"Access-Control-Allow-Origin": "*"},
+            body='<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">'
+            '<rect width="24" height="24" fill="red"/></svg>',
+        ),
+    )
+    data = deepcopy(DATALAYER_DATA)
+    data["features"][0]["properties"]["_umap_options"].update(
+        {"iconUrl": icon_url, "iconOpacity": 0.3}
+    )
+    DataLayerFactory(map=map, data=data)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}#16/48.55297/13.68896")
+    assert_screenshot(page, suffix=suffix, clip=ICON_CLIP)
 
 
 def test_can_use_char_as_picto(openmap, live_server, page, pictos, assert_screenshot):
