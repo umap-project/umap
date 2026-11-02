@@ -662,5 +662,29 @@ registerLocale('ar', {
     "Click to continue drawing the line": "Click to continue drawing the line",
     "Click to start measuring": "Click to start measuring",
     "Measure": "Measure",
-    "Measure areas": "Measure areas"
-})
+    "Measure areas": "Measure areas",
+    "Feature timing": "التحكم الزمني",
+    "Automatic cleanup": "الحذف التلقائي",
+    "Hide from (optional)": "الإخفاء بدءًا من (اختياري)",
+    "Delete on": "الحذف في",
+    "Required for automatic cleanup. Dates start at midnight UTC. Hidden features remain accessible; older versions and backups may retain deleted features.": "مطلوب للحذف التلقائي. تبدأ التواريخ عند منتصف الليل بتوقيت UTC. تظل العناصر المخفية متاحة؛ وقد تحتفظ الإصدارات القديمة والنسخ الاحتياطية بالعناصر المحذوفة.",
+    "Invalid feature timing. Delete on is required for automatic cleanup; Hide from must not be later. Use calendar dates in UTC.": "إعدادات زمنية غير صالحة. يتطلب الحذف التلقائي تاريخ حذف، ويجب ألا يكون تاريخ الإخفاء بعده. استخدم تواريخ التقويم الميلادي بتوقيت UTC.",
+    "This layer changed and uses automatic cleanup. Reload the map before saving to avoid restoring deleted features.": "تغيّرت هذه الطبقة وتستخدم الحذف التلقائي. أعد تحميل الخريطة قبل الحفظ لتجنب استعادة عناصر محذوفة.",
+    "Use a date or a field reference such as {Ende}. Empty referenced fields pause the schedule.": "استخدم تاريخًا أو مرجع حقل مثل {Ende}. الحقل الفارغ يوقف الجدولة مؤقتًا.",
+    "Delete after hiding": "الحذف بعد الإخفاء",
+    "Enter a delay instead of Delete on. Calendar months end on the last available day.": "أدخل مدة بدلًا من تاريخ الحذف. تُضبط الأشهر على آخر يوم متاح عند الحاجة.",
+    "Unit": "الوحدة",
+    "Days": "أيام",
+    "Months": "أشهر",
+    "Applied to newly drawn features only. Existing features keep their own schedule.": "للعناصر المرسومة حديثًا فقط. تحتفظ العناصر الحالية بجدولتها الخاصة.",
+    "Use for new features in this layer": "استخدام للعناصر الجديدة في هذه الطبقة",
+    "Invalid calendar date.": "تاريخ ميلادي غير صالح.",
+    "Enable timing": "تفعيل الجدولة",
+    "At expiration": "عند انتهاء المدة",
+    "Move to layer (keep)": "نقل إلى طبقة (احتفاظ)",
+    "Destination layer": "الطبقة المستهدفة",
+    "Choose a saved local layer with compatible edit permissions. Moving disables timing. Older versions remain; reload to see background changes.": "اختر طبقة محلية محفوظة بصلاحيات تحرير متوافقة. يعطّل النقل الجدولة. تبقى الإصدارات القديمة؛ أعد التحميل لرؤية تغييرات الخلفية.",
+    "Move on": "النقل في",
+    "Move after hiding": "النقل بعد الإخفاء"
+}
+)

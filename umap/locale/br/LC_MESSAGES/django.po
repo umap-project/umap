@@ -904,3 +904,53 @@ msgstr "Aotreoù hizivaet gant berzh!"
 #: views.py:1455
 msgid "Generic"
 msgstr ""
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Use a calendar date in YYYY-MM-DD format (UTC)."
+msgstr "Implijit un deiziad er stumm BBBB-MM-DD (UTC)."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid calendar date."
+msgstr "Deiziad didalvoudek."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid feature collection."
+msgstr "Dastumad elfennoù didalvoudek."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timing must contain a boolean enabled option."
+msgstr "Ret eo d’ar mererezh amzer kaout un dibarzh gweredekaat boulean."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Hide from must not be after Delete on."
+msgstr "An deiziad kuzhat ne c’hall ket bezañ goude an deiziad dilemel."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "A timed feature needs a stable string ID."
+msgstr "Ret eo d’un elfenn gant mererezh amzer kaout un anaouder testenn stabil."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Delete on is required when timing is enabled."
+msgstr "Ret eo reiñ un deiziad dilemel pa vez gweredekaet mererezh an amzer."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timed feature IDs must be unique in their layer."
+msgstr "Ret eo d’anaouderioù an elfennoù gant mererezh amzer bezañ dibar en o zreuzfollenn."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "An automatically deleted feature cannot be restored with the same ID. Reload the layer."
+msgstr "Un elfenn dilamet emgefreek ne c’hall ket bezañ adlakaet gant an hevelep anaouder. Adkargit an treuzfollenn."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "Invalid GeoJSON or timing options."
+msgstr "GeoJSON pe arventennoù amzer didalvoudek."

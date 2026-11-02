@@ -662,5 +662,29 @@ registerLocale('el', {
     "Click to continue drawing the line": "Click to continue drawing the line",
     "Click to start measuring": "Click to start measuring",
     "Measure": "Measure",
-    "Measure areas": "Measure areas"
-})
+    "Measure areas": "Measure areas",
+    "Feature timing": "Χρονικός προγραμματισμός",
+    "Automatic cleanup": "Αυτόματη διαγραφή",
+    "Hide from (optional)": "Απόκρυψη από (προαιρετικό)",
+    "Delete on": "Διαγραφή στις",
+    "Required for automatic cleanup. Dates start at midnight UTC. Hidden features remain accessible; older versions and backups may retain deleted features.": "Υποχρεωτικό για την αυτόματη διαγραφή. Οι ημερομηνίες αρχίζουν τα μεσάνυχτα UTC. Τα κρυμμένα αντικείμενα παραμένουν προσβάσιμα· παλιότερες εκδόσεις και αντίγραφα ασφαλείας μπορεί να διατηρούν διαγραμμένα αντικείμενα.",
+    "Invalid feature timing. Delete on is required for automatic cleanup; Hide from must not be later. Use calendar dates in UTC.": "Μη έγκυρος χρονικός προγραμματισμός. Η αυτόματη διαγραφή απαιτεί ημερομηνία διαγραφής· η ημερομηνία απόκρυψης δεν μπορεί να είναι μεταγενέστερη. Χρησιμοποιήστε ημερομηνίες ημερολογίου σε UTC.",
+    "This layer changed and uses automatic cleanup. Reload the map before saving to avoid restoring deleted features.": "Αυτό το επίπεδο άλλαξε και χρησιμοποιεί αυτόματη διαγραφή. Φορτώστε ξανά τον χάρτη πριν αποθηκεύσετε, ώστε να μην επαναφέρετε διαγραμμένα αντικείμενα.",
+    "Use a date or a field reference such as {Ende}. Empty referenced fields pause the schedule.": "Χρησιμοποιήστε ημερομηνία ή αναφορά πεδίου όπως {Ende}. Ένα κενό πεδίο αναστέλλει τον προγραμματισμό.",
+    "Delete after hiding": "Διαγραφή μετά την απόκρυψη",
+    "Enter a delay instead of Delete on. Calendar months end on the last available day.": "Εισαγάγετε διάστημα αντί ημερομηνίας διαγραφής. Οι μήνες περιορίζονται στην τελευταία διαθέσιμη ημέρα.",
+    "Unit": "Μονάδα",
+    "Days": "Ημέρες",
+    "Months": "Μήνες",
+    "Applied to newly drawn features only. Existing features keep their own schedule.": "Μόνο για νέα σχεδιασμένα αντικείμενα. Τα υπάρχοντα διατηρούν τον προγραμματισμό τους.",
+    "Use for new features in this layer": "Χρήση για νέα αντικείμενα αυτού του επιπέδου",
+    "Invalid calendar date.": "Μη έγκυρη ημερομηνία ημερολογίου.",
+    "Enable timing": "Ενεργοποίηση προγραμματισμού",
+    "At expiration": "Κατά τη λήξη",
+    "Move to layer (keep)": "Μετακίνηση σε επίπεδο (διατήρηση)",
+    "Destination layer": "Επίπεδο προορισμού",
+    "Choose a saved local layer with compatible edit permissions. Moving disables timing. Older versions remain; reload to see background changes.": "Επιλέξτε αποθηκευμένο τοπικό επίπεδο με συμβατά δικαιώματα επεξεργασίας. Η μετακίνηση απενεργοποιεί τον προγραμματισμό. Οι παλαιές εκδόσεις διατηρούνται· ανανεώστε για αλλαγές στο παρασκήνιο.",
+    "Move on": "Μετακίνηση στις",
+    "Move after hiding": "Μετακίνηση μετά την απόκρυψη"
+}
+)

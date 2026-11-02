@@ -662,5 +662,29 @@ registerLocale('ru', {
     "Click to continue drawing the line": "Click to continue drawing the line",
     "Click to start measuring": "Click to start measuring",
     "Measure": "Measure",
-    "Measure areas": "Measure areas"
-})
+    "Measure areas": "Measure areas",
+    "Feature timing": "Управление по времени",
+    "Automatic cleanup": "Автоматическое удаление",
+    "Hide from (optional)": "Скрыть с (необязательно)",
+    "Delete on": "Удалить",
+    "Required for automatic cleanup. Dates start at midnight UTC. Hidden features remain accessible; older versions and backups may retain deleted features.": "Обязательно для автоматического удаления. Даты действуют с полуночи UTC. Скрытые объекты остаются доступны; старые версии и резервные копии могут сохранять удалённые объекты.",
+    "Invalid feature timing. Delete on is required for automatic cleanup; Hide from must not be later. Use calendar dates in UTC.": "Недопустимые настройки времени. Для автоматического удаления нужна дата удаления; дата скрытия не может быть позже неё. Используйте календарные даты в UTC.",
+    "This layer changed and uses automatic cleanup. Reload the map before saving to avoid restoring deleted features.": "Этот слой изменён и использует автоматическое удаление. Перед сохранением перезагрузите карту, чтобы не восстановить удалённые объекты.",
+    "Use a date or a field reference such as {Ende}. Empty referenced fields pause the schedule.": "Используйте дату или ссылку на поле, например {Ende}. Пустое поле приостанавливает расписание.",
+    "Delete after hiding": "Удалить после скрытия",
+    "Enter a delay instead of Delete on. Calendar months end on the last available day.": "Укажите срок вместо даты удаления. Месяцы ограничиваются последним доступным днём.",
+    "Unit": "Единица",
+    "Days": "Дни",
+    "Months": "Месяцы",
+    "Applied to newly drawn features only. Existing features keep their own schedule.": "Только для новых нарисованных объектов. Существующие сохраняют своё расписание.",
+    "Use for new features in this layer": "Использовать для новых объектов этого слоя",
+    "Invalid calendar date.": "Недопустимая календарная дата.",
+    "Enable timing": "Включить расписание",
+    "At expiration": "По истечении срока",
+    "Move to layer (keep)": "Переместить в слой (сохранить)",
+    "Destination layer": "Целевой слой",
+    "Choose a saved local layer with compatible edit permissions. Moving disables timing. Older versions remain; reload to see background changes.": "Выберите сохранённый локальный слой с совместимыми правами редактирования. Перемещение отключает расписание. Старые версии сохраняются; обновите карту, чтобы увидеть фоновые изменения.",
+    "Move on": "Переместить",
+    "Move after hiding": "Переместить после скрытия"
+}
+)

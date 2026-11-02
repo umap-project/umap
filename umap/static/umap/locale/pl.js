@@ -662,5 +662,29 @@ registerLocale('pl', {
     "Click to continue drawing the line": "Click to continue drawing the line",
     "Click to start measuring": "Click to start measuring",
     "Measure": "Measure",
-    "Measure areas": "Measure areas"
-})
+    "Measure areas": "Measure areas",
+    "Feature timing": "Sterowanie czasem",
+    "Automatic cleanup": "Automatyczne usuwanie",
+    "Hide from (optional)": "Ukryj od (opcjonalnie)",
+    "Delete on": "Usuń dnia",
+    "Required for automatic cleanup. Dates start at midnight UTC. Hidden features remain accessible; older versions and backups may retain deleted features.": "Wymagane do automatycznego usuwania. Daty obowiązują od północy UTC. Ukryte obiekty pozostają dostępne; starsze wersje i kopie zapasowe mogą zachowywać usunięte obiekty.",
+    "Invalid feature timing. Delete on is required for automatic cleanup; Hide from must not be later. Use calendar dates in UTC.": "Nieprawidłowe ustawienia czasu. Automatyczne usuwanie wymaga daty usunięcia; data ukrycia nie może być późniejsza. Użyj dat kalendarzowych w UTC.",
+    "This layer changed and uses automatic cleanup. Reload the map before saving to avoid restoring deleted features.": "Ta warstwa została zmieniona i używa automatycznego usuwania. Przed zapisem wczytaj mapę ponownie, aby nie przywrócić usuniętych obiektów.",
+    "Use a date or a field reference such as {Ende}. Empty referenced fields pause the schedule.": "Użyj daty lub odwołania do pola, np. {Ende}. Puste pole wstrzymuje harmonogram.",
+    "Delete after hiding": "Usuń po ukryciu",
+    "Enter a delay instead of Delete on. Calendar months end on the last available day.": "Podaj okres zamiast daty usunięcia. Miesiące są ograniczane do ostatniego dostępnego dnia.",
+    "Unit": "Jednostka",
+    "Days": "Dni",
+    "Months": "Miesiące",
+    "Applied to newly drawn features only. Existing features keep their own schedule.": "Tylko dla nowo rysowanych obiektów. Istniejące zachowują własny harmonogram.",
+    "Use for new features in this layer": "Użyj dla nowych obiektów tej warstwy",
+    "Invalid calendar date.": "Nieprawidłowa data kalendarzowa.",
+    "Enable timing": "Włącz harmonogram",
+    "At expiration": "Po upływie terminu",
+    "Move to layer (keep)": "Przenieś do warstwy (zachowaj)",
+    "Destination layer": "Warstwa docelowa",
+    "Choose a saved local layer with compatible edit permissions. Moving disables timing. Older versions remain; reload to see background changes.": "Wybierz zapisaną lokalną warstwę ze zgodnymi uprawnieniami edycji. Przeniesienie wyłącza harmonogram. Starsze wersje pozostają; odśwież mapę, aby zobaczyć zmiany w tle.",
+    "Move on": "Przenieś dnia",
+    "Move after hiding": "Przenieś po ukryciu"
+}
+)

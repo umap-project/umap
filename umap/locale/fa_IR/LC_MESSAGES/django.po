@@ -903,3 +903,53 @@ msgstr "مجوزها با موفقیت روزآمد شد!"
 #: views.py:1455
 msgid "Generic"
 msgstr ""
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Use a calendar date in YYYY-MM-DD format (UTC)."
+msgstr "از تاریخ میلادی با قالب YYYY-MM-DD و زمان UTC استفاده کنید."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid calendar date."
+msgstr "تاریخ میلادی نامعتبر است."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid feature collection."
+msgstr "مجموعهٔ عوارض نامعتبر است."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timing must contain a boolean enabled option."
+msgstr "تنظیمات زمانی باید گزینهٔ فعال‌سازی با مقدار بولی داشته باشد."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Hide from must not be after Delete on."
+msgstr "تاریخ پنهان‌سازی نباید پس از تاریخ حذف باشد."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "A timed feature needs a stable string ID."
+msgstr "عارضهٔ زمان‌بندی‌شده به شناسهٔ متنی ثابت نیاز دارد."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Delete on is required when timing is enabled."
+msgstr "هنگام فعال بودن کنترل زمانی، تاریخ حذف الزامی است."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timed feature IDs must be unique in their layer."
+msgstr "شناسه‌های عوارض زمان‌بندی‌شده باید در لایهٔ خود یکتا باشند."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "An automatically deleted feature cannot be restored with the same ID. Reload the layer."
+msgstr "عارضه‌ای که خودکار حذف شده با همان شناسه قابل بازیابی نیست. لایه را دوباره بارگیری کنید."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "Invalid GeoJSON or timing options."
+msgstr "GeoJSON یا تنظیمات زمانی نامعتبر است."

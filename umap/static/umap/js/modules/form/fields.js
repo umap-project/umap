@@ -315,6 +315,23 @@ const DateMixin = (Base) =>
 
 Fields.DateInput = class extends DateMixin(Fields.Input) {}
 
+// Keep the strict calendar value; DateInput also accepts legacy free-form dates.
+Fields.TimingDateInput = class extends Fields.Input {
+  type() {
+    return 'date'
+  }
+}
+
+Fields.TimingDelayInput = class extends Fields.Input {
+  type() {
+    return 'number'
+  }
+
+  value() {
+    return this.input.value === '' ? undefined : Number(this.input.value)
+  }
+}
+
 const DateTimeMixin = (Base) =>
   class extends Base {
     toHTML() {

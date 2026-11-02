@@ -662,5 +662,29 @@ registerLocale('sr', {
     "Click to continue drawing the line": "Click to continue drawing the line",
     "Click to start measuring": "Click to start measuring",
     "Measure": "Measure",
-    "Measure areas": "Measure areas"
-})
+    "Measure areas": "Measure areas",
+    "Feature timing": "Временско управљање",
+    "Automatic cleanup": "Аутоматско брисање",
+    "Hide from (optional)": "Сакриј од (необавезно)",
+    "Delete on": "Избриши дана",
+    "Required for automatic cleanup. Dates start at midnight UTC. Hidden features remain accessible; older versions and backups may retain deleted features.": "Обавезно за аутоматско брисање. Датуми почињу у поноћ UTC. Скривени објекти остају доступни; старије верзије и резервне копије могу задржати избрисане објекте.",
+    "Invalid feature timing. Delete on is required for automatic cleanup; Hide from must not be later. Use calendar dates in UTC.": "Неисправна временска подешавања. Аутоматско брисање захтева датум брисања; датум скривања не сме бити каснији. Користите календарске датуме у UTC-у.",
+    "This layer changed and uses automatic cleanup. Reload the map before saving to avoid restoring deleted features.": "Овај слој је промењен и користи аутоматско брисање. Поново учитајте карту пре чувања да се избрисани објекти не би вратили.",
+    "Use a date or a field reference such as {Ende}. Empty referenced fields pause the schedule.": "Користите датум или референцу на поље као {Ende}. Празно поље паузира распоред.",
+    "Delete after hiding": "Обриши након скривања",
+    "Enter a delay instead of Delete on. Calendar months end on the last available day.": "Унесите рок уместо датума брисања. Месеци се ограничавају на последњи доступан дан.",
+    "Unit": "Јединица",
+    "Days": "Дани",
+    "Months": "Месеци",
+    "Applied to newly drawn features only. Existing features keep their own schedule.": "Само за новонацртане објекте. Постојећи задржавају свој распоред.",
+    "Use for new features in this layer": "Користи за нове објекте овог слоја",
+    "Invalid calendar date.": "Неисправан календарски датум.",
+    "Enable timing": "Омогући распоред",
+    "At expiration": "По истеку",
+    "Move to layer (keep)": "Премести у слој (задржи)",
+    "Destination layer": "Одредишни слој",
+    "Choose a saved local layer with compatible edit permissions. Moving disables timing. Older versions remain; reload to see background changes.": "Изаберите сачуван локални слој са одговарајућим правима уређивања. Премештање искључује распоред. Старије верзије остају; поново учитајте карту за промене у позадини.",
+    "Move on": "Премести дана",
+    "Move after hiding": "Премести након скривања"
+}
+)

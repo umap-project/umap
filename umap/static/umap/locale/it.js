@@ -662,5 +662,29 @@ registerLocale('it', {
     "Click to continue drawing the line": "Click to continue drawing the line",
     "Click to start measuring": "Click to start measuring",
     "Measure": "Measure",
-    "Measure areas": "Measure areas"
-})
+    "Measure areas": "Measure areas",
+    "Feature timing": "Gestione temporale",
+    "Automatic cleanup": "Eliminazione automatica",
+    "Hide from (optional)": "Nascondi dal (facoltativo)",
+    "Delete on": "Elimina il",
+    "Required for automatic cleanup. Dates start at midnight UTC. Hidden features remain accessible; older versions and backups may retain deleted features.": "Obbligatorio per l’eliminazione automatica. Le date iniziano a mezzanotte UTC. Gli oggetti nascosti restano accessibili; le versioni precedenti e le copie di sicurezza possono conservare gli oggetti eliminati.",
+    "Invalid feature timing. Delete on is required for automatic cleanup; Hide from must not be later. Use calendar dates in UTC.": "Date non valide. L’eliminazione automatica richiede una data di eliminazione; la data di occultamento non può essere successiva. Usare date di calendario in UTC.",
+    "This layer changed and uses automatic cleanup. Reload the map before saving to avoid restoring deleted features.": "Questo livello è cambiato e usa l’eliminazione automatica. Ricaricare la mappa prima di salvare per evitare di ripristinare oggetti eliminati.",
+    "Use a date or a field reference such as {Ende}. Empty referenced fields pause the schedule.": "Usa una data o un riferimento come {Ende}. Un campo vuoto sospende la pianificazione.",
+    "Delete after hiding": "Elimina dopo aver nascosto",
+    "Enter a delay instead of Delete on. Calendar months end on the last available day.": "Inserisci un intervallo invece della data di eliminazione. I mesi si adattano all’ultimo giorno disponibile.",
+    "Unit": "Unità",
+    "Days": "Giorni",
+    "Months": "Mesi",
+    "Applied to newly drawn features only. Existing features keep their own schedule.": "Solo per i nuovi oggetti disegnati. Quelli esistenti mantengono la propria pianificazione.",
+    "Use for new features in this layer": "Usa per i nuovi oggetti di questo livello",
+    "Invalid calendar date.": "Data di calendario non valida.",
+    "Enable timing": "Attiva pianificazione",
+    "At expiration": "Alla scadenza",
+    "Move to layer (keep)": "Sposta in un livello (conserva)",
+    "Destination layer": "Livello di destinazione",
+    "Choose a saved local layer with compatible edit permissions. Moving disables timing. Older versions remain; reload to see background changes.": "Scegli un livello locale salvato con permessi di modifica compatibili. Lo spostamento disattiva la pianificazione. Le versioni precedenti rimangono; ricarica per vedere le modifiche in background.",
+    "Move on": "Sposta il",
+    "Move after hiding": "Sposta dopo aver nascosto"
+}
+)

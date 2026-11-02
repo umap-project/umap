@@ -662,5 +662,29 @@ registerLocale('ja', {
     "Click to continue drawing the line": "Click to continue drawing the line",
     "Click to start measuring": "Click to start measuring",
     "Measure": "Measure",
-    "Measure areas": "Measure areas"
-})
+    "Measure areas": "Measure areas",
+    "Feature timing": "時間設定",
+    "Automatic cleanup": "自動削除",
+    "Hide from (optional)": "非表示開始日（任意）",
+    "Delete on": "削除日",
+    "Required for automatic cleanup. Dates start at midnight UTC. Hidden features remain accessible; older versions and backups may retain deleted features.": "自動削除には必須です。日付はUTCの午前0時から有効です。非表示の地物には引き続きアクセスできます。削除した地物は過去のバージョンやバックアップに残る場合があります。",
+    "Invalid feature timing. Delete on is required for automatic cleanup; Hide from must not be later. Use calendar dates in UTC.": "時間設定が無効です。自動削除には削除日が必要です。非表示開始日は削除日以前にしてください。UTCの暦日を使用してください。",
+    "This layer changed and uses automatic cleanup. Reload the map before saving to avoid restoring deleted features.": "このレイヤーは変更され、自動削除が設定されています。削除した地物を復元しないよう、保存前に地図を再読み込みしてください。",
+    "Use a date or a field reference such as {Ende}. Empty referenced fields pause the schedule.": "日付または {Ende} のようなフィールド参照を指定します。参照先が空の場合はスケジュールを一時停止します。",
+    "Delete after hiding": "非表示にしてから削除するまでの期間",
+    "Enter a delay instead of Delete on. Calendar months end on the last available day.": "削除日の代わりに期間を入力します。該当する日がない場合は対象月の末日を使用します。",
+    "Unit": "単位",
+    "Days": "日",
+    "Months": "か月",
+    "Applied to newly drawn features only. Existing features keep their own schedule.": "新しく描画する地物のみに適用します。既存の地物のスケジュールは維持されます。",
+    "Use for new features in this layer": "このレイヤーの新しい地物に使用",
+    "Invalid calendar date.": "無効な暦日です。",
+    "Enable timing": "スケジュールを有効にする",
+    "At expiration": "期限が来たとき",
+    "Move to layer (keep)": "レイヤーに移動（保持）",
+    "Destination layer": "移動先レイヤー",
+    "Choose a saved local layer with compatible edit permissions. Moving disables timing. Older versions remain; reload to see background changes.": "編集権限に互換性のある保存済みのローカルレイヤーを選択します。移動するとスケジュールは無効になります。古いバージョンは残ります。バックグラウンドでの変更は再読み込みすると表示されます。",
+    "Move on": "移動日",
+    "Move after hiding": "非表示後に移動するまでの期間"
+}
+)

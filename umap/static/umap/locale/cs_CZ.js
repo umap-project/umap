@@ -662,5 +662,29 @@ registerLocale('cs_CZ', {
     "Click to continue drawing the line": "Click to continue drawing the line",
     "Click to start measuring": "Click to start measuring",
     "Measure": "Measure",
-    "Measure areas": "Measure areas"
-})
+    "Measure areas": "Measure areas",
+    "Feature timing": "Časové řízení",
+    "Automatic cleanup": "Automatické smazání",
+    "Hide from (optional)": "Skrýt od (volitelné)",
+    "Delete on": "Smazat dne",
+    "Required for automatic cleanup. Dates start at midnight UTC. Hidden features remain accessible; older versions and backups may retain deleted features.": "Povinné pro automatické smazání. Data začínají o půlnoci UTC. Skryté objekty zůstávají dostupné; starší verze a zálohy mohou smazané objekty uchovávat.",
+    "Invalid feature timing. Delete on is required for automatic cleanup; Hide from must not be later. Use calendar dates in UTC.": "Neplatné časové nastavení. Automatické smazání vyžaduje datum smazání; datum skrytí nesmí být pozdější. Použijte kalendářní data v UTC.",
+    "This layer changed and uses automatic cleanup. Reload the map before saving to avoid restoring deleted features.": "Tato vrstva se změnila a používá automatické smazání. Před uložením znovu načtěte mapu, aby se neobnovily smazané objekty.",
+    "Use a date or a field reference such as {Ende}. Empty referenced fields pause the schedule.": "Použijte datum nebo odkaz na pole, například {Ende}. Prázdné pole pozastaví plánování.",
+    "Delete after hiding": "Smazat po skrytí",
+    "Enter a delay instead of Delete on. Calendar months end on the last available day.": "Zadejte lhůtu místo data smazání. Měsíce se omezí na poslední dostupný den.",
+    "Unit": "Jednotka",
+    "Days": "Dny",
+    "Months": "Měsíce",
+    "Applied to newly drawn features only. Existing features keep their own schedule.": "Pouze pro nově kreslené objekty. Stávající objekty si ponechají svůj plán.",
+    "Use for new features in this layer": "Použít pro nové objekty této vrstvy",
+    "Invalid calendar date.": "Neplatné kalendářní datum.",
+    "Enable timing": "Zapnout plánování",
+    "At expiration": "Po vypršení",
+    "Move to layer (keep)": "Přesunout do vrstvy (ponechat)",
+    "Destination layer": "Cílová vrstva",
+    "Choose a saved local layer with compatible edit permissions. Moving disables timing. Older versions remain; reload to see background changes.": "Vyberte uloženou místní vrstvu s odpovídajícími právy úprav. Přesun vypne plánování. Starší verze zůstávají; pro zobrazení změn na pozadí mapu znovu načtěte.",
+    "Move on": "Přesunout dne",
+    "Move after hiding": "Přesunout po skrytí"
+}
+)

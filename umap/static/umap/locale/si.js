@@ -485,5 +485,29 @@ registerLocale('si', {
     "Only geometry centers": "Only geometry centers",
     "Search area": "Search area",
     "Type area name, or let empty to load data in current map view": "Type area name, or let empty to load data in current map view",
-    "Please define an expression for the query first": "Please define an expression for the query first"
-})
+    "Please define an expression for the query first": "Please define an expression for the query first",
+    "Feature timing": "කාල පාලනය",
+    "Automatic cleanup": "ස්වයංක්‍රීය මකාදැමීම",
+    "Hide from (optional)": "මෙම දිනයේ සිට සඟවන්න (විකල්ප)",
+    "Delete on": "මකා දැමිය යුතු දිනය",
+    "Required for automatic cleanup. Dates start at midnight UTC. Hidden features remain accessible; older versions and backups may retain deleted features.": "ස්වයංක්‍රීය මකාදැමීම සඳහා අනිවාර්යයි. දිනයන් UTC මධ්‍යම රාත්‍රියේ ආරම්භ වේ. සැඟවූ අංග තවමත් ප්‍රවේශ විය හැක; පැරණි සංස්කරණ සහ උපස්ථවල මකා දැමූ අංග පැවතිය හැක.",
+    "Invalid feature timing. Delete on is required for automatic cleanup; Hide from must not be later. Use calendar dates in UTC.": "කාල සැකසුම් වලංගු නැත. ස්වයංක්‍රීය මකාදැමීමට මකාදැමීමේ දිනයක් අවශ්‍ය අතර සැඟවීමේ දිනය ඊට පසු විය නොහැක. UTC අනුව ග්‍රෙගෝරියානු දින භාවිත කරන්න.",
+    "This layer changed and uses automatic cleanup. Reload the map before saving to avoid restoring deleted features.": "මෙම ස්තරය වෙනස් වී ඇති අතර ස්වයංක්‍රීය මකාදැමීම භාවිත කරයි. මකා දැමූ අංග නැවත ඇති නොවීමට සුරැකීමට පෙර සිතියම නැවත පූරණය කරන්න.",
+    "Use a date or a field reference such as {Ende}. Empty referenced fields pause the schedule.": "දිනයක් හෝ {Ende} වැනි ක්ෂේත්‍ර යොමුවක් භාවිත කරන්න. හිස් ක්ෂේත්‍රයක් කාලසටහන නවතයි.",
+    "Delete after hiding": "සැඟවීමෙන් පසු මකන්න",
+    "Enter a delay instead of Delete on. Calendar months end on the last available day.": "මකන දිනය වෙනුවට කාලයක් ඇතුළත් කරන්න. මාස අවසන් වන්නේ ලබා ගත හැකි අවසාන දිනයෙනි.",
+    "Unit": "ඒකකය",
+    "Days": "දින",
+    "Months": "මාස",
+    "Applied to newly drawn features only. Existing features keep their own schedule.": "අලුතින් අඳින ලද වස්තු සඳහා පමණි. පවතින වස්තු තම කාලසටහන තබා ගනී.",
+    "Use for new features in this layer": "මෙම ස්තරයේ නව වස්තු සඳහා භාවිත කරන්න",
+    "Invalid calendar date.": "වලංගු නොවන දින දර්ශන දිනයකි.",
+    "Enable timing": "කාලසටහන සක්‍රිය කරන්න",
+    "At expiration": "කල් ඉකුත් වූ විට",
+    "Move to layer (keep)": "ස්තරයකට ගෙනයන්න (තබාගන්න)",
+    "Destination layer": "ගමනාන්ත ස්තරය",
+    "Choose a saved local layer with compatible edit permissions. Moving disables timing. Older versions remain; reload to see background changes.": "ගැළපෙන සංස්කරණ අවසර ඇති සුරැකි දේශීය ස්තරයක් තෝරන්න. ගෙනයාම කාලසටහන අක්‍රිය කරයි. පැරණි අනුවාද පවතී; පසුබිම් වෙනස්කම් බැලීමට නැවත පූරණය කරන්න.",
+    "Move on": "ගෙනයන දිනය",
+    "Move after hiding": "සැඟවීමෙන් පසු ගෙනයන්න"
+}
+)

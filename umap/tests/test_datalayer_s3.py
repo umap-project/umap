@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import UTC, datetime
 
 import boto3
 import pytest
@@ -13,6 +14,55 @@ from umap.models import DataLayer
 from .base import DataLayerFactory
 
 pytestmark = pytest.mark.django_db
+
+
+def test_archive_preserves_s3_versions_and_recovers_after_partial_storage_write(
+    map, monkeypatch
+):
+    from umap import feature_archiving
+    from umap.feature_timing import cleanup_layer
+    from umap.models import FeatureArchive
+
+    from .test_feature_archiving import pair
+    from .test_feature_timing import read
+
+    source, target, data = pair(map)
+    source_ref, target_ref = source.reference_version, target.reference_version
+    write = feature_archiving.write_layer
+
+    def interrupt_after_removal(layer, *args, **kwargs):
+        result = write(layer, *args, **kwargs)
+        if layer.pk == source.pk:
+            raise OSError("Synthetic interruption after S3 object PUT")
+        return result
+
+    monkeypatch.setattr(feature_archiving, "write_layer", interrupt_after_removal)
+    with pytest.raises(OSError):
+        cleanup_layer(source.pk, datetime(2030, 1, 2, tzinfo=UTC))
+    # S3 objects have changed even though the pointer transaction rolled back.
+    assert not read(source)["features"]
+    assert len(read(target)["features"]) == 1
+    assert FeatureArchive.objects.filter(completed=False).exists()
+    monkeypatch.setattr(feature_archiving, "write_layer", write)
+    assert cleanup_layer(source.pk, datetime(2030, 1, 2, tzinfo=UTC)) == 1
+    assert len(read(target)["features"]) == 1
+    assert FeatureArchive.objects.get(source=source).completed
+    assert json.loads(source.get_version(source_ref))["features"] == data["features"]
+    assert not json.loads(target.get_version(target_ref))["features"]
+
+
+def test_timed_cleanup_preserves_s3_history(map):
+    from umap.feature_timing import cleanup_layer
+
+    from .test_feature_timing import document, read
+
+    data = document()
+    layer = DataLayerFactory(map=map, data=data)
+    reference = layer.reference_version
+    assert cleanup_layer(layer.pk, datetime(2030, 1, 2, tzinfo=UTC)) == 1
+    assert not read(layer)["features"]
+    assert json.loads(layer.get_version(reference))["features"] == data["features"]
+    assert layer.expiredfeature_set.count() == 1
 
 
 @pytest.fixture(scope="module", autouse=True)

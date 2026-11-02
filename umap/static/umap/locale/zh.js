@@ -662,5 +662,29 @@ registerLocale('zh', {
     "Click to continue drawing the line": "Click to continue drawing the line",
     "Click to start measuring": "Click to start measuring",
     "Measure": "Measure",
-    "Measure areas": "Measure areas"
-})
+    "Measure areas": "Measure areas",
+    "Feature timing": "时间控制",
+    "Automatic cleanup": "自动删除",
+    "Hide from (optional)": "开始隐藏日期（可选）",
+    "Delete on": "删除日期",
+    "Required for automatic cleanup. Dates start at midnight UTC. Hidden features remain accessible; older versions and backups may retain deleted features.": "自动删除时必填。日期从UTC午夜零时开始生效。隐藏的要素仍可访问；旧版本和备份可能保留已删除的要素。",
+    "Invalid feature timing. Delete on is required for automatic cleanup; Hide from must not be later. Use calendar dates in UTC.": "时间设置无效。自动删除需要填写删除日期，开始隐藏日期不能晚于删除日期。请使用UTC公历日期。",
+    "This layer changed and uses automatic cleanup. Reload the map before saving to avoid restoring deleted features.": "此图层已更改且使用自动删除。保存前请重新加载地图，以免恢复已删除的要素。",
+    "Use a date or a field reference such as {Ende}. Empty referenced fields pause the schedule.": "使用日期或 {Ende} 这样的字段引用。引用字段为空时暂停计划。",
+    "Delete after hiding": "隐藏后多久删除",
+    "Enter a delay instead of Delete on. Calendar months end on the last available day.": "输入期限以代替删除日期。目标月份没有对应日期时使用月末。",
+    "Unit": "单位",
+    "Days": "天",
+    "Months": "个月",
+    "Applied to newly drawn features only. Existing features keep their own schedule.": "仅应用于新绘制的要素。现有要素保留各自的计划。",
+    "Use for new features in this layer": "用于此图层的新要素",
+    "Invalid calendar date.": "公历日期无效。",
+    "Enable timing": "启用时间设置",
+    "At expiration": "到期时",
+    "Move to layer (keep)": "移至图层（保留）",
+    "Destination layer": "目标图层",
+    "Choose a saved local layer with compatible edit permissions. Moving disables timing. Older versions remain; reload to see background changes.": "选择具有兼容编辑权限的已保存本地图层。移动后停用时间设置。旧版本仍然保留；重新加载以查看后台更改。",
+    "Move on": "移动日期",
+    "Move after hiding": "隐藏后多久移动"
+}
+)

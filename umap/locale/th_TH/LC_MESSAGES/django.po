@@ -899,3 +899,53 @@ msgstr ""
 #: views.py:1455
 msgid "Generic"
 msgstr ""
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Use a calendar date in YYYY-MM-DD format (UTC)."
+msgstr "ใช้วันที่ตามปฏิทินเกรกอเรียนในรูปแบบ YYYY-MM-DD (UTC)"
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid calendar date."
+msgstr "วันที่ตามปฏิทินไม่ถูกต้อง"
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid feature collection."
+msgstr "ชุดวัตถุไม่ถูกต้อง"
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timing must contain a boolean enabled option."
+msgstr "การตั้งเวลาต้องมีตัวเลือกเปิดใช้งานที่เป็นค่าบูลีน"
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Hide from must not be after Delete on."
+msgstr "วันที่ซ่อนต้องไม่อยู่หลังวันที่ลบ"
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "A timed feature needs a stable string ID."
+msgstr "วัตถุที่ตั้งเวลาต้องมี ID แบบข้อความที่คงที่"
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Delete on is required when timing is enabled."
+msgstr "ต้องระบุวันที่ลบเมื่อเปิดใช้การตั้งเวลา"
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timed feature IDs must be unique in their layer."
+msgstr "ID ของวัตถุที่ตั้งเวลาต้องไม่ซ้ำกันภายในชั้นข้อมูล"
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "An automatically deleted feature cannot be restored with the same ID. Reload the layer."
+msgstr "ไม่สามารถคืนค่าวัตถุที่ถูกลบอัตโนมัติด้วย ID เดิมได้ โปรดโหลดชั้นข้อมูลใหม่"
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "Invalid GeoJSON or timing options."
+msgstr "GeoJSON หรือตัวเลือกเวลาไม่ถูกต้อง"

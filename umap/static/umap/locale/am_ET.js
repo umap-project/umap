@@ -662,5 +662,29 @@ registerLocale('am_ET', {
     "Click to continue drawing the line": "Click to continue drawing the line",
     "Click to start measuring": "Click to start measuring",
     "Measure": "Measure",
-    "Measure areas": "Measure areas"
-})
+    "Measure areas": "Measure areas",
+    "Feature timing": "የጊዜ ቁጥጥር",
+    "Automatic cleanup": "ራስ-ሰር መሰረዝ",
+    "Hide from (optional)": "ከዚህ ቀን ጀምሮ ደብቅ (አማራጭ)",
+    "Delete on": "የሚሰረዝበት ቀን",
+    "Required for automatic cleanup. Dates start at midnight UTC. Hidden features remain accessible; older versions and backups may retain deleted features.": "ለራስ-ሰር መሰረዝ ግዴታ ነው። ቀኖች በUTC እኩለ ሌሊት ይጀምራሉ። የተደበቁ ነገሮች አሁንም ተደራሽ ናቸው፤ የቆዩ ስሪቶች እና መጠባበቂያ ቅጂዎች የተሰረዙ ነገሮችን ሊያቆዩ ይችላሉ።",
+    "Invalid feature timing. Delete on is required for automatic cleanup; Hide from must not be later. Use calendar dates in UTC.": "የጊዜ ቅንብሮቹ ልክ አይደሉም። ራስ-ሰር መሰረዝ የመሰረዣ ቀን ይፈልጋል፤ የመደበቂያ ቀን ከዚያ በኋላ መሆን የለበትም። የግሪጎሪያን ቀኖችን በUTC ይጠቀሙ።",
+    "This layer changed and uses automatic cleanup. Reload the map before saving to avoid restoring deleted features.": "ይህ ንብርብር ተለውጧል እና ራስ-ሰር መሰረዝን ይጠቀማል። የተሰረዙ ነገሮች እንዳይመለሱ ከማስቀመጥዎ በፊት ካርታውን እንደገና ይጫኑ።",
+    "Use a date or a field reference such as {Ende}. Empty referenced fields pause the schedule.": "ቀን ወይም እንደ {Ende} ያለ የመስክ ማጣቀሻ ይጠቀሙ። ባዶ መስክ የጊዜ ሰሌዳውን ያቆማል።",
+    "Delete after hiding": "ከመደበቅ በኋላ ሰርዝ",
+    "Enter a delay instead of Delete on. Calendar months end on the last available day.": "በመሰረዣ ቀን ፈንታ የጊዜ ገደብ ያስገቡ። ወራት እስከ መጨረሻው ያለ ቀን ይገደባሉ።",
+    "Unit": "መለኪያ",
+    "Days": "ቀናት",
+    "Months": "ወራት",
+    "Applied to newly drawn features only. Existing features keep their own schedule.": "አዲስ ለተሳሉ ነገሮች ብቻ። ያሉት ነገሮች የራሳቸውን የጊዜ ሰሌዳ ይይዛሉ።",
+    "Use for new features in this layer": "በዚህ ንብርብር ላሉ አዲስ ነገሮች ተጠቀም",
+    "Invalid calendar date.": "ልክ ያልሆነ የቀን መቁጠሪያ ቀን።",
+    "Enable timing": "የጊዜ ሰሌዳን አንቃ",
+    "At expiration": "ጊዜው ሲያበቃ",
+    "Move to layer (keep)": "ወደ ንብርብር አንቀሳቅስ (አቆይ)",
+    "Destination layer": "መድረሻ ንብርብር",
+    "Choose a saved local layer with compatible edit permissions. Moving disables timing. Older versions remain; reload to see background changes.": "ተስማሚ የአርትዖት ፈቃድ ያለው የተቀመጠ አካባቢያዊ ንብርብር ይምረጡ። ማንቀሳቀስ የጊዜ ሰሌዳውን ያቦዝናል። የቆዩ ስሪቶች ይቀራሉ፤ የጀርባ ለውጦችን ለማየት እንደገና ይጫኑ።",
+    "Move on": "የማንቀሳቀሻ ቀን",
+    "Move after hiding": "ከመደበቅ በኋላ አንቀሳቅስ"
+}
+)

@@ -904,3 +904,53 @@ msgstr "Τα δικαιώματα ενημερώθηκαν με επιτυχία
 #: views.py:1455
 msgid "Generic"
 msgstr "Γενικό"
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Use a calendar date in YYYY-MM-DD format (UTC)."
+msgstr "Χρησιμοποιήστε ημερομηνία στη μορφή ΕΕΕΕ-ΜΜ-ΗΗ (UTC)."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid calendar date."
+msgstr "Μη έγκυρη ημερομηνία ημερολογίου."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid feature collection."
+msgstr "Μη έγκυρη συλλογή αντικειμένων."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timing must contain a boolean enabled option."
+msgstr "Ο χρονικός προγραμματισμός πρέπει να περιέχει λογική επιλογή ενεργοποίησης."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Hide from must not be after Delete on."
+msgstr "Η ημερομηνία απόκρυψης δεν μπορεί να είναι μετά την ημερομηνία διαγραφής."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "A timed feature needs a stable string ID."
+msgstr "Ένα προγραμματισμένο αντικείμενο χρειάζεται σταθερό αναγνωριστικό συμβολοσειράς."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Delete on is required when timing is enabled."
+msgstr "Η ημερομηνία διαγραφής απαιτείται όταν ο χρονικός προγραμματισμός είναι ενεργός."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timed feature IDs must be unique in their layer."
+msgstr "Τα αναγνωριστικά των προγραμματισμένων αντικειμένων πρέπει να είναι μοναδικά στο επίπεδό τους."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "An automatically deleted feature cannot be restored with the same ID. Reload the layer."
+msgstr "Ένα αυτόματα διαγραμμένο αντικείμενο δεν μπορεί να επαναφερθεί με το ίδιο αναγνωριστικό. Φορτώστε ξανά το επίπεδο."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "Invalid GeoJSON or timing options."
+msgstr "Μη έγκυρο GeoJSON ή χρονικές επιλογές."
