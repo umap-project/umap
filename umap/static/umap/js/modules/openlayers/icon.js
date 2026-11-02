@@ -146,12 +146,14 @@ function wrapText(text, font, maxWidth) {
   return lines.join('\n')
 }
 
-function makeSymbol(src, offset, size, bgColor, maxWidth, zIndex) {
+function makeSymbol({ url, offset = 0, size, bgColor, maxWidth, opacity }, zIndex) {
+  const src = url || SCHEMA.iconUrl.default
   if (isImg(src)) {
     const options = {
       src,
       displacement: [0, offset],
       crossOrigin: null,
+      opacity,
     }
     if (bgColor && src.endsWith('.svg') && src !== SCHEMA.iconUrl.default) {
       options.color = blackOrWhite(bgColor)
@@ -168,7 +170,7 @@ function makeSymbol(src, offset, size, bgColor, maxWidth, zIndex) {
     text: label,
     offsetY: -offset,
     font,
-    fill: new Fill({ color: bgColor ? blackOrWhite(bgColor) : '#fff' }),
+    fill: new Fill({ color: rgba(bgColor ? blackOrWhite(bgColor) : '#fff', opacity) }),
   })
   if (maxWidth) {
     // Wrapping fits multi-word labels; a single word longer than the box still needs scaling.
@@ -201,10 +203,10 @@ export function makeIcon(properties, zIndex) {
   // Circle / LargeCircle are plain circles → native CircleStyle, no rasterization.
   if (['Circle', 'ProportionalCircle'].includes(iconClass)) {
     const circleOpacity =
-      iconClass === 'Circle' ? 0.5 : properties.fillOpacity || properties.iconOpacity
+      iconClass === 'Circle' ? opacity : properties.fillOpacity || opacity
     const strokeColor =
       iconClass === 'Circle'
-        ? '#fff'
+        ? rgba('#fff', circleOpacity)
         : rgba(properties.fillColor || properties.color, circleOpacity)
     const radius = (properties.radius || 6) * scale
     return {
@@ -226,6 +228,13 @@ export function makeIcon(properties, zIndex) {
     // iconSize is a dynamic diameter; the 2px ring straddles the edge (radius = size/2 - 1).
     const iconSize = properties.iconSize || SCHEMA.iconSize.default
     const radius = (iconSize / 2 - 1) * scale
+    const symbol = {
+      url: properties.iconUrl,
+      size: iconSize * scale,
+      bgColor: '#fff',
+      maxWidth: (iconSize / 2) * scale,
+      opacity,
+    }
     return {
       style: [
         new Style({
@@ -237,14 +246,7 @@ export function makeIcon(properties, zIndex) {
           zIndex,
         }),
         // Symbol contrasts with the white disk; wrapped/scaled to stay inside the ring.
-        makeSymbol(
-          properties.iconUrl || SCHEMA.iconUrl.default,
-          0,
-          iconSize * scale,
-          '#fff',
-          (iconSize / 2) * scale,
-          zIndex
-        ),
+        makeSymbol(symbol, zIndex),
       ],
       popupOffsetY: -radius,
       textAnchor: [radius, -radius, radius],
@@ -255,15 +257,9 @@ export function makeIcon(properties, zIndex) {
   if (iconClass === 'Raw') {
     const iconSize = properties.iconSize || SCHEMA.iconSize.default
     const radius = (iconSize / 2) * scale
+    const symbol = { url: properties.iconUrl, size: iconSize * scale, opacity }
     return {
-      style: makeSymbol(
-        properties.iconUrl || SCHEMA.iconUrl.default,
-        0,
-        iconSize * scale,
-        undefined,
-        undefined,
-        zIndex
-      ),
+      style: makeSymbol(symbol, zIndex),
       popupOffsetY: -radius,
       textAnchor: [radius, -radius, radius],
     }
@@ -281,16 +277,15 @@ export function makeIcon(properties, zIndex) {
   ]
   // Shapes with a `symbolOffset` host a symbol; others (Ball) are self-contained.
   if (shape.symbolOffset !== undefined) {
-    styles.push(
-      makeSymbol(
-        properties.iconUrl || SCHEMA.iconUrl.default,
-        shape.symbolOffset * scale,
-        24 * scale,
-        properties.color,
-        24 * scale,
-        zIndex
-      )
-    )
+    const symbol = {
+      url: properties.iconUrl,
+      offset: shape.symbolOffset * scale,
+      size: 24 * scale,
+      bgColor: properties.color,
+      maxWidth: 24 * scale,
+      opacity,
+    }
+    styles.push(makeSymbol(symbol, zIndex))
   }
   return {
     style: styles,
