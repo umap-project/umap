@@ -185,7 +185,7 @@ def test_can_restore_version(
     assert_screenshot(page, suffix="default", ui=False)
     page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel.right").get_by_title("Edit", exact=True).click()
-    page.get_by_text("Versions").click()
+    page.get_by_role("heading", name="Versions", exact=True).click()
     page.get_by_title("Restore this version").last.click()
     page.get_by_role("button", name="OK").click()
     assert_screenshot(page, suffix="ball", ui=False)
