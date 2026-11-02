@@ -2,6 +2,38 @@
     --background-color: var(--color-lighterGray);
 }
 
+/* Keep disclosure separate from the eye control. Native summary retains
+   keyboard support and exposes its expanded state to assistive technology. */
+.umap-browser details.datalayer > summary > span:first-child,
+details.expandable-layer-group > summary > span:first-child {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}
+.umap-browser details.datalayer > summary > span:last-child {
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.umap-browser details.datalayer > summary .icon-folder {
+    flex-shrink: 0;
+}
+.umap-browser details.datalayer > summary > span:first-child::before,
+details.expandable-layer-group > summary > span:first-child::before {
+    content: '';
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-inline: 3px 9px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(-45deg);
+    flex-shrink: 0;
+}
+.umap-browser details.datalayer[open] > summary > span:first-child::before,
+details.expandable-layer-group[open] > summary > span:first-child::before {
+    transform: rotate(45deg);
+}
+
 .umap-caption .datalayer-name,
 .umap-browser .datalayer-name,
 .umap-browser .feature-title {

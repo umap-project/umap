@@ -940,6 +940,7 @@ export default class App extends Utils.WithEvents {
       'properties.miniMapControl',
       'properties.scaleControl',
       'properties.onLoadPanel',
+      'properties.collapseGroupsOnLoad',
       'properties.displayPopupFooter',
       'properties.captionBar',
       'properties.captionMenus',
@@ -1730,7 +1731,7 @@ export default class App extends Utils.WithEvents {
           : ''
       const [li, { body, toolbox, formbox, icon }] = Utils.loadTemplateWithRefs(`
           <li class="orderable${nochildren}">
-            <details open data-ondelete data-id="${layer.id}">
+            <details open class="${layer.group ? 'expandable-layer-group' : ''}" data-ondelete data-id="${layer.id}">
               <summary class="with-toolbox" data-ontoggle data-id="${layer.id}">
                 <span>
                   <i class="icon icon-16" data-ref="icon"></i>

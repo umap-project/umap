@@ -658,5 +658,11 @@
     "Click to continue drawing the line": "Click to continue drawing the line",
     "Click to start measuring": "Click to start measuring",
     "Measure": "Measure",
-    "Measure areas": "Measure areas"
+    "Measure areas": "Measure areas",
+    "Group in the data browser on load": "Group in the data browser on load",
+    "Use map setting": "Use map setting",
+    "Expanded": "Expanded",
+    "Collapsed": "Collapsed",
+    "Only changes the list. Layer visibility on the map is unchanged.": "Only changes the list. Layer visibility on the map is unchanged.",
+    "Collapse layer groups on load": "Collapse layer groups on load"
 }
