@@ -10,26 +10,26 @@
 ## How to make a release
 
 1. Make sure JS packages are up to date:
-    - `make installjs`
+    - `just installjs`
 1. Run tests:
-    - `make test`
+    - `just test`
 1. I18N
-    - `make messages` look for new strings within the code
-    - `make tx_push` to publish new strings [to transifex](https://app.transifex.com/openstreetmap/umap/dashboard/)
+    - `just messages` look for new strings within the code
+    - `just tx_push` to publish new strings [to transifex](https://app.transifex.com/openstreetmap/umap/dashboard/)
     - translators at work
-    - `make tx_pull` to retrieve new translations from transifex
-    - `make compilemessages` to create regular `.mo` + `umap/static/umap/locale/*.js`
+    - `just tx_pull` to retrieve new translations from transifex
+    - `just compilemessages` to create regular `.mo` + `umap/static/umap/locale/*.js`
     - commit new translations `git commit -am "i18n"`
-2. Test collectstatic: `make buildjs && uv run umap collectstatic --no-input`
-2. Bump version: `make patch|minor`
-2. Ask automatic release notes to Github: `make changelog` and paste it in `docs/changelog.md`
+2. Test collectstatic: `just buildjs && uv run umap collectstatic --no-input`
+2. Bump version: `just patch|minor`
+2. Ask automatic release notes to Github: `just changelog` and paste it in `docs/changelog.md`
 3. `git commit -am "2.X.Y"`
 4. `git tag 2.X.Y`
 5. `git push && git push --tag`
 6. Go to [Github release page](https://github.com/umap-project/umap/releases/new) and paste release notes
-7. `make build`
-8. `make publish`
-9. `make docker`
+7. `just build`
+8. `just publish`
+9. `just docker`
 
 ### Deploying instances
 

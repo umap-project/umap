@@ -40,6 +40,9 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
 
+      - name: Install just
+        uses: extractions/setup-just@v3
+
       - name: Set up Python
         run: uv python install
 
@@ -47,10 +50,10 @@ jobs:
         run: |
           sudo apt update
           sudo apt install libgdal-dev
-          make ci
+          just ci
           npm install mocha esbuild
       - name: run tests
-        run: make test
+        run: just test
         env:
           DJANGO_SETTINGS_MODULE: 'umap.tests.settings'
           UMAP_SETTINGS: 'umap/tests/settings.py'
@@ -71,16 +74,19 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
 
+      - name: Install just
+        uses: extractions/setup-just@v3
+
       - name: Set up Python
         run: uv python install
 
       - name: Install dependencies
         run: |
-          make ci
+          just ci
           npm install eslint
 
       - name: Run Lint
-        run: make lint
+        run: just lint
 
       - name: Run Docs
-        run: make docs
+        run: just docs
