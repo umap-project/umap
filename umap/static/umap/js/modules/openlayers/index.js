@@ -1,4 +1,4 @@
-import { noModifierKeys } from 'ol/events/condition.js'
+import { never, noModifierKeys } from 'ol/events/condition.js'
 import MultiPoint from 'ol/geom/MultiPoint.js'
 import MouseWheelZoom from 'ol/interaction/MouseWheelZoom.js'
 import VectorLayer from 'ol/layer/Vector.js'
@@ -8,6 +8,7 @@ import { fromLonLat, toLonLat } from 'ol/proj.js'
 import VectorSource from 'ol/source/Vector.js'
 import CircleStyle from 'ol/style/Circle.js'
 import Fill from 'ol/style/Fill.js'
+import Select from 'ol/interaction/Select.js'
 import Stroke from 'ol/style/Stroke.js'
 import Style from 'ol/style/Style.js'
 import View from 'ol/View.js'
@@ -38,6 +39,8 @@ const HIGHLIGHT_ZINDEX = 1e6
 
 const POPUP_ARROW_HEIGHT = 12
 const FIT_PADDING = [50, 50, 50, 50]
+
+const HIT_TOLERANCE = 5 // pixels
 
 const popupTemplate = `
   <div class="umap-popup window">
@@ -84,6 +87,26 @@ export class OLProxy {
     container.addEventListener('click', (event) => {
       if (event.target.closest('[data-close]')) this.app.fire('popup:close')
     })
+
+    // Do not allow to select spiderfied "false" markers (they are recreated at each
+    // spiderfy, and this would activate the translate, which we do not want).
+    const selectable = (feature) => feature.get('editable')
+    const onHighlight = (feature) => {
+      if (feature.get('represents')) {
+        feature = feature.get('represents')
+      }
+      return feature?.umapStyles?.highlight
+    }
+    // Shift means "edit this feature" in uMap, not OL's default "toggle selection".
+    this.select = new Select({
+      style: onHighlight,
+      filter: selectable,
+      toggleCondition: never,
+      hitTolerance: HIT_TOLERANCE,
+    })
+    this.map.addInteraction(this.select)
+    this.select.on('select', (event) => this.onSelect(event))
+
     this.proxyOutgoingEvents()
     this.proxyIncomingEvents()
   }
@@ -106,7 +129,8 @@ export class OLProxy {
   onPointerMove(event) {
     if (event.dragging) return
     const olFeature = this.map.forEachFeatureAtPixel(event.pixel, (feature) =>
-      feature.get('interactive') ? feature : undefined
+      feature.get('interactive') ? feature : undefined,
+      {hitTolerance: HIT_TOLERANCE}
     )
     this.map.getTargetElement().style.cursor = olFeature ? 'pointer' : ''
     this.toggleTooltip(olFeature, event.originalEvent)
@@ -153,7 +177,16 @@ export class OLProxy {
       body.innerHTML = ''
       body.appendChild(content)
       this.popup.element.classList.toggle('umap-popup-large', mode === 'large')
-      this.highlight(sourceId, id)
+      if (olFeature.represented) {
+        const features = olFeature.represented.get('features')
+        if (features.length > 1) {
+          this.spider.reveal(features, olFeature.getGeometry().getCoordinates())
+        } else {
+          this.select.selectFeature(olFeature.represented)
+        }
+      } else {
+        this.select.selectFeature(olFeature)
+      }
     })
     this.app.on('popup:close', () => this.closePopup())
     this.app.on('map:show:point', (event) => this.showPoint(event.detail))
@@ -162,9 +195,9 @@ export class OLProxy {
       const { sourceId, id } = event.detail
       const olFeature = this.sources[sourceId]?.getFeatureById(id)
       if (!olFeature) return
-      this.editor?.select.selectFeature(olFeature)
+      this.select.selectFeature(olFeature)
     })
-    this.app.on('feature:endedit', () => this.editor?.select.clearSelection())
+    this.app.on('feature:endedit', () => this.select.clearSelection())
     this.app.on('feature:reset', (event) => {
       const { sourceId, geojson } = event.detail
       const olFeature = this.sources[sourceId]?.getFeatureById(geojson.id)
@@ -407,11 +440,11 @@ export class OLProxy {
   }
 
   hasSelection() {
-    return Boolean(this.editor?.select.getFeatures().getLength())
+    return Boolean(this.select.getFeatures().getLength())
   }
 
   get selection() {
-    return this.editor?.select
+    return this.select
       .getFeatures()
       .getArray()
       .map((olFeature) => this.getFeatureById(olFeature.getId()))
@@ -502,33 +535,45 @@ export class OLProxy {
     // (fromZoom/toZoom) is not wired on the OL side yet.
   }
 
+  async ensureSpider() {
+    if (!this.spider) {
+      // Several features under one marker: the click spreads or zooms them, it opens nothing.
+      return import('./cluster.js').then((Cluster) => {
+        this.spider ??= new Cluster.Spider(this.map)
+        return Cluster
+      })
+    }
+  }
+
   onClick(event) {
     this.closePopup()
     // Topmost interactive feature, skipping non-interactive ones.
     const olFeature = this.map.forEachFeatureAtPixel(event.pixel, (feature) =>
       feature.get('interactive') ? feature : undefined
     )
-    if (!olFeature) return
-    const geometry = olFeature.getGeometry()
-    // A point is anchored where it is drawn, which differs from its data position
-    // once spiderfied.
-    const anchor =
-      geometry.getType() === 'Point' ? geometry.getCoordinates() : event.coordinate
-    const represented = olFeature.get('represents')
-    if (represented) {
-      this.onFeatureClick(represented.getId(), event, anchor)
-    } else if (olFeature.get('features')) {
-      // Several features under one marker: the click spreads or zooms them, it opens nothing.
-      import('./cluster.js').then((Cluster) => {
-        this.spider ??= new Cluster.Spider(this.map)
+    if (olFeature?.get('features')?.length > 1) {
+      this.ensureSpider().then((Cluster) => {
         Cluster.onClick(olFeature, {
           map: this.map,
           spider: this.spider,
           app: this.app,
         })
       })
-    } else {
-      this.onFeatureClick(olFeature.getId(), event, anchor)
+    }
+  }
+
+  onSelect(event) {
+    const olFeature = event.selected[0]
+    if (!olFeature) return
+    const geometry = olFeature.getGeometry()
+    // A point is anchored where it is drawn, which differs from its data position
+    // once spiderfied.
+    const anchor =
+      geometry.getType() === 'Point' ? geometry.getCoordinates() : event.mapBrowserEvent?.coordinate_
+    const represented = olFeature.get('represents')
+    const realFeatureId = represented ? represented.getId() : olFeature.id_
+    if (event.selected.length === 1) {
+      this.onFeatureClick(realFeatureId, event, anchor)
     }
   }
 
@@ -537,8 +582,11 @@ export class OLProxy {
     const uFeature = this.getFeatureById(id)
     if (!uFeature) return
     if (this.map.measureTools?.enabled()) return
-    if (event.originalEvent.shiftKey) {
-      if (event.originalEvent.ctrlKey || event.originalEvent.metaKey) {
+    if (!event.mapBrowserEvent) return
+    event.originalEvent = event.mapBrowserEvent
+    event.originalEvent.coordinate = event.mapBrowserEvent.coordinate_
+    if (event.mapBrowserEvent.shiftKey) {
+      if (event.mapBrowserEvent.ctrlKey || event.mapBrowserEvent.metaKey) {
         uFeature.datalayer.edit(event)
       } else if (!uFeature.isReadOnly()) {
         uFeature.edit()
@@ -681,10 +729,7 @@ export class OLProxy {
 
   // A feature renders highlighted when its popup is open or it is selected in edit.
   isHighlighted(olFeature) {
-    return (
-      olFeature === this.highlighted ||
-      Boolean(this.editor?.select?.getFeatures().getArray().includes(olFeature))
-    )
+    return Boolean(this.editor?.select?.getFeatures().getArray().includes(olFeature))
   }
 
   applyStyle(olFeature) {
@@ -692,32 +737,9 @@ export class OLProxy {
     styles.current = this.isHighlighted(olFeature) ? styles.highlight : styles.base
   }
 
-  restyle(olFeatures) {
-    for (const olFeature of olFeatures) this.applyStyle(olFeature)
-    for (const layers of Object.values(this.layers)) {
-      for (const layer of Object.values(layers)) layer.changed()
-    }
-    this.map.dispatchEvent('umap:highlight')
-  }
-
   closePopup() {
     this.popup.setPosition(undefined)
-    this.unhighlight()
-  }
-
-  highlight(sourceId, id) {
-    const olFeature = this.sources[sourceId]?.getFeatureById(id)
-    if (olFeature === this.highlighted) return
-    const previous = this.highlighted
-    this.highlighted = olFeature
-    this.restyle([previous, olFeature].filter(Boolean))
-  }
-
-  unhighlight() {
-    if (!this.highlighted) return
-    const olFeature = this.highlighted
-    this.highlighted = null
-    this.restyle([olFeature])
+    //this.unhighlight()
   }
 
   style(geojson, highlight = false) {
