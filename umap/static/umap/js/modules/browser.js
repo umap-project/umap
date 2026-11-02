@@ -15,6 +15,27 @@ export default class Browser {
       inBbox: false,
     }
     this.mode = 'layers'
+    this.expandedLayers = new Map()
+    this.disclosureStates = new Map()
+    this.renderedStates = new WeakMap()
+    // Preferences belong to this map on this origin, independently of visibility.
+    this.storageKey = app.id ? `umap:browser:groups:${app.id}` : null
+    try {
+      const saved = this.storageKey && JSON.parse(localStorage.getItem(this.storageKey))
+      if (Array.isArray(saved)) {
+        this.disclosureStates = new Map(
+          saved.filter(
+            (entry) =>
+              Array.isArray(entry) &&
+              typeof entry[0] === 'string' &&
+              typeof entry[1] === 'boolean'
+          )
+        )
+      }
+    } catch {
+      // Browsing remains usable if storage is unavailable or has invalid data.
+    }
+    window.addEventListener('pagehide', () => this.rememberExpandedLayers())
   }
 
   addFeature(feature, parent) {
@@ -51,10 +72,19 @@ export default class Browser {
   }
 
   addDataLayer(datalayer, parentContainer) {
-    let open = ''
-    if (this.mode !== 'layers' || datalayer.hasVisibleChild()) {
-      open = ' open'
+    const stateKey = `${this.mode}:${datalayer.id}`
+    let expanded = this.mode !== 'layers' || datalayer.hasVisibleChild()
+    if (datalayer.group) {
+      const initial = datalayer.properties.browserExpandedOnLoad
+      if (initial === 'expanded') expanded = true
+      else if (initial === 'collapsed') expanded = false
+      else if (this.app.getProperty('collapseGroupsOnLoad')) expanded = false
     }
+    if (this.expandedLayers.has(stateKey)) expanded = this.expandedLayers.get(stateKey)
+    if (this.disclosureStates.has(String(datalayer.id))) {
+      expanded = this.disclosureStates.get(String(datalayer.id))
+    }
+    const open = expanded ? ' open' : ''
 
     const [container, { details, toolbox, ul, childrenContainer, parentIcon }] =
       Utils.loadTemplateWithRefs(`
@@ -73,7 +103,10 @@ export default class Browser {
         <div data-ref=childrenContainer></div>
       </details>
     `)
+    this.renderedStates.set(details, expanded)
     details.addEventListener('toggle', () => {
+      if (!details.isConnected) return
+      this.rememberLayerState(details, stateKey)
       if (details.open && !ul.innerHTML.trim()) {
         this._appendFeaturesDOM(datalayer, ul)
       }
@@ -150,6 +183,7 @@ export default class Browser {
 
   update() {
     if (!this.isOpen()) return
+    this.rememberExpandedLayers()
     this.dataContainer.innerHTML = ''
     const layers = this.app.layers.root.browsable()
     for (const layer of layers) {
@@ -157,8 +191,34 @@ export default class Browser {
     }
   }
 
+  rememberExpandedLayers() {
+    for (const details of this.dataContainer?.querySelectorAll('details.datalayer') ||
+      []) {
+      this.rememberLayerState(details, `${this.mode}:${details.dataset.id}`)
+    }
+  }
+
+  rememberLayerState(details, stateKey) {
+    this.expandedLayers.set(stateKey, details.open)
+    if (this.renderedStates.get(details) !== details.open) {
+      this.disclosureStates.set(details.dataset.id, details.open)
+      if (this.storageKey) {
+        try {
+          localStorage.setItem(
+            this.storageKey,
+            JSON.stringify([...this.disclosureStates])
+          )
+        } catch {
+          // Keep the in-memory state when browser storage is disabled or full.
+        }
+      }
+    }
+    this.renderedStates.set(details, details.open)
+  }
+
   open(mode) {
     // TODO add loader
+    this.rememberExpandedLayers()
     // Force only if mode is known, otherwise keep current mode.
     if (mode) this.mode = mode
     const template = `
