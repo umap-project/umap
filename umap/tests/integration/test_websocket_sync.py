@@ -45,6 +45,128 @@ def syncmap(map):
 
 
 @pytest.mark.xdist_group(name="websockets")
+def test_archive_generation_is_not_advanced_by_websocket_reference_updates(
+    syncmap, new_page, asgi_live_server, wait_for_loaded
+):
+    import json
+    from copy import deepcopy
+    from datetime import UTC, datetime
+
+    from umap.feature_timing import cleanup_layer
+
+    from ..base import DATALAYER_DATA
+
+    target = DataLayerFactory(map=syncmap, name="Archive destination")
+    data = deepcopy(DATALAYER_DATA)
+    data["features"][0]["id"] = "ARCH1"
+    data["features"][0]["properties"]["name"] = "Expired source"
+    data["features"][0]["properties"]["_umap_options"]["timing"] = {
+        "enabled": True,
+        "deleteOn": "2000-01-01",
+        "expiryAction": "move",
+        "archiveLayer": str(target.pk),
+    }
+    source = DataLayerFactory(map=syncmap, data=data)
+    url = f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit&onLoadPanel=databrowser"
+    old = new_page("Old archive peer")
+    old.goto(url)
+    wait_for_loaded(old)
+    old.locator(f'.umap-browser details[data-id="{target.pk}"]').get_by_title(
+        "Edit this feature"
+    ).click()
+    assert cleanup_layer(source.pk, datetime.now(UTC)) == 1
+    fresh = new_page("Fresh archive peer")
+    fresh.goto(url)
+    wait_for_loaded(fresh)
+    fresh.locator(f'.umap-browser details[data-id="{target.pk}"] .feature').filter(
+        has_text="Here"
+    ).get_by_title("Edit this feature").click()
+    fresh.locator("input[name=name]").fill("Fresh archive generation barrier")
+    fresh.locator("input[name=name]").blur()
+    expect(fresh.get_by_role("button", name="Save", exact=True)).to_be_enabled()
+    with fresh.expect_response(DATALAYER_UPDATE):
+        fresh.get_by_role("button", name="Save", exact=True).click()
+    expect(
+        old.locator(f'.umap-browser details[data-id="{target.pk}"] .feature')
+    ).to_contain_text("Fresh archive generation barrier")
+    expect(old.get_by_role("button", name="Save", exact=True)).to_be_disabled()
+    current_ref = DataLayer.objects.get(pk=target.pk).reference_version
+    old.locator("textarea[name=description]").fill("Synthetic stale write")
+    old.locator("textarea[name=description]").blur()
+    expect(old.get_by_role("button", name="Save", exact=True)).to_be_enabled()
+    with old.expect_response(DATALAYER_UPDATE) as result:
+        old.get_by_role("button", name="Save", exact=True).click()
+    assert result.value.request.headers["x-datalayer-reference"] == current_ref
+    assert result.value.request.headers["x-umap-archive-generation"] == "0"
+    assert result.value.status == 412
+    expect(
+        old.get_by_text("This layer changed and uses automatic cleanup.", exact=False)
+    ).to_be_visible()
+    target.refresh_from_db()
+    with target.geojson.open("rb") as file:
+        assert len(json.load(file)["features"]) == 2
+
+
+@pytest.mark.xdist_group(name="websockets")
+@pytest.mark.parametrize("expiry_action", ["delete", "move"])
+def test_first_feature_schedule_is_received_before_peer_opens_editor(
+    syncmap, new_page, asgi_live_server, wait_for_loaded, expiry_action
+):
+    import json
+
+    layer = DataLayerFactory(map=syncmap)
+    archive = None
+    if expiry_action == "move":
+        archive = DataLayerFactory(
+            map=syncmap, data={"type": "FeatureCollection", "features": []}
+        )
+    url = f"{asgi_live_server.url}{syncmap.get_absolute_url()}?edit&onLoadPanel=databrowser"
+    peer_a = new_page("Timing A")
+    peer_b = new_page("Timing B")
+    for page in (peer_a, peer_b):
+        page.goto(url)
+        wait_for_loaded(page)
+
+    peer_a.get_by_title("Edit this feature").click()
+    peer_a.get_by_text("Feature timing", exact=True).click()
+    if archive:
+        peer_a.locator("select[name=expiryAction]").select_option("move")
+        peer_a.locator("select[name=archiveLayer]").select_option(str(archive.pk))
+    peer_a.locator("input[name=deleteOn]").fill("2031-01-02")
+    peer_a.locator("input[name=deleteOn]").blur()
+    peer_a.locator("input[name=hideOn]").fill("2031-01-01")
+    peer_a.locator("input[name=hideOn]").blur()
+    peer_a.get_by_text("Enable timing", exact=True).click()
+    # A subsequent ordinary property update is a barrier for the websocket
+    # messages; B must receive timing before it opens the feature editor.
+    peer_a.locator("input[name=name]").fill("Synthetic timing sync barrier")
+    peer_a.locator("input[name=name]").blur()
+    expect(peer_b.locator(".umap-browser .feature.marker")).to_contain_text(
+        "Synthetic timing sync barrier"
+    )
+    peer_b.get_by_title("Edit this feature").click()
+    peer_b.get_by_text("Feature timing", exact=True).click()
+    expect(peer_b.locator("input[name=deleteOn]")).to_have_value("2031-01-02")
+    expect(peer_b.locator("input[name=hideOn]")).to_have_value("2031-01-01")
+    expect(peer_b.locator("input[name=enabled]")).to_be_checked()
+    peer_b.locator("input[name=name]").fill("Synthetic peer save")
+    peer_b.locator("input[name=name]").blur()
+    with peer_b.expect_response(DATALAYER_UPDATE):
+        peer_b.get_by_role("button", name="Save", exact=True).click()
+    layer.refresh_from_db()
+    with layer.geojson.open("rb") as source:
+        feature = json.load(source)["features"][0]
+    expected = {
+        "enabled": True,
+        "hideOn": "2031-01-01",
+        "deleteOn": "2031-01-02",
+    }
+    if archive:
+        expected.update({"expiryAction": "move", "archiveLayer": str(archive.pk)})
+    assert feature["properties"]["_umap_options"]["timing"] == expected
+
+
+@pytest.mark.xdist_group(name="websockets")
 @pytest.mark.screenshot
 def test_websocket_connection_can_sync_markers(
     syncmap, new_page, asgi_live_server, tilelayer, wait_for_loaded, assert_screenshot

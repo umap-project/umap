@@ -110,3 +110,14 @@ Eg.: `umap switch_user oldUserName newUserName --delete-user`
 
 * `--dry-run`: only print candidate datalayers without any effective deletion.
 * `--delete-user`: if true, delete old user at the end of the process.
+
+
+## cleanup_expired_features
+
+Apply due feature deletions or moves to their configured destination layer. Run
+`umap cleanup_expired_features --dry-run` to inspect pending actions, schedule
+`umap cleanup_expired_features` every minute, or supervise
+`umap cleanup_expired_features --loop` for repeated passes.
+
+See [Feature timing](../feature-timing.md) for UTC date boundaries, migration
+requirements, concurrency protection and historical data retention.
