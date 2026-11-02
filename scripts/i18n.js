@@ -5,7 +5,7 @@
 //
 // We walk each file's AST and collect the first string argument of every
 // `translate(...)` / `_(...)` call. Obsolete keys are dropped; new keys default
-// to their English source (value === key). Run it via `make messages`.
+// to their English source (value === key). Run it via `just messages`.
 
 import fs from 'node:fs'
 import path from 'node:path'
