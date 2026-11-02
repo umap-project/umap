@@ -223,6 +223,7 @@ export default class App extends Utils.WithEvents {
       this.initShortcuts()
       this.onceDataLoaded(() => this.setViewFromQueryString())
       this.bottomBar.setup()
+      this.bottomBar.redraw()
       this.propagate()
     }
 
@@ -1534,6 +1535,9 @@ export default class App extends Utils.WithEvents {
   }
 
   render(fields = []) {
+    if (fields.includes('properties.permissions')) {
+      this.topBar.redraw()
+    }
     // Propagate will remove the fields it has already
     // processed
     fields = this.propagate(fields)
@@ -1589,8 +1593,9 @@ export default class App extends Utils.WithEvents {
   // This method does a targeted update of the UI,
   // it would be merged with `render`` method and the
   // SCHEMA at some point
-  propagate(fields = [], element=document) {
-    const eachElement = (selector, callback) => element.querySelectorAll(selector).forEach(callback)
+  propagate(fields = [], root = document) {
+    const eachElement = (selector, callback) =>
+      Utils.eachElement(selector, callback, root)
     const impacts = {
       'properties.name': () => {
         eachElement('.map-name', (el) => {
@@ -1613,7 +1618,6 @@ export default class App extends Utils.WithEvents {
             })
           })
         }
-        this.topBar.redraw()
       },
       numberOfConnectedPeers: () => {
         eachElement('.connected-peers span', (el) => {
