@@ -1888,7 +1888,23 @@ export default class App extends Utils.WithEvents {
     if (importedData.properties?.iconUrl?.startsWith('/')) {
       importedData.properties.iconUrl = remoteOrigin + importedData.properties.iconUrl
     }
+    const oldProperties = Utils.CopyJSON(this.properties)
     this.setProperties(importedData.properties)
+    // Imported properties do not go through the journaled form flow, so
+    // record them in the journal: without a dirty operation for the map
+    // itself, saving would only persist the imported layers, and the new
+    // map properties (eg. filters) would be lost on reload.
+    if (this.journal) {
+      for (const key of Object.keys(Schema.SCHEMA)) {
+        if (importedData.properties[key] === undefined) continue
+        if (Utils.deepEqual(this.properties[key], oldProperties[key])) continue
+        this.journal.update(
+          `properties.${key}`,
+          this.properties[key],
+          oldProperties[key]
+        )
+      }
+    }
 
     if (importedData.geometry) {
       this.properties.center = importedData.geometry.coordinates
