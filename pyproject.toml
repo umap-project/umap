@@ -39,7 +39,7 @@ dependencies = [
   "psycopg==3.3.4",
   "requests==2.34.2",
   "rcssmin==1.2.2",
-  "rjsmin==1.2.5",
+  "rjsmin==1.3.0",
   "social-auth-core==6.2.0",
   "social-auth-app-django==7.2.0"
 ]
