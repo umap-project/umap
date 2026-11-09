@@ -21,6 +21,20 @@ export const SCHEMA = {
     type: Boolean,
     impacts: ['ui'],
   },
+  browserExpandedOnLoad: {
+    type: String,
+    impacts: [],
+    label: translate('Group in the data browser on load'),
+    choices: [
+      ['inherit', translate('Use map setting')],
+      ['expanded', translate('Expanded')],
+      ['collapsed', translate('Collapsed')],
+    ],
+    default: 'inherit',
+    helpText: translate(
+      'Only changes the list. Layer visibility on the map is unchanged.'
+    ),
+  },
   captionBar: {
     type: Boolean,
     impacts: ['ui'],
@@ -47,6 +61,15 @@ export const SCHEMA = {
   center: {
     type: Object,
     impacts: [], // default center, doesn't need any update of the map
+  },
+  collapseGroupsOnLoad: {
+    type: Boolean,
+    impacts: [],
+    default: false,
+    label: translate('Collapse layer groups on load'),
+    helpText: translate(
+      'Only changes the list. Layer visibility on the map is unchanged.'
+    ),
   },
   color: {
     type: String,

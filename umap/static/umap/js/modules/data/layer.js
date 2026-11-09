@@ -858,6 +858,7 @@ export class DataLayer {
       groupOptions.disabled = true
     }
     metadataFields.push(['properties.group', groupOptions])
+    if (this.group) metadataFields.push('properties.browserExpandedOnLoad')
     metadataFields.push(
       'properties.labelKey',
       [
