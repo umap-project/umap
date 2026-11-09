@@ -23,10 +23,18 @@ Following the [installation instructions](install.md) should get you started to 
 
 ### Installing dev dependencies
 
-To be sure to install all the dev dependencies, and have everything working locally.
+To be sure to install all the dev dependencies, and have everything working locally
+(commands are run with [just](https://just.systems/), `just` alone lists them).
 
 ```bash
-make develop
+just develop
+```
+
+Then run the dev server (on `0.0.0.0:8020` by default, with `DEBUG=1` unless
+`DEBUG` is set), which also rebuilds the JS on change:
+
+```bash
+just runserver
 ```
 
 #### JavaScript
@@ -45,10 +53,16 @@ You can now do your changes in a specific branch, and when you're ready you can 
 Multiple tests suites are in use in the project. You can run all the tests by using:
 
 ```
-make test 
+just test
 ```
 
-This will run JavaScript and Python unittests + Playwright integration tests
+This will run JavaScript and Python unittests + Playwright integration tests.
+
+To run only the Python tests, with any pytest argument:
+
+```
+just pytest umap/tests/test_views.py -k share
+```
 
 #### Python unit tests
 
@@ -108,7 +122,7 @@ PWDEBUG=1 pytest --headed -n1 -k specific-test-name
 #### JS tests
 
 ```bash
-make testjs
+just testjs
 ```
 
 These tests are located in `umap/static/test`, and we are currently using a mocha test runner.
@@ -129,6 +143,6 @@ Pull the translations from transifex website:
 
 Then you will need to update binary files with command:
 
-    make compilemessages
+    just compilemessages
 
 Done. You can now review and commit modified/added files.

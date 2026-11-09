@@ -45,6 +45,8 @@ export function rgba(color, opacity) {
 // dependent.
 export const FONT_FAMILY = 'fira_sans, sans-serif'
 
+export const HIT_TOLERANCE = 5 // pixels
+
 // Make sure fonts used in canvas are preloaded, otherwise it will fallback to
 // system font (if the font is not in the DOM yet; eg. the bold used in a cluster
 // is not in the DOM for a normal map detail view).

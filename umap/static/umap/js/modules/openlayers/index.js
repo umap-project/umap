@@ -24,6 +24,7 @@ import {
 import TileLayerManager from './tilelayer.js'
 import {
   fromOLExtent,
+  HIT_TOLERANCE,
   invertPolygon,
   loadFonts,
   readFeature,
@@ -103,11 +104,17 @@ export class OLProxy {
     this.map.on('moveend', () => this.app.loader.stop('map-moving'))
   }
 
+  featureAt(pixel, options = {}) {
+    return this.map.forEachFeatureAtPixel(
+      pixel,
+      (feature) => (feature.get('interactive') ? feature : undefined),
+      { ...options, hitTolerance: HIT_TOLERANCE }
+    )
+  }
+
   onPointerMove(event) {
     if (event.dragging) return
-    const olFeature = this.map.forEachFeatureAtPixel(event.pixel, (feature) =>
-      feature.get('interactive') ? feature : undefined
-    )
+    const olFeature = this.featureAt(event.pixel)
     this.map.getTargetElement().style.cursor = olFeature ? 'pointer' : ''
     this.toggleTooltip(olFeature, event.originalEvent)
   }
@@ -504,10 +511,7 @@ export class OLProxy {
 
   onClick(event) {
     this.closePopup()
-    // Topmost interactive feature, skipping non-interactive ones.
-    const olFeature = this.map.forEachFeatureAtPixel(event.pixel, (feature) =>
-      feature.get('interactive') ? feature : undefined
-    )
+    const olFeature = this.featureAt(event.pixel)
     if (!olFeature) return
     const geometry = olFeature.getGeometry()
     // A point is anchored where it is drawn, which differs from its data position
@@ -558,13 +562,9 @@ export class OLProxy {
       pixel: [event.originalEvent.clientX, event.originalEvent.clientY],
     }
     // Restrict hit-testing to our data layers, else Modify's vertex overlay wins.
-    const olFeature = this.map.forEachFeatureAtPixel(
-      event.pixel,
-      (feature) => (feature.get('interactive') ? feature : undefined),
-      {
-        layerFilter: (layer) => Object.values(this.sources).includes(layer.getSource()),
-      }
-    )
+    const olFeature = this.featureAt(event.pixel, {
+      layerFilter: (layer) => Object.values(this.sources).includes(layer.getSource()),
+    })
     const feature = olFeature && this.getFeatureById(olFeature.getId())
     if (feature) feature.onContextMenu(appEvent)
     else this.app.onContextMenu(appEvent)
