@@ -27,6 +27,7 @@ nav:
       - Docker: deploy/docker.md
       - Dokku: deploy/dokku.md
       - Yunohost: deploy/yunohost.md
+      - Cloudron: deploy/cloudron.md
       - Helm: deploy/helm.md
   - Maintenance:
       - Management commands: maintenance/management_commands.md
