@@ -11,6 +11,7 @@ import { unByKey } from 'ol/Observable.js'
 import ContinueLine from './continueline.js'
 import DrawHole from './hole.js'
 import DrawRoute from './route.js'
+import { HIT_TOLERANCE } from './utils.js'
 
 // A polygon ring repeats its first point to close itself (eg. a triangle has 4).
 function isValidGeometry(geometry) {
@@ -87,6 +88,7 @@ export default class Editor {
       style: null,
       filter: selectable,
       toggleCondition: never,
+      hitTolerance: HIT_TOLERANCE,
     })
     this.map.addInteraction(this.select)
     this.select.on('select', (event) => {
