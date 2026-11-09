@@ -443,8 +443,8 @@ export function download(content, filetype, filename) {
   document.body.removeChild(el)
 }
 
-export function eachElement(selector, callback) {
-  for (const el of document.querySelectorAll(selector)) {
+export function eachElement(selector, callback, root = document) {
+  for (const el of root.querySelectorAll(selector)) {
     callback(el)
   }
 }

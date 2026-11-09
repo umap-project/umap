@@ -223,6 +223,7 @@ export default class App extends Utils.WithEvents {
       this.initShortcuts()
       this.onceDataLoaded(() => this.setViewFromQueryString())
       this.bottomBar.setup()
+      this.bottomBar.redraw()
       this.propagate()
     }
 
@@ -1534,13 +1535,19 @@ export default class App extends Utils.WithEvents {
   }
 
   render(fields = []) {
+    if (fields.includes('properties.permissions')) {
+      this.topBar.redraw()
+    }
     // Propagate will remove the fields it has already
     // processed
     fields = this.propagate(fields)
     if (fields.includes('properties.filters')) {
       this.filters.load()
     }
-
+    if (fields.includes('properties.slideshow.active')) {
+      this.slideshow.load()
+      this.bottomBar.redraw()
+    }
     const impacts = Schema.getImpacts(fields)
     for (const impact of impacts) {
       switch (impact) {
@@ -1586,15 +1593,17 @@ export default class App extends Utils.WithEvents {
   // This method does a targeted update of the UI,
   // it would be merged with `render`` method and the
   // SCHEMA at some point
-  propagate(fields = []) {
+  propagate(fields = [], root = document) {
+    const eachElement = (selector, callback) =>
+      Utils.eachElement(selector, callback, root)
     const impacts = {
       'properties.name': () => {
-        Utils.eachElement('.map-name', (el) => {
+        eachElement('.map-name', (el) => {
           el.textContent = this.getDisplayName()
         })
       },
       user: () => {
-        Utils.eachElement('.umap-user .username', (el) => {
+        eachElement('.umap-user .username', (el) => {
           if (this.permissions.userIsAuth()) {
             el.textContent = this.properties.user.name
           }
@@ -1603,20 +1612,15 @@ export default class App extends Utils.WithEvents {
       'properties.permissions': () => {
         const status = this.permissions.getShareStatusDisplay()
         if (status) {
-          Utils.eachElement('.share-status', (el) => {
+          eachElement('.share-status', (el) => {
             el.textContent = translate('Visibility: {status}', {
               status: status,
             })
           })
         }
-        this.topBar.redraw()
-      },
-      'properties.slideshow.active': () => {
-        this.slideshow.load()
-        this.bottomBar.redraw()
       },
       numberOfConnectedPeers: () => {
-        Utils.eachElement('.connected-peers span', (el) => {
+        eachElement('.connected-peers span', (el) => {
           if (this.journal?.websocketConnected) {
             el.textContent = Object.keys(this.journal.getPeers()).length
           } else {
@@ -1626,11 +1630,11 @@ export default class App extends Utils.WithEvents {
         })
       },
       'properties.starred': () => {
-        Utils.eachElement('.map-star', (el) => {
+        eachElement('.map-star', (el) => {
           el.classList.toggle('icon-starred', this.properties.starred)
           el.classList.toggle('icon-star', !this.properties.starred)
         })
-        Utils.eachElement('.map-stars', (el) => {
+        eachElement('.map-stars', (el) => {
           el.textContent = this.properties.stars || 0
         })
       },

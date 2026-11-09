@@ -46,3 +46,26 @@ def test_caption_should_display_team_as_author(live_server, page, map, team):
     expect(panel).to_be_visible()
     expect(panel.get_by_text("By Gabriel")).to_be_hidden()
     expect(panel.get_by_text("By Awesome Team")).to_be_visible()
+
+
+def test_caption_bar_should_display_map_name(live_server, page, map):
+    map.settings["properties"]["captionBar"] = True
+    map.settings["properties"]["onLoadPanel"] = "none"
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    expect(page.locator(".umap-caption-bar .map-name")).to_have_text(map.name)
+
+
+def test_caption_bar_should_display_map_name_when_enabled_after_load(
+    live_server, page, openmap
+):
+    openmap.settings["properties"]["onLoadPanel"] = "none"
+    openmap.save()
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?edit")
+    expect(page.locator(".umap-caption-bar")).to_be_hidden()
+    page.get_by_role("button", name="Map advanced properties").click()
+    page.locator("summary").filter(has_text="User interface options").click()
+    page.locator(".umap-field-captionBar").get_by_text(
+        "Do you want to display a caption bar?"
+    ).click()
+    expect(page.locator(".umap-caption-bar .map-name")).to_have_text(openmap.name)
