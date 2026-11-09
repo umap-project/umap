@@ -902,3 +902,53 @@ msgstr ""
 #: views.py:1455
 msgid "Generic"
 msgstr ""
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Use a calendar date in YYYY-MM-DD format (UTC)."
+msgstr "Naudokite kalendorinę datą formatu MMMM-MM-DD (UTC)."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid calendar date."
+msgstr "Netinkama kalendorinė data."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid feature collection."
+msgstr "Netinkamas objektų rinkinys."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timing must contain a boolean enabled option."
+msgstr "Laiko nustatymuose turi būti loginė įjungimo parinktis."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Hide from must not be after Delete on."
+msgstr "Slėpimo data negali būti vėlesnė už ištrynimo datą."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "A timed feature needs a stable string ID."
+msgstr "Laiku valdomam objektui būtinas pastovus tekstinis ID."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Delete on is required when timing is enabled."
+msgstr "Įjungus laiko valdymą, ištrynimo data privaloma."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timed feature IDs must be unique in their layer."
+msgstr "Laiku valdomų objektų ID jų sluoksnyje turi būti unikalūs."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "An automatically deleted feature cannot be restored with the same ID. Reload the layer."
+msgstr "Automatiškai ištrinto objekto negalima atkurti tuo pačiu ID. Iš naujo įkelkite sluoksnį."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "Invalid GeoJSON or timing options."
+msgstr "Netinkamas GeoJSON arba laiko parinktys."

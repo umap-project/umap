@@ -912,3 +912,53 @@ msgstr "Berechtigungen erfolgreich aktualisiert!"
 #: views.py:1455
 msgid "Generic"
 msgstr "Allgemein"
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Use a calendar date in YYYY-MM-DD format (UTC)."
+msgstr "Verwende ein Kalenderdatum im Format JJJJ-MM-TT (UTC)."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid calendar date."
+msgstr "Ungültiges Kalenderdatum."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid feature collection."
+msgstr "Ungültige Objektsammlung."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timing must contain a boolean enabled option."
+msgstr "Die Zeitsteuerung muss eine Aktivierungsoption mit dem Wert wahr oder falsch enthalten."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Hide from must not be after Delete on."
+msgstr "Das Ausblenddatum darf nicht nach dem Löschdatum liegen."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "A timed feature needs a stable string ID."
+msgstr "Ein zeitgesteuertes Objekt benötigt eine beständige ID als Zeichenfolge."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Delete on is required when timing is enabled."
+msgstr "Bei aktivierter Zeitsteuerung ist ein Löschdatum erforderlich."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timed feature IDs must be unique in their layer."
+msgstr "Die IDs zeitgesteuerter Objekte müssen innerhalb ihrer Ebene eindeutig sein."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "An automatically deleted feature cannot be restored with the same ID. Reload the layer."
+msgstr "Ein automatisch gelöschtes Objekt kann nicht mit derselben ID wiederhergestellt werden. Lade die Ebene neu."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "Invalid GeoJSON or timing options."
+msgstr "Ungültiges GeoJSON oder ungültige Zeitsteuerungsoptionen."

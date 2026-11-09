@@ -662,5 +662,29 @@ registerLocale('br', {
     "Click to continue drawing the line": "Click to continue drawing the line",
     "Click to start measuring": "Click to start measuring",
     "Measure": "Measure",
-    "Measure areas": "Measure areas"
-})
+    "Measure areas": "Measure areas",
+    "Feature timing": "Mererezh an amzer",
+    "Automatic cleanup": "Dilemel emgefreek",
+    "Hide from (optional)": "Kuzhat adalek (diret)",
+    "Delete on": "Dilemel d’an",
+    "Required for automatic cleanup. Dates start at midnight UTC. Hidden features remain accessible; older versions and backups may retain deleted features.": "Ret evit an dilemel emgefreek. An deiziadoù a grog da hanternoz UTC. An elfennoù kuzhet a chom hegerz; stummoù koshoc’h ha kopioù gwared a c’hall mirout elfennoù dilamet.",
+    "Invalid feature timing. Delete on is required for automatic cleanup; Hide from must not be later. Use calendar dates in UTC.": "Arventennoù amzer didalvoudek. Ret eo reiñ un deiziad dilemel evit an dilemel emgefreek; an deiziad kuzhat ne c’hall ket bezañ diwezhatoc’h. Implijit deiziadoù an deiziadur e UTC.",
+    "This layer changed and uses automatic cleanup. Reload the map before saving to avoid restoring deleted features.": "Kemmet eo bet an treuzfollenn-mañ hag implijout a ra an dilemel emgefreek. Adkargit ar gartenn a-raok enrollañ evit chom hep adlakaat elfennoù dilamet.",
+    "Use a date or a field reference such as {Ende}. Empty referenced fields pause the schedule.": "Implijit un deiziad pe un dave d’ur vaezienn evel {Ende}. Ur vaezienn c’houllo a laka an amzerata da baouez.",
+    "Delete after hiding": "Dilemel goude kuzhat",
+    "Enter a delay instead of Delete on. Calendar months end on the last available day.": "Roit un dale e-lec’h deiziad an dilemel. Ar mizioù a zo bevennet gant an deiz diwezhañ a c’haller implijout.",
+    "Unit": "Unanenn",
+    "Days": "Deizioù",
+    "Months": "Mizioù",
+    "Applied to newly drawn features only. Existing features keep their own schedule.": "Evit an traezoù nevez treset hepken. An traezoù zo anezho a vir o amzerata.",
+    "Use for new features in this layer": "Implijout evit traezoù nevez ar gwiskad-mañ",
+    "Invalid calendar date.": "Deiziad didalvoudek.",
+    "Enable timing": "Gweredekaat an amzerata",
+    "At expiration": "Pa echu an termen",
+    "Move to layer (keep)": "Dilec’hiañ d’ur gwiskad (mirout)",
+    "Destination layer": "Gwiskad pal",
+    "Choose a saved local layer with compatible edit permissions. Moving disables timing. Older versions remain; reload to see background changes.": "Dibabit ur gwiskad lec’hel enrollet gant gwirioù embann kenglotus. An dilec’hiañ a ziweredeka an amzerata. Mirout a reer an doareoù kozh; adkargit evit gwelet ar c’hemmoù en drekleur.",
+    "Move on": "Dilec’hiañ d’an",
+    "Move after hiding": "Dilec’hiañ goude kuzhat"
+}
+)

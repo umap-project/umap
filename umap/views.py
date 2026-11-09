@@ -26,6 +26,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.mail import send_mail
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.signing import BadSignature, Signer, TimestampSigner
+from django.db import transaction
 from django.db.models import QuerySet
 from django.http import (
     FileResponse,
@@ -1303,6 +1304,14 @@ class DataLayerCreate(FormLessEditMixin, CreateView):
     model = DataLayer
     form_class = DataLayerForm
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["request"] = self.request
+        kwargs["instance"] = DataLayer(
+            uuid=self.kwargs["pk"], map=self.kwargs["map_inst"]
+        )
+        return kwargs
+
     def form_valid(self, form):
         form.instance.map = self.kwargs["map_inst"]
 
@@ -1326,6 +1335,9 @@ class DataLayerCreate(FormLessEditMixin, CreateView):
 class DataLayerUpdate(FormLessEditMixin, UpdateView):
     model = DataLayer
     form_class = DataLayerForm
+
+    def get_form_kwargs(self):
+        return {**super().get_form_kwargs(), "request": self.request}
 
     def has_changes_since(self, incoming_version):
         return incoming_version and self.object.reference_version != incoming_version
@@ -1365,10 +1377,44 @@ class DataLayerUpdate(FormLessEditMixin, UpdateView):
         except ConflictError:
             return None
 
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
-        self.object = kwargs["datalayer_inst"]
+        from .feature_archiving import has_pending_archive
+        from .feature_timing import timing_for
 
+        # Use the same lock order as deletion and cross-layer archiving workers.
+        Map.objects.select_for_update().get(pk=kwargs["datalayer_inst"].map_id)
+        self.object = get_object_or_404(
+            DataLayer.objects.select_for_update(), pk=kwargs["datalayer_inst"].pk
+        )
+        kwargs["datalayer_inst"] = self.object
+        self.kwargs["datalayer_inst"] = self.object
         reference_version = self.request.headers.get("X-Datalayer-Reference")
+        pending = has_pending_archive(self.object.pk)
+        protected = (
+            self.object.archive_generation > 0
+            or self.object.expiredfeature_set.exists()
+            or self.object.incoming_archives.exists()
+            or pending
+        )
+        if self.object.geojson and not protected:
+            with self.object.geojson.open("rb") as source:
+                current = json.load(source)
+            protected = any(
+                isinstance(timing_for(f), dict) and timing_for(f).get("enabled")
+                for f in current.get("features", [])
+            )
+        generation_matches = self.object.archive_generation == 0 or request.headers.get(
+            "X-Umap-Archive-Generation"
+        ) == str(self.object.archive_generation)
+        if (
+            pending
+            or not generation_matches
+            or (protected and reference_version != self.object.reference_version)
+        ):
+            response = HttpResponse(status=412)
+            response["X-Umap-Timing-Conflict"] = "reload"
+            return response
         if self.has_changes_since(reference_version):
             merged = self.merge(reference_version)
             if not merged:

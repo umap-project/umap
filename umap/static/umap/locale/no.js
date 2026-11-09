@@ -662,5 +662,29 @@ registerLocale('no', {
     "Click to continue drawing the line": "Click to continue drawing the line",
     "Click to start measuring": "Click to start measuring",
     "Measure": "Measure",
-    "Measure areas": "Measure areas"
-})
+    "Measure areas": "Measure areas",
+    "Feature timing": "Tidsstyring",
+    "Automatic cleanup": "Automatisk sletting",
+    "Hide from (optional)": "Skjul fra (valgfritt)",
+    "Delete on": "Slett den",
+    "Required for automatic cleanup. Dates start at midnight UTC. Hidden features remain accessible; older versions and backups may retain deleted features.": "Påkrevd ved automatisk sletting. Datoer begynner ved midnatt UTC. Skjulte objekter er fortsatt tilgjengelige; eldre versjoner og sikkerhetskopier kan bevare slettede objekter.",
+    "Invalid feature timing. Delete on is required for automatic cleanup; Hide from must not be later. Use calendar dates in UTC.": "Ugyldig tidsstyring. Automatisk sletting krever en slettedato; skjulingsdatoen kan ikke være senere. Bruk kalenderdatoer i UTC.",
+    "This layer changed and uses automatic cleanup. Reload the map before saving to avoid restoring deleted features.": "Dette laget er endret og bruker automatisk sletting. Last kartet på nytt før lagring for å unngå å gjenopprette slettede objekter.",
+    "Use a date or a field reference such as {Ende}. Empty referenced fields pause the schedule.": "Bruk en dato eller feltreferanse som {Ende}. Et tomt felt setter tidsplanen på pause.",
+    "Delete after hiding": "Slett etter skjuling",
+    "Enter a delay instead of Delete on. Calendar months end on the last available day.": "Angi en frist i stedet for slettedatoen. Måneder avgrenses til siste tilgjengelige dag.",
+    "Unit": "Enhet",
+    "Days": "Dager",
+    "Months": "Måneder",
+    "Applied to newly drawn features only. Existing features keep their own schedule.": "Bare for nye tegnede objekter. Eksisterende objekter beholder sin tidsplan.",
+    "Use for new features in this layer": "Bruk for nye objekter i dette laget",
+    "Invalid calendar date.": "Ugyldig kalenderdato.",
+    "Enable timing": "Aktiver tidsplan",
+    "At expiration": "Ved utløp",
+    "Move to layer (keep)": "Flytt til lag (behold)",
+    "Destination layer": "Mållag",
+    "Choose a saved local layer with compatible edit permissions. Moving disables timing. Older versions remain; reload to see background changes.": "Velg et lagret lokalt lag med passende redigeringstillatelser. Flytting deaktiverer tidsplanen. Eldre versjoner beholdes; last inn på nytt for å se bakgrunnsendringer.",
+    "Move on": "Flytt den",
+    "Move after hiding": "Flytt etter skjuling"
+}
+)

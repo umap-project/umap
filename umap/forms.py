@@ -1,9 +1,12 @@
+import json
+
 from django import forms
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.gis.geos import Point
 from django.forms.utils import ErrorList
 from django.template.defaultfilters import slugify
+from django.utils.translation import gettext_lazy as _
 
 from .models import DataLayer, Map, Team
 
@@ -48,6 +51,84 @@ class AnonymousMapPermissionsForm(forms.ModelForm):
 
 
 class DataLayerForm(forms.ModelForm):
+    def __init__(self, *args, request=None, **kwargs):
+        self.timing_request = request
+        self.timing_document = None
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        from .feature_archiving import validate_archive_targets
+        from .feature_timing import resolve_timing, timing_for
+
+        cleaned = super().clean()
+        layer_settings = cleaned.get("settings")
+        defaults = (
+            layer_settings.get("timingDefaults")
+            if isinstance(layer_settings, dict)
+            else None
+        )
+        if defaults is not None:
+            try:
+                resolve_timing(defaults)
+            except forms.ValidationError as exc:
+                self.add_error("settings", exc)
+        if (
+            self.instance.map_id
+            and "geojson" not in self.errors
+            and "settings" not in self.errors
+        ):
+            timings = [
+                timing_for(feature)
+                for feature in (self.timing_document or {}).get("features", [])
+            ]
+            timings.append(defaults)
+            try:
+                validate_archive_targets(
+                    self.instance, timings, request=self.timing_request
+                )
+            except forms.ValidationError as exc:
+                self.add_error("settings", exc)
+        return cleaned
+
+    def clean_geojson(self):
+        from .feature_timing import validate_timing
+
+        uploaded = self.cleaned_data.get("geojson")
+        if uploaded and hasattr(uploaded, "chunks"):
+            try:
+                document = json.load(uploaded)
+                validate_timing(document)
+                generation = document.get("archiveGeneration", 0)
+                if (
+                    type(generation) is not int
+                    or generation != self.instance.archive_generation
+                ):
+                    raise forms.ValidationError(_("Invalid GeoJSON or timing options."))
+                self.timing_document = document
+                if self.instance.pk:
+                    expired_ids = set(
+                        self.instance.expiredfeature_set.values_list(
+                            "feature_id", flat=True
+                        )
+                    )
+                    if any(
+                        f.get("id") in expired_ids
+                        for f in document.get("features", [])
+                        if isinstance(f.get("id"), str)
+                    ):
+                        raise forms.ValidationError(
+                            _(
+                                "An automatically deleted feature cannot be restored with the same ID. Reload the layer."
+                            )
+                        )
+            except (ValueError, TypeError, AttributeError) as exc:
+                raise forms.ValidationError(
+                    _("Invalid GeoJSON or timing options.")
+                ) from exc
+            finally:
+                uploaded.seek(0)
+        return uploaded
+
     class Meta:
         model = DataLayer
         fields = ("geojson", "name", "display_on_load", "rank", "settings", "parent")

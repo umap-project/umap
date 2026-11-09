@@ -454,3 +454,53 @@ msgstr ""
 #: views.py:884
 msgid "Layer successfully deleted."
 msgstr ""
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Use a calendar date in YYYY-MM-DD format (UTC)."
+msgstr "YYYY-MM-DD ආකෘතියෙන් ග්‍රෙගෝරියානු දිනයක් භාවිත කරන්න (UTC)."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid calendar date."
+msgstr "වලංගු නොවන දින දර්ශන දිනයකි."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid feature collection."
+msgstr "වලංගු නොවන අංග එකතුවකි."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timing must contain a boolean enabled option."
+msgstr "කාල සැකසුම්වල සත්‍ය හෝ අසත්‍ය අගයක් ඇති සක්‍රිය කිරීමේ විකල්පයක් තිබිය යුතුය."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Hide from must not be after Delete on."
+msgstr "සැඟවීමේ දිනය මකාදැමීමේ දිනයට පසු විය නොහැක."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "A timed feature needs a stable string ID."
+msgstr "කාල පාලනය කළ අංගයකට ස්ථාවර පෙළ හැඳුනුම්කාරකයක් අවශ්‍යයි."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Delete on is required when timing is enabled."
+msgstr "කාල පාලනය සක්‍රිය කළ විට මකාදැමීමේ දිනය අනිවාර්යයි."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timed feature IDs must be unique in their layer."
+msgstr "කාල පාලනය කළ අංගවල හැඳුනුම්කාරක ඒවායේ ස්තරය තුළ අනන්‍ය විය යුතුය."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "An automatically deleted feature cannot be restored with the same ID. Reload the layer."
+msgstr "ස්වයංක්‍රීයව මකා දැමූ අංගයක් එම හැඳුනුම්කාරකයෙන්ම නැවත පිහිටුවිය නොහැක. ස්තරය නැවත පූරණය කරන්න."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "Invalid GeoJSON or timing options."
+msgstr "GeoJSON හෝ කාල සැකසුම් වලංගු නැත."

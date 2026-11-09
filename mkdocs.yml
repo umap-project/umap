@@ -19,6 +19,7 @@ nav:
       - Storage: config/storage.md
       - Icon packs: config/icons.md
       - Importers: config/importers.md
+      - Feature timing: feature-timing.md
   - Deployment:
       - Overview: deploy/overview.md
       - WSGI: deploy/wsgi.md

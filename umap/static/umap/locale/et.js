@@ -662,5 +662,29 @@ registerLocale('et', {
     "Click to continue drawing the line": "Click to continue drawing the line",
     "Click to start measuring": "Click to start measuring",
     "Measure": "Measure",
-    "Measure areas": "Measure areas"
-})
+    "Measure areas": "Measure areas",
+    "Feature timing": "Ajastus",
+    "Automatic cleanup": "Automaatne kustutamine",
+    "Hide from (optional)": "Peida alates (valikuline)",
+    "Delete on": "Kustuta kuupäeval",
+    "Required for automatic cleanup. Dates start at midnight UTC. Hidden features remain accessible; older versions and backups may retain deleted features.": "Automaatse kustutamise korral kohustuslik. Kuupäevad algavad keskööl UTC järgi. Peidetud objektid jäävad ligipääsetavaks; vanemad versioonid ja varukoopiad võivad kustutatud objekte säilitada.",
+    "Invalid feature timing. Delete on is required for automatic cleanup; Hide from must not be later. Use calendar dates in UTC.": "Vigane ajastus. Automaatne kustutamine nõuab kustutamiskuupäeva; peitmiskuupäev ei tohi olla hilisem. Kasuta UTC kalendrikuupäevi.",
+    "This layer changed and uses automatic cleanup. Reload the map before saving to avoid restoring deleted features.": "Seda kihti on muudetud ja see kasutab automaatset kustutamist. Kustutatud objektide taastamise vältimiseks laadi kaart enne salvestamist uuesti.",
+    "Use a date or a field reference such as {Ende}. Empty referenced fields pause the schedule.": "Kasutage kuupäeva või välja viidet, näiteks {Ende}. Tühi väli peatab ajakava.",
+    "Delete after hiding": "Kustuta pärast peitmist",
+    "Enter a delay instead of Delete on. Calendar months end on the last available day.": "Sisestage kustutamiskuupäeva asemel ajavahemik. Kuud piiratakse viimase saadaoleva päevaga.",
+    "Unit": "Ühik",
+    "Days": "Päevad",
+    "Months": "Kuud",
+    "Applied to newly drawn features only. Existing features keep their own schedule.": "Ainult uutele joonistatud objektidele. Olemasolevad säilitavad oma ajakava.",
+    "Use for new features in this layer": "Kasuta selle kihi uute objektide jaoks",
+    "Invalid calendar date.": "Vigane kalendrikuupäev.",
+    "Enable timing": "Luba ajakava",
+    "At expiration": "Tähtaja saabumisel",
+    "Move to layer (keep)": "Teisalda kihile (säilita)",
+    "Destination layer": "Sihtkiht",
+    "Choose a saved local layer with compatible edit permissions. Moving disables timing. Older versions remain; reload to see background changes.": "Valige salvestatud kohalik kiht sobivate muutmisõigustega. Teisaldamine lülitab ajakava välja. Vanemad versioonid säilivad; taustamuudatuste nägemiseks laadige kaart uuesti.",
+    "Move on": "Teisalda kuupäeval",
+    "Move after hiding": "Teisalda pärast peitmist"
+}
+)

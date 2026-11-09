@@ -662,5 +662,29 @@ registerLocale('ca', {
     "Click to continue drawing the line": "Click to continue drawing the line",
     "Click to start measuring": "Click to start measuring",
     "Measure": "Measure",
-    "Measure areas": "Measure areas"
-})
+    "Measure areas": "Measure areas",
+    "Feature timing": "Gestió temporal",
+    "Automatic cleanup": "Supressió automàtica",
+    "Hide from (optional)": "Amaga a partir de (opcional)",
+    "Delete on": "Suprimeix el",
+    "Required for automatic cleanup. Dates start at midnight UTC. Hidden features remain accessible; older versions and backups may retain deleted features.": "Obligatori per a la supressió automàtica. Les dates comencen a mitjanit UTC. Els objectes amagats continuen accessibles; les versions anteriors i les còpies de seguretat poden conservar objectes suprimits.",
+    "Invalid feature timing. Delete on is required for automatic cleanup; Hide from must not be later. Use calendar dates in UTC.": "Configuració temporal no vàlida. La supressió automàtica requereix una data de supressió; la data d’ocultació no pot ser posterior. Feu servir dates de calendari en UTC.",
+    "This layer changed and uses automatic cleanup. Reload the map before saving to avoid restoring deleted features.": "Aquesta capa ha canviat i fa servir la supressió automàtica. Torneu a carregar el mapa abans de desar per evitar restaurar objectes suprimits.",
+    "Use a date or a field reference such as {Ende}. Empty referenced fields pause the schedule.": "Feu servir una data o una referència com {Ende}. Un camp buit pausa la programació.",
+    "Delete after hiding": "Suprimeix després d’amagar",
+    "Enter a delay instead of Delete on. Calendar months end on the last available day.": "Introduïu un termini en lloc de la data de supressió. Els mesos s’ajusten a l’últim dia disponible.",
+    "Unit": "Unitat",
+    "Days": "Dies",
+    "Months": "Mesos",
+    "Applied to newly drawn features only. Existing features keep their own schedule.": "Només per a objectes nous dibuixats. Els existents conserven la seva programació.",
+    "Use for new features in this layer": "Utilitza per als objectes nous d’aquesta capa",
+    "Invalid calendar date.": "Data de calendari no vàlida.",
+    "Enable timing": "Activa la programació",
+    "At expiration": "En vèncer",
+    "Move to layer (keep)": "Mou a una capa (conserva)",
+    "Destination layer": "Capa de destinació",
+    "Choose a saved local layer with compatible edit permissions. Moving disables timing. Older versions remain; reload to see background changes.": "Trieu una capa local desada amb permisos d’edició compatibles. Moure desactiva la programació. Les versions anteriors es conserven; recarregueu per veure els canvis en segon pla.",
+    "Move on": "Mou el",
+    "Move after hiding": "Mou després d’amagar"
+}
+)

@@ -903,3 +903,53 @@ msgstr ""
 #: views.py:1455
 msgid "Generic"
 msgstr ""
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Use a calendar date in YYYY-MM-DD format (UTC)."
+msgstr "Použite kalendárny dátum vo formáte RRRR-MM-DD (UTC)."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid calendar date."
+msgstr "Neplatný kalendárny dátum."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid feature collection."
+msgstr "Neplatná kolekcia objektov."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timing must contain a boolean enabled option."
+msgstr "Časové nastavenie musí obsahovať logickú voľbu zapnutia."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Hide from must not be after Delete on."
+msgstr "Dátum skrytia nesmie byť po dátume vymazania."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "A timed feature needs a stable string ID."
+msgstr "Časovo riadený objekt potrebuje stále textové ID."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Delete on is required when timing is enabled."
+msgstr "Pri zapnutom časovom riadení je dátum vymazania povinný."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timed feature IDs must be unique in their layer."
+msgstr "ID časovo riadených objektov musia byť v ich vrstve jedinečné."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "An automatically deleted feature cannot be restored with the same ID. Reload the layer."
+msgstr "Automaticky vymazaný objekt nemožno obnoviť s rovnakým ID. Znova načítajte vrstvu."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "Invalid GeoJSON or timing options."
+msgstr "Neplatný GeoJSON alebo časové nastavenie."

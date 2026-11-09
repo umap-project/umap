@@ -662,5 +662,29 @@ registerLocale('ast', {
     "Click to continue drawing the line": "Click to continue drawing the line",
     "Click to start measuring": "Click to start measuring",
     "Measure": "Measure",
-    "Measure areas": "Measure areas"
-})
+    "Measure areas": "Measure areas",
+    "Feature timing": "Control temporal",
+    "Automatic cleanup": "Desaniciu automáticu",
+    "Hide from (optional)": "Anubrir dende (opcional)",
+    "Delete on": "Desaniciar el",
+    "Required for automatic cleanup. Dates start at midnight UTC. Hidden features remain accessible; older versions and backups may retain deleted features.": "Obligatoriu pal desaniciu automáticu. Les feches entamen a medianueche UTC. Los oxetos anubríos siguen accesibles; les versiones anteriores y les copies de seguridá puen conservar oxetos desaniciaos.",
+    "Invalid feature timing. Delete on is required for automatic cleanup; Hide from must not be later. Use calendar dates in UTC.": "Configuración temporal non válida. El desaniciu automáticu precisa una fecha de desaniciu; la fecha d’ocultación nun pue ser posterior. Usa feches del calendariu en UTC.",
+    "This layer changed and uses automatic cleanup. Reload the map before saving to avoid restoring deleted features.": "Esta capa camudó y usa desaniciu automáticu. Recarga’l mapa enantes de guardar pa nun restaurar oxetos desaniciaos.",
+    "Use a date or a field reference such as {Ende}. Empty referenced fields pause the schedule.": "Usa una data o una referencia como {Ende}. Un campu baleru posa la programación en pausa.",
+    "Delete after hiding": "Desaniciar dempués d’anubrir",
+    "Enter a delay instead of Delete on. Calendar months end on the last available day.": "Introduz un plazu en cuenta de la data de desaniciu. Los meses axústense al últimu día disponible.",
+    "Unit": "Unidá",
+    "Days": "Díes",
+    "Months": "Meses",
+    "Applied to newly drawn features only. Existing features keep their own schedule.": "Namás pa oxetos nuevos dibuxaos. Los esistentes caltienen la so programación.",
+    "Use for new features in this layer": "Usar pa los oxetos nuevos d’esta capa",
+    "Invalid calendar date.": "Fecha del calendariu non válida.",
+    "Enable timing": "Activar programación",
+    "At expiration": "Al vencer",
+    "Move to layer (keep)": "Mover a una capa (caltener)",
+    "Destination layer": "Capa de destín",
+    "Choose a saved local layer with compatible edit permissions. Moving disables timing. Older versions remain; reload to see background changes.": "Escueyi una capa llocal guardada con permisos d’edición compatibles. Mover desactiva la programación. Les versiones anteriores caltiénense; recarga pa ver cambeos en segundu planu.",
+    "Move on": "Mover el",
+    "Move after hiding": "Mover dempués d’anubrir"
+}
+)

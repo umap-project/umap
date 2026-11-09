@@ -662,5 +662,29 @@ registerLocale('he', {
     "Click to continue drawing the line": "Click to continue drawing the line",
     "Click to start measuring": "Click to start measuring",
     "Measure": "Measure",
-    "Measure areas": "Measure areas"
-})
+    "Measure areas": "Measure areas",
+    "Feature timing": "תזמון",
+    "Automatic cleanup": "מחיקה אוטומטית",
+    "Hide from (optional)": "הסתרה החל מ־ (לא חובה)",
+    "Delete on": "מחיקה בתאריך",
+    "Required for automatic cleanup. Dates start at midnight UTC. Hidden features remain accessible; older versions and backups may retain deleted features.": "חובה לצורך מחיקה אוטומטית. התאריכים מתחילים בחצות UTC. עצמים מוסתרים נשארים נגישים; גרסאות קודמות וגיבויים עשויים לשמור עצמים שנמחקו.",
+    "Invalid feature timing. Delete on is required for automatic cleanup; Hide from must not be later. Use calendar dates in UTC.": "הגדרות תזמון לא תקינות. למחיקה אוטומטית דרוש תאריך מחיקה; תאריך ההסתרה לא יכול להיות מאוחר יותר. יש להשתמש בתאריכים לועזיים לפי UTC.",
+    "This layer changed and uses automatic cleanup. Reload the map before saving to avoid restoring deleted features.": "השכבה השתנתה ומשתמשת במחיקה אוטומטית. יש לטעון את המפה מחדש לפני השמירה כדי למנוע שחזור עצמים שנמחקו.",
+    "Use a date or a field reference such as {Ende}. Empty referenced fields pause the schedule.": "השתמשו בתאריך או בהפניה לשדה כגון {Ende}. שדה ריק משהה את התזמון.",
+    "Delete after hiding": "מחיקה לאחר הסתרה",
+    "Enter a delay instead of Delete on. Calendar months end on the last available day.": "הזינו פרק זמן במקום תאריך מחיקה. חודשים מוגבלים ליום האחרון הזמין.",
+    "Unit": "יחידה",
+    "Days": "ימים",
+    "Months": "חודשים",
+    "Applied to newly drawn features only. Existing features keep their own schedule.": "חל רק על עצמים חדשים שצוירו. עצמים קיימים שומרים על התזמון שלהם.",
+    "Use for new features in this layer": "שימוש עבור עצמים חדשים בשכבה זו",
+    "Invalid calendar date.": "תאריך לועזי לא תקין.",
+    "Enable timing": "הפעלת תזמון",
+    "At expiration": "בתום התקופה",
+    "Move to layer (keep)": "העברה לשכבה (שמירה)",
+    "Destination layer": "שכבת יעד",
+    "Choose a saved local layer with compatible edit permissions. Moving disables timing. Older versions remain; reload to see background changes.": "בחרו שכבה מקומית שמורה עם הרשאות עריכה תואמות. ההעברה משביתה את התזמון. גרסאות קודמות נשמרות; טענו מחדש לצפייה בשינויי רקע.",
+    "Move on": "העברה בתאריך",
+    "Move after hiding": "העברה לאחר הסתרה"
+}
+)

@@ -901,3 +901,53 @@ msgstr "Baimenak behar bezala eguneratu dira!"
 #: views.py:1455
 msgid "Generic"
 msgstr "Generikoa"
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Use a calendar date in YYYY-MM-DD format (UTC)."
+msgstr "Erabili UUUU-HH-EE formatuko egutegi-data bat (UTC)."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid calendar date."
+msgstr "Egutegi-data baliogabea."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid feature collection."
+msgstr "Objektu-bilduma baliogabea."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timing must contain a boolean enabled option."
+msgstr "Denboraren ezarpenek aktibatzeko aukera boolear bat izan behar dute."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Hide from must not be after Delete on."
+msgstr "Ezkutatzeko data ezin da ezabatzeko data baino geroagokoa izan."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "A timed feature needs a stable string ID."
+msgstr "Denboraz kontrolatutako objektu batek testu-ID egonkor bat behar du."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Delete on is required when timing is enabled."
+msgstr "Ezabatzeko data derrigorrezkoa da denboraren kontrola aktibatuta dagoenean."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timed feature IDs must be unique in their layer."
+msgstr "Denboraz kontrolatutako objektuen IDek bakarrak izan behar dute beren geruzan."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "An automatically deleted feature cannot be restored with the same ID. Reload the layer."
+msgstr "Automatikoki ezabatutako objektu bat ezin da ID berarekin leheneratu. Kargatu berriro geruza."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "Invalid GeoJSON or timing options."
+msgstr "GeoJSON edo denboraren aukera baliogabeak."

@@ -1,7 +1,9 @@
 import { Alert } from '../../components/alerts/alert.js'
 import * as Clipboard from '../clipboard.js'
 import * as DOMUtils from '../domutils.js'
+import { isTimeHidden } from '../feature_timing.js'
 import { MutatingForm } from '../form/builder.js'
+import { appendTimingFields } from '../form/timing.js'
 import { EXPORT_FORMATS } from '../formatter.js'
 import * as GeoUtils from '../geoutils.js'
 import { getLocale, translate } from '../i18n.js'
@@ -221,6 +223,12 @@ class Feature {
   }
 
   render(fields) {
+    this.updateTimingStatus?.()
+    if (fields.some((field) => field.startsWith('properties._umap_options.timing'))) {
+      this.datalayer.redraw()
+      this.datalayer.dataChanged()
+      return
+    }
     const impactData = fields.some((field) => {
       return field.startsWith('properties.')
     })
@@ -242,6 +250,8 @@ class Feature {
       })
     }
     this.redraw()
+    this.datalayer.scheduleTiming()
+    this.datalayer.dataChanged()
   }
 
   edit(event) {
@@ -288,6 +298,15 @@ class Feature {
     })
     const onFormCreated = builder.build()
     onFormCreated.then((form) => {
+      form.addEventListener('focusout', (event) => {
+        const helper = event.target._helper
+        if (!helper?.field.startsWith('properties.')) return
+        const timing = this.properties._umap_options.timing
+        const reference = `{${helper.field.slice('properties.'.length)}}`
+        // Commit a referenced date before a save/preset click, rather than
+        // waiting for the ordinary text-input debounce.
+        if (timing && [timing.hideOn, timing.deleteOn].includes(reference)) helper.sync()
+      })
       container.appendChild(form)
       const button = Utils.loadTemplate(
         `<button type="button"><i class="icon icon-16 icon-add"></i>${translate('Add a new field')}</button>`
@@ -296,6 +315,7 @@ class Feature {
         this.datalayer.fields.editField().then(() => this.edit({ force: true }))
       })
       form.appendChild(button)
+      this.appendTimingFields(container)
       this.appendEditFieldsets(container)
       this.addAdvancedActions(container)
     })
@@ -306,6 +326,10 @@ class Feature {
       form.querySelector('input')?.focus()
       return panel
     })
+  }
+
+  appendTimingFields(container) {
+    return appendTimingFields(this, container)
   }
 
   addAdvancedActions(container) {
@@ -639,6 +663,8 @@ class Feature {
   }
 
   isFiltered() {
+    if (isTimeHidden(this.properties._umap_options?.timing, this.app.editEnabled, Date.now(), this.properties))
+      return true
     const filterKeys = this.datalayer.getFilterKeys()
     const filter = this.app.browser?.options.filter
     if (filter && !this.matchFullTextFilter(filter, filterKeys)) return true
@@ -707,6 +733,10 @@ class Feature {
   }
 
   redraw() {
+    if (isTimeHidden(this.properties._umap_options?.timing, this.app.editEnabled, Date.now(), this.properties)) {
+      this.datalayer.redraw()
+      return
+    }
     this.app.fire('feature:reset', {
       sourceId: this.datalayer.id,
       geojson: this.toRenderer(),

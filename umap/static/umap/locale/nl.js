@@ -662,5 +662,29 @@ registerLocale('nl', {
     "Click to continue drawing the line": "Click to continue drawing the line",
     "Click to start measuring": "Click to start measuring",
     "Measure": "Measure",
-    "Measure areas": "Measure areas"
-})
+    "Measure areas": "Measure areas",
+    "Feature timing": "Tijdregeling",
+    "Automatic cleanup": "Automatisch verwijderen",
+    "Hide from (optional)": "Verbergen vanaf (optioneel)",
+    "Delete on": "Verwijderen op",
+    "Required for automatic cleanup. Dates start at midnight UTC. Hidden features remain accessible; older versions and backups may retain deleted features.": "Verplicht voor automatisch verwijderen. Datums beginnen om middernacht UTC. Verborgen objecten blijven toegankelijk; oudere versies en back-ups kunnen verwijderde objecten bewaren.",
+    "Invalid feature timing. Delete on is required for automatic cleanup; Hide from must not be later. Use calendar dates in UTC.": "Ongeldige tijdregeling. Automatisch verwijderen vereist een verwijderdatum; de verbergdatum mag niet later zijn. Gebruik kalenderdatums in UTC.",
+    "This layer changed and uses automatic cleanup. Reload the map before saving to avoid restoring deleted features.": "Deze laag is gewijzigd en gebruikt automatisch verwijderen. Herlaad de kaart voordat u opslaat om verwijderde objecten niet terug te zetten.",
+    "Use a date or a field reference such as {Ende}. Empty referenced fields pause the schedule.": "Gebruik een datum of veldverwijzing zoals {Ende}. Een leeg veld pauzeert de planning.",
+    "Delete after hiding": "Verwijderen na verbergen",
+    "Enter a delay instead of Delete on. Calendar months end on the last available day.": "Voer een termijn in in plaats van een verwijderdatum. Maanden worden begrensd tot de laatst beschikbare dag.",
+    "Unit": "Eenheid",
+    "Days": "Dagen",
+    "Months": "Maanden",
+    "Applied to newly drawn features only. Existing features keep their own schedule.": "Alleen voor nieuw getekende objecten. Bestaande objecten behouden hun eigen planning.",
+    "Use for new features in this layer": "Gebruiken voor nieuwe objecten in deze laag",
+    "Invalid calendar date.": "Ongeldige kalenderdatum.",
+    "Enable timing": "Planning inschakelen",
+    "At expiration": "Bij afloop",
+    "Move to layer (keep)": "Naar laag verplaatsen (bewaren)",
+    "Destination layer": "Doellaag",
+    "Choose a saved local layer with compatible edit permissions. Moving disables timing. Older versions remain; reload to see background changes.": "Kies een opgeslagen lokale laag met passende bewerkingsrechten. Verplaatsen schakelt de planning uit. Oudere versies blijven bestaan; herlaad om achtergrondwijzigingen te zien.",
+    "Move on": "Verplaatsen op",
+    "Move after hiding": "Verplaatsen na verbergen"
+}
+)

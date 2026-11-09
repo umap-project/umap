@@ -507,6 +507,47 @@ def set_storage():
     return storages["data"]
 
 
+class ExpiredFeature(models.Model):
+    """IDs removed by automatic cleanup, independent of file version retention."""
+
+    datalayer = models.ForeignKey("DataLayer", on_delete=models.CASCADE)
+    feature_id = models.CharField(max_length=255)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["datalayer", "feature_id"], name="unique_expired_feature"
+            )
+        ]
+
+
+class FeatureArchive(models.Model):
+    """Durable copy-before-remove job and protection against stale target saves."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    source = models.ForeignKey(
+        "DataLayer", on_delete=models.CASCADE, related_name="outgoing_archives"
+    )
+    target = models.ForeignKey(
+        "DataLayer", on_delete=models.CASCADE, related_name="incoming_archives"
+    )
+    feature_id = models.CharField(max_length=255)
+    source_hash = models.CharField(max_length=64)
+    payload = models.JSONField(default=dict)
+    completed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source", "feature_id"], name="unique_feature_archive"
+            ),
+            models.UniqueConstraint(
+                fields=["target", "feature_id"], name="unique_archive_target"
+            ),
+        ]
+
+
 class DataLayer(NamedModel):
     """
     Layer to store Features in.
@@ -560,6 +601,7 @@ class DataLayer(NamedModel):
         verbose_name=_("share status"),
     )
     modified_at = models.DateTimeField(auto_now=True)
+    archive_generation = models.PositiveIntegerField(default=0, editable=False)
 
     class Meta:
         ordering = ("rank",)

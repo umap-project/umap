@@ -1,7 +1,9 @@
 import { Alert, AlertConflict } from '../../components/alerts/alert.js'
 import * as DOMUtils from '../domutils.js'
 import { Filters } from '../filters.js'
+import { nextHideTime, validateTiming } from '../feature_timing.js'
 import { MutatingForm } from '../form/builder.js'
+import { appendTimingFields } from '../form/timing.js'
 import * as GeoUtils from '../geoutils.js'
 import { translate } from '../i18n.js'
 import { FeatureManager, LayerManager } from '../managers.js'
@@ -28,6 +30,9 @@ export class DataLayer {
 
     this.isDeleted = false
     this.referenceVersion = spec.referenceVersion
+    // Only a full data load may acknowledge newly archived objects. Never
+    // advance this through the websocket's referenceVersion updates.
+    this.archiveGeneration = 0
     // Do not save it later.
     delete spec.referenceVersion
     this._id = spec.id || crypto.randomUUID()
@@ -81,6 +86,14 @@ export class DataLayer {
       if (this.showAtLoad()) this.show()
     }
     this.eventsController = new AbortController()
+    const signal = this.eventsController.signal
+    const refreshTiming = () => {
+      this.redraw()
+      this.app.fire('datalayer:changed')
+    }
+    this.app.on('edit:enabled', refreshTiming, { signal })
+    this.app.on('edit:disabled', refreshTiming, { signal })
+    signal.addEventListener('abort', () => clearTimeout(this.timingTimeout))
     this.app.on('map:moveend', () => this.onMoveEnd(), {
       signal: this.eventsController.signal,
     })
@@ -317,6 +330,14 @@ export class DataLayer {
       await this.fetchRemoteData()
     } else {
       await this.fromGeoJSON(geojson, false)
+      if (Array.isArray(geojson.features)) {
+        this.archiveGeneration =
+          this.createdOnServer &&
+          Number.isInteger(geojson.archiveGeneration) &&
+          geojson.archiveGeneration >= 0
+            ? geojson.archiveGeneration
+            : 0
+      }
     }
   }
 
@@ -582,6 +603,21 @@ export class DataLayer {
   }
 
   makeFeature(geojson = {}, sync = true, id = null, allowEmpty = false) {
+    // Copy only at explicit drawing/creation, never when loading, importing,
+    // replaying a journal or moving an existing object between layers.
+    if (
+      (sync || allowEmpty) &&
+      this.properties.timingDefaults &&
+      geojson.properties?._umap_options?.timing === undefined
+    ) {
+      geojson = Utils.CopyJSON(geojson)
+      if (!geojson.geometry && geojson.coordinates) geojson = { geometry: geojson }
+      geojson.properties ||= {}
+      geojson.properties._umap_options ||= {}
+      geojson.properties._umap_options.timing = Utils.CopyJSON(
+        this.properties.timingDefaults
+      )
+    }
     const feature = this._buildFeature(geojson, sync, id, allowEmpty)
     if (feature) this.app.mapProxy.addFeature(this.id, feature.toRenderer())
     return feature
@@ -759,7 +795,24 @@ export class DataLayer {
     return datalayer
   }
 
+  scheduleTiming() {
+    clearTimeout(this.timingTimeout)
+    if (!this.app.editEnabled && !this.isDeleted) {
+      const next = nextHideTime(this.features.all())
+      if (Number.isFinite(next)) {
+        this.timingTimeout = setTimeout(
+          () => {
+            this.redraw()
+            this.app.fire('datalayer:changed')
+          },
+          Math.min(Math.max(1, next - Date.now()), 2147483647)
+        )
+      }
+    }
+  }
+
   redraw() {
+    this.scheduleTiming()
     if (this.layers.count()) {
       this.layers.tree.map((datalayer) => datalayer.redraw())
       return
@@ -1109,6 +1162,8 @@ export class DataLayer {
     const container = document.createElement('div')
     await this._editMetadata(container)
     await this._editLayerProperties(container)
+    if (!this.group && !this.isRemoteLayer())
+      await appendTimingFields(this, container, true)
     await this._editShapeProperties(container)
     await this._editAdvancedProperties(container)
     await this._editInteractionProperties(container)
@@ -1360,6 +1415,7 @@ export class DataLayer {
       features: features.map((f) => f.toJournal()),
     }
     geojson.properties = this.properties
+    geojson.archiveGeneration = this.archiveGeneration
     geojson.id = this.id
     geojson.rank = this.rank
     geojson.parent = this.parentId
@@ -1369,6 +1425,7 @@ export class DataLayer {
   // Render collection for the map proxy: each feature carries its resolved
   // `style`. Never saved (cf umapGeoJSON, the save format).
   toRenderer() {
+    this.scheduleTiming()
     return {
       type: 'FeatureCollection',
       style: {
@@ -1411,6 +1468,25 @@ export class DataLayer {
     if (!this.isRemoteLayer() && !this.isLoaded()) {
       await this.fetchData()
     }
+    if (
+      !validateTiming(this.properties.timingDefaults) ||
+      this.features
+        .all()
+        .some(
+          (feature) =>
+            !validateTiming(
+              feature.properties._umap_options?.timing,
+              feature.properties
+            )
+        )
+    ) {
+      Alert.error(
+        translate(
+          'Invalid feature timing. Delete on is required for automatic cleanup; Hide from must not be later. Use calendar dates in UTC.'
+        )
+      )
+      return false
+    }
     const formData = new FormData()
     formData.append('name', this.properties.name)
     formData.append('parent', this.parent?.id || '')
@@ -1429,6 +1505,7 @@ export class DataLayer {
     const headers = this.referenceVersion
       ? { 'X-Datalayer-Reference': this.referenceVersion }
       : {}
+    headers['X-Umap-Archive-Generation'] = String(this.archiveGeneration)
     const status = await this._trySave(saveURL, headers, formData)
     return status
   }
@@ -1441,6 +1518,14 @@ export class DataLayer {
     const [data, response, error] = await this.app.server.post(url, headers, formData)
     if (error) {
       if (response && response.status === 412) {
+        if (response.headers.get('X-Umap-Timing-Conflict')) {
+          Alert.error(
+            translate(
+              'This layer changed and uses automatic cleanup. Reload the map before saving to avoid restoring deleted features.'
+            )
+          )
+          return false
+        }
         AlertConflict.error(
           translate(
             'Whoops! Other contributor(s) changed some of the same map elements as you. ' +

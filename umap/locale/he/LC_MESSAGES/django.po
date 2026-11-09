@@ -901,3 +901,53 @@ msgstr "ההרשאות עודכנו בהצלחה!"
 #: views.py:1455
 msgid "Generic"
 msgstr "כללי"
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Use a calendar date in YYYY-MM-DD format (UTC)."
+msgstr "יש להשתמש בתאריך לועזי בתבנית YYYY-MM-DD לפי UTC."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid calendar date."
+msgstr "תאריך לועזי לא תקין."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Invalid feature collection."
+msgstr "אוסף עצמים לא תקין."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timing must contain a boolean enabled option."
+msgstr "התזמון חייב לכלול אפשרות הפעלה בעלת ערך בוליאני."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Hide from must not be after Delete on."
+msgstr "תאריך ההסתרה לא יכול להיות אחרי תאריך המחיקה."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "A timed feature needs a stable string ID."
+msgstr "עצם מתוזמן זקוק למזהה מחרוזת קבוע."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Delete on is required when timing is enabled."
+msgstr "תאריך מחיקה הוא חובה כאשר התזמון מופעל."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/feature_timing.py
+msgid "Timed feature IDs must be unique in their layer."
+msgstr "מזהי עצמים מתוזמנים חייבים להיות ייחודיים בשכבה שלהם."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "An automatically deleted feature cannot be restored with the same ID. Reload the layer."
+msgstr "אי אפשר לשחזר עצם שנמחק אוטומטית עם אותו מזהה. יש לטעון את השכבה מחדש."
+
+#. Feature timing: local AI-assisted draft; native-language review pending.
+#: umap/forms.py
+msgid "Invalid GeoJSON or timing options."
+msgstr "נתוני GeoJSON או הגדרות תזמון לא תקינים."
