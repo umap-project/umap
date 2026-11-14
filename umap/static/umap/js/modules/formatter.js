@@ -15,6 +15,32 @@ const parseTextGeom = async (geom) => {
   }
 }
 
+// Raised when the data has no data row at all. This is expected for remote data,
+// for example a dynamic layer with nothing in the current view.
+export class EmptyDataError extends Error {}
+
+// Raised when the data has rows, but none of them can be turned into a feature.
+export class InvalidDataError extends Error {}
+
+const csvWithoutFeaturesError = (str, err) => {
+  const nonBlankLines = str.split(/\r\n|\r|\n/).filter((line) => line.trim())
+  if (!nonBlankLines.length) {
+    return new EmptyDataError(translate('the CSV is empty'))
+  }
+  if (nonBlankLines.length === 1) {
+    return new EmptyDataError(translate('the CSV only contains a header row'))
+  }
+  if (Array.isArray(err)) {
+    // csv2geojson returns one error per row it could not convert.
+    return new InvalidDataError(
+      translate('the latitude or longitude is invalid in all {count} rows', {
+        count: err.length,
+      })
+    )
+  }
+  return new InvalidDataError(err?.message || translate('the CSV has no data rows'))
+}
+
 export const EXPORT_FORMATS = {
   geojson: {
     ext: '.geojson',
@@ -77,69 +103,64 @@ export class Formatter {
     return data
   }
 
-  fromCSV(str, callback) {
-    csv2geojson.csv2geojson(
-      str,
-      {
-        delimiter: 'auto',
-        includeLatLon: false,
-        sexagesimal: false,
-        parseLatLon: (raw) => Number.parseFloat(raw.toString().replace(',', '.')),
-      },
-      async (err, result) => {
-        if (result?.features.length) {
-          const first = result.features[0]
-          if (first.geometry === null) {
-            const geomFields = ['geom', 'geometry', 'wkt', 'geojson']
-            const availableFields = Object.keys(first.properties).reduce((acc, key) => {
-              acc[key.toLowerCase()] = key
-              return acc
-            }, {})
-            for (let field of geomFields) {
-              field = availableFields[field]
-              if (first.properties[field]) {
-                for (const feature of result.features) {
-                  feature.geometry = await parseTextGeom(feature.properties[field])
-                  delete feature.properties[field]
-                }
-                break
-              }
-            }
-            if (first.geometry === null) {
-              // csv2geojson fallback to null geometries when it cannot determine
-              // lat or lon columns. This is valid geojson, but unwanted from a user
-              // point of view.
-              err = {
-                type: 'Error',
-                message: translate(
-                  'No geo column found: must be either `lat(itude)` and `lon(gitude)` or `geom(etry)`.'
-                ),
-              }
-            }
+  async fromCSV(str) {
+    let { err, result } = await new Promise((resolve) => {
+      csv2geojson.csv2geojson(
+        str,
+        {
+          delimiter: 'auto',
+          includeLatLon: false,
+          sexagesimal: false,
+          parseLatLon: (raw) => Number.parseFloat(raw.toString().replace(',', '.')),
+        },
+        (err, result) => resolve({ err, result })
+      )
+    })
+    if (!result?.features.length) {
+      throw csvWithoutFeaturesError(str, err)
+    }
+    const first = result.features[0]
+    if (first.geometry === null) {
+      const geomFields = ['geom', 'geometry', 'wkt', 'geojson']
+      const availableFields = Object.keys(first.properties).reduce((acc, key) => {
+        acc[key.toLowerCase()] = key
+        return acc
+      }, {})
+      for (let field of geomFields) {
+        field = availableFields[field]
+        if (first.properties[field]) {
+          for (const feature of result.features) {
+            feature.geometry = await parseTextGeom(feature.properties[field])
+            delete feature.properties[field]
           }
-        }
-        if (err) {
-          let message
-          if (err.type === 'Error') {
-            message = err.message
-          } else {
-            message = translate('{count} errors during import: {message}', {
-              count: err.length,
-              message: err[0].message,
-            })
-          }
-          if (str.split(/\r\n|\r|\n/).length <= 2) {
-            // Seems like a blank CSV, let's not warn
-            console.debug(err)
-          } else {
-            Alert.error(message, 10000)
-          }
-        }
-        if (result?.features.length) {
-          callback(result)
+          break
         }
       }
-    )
+      if (first.geometry === null) {
+        // csv2geojson fallback to null geometries when it cannot determine
+        // lat or lon columns. This is valid geojson, but unwanted from a user
+        // point of view.
+        err = {
+          type: 'Error',
+          message: translate(
+            'No geo column found: must be either `lat(itude)` and `lon(gitude)` or `geom(etry)`.'
+          ),
+        }
+      }
+    }
+    if (err) {
+      let message
+      if (err.type === 'Error') {
+        message = err.message
+      } else {
+        message = translate('{count} errors during import: {message}', {
+          count: err.length,
+          message: err[0].message,
+        })
+      }
+      Alert.error(message, 10000)
+    }
+    return result
   }
 
   async fromGeoRSS(str) {
@@ -159,9 +180,7 @@ export class Formatter {
   async parse(str, format) {
     switch (format) {
       case 'csv':
-        return new Promise((resolve, reject) => {
-          return this.fromCSV(str, (data) => resolve(data))
-        })
+        return await this.fromCSV(str)
       case 'gpx':
         return await this.fromGPX(str)
       case 'kml':
