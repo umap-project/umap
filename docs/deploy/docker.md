@@ -11,6 +11,11 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
       - umap_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+    # make sure the database is also restarted after a reboot of the host
+    restart: always
 
   app:
     # Check https://hub.docker.com/r/umap/umap/tags to find the latest version
