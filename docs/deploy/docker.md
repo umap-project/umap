@@ -36,7 +36,8 @@ services:
       - /home/ubuntu/umap.conf:/etc/umap/umap.conf
     restart: always
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     
 volumes:
   umap_userdata:
