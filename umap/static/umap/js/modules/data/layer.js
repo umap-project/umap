@@ -2,6 +2,7 @@ import { Alert, AlertConflict } from '../../components/alerts/alert.js'
 import * as DOMUtils from '../domutils.js'
 import { Filters } from '../filters.js'
 import { MutatingForm } from '../form/builder.js'
+import { EmptyDataError, InvalidDataError } from '../formatter.js'
 import * as GeoUtils from '../geoutils.js'
 import { translate } from '../i18n.js'
 import { FeatureManager, LayerManager } from '../managers.js'
@@ -379,6 +380,8 @@ export class DataLayer {
         .then(async (geojson) => await this.fromGeoJSON(geojson, false))
         .catch((error) => {
           console.debug(error)
+          // A dynamic layer often has no data in the current view, so stay silent.
+          if (error instanceof EmptyDataError) return
           Alert.error(
             translate('Cannot parse remote data for layer "{layer}" with url "{url}"', {
               layer: this.getName(),
@@ -646,18 +649,35 @@ export class DataLayer {
 
   async importRaw(raw, format) {
     this.journal.startBatch()
-    const data = await this.addRaw(raw, format)
-    this.journal.commitBatch()
-    return data
+    try {
+      return await this.addRaw(raw, format)
+    } finally {
+      this.journal.commitBatch()
+    }
   }
 
-  async addRaw(raw, format) {
+  async addRaw(raw, format, filename) {
     return this.app.formatter
       .parse(raw, format)
       .then((geojson) => this.addData(geojson))
       .catch((error) => {
         console.debug(error)
-        Alert.error(translate('Import failed: invalid data'))
+        const hasReason =
+          error instanceof EmptyDataError || error instanceof InvalidDataError
+        if (!hasReason) {
+          Alert.error(translate('Import failed: invalid data'))
+        } else if (filename) {
+          Alert.error(
+            translate('Cannot import "{filename}": {reason}.', {
+              filename,
+              reason: error.message,
+            })
+          )
+        } else {
+          Alert.error(
+            translate('Cannot import data: {reason}.', { reason: error.message })
+          )
+        }
       })
   }
 
@@ -671,13 +691,24 @@ export class DataLayer {
 
   async importFromFiles(files, type) {
     this.journal.startBatch()
-    const features = await Promise.all(
-      Array.from(files, async (file) =>
-        this.addRaw(await this.readFile(file), type || Utils.detectFileType(file))
+    let features
+    try {
+      features = await Promise.all(
+        Array.from(files, async (file) =>
+          this.addRaw(
+            await this.readFile(file),
+            type || Utils.detectFileType(file),
+            file.name
+          )
+        )
       )
-    )
-    this.journal.commitBatch()
-    return features.filter(Boolean).flat()
+    } finally {
+      this.journal.commitBatch()
+    }
+    const imported = features.filter(Boolean)
+    // Every file failed and has already shown its own error.
+    if (!imported.length) return
+    return imported.flat()
   }
 
   async importFromUrl(uri, type) {
