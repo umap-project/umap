@@ -15,6 +15,7 @@ import { MapPermissions } from './permissions.js'
 import { Request, ServerRequest } from './request.js'
 import Rules from './rules.js'
 import * as Schema from './schema.js'
+import Selection from './selection.js'
 import Slideshow from './slideshow.js'
 import { BottomBar, EditBar, TopBar } from './ui/bar.js'
 import ContextMenu from './ui/contextmenu.js'
@@ -160,17 +161,27 @@ export default class App extends Utils.WithEvents {
     // Global storage for retrieving datalayers and features.
     this.layers = new LayerManager()
     this.featuresIndex = {}
+    this.selection = new Selection(this)
 
     this.formatter = new Formatter(this)
 
     this.initDataLayers()
     this.on('datalayer:changed', () => this.onDataLayersChanged())
-    this.on('feature:endedit', (event) => {
-      if (this.editedFeature?.id === event.detail.id) {
-        this.editedFeature = null
-        this.editPanel.close()
-      }
+    // Closing the edit panel ends the edit itself, and by then it is no longer open.
+    this.on('selection:changed', (event) => {
+      if (event.detail.editEnded && this.editPanel.isOpen()) this.editPanel.close()
     })
+    this.popupOpen = false
+    for (const name of ['popup:show', 'panel:show']) {
+      this.on(name, () => {
+        this.popupOpen = true
+      })
+    }
+    for (const name of ['popup:close', 'panel:close']) {
+      this.on(name, () => {
+        this.popupOpen = false
+      })
+    }
     this.on('panel:show', (event) => {
       this.panel.setDefaultMode('expanded')
       this.panel.open({
@@ -245,19 +256,6 @@ export default class App extends Utils.WithEvents {
   set editEnabled(value) {
     this._editEnabled = value
     document.body.classList.toggle('umap-edit-enabled', value)
-  }
-
-  get editedFeature() {
-    return this._editedFeature
-  }
-
-  set editedFeature(feature) {
-    const previous = this._editedFeature
-    this._editedFeature = feature
-    if (previous && previous.id !== feature?.id) {
-      this.fire('feature:endedit', { id: previous.id })
-    }
-    this.fire('seteditedfeature')
   }
 
   get modifiedAt() {
@@ -1502,7 +1500,7 @@ export default class App extends Utils.WithEvents {
   disableEdit() {
     if (this.isDirty) return
     this.drop?.disable()
-    this.editedFeature = null
+    this.selection.clear()
     this.editEnabled = false
     this.fire('edit:disabled')
     this.editPanel.close()

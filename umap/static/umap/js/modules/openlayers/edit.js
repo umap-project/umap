@@ -1,17 +1,15 @@
-import { never, platformModifierKeyOnly, singleClick } from 'ol/events/condition.js'
+import { platformModifierKeyOnly, singleClick } from 'ol/events/condition.js'
 import MultiLineString from 'ol/geom/MultiLineString.js'
 import MultiPolygon from 'ol/geom/MultiPolygon.js'
 import DoubleClickZoom from 'ol/interaction/DoubleClickZoom.js'
 import Draw from 'ol/interaction/Draw.js'
 import Modify from 'ol/interaction/Modify.js'
-import Select from 'ol/interaction/Select.js'
 import Snap from 'ol/interaction/Snap.js'
 import Translate from 'ol/interaction/Translate.js'
 import { unByKey } from 'ol/Observable.js'
 import ContinueLine from './continueline.js'
 import DrawHole from './hole.js'
 import DrawRoute from './route.js'
-import { HIT_TOLERANCE } from './utils.js'
 
 // A polygon ring repeats its first point to close itself (eg. a triangle has 4).
 function isValidGeometry(geometry) {
@@ -69,41 +67,44 @@ export default class Editor {
 
   disable() {
     unByKey(this.listeners)
-    this.map.removeInteraction(this.select)
     this.map.removeInteraction(this.translate)
-    for (const { modify, snap } of this.watched.values()) {
-      this.map.removeInteraction(modify)
-      this.map.removeInteraction(snap)
-    }
+    this.map.removeInteraction(this.modify)
+    for (const snap of this.watched.values()) this.map.removeInteraction(snap)
   }
 
   enable() {
-    // Do not allow to select spiderfied "false" markers (they are recreated at each
-    // spiderfy, and this would activate the translate, which we do not want).
-    const selectable = (feature) =>
-      feature.get('editable') && !feature.get('represents')
-    // Style: null, so select do not duplicate the highlighted style.
-    // Shift means "edit this feature" in uMap, not OL's default "toggle selection".
-    this.select = new Select({
-      style: null,
-      filter: selectable,
-      toggleCondition: never,
-      hitTolerance: HIT_TOLERANCE,
+    const edited = this.proxy.edited
+    // In a cluster layer, a marker is drawn by a copy standing for it (the cluster
+    // holding only this marker, or its spiderfied copy), recreated at each
+    // recluster or spiderfy: Translate filters at pointer down, so it reaches the
+    // copy as well. Do not give it `features`, else OL ignores the filter.
+    this.translate = new Translate({
+      filter: (drawn) => edited.getArray().includes(drawn.get('represents') || drawn),
     })
-    this.map.addInteraction(this.select)
-    this.select.on('select', (event) => {
-      this.proxy.restyle([...event.selected, ...event.deselected])
-    })
-
-    this.translate = new Translate({ features: this.select.getFeatures() })
     this.map.addInteraction(this.translate)
     this.translate.on('translatestart', () => this.proxy.hideOverlays())
     this.translate.on('translateend', (event) => {
       const { startCoordinate: start, coordinate: end } = event
       if (start[0] === end[0] && start[1] === end[1]) return
-      for (const olFeature of event.features.getArray()) {
-        this.proxy.pullGeometry(olFeature)
+      for (const drawn of event.features.getArray()) {
+        const represented = drawn.get('represents')
+        if (represented) represented.setGeometry(drawn.getGeometry().clone())
+        this.proxy.pullGeometry(represented || drawn)
       }
+    })
+
+    // A point has no vertex to edit, and is moved by Translate.
+    this.modify = new Modify({
+      features: edited,
+      filter: (olFeature) => olFeature.getGeometry().getType() !== 'Point',
+      // Dragging a segment is left to Translate; a vertex is inserted on demand only.
+      insertVertexCondition: platformModifierKeyOnly,
+      deleteCondition: (event) => platformModifierKeyOnly(event) && singleClick(event),
+    })
+    this.map.addInteraction(this.modify)
+    this.modify.on('modifystart', () => this.proxy.hideOverlays())
+    this.modify.on('modifyend', (event) => {
+      for (const olFeature of event.features.getArray()) this.onModified(olFeature)
     })
 
     const layers = this.map.getLayers()
@@ -118,34 +119,16 @@ export default class Editor {
     if (!layer.get('editable')) return
     const source = layer.getSource()
     if (this.watched.has(source)) return
-    const modify = new Modify({
-      source,
-      filter: (drawn) => drawn.get('editable'),
-      // Dragging a segment is left to Translate; a vertex is inserted on demand only.
-      insertVertexCondition: platformModifierKeyOnly,
-      deleteCondition: (event) => platformModifierKeyOnly(event) && singleClick(event),
-    })
-    modify.on('modifystart', () => this.proxy.hideOverlays())
-    modify.on('modifyend', (event) => {
-      for (const drawn of event.features.getArray()) {
-        const represented = drawn.get('represents')
-        // A spiderfied marker has been drawn.
-        if (represented) represented.setGeometry(drawn.getGeometry().clone())
-        this.onModified(represented || drawn)
-      }
-    })
     const snap = new Snap({ source })
-    this.watched.set(source, { modify, snap })
+    this.watched.set(source, snap)
     // OL serves the last added interaction first: Snap after Modify, or nothing snaps.
-    this.map.addInteraction(modify)
     this.map.addInteraction(snap)
   }
 
   unwatch(layer) {
     if (!layer.get('editable')) return
     const source = layer.getSource()
-    const { modify, snap } = this.watched.get(source) || {}
-    if (modify) this.map.removeInteraction(modify)
+    const snap = this.watched.get(source)
     if (snap) this.map.removeInteraction(snap)
     this.watched.delete(source)
   }
@@ -163,12 +146,12 @@ export default class Editor {
   // Snap stays on: drawing snaps to existing features too.
   pauseInteractions() {
     this.translate.setActive(false)
-    for (const { modify } of this.watched.values()) modify.setActive(false)
+    this.modify.setActive(false)
   }
 
   resumeInteractions() {
     this.translate.setActive(true)
-    for (const { modify } of this.watched.values()) modify.setActive(true)
+    this.modify.setActive(true)
   }
 
   async startRoute() {
@@ -252,7 +235,7 @@ export default class Editor {
 
   // Snap must be the last interaction to intercept coordinates before Draw/Modify.
   _moveSnapToTop() {
-    for (const { snap } of this.watched.values()) {
+    for (const snap of this.watched.values()) {
       this.map.removeInteraction(snap)
       this.map.addInteraction(snap)
     }

@@ -134,7 +134,7 @@ export class EditPanel extends Panel {
 
   onClose() {
     super.onClose()
-    this.app.editedFeature = null
+    this.app.selection.endEdit()
   }
 }
 

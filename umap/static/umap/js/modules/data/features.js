@@ -203,7 +203,7 @@ class Feature {
     if (this.app.slideshow) {
       this.app.slideshow.current = this
     }
-    this.app.currentFeature = this
+    this.app.selection.select(this)
     this.buildCard().then((element) => {
       const popupShape = this.getOption('popupShape')
       if (popupShape === 'Panel') {
@@ -229,7 +229,7 @@ class Feature {
         el.textContent = this.getDisplayName()
         el.title = this.getDisplayName()
       })
-      if (this.app.currentFeature === this) {
+      if (this.app.popupOpen && this.app.selection.has(this)) {
         this.view()
       }
     }
@@ -246,7 +246,7 @@ class Feature {
 
   edit(event) {
     if (!this.app.editEnabled || this.isReadOnly()) return
-    if (this.app.editedFeature === this && !event?.force) return
+    if (this.app.selection.isEdited(this) && !event?.force) return
     // If this feature is active (popup open), let's close it.
     this.deactivate()
     const container = DOMUtils.loadTemplate(`
@@ -299,9 +299,9 @@ class Feature {
       this.appendEditFieldsets(container)
       this.addAdvancedActions(container)
     })
+    // Opening the panel ends any previous edit, so it has to come first.
     const onPanelLoaded = this.app.editPanel.open({ content: container })
-    this.app.editedFeature = this
-    this.app.fire('feature:edit', { id: this.id, sourceId: this.datalayer.id })
+    this.app.selection.edit(this)
     return Promise.all([onFormCreated, onPanelLoaded]).then(([form, panel]) => {
       form.querySelector('input')?.focus()
       return panel
@@ -320,15 +320,11 @@ class Feature {
   }
 
   toggleEditing() {
-    if (this.app.editedFeature === this) {
+    if (this.app.selection.isEdited(this)) {
       this.app.editPanel.close()
     } else {
       this.edit()
     }
-  }
-
-  endEdit() {
-    this.app.fire('feature:endedit', { id: this.id })
   }
 
   getAdvancedEditActions(container) {
@@ -415,7 +411,7 @@ class Feature {
   }
 
   del(sync) {
-    this.endEdit()
+    this.app.selection.remove(this)
     if (this.datalayer) {
       this.datalayer.removeFeature(this, sync)
     }
@@ -997,8 +993,8 @@ class Path extends Feature {
         }
       )
     }
-    if (this.app.mapProxy.hasSelection()) {
-      const others = this.app.mapProxy.selection.filter((feature) => feature !== this)
+    if (this.app.selection.size) {
+      const others = this.app.selection.features.filter((feature) => feature !== this)
       const combinable =
         others.length &&
         others.every(
@@ -1509,8 +1505,8 @@ export class Polygon extends Path {
       action: () => this.startHole([event.lng, event.lat]),
       icon: 'icon-hole',
     })
-    if (this.app.mapProxy.hasSelection()) {
-      const selection = this.app.mapProxy.selection
+    if (this.app.selection.size) {
+      const selection = this.app.selection.features
       const others = selection.filter((feature) => feature !== this)
       const mergeable =
         others.length &&

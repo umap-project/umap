@@ -130,7 +130,7 @@ messages:
     node scripts/i18n.js
 
 installjs:
-    npm install
+    npm install --allow-git=all
 
 tx_push:
     tx push -s

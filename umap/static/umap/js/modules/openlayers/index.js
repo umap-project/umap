@@ -1,3 +1,4 @@
+import Collection from 'ol/Collection.js'
 import { noModifierKeys } from 'ol/events/condition.js'
 import MultiPoint from 'ol/geom/MultiPoint.js'
 import MouseWheelZoom from 'ol/interaction/MouseWheelZoom.js'
@@ -56,7 +57,8 @@ export class OLProxy {
     this.sources = {}
     this.layers = {}
     this.point = null
-    this.highlighted = null
+    this.selected = new Collection()
+    this.edited = new Collection()
     this.map = new OLMap({
       target: element,
       controls: [],
@@ -160,18 +162,11 @@ export class OLProxy {
       body.innerHTML = ''
       body.appendChild(content)
       this.popup.element.classList.toggle('umap-popup-large', mode === 'large')
-      this.highlight(sourceId, id)
     })
     this.app.on('popup:close', () => this.closePopup())
     this.app.on('map:show:point', (event) => this.showPoint(event.detail))
     this.app.on('map:hide:point', () => this.hidePoint())
-    this.app.on('feature:edit', (event) => {
-      const { sourceId, id } = event.detail
-      const olFeature = this.sources[sourceId]?.getFeatureById(id)
-      if (!olFeature) return
-      this.editor?.select.selectFeature(olFeature)
-    })
-    this.app.on('feature:endedit', () => this.editor?.select.clearSelection())
+    this.app.on('selection:changed', () => this.syncSelection())
     this.app.on('feature:reset', (event) => {
       const { sourceId, geojson } = event.detail
       const olFeature = this.sources[sourceId]?.getFeatureById(geojson.id)
@@ -413,15 +408,34 @@ export class OLProxy {
     return true
   }
 
-  hasSelection() {
-    return Boolean(this.editor?.select.getFeatures().getLength())
+  // An OL feature can be recreated, eg. when its feature moves to another
+  // datalayer, or be absent, eg. when filtered out: resync from the app selection
+  // whenever the sources change.
+  syncSelection() {
+    const { selection } = this.app
+    const resolve = (features) =>
+      features.map((feature) => this.findOLFeature(feature.id)).filter(Boolean)
+    const previous = [...this.selected.getArray()]
+    const selected = resolve(selection.features)
+    const edited = resolve(
+      selection.features.filter((feature) => selection.isEdited(feature))
+    )
+    const same = (collection, olFeatures) =>
+      collection.getLength() === olFeatures.length &&
+      olFeatures.every((olFeature, index) => olFeature === collection.item(index))
+    if (same(this.selected, selected) && same(this.edited, edited)) return
+    this.selected.clear()
+    this.selected.extend(selected)
+    this.edited.clear()
+    this.edited.extend(edited)
+    this.restyle([...previous, ...selected])
   }
 
-  get selection() {
-    return this.editor?.select
-      .getFeatures()
-      .getArray()
-      .map((olFeature) => this.getFeatureById(olFeature.getId()))
+  findOLFeature(id) {
+    for (const source of Object.values(this.sources)) {
+      const olFeature = source.getFeatureById(id)
+      if (olFeature) return olFeature
+    }
   }
 
   hasLayer(id) {
@@ -459,7 +473,7 @@ export class OLProxy {
   // Overlays are anchored to a coordinate: dragging a feature would leave them
   // behind, pointing at where it no longer is.
   hideOverlays() {
-    this.closePopup()
+    this.app.fire('popup:close')
     this.hidePoint()
   }
 
@@ -510,9 +524,12 @@ export class OLProxy {
   }
 
   onClick(event) {
-    this.closePopup()
+    this.app.fire('popup:close')
     const olFeature = this.featureAt(event.pixel)
-    if (!olFeature) return
+    if (!olFeature) {
+      this.app.selection.clear()
+      return
+    }
     const geometry = olFeature.getGeometry()
     // A point is anchored where it is drawn, which differs from its data position
     // once spiderfied.
@@ -573,8 +590,8 @@ export class OLProxy {
   removeFeature(id, featureId) {
     const olFeature = this.sources[id]?.getFeatureById(featureId)
     if (!olFeature) return
-    this.editor?.select?.getFeatures().remove(olFeature)
     this.sources[id].removeFeature(olFeature)
+    this.syncSelection()
   }
 
   clearLayer(id) {
@@ -629,6 +646,7 @@ export class OLProxy {
 
   addFeature(id, geojson) {
     this.sources[id].addFeature(this.geojsonToOL(geojson))
+    this.syncSelection()
   }
 
   redraw(id, geojson) {
@@ -649,6 +667,7 @@ export class OLProxy {
       else added.push(this.geojsonToOL(feature))
     }
     source.addFeatures(added)
+    this.syncSelection()
   }
 
   redrawFeature(olFeature, geojson) {
@@ -679,12 +698,8 @@ export class OLProxy {
     this.applyStyle(olFeature)
   }
 
-  // A feature renders highlighted when its popup is open or it is selected in edit.
   isHighlighted(olFeature) {
-    return (
-      olFeature === this.highlighted ||
-      Boolean(this.editor?.select?.getFeatures().getArray().includes(olFeature))
-    )
+    return this.selected.getArray().includes(olFeature)
   }
 
   applyStyle(olFeature) {
@@ -702,22 +717,6 @@ export class OLProxy {
 
   closePopup() {
     this.popup.setPosition(undefined)
-    this.unhighlight()
-  }
-
-  highlight(sourceId, id) {
-    const olFeature = this.sources[sourceId]?.getFeatureById(id)
-    if (olFeature === this.highlighted) return
-    const previous = this.highlighted
-    this.highlighted = olFeature
-    this.restyle([previous, olFeature].filter(Boolean))
-  }
-
-  unhighlight() {
-    if (!this.highlighted) return
-    const olFeature = this.highlighted
-    this.highlighted = null
-    this.restyle([olFeature])
   }
 
   style(geojson, highlight = false) {
