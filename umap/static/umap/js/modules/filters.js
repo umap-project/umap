@@ -26,7 +26,19 @@ class BaseWidget {
     if (this.label) {
       props.label = this.label
     }
+    if (
+      this.defaultValue &&
+      Object.values(this.defaultValue).some(
+        (value) => value !== undefined && (!Array.isArray(value) || value.length)
+      )
+    ) {
+      props.defaultValue = Utils.CopyJSON(this.defaultValue)
+    }
     return props
+  }
+
+  parseValue(value) {
+    return Utils.CopyJSON(value || {})
   }
 
   getFormField(field) {
@@ -41,6 +53,14 @@ Widgets.MinMax = class extends BaseWidget {
     super(parent, label, field)
     // FIXME make it dynamic from class name
     this.KEY = 'MinMax'
+  }
+  parseValue(value) {
+    const result = super.parseValue(value)
+    const field = this.parent._parent.fields.get(this.field)
+    for (const key of ['min', 'max']) {
+      if (result[key] !== undefined && field) result[key] = field.parse(result[key])
+    }
+    return result
   }
   match(value) {
     if (this.userData.min > value) return true
@@ -211,6 +231,12 @@ export class Filters {
   load() {
     let filters = this._parent.properties.filters
     if (!Array.isArray(filters)) filters = []
+    for (const key of this.available.keys()) {
+      if (!filters.some((filter) => filter.fieldKey === key)) {
+        this.available.delete(key)
+        delete this.userData[key]
+      }
+    }
     for (const filter of filters) {
       this._add({ ...filter })
     }
@@ -239,25 +265,35 @@ export class Filters {
     return this.available.get(fieldKey)
   }
 
-  add({ fieldKey, label, widget }) {
-    if (!this.available.has(fieldKey)) {
-      this.update({ fieldKey, label, widget })
+  add(options) {
+    if (!this.available.has(options.fieldKey)) {
+      this.update(options)
     }
   }
 
-  _add({ fieldKey, label, widget }) {
+  _add({ fieldKey, label, widget, defaultValue }) {
+    const previous = this.available.get(fieldKey)
     const klass = loadWidget(widget)
     const inst = new klass(this, label, fieldKey)
+    inst.defaultValue = Utils.CopyJSON(defaultValue || {})
+    if (
+      !previous ||
+      previous.KEY !== inst.KEY ||
+      JSON.stringify(previous.defaultValue) !== JSON.stringify(inst.defaultValue)
+    ) {
+      this.userData[fieldKey] = inst.parseValue(defaultValue)
+    }
     this.available.set(fieldKey, inst)
   }
 
-  update({ fieldKey, label, widget }) {
-    this._add({ fieldKey, label, widget })
+  update(options) {
+    this._add(options)
     this.dumps()
   }
 
   remove(fieldKey) {
     this.available.delete(fieldKey)
+    delete this.userData[fieldKey]
     this.dumps()
   }
 
@@ -412,15 +448,52 @@ export class Filters {
       label = translate('Add filter')
     }
 
-    const [container, { body, editField }] =
+    const [container, { body, editField, defaults }] =
       Utils.loadTemplateWithRefs(Utils.sanitizeVars`
       <div>
         <h3>${label}</h3>
         <div data-ref=body></div>
+        <fieldset class="formbox" data-ref=defaults></fieldset>
         <button type="button" data-ref=editField><i class="icon icon-16 icon-edit"></i>${translate('Edit this field')}</button>
       </div>
     `)
-    form.build().then((el) => body.appendChild(el))
+    const buildDefaults = () => {
+      defaults.replaceChildren()
+      const target = properties.target
+      const field = target?.fields.get(properties.fieldKey)
+      defaults.hidden = !field
+      if (!field) return
+      const Widget = loadWidget(properties.widget)
+      const widget = new Widget(target.filters, properties.label, properties.fieldKey)
+      properties.defaultValue = widget.parseValue(properties.defaultValue)
+      const legend = document.createElement('legend')
+      legend.textContent = translate('Default filter value')
+      defaults.appendChild(legend)
+      const initialData = {}
+      target.eachFeature((feature) => {
+        widget.computeInitialData(
+          initialData,
+          field.parse(feature.properties[field.key])
+        )
+      })
+      const defaultForm = new Form(properties, [
+        [
+          'defaultValue',
+          { handler: widget.getFormField(field), dataField: field, initialData },
+        ],
+      ])
+      defaultForm.build().then((el) => defaults.appendChild(el))
+    }
+    form.on('set', ({ detail: { helper } }) => {
+      if (['target', 'fieldKey', 'widget'].includes(helper.field)) {
+        delete properties.defaultValue
+        buildDefaults()
+      }
+    })
+    form.build().then((el) => {
+      body.appendChild(el)
+      buildDefaults()
+    })
     editField.addEventListener('click', () => {
       this.app.dialog.accept().then(() => {
         this._parent.fields.editField(fieldKey)
@@ -558,7 +631,7 @@ Fields.MinMaxBase = class extends FilterBase {
   }
 
   prepareForJS(value) {
-    return this.cast(value)
+    return this.properties.dataField.cast(value)
   }
 
   getTemplate() {
@@ -654,9 +727,9 @@ Fields.FilterByDate = class extends Fields.MinMaxBase {
   }
 
   prepareForHTML(value) {
-    // Value must be in local time
-    if (!value || isNaN(value)) return
-    return this.toLocaleDateTime(value).toISOString().substr(0, 10)
+    // Date fields are parsed as UTC calendar dates, independently of local time.
+    if (!value || Number.isNaN(value.valueOf())) return
+    return value.toISOString().slice(0, 10)
   }
 
   getLabels() {
@@ -742,6 +815,8 @@ Fields.FilterBySwitch = class extends FilterBase {
   build() {
     super.build()
     this.inputs = Array.from(this.form[this.name])
+    const wanted = this.get()?.wanted
+    this.form[this.name].value = wanted === undefined ? 'unset' : String(wanted)
     for (const input of this.inputs) {
       input.addEventListener('change', () => this.sync())
     }

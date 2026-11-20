@@ -691,3 +691,179 @@ def test_filter_with_enum(live_server, openmap, page, assert_screenshot):
     page.get_by_role("checkbox", name="milk").check()
     expect(features).to_have_count(1)
     assert_screenshot(page, suffix="one-marker", ui=False)
+
+
+@pytest.mark.parametrize("on_layer", [False, True])
+@pytest.mark.parametrize(
+    "field,kind,widget,default,expected",
+    [
+        ("mytype", "String", "Checkbox", {"selected": ["odd"]}, 2),
+        ("mytype", "String", "Radio", {"selected": ["even"]}, 2),
+        ("mynumber", "Number", "MinMax", {"min": 12}, 2),
+        ("mydate", "Date", "MinMax", {"min": "2024-04-14"}, 3),
+        ("mydate", "Datetime", "MinMax", {"min": "2024-04-14T10:19:17Z"}, 3),
+        ("active", "Boolean", "Switch", {"wanted": False}, 2),
+    ],
+)
+def test_saved_default_filters_apply_on_load(
+    live_server, page, map, on_layer, field, kind, widget, default, expected
+):
+    data = copy.deepcopy(DATALAYER_DATA1)
+    data["features"][0]["properties"]["active"] = True
+    data["features"][1]["properties"]["active"] = False
+    data2 = copy.deepcopy(DATALAYER_DATA2)
+    data2["features"][0]["properties"]["active"] = True
+    data2["features"][1]["properties"]["active"] = False
+    filters = [{"fieldKey": field, "widget": widget, "defaultValue": default}]
+    fields = [{"key": field, "type": kind}]
+    if on_layer:
+        data["properties"].update(filters=filters, fields=fields)
+        data2["properties"].update(filters=filters, fields=fields)
+    else:
+        map.settings["properties"].update(filters=filters, fields=fields)
+        map.save()
+    DataLayerFactory(map=map, data=data)
+    DataLayerFactory(map=map, data=data2)
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.get_by_role("button", name="Open browser").click()
+    features = page.locator(".umap-browser li.feature")
+    expect(features).to_have_count(expected)
+    page.locator(".filters summary").click()
+    if widget == "Switch":
+        for radio in page.get_by_role("radio", name="no", exact=True).all():
+            expect(radio).to_be_checked()
+    for details in page.locator(".umap-browser details[data-id]").all():
+        if details.get_attribute("open") is None:
+            details.locator(":scope > summary").click()
+    page.get_by_role("button", name="Reset all", exact=True).click()
+    expect(features).to_have_count(4)
+    page.reload()
+    page.get_by_role("button", name="Open browser").click()
+    expect(features).to_have_count(expected)
+
+
+def test_edit_save_and_remove_default_filter(live_server, page, openmap, tmp_path):
+    openmap.settings["properties"].update(
+        fields=[{"key": "mytype", "type": "String"}],
+        filters=[{"fieldKey": "mytype", "widget": "Checkbox", "label": "My type"}],
+    )
+    openmap.save()
+    DataLayerFactory(map=openmap, data=DATALAYER_DATA1)
+    page.goto(
+        f"{live_server.url}{openmap.get_absolute_url()}?edit&onLoadPanel=datafilters"
+    )
+    page.get_by_role("group", name="My type").get_by_role("button").click()
+    defaults = page.get_by_role("group", name="Default filter value")
+    expect(defaults.get_by_role("checkbox", name="odd")).not_to_be_checked()
+    page.screenshot(path=str(tmp_path / "default-filter-before.png"))
+    defaults.get_by_role("checkbox", name="odd").check()
+    page.screenshot(path=str(tmp_path / "default-filter-after.png"))
+    page.get_by_role("button", name="OK", exact=True).click()
+    expect(page.locator(".umap-browser li.feature")).to_have_count(1)
+    with page.expect_response(re.compile(".*/update/settings/.*")):
+        page.get_by_role("button", name="Save", exact=True).click()
+    openmap.refresh_from_db()
+    assert openmap.settings["properties"]["filters"][0]["defaultValue"] == {
+        "selected": ["odd"]
+    }
+    page.goto(
+        f"{live_server.url}{openmap.get_absolute_url()}?edit&onLoadPanel=datafilters"
+    )
+    expect(page.locator(".umap-browser li.feature")).to_have_count(1)
+    page.get_by_role("group", name="My type").get_by_role("button").click()
+    defaults.get_by_role("checkbox", name="odd").uncheck()
+    page.get_by_role("button", name="OK", exact=True).click()
+    expect(page.locator(".umap-browser li.feature")).to_have_count(2)
+    with page.expect_response(re.compile(".*/update/settings/.*")):
+        page.get_by_role("button", name="Save", exact=True).click()
+    openmap.refresh_from_db()
+    assert "defaultValue" not in openmap.settings["properties"]["filters"][0]
+
+
+def test_default_number_can_be_zero(live_server, page, openmap):
+    data = copy.deepcopy(DATALAYER_DATA1)
+    data["features"][0]["properties"]["mynumber"] = -1
+    data["features"][1]["properties"]["mynumber"] = 1
+    DataLayerFactory(map=openmap, data=data)
+    openmap.settings["properties"].update(
+        fields=[{"key": "mynumber", "type": "Number"}],
+        filters=[{"fieldKey": "mynumber", "widget": "MinMax", "label": "Number"}],
+    )
+    openmap.save()
+    page.goto(
+        f"{live_server.url}{openmap.get_absolute_url()}?edit&onLoadPanel=datafilters"
+    )
+    page.get_by_role("group", name="Number").get_by_role("button").click()
+    page.get_by_role("group", name="Default filter value").get_by_label("Min").fill("0")
+    page.keyboard.press("Tab")
+    page.get_by_role("button", name="OK", exact=True).click()
+    expect(page.locator(".umap-browser li.feature")).to_have_count(1)
+    with page.expect_response(re.compile(".*/update/settings/.*")):
+        page.get_by_role("button", name="Save", exact=True).click()
+    openmap.refresh_from_db()
+    assert openmap.settings["properties"]["filters"][0]["defaultValue"] == {"min": 0}
+    page.reload()
+    expect(page.locator(".umap-browser li.feature")).to_have_count(1)
+
+
+@pytest.mark.parametrize("on_layer", [False, True])
+def test_create_date_filter_with_default(live_server, page, openmap, on_layer):
+    data = copy.deepcopy(DATALAYER_DATA1)
+    fields = [{"key": "mydate", "type": "Date"}]
+    if on_layer:
+        data["properties"]["fields"] = fields
+    else:
+        openmap.settings["properties"]["fields"] = fields
+        openmap.save()
+    layer = DataLayerFactory(map=openmap, data=data)
+    page.goto(
+        f"{live_server.url}{openmap.get_absolute_url()}?edit&onLoadPanel=datafilters"
+    )
+    page.get_by_role("button", name="Manage filters").click()
+    page.get_by_role("button", name="Add filter").nth(int(on_layer)).click()
+    page.get_by_label("Filter on").select_option("mydate")
+    page.get_by_text("Min/Max", exact=True).click()
+    defaults = page.get_by_role("group", name="Default filter value")
+    defaults.get_by_label("From").fill("2024-04-01")
+    page.keyboard.press("Tab")
+    page.get_by_role("button", name="OK", exact=True).click()
+    expect(page.locator(".umap-browser li.feature")).to_have_count(1)
+    pattern = ".*/datalayer/update/.*" if on_layer else ".*/update/settings/.*"
+    with page.expect_response(re.compile(pattern)):
+        page.get_by_role("button", name="Save", exact=True).click()
+    page.goto(f"{live_server.url}{openmap.get_absolute_url()}?onLoadPanel=datafilters")
+    expect(page.locator(".umap-browser li.feature")).to_have_count(1)
+    expect(page.get_by_label("From")).to_have_value("2024-04-01")
+    if on_layer:
+        layer.refresh_from_db()
+        assert layer.settings["filters"][0]["defaultValue"]["min"].startswith(
+            "2024-04-01"
+        )
+    else:
+        openmap.refresh_from_db()
+        assert openmap.settings["properties"]["filters"][0]["defaultValue"][
+            "min"
+        ].startswith("2024-04-01")
+
+
+def test_default_calendar_date_in_western_timezone(live_server, map, browser, new_page):
+    map.settings["properties"].update(
+        fields=[{"key": "mydate", "type": "Date"}],
+        filters=[
+            {
+                "fieldKey": "mydate",
+                "widget": "MinMax",
+                "defaultValue": {"min": "2024-04-14"},
+            }
+        ],
+    )
+    map.save()
+    DataLayerFactory(map=map, data=DATALAYER_DATA1)
+    DataLayerFactory(map=map, data=DATALAYER_DATA2)
+    with browser.new_context(
+        timezone_id="America/Los_Angeles", locale="en-GB"
+    ) as context:
+        page = new_page(custom_context=context)
+        page.goto(f"{live_server.url}{map.get_absolute_url()}?onLoadPanel=datafilters")
+        expect(page.get_by_label("From")).to_have_value("2024-04-14")
+        expect(page.locator(".umap-browser li.feature")).to_have_count(3)
