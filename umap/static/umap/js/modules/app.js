@@ -1565,8 +1565,8 @@ export default class App extends Utils.WithEvents {
           this.layers.tree.visible().map((datalayer) => {
             datalayer.redraw()
           })
-          // The browser previews each feature with the same resolved style.
-          this.browser?.redraw()
+          // UI impacts already rebuild the browser's asynchronous forms.
+          if (!impacts.includes('ui')) this.browser?.redraw()
           break
         case 'datalayer-index':
           this.reindexDataLayers()
