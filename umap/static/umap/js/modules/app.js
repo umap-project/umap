@@ -167,19 +167,16 @@ export default class App extends Utils.WithEvents {
 
     this.initDataLayers()
     this.on('datalayer:changed', () => this.onDataLayersChanged())
-    // Closing the edit panel ends the edit itself, and by then it is no longer open.
     this.on('selection:changed', (event) => {
       if (event.detail.editEnded && this.editPanel.isOpen()) this.editPanel.close()
+      if (this.shownFeature && !this.selection.has(this.shownFeature)) {
+        this.shownFeature.closePopup()
+      }
     })
-    this.popupOpen = false
-    for (const name of ['popup:show', 'panel:show']) {
-      this.on(name, () => {
-        this.popupOpen = true
-      })
-    }
+    this.shownFeature = null
     for (const name of ['popup:close', 'panel:close']) {
       this.on(name, () => {
-        this.popupOpen = false
+        this.shownFeature = null
       })
     }
     this.on('panel:show', (event) => {

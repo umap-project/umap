@@ -83,6 +83,10 @@ def test_can_drag_single_marker_in_cluster_layer(
     assert_screenshot(page, "before_drag", ui=False)
     box = page.locator("#map").bounding_box()
     cx, cy = box["x"] + box["width"] / 2, box["y"] + box["height"] / 2
+    page.keyboard.down("Shift")
+    page.mouse.click(cx, cy)
+    page.keyboard.up("Shift")
+    expect(page.get_by_text("Feature properties")).to_be_visible()
     page.mouse.move(cx, cy)
     page.mouse.down()
     page.mouse.move(cx - 60, cy - 60, steps=10)
@@ -106,6 +110,12 @@ def test_can_drag_marker_in_cluster(
     # Spiderfying spreads the first member at the maximum radius, due east of the
     # cluster it came from — so 150px to the right of the map center.
     cx, cy = 790, 360
+    # OL pairs two clicks within 250ms into a dblclick, which zooms.
+    page.wait_for_timeout(250)
+    page.keyboard.down("Shift")
+    page.mouse.click(cx, cy)
+    page.keyboard.up("Shift")
+    expect(page.get_by_text("Feature properties")).to_be_visible()
     page.mouse.move(cx, cy)
     page.mouse.down()
     page.mouse.move(cx - 60, cy - 60, steps=10)

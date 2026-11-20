@@ -60,6 +60,10 @@
     cursor: grab;
 }
 
+.ol-viewport.umap-vertex-hover {
+    cursor: pointer;
+}
+
 .print-portrait,
 .print-landscape {
     left: initial !important;

@@ -199,12 +199,13 @@ class Feature {
       }
       return
     }
-    // TODO deal with an event instead?
-    if (this.app.slideshow) {
-      this.app.slideshow.current = this
-    }
     this.app.selection.select(this)
+    this.openPopup({ center })
+  }
+
+  openPopup({ center } = {}) {
     this.buildCard().then((element) => {
+      this.app.shownFeature = this
       const popupShape = this.getOption('popupShape')
       if (popupShape === 'Panel') {
         this.app.fire('panel:show', { id: this.id, content: element })
@@ -229,9 +230,7 @@ class Feature {
         el.textContent = this.getDisplayName()
         el.title = this.getDisplayName()
       })
-      if (this.app.popupOpen && this.app.selection.has(this)) {
-        this.view()
-      }
+      if (this.app.shownFeature === this) this.openPopup()
     }
     const impactPreview = fields.some((field) => {
       return field.startsWith('properties._umap_options')
@@ -247,8 +246,6 @@ class Feature {
   edit(event) {
     if (!this.app.editEnabled || this.isReadOnly()) return
     if (this.app.selection.isEdited(this) && !event?.force) return
-    // If this feature is active (popup open), let's close it.
-    this.deactivate()
     const container = DOMUtils.loadTemplate(`
       <div class="umap-feature-container">
         <h3><i class="icon icon-16 icon-${this.getClassName()}"></i> ${translate('Feature properties')}</h3>
@@ -780,8 +777,9 @@ class Feature {
     return items
   }
 
-  deactivate() {
-    this.app.fire('popup:close')
+  closePopup() {
+    if (this.getOption('popupShape') === 'Panel') this.app.fire('panel:close')
+    else this.app.fire('popup:close')
   }
 
   makePreview(element) {

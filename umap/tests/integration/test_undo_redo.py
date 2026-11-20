@@ -168,19 +168,14 @@ def test_can_undo_redo_marker_drag(live_server, page, tilelayer, assert_screensh
     # Create a marker
     page.get_by_title("Draw a marker").click()
     map.click(position={"x": 225, "y": 225})
-    # A selected feature renders highlighted, and undo does not restore the
-    # selection: leave edit mode so every screenshot shares the same style.
-    page.keyboard.press("Escape")
+    # A drawn feature is edited.
+    expect(page.locator(".panel.right form input").first).to_be_focused()
     assert_screenshot(page, suffix="created", ui=False)
 
-    # Translate acts on the selection.
-    map.click(position={"x": 225, "y": 215}, modifiers=["Shift"])
-    expect(page.locator(".panel.right form input").first).to_be_focused()
     # Drag the marker, grabbing its icon, which sits above its anchor
     map.drag_to(
         map, source_position={"x": 225, "y": 215}, target_position={"x": 250, "y": 240}
     )
-    page.keyboard.press("Escape")
 
     # Undo
     page.locator(".edit-undo").click()
@@ -205,9 +200,8 @@ def test_can_undo_redo_polygon_geometry_change(
     map.click(position={"x": 100, "y": 200})
     map.click(position={"x": 100, "y": 100})
     map.click(position={"x": 100, "y": 100})
-    # A selected feature renders highlighted, and undo does not restore the
-    # selection: leave edit mode so every screenshot shares the same style.
-    page.keyboard.press("Escape")
+    # A drawn feature is edited.
+    expect(page.locator(".panel.right form input").first).to_be_focused()
     assert_screenshot(page, suffix="drawn", ui=False)
 
     # Move one of its vertices

@@ -38,6 +38,19 @@ import {
 const POINT_ZINDEX_OFFSET = 10000
 const HIGHLIGHT_ZINDEX = 1e6
 
+const VERTEX_STYLE = new Style({
+  image: new CircleStyle({
+    radius: 5,
+    fill: new Fill({ color: '#fff' }),
+    stroke: new Stroke({ color: '#333', width: 2 }),
+  }),
+  geometry: (feature) => {
+    const geometry = feature.getGeometry()
+    return new MultiPoint(geometry.getFlatCoordinates(), geometry.getLayout())
+  },
+  zIndex: HIGHLIGHT_ZINDEX + 1,
+})
+
 const POPUP_ARROW_HEIGHT = 12
 const FIT_PADDING = [50, 50, 50, 50]
 
@@ -524,7 +537,6 @@ export class OLProxy {
   }
 
   onClick(event) {
-    this.app.fire('popup:close')
     const olFeature = this.featureAt(event.pixel)
     if (!olFeature) {
       this.app.selection.clear()
@@ -540,6 +552,7 @@ export class OLProxy {
       this.onFeatureClick(represented.getId(), event, anchor)
     } else if (olFeature.get('features')) {
       // Several features under one marker: the click spreads or zooms them, it opens nothing.
+      this.app.fire('popup:close')
       import('./cluster.js').then((Cluster) => {
         this.spider ??= new Cluster.Spider(this.map)
         Cluster.onClick(olFeature, {
@@ -679,9 +692,11 @@ export class OLProxy {
 
   applyGeojson(olFeature, geojson) {
     const base = this.style(geojson)
+    const highlight = this.style(geojson, true).style
     olFeature.umapStyles = {
       base: base.style,
-      highlight: this.style(geojson, true).style,
+      highlight,
+      edit: [].concat(highlight, VERTEX_STYLE),
       texts: base.texts,
       popupOffsetY: base.popupOffsetY,
     }
@@ -704,7 +719,9 @@ export class OLProxy {
 
   applyStyle(olFeature) {
     const styles = olFeature.umapStyles
-    styles.current = this.isHighlighted(olFeature) ? styles.highlight : styles.base
+    if (this.edited.getArray().includes(olFeature)) styles.current = styles.edit
+    else if (this.isHighlighted(olFeature)) styles.current = styles.highlight
+    else styles.current = styles.base
   }
 
   restyle(olFeatures) {

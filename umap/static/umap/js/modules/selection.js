@@ -1,7 +1,3 @@
-function sameFeatures(a, b) {
-  return a.length === b.length && a.every((feature, index) => feature === b[index])
-}
-
 export default class Selection {
   constructor(app) {
     this.app = app
@@ -48,14 +44,12 @@ export default class Selection {
 
   _select(features) {
     const editEnded = this._editing
-    if (!editEnded && sameFeatures(features, this._features)) return
     this._features = features
     this._editing = false
     this.app.fire('selection:changed', { editEnded })
   }
 
   _edit(feature) {
-    if (this._editing && sameFeatures([feature], this._features)) return
     this._features = [feature]
     this._editing = true
     this.app.fire('selection:changed', { editEnded: false })

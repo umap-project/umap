@@ -69,15 +69,13 @@ export default class Editor {
     unByKey(this.listeners)
     this.map.removeInteraction(this.translate)
     this.map.removeInteraction(this.modify)
+    this.map.getViewport().classList.remove('umap-vertex-hover')
     for (const snap of this.watched.values()) this.map.removeInteraction(snap)
   }
 
   enable() {
     const edited = this.proxy.edited
-    // In a cluster layer, a marker is drawn by a copy standing for it (the cluster
-    // holding only this marker, or its spiderfied copy), recreated at each
-    // recluster or spiderfy: Translate filters at pointer down, so it reaches the
-    // copy as well. Do not give it `features`, else OL ignores the filter.
+    // In a cluster layer, a marker is drawn by a copy standing for it.
     this.translate = new Translate({
       filter: (drawn) => edited.getArray().includes(drawn.get('represents') || drawn),
     })
@@ -102,6 +100,11 @@ export default class Editor {
       deleteCondition: (event) => platformModifierKeyOnly(event) && singleClick(event),
     })
     this.map.addInteraction(this.modify)
+    // Modify draws its handle in its overlay only while the pointer is on a vertex.
+    const handles = this.modify.getOverlay().getSource()
+    const viewport = this.map.getViewport()
+    handles.on('addfeature', () => viewport.classList.add('umap-vertex-hover'))
+    handles.on('removefeature', () => viewport.classList.remove('umap-vertex-hover'))
     this.modify.on('modifystart', () => this.proxy.hideOverlays())
     this.modify.on('modifyend', (event) => {
       for (const olFeature of event.features.getArray()) this.onModified(olFeature)

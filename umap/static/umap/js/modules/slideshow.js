@@ -20,7 +20,6 @@ export default class Slideshow extends WithTemplate {
     this.CLASSNAME = 'umap-slideshow-active'
     this.app.properties.slideshow ??= {}
     this.load()
-    this._current = null
 
     if (this.properties.autoplay) {
       this.app.onceDataLoaded(() => this.play())
@@ -28,23 +27,13 @@ export default class Slideshow extends WithTemplate {
     app.on('edit:enabled', () => this.stop())
   }
 
-  set current(feature) {
-    this._current = feature
-  }
-
   get current() {
-    if (!this._current) {
-      const datalayer = this.defaultDatalayer()
-      if (datalayer) this._current = datalayer.features.first()
-    }
-    return this._current
+    const { selection } = this.app
+    if (selection.size === 1) return selection.features[0]
   }
 
   get next() {
-    if (this._current === null) {
-      return this.current
-    }
-    return this.current.getNext()
+    return this.current?.getNext() || this.defaultDatalayer()?.features.first()
   }
 
   load() {
@@ -92,8 +81,7 @@ export default class Slideshow extends WithTemplate {
   }
 
   loop() {
-    this.current = this.next
-    this.step()
+    this.step(this.next)
   }
 
   pause() {
@@ -107,25 +95,22 @@ export default class Slideshow extends WithTemplate {
 
   stop() {
     this.pause()
-    this.current = null
   }
 
   forward() {
     this.pause()
-    this.current = this.next
-    this.step()
+    this.step(this.next)
   }
 
   backward() {
     this.pause()
-    if (this.current) this.current = this.current.getPrevious()
-    this.step()
+    this.step(this.current?.getPrevious())
   }
 
-  step() {
-    if (!this.current) return this.stop()
-    this.current.zoomTo({ easing: this.properties.easing })
-    this.current.view()
+  step(feature) {
+    if (!feature) return this.stop()
+    feature.zoomTo({ easing: this.properties.easing })
+    feature.view()
   }
 
   toggle() {
