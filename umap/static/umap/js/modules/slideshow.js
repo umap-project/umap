@@ -27,15 +27,6 @@ export default class Slideshow extends WithTemplate {
     app.on('edit:enabled', () => this.stop())
   }
 
-  get current() {
-    const { selection } = this.app
-    if (selection.size === 1) return selection.features[0]
-  }
-
-  get next() {
-    return this.current?.getNext() || this.defaultDatalayer()?.features.first()
-  }
-
   load() {
     this.setProperties(this.app.properties.slideshow)
   }
@@ -48,10 +39,6 @@ export default class Slideshow extends WithTemplate {
       },
       properties
     )
-  }
-
-  defaultDatalayer() {
-    return this.app.layers.tree.find((d) => d.canBrowse())
   }
 
   startSpinner() {
@@ -81,7 +68,7 @@ export default class Slideshow extends WithTemplate {
   }
 
   loop() {
-    this.step(this.next)
+    if (!this.app.selection.next({ easing: this.properties.easing })) this.stop()
   }
 
   pause() {
@@ -99,18 +86,12 @@ export default class Slideshow extends WithTemplate {
 
   forward() {
     this.pause()
-    this.step(this.next)
+    this.app.selection.next({ easing: this.properties.easing })
   }
 
   backward() {
     this.pause()
-    this.step(this.current?.getPrevious())
-  }
-
-  step(feature) {
-    if (!feature) return this.stop()
-    feature.zoomTo({ easing: this.properties.easing })
-    feature.view()
+    this.app.selection.previous({ easing: this.properties.easing })
   }
 
   toggle() {

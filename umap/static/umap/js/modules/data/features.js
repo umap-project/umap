@@ -214,7 +214,7 @@ class Feature {
           id: this.id,
           sourceId: this.datalayer.id,
           content: element,
-          center: center || this.center,
+          center,
           mode: popupShape === 'Large' ? 'large' : 'normal',
         })
       }
@@ -408,7 +408,7 @@ class Feature {
   }
 
   del(sync) {
-    this.app.selection.remove(this)
+    this.app.selection.unselect(this)
     if (this.datalayer) {
       this.datalayer.removeFeature(this, sync)
     }
@@ -747,7 +747,7 @@ class Feature {
   getDrawingTools(event) {
     return [
       {
-        title: translate('Toggle edit mode (⇧+Click)'),
+        title: this.app.help.displayLabel('TOGGLE_FEATURE_EDIT', false),
         action: () => this.toggleEditing(),
         icon: 'icon-edit',
       },
@@ -954,7 +954,7 @@ class Path extends Feature {
     this.journal.commitBatch()
   }
 
-  zoomTo({ easing, callback }) {
+  zoomTo({ easing, callback } = {}) {
     // Use bounds instead of centroid for paths.
     const zoom = this.getBestZoom()
     this.app.fire('map:view:fit', {

@@ -593,7 +593,37 @@ export default class App extends Utils.WithEvents {
   }
 
   initShortcuts() {
+    const selected = () => this.selection.features[0]
+    const onSelected = () => this.selection.size === 1 && this.mapProxy.hasFocus()
+    const onEditable = () => this.editEnabled && onSelected()
     const shortcuts = {
+      Enter: {
+        if: onSelected,
+        do: () => {
+          if (this.shownFeature === selected()) selected().closePopup()
+          else selected().openPopup()
+        },
+      },
+      'Alt+Enter': {
+        if: onEditable,
+        do: () => selected().toggleEditing(),
+      },
+      'Shift+Alt+Enter': {
+        if: onEditable,
+        do: () => selected().datalayer.edit(),
+      },
+      Tab: {
+        if: onSelected,
+        do: () => this.selection.next(),
+      },
+      'Shift+Tab': {
+        if: onSelected,
+        do: () => this.selection.previous(),
+      },
+      Delete: {
+        if: () => onEditable() && !selected().isReadOnly(),
+        do: () => selected().del(),
+      },
       Escape: {
         do: () => {
           if (this.importer?.dialog.visible) {
@@ -604,6 +634,8 @@ export default class App extends Utils.WithEvents {
             this.fullPanel?.close()
           } else if (this.editPanel?.isOpen()) {
             this.editPanel?.close()
+          } else if (this.selection.size) {
+            this.selection.clear()
           } else if (this.panel.isOpen()) {
             this.panel.close()
           }

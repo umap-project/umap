@@ -83,9 +83,8 @@ def test_can_drag_single_marker_in_cluster_layer(
     assert_screenshot(page, "before_drag", ui=False)
     box = page.locator("#map").bounding_box()
     cx, cy = box["x"] + box["width"] / 2, box["y"] + box["height"] / 2
-    page.keyboard.down("Shift")
-    page.mouse.click(cx, cy)
-    page.keyboard.up("Shift")
+    page.mouse.click(cx, cy, button="right")
+    page.get_by_role("button", name="Toggle edit mode (Alt+Enter, Alt+Click)").click()
     expect(page.get_by_text("Feature properties")).to_be_visible()
     page.mouse.move(cx, cy)
     page.mouse.down()
@@ -110,11 +109,9 @@ def test_can_drag_marker_in_cluster(
     # Spiderfying spreads the first member at the maximum radius, due east of the
     # cluster it came from — so 150px to the right of the map center.
     cx, cy = 790, 360
-    # OL pairs two clicks within 250ms into a dblclick, which zooms.
-    page.wait_for_timeout(250)
-    page.keyboard.down("Shift")
-    page.mouse.click(cx, cy)
-    page.keyboard.up("Shift")
+    # A right click is not paired with the spiderfying click into an OL dblclick.
+    page.mouse.click(cx, cy, button="right")
+    page.get_by_role("button", name="Toggle edit mode (Alt+Enter, Alt+Click)").click()
     expect(page.get_by_text("Feature properties")).to_be_visible()
     page.mouse.move(cx, cy)
     page.mouse.down()
@@ -162,16 +159,9 @@ def test_can_change_datalayer_of_marker_in_cluster(
     expect(target).not_to_contain_text("again one another point")
     assert_screenshot(page, "before_change", ui=False)
 
-    # The marker get highlighted when OL adds it to the selection, which only happen
-    # after 250ms, delay of OL before firing a singleclick event. So wait for that
-    # before doing the screenshot, so it's stable.
-    page.evaluate(
-        "() => { window.singleclick = new Promise((done) => "
-        "U.MAP.mapProxy.map.once('singleclick', done)) }"
-    )
-    # Shift-click opens the edit form of the lone marker, south of the cluster.
-    page.locator("#map").click(position={"x": 640, "y": 468}, modifiers=["Shift"])
-    page.evaluate("() => window.singleclick")
+    # Edit the lone marker, south of the cluster.
+    page.locator("#map").click(position={"x": 640, "y": 468})
+    page.keyboard.press("Alt+Enter")
     page.get_by_role("combobox").select_option(str(datalayer.pk))
 
     expect(target).to_contain_text("again one another point")

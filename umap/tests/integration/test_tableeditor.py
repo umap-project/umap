@@ -151,13 +151,13 @@ def test_rename_field(live_server, openmap, page, wait_for_loaded):
     page.locator(".panel.full").get_by_role("button", name="Close").click()
     # Click the marker
     page.locator("#map").click(position={"x": 557, "y": 320}, button="right")
-    page.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
+    page.get_by_role("button", name="Toggle edit mode (Alt+Enter, Alt+Click)").click()
     expect(page.locator(".panel.right .umap-field-mynewtype")).to_be_visible()
     expect(page.locator(".panel.right .umap-field-mytype")).to_be_hidden()
     page.locator(".edit-undo").click()
     page.locator(".panel.right").get_by_role("button", name="Close").click()
     page.locator("#map").click(position={"x": 557, "y": 320}, button="right")
-    page.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
+    page.get_by_role("button", name="Toggle edit mode (Alt+Enter, Alt+Click)").click()
     expect(page.locator(".panel.right .umap-field-mynewtype")).to_be_hidden()
     expect(page.locator(".panel.right .umap-field-mytype")).to_be_visible()
 
@@ -177,12 +177,12 @@ def test_delete_field(live_server, openmap, page, wait_for_loaded):
     page.locator(".panel.full").get_by_role("button", name="Close").click()
     # Click the marker
     page.locator("#map").click(position={"x": 557, "y": 320}, button="right")
-    page.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
+    page.get_by_role("button", name="Toggle edit mode (Alt+Enter, Alt+Click)").click()
     expect(page.locator(".panel.right .umap-field-mytype")).to_be_hidden()
     page.locator(".edit-undo").click()
     page.locator(".panel.right").get_by_role("button", name="Close").click()
     page.locator("#map").click(position={"x": 557, "y": 320}, button="right")
-    page.get_by_role("button", name="Toggle edit mode (⇧+Click)").click()
+    page.get_by_role("button", name="Toggle edit mode (Alt+Enter, Alt+Click)").click()
     expect(page.locator(".panel.right .umap-field-mytype")).to_be_visible()
 
 

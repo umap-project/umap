@@ -10,6 +10,7 @@ import { unByKey } from 'ol/Observable.js'
 import ContinueLine from './continueline.js'
 import DrawHole from './hole.js'
 import DrawRoute from './route.js'
+import { targetFeature } from './utils.js'
 
 // A polygon ring repeats its first point to close itself (eg. a triangle has 4).
 function isValidGeometry(geometry) {
@@ -77,7 +78,7 @@ export default class Editor {
     const edited = this.proxy.edited
     // In a cluster layer, a marker is drawn by a copy standing for it.
     this.translate = new Translate({
-      filter: (drawn) => edited.getArray().includes(drawn.get('represents') || drawn),
+      filter: (drawn) => edited.getArray().includes(targetFeature(drawn)),
     })
     this.map.addInteraction(this.translate)
     this.translate.on('translatestart', () => this.proxy.hideOverlays())
@@ -85,9 +86,9 @@ export default class Editor {
       const { startCoordinate: start, coordinate: end } = event
       if (start[0] === end[0] && start[1] === end[1]) return
       for (const drawn of event.features.getArray()) {
-        const represented = drawn.get('represents')
-        if (represented) represented.setGeometry(drawn.getGeometry().clone())
-        this.proxy.pullGeometry(represented || drawn)
+        const target = targetFeature(drawn)
+        if (target !== drawn) target.setGeometry(drawn.getGeometry().clone())
+        this.proxy.pullGeometry(target)
       }
     })
 

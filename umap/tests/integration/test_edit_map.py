@@ -110,7 +110,7 @@ def test_map_color_impacts_data(live_server, page, tilelayer, assert_screenshot)
     shape.get_by_text("define").first.click()
     shape.get_by_title("Lime", exact=True).click()
 
-    # Leave the edited state, so the marker renders with its base style.
+    # Leave the edited state.
     page.locator(".panel.right .icon-close").click()
     expect(page.locator(".panel.right.on")).to_have_count(0)
 

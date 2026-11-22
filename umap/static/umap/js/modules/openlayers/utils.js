@@ -15,6 +15,30 @@ export function invertPolygon(geometry) {
   return new Polygon(rings)
 }
 
+// The data feature a rendered one stands for: a cluster of one or a spiderfied
+// marker stands for its member, a cluster of several for none.
+export function targetFeature(olFeature) {
+  if (olFeature.get('represents')) return olFeature.get('represents')
+  if (!olFeature.get('features')) return olFeature
+}
+
+// A point on the shape itself: a centroid can fall off a curved line or a concave
+// polygon.
+export function popupAnchor(geometry) {
+  switch (geometry.getType()) {
+    case 'LineString':
+      return geometry.getCoordinateAt(0.5)
+    case 'MultiLineString':
+      return geometry.getLineString(0).getCoordinateAt(0.5)
+    case 'Polygon':
+      return geometry.getInteriorPoint().getCoordinates().slice(0, 2)
+    case 'MultiPolygon':
+      return geometry.getInteriorPoints().getPoint(0).getCoordinates().slice(0, 2)
+    default:
+      return geometry.getCoordinates()
+  }
+}
+
 export function readGeometry(data) {
   return geojsonFormat.readGeometry(data, PROJECTION)
 }

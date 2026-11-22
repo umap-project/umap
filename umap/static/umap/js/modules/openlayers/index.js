@@ -1,5 +1,9 @@
 import Collection from 'ol/Collection.js'
-import { noModifierKeys } from 'ol/events/condition.js'
+import {
+  altKeyOnly,
+  altShiftKeysOnly,
+  noModifierKeys,
+} from 'ol/events/condition.js'
 import MultiPoint from 'ol/geom/MultiPoint.js'
 import MouseWheelZoom from 'ol/interaction/MouseWheelZoom.js'
 import VectorLayer from 'ol/layer/Vector.js'
@@ -28,9 +32,11 @@ import {
   HIT_TOLERANCE,
   invertPolygon,
   loadFonts,
+  popupAnchor,
   readFeature,
   readGeometry,
   rgba,
+  targetFeature,
   toOLExtent,
   writeFeature,
 } from './utils.js'
@@ -170,7 +176,9 @@ export class OLProxy {
       const olFeature = this.sources[sourceId]?.getFeatureById(id)
       const popupOffsetY = olFeature?.umapStyles.popupOffsetY || 0
       this.popup.setOffset([0, popupOffsetY - POPUP_ARROW_HEIGHT])
-      this.popup.setPosition(fromLonLat(center))
+      this.popup.setPosition(
+        center ? fromLonLat(center) : olFeature && popupAnchor(olFeature.getGeometry())
+      )
       const body = this.popup.get('body')
       body.innerHTML = ''
       body.appendChild(content)
@@ -302,6 +310,10 @@ export class OLProxy {
 
   focus() {
     this.map.getTargetElement().focus()
+  }
+
+  hasFocus() {
+    return document.activeElement === this.map.getTargetElement()
   }
 
   getFeatureById(id) {
@@ -547,10 +559,10 @@ export class OLProxy {
     // once spiderfied.
     const anchor =
       geometry.getType() === 'Point' ? geometry.getCoordinates() : event.coordinate
-    const represented = olFeature.get('represents')
-    if (represented) {
-      this.onFeatureClick(represented.getId(), event, anchor)
-    } else if (olFeature.get('features')) {
+    const target = targetFeature(olFeature)
+    if (target) {
+      this.onFeatureClick(target.getId(), event, anchor)
+    } else {
       // Several features under one marker: the click spreads or zooms them, it opens nothing.
       this.app.fire('popup:close')
       import('./cluster.js').then((Cluster) => {
@@ -561,8 +573,6 @@ export class OLProxy {
           app: this.app,
         })
       })
-    } else {
-      this.onFeatureClick(olFeature.getId(), event, anchor)
     }
   }
 
@@ -571,12 +581,10 @@ export class OLProxy {
     const uFeature = this.getFeatureById(id)
     if (!uFeature) return
     if (this.map.measureTools?.enabled()) return
-    if (event.originalEvent.shiftKey) {
-      if (event.originalEvent.ctrlKey || event.originalEvent.metaKey) {
-        uFeature.datalayer.edit(event)
-      } else if (!uFeature.isReadOnly()) {
-        uFeature.edit()
-      }
+    if (altKeyOnly(event)) {
+      uFeature.toggleEditing()
+    } else if (altShiftKeysOnly(event)) {
+      uFeature.datalayer.edit()
     } else if (noModifierKeys(event) && !this.map.editTools?.drawing()) {
       // Events carry geographic lon/lat; the proxy converts to/from its projection.
       uFeature.view({ center: toLonLat(anchor) })
@@ -591,11 +599,9 @@ export class OLProxy {
       lng,
       pixel: [event.originalEvent.clientX, event.originalEvent.clientY],
     }
-    // Restrict hit-testing to our data layers, else Modify's vertex overlay wins.
-    const olFeature = this.featureAt(event.pixel, {
-      layerFilter: (layer) => Object.values(this.sources).includes(layer.getSource()),
-    })
-    const feature = olFeature && this.getFeatureById(olFeature.getId())
+    const olFeature = this.featureAt(event.pixel)
+    const target = olFeature && targetFeature(olFeature)
+    const feature = target && this.getFeatureById(target.getId())
     if (feature) feature.onContextMenu(appEvent)
     else this.app.onContextMenu(appEvent)
   }

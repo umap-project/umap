@@ -52,8 +52,12 @@ const SHORTCUTS = {
     shortcut: 'Modifier+S',
     label: translate('Save current edits'),
   },
+  TOGGLE_FEATURE_EDIT: {
+    shortcut: 'Alt+Enter, Alt+Click',
+    label: translate('Toggle edit mode'),
+  },
   EDIT_FEATURE_LAYER: {
-    shortcut: 'Modifier+⇧+Click',
+    shortcut: 'Shift+Alt+Enter, Shift+Alt+Click',
     label: translate("Edit feature's layer"),
   },
   CONTINUE_LINE: {
