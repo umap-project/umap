@@ -367,6 +367,63 @@ def test_can_delete_shape_using_toolbar(live_server, page, tilelayer, settings):
     ]
 
 
+def test_can_continue_line_from_its_end(live_server, page, tilelayer, settings):
+    settings.UMAP_ALLOW_ANONYMOUS = True
+    page.goto(f"{live_server.url}/en/map/new/")
+    page.get_by_title("Draw a polyline").click()
+    map = page.locator("#map")
+    map.click(position={"x": 200, "y": 100})
+    map.click(position={"x": 100, "y": 100})
+    map.click(position={"x": 100, "y": 200})
+    map.click(position={"x": 100, "y": 200})
+    # When panel opens, it will have the focus, thus close the contextmenu,
+    # so wait for it before trying to right click (and prevent a race).
+    expect(page.locator(".panel.right form input").first).to_be_focused()
+    map.click(position={"x": 100, "y": 200}, button="right")
+    page.get_by_role("button", name="Continue line").click()
+    map.click(position={"x": 200, "y": 200})
+    map.click(position={"x": 200, "y": 200})
+    # The new end can be continued again.
+    map.click(position={"x": 200, "y": 200}, button="right")
+    page.get_by_role("button", name="Continue line").click()
+    map.click(position={"x": 300, "y": 200})
+    map.click(position={"x": 300, "y": 200})
+    data = save_and_get_json(page)
+    coordinates = data["features"][0]["geometry"]["coordinates"]
+    assert coordinates[:4] == [
+        [-7.667969, 54.457332],
+        [-9.865234, 54.457332],
+        [-9.865234, 53.160015],
+        [-7.667969, 53.160015],
+    ]
+    assert len(coordinates) == 5
+
+
+def test_can_continue_line_from_its_start(live_server, page, tilelayer, settings):
+    settings.UMAP_ALLOW_ANONYMOUS = True
+    page.goto(f"{live_server.url}/en/map/new/")
+    page.get_by_title("Draw a polyline").click()
+    map = page.locator("#map")
+    map.click(position={"x": 200, "y": 100})
+    map.click(position={"x": 100, "y": 100})
+    map.click(position={"x": 100, "y": 200})
+    map.click(position={"x": 100, "y": 200})
+    # When panel opens, it will have the focus, thus close the contextmenu,
+    # so wait for it before trying to right click (and prevent a race).
+    expect(page.locator(".panel.right form input").first).to_be_focused()
+    map.click(position={"x": 200, "y": 100}, button="right")
+    page.get_by_role("button", name="Continue line").click()
+    map.click(position={"x": 200, "y": 200})
+    map.click(position={"x": 200, "y": 200})
+    data = save_and_get_json(page)
+    assert data["features"][0]["geometry"]["coordinates"] == [
+        [-7.667969, 53.160015],
+        [-7.667969, 54.457332],
+        [-9.865234, 54.457332],
+        [-9.865234, 53.160015],
+    ]
+
+
 def test_can_merge_lines(live_server, page, tilelayer, settings):
     settings.UMAP_ALLOW_ANONYMOUS = True
     page.goto(f"{live_server.url}/en/map/new/")

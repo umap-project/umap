@@ -164,6 +164,10 @@ export class OLProxy {
       'draw:shape',
       async (event) => await this.editor?.startShape(event.detail)
     )
+    this.app.on(
+      'draw:continueline',
+      async (event) => await this.editor?.startContinueLine(event.detail)
+    )
     this.app.on('draw:route', async () => await this.editor?.startRoute())
     this.app.on('map:view:set', (event) => {
       const { easing, zoom, coordinates, callback } = event.detail
@@ -537,6 +541,9 @@ export class OLProxy {
     if (!feature) return
     const { geometry } = this.OLFeatureToGeojson(olFeature)
     feature.onCommit(geometry)
+    // The committed geometry is rounded: keep the map on the same coordinates
+    // as the data, eg. for matching a vertex under the pointer.
+    olFeature.setGeometry(readGeometry(geometry))
   }
 
   pushGeometry(layerId, featureId, geometry) {
@@ -604,6 +611,8 @@ export class OLProxy {
     const olFeature = this.featureAt(event.pixel)
     const target = olFeature && targetFeature(olFeature)
     const feature = target && this.getFeatureById(target.getId())
+    const vertex = this.editor?.vertexAtPointer()
+    if (vertex) appEvent.vertex = toLonLat(vertex)
     if (feature) feature.onContextMenu(appEvent)
     else this.app.onContextMenu(appEvent)
   }

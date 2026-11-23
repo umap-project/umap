@@ -710,11 +710,11 @@ class Feature {
     })
   }
 
-  onContextMenu({ lat, lng, pixel }) {
-    const items = this.getContextMenu({ lat, lng }).concat(
-      this.app.getSharedContextMenu({ lat, lng })
+  onContextMenu(event) {
+    const items = this.getContextMenu(event).concat(
+      this.app.getSharedContextMenu(event)
     )
-    this.app.contextmenu.openAt(pixel, items)
+    this.app.contextmenu.openAt(event.pixel, items)
   }
 
   getContextMenu(event) {
@@ -1199,20 +1199,29 @@ export class LineString extends Path {
     return !GeoUtils.isFlat(this.coordinates) && this.coordinates.length > 1
   }
 
+  lineEndAt(vertex) {
+    const lines = this.isMulti() ? this.coordinates : [this.coordinates]
+    for (const [index, line] of lines.entries()) {
+      if (GeoUtils.sameCoordinates(line[0], vertex)) return { index, atStart: true }
+      if (GeoUtils.sameCoordinates(line.at(-1), vertex)) return { index, atStart: false }
+    }
+  }
+
   getDrawingTools(event) {
     const items = super.getDrawingTools(event)
-    items.push({
-      title: this.app.help.displayLabel('CONTINUE_LINE', false),
-      icon: 'icon-continue-line',
-      action: async () => {
-        const point = [event.lng, event.lat]
-        const index = this.isMulti() ? await GeoUtils.shapeAt(this.geometry, point) : 0
-        const rings = this.isMulti() ? this.coordinates : [this.coordinates]
-        const atStart =
-          GeoUtils.closestVertexIndex(rings[index], point, { ends: true }) === 0
-        this.app.mapProxy.startContinueLine(this, this.datalayer.id, index, atStart)
-      },
-    })
+    const end = event.vertex && this.lineEndAt(event.vertex)
+    if (end && this.app.selection.isEdited(this)) {
+      items.push({
+        title: this.app.help.displayLabel('CONTINUE_LINE', false),
+        icon: 'icon-continue-line',
+        action: () =>
+          this.app.fire('draw:continueline', {
+            featureId: this.id,
+            sourceId: this.datalayer.id,
+            ...end,
+          }),
+      })
+    }
     if (!this.isMulti() && this.coordinates.length > 2) {
       items.push({
         title: translate('Split line'),

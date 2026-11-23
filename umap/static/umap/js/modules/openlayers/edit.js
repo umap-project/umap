@@ -225,8 +225,15 @@ export default class Editor {
     this.activeDrawing = null
   }
 
-  async startContinueLine(feature, sourceId, index, atStart) {
-    const olFeature = this.proxy.sources[sourceId].getFeatureById(feature.id)
+  vertexAtPointer() {
+    const handle = this.modify.getOverlay().getSource().getFeatures()[0]
+    return handle?.getGeometry().getCoordinates()
+  }
+
+  async startContinueLine({ featureId, sourceId, index, atStart }) {
+    const olFeature = this.proxy.sources[sourceId].getFeatureById(featureId)
+    this.proxy.edited.remove(olFeature)
+    this.proxy.restyle([olFeature])
     const continueLine = new ContinueLine(this.map, olFeature, index, atStart)
     const promise = continueLine.start()
     this.activeDrawing = continueLine.draw
@@ -234,6 +241,7 @@ export default class Editor {
     promise.then((geometry) => {
       this.activeDrawing = null
       if (geometry) this.proxy.pullGeometry(olFeature)
+      this.proxy.syncSelection()
     })
   }
 
