@@ -53,20 +53,28 @@ const SHORTCUTS = {
     label: translate('Save current edits'),
   },
   TOGGLE_FEATURE_EDIT: {
-    shortcut: 'Alt+Enter, Alt+Click',
+    shortcut: 'AltModifier+Enter, AltModifier+Click',
     label: translate('Toggle edit mode'),
   },
   EDIT_FEATURE_LAYER: {
-    shortcut: 'Shift+Alt+Enter, Shift+Alt+Click',
+    shortcut: 'Shift+AltModifier+Enter, Shift+AltModifier+Click',
     label: translate("Edit feature's layer"),
+  },
+  EDIT_FEATURE: {
+    shortcut: 'AltModifier+Enter, AltModifier+Click',
+    label: translate('Right-click to edit'),
   },
   CONTINUE_LINE: {
     shortcut: 'Modifier+Click',
     label: translate('Continue line'),
   },
   DELETE_FEATURE: {
-    shortcut: 'Suppr, Backspace',
+    shortcut: 'Delete, Backspace',
     label: translate('Delete feature'),
+  },
+  ADD_VERTEX: {
+    shortcut: 'Modifier+Drag',
+    label: translate('Add a vertex'),
   },
 }
 
@@ -200,15 +208,22 @@ export default class Help {
   displayLabel(action, withKbdTag = true) {
     let { shortcut, label } = SHORTCUTS[action]
     const modifier = this.isMacOS ? 'Cmd' : 'Ctrl'
-    shortcut = shortcut.replace('Modifier', modifier)
+    const altModifier = this.isMacOS ? 'Option' : 'Alt'
+    const shortcuts = shortcut
+      .replaceAll('AltModifier', altModifier)
+      .replaceAll('Modifier', modifier)
+      .split(',')
+      .map((short) => short.trim())
     if (withKbdTag) {
-      shortcut = shortcut
-        .split('+')
-        .map((el) => `<kbd>${el}</kbd>`)
-        .join('+')
-      label += ` <span class="nobr">${shortcut}</span>`
+      for (const short of shortcuts) {
+        const keys = short
+          .split('+')
+          .map((key) => `<kbd>${key}</kbd>`)
+          .join('+')
+        label += ` <span class="nobr">${keys}</span>`
+      }
     } else {
-      label += ` (${shortcut})`
+      label += ` (${shortcuts.join(', ')})`
     }
     return label
   }

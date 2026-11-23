@@ -130,7 +130,7 @@ class Feature {
   }
 
   getHoverEditMessage() {
-    return translate('Right-click to edit (Alt+click)')
+    return this.app.help.displayLabel('EDIT_FEATURE')
   }
 
   onCommit(geometry) {
@@ -901,7 +901,7 @@ class Path extends Feature {
 
   getHoverEditMessage() {
     if (this.app.selection.isEdited(this)) {
-      return translate('Drag path with ctrl key to add a vertex')
+      return this.app.help.displayLabel('ADD_VERTEX')
     }
     return super.getHoverEditMessage()
   }
