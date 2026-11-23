@@ -102,7 +102,7 @@ def test_should_open_an_edit_toolbar_on_click(
     wait_for_edit_mode(page)
     page.locator("#map").click(position={"x": 640, "y": 360}, button="right")
     expect(page.get_by_role("button", name="Toggle edit mode")).to_be_visible()
-    expect(page.get_by_role("button", name="Delete this feature")).to_be_visible()
+    expect(page.get_by_role("button", name="Delete feature")).to_be_visible()
 
 
 def test_can_remove_stroke(

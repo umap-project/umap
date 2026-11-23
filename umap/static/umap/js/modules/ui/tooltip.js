@@ -41,7 +41,7 @@ export default class Tooltip extends Positioned {
   close(id) {
     // Clear timetout even if a new tooltip has been added
     // in the meantime. Eg. after a mouseout from the anchor.
-    window.clearTimeout(id)
+    window.clearTimeout(id ?? this.TOOLTIP_ID)
     if (id && id !== this.TOOLTIP_ID) return
     this.toggleClassPosition()
     this.container.innerHTML = ''

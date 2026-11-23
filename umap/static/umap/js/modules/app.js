@@ -187,7 +187,6 @@ export default class App extends Utils.WithEvents {
       })
     })
     this.on('panel:close', () => this.panel.close())
-    this.on('tooltip', (event) => this.tooltip.open(event.detail))
     this.on('feature:create', async (event) => {
       const datalayer = await this.defaultEditDataLayer()
       datalayer.makeFeature(event.detail.geojson).edit()

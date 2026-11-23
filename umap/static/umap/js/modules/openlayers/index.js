@@ -86,6 +86,7 @@ export class OLProxy {
     this.tilelayers = new TileLayerManager(this)
 
     this.map.on('pointermove', (event) => this.onPointerMove(event))
+    this.map.on('pointerdown', () => this.app.tooltip.close())
 
     const [container, { body }] = Utils.loadTemplateWithRefs(popupTemplate)
     this.popup = new Overlay({
@@ -136,12 +137,13 @@ export class OLProxy {
     const olFeature = this.featureAt(event.pixel)
     this.map.getTargetElement().style.cursor = olFeature ? 'pointer' : ''
     this.toggleTooltip(olFeature, event.originalEvent)
-    if (this.app.editEnabled) {
-      const target = olFeature && targetFeature(olFeature)
-      const feature = target && this.getFeatureById(target.getId())
-      if (feature) {
-        const msg = feature.getHoverEditMessage()
-        this.app.fire('tooltip', { content: msg, duration: 3000 })
+    const target = this.app.editEnabled && olFeature && targetFeature(olFeature)
+    if (target !== this.hintTarget) {
+      this.hintTarget = target
+      this.app.tooltip.close()
+      if (target) {
+        const feature = this.getFeatureById(target.getId())
+        this.app.tooltip.open({ content: feature.getHoverEditMessage(), delay: 1000 })
       }
     }
   }
