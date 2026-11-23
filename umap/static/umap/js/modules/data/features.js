@@ -769,7 +769,7 @@ class Feature {
         action: () => this.clone(),
       },
       {
-        title: translate('Delete this feature'),
+        title: this.app.help.displayLabel('DELETE_FEATURE', false),
         icon: 'icon-delete',
         action: () => this.del(),
       }

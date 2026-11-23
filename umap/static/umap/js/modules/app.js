@@ -595,7 +595,7 @@ export default class App extends Utils.WithEvents {
   initShortcuts() {
     const selected = () => this.selection.features[0]
     const onSelected = () => this.selection.size === 1 && this.mapProxy.hasFocus()
-    const onEditable = () => this.editEnabled && onSelected()
+    const onEditable = () => this.editEnabled && onSelected() && !selected().isReadOnly()
     const shortcuts = {
       Enter: {
         if: onSelected,
@@ -621,7 +621,11 @@ export default class App extends Utils.WithEvents {
         do: () => this.selection.previous(),
       },
       Delete: {
-        if: () => onEditable() && !selected().isReadOnly(),
+        if: () => onEditable(),
+        do: () => selected().del(),
+      },
+      Backspace: {
+        if: () => onEditable(),
         do: () => selected().del(),
       },
       Escape: {

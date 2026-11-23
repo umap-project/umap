@@ -64,6 +64,10 @@ const SHORTCUTS = {
     shortcut: 'Modifier+Click',
     label: translate('Continue line'),
   },
+  DELETE_FEATURE: {
+    shortcut: 'Suppr, Backspace',
+    label: translate('Delete feature'),
+  },
 }
 
 const ENTRIES = {
