@@ -1,11 +1,13 @@
 import { default as DOMPurifyInitializer } from 'dompurify'
 
-/**
- * Generate a pseudo-unique identifier (5 chars long, mixed-case alphanumeric)
- *
- * @returns string
- */
 const CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+
+/**
+ * Generate a pseudo-unique identifier (mixed-case alphanumeric)
+ *
+ * @param {number} [length=5] The number of characters of the identifier.
+ * @returns {string}
+ */
 export function generateId(length = 5) {
   let result = ''
   const charactersLength = CHARACTERS.length
@@ -327,7 +329,7 @@ export function isDataImage(value) {
  *
  * If the input is nullish, it defaults to an empty string.
  *
- * @param {string} s - The string to be normalized.
+ * @param {?string} s - The string to be normalized.
  * @returns {string} - The normalized string with lowercase
  *                     characters and no diacritics.
  */
