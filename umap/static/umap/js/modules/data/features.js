@@ -129,6 +129,10 @@ class Feature {
     }
   }
 
+  getHoverEditMessage() {
+    return translate('Right-click to edit (Alt+click)')
+  }
+
   onCommit(geometry) {
     const oldGeometry = Utils.CopyJSON(this._geometry)
     this._geometry = geometry
@@ -893,6 +897,13 @@ class Path extends Feature {
     return (
       this.getOption('zoomTo') || this.app.mapProxy.getBoundsZoom(this.bounds, true)
     )
+  }
+
+  getHoverEditMessage() {
+    if (this.app.selection.isEdited(this)) {
+      return translate('Drag path with ctrl key to add a vertex')
+    }
+    return super.getHoverEditMessage()
   }
 
   async _removeShapeAt(coordinate) {

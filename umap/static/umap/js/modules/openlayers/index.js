@@ -1,9 +1,5 @@
 import Collection from 'ol/Collection.js'
-import {
-  altKeyOnly,
-  altShiftKeysOnly,
-  noModifierKeys,
-} from 'ol/events/condition.js'
+import { altKeyOnly, altShiftKeysOnly, noModifierKeys } from 'ol/events/condition.js'
 import MultiPoint from 'ol/geom/MultiPoint.js'
 import MouseWheelZoom from 'ol/interaction/MouseWheelZoom.js'
 import VectorLayer from 'ol/layer/Vector.js'
@@ -40,6 +36,7 @@ import {
   toOLExtent,
   writeFeature,
 } from './utils.js'
+import Tooltip from '../ui/tooltip.js'
 
 const POINT_ZINDEX_OFFSET = 10000
 const HIGHLIGHT_ZINDEX = 1e6
@@ -102,6 +99,7 @@ export class OLProxy {
       },
     })
     this.popup.set('body', body)
+    this.tooltip = new Tooltip()
     this.map.addOverlay(this.popup)
     container.addEventListener('click', (event) => {
       if (event.target.closest('[data-close]')) this.app.fire('popup:close')
@@ -138,6 +136,14 @@ export class OLProxy {
     const olFeature = this.featureAt(event.pixel)
     this.map.getTargetElement().style.cursor = olFeature ? 'pointer' : ''
     this.toggleTooltip(olFeature, event.originalEvent)
+    if (this.app.editEnabled) {
+      const target = olFeature && targetFeature(olFeature)
+      const feature = target && this.getFeatureById(target.getId())
+      if (feature) {
+        const msg = feature.getHoverEditMessage()
+        this.app.fire('tooltip', { content: msg, duration: 3000 })
+      }
+    }
   }
 
   proxyOutgoingEvents() {
@@ -838,17 +844,17 @@ export class OLProxy {
     const label = olFeature?.get('umapLabel')
     if (!label?.text || label.show !== null) {
       if (this.hovered) {
-        this.app.tooltip.close()
+        this.tooltip.close()
         this.hovered = null
       }
       return
     }
     const at = [originalEvent.clientX, originalEvent.clientY]
     if (this.hovered === olFeature) {
-      this.app.tooltip.anchorAt(at, label.direction)
+      this.tooltip.anchorAt(at, label.direction)
     } else {
       this.hovered = olFeature
-      this.app.tooltip.open({
+      this.tooltip.open({
         content: label.text,
         at,
         position: label.direction,

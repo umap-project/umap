@@ -187,6 +187,7 @@ export default class App extends Utils.WithEvents {
       })
     })
     this.on('panel:close', () => this.panel.close())
+    this.on('tooltip', (event) => this.tooltip.open(event.detail))
     this.on('feature:create', async (event) => {
       const datalayer = await this.defaultEditDataLayer()
       datalayer.makeFeature(event.detail.geojson).edit()
@@ -595,7 +596,8 @@ export default class App extends Utils.WithEvents {
   initShortcuts() {
     const selected = () => this.selection.features[0]
     const onSelected = () => this.selection.size === 1 && this.mapProxy.hasFocus()
-    const onEditable = () => this.editEnabled && onSelected() && !selected().isReadOnly()
+    const onEditable = () =>
+      this.editEnabled && onSelected() && !selected().isReadOnly()
     const shortcuts = {
       Enter: {
         if: onSelected,

@@ -68,7 +68,9 @@ export default class Selection {
   }
 
   firstFeature() {
-    return this.app.layers.tree.find((datalayer) => datalayer.canBrowse())?.features.first()
+    return this.app.layers.tree
+      .find((datalayer) => datalayer.canBrowse())
+      ?.features.first()
   }
 
   _select(features) {
