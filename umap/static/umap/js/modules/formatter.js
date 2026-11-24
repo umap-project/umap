@@ -15,12 +15,16 @@ const parseTextGeom = async (geom) => {
   }
 }
 
+// Base class for problems in the data itself, whose message is meant to be shown
+// to the user.
+export class DataError extends Error {}
+
 // Raised when the data has no data row at all. This is expected for remote data,
 // for example a dynamic layer with nothing in the current view.
-export class EmptyDataError extends Error {}
+export class EmptyDataError extends DataError {}
 
 // Raised when the data has rows, but none of them can be turned into a feature.
-export class InvalidDataError extends Error {}
+export class InvalidDataError extends DataError {}
 
 const csvWithoutFeaturesError = (str, err) => {
   const nonBlankLines = str.split(/\r\n|\r|\n/).filter((line) => line.trim())

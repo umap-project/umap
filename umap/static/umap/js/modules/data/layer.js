@@ -2,7 +2,7 @@ import { Alert, AlertConflict } from '../../components/alerts/alert.js'
 import * as DOMUtils from '../domutils.js'
 import { Filters } from '../filters.js'
 import { MutatingForm } from '../form/builder.js'
-import { EmptyDataError, InvalidDataError } from '../formatter.js'
+import { DataError, EmptyDataError } from '../formatter.js'
 import * as GeoUtils from '../geoutils.js'
 import { translate } from '../i18n.js'
 import { FeatureManager, LayerManager } from '../managers.js'
@@ -662,9 +662,7 @@ export class DataLayer {
       .then((geojson) => this.addData(geojson))
       .catch((error) => {
         console.debug(error)
-        const hasReason =
-          error instanceof EmptyDataError || error instanceof InvalidDataError
-        if (!hasReason) {
+        if (!(error instanceof DataError)) {
           Alert.error(translate('Import failed: invalid data'))
         } else if (filename) {
           Alert.error(
