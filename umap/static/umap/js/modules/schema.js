@@ -135,7 +135,7 @@ export const SCHEMA = {
   },
   filters: {
     type: Array,
-    impacts: ['ui'],
+    impacts: ['ui', 'data'],
   },
   fields: {
     type: Array,
