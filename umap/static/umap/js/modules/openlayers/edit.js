@@ -1,4 +1,9 @@
-import { never, platformModifierKeyOnly, singleClick } from 'ol/events/condition.js'
+import {
+  click,
+  never,
+  platformModifierKeyOnly,
+  singleClick,
+} from 'ol/events/condition.js'
 import MultiLineString from 'ol/geom/MultiLineString.js'
 import MultiPolygon from 'ol/geom/MultiPolygon.js'
 import DoubleClickZoom from 'ol/interaction/DoubleClickZoom.js'
@@ -84,7 +89,10 @@ export default class Editor {
       feature.get('editable') && !feature.get('represents')
     // Style: null, so select do not duplicate the highlighted style.
     // Shift means "edit this feature" in uMap, not OL's default "toggle selection".
+    // Select on `click`, not OL's default `singleclick`: the latter fires ~250ms
+    // later, and would select the feature again after its edit has already ended.
     this.select = new Select({
+      condition: click,
       style: null,
       filter: selectable,
       toggleCondition: never,
