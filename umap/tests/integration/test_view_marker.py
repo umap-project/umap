@@ -110,6 +110,22 @@ def test_should_open_popup_panel_on_click(
     expect(panel).to_be_hidden()
 
 
+def test_unselecting_should_keep_panel_showing_other_content(
+    live_server, map, page, bootstrap, wait_for_loaded
+):
+    map.settings["properties"]["popupShape"] = "Panel"
+    map.save()
+    page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    wait_for_loaded(page)
+    panel = page.locator(".panel.left.on")
+    page.locator("#map").click(position=XY)
+    expect(panel.get_by_role("heading", name="test marker")).to_be_visible()
+    page.get_by_title("Open browser").click()
+    expect(panel.locator(".umap-browser")).to_be_visible()
+    page.keyboard.press("Escape")
+    expect(panel.locator(".umap-browser")).to_be_visible()
+
+
 def test_extended_properties_in_popup(
     live_server, map, page, bootstrap, wait_for_loaded
 ):

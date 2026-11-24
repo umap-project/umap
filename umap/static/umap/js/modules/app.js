@@ -183,10 +183,11 @@ export default class App extends Utils.WithEvents {
       this.panel.setDefaultMode('expanded')
       this.panel.open({
         content: event.detail.content,
+        id: event.detail.id,
         actions: [this.panelBackButton()],
       })
     })
-    this.on('panel:close', () => this.panel.close())
+    this.on('panel:close', (event) => this.panel.close(event.detail?.id))
     this.on('feature:create', async (event) => {
       const datalayer = await this.defaultEditDataLayer()
       datalayer.makeFeature(event.detail.geojson).edit()

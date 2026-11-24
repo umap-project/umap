@@ -173,12 +173,6 @@ export class OLProxy {
       const { easing, zoom, bounds, callback } = event.detail
       this.setView({ bounds, zoom, easing, callback })
     })
-    this.app.on('panel:show', (event) => {
-      const { content } = event.detail
-      this.app.panel.open({ content })
-      // Mimic popup behaviour
-      this.map.once('click', () => this.app.fire('panel:close'))
-    })
     this.app.on('popup:show', (event) => {
       const { sourceId, id, content, center, mode } = event.detail
       const olFeature = this.sources[sourceId]?.getFeatureById(id)

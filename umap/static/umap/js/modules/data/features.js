@@ -782,7 +782,9 @@ class Feature {
   }
 
   closePopup() {
-    if (this.getOption('popupShape') === 'Panel') this.app.fire('panel:close')
+    if (this.getOption('popupShape') === 'Panel') {
+      this.app.fire('panel:close', { id: this.id })
+    }
     else this.app.fire('popup:close')
   }
 
