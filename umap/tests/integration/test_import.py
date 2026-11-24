@@ -1386,18 +1386,24 @@ def test_umap_import_with_enum_and_filter(live_server, tilelayer, page):
         (
             "empty.csv",
             b"",
-            'Cannot import "empty.csv": the CSV is empty.',
+            'Cannot import "empty.csv": the CSV is empty',
         ),
         (
             "header-only.csv",
             b"lat,lon,name\n",
-            'Cannot import "header-only.csv": the CSV only contains a header row.',
+            'Cannot import "header-only.csv": the CSV only contains a header row',
         ),
         (
             "invalid-coordinates.csv",
             b"lat,lon,name\nabc,def,foo\nxyz,uvw,bar\n",
             'Cannot import "invalid-coordinates.csv": '
-            "the latitude or longitude is invalid in all 2 rows.",
+            "the latitude or longitude is invalid in all 2 rows",
+        ),
+        (
+            "no-geo-column.csv",
+            b"name,description\nfoo,bar\n",
+            'Cannot import "no-geo-column.csv": No geo column found: must be either '
+            "`lat(itude)` and `lon(gitude)` or `geom(etry)`.",
         ),
     ],
 )
@@ -1415,7 +1421,8 @@ def test_import_csv_file_without_features_into_existing_layer(
     )
     page.locator('select[name="layer-id"]').select_option(datalayer.name)
     page.get_by_role("button", name="Import data", exact=True).click()
-    expect(page.locator('umap-alert div[data-level="error"]')).to_contain_text(message)
+    error = page.locator('umap-alert div[data-level="error"] [role="alert"]')
+    expect(error).to_have_text(message)
     # The failed import must not swallow later edits: they must be tracked
     # as usual, so they can be undone and saved.
     page.locator(".panel.right").get_by_title("Close").click()
@@ -1431,6 +1438,31 @@ def test_import_pasted_csv_with_only_a_header(live_server, tilelayer, page):
     page.locator(".umap-import textarea").fill("lat,lon,name")
     page.locator('select[name="format"]').select_option("csv")
     page.get_by_role("button", name="Import data", exact=True).click()
-    expect(page.locator('umap-alert div[data-level="error"]')).to_contain_text(
-        "Cannot import data: the CSV only contains a header row."
+    error = page.locator('umap-alert div[data-level="error"] [role="alert"]')
+    expect(error).to_have_text("Cannot import data: the CSV only contains a header row")
+
+
+def test_import_csv_file_with_some_invalid_rows(live_server, tilelayer, page):
+    page.goto(f"{live_server.url}/map/new/")
+    page.get_by_title("Open browser").click()
+    markers = page.locator(".umap-browser .feature.marker")
+    page.get_by_title("Import data").click()
+    page.wait_for_timeout(PANEL_ANIMATION_TIME)
+    page.locator(".umap-import input[type='file']").set_input_files(
+        files=[
+            {
+                "name": "partial.csv",
+                "mimeType": "text/csv",
+                "buffer": b"lat,lon,name\n48.1,2.3,valid\nabc,def,broken\n",
+            }
+        ]
     )
+    page.get_by_role("button", name="Import data", exact=True).click()
+    # The valid rows are imported, and the warning about the skipped rows is not
+    # replaced by the success message.
+    expect(page.locator('umap-alert div[data-level="warning"]')).to_contain_text(
+        'Imported 1 feature(s). Some rows of "partial.csv" were skipped: '
+        "the latitude or longitude is invalid in 1 row(s)."
+    )
+    page.locator(".umap-browser .datalayer").first.click()
+    expect(markers).to_have_count(1)

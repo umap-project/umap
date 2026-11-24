@@ -68,7 +68,20 @@ export const EXPORT_FORMATS = {
   },
 }
 
+/**
+ * The result of converting data in one of the supported formats to GeoJSON.
+ *
+ * @typedef {Object} ParseResult
+ * @property {Object} geojson - The converted data, as a GeoJSON FeatureCollection.
+ * @property {Array<string>} warnings - Reasons, meant for the user, why parts of
+ *   the data could not be converted while the rest could.
+ */
+
 export class Formatter {
+  /**
+   * @param {string} str - The GPX document.
+   * @returns {Promise<ParseResult>}
+   */
   async fromGPX(str) {
     const togeojson = await import('@tmcw/togeojson')
     const data = togeojson.gpx(this.toDom(str))
@@ -80,20 +93,33 @@ export class Formatter {
         }
       }
     }
-    return data
+    return { geojson: data, warnings: [] }
   }
 
+  /**
+   * @param {string} str - The KML document.
+   * @returns {Promise<ParseResult>}
+   */
   async fromKML(str) {
     const togeojson = await import('@tmcw/togeojson')
-    return togeojson.kml(this.toDom(str), {
+    const data = togeojson.kml(this.toDom(str), {
       skipNullGeometry: true,
     })
+    return { geojson: data, warnings: [] }
   }
 
+  /**
+   * @param {string} str - The GeoJSON document.
+   * @returns {Promise<ParseResult>}
+   */
   async fromGeoJSON(str) {
-    return JSON.parse(str)
+    return { geojson: JSON.parse(str), warnings: [] }
   }
 
+  /**
+   * @param {string} str - The OSM XML or JSON document.
+   * @returns {Promise<ParseResult>}
+   */
   async fromOSM(str) {
     const osm2geojson = await import('osm2geojson-lite')
     const data = osm2geojson.default(str, { flatProperties: true })
@@ -104,9 +130,15 @@ export class Formatter {
       feature.properties.osm_id = osm_id
       feature.properties.osm_type = osm_type
     }
-    return data
+    return { geojson: data, warnings: [] }
   }
 
+  /**
+   * @param {string} str - The CSV document.
+   * @returns {Promise<ParseResult>} The features of the valid rows, with a warning
+   *   when other rows have an invalid latitude or longitude.
+   * @throws {DataError} When no row at all can be turned into a feature.
+   */
   async fromCSV(str) {
     let { err, result } = await new Promise((resolve) => {
       csv2geojson.csv2geojson(
@@ -144,32 +176,33 @@ export class Formatter {
         // csv2geojson fallback to null geometries when it cannot determine
         // lat or lon columns. This is valid geojson, but unwanted from a user
         // point of view.
-        err = {
-          type: 'Error',
-          message: translate(
+        throw new InvalidDataError(
+          translate(
             'No geo column found: must be either `lat(itude)` and `lon(gitude)` or `geom(etry)`.'
-          ),
-        }
+          )
+        )
       }
     }
-    if (err) {
-      let message
-      if (err.type === 'Error') {
-        message = err.message
-      } else {
-        message = translate('{count} errors during import: {message}', {
+    const warnings = []
+    if (Array.isArray(err)) {
+      // csv2geojson returns one error per row it could not convert, next to the
+      // features of the valid rows.
+      warnings.push(
+        translate('the latitude or longitude is invalid in {count} row(s)', {
           count: err.length,
-          message: err[0].message,
         })
-      }
-      Alert.error(message, 10000)
+      )
     }
-    return result
+    return { geojson: result, warnings }
   }
 
+  /**
+   * @param {string} str - The GeoRSS document.
+   * @returns {Promise<ParseResult>}
+   */
   async fromGeoRSS(str) {
     const GeoRSSToGeoJSON = await import('georsstogeojson')
-    return GeoRSSToGeoJSON.parse(this.toDom(str))
+    return { geojson: GeoRSSToGeoJSON.parse(this.toDom(str)), warnings: [] }
   }
 
   toDom(x) {
@@ -181,6 +214,14 @@ export class Formatter {
     return doc
   }
 
+  /**
+   * Converts data in one of the supported formats to GeoJSON.
+   *
+   * @param {string} str - The raw data.
+   * @param {string} format - One of `csv`, `gpx`, `kml`, `osm`, `georss` or `geojson`.
+   * @returns {Promise<ParseResult|undefined>} `undefined` for an unknown format.
+   * @throws {DataError} When the data contains nothing that can be imported.
+   */
   async parse(str, format) {
     switch (format) {
       case 'csv':
