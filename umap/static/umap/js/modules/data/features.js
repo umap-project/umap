@@ -1004,20 +1004,18 @@ class Path extends Feature {
         }
       )
     }
-    if (this.app.selection.size) {
-      const others = this.app.selection.features.filter((feature) => feature !== this)
-      const combinable =
-        others.length &&
-        others.every(
-          (feature) => this.isSameClass(feature) && feature.datalayer === this.datalayer
-        )
-      if (combinable) {
-        items.push({
-          title: translate('Combine features'),
-          icon: 'icon-transfer-shape',
-          action: () => this.combine(others),
-        })
-      }
+    const target = this.app.selection.current
+    if (
+      target &&
+      target !== this &&
+      this.isSameClass(target) &&
+      target.datalayer === this.datalayer
+    ) {
+      items.push({
+        title: translate('Combine features'),
+        icon: 'icon-transfer-shape',
+        action: () => target.combine([this]),
+      })
     }
     return items
   }
@@ -1516,35 +1514,30 @@ export class Polygon extends Path {
       action: () => this.startHole([event.lng, event.lat]),
       icon: 'icon-hole',
     })
-    if (this.app.selection.size) {
-      const selection = this.app.selection.features
-      const others = selection.filter((feature) => feature !== this)
-      const mergeable =
-        others.length &&
-        selection.every(
-          (feature) =>
-            feature instanceof Polygon && feature.datalayer === this.datalayer
-        )
-      if (mergeable) {
-        items.push({
-          title: translate('Merge selected polygons'),
-          icon: 'icon-transfer-shape',
-          action: async () => {
-            const { union } = await import('../geoutils.js')
-            const merged = await union(
-              [this, ...others].map((feature) => feature.toGeoJSON())
-            )
-            if (!merged) return
-            this.journal.startBatch()
-            this.commitGeometry(merged.geometry)
-            for (const feature of others) feature.del()
-            this.journal.commitBatch()
-          },
-        })
-      }
+    const target = this.app.selection.current
+    if (
+      target instanceof Polygon &&
+      target !== this &&
+      target.datalayer === this.datalayer
+    ) {
+      items.push({
+        title: translate('Merge selected polygons'),
+        icon: 'icon-transfer-shape',
+        action: () => target.merge([this]),
+      })
     }
 
     return items
+  }
+
+  async merge(others) {
+    const { union } = await import('../geoutils.js')
+    const merged = await union([this, ...others].map((feature) => feature.toGeoJSON()))
+    if (!merged) return
+    this.journal.startBatch()
+    this.commitGeometry(merged.geometry)
+    for (const feature of others) feature.del()
+    this.journal.commitBatch()
   }
 
   startHole(coordinate) {
