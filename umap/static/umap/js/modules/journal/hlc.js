@@ -26,8 +26,8 @@ export class HybridLogicalClock {
 
   /**
    * Parse a serialized time and return a JS object.
-   * @param string raw
-   * @returns object
+   * @param {string} raw
+   * @returns {Object}
    */
   parse(raw) {
     const tokens = raw.split(':')
@@ -52,7 +52,7 @@ export class HybridLogicalClock {
    *
    * This allows each tick to be different from each other.
    *
-   * @returns a serialized clock
+   * @returns {string} a serialized clock
    */
   tick() {
     // Copy the current value of the hlc to avoid concurrency issues

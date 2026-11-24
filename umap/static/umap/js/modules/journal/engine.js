@@ -408,8 +408,9 @@ export class Journal {
    * Received when the server acknowledges the `join` for this peer.
    *
    * @param {Object} payload
-   * @param {string} payload.uuid The server-assigned uuid for this peer
-   * @param {string[]} payload.peers The list of peers uuids
+   * @param {string} payload.peer The server-assigned uuid for this peer
+   * @param {Object<string, string>} payload.peers The connected peers, as a
+   *   mapping of peer uuid to user name
    */
   onJoinResponse({ peer, peers }) {
     debug('received join response', { peer, peers })
@@ -432,7 +433,8 @@ export class Journal {
    * Received when the list of peers has changed.
    *
    * @param {Object} payload
-   * @param {string[]} payload.peers The list of peers uuids
+   * @param {Object<string, string>} payload.peers The connected peers, as a
+   *   mapping of peer uuid to user name
    */
   onListPeersResponse({ peers }) {
     debug('received peerinfo', peers)
@@ -445,7 +447,8 @@ export class Journal {
    *
    * @param {Object} payload
    * @param {string} payload.sender the uuid of the requesting peer
-   * @param {string} payload.latestKnownHLC the latest known HLC of the requesting peer
+   * @param {Object} payload.message
+   * @param {string} payload.message.lastKnownHLC the latest known HLC of the requesting peer
    */
   onListOperationsRequest({ sender, message }) {
     debug(
@@ -462,7 +465,10 @@ export class Journal {
    *
    * When receiving this message, operations are filtered and applied
    *
-   * @param {*} operations The list of (encoded operations)
+   * @param {Object} payload
+   * @param {string} payload.sender the uuid of the sending peer
+   * @param {Object} payload.message
+   * @param {Object[]} payload.message.operations The list of (encoded) operations
    */
   onListOperationsResponse({ sender, message }) {
     debug(`received operations list from peer ${sender}`, message.operations)
@@ -526,7 +532,7 @@ export class Journal {
   /**
    * Selects a peer ID at random within the known ones.
    *
-   * @returns {string|bool} the selected peer uuid, or False if none was found.
+   * @returns {string|false} the selected peer uuid, or false if none was found.
    */
   _getRandomPeer() {
     const otherPeers = Object.keys(this.peers).filter((p) => p !== this.peerId)
@@ -583,10 +589,10 @@ export class Operations {
   }
 
   /**
-   * Tick the clock and store the passed message in the operations list.
+   * Tick the clock and store the passed operation in the operations list.
    *
-   * @param {*} inputMessage
-   * @returns {*} clock-aware message
+   * @param {Object} operation
+   * @returns {Object} the same operation, with its `hlc` set
    */
   addLocal(operation) {
     operation.hlc = this._hlc.tick()
@@ -609,7 +615,7 @@ export class Operations {
    * Static method to order the given list of operations by their HCL.
    *
    * @param {Object[]} operations
-   * @returns an ordered copy
+   * @returns {Object[]} an ordered copy
    */
   static sort(operations) {
     const copy = [...operations]
@@ -668,7 +674,7 @@ export class Operations {
    * on the same context (subject + metadata).
    *
    * @param {Object} remote the remote operation to compare to
-   * @returns bool
+   * @returns {boolean}
    */
   shouldBypassOperation(remote) {
     const sortedLocalOperations = this.sorted()
@@ -714,7 +720,7 @@ export class Operations {
    *
    * @param {Object} local
    * @param {Object} remote
-   * @return {bool} true if the two operations share the same context.
+   * @returns {boolean} true if the two operations share the same context.
    */
   static haveSameContext(local, remote) {
     const shouldCheckKey = local.key !== undefined && remote.key !== undefined
