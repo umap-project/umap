@@ -358,9 +358,10 @@ export class EditBar extends WithTemplate {
     DOMUtils.disableClickPropagation(this.element)
     this.addDrawListener('marker', () => this.app.startDrawing('marker'))
     this.addDrawListener('linestring', () => this.app.startDrawing('linestring'))
-    this.addDrawListener('multiline', () => this.app.editedFeature.startShape())
+    const addShape = () => this.app.selection.features[0].startShape()
+    this.addDrawListener('multiline', addShape)
     this.addDrawListener('polygon', () => this.app.startDrawing('polygon'))
-    this.addDrawListener('multipolygon', () => this.app.editedFeature.startShape())
+    this.addDrawListener('multipolygon', addShape)
     this.addDrawListener('route', () => this.app.startDrawing('route'))
     this.addClickListener('caption', () => this.app.editCaption())
     this.addClickListener('import', () => this.app.openImporter())
@@ -382,13 +383,15 @@ export class EditBar extends WithTemplate {
     this.addTitle('linestring', 'DRAW_LINE')
     this.addTitle('polygon', 'DRAW_POLYGON')
     this.app.on('edit:enabled', () => this.redraw())
-    this.app.on('seteditedfeature', () => this.redraw())
+    this.app.on('selection:changed', () => this.redraw())
   }
 
   redraw() {
-    const editedFeature = this.app.editedFeature
-    this.elements.multiline.hidden = !(editedFeature instanceof LineString)
-    this.elements.multipolygon.hidden = !(editedFeature instanceof Polygon)
+    const { selection } = this.app
+    const [feature] = selection.features
+    const single = selection.size === 1 && selection.isEdited(feature)
+    this.elements.multiline.hidden = !(single && feature instanceof LineString)
+    this.elements.multipolygon.hidden = !(single && feature instanceof Polygon)
     this.elements.caption.hidden = this.app.properties.editMode !== 'advanced'
     this.elements.import.hidden = this.app.properties.editMode !== 'advanced'
     this.elements.templates.hidden =

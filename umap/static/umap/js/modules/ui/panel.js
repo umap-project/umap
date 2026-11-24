@@ -30,7 +30,8 @@ export class Panel {
     return this.container.classList.contains('on')
   }
 
-  open({ content, className, highlight, actions = [] } = {}) {
+  open({ content, id, className, highlight, actions = [] } = {}) {
+    this.id = id
     let isOpen = false
     if (this.isOpen()) {
       isOpen = true
@@ -97,7 +98,8 @@ export class Panel {
     }
   }
 
-  close() {
+  close(id) {
+    if (id && id !== this.id) return
     document.body.classList.remove(`panel-${this.className.split(' ')[0]}-on`)
     this.container.dataset.highlight = null
     this.onClose()
@@ -134,7 +136,7 @@ export class EditPanel extends Panel {
 
   onClose() {
     super.onClose()
-    this.app.editedFeature = null
+    this.app.selection.endEdit()
   }
 }
 

@@ -189,13 +189,49 @@ def test_can_combine_two_simple_polygons(live_server, page, tilelayer, settings)
     # Click again to finish
     map.click(position={"x": 200, "y": 200})
 
-    # The first polygon takes the shape of the selected one, which is deleted
+    # The selected polygon takes the shape of the first one, which is deleted
     expect(page.locator(".panel.right form input").first).to_be_focused()
     map.click(position={"x": 125, "y": 125}, button="right")
     page.get_by_role("button", name="Combine features").click()
+    expect(page.get_by_text("Feature properties")).to_be_visible()
     data = save_and_get_json(page)
     assert len(data["features"]) == 1
     assert data["features"][0]["geometry"]["type"] == "MultiPolygon"
+
+
+def test_can_merge_two_polygons(live_server, page, tilelayer, settings):
+    settings.UMAP_ALLOW_ANONYMOUS = True
+    page.goto(f"{live_server.url}/en/map/new/")
+    page.get_by_title("Draw a polygon").click()
+    map = page.locator("#map")
+
+    map.click(position={"x": 150, "y": 100})
+    map.click(position={"x": 150, "y": 150})
+    map.click(position={"x": 100, "y": 150})
+    map.click(position={"x": 100, "y": 100})
+    # Click again to finish
+    map.click(position={"x": 100, "y": 100})
+
+    # Draw another polygon overlapping the first, which remains the selected one
+    page.get_by_title("Draw a polygon").click()
+    map.click(position={"x": 175, "y": 125})
+    map.click(position={"x": 175, "y": 175})
+    map.click(position={"x": 125, "y": 175})
+    map.click(position={"x": 125, "y": 125})
+    # Click again to finish
+    map.click(position={"x": 125, "y": 125})
+
+    expect(page.locator(".panel.right form input").first).to_be_focused()
+    # Outside of the overlap, so the first polygon is the one right-clicked.
+    map.click(position={"x": 110, "y": 110}, button="right")
+    page.get_by_role("button", name="Merge selected polygons").click()
+    # Merging is async: wait for its end, which deletes the first polygon.
+    page.get_by_title("Open browser").click()
+    expect(page.locator(".umap-browser .datalayer-counter")).to_have_text("(1)")
+    expect(page.get_by_text("Feature properties")).to_be_visible()
+    data = save_and_get_json(page)
+    assert len(data["features"]) == 1
+    assert data["features"][0]["geometry"]["type"] == "Polygon"
 
 
 def test_can_extract_shape(live_server, page, tilelayer, settings):

@@ -1,4 +1,5 @@
-import { noModifierKeys } from 'ol/events/condition.js'
+import Collection from 'ol/Collection.js'
+import { altKeyOnly, altShiftKeysOnly, noModifierKeys } from 'ol/events/condition.js'
 import MultiPoint from 'ol/geom/MultiPoint.js'
 import MouseWheelZoom from 'ol/interaction/MouseWheelZoom.js'
 import VectorLayer from 'ol/layer/Vector.js'
@@ -27,15 +28,31 @@ import {
   HIT_TOLERANCE,
   invertPolygon,
   loadFonts,
+  popupAnchor,
   readFeature,
   readGeometry,
   rgba,
+  targetFeature,
   toOLExtent,
   writeFeature,
 } from './utils.js'
+import Tooltip from '../ui/tooltip.js'
 
 const POINT_ZINDEX_OFFSET = 10000
 const HIGHLIGHT_ZINDEX = 1e6
+
+const VERTEX_STYLE = new Style({
+  image: new CircleStyle({
+    radius: 5,
+    fill: new Fill({ color: '#fff' }),
+    stroke: new Stroke({ color: '#333', width: 2 }),
+  }),
+  geometry: (feature) => {
+    const geometry = feature.getGeometry()
+    return new MultiPoint(geometry.getFlatCoordinates(), geometry.getLayout())
+  },
+  zIndex: HIGHLIGHT_ZINDEX + 1,
+})
 
 const POPUP_ARROW_HEIGHT = 12
 const FIT_PADDING = [50, 50, 50, 50]
@@ -56,7 +73,8 @@ export class OLProxy {
     this.sources = {}
     this.layers = {}
     this.point = null
-    this.highlighted = null
+    this.selected = new Collection()
+    this.edited = new Collection()
     this.map = new OLMap({
       target: element,
       controls: [],
@@ -68,6 +86,7 @@ export class OLProxy {
     this.tilelayers = new TileLayerManager(this)
 
     this.map.on('pointermove', (event) => this.onPointerMove(event))
+    this.map.on('pointerdown', () => this.app.tooltip.close())
 
     const [container, { body }] = Utils.loadTemplateWithRefs(popupTemplate)
     this.popup = new Overlay({
@@ -81,6 +100,7 @@ export class OLProxy {
       },
     })
     this.popup.set('body', body)
+    this.tooltip = new Tooltip()
     this.map.addOverlay(this.popup)
     container.addEventListener('click', (event) => {
       if (event.target.closest('[data-close]')) this.app.fire('popup:close')
@@ -117,6 +137,15 @@ export class OLProxy {
     const olFeature = this.featureAt(event.pixel)
     this.map.getTargetElement().style.cursor = olFeature ? 'pointer' : ''
     this.toggleTooltip(olFeature, event.originalEvent)
+    const target = this.app.editEnabled && olFeature && targetFeature(olFeature)
+    if (target !== this.hintTarget) {
+      this.hintTarget = target
+      this.app.tooltip.close()
+      if (target) {
+        const feature = this.getFeatureById(target.getId())
+        this.app.tooltip.open({ content: feature.getHoverEditMessage(), delay: 1000 })
+      }
+    }
   }
 
   proxyOutgoingEvents() {
@@ -135,6 +164,10 @@ export class OLProxy {
       'draw:shape',
       async (event) => await this.editor?.startShape(event.detail)
     )
+    this.app.on(
+      'draw:continueline',
+      async (event) => await this.editor?.startContinueLine(event.detail)
+    )
     this.app.on('draw:route', async () => await this.editor?.startRoute())
     this.app.on('map:view:set', (event) => {
       const { easing, zoom, coordinates, callback } = event.detail
@@ -144,34 +177,23 @@ export class OLProxy {
       const { easing, zoom, bounds, callback } = event.detail
       this.setView({ bounds, zoom, easing, callback })
     })
-    this.app.on('panel:show', (event) => {
-      const { content } = event.detail
-      this.app.panel.open({ content })
-      // Mimic popup behaviour
-      this.map.once('click', () => this.app.fire('panel:close'))
-    })
     this.app.on('popup:show', (event) => {
       const { sourceId, id, content, center, mode } = event.detail
       const olFeature = this.sources[sourceId]?.getFeatureById(id)
       const popupOffsetY = olFeature?.umapStyles.popupOffsetY || 0
       this.popup.setOffset([0, popupOffsetY - POPUP_ARROW_HEIGHT])
-      this.popup.setPosition(fromLonLat(center))
+      this.popup.setPosition(
+        center ? fromLonLat(center) : olFeature && popupAnchor(olFeature.getGeometry())
+      )
       const body = this.popup.get('body')
       body.innerHTML = ''
       body.appendChild(content)
       this.popup.element.classList.toggle('umap-popup-large', mode === 'large')
-      this.highlight(sourceId, id)
     })
     this.app.on('popup:close', () => this.closePopup())
     this.app.on('map:show:point', (event) => this.showPoint(event.detail))
     this.app.on('map:hide:point', () => this.hidePoint())
-    this.app.on('feature:edit', (event) => {
-      const { sourceId, id } = event.detail
-      const olFeature = this.sources[sourceId]?.getFeatureById(id)
-      if (!olFeature) return
-      this.editor?.select.selectFeature(olFeature)
-    })
-    this.app.on('feature:endedit', () => this.editor?.select.clearSelection())
+    this.app.on('selection:changed', () => this.syncSelection())
     this.app.on('feature:reset', (event) => {
       const { sourceId, geojson } = event.detail
       const olFeature = this.sources[sourceId]?.getFeatureById(geojson.id)
@@ -296,6 +318,10 @@ export class OLProxy {
     this.map.getTargetElement().focus()
   }
 
+  hasFocus() {
+    return document.activeElement === this.map.getTargetElement()
+  }
+
   getFeatureById(id) {
     for (const layer of this.app.layers.tree) {
       if (layer.features.has(id)) {
@@ -413,15 +439,34 @@ export class OLProxy {
     return true
   }
 
-  hasSelection() {
-    return Boolean(this.editor?.select.getFeatures().getLength())
+  // An OL feature can be recreated, eg. when its feature moves to another
+  // datalayer, or be absent, eg. when filtered out: resync from the app selection
+  // whenever the sources change.
+  syncSelection() {
+    const { selection } = this.app
+    const resolve = (features) =>
+      features.map((feature) => this.findOLFeature(feature.id)).filter(Boolean)
+    const previous = [...this.selected.getArray()]
+    const selected = resolve(selection.features)
+    const edited = resolve(
+      selection.features.filter((feature) => selection.isEdited(feature))
+    )
+    const same = (collection, olFeatures) =>
+      collection.getLength() === olFeatures.length &&
+      olFeatures.every((olFeature, index) => olFeature === collection.item(index))
+    if (same(this.selected, selected) && same(this.edited, edited)) return
+    this.selected.clear()
+    this.selected.extend(selected)
+    this.edited.clear()
+    this.edited.extend(edited)
+    this.restyle([...previous, ...selected])
   }
 
-  get selection() {
-    return this.editor?.select
-      .getFeatures()
-      .getArray()
-      .map((olFeature) => this.getFeatureById(olFeature.getId()))
+  findOLFeature(id) {
+    for (const source of Object.values(this.sources)) {
+      const olFeature = source.getFeatureById(id)
+      if (olFeature) return olFeature
+    }
   }
 
   hasLayer(id) {
@@ -459,7 +504,7 @@ export class OLProxy {
   // Overlays are anchored to a coordinate: dragging a feature would leave them
   // behind, pointing at where it no longer is.
   hideOverlays() {
-    this.closePopup()
+    this.app.fire('popup:close')
     this.hidePoint()
   }
 
@@ -496,6 +541,9 @@ export class OLProxy {
     if (!feature) return
     const { geometry } = this.OLFeatureToGeojson(olFeature)
     feature.onCommit(geometry)
+    // The committed geometry is rounded: keep the map on the same coordinates
+    // as the data, eg. for matching a vertex under the pointer.
+    olFeature.setGeometry(readGeometry(geometry))
   }
 
   pushGeometry(layerId, featureId, geometry) {
@@ -510,19 +558,22 @@ export class OLProxy {
   }
 
   onClick(event) {
-    this.closePopup()
     const olFeature = this.featureAt(event.pixel)
-    if (!olFeature) return
+    if (!olFeature) {
+      this.app.selection.clear()
+      return
+    }
     const geometry = olFeature.getGeometry()
     // A point is anchored where it is drawn, which differs from its data position
     // once spiderfied.
     const anchor =
       geometry.getType() === 'Point' ? geometry.getCoordinates() : event.coordinate
-    const represented = olFeature.get('represents')
-    if (represented) {
-      this.onFeatureClick(represented.getId(), event, anchor)
-    } else if (olFeature.get('features')) {
+    const target = targetFeature(olFeature)
+    if (target) {
+      this.onFeatureClick(target.getId(), event, anchor)
+    } else {
       // Several features under one marker: the click spreads or zooms them, it opens nothing.
+      this.app.fire('popup:close')
       import('./cluster.js').then((Cluster) => {
         this.spider ??= new Cluster.Spider(this.map)
         Cluster.onClick(olFeature, {
@@ -531,8 +582,6 @@ export class OLProxy {
           app: this.app,
         })
       })
-    } else {
-      this.onFeatureClick(olFeature.getId(), event, anchor)
     }
   }
 
@@ -541,12 +590,10 @@ export class OLProxy {
     const uFeature = this.getFeatureById(id)
     if (!uFeature) return
     if (this.map.measureTools?.enabled()) return
-    if (event.originalEvent.shiftKey) {
-      if (event.originalEvent.ctrlKey || event.originalEvent.metaKey) {
-        uFeature.datalayer.edit(event)
-      } else if (!uFeature.isReadOnly()) {
-        uFeature.edit()
-      }
+    if (altKeyOnly(event)) {
+      uFeature.toggleEditing()
+    } else if (altShiftKeysOnly(event)) {
+      uFeature.datalayer.edit()
     } else if (noModifierKeys(event) && !this.map.editTools?.drawing()) {
       // Events carry geographic lon/lat; the proxy converts to/from its projection.
       uFeature.view({ center: toLonLat(anchor) })
@@ -561,11 +608,11 @@ export class OLProxy {
       lng,
       pixel: [event.originalEvent.clientX, event.originalEvent.clientY],
     }
-    // Restrict hit-testing to our data layers, else Modify's vertex overlay wins.
-    const olFeature = this.featureAt(event.pixel, {
-      layerFilter: (layer) => Object.values(this.sources).includes(layer.getSource()),
-    })
-    const feature = olFeature && this.getFeatureById(olFeature.getId())
+    const olFeature = this.featureAt(event.pixel)
+    const target = olFeature && targetFeature(olFeature)
+    const feature = target && this.getFeatureById(target.getId())
+    const vertex = this.editor?.vertexAtPointer()
+    if (vertex) appEvent.vertex = toLonLat(vertex)
     if (feature) feature.onContextMenu(appEvent)
     else this.app.onContextMenu(appEvent)
   }
@@ -573,8 +620,8 @@ export class OLProxy {
   removeFeature(id, featureId) {
     const olFeature = this.sources[id]?.getFeatureById(featureId)
     if (!olFeature) return
-    this.editor?.select?.getFeatures().remove(olFeature)
     this.sources[id].removeFeature(olFeature)
+    this.syncSelection()
   }
 
   clearLayer(id) {
@@ -629,6 +676,7 @@ export class OLProxy {
 
   addFeature(id, geojson) {
     this.sources[id].addFeature(this.geojsonToOL(geojson))
+    this.syncSelection()
   }
 
   redraw(id, geojson) {
@@ -649,6 +697,7 @@ export class OLProxy {
       else added.push(this.geojsonToOL(feature))
     }
     source.addFeatures(added)
+    this.syncSelection()
   }
 
   redrawFeature(olFeature, geojson) {
@@ -660,9 +709,11 @@ export class OLProxy {
 
   applyGeojson(olFeature, geojson) {
     const base = this.style(geojson)
+    const highlight = this.style(geojson, true).style
     olFeature.umapStyles = {
       base: base.style,
-      highlight: this.style(geojson, true).style,
+      highlight,
+      edit: [].concat(highlight, VERTEX_STYLE),
       texts: base.texts,
       popupOffsetY: base.popupOffsetY,
     }
@@ -679,17 +730,15 @@ export class OLProxy {
     this.applyStyle(olFeature)
   }
 
-  // A feature renders highlighted when its popup is open or it is selected in edit.
   isHighlighted(olFeature) {
-    return (
-      olFeature === this.highlighted ||
-      Boolean(this.editor?.select?.getFeatures().getArray().includes(olFeature))
-    )
+    return this.selected.getArray().includes(olFeature)
   }
 
   applyStyle(olFeature) {
     const styles = olFeature.umapStyles
-    styles.current = this.isHighlighted(olFeature) ? styles.highlight : styles.base
+    if (this.edited.getArray().includes(olFeature)) styles.current = styles.edit
+    else if (this.isHighlighted(olFeature)) styles.current = styles.highlight
+    else styles.current = styles.base
   }
 
   restyle(olFeatures) {
@@ -702,22 +751,6 @@ export class OLProxy {
 
   closePopup() {
     this.popup.setPosition(undefined)
-    this.unhighlight()
-  }
-
-  highlight(sourceId, id) {
-    const olFeature = this.sources[sourceId]?.getFeatureById(id)
-    if (olFeature === this.highlighted) return
-    const previous = this.highlighted
-    this.highlighted = olFeature
-    this.restyle([previous, olFeature].filter(Boolean))
-  }
-
-  unhighlight() {
-    if (!this.highlighted) return
-    const olFeature = this.highlighted
-    this.highlighted = null
-    this.restyle([olFeature])
   }
 
   style(geojson, highlight = false) {
@@ -816,17 +849,17 @@ export class OLProxy {
     const label = olFeature?.get('umapLabel')
     if (!label?.text || label.show !== null) {
       if (this.hovered) {
-        this.app.tooltip.close()
+        this.tooltip.close()
         this.hovered = null
       }
       return
     }
     const at = [originalEvent.clientX, originalEvent.clientY]
     if (this.hovered === olFeature) {
-      this.app.tooltip.anchorAt(at, label.direction)
+      this.tooltip.anchorAt(at, label.direction)
     } else {
       this.hovered = olFeature
-      this.app.tooltip.open({
+      this.tooltip.open({
         content: label.text,
         at,
         position: label.direction,

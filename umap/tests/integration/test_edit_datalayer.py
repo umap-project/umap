@@ -1,4 +1,3 @@
-import platform
 import re
 
 from playwright.sync_api import expect
@@ -177,11 +176,14 @@ def test_can_restore_version(
     )
     wait_for_edit_mode(page)
     assert_screenshot(page, suffix="ball", ui=False)
-    page.locator("#map").click(position={"x": 640, "y": 340}, modifiers=["Shift"])
+    page.locator("#map").click(position={"x": 640, "y": 340})
+    page.keyboard.press("Alt+Enter")
     page.get_by_text("Shape properties").click()
     page.locator("#umap-feature-shape-properties").get_by_text("Default").click()
     with page.expect_response(re.compile(".*/datalayer/update/.*")):
         page.get_by_role("button", name="Save").click()
+    # Deselect the marker, so it renders without highlight.
+    page.locator("#map").click(position={"x": 640, "y": 650})
     assert_screenshot(page, suffix="default", ui=False)
     page.get_by_role("button", name="Manage layers").click()
     page.locator(".panel.right").get_by_title("Edit", exact=True).click()
@@ -191,17 +193,15 @@ def test_can_restore_version(
     assert_screenshot(page, suffix="ball", ui=False)
 
 
-def test_can_edit_layer_on_ctrl_shift_click(
+def test_can_edit_layer_on_shift_alt_enter(
     live_server, openmap, page, datalayer, wait_for_edit_mode
 ):
-    modifier = "Meta" if platform.system() == "Darwin" else "Control"
     page.goto(
         f"{live_server.url}{openmap.get_absolute_url()}?edit#16/48.55298/14.68896"
     )
     wait_for_edit_mode(page)
-    page.locator("#map").click(
-        position={"x": 640, "y": 340}, modifiers=[modifier, "Shift"]
-    )
+    page.locator("#map").click(position={"x": 640, "y": 340})
+    page.keyboard.press("Shift+Alt+Enter")
     expect(page.get_by_text("Layer properties")).to_be_visible()
 
 

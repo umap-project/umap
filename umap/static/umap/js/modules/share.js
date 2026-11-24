@@ -168,8 +168,9 @@ class IframeExporter {
 
   buildUrl(options) {
     const datalayers = []
-    if (this.options.viewCurrentFeature && this.app.currentFeature) {
-      this.queryString.feature = this.app.currentFeature.getSlug()
+    const { selection } = this.app
+    if (this.options.viewCurrentFeature && selection.size === 1) {
+      this.queryString.feature = selection.features[0].getSlug()
     } else {
       delete this.queryString.feature
     }

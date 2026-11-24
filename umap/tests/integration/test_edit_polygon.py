@@ -1,5 +1,3 @@
-import platform
-
 import pytest
 from playwright.sync_api import expect
 
@@ -46,17 +44,15 @@ def bootstrap(map, live_server):
     DataLayerFactory(map=map, data=DATALAYER_DATA)
 
 
-def test_can_edit_on_ctrl_shift_click(
+def test_can_edit_layer_on_shift_alt_enter(
     live_server, openmap, page, datalayer, wait_for_edit_mode
 ):
-    modifier = "Meta" if platform.system() == "Darwin" else "Control"
     page.goto(
         f"{live_server.url}{openmap.get_absolute_url()}?edit#16/48.55298/14.68896"
     )
     wait_for_edit_mode(page)
-    page.locator("#map").click(
-        position={"x": 640, "y": 340}, modifiers=[modifier, "Shift"]
-    )
+    page.locator("#map").click(position={"x": 640, "y": 340})
+    page.keyboard.press("Shift+Alt+Enter")
     expect(page.get_by_text("Layer properties")).to_be_visible()
 
 
@@ -81,7 +77,8 @@ def test_marker_style_should_have_precedence(
     assert_screenshot(page, suffix="layer-color", ui=False)
 
     # Now change at polygon level, it should take precedence
-    page.locator("#map").click(position={"x": 640, "y": 360}, modifiers=["Shift"])
+    page.locator("#map").click(position={"x": 640, "y": 360})
+    page.keyboard.press("Alt+Enter")
     page.get_by_text("Shape properties").click()
     page.locator("#umap-feature-shape-properties").get_by_text("define").first.click()
     page.locator("#umap-feature-shape-properties").get_by_title(
@@ -105,7 +102,7 @@ def test_should_open_an_edit_toolbar_on_click(
     wait_for_edit_mode(page)
     page.locator("#map").click(position={"x": 640, "y": 360}, button="right")
     expect(page.get_by_role("button", name="Toggle edit mode")).to_be_visible()
-    expect(page.get_by_role("button", name="Delete this feature")).to_be_visible()
+    expect(page.get_by_role("button", name="Delete feature")).to_be_visible()
 
 
 def test_can_remove_stroke(
@@ -135,7 +132,8 @@ def test_should_reset_style_on_cancel(
     wait_for_edit_mode(page)
     page.locator(".umap-browser .datalayer").click()
     color = page.locator(".umap-browser .feature-color")
-    page.locator("#map").click(position={"x": 640, "y": 360}, modifiers=["Shift"])
+    page.locator("#map").click(position={"x": 640, "y": 360})
+    page.keyboard.press("Alt+Enter")
     page.get_by_text("Shape properties").click()
     page.locator("#umap-feature-shape-properties").get_by_text("define").first.click()
     page.locator("#umap-feature-shape-properties").get_by_title(
@@ -162,6 +160,7 @@ def test_can_change_datalayer(
     page.locator(".umap-browser .datalayer").nth(1).click()
     color = page.locator(".umap-browser .feature.polygon .feature-color")
     expect(color).to_have_css("background-color", "rgb(0, 0, 139)")
-    page.locator("#map").click(position={"x": 640, "y": 360}, modifiers=["Shift"])
+    page.locator("#map").click(position={"x": 640, "y": 360})
+    page.keyboard.press("Alt+Enter")
     page.locator(".umap-field-datalayer select").select_option(other.name)
     expect(color).to_have_css("background-color", "rgb(218, 165, 32)")

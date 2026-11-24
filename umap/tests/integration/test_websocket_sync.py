@@ -118,6 +118,7 @@ def test_websocket_connection_can_sync_markers(
     assert_screenshot(peerB.locator("#map"), "b-marker-deleted", ui=False)
 
     # Drag the remaining marker on peer B and check that it moved on peer A
+    b_map_el.click(position={"x": PANEL + 320, "y": 320}, modifiers=["Alt"])
     drag_on_map(peerB, (PANEL + 320, 320), (PANEL + 350, 350))
 
     assert_screenshot(peerA.locator("#map"), "a-marker-moved", ui=False)
@@ -173,9 +174,8 @@ def test_websocket_connection_can_sync_polygons(
     assert_screenshot(peerA.locator("#map"), "a-polygon-created", ui=False)
     assert_screenshot(peerB.locator("#map"), "b-polygon-created", ui=False)
 
-    # Change the geometry by moving a vertex on peer B. Modify is paused while
-    # something is selected, so make sure nothing is.
-    peerB.keyboard.press("Escape")
+    # Change the geometry by moving a vertex on peer B
+    b_map_el.click(position={"x": PANEL + 130, "y": 170}, modifiers=["Alt"])
     drag_on_map(peerB, (PANEL + 100, 100), (PANEL + 233, 126))
     peerB.keyboard.press("Escape")
 
@@ -183,9 +183,7 @@ def test_websocket_connection_can_sync_polygons(
     assert_screenshot(peerB.locator("#map"), "b-vertex-moved", ui=False)
 
     # Move the polygon on peer B and check it moved also on peer A
-    b_map_el.click(position={"x": PANEL + 178, "y": 175})
-    # OL selects on its singleclick event, 250ms after the click.
-    peerB.wait_for_timeout(400)
+    b_map_el.click(position={"x": PANEL + 178, "y": 175}, modifiers=["Alt"])
     drag_on_map(peerB, (PANEL + 178, 175), (PANEL + 300, 300))
     peerB.keyboard.press("Escape")
 

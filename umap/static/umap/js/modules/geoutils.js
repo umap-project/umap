@@ -80,16 +80,10 @@ export async function mergeLines(a, b) {
 }
 
 // Index of the vertex of `coordinates` (a flat [[lng, lat], ...] ring) nearest to
-// `point` ([lng, lat]), by planar squared distance. With { ends: true }, only the
-// first and last vertices are considered.
-export function closestVertexIndex(coordinates, [lng, lat], { ends = false } = {}) {
+// `point` ([lng, lat]), by planar squared distance.
+export function closestVertexIndex(coordinates, [lng, lat]) {
   const squaredDistance = ([x, y]) => (x - lng) ** 2 + (y - lat) ** 2
   const last = coordinates.length - 1
-  if (ends) {
-    return squaredDistance(coordinates[0]) <= squaredDistance(coordinates[last])
-      ? 0
-      : last
-  }
   let best = 0
   let min = squaredDistance(coordinates[0])
   for (let index = 1; index <= last; index++) {
@@ -100,6 +94,10 @@ export function closestVertexIndex(coordinates, [lng, lat], { ends = false } = {
     }
   }
   return best
+}
+
+export function sameCoordinates([lng1, lat1], [lng2, lat2]) {
+  return Math.abs(lng1 - lng2) < 1e-9 && Math.abs(lat1 - lat2) < 1e-9
 }
 
 // Don't let 2D and 3D coordinates in the geometry, otherwise OL will

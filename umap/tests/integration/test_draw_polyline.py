@@ -191,17 +191,18 @@ def test_can_combine_two_simple_polylines(live_server, page, tilelayer, settings
     # Click again to finish
     map.click(position={"x": 200, "y": 200})
 
-    # The first line takes the shape of the selected one, which is deleted
+    # The selected line takes the shape of the first one, which is deleted
     expect(page.locator(".panel.right form input").first).to_be_focused()
     map.click(position={"x": 110, "y": 100}, button="right")
     page.get_by_role("button", name="Combine features").click()
+    expect(page.get_by_text("Feature properties")).to_be_visible()
     data = save_and_get_json(page)
     assert len(data["features"]) == 1
     assert data["features"][0]["geometry"] == {
         "type": "MultiLineString",
         "coordinates": [
-            [[-7.667969, 54.457332], [-9.865234, 54.457332], [-9.865234, 53.160015]],
             [[-6.569336, 52.496228], [-7.667969, 52.496228], [-7.667969, 53.160015]],
+            [[-7.667969, 54.457332], [-9.865234, 54.457332], [-9.865234, 53.160015]],
         ],
     }
 
@@ -233,18 +234,19 @@ def test_can_combine_multi_and_simple_polylines(live_server, page, tilelayer, se
     # Click again to finish
     map.click(position={"x": 300, "y": 300})
 
-    # The multi takes the shape of the selected line, which is deleted
+    # The selected line takes the shapes of the multi, which is deleted
     expect(page.locator(".panel.right form input").first).to_be_focused()
     map.click(position={"x": 110, "y": 100}, button="right")
     page.get_by_role("button", name="Combine features").click()
+    expect(page.get_by_text("Feature properties")).to_be_visible()
     data = save_and_get_json(page)
     assert len(data["features"]) == 1
     assert data["features"][0]["geometry"] == {
         "type": "MultiLineString",
         "coordinates": [
+            [[-4.37207, 51.138072], [-5.470703, 51.138072], [-5.470703, 51.822268]],
             [[-7.667969, 54.457332], [-9.865234, 54.457332], [-9.865234, 53.160015]],
             [[-6.569336, 52.496228], [-7.667969, 52.496228], [-7.667969, 53.160015]],
-            [[-4.37207, 51.138072], [-5.470703, 51.138072], [-5.470703, 51.822268]],
         ],
     }
 
@@ -362,6 +364,63 @@ def test_can_delete_shape_using_toolbar(live_server, page, tilelayer, settings):
             -9.865234,
             53.160015,
         ],
+    ]
+
+
+def test_can_continue_line_from_its_end(live_server, page, tilelayer, settings):
+    settings.UMAP_ALLOW_ANONYMOUS = True
+    page.goto(f"{live_server.url}/en/map/new/")
+    page.get_by_title("Draw a polyline").click()
+    map = page.locator("#map")
+    map.click(position={"x": 200, "y": 100})
+    map.click(position={"x": 100, "y": 100})
+    map.click(position={"x": 100, "y": 200})
+    map.click(position={"x": 100, "y": 200})
+    # When panel opens, it will have the focus, thus close the contextmenu,
+    # so wait for it before trying to right click (and prevent a race).
+    expect(page.locator(".panel.right form input").first).to_be_focused()
+    map.click(position={"x": 100, "y": 200}, button="right")
+    page.get_by_role("button", name="Continue line").click()
+    map.click(position={"x": 200, "y": 200})
+    map.click(position={"x": 200, "y": 200})
+    # The new end can be continued again.
+    map.click(position={"x": 200, "y": 200}, button="right")
+    page.get_by_role("button", name="Continue line").click()
+    map.click(position={"x": 300, "y": 200})
+    map.click(position={"x": 300, "y": 200})
+    data = save_and_get_json(page)
+    coordinates = data["features"][0]["geometry"]["coordinates"]
+    assert coordinates[:4] == [
+        [-7.667969, 54.457332],
+        [-9.865234, 54.457332],
+        [-9.865234, 53.160015],
+        [-7.667969, 53.160015],
+    ]
+    assert len(coordinates) == 5
+
+
+def test_can_continue_line_from_its_start(live_server, page, tilelayer, settings):
+    settings.UMAP_ALLOW_ANONYMOUS = True
+    page.goto(f"{live_server.url}/en/map/new/")
+    page.get_by_title("Draw a polyline").click()
+    map = page.locator("#map")
+    map.click(position={"x": 200, "y": 100})
+    map.click(position={"x": 100, "y": 100})
+    map.click(position={"x": 100, "y": 200})
+    map.click(position={"x": 100, "y": 200})
+    # When panel opens, it will have the focus, thus close the contextmenu,
+    # so wait for it before trying to right click (and prevent a race).
+    expect(page.locator(".panel.right form input").first).to_be_focused()
+    map.click(position={"x": 200, "y": 100}, button="right")
+    page.get_by_role("button", name="Continue line").click()
+    map.click(position={"x": 200, "y": 200})
+    map.click(position={"x": 200, "y": 200})
+    data = save_and_get_json(page)
+    assert data["features"][0]["geometry"]["coordinates"] == [
+        [-7.667969, 53.160015],
+        [-7.667969, 54.457332],
+        [-9.865234, 54.457332],
+        [-9.865234, 53.160015],
     ]
 
 

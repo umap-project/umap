@@ -20,31 +20,11 @@ export default class Slideshow extends WithTemplate {
     this.CLASSNAME = 'umap-slideshow-active'
     this.app.properties.slideshow ??= {}
     this.load()
-    this._current = null
 
     if (this.properties.autoplay) {
       this.app.onceDataLoaded(() => this.play())
     }
     app.on('edit:enabled', () => this.stop())
-  }
-
-  set current(feature) {
-    this._current = feature
-  }
-
-  get current() {
-    if (!this._current) {
-      const datalayer = this.defaultDatalayer()
-      if (datalayer) this._current = datalayer.features.first()
-    }
-    return this._current
-  }
-
-  get next() {
-    if (this._current === null) {
-      return this.current
-    }
-    return this.current.getNext()
   }
 
   load() {
@@ -59,10 +39,6 @@ export default class Slideshow extends WithTemplate {
       },
       properties
     )
-  }
-
-  defaultDatalayer() {
-    return this.app.layers.tree.find((d) => d.canBrowse())
   }
 
   startSpinner() {
@@ -92,8 +68,7 @@ export default class Slideshow extends WithTemplate {
   }
 
   loop() {
-    this.current = this.next
-    this.step()
+    if (!this.app.selection.next({ easing: this.properties.easing })) this.stop()
   }
 
   pause() {
@@ -107,25 +82,16 @@ export default class Slideshow extends WithTemplate {
 
   stop() {
     this.pause()
-    this.current = null
   }
 
   forward() {
     this.pause()
-    this.current = this.next
-    this.step()
+    this.app.selection.next({ easing: this.properties.easing })
   }
 
   backward() {
     this.pause()
-    if (this.current) this.current = this.current.getPrevious()
-    this.step()
-  }
-
-  step() {
-    if (!this.current) return this.stop()
-    this.current.zoomTo({ easing: this.properties.easing })
-    this.current.view()
+    this.app.selection.previous({ easing: this.properties.easing })
   }
 
   toggle() {

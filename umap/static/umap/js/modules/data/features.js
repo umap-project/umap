@@ -129,6 +129,10 @@ class Feature {
     }
   }
 
+  getHoverEditMessage() {
+    return this.app.help.displayLabel('EDIT_FEATURE')
+  }
+
   onCommit(geometry) {
     const oldGeometry = Utils.CopyJSON(this._geometry)
     this._geometry = geometry
@@ -199,12 +203,13 @@ class Feature {
       }
       return
     }
-    // TODO deal with an event instead?
-    if (this.app.slideshow) {
-      this.app.slideshow.current = this
-    }
-    this.app.currentFeature = this
+    this.app.selection.select(this)
+    this.openPopup({ center })
+  }
+
+  openPopup({ center } = {}) {
     this.buildCard().then((element) => {
+      this.app.shownFeature = this
       const popupShape = this.getOption('popupShape')
       if (popupShape === 'Panel') {
         this.app.fire('panel:show', { id: this.id, content: element })
@@ -213,7 +218,7 @@ class Feature {
           id: this.id,
           sourceId: this.datalayer.id,
           content: element,
-          center: center || this.center,
+          center,
           mode: popupShape === 'Large' ? 'large' : 'normal',
         })
       }
@@ -229,9 +234,7 @@ class Feature {
         el.textContent = this.getDisplayName()
         el.title = this.getDisplayName()
       })
-      if (this.app.currentFeature === this) {
-        this.view()
-      }
+      if (this.app.shownFeature === this) this.openPopup()
     }
     const impactPreview = fields.some((field) => {
       return field.startsWith('properties._umap_options')
@@ -246,9 +249,7 @@ class Feature {
 
   edit(event) {
     if (!this.app.editEnabled || this.isReadOnly()) return
-    if (this.app.editedFeature === this && !event?.force) return
-    // If this feature is active (popup open), let's close it.
-    this.deactivate()
+    if (this.app.selection.isEdited(this) && !event?.force) return
     const container = DOMUtils.loadTemplate(`
       <div class="umap-feature-container">
         <h3><i class="icon icon-16 icon-${this.getClassName()}"></i> ${translate('Feature properties')}</h3>
@@ -299,9 +300,9 @@ class Feature {
       this.appendEditFieldsets(container)
       this.addAdvancedActions(container)
     })
+    // Opening the panel ends any previous edit, so it has to come first.
     const onPanelLoaded = this.app.editPanel.open({ content: container })
-    this.app.editedFeature = this
-    this.app.fire('feature:edit', { id: this.id, sourceId: this.datalayer.id })
+    this.app.selection.edit(this)
     return Promise.all([onFormCreated, onPanelLoaded]).then(([form, panel]) => {
       form.querySelector('input')?.focus()
       return panel
@@ -320,15 +321,11 @@ class Feature {
   }
 
   toggleEditing() {
-    if (this.app.editedFeature === this) {
+    if (this.app.selection.isEdited(this)) {
       this.app.editPanel.close()
     } else {
       this.edit()
     }
-  }
-
-  endEdit() {
-    this.app.fire('feature:endedit', { id: this.id })
   }
 
   getAdvancedEditActions(container) {
@@ -415,7 +412,7 @@ class Feature {
   }
 
   del(sync) {
-    this.endEdit()
+    this.app.selection.unselect(this)
     if (this.datalayer) {
       this.datalayer.removeFeature(this, sync)
     }
@@ -713,11 +710,11 @@ class Feature {
     })
   }
 
-  onContextMenu({ lat, lng, pixel }) {
-    const items = this.getContextMenu({ lat, lng }).concat(
-      this.app.getSharedContextMenu({ lat, lng })
+  onContextMenu(event) {
+    const items = this.getContextMenu(event).concat(
+      this.app.getSharedContextMenu(event)
     )
-    this.app.contextmenu.openAt(pixel, items)
+    this.app.contextmenu.openAt(event.pixel, items)
   }
 
   getContextMenu(event) {
@@ -754,7 +751,7 @@ class Feature {
   getDrawingTools(event) {
     return [
       {
-        title: translate('Toggle edit mode (⇧+Click)'),
+        title: this.app.help.displayLabel('TOGGLE_FEATURE_EDIT', false),
         action: () => this.toggleEditing(),
         icon: 'icon-edit',
       },
@@ -776,7 +773,7 @@ class Feature {
         action: () => this.clone(),
       },
       {
-        title: translate('Delete this feature'),
+        title: this.app.help.displayLabel('DELETE_FEATURE', false),
         icon: 'icon-delete',
         action: () => this.del(),
       }
@@ -784,8 +781,11 @@ class Feature {
     return items
   }
 
-  deactivate() {
-    this.app.fire('popup:close')
+  closePopup() {
+    if (this.getOption('popupShape') === 'Panel') {
+      this.app.fire('panel:close', { id: this.id })
+    }
+    else this.app.fire('popup:close')
   }
 
   makePreview(element) {
@@ -901,6 +901,13 @@ class Path extends Feature {
     )
   }
 
+  getHoverEditMessage() {
+    if (this.app.selection.isEdited(this)) {
+      return this.app.help.displayLabel('ADD_VERTEX')
+    }
+    return super.getHoverEditMessage()
+  }
+
   async _removeShapeAt(coordinate) {
     const index = await GeoUtils.shapeAt(this.geometry, coordinate)
     if (index === -1) return null
@@ -960,7 +967,7 @@ class Path extends Feature {
     this.journal.commitBatch()
   }
 
-  zoomTo({ easing, callback }) {
+  zoomTo({ easing, callback } = {}) {
     // Use bounds instead of centroid for paths.
     const zoom = this.getBestZoom()
     this.app.fire('map:view:fit', {
@@ -997,20 +1004,18 @@ class Path extends Feature {
         }
       )
     }
-    if (this.app.mapProxy.hasSelection()) {
-      const others = this.app.mapProxy.selection.filter((feature) => feature !== this)
-      const combinable =
-        others.length &&
-        others.every(
-          (feature) => this.isSameClass(feature) && feature.datalayer === this.datalayer
-        )
-      if (combinable) {
-        items.push({
-          title: translate('Combine features'),
-          icon: 'icon-transfer-shape',
-          action: () => this.combine(others),
-        })
-      }
+    const target = this.app.selection.current
+    if (
+      target &&
+      target !== this &&
+      this.isSameClass(target) &&
+      target.datalayer === this.datalayer
+    ) {
+      items.push({
+        title: translate('Combine features'),
+        icon: 'icon-transfer-shape',
+        action: () => target.combine([this]),
+      })
     }
     return items
   }
@@ -1194,20 +1199,29 @@ export class LineString extends Path {
     return !GeoUtils.isFlat(this.coordinates) && this.coordinates.length > 1
   }
 
+  lineEndAt(vertex) {
+    const lines = this.isMulti() ? this.coordinates : [this.coordinates]
+    for (const [index, line] of lines.entries()) {
+      if (GeoUtils.sameCoordinates(line[0], vertex)) return { index, atStart: true }
+      if (GeoUtils.sameCoordinates(line.at(-1), vertex)) return { index, atStart: false }
+    }
+  }
+
   getDrawingTools(event) {
     const items = super.getDrawingTools(event)
-    items.push({
-      title: this.app.help.displayLabel('CONTINUE_LINE', false),
-      icon: 'icon-continue-line',
-      action: async () => {
-        const point = [event.lng, event.lat]
-        const index = this.isMulti() ? await GeoUtils.shapeAt(this.geometry, point) : 0
-        const rings = this.isMulti() ? this.coordinates : [this.coordinates]
-        const atStart =
-          GeoUtils.closestVertexIndex(rings[index], point, { ends: true }) === 0
-        this.app.mapProxy.startContinueLine(this, this.datalayer.id, index, atStart)
-      },
-    })
+    const end = event.vertex && this.lineEndAt(event.vertex)
+    if (end && this.app.selection.isEdited(this)) {
+      items.push({
+        title: this.app.help.displayLabel('CONTINUE_LINE', false),
+        icon: 'icon-continue-line',
+        action: () =>
+          this.app.fire('draw:continueline', {
+            featureId: this.id,
+            sourceId: this.datalayer.id,
+            ...end,
+          }),
+      })
+    }
     if (!this.isMulti() && this.coordinates.length > 2) {
       items.push({
         title: translate('Split line'),
@@ -1509,35 +1523,30 @@ export class Polygon extends Path {
       action: () => this.startHole([event.lng, event.lat]),
       icon: 'icon-hole',
     })
-    if (this.app.mapProxy.hasSelection()) {
-      const selection = this.app.mapProxy.selection
-      const others = selection.filter((feature) => feature !== this)
-      const mergeable =
-        others.length &&
-        selection.every(
-          (feature) =>
-            feature instanceof Polygon && feature.datalayer === this.datalayer
-        )
-      if (mergeable) {
-        items.push({
-          title: translate('Merge selected polygons'),
-          icon: 'icon-transfer-shape',
-          action: async () => {
-            const { union } = await import('../geoutils.js')
-            const merged = await union(
-              [this, ...others].map((feature) => feature.toGeoJSON())
-            )
-            if (!merged) return
-            this.journal.startBatch()
-            this.commitGeometry(merged.geometry)
-            for (const feature of others) feature.del()
-            this.journal.commitBatch()
-          },
-        })
-      }
+    const target = this.app.selection.current
+    if (
+      target instanceof Polygon &&
+      target !== this &&
+      target.datalayer === this.datalayer
+    ) {
+      items.push({
+        title: translate('Merge selected polygons'),
+        icon: 'icon-transfer-shape',
+        action: () => target.merge([this]),
+      })
     }
 
     return items
+  }
+
+  async merge(others) {
+    const { union } = await import('../geoutils.js')
+    const merged = await union([this, ...others].map((feature) => feature.toGeoJSON()))
+    if (!merged) return
+    this.journal.startBatch()
+    this.commitGeometry(merged.geometry)
+    for (const feature of others) feature.del()
+    this.journal.commitBatch()
   }
 
   startHole(coordinate) {

@@ -1,4 +1,3 @@
-import platform
 from copy import deepcopy
 from pathlib import Path
 
@@ -94,11 +93,9 @@ def test_can_change_picto_at_datalayer_level(
     )
     # Icon inherited from the map, drawn on the canvas.
     assert_screenshot(page, suffix="star", clip=ICON_CLIP)
-    # Edit datalayer: shift+meta click on the (centered) marker.
-    modifier = "Meta" if platform.system() == "Darwin" else "Control"
-    page.locator("#map").click(
-        position={"x": 640, "y": 340}, modifiers=[modifier, "Shift"]
-    )
+    # Edit datalayer of the (centered) marker.
+    page.locator("#map").click(position={"x": 640, "y": 340})
+    page.keyboard.press("Shift+Alt+Enter")
     settings = page.get_by_text("Layer properties")
     expect(settings).to_be_visible()
     shape_settings = page.get_by_text("Shape properties")
@@ -138,8 +135,9 @@ def test_can_change_picto_at_marker_level(
     )
     # Icon inherited from the map, drawn on the canvas.
     assert_screenshot(page, suffix="star", clip=ICON_CLIP)
-    # Edit marker: shift click on the (centered) marker.
-    page.locator("#map").click(position={"x": 640, "y": 340}, modifiers=["Shift"])
+    # Edit the (centered) marker.
+    page.locator("#map").click(position={"x": 640, "y": 340})
+    page.keyboard.press("Alt+Enter")
     settings = page.get_by_text("Feature properties")
     expect(settings).to_be_visible()
     shape_settings = page.get_by_text("Shape properties")

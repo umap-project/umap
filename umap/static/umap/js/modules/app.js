@@ -15,6 +15,7 @@ import { MapPermissions } from './permissions.js'
 import { Request, ServerRequest } from './request.js'
 import Rules from './rules.js'
 import * as Schema from './schema.js'
+import Selection from './selection.js'
 import Slideshow from './slideshow.js'
 import { BottomBar, EditBar, TopBar } from './ui/bar.js'
 import ContextMenu from './ui/contextmenu.js'
@@ -160,25 +161,33 @@ export default class App extends Utils.WithEvents {
     // Global storage for retrieving datalayers and features.
     this.layers = new LayerManager()
     this.featuresIndex = {}
+    this.selection = new Selection(this)
 
     this.formatter = new Formatter(this)
 
     this.initDataLayers()
     this.on('datalayer:changed', () => this.onDataLayersChanged())
-    this.on('feature:endedit', (event) => {
-      if (this.editedFeature?.id === event.detail.id) {
-        this.editedFeature = null
-        this.editPanel.close()
+    this.on('selection:changed', (event) => {
+      if (event.detail.editEnded && this.editPanel.isOpen()) this.editPanel.close()
+      if (this.shownFeature && !this.selection.has(this.shownFeature)) {
+        this.shownFeature.closePopup()
       }
     })
+    this.shownFeature = null
+    for (const name of ['popup:close', 'panel:close']) {
+      this.on(name, () => {
+        this.shownFeature = null
+      })
+    }
     this.on('panel:show', (event) => {
       this.panel.setDefaultMode('expanded')
       this.panel.open({
         content: event.detail.content,
+        id: event.detail.id,
         actions: [this.panelBackButton()],
       })
     })
-    this.on('panel:close', () => this.panel.close())
+    this.on('panel:close', (event) => this.panel.close(event.detail?.id))
     this.on('feature:create', async (event) => {
       const datalayer = await this.defaultEditDataLayer()
       datalayer.makeFeature(event.detail.geojson).edit()
@@ -245,19 +254,6 @@ export default class App extends Utils.WithEvents {
   set editEnabled(value) {
     this._editEnabled = value
     document.body.classList.toggle('umap-edit-enabled', value)
-  }
-
-  get editedFeature() {
-    return this._editedFeature
-  }
-
-  set editedFeature(feature) {
-    const previous = this._editedFeature
-    this._editedFeature = feature
-    if (previous && previous.id !== feature?.id) {
-      this.fire('feature:endedit', { id: previous.id })
-    }
-    this.fire('seteditedfeature')
   }
 
   get modifiedAt() {
@@ -598,7 +594,42 @@ export default class App extends Utils.WithEvents {
   }
 
   initShortcuts() {
+    const selected = () => this.selection.features[0]
+    const onSelected = () => this.selection.size === 1 && this.mapProxy.hasFocus()
+    const onEditable = () =>
+      this.editEnabled && onSelected() && !selected().isReadOnly()
     const shortcuts = {
+      Enter: {
+        if: onSelected,
+        do: () => {
+          if (this.shownFeature === selected()) selected().closePopup()
+          else selected().openPopup()
+        },
+      },
+      'Alt+Enter': {
+        if: onEditable,
+        do: () => selected().toggleEditing(),
+      },
+      'Shift+Alt+Enter': {
+        if: onEditable,
+        do: () => selected().datalayer.edit(),
+      },
+      Tab: {
+        if: onSelected,
+        do: () => this.selection.next(),
+      },
+      'Shift+Tab': {
+        if: onSelected,
+        do: () => this.selection.previous(),
+      },
+      Delete: {
+        if: () => onEditable(),
+        do: () => selected().del(),
+      },
+      Backspace: {
+        if: () => onEditable(),
+        do: () => selected().del(),
+      },
       Escape: {
         do: () => {
           if (this.importer?.dialog.visible) {
@@ -609,6 +640,8 @@ export default class App extends Utils.WithEvents {
             this.fullPanel?.close()
           } else if (this.editPanel?.isOpen()) {
             this.editPanel?.close()
+          } else if (this.selection.size) {
+            this.selection.clear()
           } else if (this.panel.isOpen()) {
             this.panel.close()
           }
@@ -1502,7 +1535,7 @@ export default class App extends Utils.WithEvents {
   disableEdit() {
     if (this.isDirty) return
     this.drop?.disable()
-    this.editedFeature = null
+    this.selection.clear()
     this.editEnabled = false
     this.fire('edit:disabled')
     this.editPanel.close()
