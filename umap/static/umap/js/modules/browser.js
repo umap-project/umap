@@ -51,10 +51,14 @@ export default class Browser {
   }
 
   addDataLayer(datalayer, parentContainer) {
-    let open = ''
-    if (this.mode !== 'layers' || datalayer.hasVisibleChild()) {
-      open = ' open'
+    let expanded = this.mode !== 'layers' || datalayer.hasVisibleChild()
+    if (datalayer.group) {
+      const initial = datalayer.properties.browserExpandedOnLoad
+      if (initial === 'expanded') expanded = true
+      else if (initial === 'collapsed') expanded = false
+      else if (this.app.getProperty('collapseGroupsOnLoad')) expanded = false
     }
+    const open = expanded ? ' open' : ''
 
     const [container, { details, toolbox, ul, childrenContainer, parentIcon }] =
       Utils.loadTemplateWithRefs(`
