@@ -2,6 +2,7 @@ import json
 import re
 from pathlib import Path
 
+import pytest
 from playwright.sync_api import expect
 
 from umap.models import DataLayer, Map
@@ -151,3 +152,23 @@ def test_create_remote_data_layer(
         "features": [],
         "type": "FeatureCollection",
     }
+
+
+@pytest.mark.parametrize("content", ["", "lat,lon,name\n"])
+def test_remote_csv_without_rows_does_not_show_an_error(
+    page, live_server, tilelayer, map, content
+):
+    # A dynamic layer often has no data in the current view, so an empty CSV
+    # is expected there and must not show an error on every refresh.
+    page.route(
+        "https://remote.org/data.csv",
+        lambda route: route.fulfill(body=content, content_type="text/csv"),
+    )
+    settings = {
+        "remoteData": {"url": "https://remote.org/data.csv", "format": "csv"},
+    }
+    DataLayerFactory(map=map, settings=settings)
+    with page.expect_response("https://remote.org/data.csv"):
+        page.goto(f"{live_server.url}{map.get_absolute_url()}")
+    page.wait_for_timeout(500)
+    expect(page.locator('umap-alert div[data-level="error"]')).to_be_hidden()

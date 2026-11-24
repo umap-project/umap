@@ -15,6 +15,36 @@ const parseTextGeom = async (geom) => {
   }
 }
 
+// Base class for problems in the data itself, whose message is meant to be shown
+// to the user.
+export class DataError extends Error {}
+
+// Raised when the data has no data row at all. This is expected for remote data,
+// for example a dynamic layer with nothing in the current view.
+export class EmptyDataError extends DataError {}
+
+// Raised when the data has rows, but none of them can be turned into a feature.
+export class InvalidDataError extends DataError {}
+
+const csvWithoutFeaturesError = (str, err) => {
+  const nonBlankLines = str.split(/\r\n|\r|\n/).filter((line) => line.trim())
+  if (!nonBlankLines.length) {
+    return new EmptyDataError(translate('the CSV is empty'))
+  }
+  if (nonBlankLines.length === 1) {
+    return new EmptyDataError(translate('the CSV only contains a header row'))
+  }
+  if (Array.isArray(err)) {
+    // csv2geojson returns one error per row it could not convert.
+    return new InvalidDataError(
+      translate('the latitude or longitude is invalid in all {count} rows', {
+        count: err.length,
+      })
+    )
+  }
+  return new InvalidDataError(err?.message || translate('the CSV has no data rows'))
+}
+
 export const EXPORT_FORMATS = {
   geojson: {
     ext: '.geojson',
@@ -38,7 +68,20 @@ export const EXPORT_FORMATS = {
   },
 }
 
+/**
+ * The result of converting data in one of the supported formats to GeoJSON.
+ *
+ * @typedef {Object} ParseResult
+ * @property {Object} geojson - The converted data, as a GeoJSON FeatureCollection.
+ * @property {Array<string>} warnings - Reasons, meant for the user, why parts of
+ *   the data could not be converted while the rest could.
+ */
+
 export class Formatter {
+  /**
+   * @param {string} str - The GPX document.
+   * @returns {Promise<ParseResult>}
+   */
   async fromGPX(str) {
     const togeojson = await import('@tmcw/togeojson')
     const data = togeojson.gpx(this.toDom(str))
@@ -50,20 +93,33 @@ export class Formatter {
         }
       }
     }
-    return data
+    return { geojson: data, warnings: [] }
   }
 
+  /**
+   * @param {string} str - The KML document.
+   * @returns {Promise<ParseResult>}
+   */
   async fromKML(str) {
     const togeojson = await import('@tmcw/togeojson')
-    return togeojson.kml(this.toDom(str), {
+    const data = togeojson.kml(this.toDom(str), {
       skipNullGeometry: true,
     })
+    return { geojson: data, warnings: [] }
   }
 
+  /**
+   * @param {string} str - The GeoJSON document.
+   * @returns {Promise<ParseResult>}
+   */
   async fromGeoJSON(str) {
-    return JSON.parse(str)
+    return { geojson: JSON.parse(str), warnings: [] }
   }
 
+  /**
+   * @param {string} str - The OSM XML or JSON document.
+   * @returns {Promise<ParseResult>}
+   */
   async fromOSM(str) {
     const osm2geojson = await import('osm2geojson-lite')
     const data = osm2geojson.default(str, { flatProperties: true })
@@ -74,77 +130,79 @@ export class Formatter {
       feature.properties.osm_id = osm_id
       feature.properties.osm_type = osm_type
     }
-    return data
+    return { geojson: data, warnings: [] }
   }
 
-  fromCSV(str, callback) {
-    csv2geojson.csv2geojson(
-      str,
-      {
-        delimiter: 'auto',
-        includeLatLon: false,
-        sexagesimal: false,
-        parseLatLon: (raw) => Number.parseFloat(raw.toString().replace(',', '.')),
-      },
-      async (err, result) => {
-        if (result?.features.length) {
-          const first = result.features[0]
-          if (first.geometry === null) {
-            const geomFields = ['geom', 'geometry', 'wkt', 'geojson']
-            const availableFields = Object.keys(first.properties).reduce((acc, key) => {
-              acc[key.toLowerCase()] = key
-              return acc
-            }, {})
-            for (let field of geomFields) {
-              field = availableFields[field]
-              if (first.properties[field]) {
-                for (const feature of result.features) {
-                  feature.geometry = await parseTextGeom(feature.properties[field])
-                  delete feature.properties[field]
-                }
-                break
-              }
-            }
-            if (first.geometry === null) {
-              // csv2geojson fallback to null geometries when it cannot determine
-              // lat or lon columns. This is valid geojson, but unwanted from a user
-              // point of view.
-              err = {
-                type: 'Error',
-                message: translate(
-                  'No geo column found: must be either `lat(itude)` and `lon(gitude)` or `geom(etry)`.'
-                ),
-              }
-            }
+  /**
+   * @param {string} str - The CSV document.
+   * @returns {Promise<ParseResult>} The features of the valid rows, with a warning
+   *   when other rows have an invalid latitude or longitude.
+   * @throws {DataError} When no row at all can be turned into a feature.
+   */
+  async fromCSV(str) {
+    let { err, result } = await new Promise((resolve) => {
+      csv2geojson.csv2geojson(
+        str,
+        {
+          delimiter: 'auto',
+          includeLatLon: false,
+          sexagesimal: false,
+          parseLatLon: (raw) => Number.parseFloat(raw.toString().replace(',', '.')),
+        },
+        (err, result) => resolve({ err, result })
+      )
+    })
+    if (!result?.features.length) {
+      throw csvWithoutFeaturesError(str, err)
+    }
+    const first = result.features[0]
+    if (first.geometry === null) {
+      const geomFields = ['geom', 'geometry', 'wkt', 'geojson']
+      const availableFields = Object.keys(first.properties).reduce((acc, key) => {
+        acc[key.toLowerCase()] = key
+        return acc
+      }, {})
+      for (let field of geomFields) {
+        field = availableFields[field]
+        if (first.properties[field]) {
+          for (const feature of result.features) {
+            feature.geometry = await parseTextGeom(feature.properties[field])
+            delete feature.properties[field]
           }
-        }
-        if (err) {
-          let message
-          if (err.type === 'Error') {
-            message = err.message
-          } else {
-            message = translate('{count} errors during import: {message}', {
-              count: err.length,
-              message: err[0].message,
-            })
-          }
-          if (str.split(/\r\n|\r|\n/).length <= 2) {
-            // Seems like a blank CSV, let's not warn
-            console.debug(err)
-          } else {
-            Alert.error(message, 10000)
-          }
-        }
-        if (result?.features.length) {
-          callback(result)
+          break
         }
       }
-    )
+      if (first.geometry === null) {
+        // csv2geojson fallback to null geometries when it cannot determine
+        // lat or lon columns. This is valid geojson, but unwanted from a user
+        // point of view.
+        throw new InvalidDataError(
+          translate(
+            'No geo column found: must be either `lat(itude)` and `lon(gitude)` or `geom(etry)`.'
+          )
+        )
+      }
+    }
+    const warnings = []
+    if (Array.isArray(err)) {
+      // csv2geojson returns one error per row it could not convert, next to the
+      // features of the valid rows.
+      warnings.push(
+        translate('the latitude or longitude is invalid in {count} row(s)', {
+          count: err.length,
+        })
+      )
+    }
+    return { geojson: result, warnings }
   }
 
+  /**
+   * @param {string} str - The GeoRSS document.
+   * @returns {Promise<ParseResult>}
+   */
   async fromGeoRSS(str) {
     const GeoRSSToGeoJSON = await import('georsstogeojson')
-    return GeoRSSToGeoJSON.parse(this.toDom(str))
+    return { geojson: GeoRSSToGeoJSON.parse(this.toDom(str)), warnings: [] }
   }
 
   toDom(x) {
@@ -156,12 +214,18 @@ export class Formatter {
     return doc
   }
 
+  /**
+   * Converts data in one of the supported formats to GeoJSON.
+   *
+   * @param {string} str - The raw data.
+   * @param {string} format - One of `csv`, `gpx`, `kml`, `osm`, `georss` or `geojson`.
+   * @returns {Promise<ParseResult|undefined>} `undefined` for an unknown format.
+   * @throws {DataError} When the data contains nothing that can be imported.
+   */
   async parse(str, format) {
     switch (format) {
       case 'csv':
-        return new Promise((resolve, reject) => {
-          return this.fromCSV(str, (data) => resolve(data))
-        })
+        return await this.fromCSV(str)
       case 'gpx':
         return await this.fromGPX(str)
       case 'kml':

@@ -366,7 +366,7 @@ export default class Importer extends Utils.WithTemplate {
     } else if (this.url) {
       promise = layer.importFromUrl(this.url, this.format)
     }
-    if (promise) promise.then((features) => this.onCopyFinished(layer, features))
+    if (promise) promise.then((result) => this.onCopyFinished(layer, result))
   }
 
   onError(message = translate('No data has been found for import')) {
@@ -385,9 +385,20 @@ export default class Importer extends Utils.WithTemplate {
     }
   }
 
-  onCopyFinished(layer, features) {
-    // undefined features means error, let original error message pop
-    if (!features) return
+  /**
+   * Shows the outcome of an import and fits the map view to the imported features.
+   *
+   * @param {DataLayer} layer - The layer the data was imported into.
+   * @param {{features: Array<Object>, warnings: Array<string>}|undefined} result -
+   *   What `importFromFiles`, `importRaw` or `importFromUrl` returned:
+   *   `features` are the imported features, `warnings` are sentences about the
+   *   skipped parts of the data. `undefined` when the import failed, in which case
+   *   the error has already been shown.
+   */
+  onCopyFinished(layer, result) {
+    // undefined result means error, let original error message pop
+    if (!result) return
+    const { features, warnings } = result
     if (!features.length) {
       this.onError()
     } else {
@@ -395,7 +406,17 @@ export default class Importer extends Utils.WithTemplate {
       for (const feature of features) {
         bounds = GeoUtils.unionBbox(bounds, feature.bounds)
       }
-      this.onSuccess(features.length)
+      if (warnings.length) {
+        // A success message would hide the warnings about the skipped data.
+        Alert.warning(
+          translate('Imported {count} feature(s). {warnings}', {
+            count: features.length,
+            warnings: warnings.join(' '),
+          })
+        )
+      } else {
+        this.onSuccess(features.length)
+      }
       this.app.fire('map:view:fit', { bounds })
     }
   }

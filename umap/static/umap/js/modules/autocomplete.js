@@ -498,8 +498,8 @@ export class Geocoder extends BaseAjax {
     const url = `https://www.openstreetmap.org/api/0.6/${osm_type}/${osm_id}/full`
     const response = await this.app.request.get(url)
     if (response?.ok) {
-      const data = await this.app.formatter.fromOSM(await response.text())
-      return JSON.stringify(data)
+      const { geojson } = await this.app.formatter.fromOSM(await response.text())
+      return JSON.stringify(geojson)
     }
   }
 

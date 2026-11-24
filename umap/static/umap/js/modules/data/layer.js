@@ -2,6 +2,7 @@ import { Alert, AlertConflict } from '../../components/alerts/alert.js'
 import * as DOMUtils from '../domutils.js'
 import { Filters } from '../filters.js'
 import { MutatingForm } from '../form/builder.js'
+import { DataError, EmptyDataError } from '../formatter.js'
 import * as GeoUtils from '../geoutils.js'
 import { translate } from '../i18n.js'
 import { FeatureManager, LayerManager } from '../managers.js'
@@ -376,9 +377,23 @@ export class DataLayer {
       this.dataChanged()
       return this.app.formatter
         .parse(raw, this.properties.remoteData.format)
-        .then(async (geojson) => await this.fromGeoJSON(geojson, false))
+        .then(async ({ geojson, warnings }) => {
+          const features = await this.fromGeoJSON(geojson, false)
+          if (warnings.length) {
+            Alert.warning(
+              translate(
+                'Some rows of the remote data for layer "{layer}" were skipped: {reason}.',
+                { layer: this.getName(), reason: warnings.join(', ') }
+              ),
+              10000
+            )
+          }
+          return features
+        })
         .catch((error) => {
           console.debug(error)
+          // A dynamic layer often has no data in the current view, so stay silent.
+          if (error instanceof EmptyDataError) return
           Alert.error(
             translate('Cannot parse remote data for layer "{layer}" with url "{url}"', {
               layer: this.getName(),
@@ -646,18 +661,48 @@ export class DataLayer {
 
   async importRaw(raw, format) {
     this.journal.startBatch()
-    const data = await this.addRaw(raw, format)
-    this.journal.commitBatch()
-    return data
+    try {
+      return await this.addRaw(raw, format)
+    } finally {
+      this.journal.commitBatch()
+    }
   }
 
-  async addRaw(raw, format) {
+  // Returns `{ features, warnings }`, or nothing when the data cannot be imported
+  // at all. `warnings` are full sentences about the skipped parts of the data,
+  // which have already been shown, so a caller can repeat them in its own message.
+  async addRaw(raw, format, filename) {
     return this.app.formatter
       .parse(raw, format)
-      .then((geojson) => this.addData(geojson))
+      .then(async ({ geojson, warnings }) => {
+        const features = await this.addData(geojson)
+        const messages = warnings.map((reason) =>
+          filename
+            ? translate('Some rows of "{filename}" were skipped: {reason}.', {
+                filename,
+                reason,
+              })
+            : translate('Some rows were skipped: {reason}.', { reason })
+        )
+        if (messages.length) Alert.warning(messages.join(' '))
+        return { features, warnings: messages }
+      })
       .catch((error) => {
         console.debug(error)
-        Alert.error(translate('Import failed: invalid data'))
+        if (!(error instanceof DataError)) {
+          Alert.error(translate('Import failed: invalid data'))
+        } else if (filename) {
+          Alert.error(
+            translate('Cannot import "{filename}": {reason}', {
+              filename,
+              reason: error.message,
+            })
+          )
+        } else {
+          Alert.error(
+            translate('Cannot import data: {reason}', { reason: error.message })
+          )
+        }
       })
   }
 
@@ -671,13 +716,27 @@ export class DataLayer {
 
   async importFromFiles(files, type) {
     this.journal.startBatch()
-    const features = await Promise.all(
-      Array.from(files, async (file) =>
-        this.addRaw(await this.readFile(file), type || Utils.detectFileType(file))
+    let results
+    try {
+      results = await Promise.all(
+        Array.from(files, async (file) =>
+          this.addRaw(
+            await this.readFile(file),
+            type || Utils.detectFileType(file),
+            file.name
+          )
+        )
       )
-    )
-    this.journal.commitBatch()
-    return features.filter(Boolean).flat()
+    } finally {
+      this.journal.commitBatch()
+    }
+    const imported = results.filter(Boolean)
+    // Every file failed and has already shown its own error.
+    if (!imported.length) return
+    return {
+      features: imported.flatMap((result) => result.features),
+      warnings: imported.flatMap((result) => result.warnings),
+    }
   }
 
   async importFromUrl(uri, type) {
